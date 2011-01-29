@@ -30,3 +30,6 @@ class Arrangement(Nyhet):
 
     def __unicode__(self):
         return "%s, %s" % (self.tittel[:20], self.tid.strftime("%d/%m/%y"))
+
+    def ledige(self):
+        return self.plasser - len(self.paameldte.all())
