@@ -13,6 +13,9 @@ class Nyhet(models.Model):
 class Arrangement(Nyhet):
     """class Arrangement(Nyhet)"""
 
+    class Meta:
+        verbose_name_plural = "arrangement"
+
     sted = models.CharField(max_length=100)
     tid = models.DateTimeField()
 
