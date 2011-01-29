@@ -1,0 +1,16 @@
+<h3> {{ arrangement.tittel }} </h3>
+
+<ul>
+<li>Sted: {{ arrangement.sted }}</li>
+<li>Tidspunkt: {{ arrangement.tid }}</li>
+<li>Plasser: 
+{% if arrangement.aapen %}
+Åpent for alle.</li>
+{% else %}
+{{ arrangement.plasser }}</li>
+<li>Ledige: {{ arrangement.ledige }}</li>
+{% endif %}
+{% if arrangement.paameldingsfrist %}
+<li>Påmeldingsfrist: {{ arrangement.frist }}</li>
+{% endif %}
+</ul>

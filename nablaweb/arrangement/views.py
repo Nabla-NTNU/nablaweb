@@ -1,7 +1,7 @@
 # arrangement/views.py
 
 from arrangement.models import Arrangement
-
+from django.shortcuts import render_to_response, get_object_or_404
 
 # Administrasjon
 
@@ -24,10 +24,11 @@ def bekreft_sletting(request, arr_id):
 # Offentlig
 
 def oversikt(request):
-    pass
+    return render_to_response('nablaweb/arrangement/templates/arrangement/oversikt.html', {'arrangementliste': Arrangement.objects.all()})
 
 def detaljer(request, arr_id):
-    pass
+    a = get_object_or_404(Arrangement, pk=arr_id)
+    return render_to_response('nablaweb/arrangement/templates/arrangement/detaljer.html', {'arrangement': a})
 
 
 # Bruker
