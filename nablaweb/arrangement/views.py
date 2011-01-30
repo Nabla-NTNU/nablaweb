@@ -2,6 +2,9 @@
 
 from arrangement.models import Arrangement
 from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponse
+from django.template import Context, loader
+
 
 # Administrasjon
 
@@ -42,8 +45,13 @@ def meld_paa(request, arr_id):
 
 # Eksporter
 
-def vcal_arrangement(request, arr_id):
-    pass
+def ical_arrangement(request, arr_id):
+    a = get_object_or_404(Arrangement, pk=arr_id)
+    t = loader.get_template('nablaweb/arrangement/templates/arrangement/icalendar.ics')
+    c = Context({'arrangementliste': (a,),})
+    svar = HttpResponse(t.render(c), mimetype='text/calendar')
+    svar['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % a.tittel.replace(' ', '_')
+    return svar
 
-def vcal_bruker(request):
+def ical_bruker(request):
     pass

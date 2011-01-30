@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Nabla//NONSGML Nablaweb//EN{% for arr in arrangementliste %}
+BEGIN:VEVENT
+UID:nablaarr{{ arr.id }}
+CALSCALE:GREGORIAN
+DTSTAMP:
+DTSTART:
+LOCATION:{{ arr.sted }}
+ORGANIZER:Nabla
+CATEGORIES:NABLA
+SUMMARY:{{ arr.tittel }}
+DESCRIPTION:{{ arr.ingress }}
+URL:http://www.nabla.no/arrangement/{{ arr.id }}/
+END:VEVENT{% endfor %}
+END:VCALENDAR

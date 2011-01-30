@@ -16,6 +16,6 @@ urlpatterns = patterns('arrangement.views',
     (r'^mine/$', 'vis_bruker'),
     (r'^(?P<arr_id>\d+)/paamelding$', 'meld_paa'),
 # Eksporter
-    (r'^(?P<arr_id>\d+)/vcal$', 'vcal_arrangement'),
-    (r'^(?P<arr_id>\d+)/mine/eskporter$', 'vcal_bruker'),
+    (r'^(?P<arr_id>\d+)/ical$', 'ical_arrangement'),
+    (r'^(?P<arr_id>\d+)/mine/ical$', 'ical_bruker'),
 )
