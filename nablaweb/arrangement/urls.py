@@ -4,18 +4,19 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('arrangement.views',
 # Administrasjon
-    (r'^opprett/$', 'opprett'),
-    (r'^(?P<arr_id>\d+)/status$', 'status'),
-    (r'^(?P<arr_id>\d+)/endre$', 'endre'),
-    (r'^(?P<arr_id>\d+)/slett$', 'bekreft_sletting'),
-    (r'^(?P<arr_id>\d+)/slett_arrangement$', 'slett'),
+    (r'^create/$', 'create'),
+    (r'^(?P<event_id>\d+)/status$', 'status'),
+    (r'^(?P<event_id>\d+)/edit$', 'edit'),
+    (r'^(?P<event_id>\d+)/delete$', 'confirm_deletion'),
+    (r'^(?P<event_id>\d+)/delete_event$', 'delete'),
 # Offentlig
-    (r'^$', 'oversikt'),
-    (r'^(?P<arr_id>\d+)/$', 'detaljer'),
+    (r'^$', 'overview'),
+    (r'^(?P<event_id>\d+)/$', 'details'),
 # Bruker
-    (r'^mine/$', 'vis_bruker'),
-    (r'^(?P<arr_id>\d+)/paamelding$', 'meld_paa'),
+    (r'^my_events/$', 'show_user'),
+    (r'^(?P<event_id>\d+)/registration$', 'registration'),
+    (r'^(?P<event_id>\d+)/register$', 'register'),
 # Eksporter
-    (r'^(?P<arr_id>\d+)/ical$', 'ical_arrangement'),
-    (r'^(?P<arr_id>\d+)/mine/ical$', 'ical_bruker'),
+    (r'^(?P<event_id>\d+)/ical$', 'ical_event'),
+    (r'^(?P<event_id>\d+)/my_events/ical$', 'ical_user'),
 )

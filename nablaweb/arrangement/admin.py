@@ -1,9 +1,9 @@
 # arrangement/admin.py
 
 from django.contrib import admin
-from arrangement.models import Arrangement
+from arrangement.models import Event
 
-class ArrangementAdmin(admin.ModelAdmin):
+class EventAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Arrangement)
+admin.site.register(Event)

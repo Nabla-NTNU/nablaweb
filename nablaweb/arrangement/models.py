@@ -5,31 +5,31 @@ from django.contrib.auth.models import User
 class Nyhet(models.Model):
     """class Nyhet(models.Model)"""
 
-    tittel = models.CharField(max_length=100)
-    ingress = models.TextField()
-    brodtekst = models.TextField()
+    title = models.CharField(max_length=100)
+    summary = models.TextField()
+    body = models.TextField()
 
 
-class Arrangement(Nyhet):
-    """class Arrangement(Nyhet)"""
+class Event(Nyhet):
+    """class Event(Nyhet)"""
 
     class Meta:
         verbose_name_plural = "arrangement"
 
-    sted = models.CharField(max_length=100)
-    tid = models.DateTimeField()
+    location = models.CharField(max_length=100)
+    time = models.DateTimeField()
 
-    aapen = models.BooleanField(default=False)
-    plasser = models.PositiveIntegerField(default=0)
-    paameldte = models.ManyToManyField(User)
+    open_for_all = models.BooleanField(default=False) # for alle eller påmelding?
+    places = models.PositiveIntegerField(default=0)
+    registered = models.ManyToManyField(User)
 
-    paameldingsfrist = models.BooleanField(default=False)
-    frist = models.DateTimeField()
+    has_registration_deadline = models.BooleanField(default=False)
+    registration_deadline = models.DateTimeField()
 
-    ikke_fysmat = models.BooleanField(default=False)
+    non_nabla = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return "%s, %s" % (self.tittel[:20], self.tid.strftime("%d/%m/%y"))
+        return "%s, %s" % (self.title[:20], self.time.strftime("%d/%m/%y"))
 
-    def ledige(self):
-        return self.plasser - len(self.paameldte.all())
+    def free_places(self):
+        return self.places - len(self.registered.all())
