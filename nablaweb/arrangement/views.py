@@ -8,19 +8,19 @@ from django.template import Context, loader
 
 # Administrasjon
 
-def create(request, arr_id):
+def create(request, event_id):
     pass
 
-def status(request, arr_id):
+def status(request, event_id):
     pass
 
-def edit(request, arr_id):
+def edit(request, event_id):
     pass
 
-def delete(request, arr_id):
+def delete(request, event_id):
     pass
 
-def confirm_deletion(request, arr_id):
+def confirm_deletion(request, event_id):
     pass
 
 
@@ -29,7 +29,7 @@ def confirm_deletion(request, arr_id):
 def overview(request):
     return render_to_response('nablaweb/arrangement/templates/arrangement/overview.html', {'event_list': Event.objects.all()})
 
-def details(request, arr_id):
+def details(request, event_id):
     a = get_object_or_404(Event, pk=event_id)
     return render_to_response('nablaweb/arrangement/templates/arrangement/details.html', {'event': a})
 
@@ -48,8 +48,8 @@ def register(request, event_id):
 
 # Eksporter
 
-def ical_event(request, arr_id):
-    a = get_object_or_404(Event, pk=arr_id)
+def ical_event(request, event_id):
+    a = get_object_or_404(Event, pk=event_id)
     t = loader.get_template('nablaweb/arrangement/templates/arrangement/icalendar.ics')
     c = Context({'event_list': (a,),})
     response = HttpResponse(t.render(c), mimetype='text/calendar')

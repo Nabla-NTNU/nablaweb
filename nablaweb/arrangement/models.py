@@ -19,7 +19,7 @@ class Event(Nyhet):
     location = models.CharField(max_length=100)
     time = models.DateTimeField()
 
-    open_for_all = models.BooleanField(default=False) # for alle eller påmelding?
+    open_for_all = models.BooleanField(default=False) # for alle eller paamelding?
     places = models.PositiveIntegerField(default=0)
     registered = models.ManyToManyField(User)
 
