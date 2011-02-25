@@ -1,0 +1,49 @@
+- username
+- first_name
+- last_name
+- email
+- password
+- is_staff
+- is_active - slette konto -> false
+- is_superuser
+- last_login
+- date_joined
+
+- Ny løsning på is_staff
+- Kull (eller som grupper?)
+- Kortnummer (string med bestemt lengde)
+- bool for kullmail/ikke
+- fødselsdato
+- profilbilde
+- telefonnr. (hjemme+mobil?)
+- biografi/meritter
+- hjemmeside
+- adresse
+- postnummer/sted
+- link til facebook-profil/twitter/annet
+- ???
+- profit
+
+- brukerregistrering
+	- der webkom legger til brukere som kan registrere seg
+	- der brukerne faktisk registrerer seg
+	- nytt passord, passordgenerator
+
+- utvider gruppene til å kunne ha en leder
+- grupper
+	- webkom
+	- festkom
+	- bedkom
+	- oppkom
+	- nabladet
+	- kjellerstyret
+	- arrkom
+	- alumnikom?
+	- styret
+	- maxwells
+	- medlem (nødvendig for innmelding i de andre gruppene)
+	- kullxx
+	- 
+	
+- meny på venstre side
+- feed/innlogging/annet/facebook på venstre side
