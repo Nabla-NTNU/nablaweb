@@ -8,7 +8,8 @@ urlpatterns = patterns('',
     # Example:
     # (r'^nablaweb/', include('nablaweb.foo.urls')),
     
-    (r'^nyheter/', include('nablaweb.nyheter.urls')),	
+    (r'^nyheter/', include('nablaweb.nyheter.urls')),
+    (r'^arrangement/', include('nablaweb.arrangement.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
