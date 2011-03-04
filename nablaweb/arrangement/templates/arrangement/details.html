@@ -3,14 +3,6 @@
 <ul>
 <li>Sted: {{ event.location }}</li>
 <li>Tidspunkt: {{ event.time }}</li>
-<li>Plasser: 
-{% if event.open_for_all %}
-Åpent for alle.</li>
-{% else %}
-{{ event.places }}</li>
-<li>Ledige: {{ event.free_places }}</li>
-{% endif %}
-{% if event.registration_deadline %}
-<li>Påmeldingsfrist: {{ event.registration_deadline }}</li>
-{% endif %}
+<li>{{ event.summary }}</li>
+<li>{{ event.body }}</li>
 </ul>

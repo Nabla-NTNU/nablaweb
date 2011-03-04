@@ -1,6 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class SimpleEvent(models.Model):
+    title = models.CharField(max_length=100)
+    summary = models.TextField(blank=True)
+    body = models.TextField(blank=True)
+
+    location = models.CharField(max_length=100)
+    time = models.DateTimeField()
+
+    def __unicode__(self):
+        return u'%s, %s' % (self.title, self.time.strftime('%d/%m/%y'))
+
 
 class Event(models.Model):
     """
@@ -10,7 +21,7 @@ class Event(models.Model):
     class Meta:
         verbose_name_plural = "arrangement"
         permissions = (
-            ("can_close", "")
+            ("can_close", ""),
             )
 
     title = models.CharField(max_length=100)

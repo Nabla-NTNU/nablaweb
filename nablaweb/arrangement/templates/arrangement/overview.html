@@ -1,7 +1,7 @@
 {% for event in event_list %}
 <h3><a href="">{{ event.title }}</a></h3>
 <p>
-  {{ event.location }}, {{ event.time }}<br />{% if event.registration_deadline %}Påmeldingsfrist: {{ event.registration_deadline.time }}{% endif %}
+  {{ event.location }}, {{ event.time }}<br />
 </p>
 <p>
   {{ event.summary }}
