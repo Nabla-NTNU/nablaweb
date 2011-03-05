@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+
+{% block title %}Medlem: {{member.get_full_name }} {% endblock %}
+
+
+
+{% block content %}
+
+<h4>{{member.get_full_name}}</h4>
+
+<table>
+<tr><td>Epost: </td><td>{{member.email}}</td><tr>
+<tr><td>Hjemmeside: </td><td><a href="{{member.get_profile.web_page}}" target="_blank" >{{member.get_profile.web_page}}</a></td><tr>
+<tr><td>Bursdag: </td><td>{{member.get_profile.birthday}}</td><tr>
+</table>
+
+{% endblock %}

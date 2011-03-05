@@ -1,0 +1,26 @@
+<html>
+
+<head>
+
+<title>{% block title %}Nablaweb{% endblock %}</title>
+
+</head>
+<body>
+<h1> Nabla </h1>
+
+
+
+{% if user.is_authenticated %}
+Velkommen {{ user.get_full_name }}!<br />
+<a href="/logout/">Logg ut</a>
+{% else %}
+<a href="/login/">Logg inn</a>
+{% endif %}
+<br />
+
+<hr />
+{% block content %} Av en eller annen grunn er det ikke noe her {% endblock %}
+
+</body>
+
+</html>

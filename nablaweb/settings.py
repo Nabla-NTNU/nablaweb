@@ -89,6 +89,7 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     'nyheter',
+    'accounts',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -98,3 +99,5 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
      'django.contrib.admin',
 )
+
+AUTH_PROFILE_MODULE= 'accounts.UserProfile'
