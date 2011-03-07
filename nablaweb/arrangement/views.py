@@ -25,7 +25,7 @@ def create(request):
         form = SimpleEventForm(
             initial={'time': datetime.datetime.now()},
             )
-    return render_to_response('nablaweb/arrangement/templates/arrangement/opprett.html', RequestContext(request, {'form': form}))
+    return render_to_response('arrangement/opprett.html', RequestContext(request, {'form': form}))
 
 def status(request, event_id):
     return HttpResponse("Not implemented.")
@@ -40,11 +40,11 @@ def delete(request, event_id):
 # Offentlig
 
 def overview(request):
-    return render_to_response('nablaweb/arrangement/templates/arrangement/overview.html', {'event_list': SimpleEvent.objects.all()})
+    return render_to_response('arrangement/overview.html', {'event_list': SimpleEvent.objects.all()})
 
 def details(request, event_id):
     a = get_object_or_404(SimpleEvent, pk=event_id)
-    return render_to_response('nablaweb/arrangement/templates/arrangement/details.html', {'event': a})
+    return render_to_response('arrangement/details.html', {'event': a})
 
 
 # Bruker
@@ -63,7 +63,7 @@ def register(request, event_id):
 
 def ical_event(request, event_id):
     a = get_object_or_404(Event, pk=event_id)
-    t = loader.get_template('nablaweb/arrangement/templates/arrangement/icalendar.ics')
+    t = loader.get_template('arrangement/icalendar.ics')
     c = Context({'event_list': (a,),})
     response = HttpResponse(t.render(c), mimetype='text/calendar')
     response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % a.title.replace(' ', '_')
