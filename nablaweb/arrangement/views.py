@@ -43,8 +43,8 @@ def overview(request):
     return render_to_response('arrangement/overview.html', {'event_list': Event.objects.all()})
 
 def details(request, event_id):
-    a = get_object_or_404(Event, pk=event_id)
-    return render_to_response('arrangement/details.html', {'event': a})
+    event = get_object_or_404(Event, pk=event_id)
+    return render_to_response('arrangement/details.html', {'event': event})
 
 
 # Bruker
@@ -62,11 +62,11 @@ def register(request, event_id):
 # Eksporter
 
 def ical_event(request, event_id):
-    a = get_object_or_404(Event, pk=event_id)
-    t = loader.get_template('arrangement/icalendar.ics')
-    c = Context({'event_list': (a,),})
-    response = HttpResponse(t.render(c), mimetype='text/calendar')
-    response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % a.title.replace(' ', '_')
+    event = get_object_or_404(Event, pk=event_id)
+    template = loader.get_template('arrangement/icalendar.ics')
+    context = Context({'event_list': (event,),})
+    response = HttpResponse(template.render(context), mimetype='text/calendar')
+    response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.title.replace(' ', '_')
     return response
 
 def ical_user(request):
