@@ -1,0 +1,36 @@
+{% if form.errors %}
+<p>
+  Vennligst rett opp i feilene under.
+</p>
+{% endif %}
+
+<p>
+<form action="" method="post">{% csrf_token %}
+  <div class="field">
+    {{ form.title.errors }}
+    <label for="id_title">Tittel:</label>
+    {{ form.title }}
+  </div>
+  <div class="field">
+    {{ form.summary.errors }}
+    <label for="id_summary">Ingress:</label>
+    {{ form.summary }}
+  </div>
+  <div class="field">
+    {{ form.body.errors }}
+    <label for="id_body">Brodtekst:</Label>
+    {{ form.body }}
+  </div>
+  <div class="field">
+    {{ form.location.errors }}
+    <label for="id_location">Sted:</label>
+    {{ form.location }}
+  </div>
+  <div class="field">
+    {{ form.event_start.errors }}
+    <label for="id_event_start">Tid:</label>
+    {{ form.event_start }}
+  </div>
+  <input type="submit" value="Opprett">
+</form>
+</p>

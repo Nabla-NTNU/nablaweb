@@ -3,7 +3,7 @@
 from nablaweb.arrangement.models import Event
 from nablaweb.arrangement.forms import EventForm
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, RequestContext, loader
 import datetime
 
@@ -21,11 +21,12 @@ def create(request):
                           event_start=cd['event_start'],
                           )
             event.save()
+            return HttpResponseRedirect('/arrangement/%d/' % event.id)
     else:
         form = EventForm(
             initial={'event_start': datetime.datetime.now()},
             )
-    return render_to_response('arrangement/opprett.html', RequestContext(request, {'form': form}))
+    return render_to_response('arrangement/create.html', RequestContext(request, {'form': form}))
 
 def status(request, event_id):
     return HttpResponse("Not implemented.")

@@ -4,20 +4,20 @@ from django.db import models
 from django.contrib.auth.models import User
 
 EVENT_TYPES = {'simple':
-                   {'short_description': 'Simple event',
+                   {'name': 'Simple event',
                     'groups': [],
-                    'extra_options': [],},
+                    'options': [],},
                'standard':
-                   {'short_description': 'Standard event',
+                   {'name': 'Standard event',
                     'groups': [],
-                    'extra_options': [],},
+                    'options': [],},
                'bedpres':
-                   {'short_description': 'Business presentation',
+                   {'name': 'Business presentation',
                     'groups': [],
-                    'extra_options': [],},
+                    'options': [],},
                }
 
-EVENT_CHOICES = ((event_type, info['short_description'])
+EVENT_CHOICES = ((event_type, info['name'])
                  for (event_type, info) in EVENT_TYPES.iteritems())
 
 class Event(models.Model):
