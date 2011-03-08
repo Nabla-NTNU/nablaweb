@@ -1,7 +1,7 @@
 # arrangement/views.py
 
-from nablaweb.arrangement.models import SimpleEvent, Event
-from nablaweb.arrangement.forms import SimpleEventForm
+from nablaweb.arrangement.models import Event
+from nablaweb.arrangement.forms import EventForm
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse
 from django.template import Context, RequestContext, loader
@@ -11,19 +11,19 @@ import datetime
 
 def create(request):
     if request.method == 'POST':
-        form = SimpleEventForm(request.POST)
+        form = EventForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            event = SimpleEvent(title=cd['title'],
-                                summary=cd['summary'],
-                                body=cd['body'],
-                                location=cd['location'],
-                                time=cd['time'],
-                                )
+            event = Event(title=cd['title'],
+                          summary=cd['summary'],
+                          body=cd['body'],
+                          location=cd['location'],
+                          event_start=cd['event_start'],
+                          )
             event.save()
     else:
-        form = SimpleEventForm(
-            initial={'time': datetime.datetime.now()},
+        form = EventForm(
+            initial={'event_start': datetime.datetime.now()},
             )
     return render_to_response('arrangement/opprett.html', RequestContext(request, {'form': form}))
 
@@ -40,10 +40,10 @@ def delete(request, event_id):
 # Offentlig
 
 def overview(request):
-    return render_to_response('arrangement/overview.html', {'event_list': SimpleEvent.objects.all()})
+    return render_to_response('arrangement/overview.html', {'event_list': Event.objects.all()})
 
 def details(request, event_id):
-    a = get_object_or_404(SimpleEvent, pk=event_id)
+    a = get_object_or_404(Event, pk=event_id)
     return render_to_response('arrangement/details.html', {'event': a})
 
 
