@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     (r'^logout/$', 'accounts.views.logout_user'),
     (r'^nyheter/', include('nablaweb.nyheter.urls')),	
     (r'^medlemmer/(?P<username>\w+)/', 'accounts.views.view_member_profile'),
+    (r'^arrangement/', include('nablaweb.arrangement.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
