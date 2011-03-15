@@ -6,7 +6,7 @@
     <tr width=20>
     {% for picture in album.picture_set.all %}
         <td>
-            <a href="picture/{{ forloop.counter }}"><img src="/nabla_media/{{ picture.picture }}" width = 200 border=0 /></a>
+            <a href="picture/{{ forloop.counter }}"><img src="/nabla_media/{{ picture.thumbnail }}" width = 200 border=0 /></a>
             </br>{{ picture.title }}
                 {% if delete_mode %}
                     <a href="/gallery/album/{{ album.id }}/delete/{{ picture.id }}"><img src="/nabla_media/graphics/icon_deletelink.gif" border=0 width=15 length=15 /></a>

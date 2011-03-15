@@ -2,10 +2,10 @@
 
 <form action="/gallery/album/{{ album.id }}/add/" method="post" enctype="multipart/form-data">
     Tittel</br>
-    <input type="text" name="title" {% if picture_meta %}value="{{ picture_meta.title }}"{% endif %} />
+    <input type="text" name="title" {% if picture_meta %}value="{{ meta.title }}"{% endif %} />
     </br>
     Beskrivelse</br>
-    <textarea name="description" rows="6" cols="45">{% if picture_meta %}{{ picture_meta.description }}{% endif %}</textarea>
+    <textarea name="description" rows="6" cols="45">{% if picture_meta %}{{ meta.description }}{% endif %}</textarea>
     </br>
     Bilde</br>
     <input type="file" name="picture" />
