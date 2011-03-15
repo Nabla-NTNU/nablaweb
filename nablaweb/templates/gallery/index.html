@@ -1,0 +1,27 @@
+<h1>Nablas Bildearkiv</h1>
+<p>Her kan du finne og laste opp bilder fra Nabla-arrangement</p>
+{% if album_list %}
+    <table>
+    <tr width="20%">
+    {% for album in album_list %}
+        <td>
+            <a href="/gallery/album/{{ album.id }}">
+            <img src="/nabla_media/{% if album.picture_set.all.0.thumbnail %}{{ album.picture_set.all.0.thumbnail }}{% else %}graphics/gallery_thumb_empty.jpg{% endif %}"></img>
+	    </a></br>{{ album.title }}
+        </td>
+        {% if forloop.counter|divisibleby:"3" %}
+        </tr>
+        <tr>
+        {% endif %}
+    {% endfor %}
+    </tr>
+    </table>
+{% else %}
+    <p>Det har ikke blitt lagt ut noen bilder enda</p>
+{% endif %}
+<p>
+Lag nytt album
+    <a href="/gallery/album/add/">
+        <img src="/nabla_media/graphics/icon_addlink.gif" border=0 width=15 length=15></img>
+    </a>
+</p>

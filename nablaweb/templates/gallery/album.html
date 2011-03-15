@@ -1,0 +1,51 @@
+<p><a href="/gallery/">Galleri</a> >> </p>
+<h1> {{ album.title }} </h1>
+<p>{{ album.description }}</p>
+{% if album.picture_set.all %}
+    <table>
+    <tr width=20>
+    {% for picture in album.picture_set.all %}
+        <td>
+            <a href="picture/{{ forloop.counter }}"><img src="/nabla_media/{{ picture.picture }}" width = 200 border=0 /></a>
+            </br>{{ picture.title }}
+                {% if delete_mode %}
+                    <a href="/gallery/album/{{ album.id }}/delete/{{ picture.id }}"><img src="/nabla_media/graphics/icon_deletelink.gif" border=0 width=15 length=15 /></a>
+		        {% endif %}
+            
+        </td>
+        {% if forloop.counter|divisibleby:"3" %}
+        </tr>
+        <tr>
+        {% endif %}
+    {% endfor %}
+    </tr>
+    </table>
+{% else %}
+    <p>Dette albummet har ingen bilder enda<p>
+{% endif %}
+<a href="/gallery/">Gå tilbake til galleriet</a>
+
+<!-- Dersom logget inn + rettigheter: -->
+{% if delete_mode %}
+     <p>
+        Ferdig å slette bilder
+        <a href="/gallery/album/{{ album.id }}/">
+            <img src="/nabla_media/graphics/icon-yes.gif" border=0 width=15 length=15></img>
+        </a>
+    </p>
+{% else %}
+    <p>
+        Legg til bilde
+        <a href="/gallery/album/{{ album.id }}/add/">
+            <img src="/nabla_media/graphics/icon_addlink.gif" border=0 width=15 length=15></img>
+        </a>
+    </p>
+    {% if album.picture_set.all %}
+    <p>
+        Slett bilder
+        <a href="/gallery/album/{{ album.id }}/delete/0">
+            <img src="/nabla_media/graphics/icon_deletelink.gif" border=0 width=15 length=15></img>
+        </a>
+    </p>
+    {% endif %}
+{% endif %}

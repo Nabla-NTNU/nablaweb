@@ -1,17 +1,18 @@
+import os, PIL
 from django.db import models
-
-# Mye som mangler her fortsatt
+from django.dispatch import dispatcher
 
 class Album(models.Model):
-    title = models.CharField(max_length=64)
-    description = models.TextField(blank=true)
+    title = models.CharField(max_length=64, unique=True)
+    description = models.TextField(blank=True)
     def __unicode__(self):
         return self.title
 
 class Picture(models.Model):
-    title = models.CharField(max_length=64, blank=true) #Går ut i fra at det kan være litt slitsomt å navngi alle bilder
-    description = models.TextField(blank=true)
+    title = models.CharField(max_length=64, blank=True)
+    description = models.TextField(blank=True)
     album = models.ForeignKey(Album)
-    picture = models.ImageField(upload_to='images') #Ikke ferdig, her må det selvsagt brukes et mer omfattende opplastingsskript
+    picture = models.ImageField(upload_to='temp', blank=True)
+    thumbnail = models.ImageField(upload_to='temp', blank=True)
     def __unicode__(self):
         return self.title

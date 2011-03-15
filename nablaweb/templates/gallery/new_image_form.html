@@ -1,0 +1,17 @@
+<h3>Last opp et nytt bilde til {{ album.title }}</h3>
+
+<form action="/gallery/album/{{ album.id }}/add/" method="post" enctype="multipart/form-data">
+    Tittel</br>
+    <input type="text" name="title" {% if picture_meta %}value="{{ picture_meta.title }}"{% endif %} />
+    </br>
+    Beskrivelse</br>
+    <textarea name="description" rows="6" cols="45">{% if picture_meta %}{{ picture_meta.description }}{% endif %}</textarea>
+    </br>
+    Bilde</br>
+    <input type="file" name="picture" />
+    {% if error_message %}
+        <font color=red>{{ error_message }}</font>
+    {% endif %}
+    </br>
+    <p><input type="submit" value="Send" /></p>
+</form>

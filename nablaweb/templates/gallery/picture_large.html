@@ -1,0 +1,19 @@
+<p><a href="/gallery/">Galleri</a> >> <a href="/gallery/album/{{ album.id }}">{{ album.title }}</a> >> </p>
+
+<h3> {{ picture.title }} </h3>
+<a href="/gallery/album/{{ album.id }}/picture/{% ifnotequal current total %}{{ current|add:'1' }}{% else %}1{% endifnotequal %}">
+    <img src="/nabla_media/{{ picture.picture }}" width=800></img>
+</a>
+
+<p>
+{% ifnotequal current 1 %}
+    <a href="/gallery/album/{{ album.id }}/picture/{{ current|add:"-1" }}">Forrige bilde</a>   
+{% endifnotequal %}
+ <a href="/gallery/album/{{ album.id }}">Tilbake til albumet</a> 
+{% ifnotequal current total %}
+    <a href="/gallery/album/{{ album.id }}/picture/{{ current|add:"1" }}">Neste bilde</a>
+{% endifnotequal %}
+</p>
+
+<p>Bilde {{ current }}/{{ total }}</p> 
+<p> {{ picture.description }} </p>

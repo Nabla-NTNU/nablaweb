@@ -1,0 +1,14 @@
+<h3>Lag et nytt album</h3>
+
+<form action="/gallery/album/add/" method="post">
+    Tittel</br>
+    <input type="text" name="title" />
+    {% if error_message %}
+        <font color=red>{{ error_message }}</font>
+    {% endif %}
+    </br>
+    Beskrivelse</br>
+    <textarea name="description" rows="6" cols="45">{% if meta %}{{ meta }}{% endif %}</textarea>
+    </br>
+    <p><input type="submit" value="Send" /></p>
+</form>
