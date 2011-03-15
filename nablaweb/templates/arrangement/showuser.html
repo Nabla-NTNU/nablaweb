@@ -1,0 +1,19 @@
+{{ member.username }}<br/>
+
+{% if event_list %}
+Du er påmeldt til følgende arrangement:
+<ul>
+{% for event in event_list %}
+<li><a href="{{ event.id }}"/>{{ event }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+Du har {{ dot_list|length }} prikk{{dot_list|length|pluralize:"er"}}.
+{% if dot_list %}
+<ul>
+{% for dot in dot_list %}
+<li><a href="{{ dot.event.id }}"/>{{ dot }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}

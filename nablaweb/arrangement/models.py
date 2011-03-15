@@ -46,7 +46,7 @@ class Event(models.Model):
     # TODO: Adgangskontroll basert paa klassetrinn
 
     places = models.PositiveIntegerField(null=True, blank=True)
-    attending_users = models.ManyToManyField(User, related_name='events_attending+', null=True, blank=True)
+    attending_users = models.ManyToManyField(User, related_name='events_attending', null=True, blank=True)
     waiting_list = models.ManyToManyField(User, related_name='events_waiting+', null=True, blank=True)
 
     has_registration_deadline = models.NullBooleanField(default=False, blank=True)
@@ -72,3 +72,6 @@ class Event(models.Model):
 class NoShowDot(models.Model):
     event = models.ForeignKey(Event)
     person = models.ForeignKey(User)
+
+    def __unicode__(self):
+        return u'%s' % (self.event)

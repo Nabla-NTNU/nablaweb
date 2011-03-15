@@ -1,10 +1,11 @@
 # arrangement/views.py
 
-from nablaweb.arrangement.models import Event
+from nablaweb.arrangement.models import Event, NoShowDot
 from nablaweb.arrangement.forms import EventForm
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, RequestContext, loader
+from django.contrib.auth.models import User
 import datetime
 
 # Administrasjon
@@ -51,7 +52,10 @@ def details(request, event_id):
 # Bruker
 
 def show_user(request):
-    return HttpResponse("Not implemented.")
+    event_list = request.user.events_attending.all()
+    dot_list = request.user.noshowdot_set.all()
+    print event_list
+    return render_to_response('arrangement/showuser.html', {'event_list': event_list, 'dot_list': dot_list, 'member': request.user})
 
 def registration(request, event_id):
     return HttpResponse("Not implemented.")
