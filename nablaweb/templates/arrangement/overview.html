@@ -1,0 +1,12 @@
+{% for event in event_list %}
+<h3><a href="">{{ event.title }}</a></h3>
+<p>
+  {{ event.location }}, {{ event.event_start }}<br />
+</p>
+<p>
+  {{ event.summary }}
+</p>
+<ul>
+<li><a href="{{ event.id }}"/>Les mer</a></li>
+</ul>
+{% endfor %}
