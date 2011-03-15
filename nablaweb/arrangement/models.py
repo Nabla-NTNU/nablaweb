@@ -68,3 +68,7 @@ class Event(models.Model):
 
     def user_is_attending(self, user):
         return user in self.attending_users.all()
+
+class NoShowDot(models.Model):
+    event = models.ForeignKey(Event)
+    person = models.ForeignKey(User)
