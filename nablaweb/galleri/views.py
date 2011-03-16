@@ -44,8 +44,8 @@ def picture_large(request, album_id, picture_number):
                               'current': picture_number, 'album': album, 
                               'pic_list': album_pictures})
 
-""" Opplasting av bilder """
 
+""" Opplasting av bilder """
 #TODO: - (DONE)Sjekk om det er en ekte bildefil(PIL kan brukes)
 #      - (DONE)virker album=current_album
 #      - trenger en RequestContext hertitle=request.POST['title'] (fungerer ikke i 1.1.1)
@@ -58,8 +58,8 @@ def new_image_form(request, album_id):
     if request.method == 'POST':
         new_picture = Picture(title=request.POST['title'], description=request.POST['description'], album=current_album)
         try:
-            # Lagrer bildet + thumbnail
-            new_picture.manage_uploaded_image(request.FILES['picture'])
+            new_picture.picture = request.FILES['picture']
+            new_picture.save()
         except:
             return render_to_response('gallery/new_image_form.html', {
                                       'album': current_album, 'meta': new_picture, 'error_message': "Filen maa vaere et bilde" })
@@ -71,27 +71,19 @@ def new_image_form(request, album_id):
 
 
 """ Sletting av bilder """
-
-#TODO: -Slette filer, ikke bare django-objektet, evt flytte dem til en 'restemappe'
+#TODO: 
 #        Et annet alternativ er A lagre dem i en 'angremappe', der filene ligger i
 #        f.eks 10 dager f0r de slettes automatisk.
+
 def delete_picture(request,album_id,picture_id):
     if int(picture_id):
         picture = get_object_or_404(Picture, pk=picture_id)
-
-        # Lagrer stien til bildene som skal slettes
-        # Her kan man bruker StreamIO eller lignende
-        # til aa slette eller flytte filene etter sletting
-        picture_path = picture.picture.path
-        thumb_path = picture.thumbnail.path
-        
-        # Sletter Django-objektet
         picture.delete()
     a = get_object_or_404(Album, pk=album_id)
     return render_to_response('gallery/album.html', {'album': a, 'delete_mode':True})
 
-""" Oppretting av nytt album """
 
+""" Oppretting av nytt album """
 def new_album(request):
     if request.method == 'POST':
         if request.POST['title']:
@@ -105,7 +97,6 @@ def new_album(request):
         return render_to_response('gallery/new_album_form.html', )
 
 """ Sletting av album """
-
 def delete_album(request, album_id, confirmation):
     album_list = Album.objects.all()
     if int(album_id):
