@@ -11,23 +11,56 @@ import datetime
 # Administrasjon
 
 def create(request):
-    if request.method == 'POST':
+    if request.POST.get('event_type'):
         form = EventForm(request.POST)
         if form.is_valid():
-            cd = form.cleaned_data
-            event = Event(title=cd['title'],
-                          summary=cd['summary'],
-                          body=cd['body'],
-                          location=cd['location'],
-                          event_start=cd['event_start'],
-                          )
+            event = Event(**form.cleaned_data)
             event.save()
-            return HttpResponseRedirect('/arrangement/%d/' % event.id)
-    else:
+            response = HttpResponseRedirect('/arrangement/%d/' % event.id)
+        else:
+            response = render_to_response('arrangement/create.html', RequestContext(request, {'form': form, 'options': Event.event_options(request.POST.get('event_type'))}))
+    elif request.GET.get('event_type'):
+        # TODO: Sjekk verdien til event_type.
+        event_type = request.GET.get('event_type')
         form = EventForm(
-            initial={'event_start': datetime.datetime.now()},
+            initial={'event_type': event_type,
+                     'event_start': datetime.datetime.now(),},
             )
-    return render_to_response('arrangement/create.html', RequestContext(request, {'form': form}))
+        response = render_to_response('arrangement/create.html', RequestContext(request, {'form': form, 'options': Event.event_options(event_type)}))
+    else:
+        # TODO: Filtrer event_types gjennom brukers tilganger.
+        response = render_to_response('arrangement/chooseeventtype.html', RequestContext(request, {'event_types': Event.event_types()}))
+    return response
+        
+# def create(request):
+#     response = HttpResponse('a')
+#     if request.method == 'POST':
+#         form = EventForm(request.POST)
+#         if form.is_valid():
+#             cd = form.cleaned_data
+#             # TODO: Mer dynamisk lagring av variable.
+#             # Evt. initialiser alt uansett, og anta at cd inneholder fornuftige verdier.
+#             event = Event(title=cd['title'],
+#                           summary=cd['summary'],
+#                           body=cd['body'],
+#                           location=cd['location'],
+#                           event_start=cd['event_start'],
+#                           event_type=cd['event_type']
+#                           )
+#             event.save()
+#             response = HttpResponseRedirect('/arrangement/%d/' % event.id)
+#         else:
+#             event_type = request.GET.get('event_type')
+#             if event_type:
+#                 print Event.event_options(event_type)
+#                 form = EventForm(
+#                     initial={'event_type': event_type,},
+#                     )
+#                 response = render_to_response('arrangement/create.html', RequestContext(request, {'form': form, 'options': Event.event_options(event_type)}))
+#     else:
+#         # TODO: Filtrer event_types gjennom brukers tilganger.
+#         response = render_to_response('arrangement/chooseeventtype.html', RequestContext(request, {'event_types': Event.event_types()}))
+#     return response
 
 def status(request, event_id):
     return HttpResponse("Not implemented.")

@@ -1,0 +1,8 @@
+<form action="" method="get">
+  <select name="event_type">
+    {% for type in event_types %}
+    <option value="{{ type }}">{{ type }}</option>
+    {% endfor %}
+  </select>
+  <input type="submit" value="Submit" />
+</form>

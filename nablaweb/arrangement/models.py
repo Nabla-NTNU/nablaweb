@@ -3,25 +3,25 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-EVENT_TYPES = {'simple':
-                   {'name': 'Simple event',
-                    'groups': [],
-                    'options': [],},
-               'standard':
-                   {'name': 'Standard event',
-                    'groups': [],
-                    'options': [],},
-               'bedpres':
-                   {'name': 'Business presentation',
-                    'groups': [],
-                    'options': [],},
-               }
-
-EVENT_CHOICES = ((event_type, info['name'])
-                 for (event_type, info) in EVENT_TYPES.iteritems())
-
 class Event(models.Model):
     """class Event(models.Model)"""
+
+    EVENT_TYPES = {'simple':
+                       {'name': 'Simple event',
+                        'groups': (),
+                        'options': ('places',),},
+                   'standard':
+                       {'name': 'Standard event',
+                        'groups': (),
+                        'options': (),},
+                   'bedpres':
+                       {'name': 'Business presentation',
+                        'groups': (),
+                        'options': (),},
+                   }
+
+    EVENT_CHOICES = ((event_type, info['name'])
+                     for (event_type, info) in EVENT_TYPES.iteritems())
 
     class Meta:
         verbose_name_plural = "arrangement"
@@ -35,7 +35,7 @@ class Event(models.Model):
     title = models.CharField(max_length=80)
     summary = models.TextField(max_length=1000)
     body = models.TextField(max_length=5000)
-    image = models.ImageField(blank=True)
+#   image = models.ImageField(upload_to='temp', blank=True)
 
     location = models.CharField(max_length=80)
     event_start = models.DateTimeField(null=True)
@@ -55,6 +55,18 @@ class Event(models.Model):
     deregistration_deadline = models.DateTimeField(null=True, blank=True)
 
     is_closed = models.BooleanField(default=False)
+
+    @staticmethod
+    def event_types():
+        return Event.EVENT_TYPES.keys()
+
+    @staticmethod
+    def event_groups(event_type):
+        return Event.EVENT_TYPES[event_type].get('groups')
+
+    @staticmethod
+    def event_options(event_type):
+        return Event.EVENT_TYPES[event_type].get('options')
 
     def __unicode__(self):
         return u'%s, %s' % (self.title, self.event_start.strftime('%d/%m/%y'))
