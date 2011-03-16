@@ -41,7 +41,7 @@ class Event(models.Model):
     event_start = models.DateTimeField(null=True)
     event_end = models.DateTimeField(null=True, blank=False)
     organizer = models.CharField(max_length=80, blank=True)
-    url = models.CharField(null=True, blank=True)
+    url = models.CharField(max_length=256, null=True, blank=True)
     # TODO: Adgangskontroll
 
     places = models.PositiveIntegerField(null=True, blank=True)
