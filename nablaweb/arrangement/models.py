@@ -35,15 +35,14 @@ class Event(models.Model):
     title = models.CharField(max_length=80)
     summary = models.TextField(max_length=1000)
     body = models.TextField(max_length=5000)
-#   image = models.ImageField(blank=True)
+    image = models.ImageField(blank=True)
 
     location = models.CharField(max_length=80)
     event_start = models.DateTimeField(null=True)
-
+    event_end = models.DateTimeField(null=True, blank=False)
     organizer = models.CharField(max_length=80, blank=True)
-
-    is_only_for_nabla = models.NullBooleanField(default=False, blank=True)
-    # TODO: Adgangskontroll basert paa klassetrinn
+    url = models.CharField(null=True, blank=True)
+    # TODO: Adgangskontroll
 
     places = models.PositiveIntegerField(null=True, blank=True)
     attending_users = models.ManyToManyField(User, related_name='events_attending', null=True, blank=True)
