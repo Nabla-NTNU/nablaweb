@@ -9,7 +9,7 @@ class EventForm(forms.Form):
     title = forms.CharField(max_length=100, required=True)
     summary = forms.CharField(max_length=1000, widget=forms.Textarea, required=True)
     body = forms.CharField(max_length=5000, widget=forms.Textarea, required=True)
-    image = forms.ImageField(required=False)
+#   image = forms.ImageField(required=False)
 
     alternative_id = forms.CharField(max_length=32, required=False)
     event_type = forms.CharField(max_length=32, required=True)

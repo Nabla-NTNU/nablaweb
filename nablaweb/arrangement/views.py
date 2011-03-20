@@ -11,25 +11,26 @@ import datetime
 # Administrasjon
 
 def create(request):
-    if request.POST.get('event_type'):
-        form = EventForm(request.POST)
-        if form.is_valid():
-            event = Event(**form.cleaned_data)
-            event.save()
-            response = HttpResponseRedirect('/arrangement/%d/' % event.id)
-        else:
-            response = render_to_response('arrangement/create.html', RequestContext(request, {'form': form, 'options': Event.event_options(request.POST.get('event_type'))}))
-    elif request.GET.get('event_type'):
-        # TODO: Sjekk verdien til event_type.
-        event_type = request.GET.get('event_type')
-        form = EventForm(
-            initial={'event_type': event_type,
-                     'event_start': datetime.datetime.now(),},
-            )
-        response = render_to_response('arrangement/create.html', RequestContext(request, {'form': form, 'options': Event.event_options(event_type)}))
+    # TODO: Lag en liste over arrangementtyper bruker kan opprette.
+    user_types = Event.event_types()
+    event_type = request.POST.get('event_type')
+    print event_type
+    form = EventForm(request.POST)
+    if request.method != 'POST' \
+            or event_type not in user_types:
+        response = render_to_response('arrangement/chooseeventtype.html', RequestContext(request, {'event_types': user_types}))
+    elif form.is_valid():
+        event = Event(**form.cleaned_data)
+        event.save()
+        # TODO: Kan save() feile?
+        response = HttpResponseRedirect('/arrangement/%d/' % event.id)
     else:
-        # TODO: Filtrer event_types gjennom brukers tilganger.
-        response = render_to_response('arrangement/chooseeventtype.html', RequestContext(request, {'event_types': Event.event_types()}))
+        if request.POST.get('init'):
+            form = EventForm(
+                initial={'event_type': event_type,
+                         'event_start': datetime.datetime.now(),},
+                )
+        response = render_to_response('arrangement/create.html', RequestContext(request, {'form': form, 'event_type': event_type, 'options': Event.event_options(request.POST.get('event_type'))}))
     return response
         
 # def create(request):

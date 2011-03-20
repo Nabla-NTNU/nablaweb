@@ -1,4 +1,5 @@
-<form action="" method="get">
+<form action="" method="post">{% csrf_token %}
+  <input type="hidden" name="init" value="true">
   <select name="event_type">
     {% for type in event_types %}
     <option value="{{ type }}">{{ type }}</option>

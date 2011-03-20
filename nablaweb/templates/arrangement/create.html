@@ -6,7 +6,7 @@
 
 <p>
 <form action="" method="post">{% csrf_token %}
-  <hidden name="event_type" value="{{ event_type }}">
+  <input type="hidden" name="event_type" value="{{ event_type }}">
   <div class="field">
     {{ form.title.errors }}
     <label for="id_title">Tittel:</label>
@@ -32,13 +32,28 @@
     <label for="id_event_start">Tid:</label>
     {{ form.event_start }}
   </div>
-  {% for option in options %}
+  {% if options.event_end %}
   <div class="field">
-    Dette virker ikke: {{ form.option.errors }}
-    <label for="id_{{ option }}">{{ option }}:</label>
-    Ikke dette heller: {{ form.option }}
+    {{ form.event_end.errors }}
+    <label for="id_event_end">event_end:</label>
+    {{ form.event_end }}
   </div>
-  {% endfor %}
+  {% endif %}
+  {% if options.FOO %}
+  <div class="field">
+    {{ form.FOO.errors }}
+    <label for="id_FOO">FOO:</label>
+    {{ form.FOO }}
+  </div>
+  {% endif %}
+  {% if options.FOO %}
+  <div class="field">
+    {{ form.FOO.errors }}
+    <label for="id_FOO">FOO:</label>
+    {{ form.FOO }}
+  </div>
+  {% endif %}
+
   <input type="submit" value="Opprett">
 </form>
 </p>
