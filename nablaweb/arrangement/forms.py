@@ -3,7 +3,15 @@
 from django import forms
 from arrangement.models import Event
 
-DATE_FORMAT = '%d-%m-%Y %H:%M'
+DATE_FORMATS = ['%Y-%m-%d %H:%M:%S',
+                '%Y-%m-%d %H:%M',
+                '%Y-%m-%d',
+                '%d/%m/%Y %H:%M:%S',
+                '%d/%m/%Y %H:%M',
+                '%d/%m/%Y',
+                '%d/%m/%y %H:%M:%S',
+                '%d/%m/%y %H:%M',
+                '%d/%m/%y',]
 
 class EventForm(forms.Form):
     title = forms.CharField(max_length=100, required=True)
@@ -18,24 +26,24 @@ class EventForm(forms.Form):
     url = forms.CharField(max_length=256, required=False)
 
     location = forms.CharField(max_length=100, required=True)
-    event_start = forms.DateTimeField(required=True)
-    event_start.widget = forms.DateInput(format=DATE_FORMAT)
-    event_start.input_formats = (DATE_FORMAT,)
-    event_end = forms.DateTimeField(required=False)
-    event_end.widget = forms.DateInput(format=DATE_FORMAT)
-    event_end.input_formats = (DATE_FORMAT,)
+    event_start = forms.DateTimeField(input_formats=DATE_FORMATS,
+                                      widget = forms.DateTimeInput(format=DATE_FORMATS),
+                                      required=True,)
+    event_end = forms.DateTimeField(input_formats=DATE_FORMATS,
+                                    widget = forms.DateTimeInput(format=DATE_FORMATS),
+                                    required=True,)
 
     # TODO: Adgangskontroll
     places = forms.IntegerField(min_value=0, required=False)
     has_registration_deadline = forms.NullBooleanField(required=False)
-    registration_deadline = forms.DateTimeField(required=False)
-    registration_deadline.widget = forms.DateInput(format=DATE_FORMAT)
-    registration_deadline.input_formats = (DATE_FORMAT,)
+    registration_deadline = forms.DateTimeField(input_formats=DATE_FORMATS,
+                                                widget = forms.DateTimeInput(format=DATE_FORMATS),
+                                                required=True,)
 
     allow_deregistration = forms.NullBooleanField(required=False)
-    deregistration_deadline = forms.DateTimeField(required=False)
-    deregistration_deadline.widget = forms.DateInput(format=DATE_FORMAT)
-    deregistration_deadline.input_formats = (DATE_FORMAT,)
+    deregistration_deadline = forms.DateTimeField(input_formats=DATE_FORMATS,
+                                                  widget = forms.DateTimeInput(format=DATE_FORMATS),
+                                                  required=True,)
 
     def clean_image(self):
         image = self.cleaned_data['image']
