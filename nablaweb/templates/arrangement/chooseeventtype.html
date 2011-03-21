@@ -1,8 +1,8 @@
 <form action="" method="post">{% csrf_token %}
   <input type="hidden" name="init" value="true">
   <select name="event_type">
-    {% for type in event_types %}
-    <option value="{{ type }}">{{ type }}</option>
+    {% for choice in event_choices %}
+    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
     {% endfor %}
   </select>
   <input type="submit" value="Submit" />

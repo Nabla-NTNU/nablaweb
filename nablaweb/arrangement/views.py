@@ -13,12 +13,14 @@ import datetime
 def create(request):
     # TODO: Lag en liste over arrangementtyper bruker kan opprette.
     user_types = Event.event_types()
+    user_choices = Event.event_choices()
     event_type = request.POST.get('event_type')
-    print event_type
     form = EventForm(request.POST)
+    print event_type
+    print user_choices
     if request.method != 'POST' \
             or event_type not in user_types:
-        response = render_to_response('arrangement/chooseeventtype.html', RequestContext(request, {'event_types': user_types}))
+        response = render_to_response('arrangement/chooseeventtype.html', RequestContext(request, {'event_choices': user_choices}))
     elif form.is_valid():
         print "New event:"
         for k, v in form.cleaned_data.iteritems():

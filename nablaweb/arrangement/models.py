@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# arrangement/models.py
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -20,8 +23,8 @@ class Event(models.Model):
                         'options': (),},
                    }
 
-    EVENT_CHOICES = ((event_type, info['name'])
-                     for (event_type, info) in EVENT_TYPES.iteritems())
+    EVENT_CHOICES = [(event_type, info['name'])
+                     for (event_type, info) in EVENT_TYPES.iteritems()]
 
     class Meta:
         verbose_name_plural = "arrangement"
@@ -59,6 +62,10 @@ class Event(models.Model):
     @staticmethod
     def event_types():
         return Event.EVENT_TYPES.keys()
+
+    @staticmethod
+    def event_choices():
+        return Event.EVENT_CHOICES
 
     @staticmethod
     def event_groups(event_type):

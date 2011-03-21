@@ -13,6 +13,8 @@ DATE_FORMATS = ['%Y-%m-%d %H:%M:%S',
                 '%d/%m/%y %H:%M',
                 '%d/%m/%y',]
 
+DATE_FORMAT = DATE_FORMATS[1]
+
 class EventForm(forms.Form):
     title = forms.CharField(max_length=100, required=True)
     summary = forms.CharField(max_length=1000, widget=forms.Textarea, required=True)
@@ -27,22 +29,22 @@ class EventForm(forms.Form):
 
     location = forms.CharField(max_length=100, required=True)
     event_start = forms.DateTimeField(input_formats=DATE_FORMATS,
-                                      widget = forms.DateTimeInput(format=DATE_FORMATS),
+                                      widget = forms.DateTimeInput(format=DATE_FORMAT),
                                       required=True,)
     event_end = forms.DateTimeField(input_formats=DATE_FORMATS,
-                                    widget = forms.DateTimeInput(format=DATE_FORMATS),
+                                    widget = forms.DateTimeInput(format=DATE_FORMAT),
                                     required=True,)
 
     # TODO: Adgangskontroll
     places = forms.IntegerField(min_value=0, required=False)
     has_registration_deadline = forms.NullBooleanField(required=False)
     registration_deadline = forms.DateTimeField(input_formats=DATE_FORMATS,
-                                                widget = forms.DateTimeInput(format=DATE_FORMATS),
+                                                widget = forms.DateTimeInput(format=DATE_FORMAT),
                                                 required=True,)
 
     allow_deregistration = forms.NullBooleanField(required=False)
     deregistration_deadline = forms.DateTimeField(input_formats=DATE_FORMATS,
-                                                  widget = forms.DateTimeInput(format=DATE_FORMATS),
+                                                  widget = forms.DateTimeInput(format=DATE_FORMAT),
                                                   required=True,)
 
     def clean_image(self):
