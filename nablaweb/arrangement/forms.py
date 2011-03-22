@@ -37,12 +37,12 @@ class EventForm(forms.Form):
 
     # TODO: Adgangskontroll
     places = forms.IntegerField(min_value=0, required=False)
-    has_registration_deadline = forms.NullBooleanField(required=False)
+    has_registration_deadline = forms.BooleanField(required=False)
     registration_deadline = forms.DateTimeField(input_formats=DATE_FORMATS,
                                                 widget = forms.DateTimeInput(format=DATE_FORMAT),
                                                 required=True,)
 
-    allow_deregistration = forms.NullBooleanField(required=False)
+    allow_deregistration = forms.BooleanField(required=False)
     deregistration_deadline = forms.DateTimeField(input_formats=DATE_FORMATS,
                                                   widget = forms.DateTimeInput(format=DATE_FORMAT),
                                                   required=True,)
