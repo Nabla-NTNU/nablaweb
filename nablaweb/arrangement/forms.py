@@ -40,12 +40,12 @@ class EventForm(forms.Form):
     has_registration_deadline = forms.BooleanField(required=False)
     registration_deadline = forms.DateTimeField(input_formats=DATE_FORMATS,
                                                 widget = forms.DateTimeInput(format=DATE_FORMAT),
-                                                required=True,)
+                                                required=False,)
 
     allow_deregistration = forms.BooleanField(required=False)
     deregistration_deadline = forms.DateTimeField(input_formats=DATE_FORMATS,
                                                   widget = forms.DateTimeInput(format=DATE_FORMAT),
-                                                  required=True,)
+                                                  required=False,)
 
     def clean_image(self):
         image = self.cleaned_data['image']

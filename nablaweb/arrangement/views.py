@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # arrangement/views.py
 
 from nablaweb.arrangement.models import Event, NoShowDot
@@ -17,13 +20,18 @@ def create(request):
     event_type = request.POST.get('event_type')
     form = EventForm(request.POST)
     print event_type
+    print vars(form)
     if request.method != 'POST' \
             or event_type not in user_types:
         response = render_to_response('arrangement/chooseeventtype.html', RequestContext(request, {'event_choices': user_choices}))
     elif form.is_valid():
         print "New event:"
-        for k, v in form.cleaned_data.iteritems():
+        cd = form.cleaned_data
+        for k, v in cd.iteritems():
             print "%-25s %s" % (k, v)
+        # TODO: Stygg hack som bør fikses
+        del cd['allow_deregistration']
+        del cd['has_registration_deadline']
         event = Event(**form.cleaned_data)
         event.save()
         # TODO: Kan save() feile?
