@@ -32,7 +32,6 @@ class Event(models.Model):
             ("can_close", ""),
             )
 
-    alternative_id = models.CharField(max_length=32, blank=True)
     event_type = models.CharField(max_length=32, choices=EVENT_CHOICES)
 
     title = models.CharField(max_length=80)
@@ -40,22 +39,21 @@ class Event(models.Model):
     body = models.TextField(max_length=5000)
 #   image = models.ImageField(upload_to='temp', blank=True)
 
+    url = models.CharField(max_length=256, null=True, blank=True)
+    organizer = models.CharField(max_length=80, blank=True)
+    alternative_id = models.CharField(max_length=32, blank=True)
+
     location = models.CharField(max_length=80)
     event_start = models.DateTimeField(null=True)
     event_end = models.DateTimeField(null=True, blank=False)
-    organizer = models.CharField(max_length=80, blank=True)
-    url = models.CharField(max_length=256, null=True, blank=True)
+    registration_deadline = models.DateTimeField(null=True, blank=True)
+    deregistration_deadline = models.DateTimeField(null=True, blank=True)
+
     # TODO: Adgangskontroll
 
     places = models.PositiveIntegerField(null=True, blank=True)
     attending_users = models.ManyToManyField(User, related_name='events_attending', null=True, blank=True)
     waiting_list = models.ManyToManyField(User, related_name='events_waiting+', null=True, blank=True)
-
-    has_registration_deadline = models.NullBooleanField(default=False, blank=True)
-    registration_deadline = models.DateTimeField(null=True, blank=True)
-
-    allow_deregistration = models.NullBooleanField(default=True, blank=True)
-    deregistration_deadline = models.DateTimeField(null=True, blank=True)
 
     is_closed = models.BooleanField(default=False)
 
