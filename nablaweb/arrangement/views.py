@@ -17,7 +17,6 @@ def create(request):
     event_type = request.POST.get('event_type')
     form = EventForm(request.POST)
     print event_type
-    print user_choices
     if request.method != 'POST' \
             or event_type not in user_types:
         response = render_to_response('arrangement/chooseeventtype.html', RequestContext(request, {'event_choices': user_choices}))
@@ -35,7 +34,7 @@ def create(request):
                 initial={'event_type': event_type,
                          'event_start': datetime.datetime.now(),},
                 )
-        response = render_to_response('arrangement/create.html', RequestContext(request, {'form': form, 'event_type': event_type, 'options': Event.event_options(request.POST.get('event_type'))}))
+        response = render_to_response('arrangement/create.html', RequestContext(request, {'form': form, 'event_type': event_type, 'options': Event.event_options(event_type)}))
     return response
 
 def status(request, event_id):
