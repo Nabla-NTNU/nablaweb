@@ -15,19 +15,7 @@ DATE_FORMATS = ['%Y-%m-%d %H:%M:%S',
 
 DATE_FORMAT = DATE_FORMATS[1]
 
-class EventForm(forms.Form):
-    title = forms.CharField(max_length=100, required=True)
-    summary = forms.CharField(max_length=1000, widget=forms.Textarea, required=True)
-    body = forms.CharField(max_length=5000, widget=forms.Textarea, required=True)
-#   image = forms.ImageField(required=False)
-
-    alternative_id = forms.CharField(max_length=32, required=False)
-    event_type = forms.CharField(max_length=32, required=True)
-
-    organizer = forms.CharField(max_length=80, required=False)
-    url = forms.CharField(max_length=256, required=False)
-
-    location = forms.CharField(max_length=100, required=True)
+class EventForm(forms.ModelForm):
     event_start = forms.DateTimeField(input_formats=DATE_FORMATS,
                                       widget = forms.DateTimeInput(format=DATE_FORMAT),
                                       required=True,)
@@ -35,17 +23,17 @@ class EventForm(forms.Form):
                                     widget = forms.DateTimeInput(format=DATE_FORMAT),
                                     required=True,)
 
-    # TODO: Adgangskontroll
-    places = forms.IntegerField(min_value=0, required=False)
-    has_registration_deadline = forms.BooleanField(required=False)
-    registration_deadline = forms.DateTimeField(input_formats=DATE_FORMATS,
-                                                widget = forms.DateTimeInput(format=DATE_FORMAT),
-                                                required=False,)
-
     allow_deregistration = forms.BooleanField(required=False)
-    deregistration_deadline = forms.DateTimeField(input_formats=DATE_FORMATS,
-                                                  widget = forms.DateTimeInput(format=DATE_FORMAT),
-                                                  required=False,)
+    has_registration_deadline = forms.BooleanField(required=False)
+
+    class Meta:
+        model = Event
+        exclude = (
+            'permissions_string',
+            'waiting_list',
+            'attending_users',
+            'is_closed',
+            )
 
     def clean_image(self):
         image = self.cleaned_data['image']
