@@ -1,4 +1,7 @@
+# coding=<utf-8>
 # Django settings for nablaweb project.
+# Mulige innstillinger for nablaweb
+# Husk å sette opp hvor templatesmappa ligger
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -77,14 +80,11 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'nablaweb.urls'
 
-import os
-nablaweb_mappe = os.getcwd()
-
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    (nablaweb_mappe+"/templates"), 
+    ("/home/hiasen/webkom/nablaweb_devel/nablaweb/templates"), 
 )
 
 INSTALLED_APPS = (
