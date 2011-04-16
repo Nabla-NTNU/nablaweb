@@ -12,7 +12,7 @@ class Event(models.Model):
     EVENT_TYPES = {'simple':
                        {'name': 'Simple event',
                         'groups': {},
-                        'options': {'registration':True,},},
+                        'options': {},},
                    'standard':
                        {'name': 'Standard event',
                         'groups': {},
@@ -20,7 +20,7 @@ class Event(models.Model):
                    'bedpres':
                        {'name': 'Business presentation',
                         'groups': {},
-                        'options': {},},
+                        'options': {'registration':True, 'alternative_id':True},},
                    }
 
     EVENT_CHOICES = [(event_type, info['name'])

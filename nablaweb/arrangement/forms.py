@@ -2,6 +2,7 @@
 
 from django import forms
 from arrangement.models import Event
+import datetime
 
 DATE_FORMATS = ['%Y-%m-%d %H:%M:%S',
                 '%Y-%m-%d %H:%M',
@@ -79,8 +80,10 @@ class EventForm(forms.ModelForm):
 
     def clean_registration_deadline(self):
         registration_deadline = self.cleaned_data['registration_deadline']
-        if False:
-            raise forms.ValidationError("registration_deadline")
+        if self.cleaned_data.get('has_registration_deadline') is not True:
+            return None
+        elif registration_deadline < datetime.datetime.now():
+            raise forms.ValidationError("fuu")
         return registration_deadline
 
     def clean_allow_deregistration(self):
