@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %} Innholdsliste {% endblock %}
+
+{% block content%}
+{% for content in content_list %}
+<p>{{ content.headline }}</p>
+{% block list_content_headline%}{% endblock %}
+<p><em>{{ content.lead_paragraph }}</em></p>
+{% block list_content_lead_paragraph %}{% endblock %}
+<p><a href="vis/{{ content.id }}"/>Les mer</a>
+{% endfor %}
+{% endblock %}

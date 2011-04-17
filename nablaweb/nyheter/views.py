@@ -14,7 +14,8 @@ def show_news(request, news_id):
     return render_to_response('nyheter/base_news.html', {'content': news}, context_instance=RequestContext(request))
 
 def list_news(request):
-    return HttpResponse("Not yet implemented.")
+    news_list = News.objects.all()[:10]
+    return render_to_response('nyheter/list_news.html', {'content_list': news_list}, context_instance=RequestContext(request))
 
 def create_news(request):
     return HttpResponse("Not yet implemented.")
