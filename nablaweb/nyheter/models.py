@@ -1,17 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
-class News(models.Model):
+class SiteContent(models.Model):
+    class Meta:
+        abstract = True
+
+    created_date = models.DateTimeField(default=datetime.datetime.now(), blank=False, null=True)
+    created_by = models.ForeignKey(User, related_name="%(class)s_created", blank=False, null=True)
+    last_changed_date = models.DateTimeField(blank=True, null=True)
+    last_changed_by = models.ForeignKey(User, related_name="%(class)s_edited", blank=True, null=True)
+
+    headline = models.CharField(max_length=100, blank=False)
+    lead_paragraph = models.TextField(blank=True)
+    body = models.TextField(blank=True)
+
+class News(SiteContent):
     class Meta:
         verbose_name_plural = "news"
-    
-    user = models.ForeignKey(User)
-    author_name = models.CharField(max_length=64, null=True, blank=True) # hvis annen forfatter enn brukeren som poster
-    
-    headline = models.CharField(max_length=64)
-    lead_paragraph = models.TextField()
-    main_text = models.TextField()
-    pub_date = models.DateTimeField()
     
     def __unicode__(self):
         return self.headline

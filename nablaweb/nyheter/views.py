@@ -5,8 +5,4 @@ from django.template import RequestContext
 
 def show_news(request, news_id):
     news = get_object_or_404(News, id=news_id)
-    if news.author_name:
-        author_name = news.author_name
-    else:
-        author_name = news.user.get_full_name()
-    return render_to_response('nyheter/news_article.html', {'news': news, 'author_name':author_name}, context_instance=RequestContext(request))
+    return render_to_response('nyheter/base_news.html', {'content': news}, context_instance=RequestContext(request))

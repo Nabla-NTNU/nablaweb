@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} Nabla innhold - {{ content.headline }} {% endblock %}
+
+{% block content %}
+<h1>{{ content.headline }} </h1>
+<em>Skrevet av {{ content.created_by }} <br />
+{{content.created_date|date:"r" }} </em>
+
+<p><strong>{{ content.lead_paragraph }}</strong></p>
+
+<p>{{ content.body }}</p>
+
+{% endblock %}
