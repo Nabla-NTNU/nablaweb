@@ -8,6 +8,7 @@
 {% block list_content_headline%}{% endblock %}
 <p><em>{{ content.lead_paragraph }}</em></p>
 {% block list_content_lead_paragraph %}{% endblock %}
-<p><a href="vis/{{ content.id }}"/>Les mer</a>
+<p><a href="vis/{{ content.id }}"/>Les mer</a></p>
+{% if not forloop.last %}<br />{% endif %}
 {% endfor %}
 {% endblock %}
