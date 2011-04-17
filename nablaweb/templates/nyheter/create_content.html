@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %} Nytt innhold {% endblock %}
+
+{% block content %}
+{% if form.errors %}
+<p>Vennligst rett opp i feilene under.</p>
+{% endif %}
+
+<p>
+<form action="" method="post">{% csrf_token %}
+  <input type="hidden" name="event_type" value="{{ event_type }}">
+  <div class="field">
+    {{ form.headline.errors }}
+    <label for="id_headline">Tittel:</label>
+    {{ form.headline }}
+  </div>
+  <div class="field">
+    {{ form.lead_paragraph.errors }}
+    <label for="id_lead_paragraph">Ingress:</label>
+    {{ form.lead_paragraph }}
+  </div>
+  <div class="field">
+    {{ form.body.errors }}
+    <label for="id_body">Brodtekst:</Label>
+    {{ form.body }}
+  </div>
+  {% block sitecontent_form_extensions %}{% endblock %}
+  <input type="submit" value="Opprett">
+</form>
+</p>
+{% endblock %}
