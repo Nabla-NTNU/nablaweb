@@ -18,26 +18,29 @@ def list_news(request):
     news_list = News.objects.all()[:10]
     return render_to_response('nyheter/list_news.html', {'content_list': news_list}, context_instance=RequestContext(request))
 
-def create_news(request):
+def create_or_edit_news(request, news_id=None):
+    if news_id is None:
+        news = News()
+    else:
+        news = get_object_or_404(News, id=news_id)
     if request.method != 'POST':
-        form = NewsForm()
+        form = NewsForm(instance=news)
     else:
         form = NewsForm(data=request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            news = News(
-                created_date=datetime.datetime.now(),
-                created_by=None,
-                headline=cd['headline'],
-                lead_paragraph=cd['lead_paragraph'],
-                body=cd['body'],
-                )
+            news.headline = cd['headline']
+            news.lead_paragraph = cd['lead_paragraph']
+            news.body = cd['body']
+            if news_id is None:
+                news.created_date = datetime.datetime.now()
+                news.created_by = request.user
+            else:
+                news.last_changed_date = datetime.datetime.now()
+                news.last_changed_by = request.user
             news.save()
             return HttpResponseRedirect(reverse('nyheter.views.show_news', args=(news.id,)))
     return render_to_response('nyheter/create_news.html', {'form': form}, context_instance=RequestContext(request))
-
-def edit_news(request):
-    return HttpResponse("Not yet implemented.")
 
 def delete_news(request, news_id):
     return HttpResponse("Not yet implemented.")
