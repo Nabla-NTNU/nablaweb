@@ -1,11 +1,6 @@
 # nyheter/forms.py
 
-from django import forms
-from nyheter.models import SiteContent
-
-class SiteContentForm(forms.ModelForm):
-    class Meta:
-        model = SiteContent
+from innhold.forms import SiteContentForm
 
 class NewsForm(SiteContentForm):
     pass
