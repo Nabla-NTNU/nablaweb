@@ -9,8 +9,8 @@ urlpatterns = patterns('arrangement.views',
     (r'^(?P<event_id>\d+)/endre$', 'edit'),
     (r'^(?P<event_id>\d+)/slett$', 'delete'),
 # Offentlig
-    (r'^$', 'overview'),
-    (r'^(?P<event_id>\d+)/$', 'details'),
+    (r'^$', 'list_events'),
+    (r'^(?P<event_id>\d+)/$', 'show_event'),
 # Bruker
     (r'^mine$', 'show_user'),
     (r'^(?P<event_id>\d+)/registrering$', 'registration'),

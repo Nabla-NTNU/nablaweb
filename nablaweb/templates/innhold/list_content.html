@@ -2,12 +2,12 @@
 
 {% block title %} Innholdsliste {% endblock %}
 
-{% block content%}
+{% block content %}
 {% for content in content_list %}
 <p>{{ content.headline }}</p>
-{% block list_content_headline%}{% endblock %}
+{% block after_headline%}{% endblock %}
 <p><em>{{ content.lead_paragraph }}</em></p>
-{% block list_content_lead_paragraph %}{% endblock %}
+{% block after_lead_paragraph %}{% endblock %}
 <p><a href="{{ content.id }}"/>Les mer</a></p>
 {% if not forloop.last %}<br />{% endif %}
 {% endfor %}

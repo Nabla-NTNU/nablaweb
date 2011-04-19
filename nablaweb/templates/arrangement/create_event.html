@@ -1,27 +1,14 @@
-{% if form.errors %}
-<p>
-  Vennligst rett opp i feilene under.
-</p>
-{% endif %}
+{% extends "innhold/create_content.html" %}
 
-<p>
-<form action="" method="post">{% csrf_token %}
-  <input type="hidden" name="event_type" value="{{ event_type }}">
+{% block title %}Nytt arrangement{% endblock %}
+
+{% block form_fields %}
   <div class="field">
-    {{ form.title.errors }}
-    <label for="id_title">Tittel:</label>
-    {{ form.title }}
+    {{ form.alternative_id.errors }}
+    <label for="id_alternative_id">Alternativ id:</label>
+    {{ form.alternative_id }}
   </div>
-  <div class="field">
-    {{ form.summary.errors }}
-    <label for="id_summary">Ingress:</label>
-    {{ form.summary }}
-  </div>
-  <div class="field">
-    {{ form.body.errors }}
-    <label for="id_body">Brodtekst:</Label>
-    {{ form.body }}
-  </div>
+
   <div class="field">
     {{ form.location.errors }}
     <label for="id_location">Sted:</label>
@@ -37,14 +24,7 @@
     <label for="id_event_end">Slutt:</label>
     {{ form.event_end }}
   </div>
-  {% if options.alternative_id %}
-  <div class="field">
-    {{ form.alternative_id.errors }}
-    <label for="id_alternative_id">Alternativ id:</label>
-    {{ form.alternative_id }}
-  </div>
-  {% endif %}
-  {% if options.registration %}
+
   <div class="field">
     {{ form.places.errors }}
     <label for="id_places">Plasser:</label>
@@ -70,14 +50,4 @@
     <label for="id_deregistration_deadline">Avmeldingsfrist:</label>
     {{ form.deregistration_deadline }}
   </div>
-  {% endif %}
-  {% if options.FOO %}
-  <div class="field">
-    {{ form.FOO.errors }}
-    <label for="id_FOO">FOO:</label>
-    {{ form.FOO }}
-  </div>
-  {% endif %}
-  <input type="submit" value="Opprett">
-</form>
-</p>
+{% endblock %}

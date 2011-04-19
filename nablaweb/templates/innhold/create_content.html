@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Nytt innhold {% endblock %}
+{% block title %}Nytt innhold{% endblock %}
 
 {% block content %}
 {% if form.errors %}
@@ -25,7 +25,7 @@
     <label for="id_body">Brodtekst:</Label>
     {{ form.body }}
   </div>
-  {% block sitecontent_form_extensions %}{% endblock %}
+  {% block form_fields %}{% endblock %}
   <input type="submit" value="Lagre">
 </form>
 </p>

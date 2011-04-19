@@ -41,7 +41,7 @@ def create(request):
                 initial={'event_type': event_type,
                          'event_start': datetime.datetime.now(),},
                 )
-        response = render_to_response('arrangement/create.html', RequestContext(request, {'form': form, 'event_type': event_type, 'options': Event.event_options(event_type)}))
+        response = render_to_response('arrangement/create_event.html', RequestContext(request, {'form': form, 'event_type': event_type, 'options': Event.event_options(event_type)}))
     return response
 
 def status(request, event_id):
@@ -56,12 +56,12 @@ def delete(request, event_id):
 
 # Offentlig
 
-def overview(request):
-    return render_to_response('arrangement/overview.html', {'event_list': Event.objects.all()})
+def list_events(request):
+    return render_to_response('arrangement/list_events.html', {'content_list': Event.objects.all()})
 
-def details(request, event_id):
+def show_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    return render_to_response('arrangement/details.html', {'event': event})
+    return render_to_response('arrangement/base_event.html', {'content': event})
 
 
 # Bruker
