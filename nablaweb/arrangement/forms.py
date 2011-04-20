@@ -23,48 +23,20 @@ class EventForm(SiteContentForm):
                                       required=True,)
     event_end = forms.DateTimeField(input_formats=DATE_FORMATS,
                                     widget = forms.DateTimeInput(format=DATE_FORMAT),
-                                    required=True,)
+                                    required=False,)
 
+    event_has_registration = forms.BooleanField(required=False)
     allow_deregistration = forms.BooleanField(required=False)
     has_registration_deadline = forms.BooleanField(required=False)
 
     class Meta:
         model = Event
-        exclude = (
-            'permissions_string',
-            'waiting_list',
-            'attending_users',
-            )
 
-    def clean_image(self):
-        image = self.cleaned_data['image']
+    def clean_event_start(self):
+        event_start = self.cleaned_data['event_start']
         if False:
-            raise forms.ValidationError("image")
-        return image
-
-    def clean_alternative_id(self):
-        alternative_id = self.cleaned_data['alternative_id']
-        if False:
-            raise forms.ValidationError("alternative_id")
-        return alternative_id
-
-    def clean_event_type(self):
-        event_type = self.cleaned_data['event_type']
-        if False:
-            raise forms.ValidationError("event_type")
-        return event_type
-
-    def clean_organizer(self):
-        organizer = self.cleaned_data['organizer']
-        if False:
-            raise forms.ValidationError("organizer")
-        return organizer
-
-    def clean_url(self):
-        url = self.cleaned_data['url']
-        if False:
-            raise forms.ValidationError("url")
-        return url
+            raise forms.ValidationError("event_start")
+        return event_start
 
     def clean_event_end(self):
         event_end = self.cleaned_data['event_end']
@@ -72,11 +44,11 @@ class EventForm(SiteContentForm):
             raise forms.ValidationError("event_end")
         return event_end
 
-    def clean_places(self):
-        places = self.cleaned_data['places']
+    def event_has_registration(self):
+        event_has_registration = self.cleaned_data['event_has_registration']
         if False:
-            raise forms.ValidationError("places")
-        return places
+            raise forms.ValidationError("event_has_registration")
+        return event_has_registration
 
     def clean_registration_deadline(self):
         registration_deadline = self.cleaned_data['registration_deadline']
@@ -96,3 +68,8 @@ class EventForm(SiteContentForm):
             raise forms.ValidationError("deregistration_deadline")
         return deregistration_deadline
 
+    def clean_places(self):
+        places = self.cleaned_data['places']
+        if False:
+            raise forms.ValidationError("places")
+        return places

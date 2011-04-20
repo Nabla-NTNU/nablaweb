@@ -67,9 +67,8 @@ def show_event(request, event_id):
 # Bruker
 
 def show_user(request):
-    event_list = request.user.events_attending.all()
+    event_list = request.user.eventregistration_set.all()
     dot_list = request.user.noshowdot_set.all()
-    print event_list
     return render_to_response('arrangement/showuser.html', {'event_list': event_list, 'dot_list': dot_list, 'member': request.user})
 
 def registration(request, event_id):
