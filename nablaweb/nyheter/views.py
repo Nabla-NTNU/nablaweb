@@ -32,11 +32,10 @@ def create_or_edit_news(request, news_id=None):
             news.headline = cd['headline']
             news.lead_paragraph = cd['lead_paragraph']
             news.body = cd['body']
-            news.last_changed_date = datetime.datetime.now()
-            news.last_changed_by = request.user
             if news_id is None:
-                news.created_date = datetime.datetime.now()
                 news.created_by = request.user
+            else:
+                news.last_changed_by = request.user
             news.save()
             return HttpResponseRedirect(reverse('nyheter.views.show_news', args=(news.id,)))
     return render_to_response('nyheter/create_news.html', {'form': form}, context_instance=RequestContext(request))
