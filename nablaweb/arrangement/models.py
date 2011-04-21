@@ -27,10 +27,15 @@ class Event(SiteContent):
         return self.places - self.eventregistration_set.count()
 
     def is_full(self):
-        return self.free_places() == 0
+        return self.free_places() <= 0
 
     def is_attending(self, user):
         pass
+
+    def registration_required(self):
+        if self.registration_deadline is not None:
+            return True
+        return False
 
 
 class EventRegistration(models.Model):

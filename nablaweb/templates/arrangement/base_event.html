@@ -1,17 +1,32 @@
 {% extends "innhold/base_content.html" %}
 
 {% block after_title %}
-{% if content.organizer %}Arrangør: {{ content.organizer }}<br />{% endif %}
+
+{% if content.organizer %}
+Arrangør: {{ content.organizer }}<br />
+{% endif %}
+
 Sted: {{ content.location }}<br />
+
 Start: {{ content.event_start }}<br />
-{% if content.event_end %}Slutt: {{ content.event_end }}<br />{% endif %}
-{% if content.registration_deadline %}Påmeldingsfrist: {{ content.registration_deadline }}<br />Tillat avmelding: {{ content.deregistration_deadline|yesno:"Ja,Nei"}}<br />{% endif %}
-{% if content.deregistration_deadline %}{{ content.deregistration_deadline }}<br />{% endif %}
-{% if not content.places %}
-Åpent for alle komponenter (påmeldingsknapp her?)
-{% else %}{% if content.is_full %}
+
+{% if content.event_end %}
+Slutt: {{ content.event_end }}<br />
+{% endif %}
+
+{% if content.registration_deadline %}
+Påmeldingsfrist: {{ content.registration_deadline }}<br />
+Tillat avmelding: {{ content.deregistration_deadline|yesno:"Ja,Nei"}}<br />
+{% endif %}
+
+{% if content.registration_required %}
+{% if content.is_full %}
 Fullt (ventelisteknapp her?)
 {% else %}
 Ledige plasser: {{ content.free_places }}
-{% endif %}{% endif %}<br />
+{% endif %}
+{% else %}
+Ingen påmelding påkrevd.
+{% endif %}<br />
+
 {% endblock %}
