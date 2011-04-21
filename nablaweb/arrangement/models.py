@@ -37,6 +37,7 @@ class EventRegistration(models.Model):
     event = models.ForeignKey(Event, blank=False, null=True)
     person = models.ForeignKey(User, blank=False, null=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
+    place = models.PositiveIntegerField(blank=False, null=True)
 
 
 class NoShowDot(models.Model):
