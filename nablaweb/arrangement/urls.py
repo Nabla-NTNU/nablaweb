@@ -4,9 +4,9 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('arrangement.views',
 # Administrasjon
-    (r'^opprett/$', 'create'),
+    (r'^opprett/$', 'create_or_edit_event'),
     (r'^(?P<event_id>\d+)/status$', 'status'),
-    (r'^(?P<event_id>\d+)/endre$', 'edit'),
+    (r'^(?P<event_id>\d+)/endre$', 'create_or_edit_event'),
     (r'^(?P<event_id>\d+)/slett$', 'delete'),
 # Offentlig
     (r'^$', 'list_events'),

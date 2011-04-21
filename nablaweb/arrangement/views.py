@@ -9,40 +9,29 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, RequestContext, loader
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 import datetime
 
 # Administrasjon
 
-def create(request):
-    # TODO: Lag en liste over arrangementtyper bruker kan opprette.
-    user_types = Event.event_types()
-    user_choices = Event.event_choices()
-    event_type = request.POST.get('event_type')
-    form = EventForm(request.POST)
-    if request.method != 'POST' \
-            or event_type not in user_types:
-        response = render_to_response('arrangement/chooseeventtype.html', RequestContext(request, {'event_choices': user_choices}))
-    elif form.is_valid():
-        print "New event:"
-        cd = form.cleaned_data
-        for k, v in cd.iteritems():
-            print "%-25s %s" % (k, v)
-        # TODO: Stygg hack som bør fikses
-        del cd['allow_deregistration']
-        del cd['has_registration_deadline']
-        event = Event(**form.cleaned_data)
-        event.save()
-        # TODO: Kan save() feile?
-        response = HttpResponseRedirect('/arrangement/%d/' % event.id)
+def create_or_edit_event(request, event_id=None):
+    if event_id is None:
+        event = Event()
     else:
-        print form.errors
-        if request.POST.get('init'):
-            form = EventForm(
-                initial={'event_type': event_type,
-                         'event_start': datetime.datetime.now(),},
-                )
-        response = render_to_response('arrangement/create_event.html', RequestContext(request, {'form': form, 'event_type': event_type, 'options': Event.event_options(event_type)}))
-    return response
+        event = get_object_or_404(Event, id=event_id)
+    if request.method != 'POST':
+        form = EventForm(instance=event)
+    else:
+        form = EventForm(data=request.POST, instance=event)
+        if form.is_valid():
+            event = form.save(commit=False)
+            if event_id is None:
+                event.created_by = request.user
+            else:
+                event.last_changed_by = request.user
+            event.save()
+            return HttpResponseRedirect(reverse('arrangement.views.show_event', args=(event.id,)))
+    return render_to_response('arrangement/create_event.html', {'form': form}, context_instance=RequestContext(request))
 
 def status(request, event_id):
     return HttpResponse("Not implemented.")
