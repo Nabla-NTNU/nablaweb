@@ -19,6 +19,7 @@ def list_news(request):
     return render_to_response('nyheter/list_news.html', {'content_list': news_list}, context_instance=RequestContext(request))
 
 def create_or_edit_news(request, news_id=None):
+    # Sjekk om nyheten skal endres; ingen news_id betyr ny nyhet.
     if news_id is None:
         news = News()
     else:
@@ -26,12 +27,9 @@ def create_or_edit_news(request, news_id=None):
     if request.method != 'POST':
         form = NewsForm(instance=news)
     else:
-        form = NewsForm(data=request.POST)
+        form = NewsForm(data=request.POST, instance=news)
         if form.is_valid():
-            cd = form.cleaned_data
-            news.headline = cd['headline']
-            news.lead_paragraph = cd['lead_paragraph']
-            news.body = cd['body']
+            news = form.save(commit=False)
             if news_id is None:
                 news.created_by = request.user
             else:
