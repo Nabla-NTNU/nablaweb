@@ -13,7 +13,7 @@ urlpatterns = patterns('arrangement.views',
     (r'^(?P<event_id>\d+)/$', 'show_event'),
 # Bruker
     (r'^mine$', 'show_user'),
-    (r'^(?P<event_id>\d+)/registrering$', 'registration'),
+    (r'^(?P<event_id>\d+)/registrering$', 'register_user'),
 # Eksporter
     (r'^(?P<event_id>\d+)/eksporter$', 'ical_event'),
 )

@@ -5,6 +5,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from innhold.models import SiteContent
+import datetime
 
 class Event(SiteContent):
     class Meta:
@@ -37,6 +38,24 @@ class Event(SiteContent):
             return True
         return False
 
+    def register_user(self, user):
+        if datetime.datetime.now() > self.registration_deadline:
+            return u"Påmeldingen har stengt."
+        registration = self.eventregistration_set.filter(person=user)
+        if registration:
+            registration = registration[0]
+        else:
+            registration = EventRegistration(
+                event=self,
+                person=user,
+                place=self.eventregistration_set.count()+1,
+                )
+            registration.save()
+        if registration.place <= self.places:
+            return u"Du er påmeldt."
+        else:
+            return u"Du står på venteliste."
+        
 
 class EventRegistration(models.Model):
     event = models.ForeignKey(Event, blank=False, null=True)

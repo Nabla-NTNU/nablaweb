@@ -60,11 +60,10 @@ def show_user(request):
     dot_list = request.user.noshowdot_set.all()
     return render_to_response('arrangement/showuser.html', {'event_list': event_list, 'dot_list': dot_list, 'member': request.user})
 
-def registration(request, event_id):
-    return HttpResponse("Not implemented.")
-
-def register(request, event_id):
-    return HttpResponse("Not implemented.")
+def register_user(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    message = event.register_user(request.user)
+    return render_to_response('arrangement/base_event.html', {'content': event, 'messages': (message,)})
 
 
 # Eksporter
