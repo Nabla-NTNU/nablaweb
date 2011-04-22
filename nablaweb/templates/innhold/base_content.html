@@ -9,9 +9,13 @@
 
 {% block after_title %}{% endblock %}
 
+{% if content.lead_paragraph %}
 <p><strong>{{ content.lead_paragraph }}</strong></p>
+{% endif %}
 
+{% if content.body %}
 <p>{{ content.body }}</p>
+{% endif %}
 
 {% block after_body %}{% endblock %}
 {% endblock %}
