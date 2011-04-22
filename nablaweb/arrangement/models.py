@@ -7,9 +7,9 @@ from django.contrib.auth.models import User
 from innhold.models import SiteContent
 import datetime
 
-class Event(SiteContent):
-    class Meta:
-        verbose_name_plural = "arrangement"
+class Happening(SiteContent):
+    class Meta(SiteContent.Meta):
+        abstract = True
 
     # Indikerer hvem som står bak arrangementet.
     # Dette feltet er valgfritt.
@@ -25,6 +25,15 @@ class Event(SiteContent):
     # Dette feltet er valgfritt.
     # Datoen er ikke tidligere enn event_start.
     event_end = models.DateTimeField(null=True, blank=True)
+
+    def __unicode__(self):
+        return u'%s, %s' % (self.headline, self.event_start.strftime('%d/%m/%y'))
+
+
+class Event(Happening):
+    class Meta(Happening.Meta):
+        verbose_name_plural = "arrangement"
+
 
     # Frist for å melde seg på arrangementet.
     # Dette feltet er valgfritt.
@@ -42,9 +51,6 @@ class Event(SiteContent):
     # Dette feltet er satt hvis og bare hvis registration_deadline er satt.
     # Antall plasser er et heltall ikke mindre enn null.
     places = models.PositiveIntegerField(null=True, blank=True)
-
-    def __unicode__(self):
-        return u'%s, %s' % (self.headline, self.event_start.strftime('%d/%m/%y'))
 
     def free_places(self):
         return self.places - self.eventregistration_set.count()
