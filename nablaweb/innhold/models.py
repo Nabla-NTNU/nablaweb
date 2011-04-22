@@ -17,3 +17,5 @@ class SiteContent(models.Model):
     lead_paragraph = models.TextField(blank=True)
     body = models.TextField(blank=True)
 
+    def __unicode__(self):
+        return self.headline
