@@ -11,14 +11,36 @@ class Event(SiteContent):
     class Meta:
         verbose_name_plural = "arrangement"
 
+    # Indikerer hvem som står bak arrangementet.
+    # Dette feltet er valgfritt.
     organizer = models.CharField(max_length=100, blank=True)
+
+    # Hvor arrangementet foregår.
     location = models.CharField(max_length=100, blank=False)
 
+    # Når arrangementet starter.
     event_start = models.DateTimeField(null=True, blank=False)
+
+    # Når arrangementet slutter.
+    # Dette feltet er valgfritt.
+    # Datoen er ikke tidligere enn event_start.
     event_end = models.DateTimeField(null=True, blank=True)
+
+    # Frist for å melde seg på arrangementet.
+    # Dette feltet er valgfritt.
+    # At dette feltet er satt er ekvivalent med at arrangementet krever påmelding.
+    # Datoen er ikke senere enn event_start.
     registration_deadline = models.DateTimeField(null=True, blank=True)
+
+    # Frist for å melde seg av arrangementet.
+    # Dette feltet er valgfritt.
+    # Dette feltet er bare satt hvis registration_deadline er satt.
+    # Datoen er ikke tidligere enn registration_deadline og ikke senere enn event_start.
     deregistration_deadline = models.DateTimeField(null=True, blank=True)
 
+    # Hvor mange plasser arrangementet har.
+    # Dette feltet er satt hvis og bare hvis registration_deadline er satt.
+    # Antall plasser er et heltall ikke mindre enn null.
     places = models.PositiveIntegerField(null=True, blank=True)
 
     def __unicode__(self):
