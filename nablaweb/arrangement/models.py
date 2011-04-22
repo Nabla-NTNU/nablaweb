@@ -55,7 +55,32 @@ class Event(SiteContent):
             return u"Du er påmeldt."
         else:
             return u"Du står på venteliste."
-        
+
+    def test_event_fields(event):
+        assert isinstance(event.location, str) or isinstance(event.location, unicode)
+        assert event.location != '' and event.location != u''
+
+        assert event.event_start is not None
+        assert isinstance(event.event_start, datetime.datetime)
+
+        if event.event_end is not None:
+            assert isinstance(event.event_end, datetime.datetime)
+            assert event.event_end >= event.event_start 
+
+        if event.registration_deadline is not None:
+            assert isinstance(event.registration_deadline, datetime.datetime)
+            assert event.registration_deadline <= event.event_start 
+            assert isinstance(event.places, int) or isinstance(event.places, long)
+            assert event.places >= 0
+        else:
+            assert event.places is None
+            assert event.deregistration_deadline is None
+
+        if event.deregistration_deadline is not None:
+            assert isinstance(event.deregistration_deadline, datetime.datetime)
+            assert event.deregistration_deadline <= event.event_start
+            assert event.deregistration_deadline >= registration_deadline
+
 
 class EventRegistration(models.Model):
     event = models.ForeignKey(Event, blank=False, null=True)
