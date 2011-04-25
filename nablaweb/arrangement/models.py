@@ -88,35 +88,35 @@ class Event(Happening):
         else:
             return u"Du står på venteliste."
 
-    def test_event_fields(event):
-        assert isinstance(event.location, str) or isinstance(event.location, unicode)
-        assert event.location != '' and event.location != u''
+    def test_event_fields(self):
+        assert isinstance(self.location, str) or isinstance(self.location, unicode)
+        assert self.location != '' and self.location != u''
 
-        assert event.event_start is not None
-        assert isinstance(event.event_start, datetime.datetime)
+        assert self.event_start is not None
+        assert isinstance(self.event_start, datetime.datetime)
 
-        if event.event_end is not None:
-            assert isinstance(event.event_end, datetime.datetime)
-            assert event.event_end >= event.event_start
+        if self.event_end is not None:
+            assert isinstance(self.event_end, datetime.datetime)
+            assert self.event_end >= self.event_start
 
-        if event.registration_deadline is not None:
-            assert isinstance(event.registration_deadline, datetime.datetime)
-            assert event.registration_deadline <= event.event_start 
-            assert isinstance(event.places, int) or isinstance(event.places, long)
-            assert event.places >= 0
-            assert isinstance(event.has_queue, bool)
+        if self.registration_deadline is not None:
+            assert isinstance(self.registration_deadline, datetime.datetime)
+            assert self.registration_deadline <= self.event_start 
+            assert isinstance(self.places, int) or isinstance(self.places, long)
+            assert self.places >= 0
+            assert isinstance(self.has_queue, bool)
         else:
-            assert event.places is None
-            assert event.deregistration_deadline is None
-            assert event.has_queue is None
+            assert self.places is None
+            assert self.deregistration_deadline is None
+            assert self.has_queue is None
 
-        if event.deregistration_deadline is not None:
-            assert isinstance(event.deregistration_deadline, datetime.datetime)
-            assert event.deregistration_deadline <= event.event_start
-            assert event.deregistration_deadline >= registration_deadline
+        if self.deregistration_deadline is not None:
+            assert isinstance(self.deregistration_deadline, datetime.datetime)
+            assert self.deregistration_deadline <= self.event_start
+            assert self.deregistration_deadline >= self.registration_deadline
 
-        if event.has_queue is not None:
-            assert isinstance(event.has_queue, bool)
+        if self.has_queue is not None:
+            assert isinstance(self.has_queue, bool)
 
 
 class EventRegistration(models.Model):
