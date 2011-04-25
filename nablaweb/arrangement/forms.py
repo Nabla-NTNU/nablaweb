@@ -29,5 +29,7 @@ class EventForm(SiteContentForm):
     deregistration_allowed = forms.BooleanField(required=False)
     has_registration_deadline = forms.BooleanField(required=False)
 
+    has_queue = forms.BooleanField(required=False)
+
     class Meta:
         model = Event

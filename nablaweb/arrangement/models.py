@@ -34,7 +34,6 @@ class Event(Happening):
     class Meta(Happening.Meta):
         verbose_name_plural = "arrangement"
 
-
     # Frist for å melde seg på arrangementet.
     # Dette feltet er valgfritt.
     # At dette feltet er satt er ekvivalent med at arrangementet krever påmelding.
@@ -51,6 +50,11 @@ class Event(Happening):
     # Dette feltet er satt hvis og bare hvis registration_deadline er satt.
     # Antall plasser er et heltall ikke mindre enn null.
     places = models.PositiveIntegerField(null=True, blank=True)
+
+    # Om arrangementet har venteliste.
+    # Dette feltet er valgfritt.
+    # Dette feltet er bare satt hvis registration_deadline er satt.
+    has_queue = models.NullBooleanField(null=True, blank=True)
 
     def free_places(self):
         return self.places - self.eventregistration_set.count()
@@ -93,22 +97,26 @@ class Event(Happening):
 
         if event.event_end is not None:
             assert isinstance(event.event_end, datetime.datetime)
-            assert event.event_end >= event.event_start 
+            assert event.event_end >= event.event_start
 
         if event.registration_deadline is not None:
             assert isinstance(event.registration_deadline, datetime.datetime)
             assert event.registration_deadline <= event.event_start 
             assert isinstance(event.places, int) or isinstance(event.places, long)
             assert event.places >= 0
+            assert isinstance(event.has_queue, bool)
         else:
             assert event.places is None
             assert event.deregistration_deadline is None
+            assert event.has_queue is None
 
         if event.deregistration_deadline is not None:
             assert isinstance(event.deregistration_deadline, datetime.datetime)
             assert event.deregistration_deadline <= event.event_start
             assert event.deregistration_deadline >= registration_deadline
 
+        if event.has_queue is not None:
+            assert isinstance(event.has_queue, bool)
 
 class EventRegistration(models.Model):
     event = models.ForeignKey(Event, blank=False, null=True)

@@ -50,4 +50,11 @@
     <label for="id_deregistration_deadline">Avmeldingsfrist:</label>
     {{ form.deregistration_deadline }}
   </div>
+  <div class="field">
+    {{ form.has_queue.errors }}
+    <label for="id_has_queue">Venteliste:</label>
+    {{ form.has_queue }}
+  </div>
+
+
 {% endblock %}
