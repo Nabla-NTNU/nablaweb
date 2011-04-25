@@ -2,10 +2,12 @@
 
 # arrangement/models.py
 
+
 from django.db import models
 from django.contrib.auth.models import User
 from innhold.models import SiteContent
 import datetime
+
 
 class Happening(SiteContent):
     class Meta(SiteContent.Meta):
@@ -66,9 +68,7 @@ class Event(Happening):
         pass
 
     def registration_required(self):
-        if self.registration_deadline is not None:
-            return True
-        return False
+        return self.registration_deadline is not None
 
     def register_user(self, user):
         if datetime.datetime.now() > self.registration_deadline:
@@ -117,6 +117,7 @@ class Event(Happening):
 
         if event.has_queue is not None:
             assert isinstance(event.has_queue, bool)
+
 
 class EventRegistration(models.Model):
     event = models.ForeignKey(Event, blank=False, null=True)
