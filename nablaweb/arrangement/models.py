@@ -71,8 +71,12 @@ class Event(Happening):
         return self.registration_deadline is not None
 
     def register_user(self, user):
-        if datetime.datetime.now() > self.registration_deadline:
+        if self.registration_deadline is None:
+            return u"Ingen påmelding."
+        elif datetime.datetime.now() > self.registration_deadline:
             return u"Påmeldingen har stengt."
+        elif self.is_full() and self.has_queue is False:
+            return u"Fullt."
         registration = self.eventregistration_set.filter(person=user)
         if registration:
             registration = registration[0]
