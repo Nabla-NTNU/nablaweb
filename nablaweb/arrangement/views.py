@@ -20,15 +20,21 @@ def create_or_edit_event(request, event_id=None):
     else:
         event = get_object_or_404(Event, id=event_id)
     if request.method != 'POST':
-        form = EventForm(instance=event)
+        form = EventForm(instance=event,
+                         initial={'registration_required': event.registration_deadline is not None},
+                         )
     else:
-        form = EventForm(data=request.POST, instance=event)
+        form = EventForm(data=request.POST,
+                         instance=event,
+                         initial={'registration_required': event.registration_deadline is not None},
+                         )
         if form.is_valid():
             event = form.save(commit=False)
             if event_id is None:
                 event.created_by = request.user
             else:
                 event.last_changed_by = request.user
+            event.test_event_fields()
             event.save()
             return HttpResponseRedirect(reverse('arrangement.views.show_event', args=(event.id,)))
     return render_to_response('arrangement/create_event.html', {'form': form}, context_instance=RequestContext(request))

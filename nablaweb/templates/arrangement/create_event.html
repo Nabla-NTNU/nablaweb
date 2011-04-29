@@ -21,24 +21,19 @@
   </div>
 
   <div class="field">
+    {{ form.registration_required.errors }}
+    <label for="id_registration_required">Påmelding:</label>
+    {{ form.registration_required }}
+  </div>
+  <div class="field">
     {{ form.places.errors }}
     <label for="id_places">Plasser:</label>
     {{ form.places }}
   </div>
   <div class="field">
-    {{ form.has_registration_deadline.errors }}
-    <label for="id_has_registration_deadline">Registreringsfrist:</label>
-    {{ form.has_registration_deadline }}
-  </div>
-  <div class="field">
     {{ form.registration_deadline.errors }}
-    <label for="id_registration_deadline">Frist:</label>
+    <label for="id_registration_deadline">Påmeldingsfrist:</label>
     {{ form.registration_deadline }}
-  </div>
-  <div class="field">
-    {{ form.allow_deregistration.errors }}
-    <label for="id_allow_deregistration">Tillat avmelding:</label>
-    {{ form.allow_deregistration }}
   </div>
   <div class="field">
     {{ form.deregistration_deadline.errors }}
@@ -50,6 +45,5 @@
     <label for="id_has_queue">Venteliste:</label>
     {{ form.has_queue }}
   </div>
-
 
 {% endblock %}

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # arrangement/forms.py
 
 from django import forms
@@ -29,10 +31,8 @@ class HappeningForm(SiteContentForm):
         model = Happening
 
 
-class EventForm(SiteContentForm):
+class EventForm(HappeningForm):
     registration_required = forms.BooleanField(required=False)
-    deregistration_allowed = forms.BooleanField(required=False)
-    has_registration_deadline = forms.BooleanField(required=False)
     has_queue = forms.BooleanField(required=False)
 
     class Meta(HappeningForm.Meta):
@@ -40,4 +40,34 @@ class EventForm(SiteContentForm):
 
     def clean(self):
         cleaned_data = self.cleaned_data
+        event_start = cleaned_data.get("event_start")
+        registration_required = cleaned_data.get("registration_required")
+        places = cleaned_data.get("places")
+        registration_deadline = cleaned_data.get("registration_deadline")
+        deregistration_deadline = cleaned_data.get("deregistration_deadline")
+        has_queue = cleaned_data.get("has_queue")
+
+        if registration_required is True:
+            if not places and "places" not in self._errors:
+                self._errors["places"] = self.error_class([u'Antall plasser er påkrevd når "påmelding" er valgt.'])
+
+            if not registration_deadline and "registration_deadline" not in self._errors:
+                self._errors["registration_deadline"] = self.error_class([u'Påmeldingsfrist er påkrevd når "påmelding" er valgt.'])
+            elif event_start and registration_deadline and registration_deadline > event_start:
+                self._errors["registration_deadline"] = self.error_class([u'Påmeldingsfrist må ikke være senere enn arrangementstart.'])
+
+            if event_start and deregistration_deadline and deregistration_deadline > event_start:
+                self._errors["deregistration_deadline"] = self.error_class([u"Avmeldingsfrist må ikke være senere enn arrangementstart."])
+        else:
+            field_names = (
+                "places",
+                "registration_deadline",
+                "deregistration_deadline",
+                "has_queue",
+                )
+            for name in field_names:
+                cleaned_data[name] = None
+                if name in self._errors:
+                    del self._errors[name]
+
         return cleaned_data

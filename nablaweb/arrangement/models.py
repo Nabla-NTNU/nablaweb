@@ -45,7 +45,7 @@ class Event(Happening):
     # Frist for å melde seg av arrangementet.
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_deadline er satt.
-    # Datoen er ikke tidligere enn registration_deadline og ikke senere enn event_start.
+    # Datoen er ikke senere enn event_start.
     deregistration_deadline = models.DateTimeField(null=True, blank=True)
 
     # Hvor mange plasser arrangementet har.
