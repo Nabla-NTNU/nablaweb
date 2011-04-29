@@ -5,7 +5,7 @@
 {% block content %}
 <h1>{{ content.headline }} </h1>
 <em>Publisert {{content.created_date|date:"r" }} av {{ content.created_by }}<br />
-{% if content.last_changed_by %}Sist endret {{content.last_changed_date|date:"r" }} av {{ content.last_changed_by }}{% endif %}</em>
+{% if content.last_changed_by %}Sist endret {{content.last_changed_date|date:"r" }} av {{ content.last_changed_by }}<br />{% endif %}</em>
 
 {% block after_title %}{% endblock %}
 
