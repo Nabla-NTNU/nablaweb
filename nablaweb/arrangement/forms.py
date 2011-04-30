@@ -58,7 +58,7 @@ class EventForm(HappeningForm):
         has_queue = cleaned_data.get("has_queue")
 
         if registration_required is True:
-            if not places and "places" not in self._errors:
+            if places is None and "places" not in self._errors:
                 self._errors["places"] = self.error_class([u'Antall plasser er påkrevd når "påmelding" er valgt.'])
 
             if not registration_deadline and "registration_deadline" not in self._errors:
