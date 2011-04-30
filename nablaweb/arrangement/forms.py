@@ -58,6 +58,9 @@ class EventForm(HappeningForm):
 
             if event_start and deregistration_deadline and deregistration_deadline > event_start:
                 self._errors["deregistration_deadline"] = self.error_class([u"Avmeldingsfrist må ikke være senere enn arrangementstart."])
+
+            if has_queue is None and "has_queue" not in self._errors:
+                cleaned_data["has_queue"] = False
         else:
             field_names = (
                 "places",
