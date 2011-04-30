@@ -30,6 +30,16 @@ class HappeningForm(SiteContentForm):
     class Meta(SiteContentForm.Meta):
         model = Happening
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        event_start = cleaned_data.get("event_start")
+        event_end = cleaned_data.get("event_end")
+
+        if event_start and event_end and event_start > event_end:
+            self._errors["event_end"] = self.error_class([u'Arrangementslutt må ikke være tidligere enn arrangementstart.'])
+
+        return cleaned_data
+
 
 class EventForm(HappeningForm):
     registration_required = forms.BooleanField(required=False)
@@ -39,7 +49,7 @@ class EventForm(HappeningForm):
         model = Event
 
     def clean(self):
-        cleaned_data = self.cleaned_data
+        cleaned_data = super(EventForm, self).clean()
         event_start = cleaned_data.get("event_start")
         registration_required = cleaned_data.get("registration_required")
         places = cleaned_data.get("places")
