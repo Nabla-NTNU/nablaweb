@@ -64,11 +64,20 @@ class Event(Happening):
     def is_full(self):
         return self.free_places() <= 0
 
+    def users_attending(self):
+        return min(self.eventregistration_set.count(), self.places)
+
+    def users_waiting(self):
+        return -min(self.free_places(), 0)
+
     def is_attending(self, user):
         pass
 
     def registration_required(self):
         return self.registration_deadline is not None
+
+    def has_waiting_list(self):
+        return self.has_queue is not None
 
     def register_user(self, user):
         if self.registration_deadline is None:

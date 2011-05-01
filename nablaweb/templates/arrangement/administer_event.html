@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.headline }}{% endblock %}
+
+{% block content %}
+<h2>{{ event.headline }}</h2>
+
+{% if event.registration_required %}
+  <p>
+    Plasser: {{ event.users_attending }}<br />
+    Påmeldte: {{ event.users_attending }}<br />
+    {% if event.has_waiting_list %}
+      Ventende: {{ event.users_waiting }}<br />
+    {% endif %}
+  </p>
+  {% if registrations %}
+    <table border="1">
+      <tr>
+        <td>Plass</td>
+        <td>Navn</td>
+      </tr>
+      {% for registration in registrations %}
+      <tr>
+        <td>{{ registration.place }}</td>
+        <td>{{ registration.person }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    Det er ingen påmeldte brukere.
+  {% endif %}
+{% endif %}
+{% endblock %}

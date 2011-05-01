@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # arrangement/views.py
@@ -11,6 +10,7 @@ from django.template import Context, RequestContext, loader
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 import datetime
+
 
 # Administrasjon
 
@@ -39,8 +39,10 @@ def create_or_edit_event(request, event_id=None):
             return HttpResponseRedirect(reverse('arrangement.views.show_event', args=(event.id,)))
     return render_to_response('arrangement/create_event.html', {'form': form}, context_instance=RequestContext(request))
 
-def status(request, event_id):
-    return HttpResponse("Not implemented.")
+def administer(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    registrations = event.eventregistration_set.all().order_by('place')
+    return render_to_response('arrangement/administer_event.html', {'event': event, 'registrations': registrations}, context_instance=RequestContext(request))
 
 def edit(request, event_id):
     return HttpResponse("Not implemented.")
