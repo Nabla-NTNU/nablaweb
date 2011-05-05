@@ -1,0 +1,19 @@
+Metadata-Version: 1.0
+Name: postmarkup
+Version: 1.1.4
+Summary: BBCode to (X)HTML rendering engine
+Home-page: http://code.google.com/p/postmarkup/
+Author: Will McGugan
+Author-email: will@willmcgugan.com
+License: Python Software Foundation License
+Download-URL: http://code.google.com/p/postmarkup/downloads/list
+Description: Converts BBCode (http://en.wikipedia.org/wiki/BBCode) in to HTML and
+        XHTML snippets. Always outputs valid XHTML, even from badly nested BBCode.
+        
+Platform: any
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python
+Classifier: License :: OSI Approved :: Python Software Foundation License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Text Processing :: Markup

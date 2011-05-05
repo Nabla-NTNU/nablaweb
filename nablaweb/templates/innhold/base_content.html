@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load bbcode %}
+
 {% block title %}{{ content.headline }}{% endblock %}
 
 {% block content %}
@@ -14,7 +16,7 @@
 {% endif %}
 
 {% if content.body %}
-<p>{{ content.body }}</p>
+<p>{{ content.body|bbcode }}</p>
 {% endif %}
 
 {% endblock %}
