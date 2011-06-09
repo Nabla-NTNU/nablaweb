@@ -9,9 +9,9 @@ from innhold.models import SiteContent
 import datetime
 
 
-class Happening(SiteContent):
+class Event(SiteContent):
     class Meta(SiteContent.Meta):
-        abstract = True
+        verbose_name_plural = "arrangement"
 
     # Indikerer hvem som står bak arrangementet.
     # Dette feltet er valgfritt.
@@ -27,14 +27,6 @@ class Happening(SiteContent):
     # Dette feltet er valgfritt.
     # Datoen er ikke tidligere enn event_start.
     event_end = models.DateTimeField(null=True, blank=True)
-
-    def __unicode__(self):
-        return u'%s, %s' % (self.headline, self.event_start.strftime('%d/%m/%y'))
-
-
-class Event(Happening):
-    class Meta(Happening.Meta):
-        verbose_name_plural = "arrangement"
 
     # Frist for å melde seg på arrangementet.
     # Dette feltet er valgfritt.
@@ -57,6 +49,9 @@ class Event(Happening):
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_deadline er satt.
     has_queue = models.NullBooleanField(null=True, blank=True)
+
+    def __unicode__(self):
+        return u'%s, %s' % (self.headline, self.event_start.strftime('%d/%m/%y'))
 
     def free_places(self):
         return self.places - self.eventregistration_set.count()

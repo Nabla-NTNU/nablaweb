@@ -3,7 +3,7 @@
 # arrangement/forms.py
 
 from django import forms
-from arrangement.models import Event, Happening
+from arrangement.models import Event
 from innhold.forms import SiteContentForm
 import datetime
 
@@ -19,7 +19,8 @@ DATE_FORMATS = ['%Y-%m-%d %H:%M:%S',
 
 DATE_FORMAT = DATE_FORMATS[1]
 
-class HappeningForm(SiteContentForm):
+
+class EventForm(SiteContentForm):
     event_start = forms.DateTimeField(input_formats=DATE_FORMATS,
                                       widget = forms.DateTimeInput(format=DATE_FORMAT),
                                       required=True,)
@@ -27,35 +28,24 @@ class HappeningForm(SiteContentForm):
                                     widget = forms.DateTimeInput(format=DATE_FORMAT),
                                     required=False,)
 
+    registration_required = forms.BooleanField(required=False)
+    has_queue = forms.BooleanField(required=False)
+
     class Meta(SiteContentForm.Meta):
-        model = Happening
+        model = Event
 
     def clean(self):
         cleaned_data = self.cleaned_data
         event_start = cleaned_data.get("event_start")
         event_end = cleaned_data.get("event_end")
-
-        if event_start and event_end and event_start > event_end:
-            self._errors["event_end"] = self.error_class([u'Arrangementslutt må ikke være tidligere enn arrangementstart.'])
-
-        return cleaned_data
-
-
-class EventForm(HappeningForm):
-    registration_required = forms.BooleanField(required=False)
-    has_queue = forms.BooleanField(required=False)
-
-    class Meta(HappeningForm.Meta):
-        model = Event
-
-    def clean(self):
-        cleaned_data = super(EventForm, self).clean()
-        event_start = cleaned_data.get("event_start")
         registration_required = cleaned_data.get("registration_required")
         places = cleaned_data.get("places")
         registration_deadline = cleaned_data.get("registration_deadline")
         deregistration_deadline = cleaned_data.get("deregistration_deadline")
         has_queue = cleaned_data.get("has_queue")
+
+        if event_start and event_end and event_start > event_end:
+            self._errors["event_end"] = self.error_class([u'Arrangementslutt må ikke være tidligere enn arrangementstart.'])
 
         if registration_required is True:
             if places is None and "places" not in self._errors:
