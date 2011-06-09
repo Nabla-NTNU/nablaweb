@@ -9,11 +9,11 @@ Du er påmeldt til følgende arrangement:
 </ul>
 {% endif %}
 
-Du har {{ dot_list|length }} prikk{{dot_list|length|pluralize:"er"}}.
-{% if dot_list %}
+Du har {{ penalty_list|length }} prikk{{penalty_list|length|pluralize:"er"}}.
+{% if penalty_list %}
 <ul>
-{% for dot in dot_list %}
-<li><a href="{{ dot.event.id }}"/>{{ dot }}</a></li>
+{% for penalty in penalty_list %}
+<li><a href="{{ penalty.event.id }}"/>{{ penalty }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}

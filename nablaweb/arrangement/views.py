@@ -2,7 +2,7 @@
 
 # arrangement/views.py
 
-from nablaweb.arrangement.models import Event, NoShowDot
+from nablaweb.arrangement.models import Event
 from nablaweb.arrangement.forms import EventForm
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
@@ -65,8 +65,8 @@ def show_event(request, event_id):
 
 def show_user(request):
     event_list = request.user.eventregistration_set.all()
-    dot_list = request.user.noshowdot_set.all()
-    return render_to_response('arrangement/showuser.html', {'event_list': event_list, 'dot_list': dot_list, 'member': request.user})
+    penalty_list = request.user.eventpenalty_set.all()
+    return render_to_response('arrangement/showuser.html', {'event_list': event_list, 'penalty_list': penalty_list, 'member': request.user})
 
 def register_user(request, event_id):
     event = get_object_or_404(Event, pk=event_id)

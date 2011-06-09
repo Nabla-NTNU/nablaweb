@@ -134,9 +134,9 @@ class EventRegistration(models.Model):
     place = models.PositiveIntegerField(blank=False, null=True)
 
 
-class NoShowDot(models.Model):
+class EventPenalty(models.Model):
     event = models.ForeignKey(Event)
     user = models.ForeignKey(User)
 
     def __unicode__(self):
-        return u'NoShowDot: %s, %s' % (self.event, self.user)
+        return u'EventPenalty: %s, %s' % (self.event, self.user)

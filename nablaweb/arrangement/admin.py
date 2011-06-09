@@ -1,7 +1,7 @@
 # arrangement/admin.py
 
 from django.contrib import admin
-from arrangement.models import Event, EventRegistration, NoShowDot
+from arrangement.models import Event, EventRegistration, EventPenalty
 
 class EventAdmin(admin.ModelAdmin):
     pass
@@ -9,9 +9,9 @@ class EventAdmin(admin.ModelAdmin):
 class EventRegistrationAdmin(admin.ModelAdmin):
     pass
 
-class NoShowDotAdmin(admin.ModelAdmin):
+class EventPenaltyAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Event)
 admin.site.register(EventRegistration)
-admin.site.register(NoShowDot)
+admin.site.register(EventPenalty)
