@@ -81,13 +81,13 @@ class Event(SiteContent):
             return u"Påmeldingen har stengt."
         elif self.is_full() and self.has_queue is False:
             return u"Fullt."
-        registration = self.eventregistration_set.filter(person=user)
+        registration = self.eventregistration_set.filter(user=user)
         if registration:
             registration = registration[0]
         else:
             registration = EventRegistration(
                 event=self,
-                person=user,
+                user=user,
                 place=self.eventregistration_set.count()+1,
                 )
             registration.save()
@@ -129,14 +129,14 @@ class Event(SiteContent):
 
 class EventRegistration(models.Model):
     event = models.ForeignKey(Event, blank=False, null=True)
-    person = models.ForeignKey(User, blank=False, null=True)
+    user = models.ForeignKey(User, blank=False, null=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
     place = models.PositiveIntegerField(blank=False, null=True)
 
 
 class NoShowDot(models.Model):
     event = models.ForeignKey(Event)
-    person = models.ForeignKey(User)
+    user = models.ForeignKey(User)
 
     def __unicode__(self):
-        return u'NoShowDot: %s, %s' % (self.event, self.person)
+        return u'NoShowDot: %s, %s' % (self.event, self.user)
