@@ -19,3 +19,6 @@ class SiteContent(models.Model):
 
     def __unicode__(self):
         return self.headline
+
+    def has_been_edited(self):
+        return self.last_changed_by is not None
