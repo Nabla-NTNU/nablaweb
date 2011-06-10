@@ -6,6 +6,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from innhold.models import SiteContent
+
 import datetime
 
 
@@ -53,20 +54,35 @@ class Event(SiteContent):
     def __unicode__(self):
         return u'%s, %s' % (self.headline, self.event_start.strftime('%d/%m/%y'))
 
+    # Returnerer antall ledige plasser, dvs antall plasser som
+    # umiddelbart gir brukeren en garantert plass, og ikke bare
+    # ventelisteplass.
     def free_places(self):
-        return self.places - self.eventregistration_set.count()
+        return max(self.places - self.eventregistration_set.count(), 0)
 
     def is_full(self):
-        return self.free_places() <= 0
+        return self.free_places() == 0
 
+    # Returnerer antall brukere som er påmeldt.
     def users_attending(self):
         return min(self.eventregistration_set.count(), self.places)
 
+    # Returnerer antall brukere som står på venteliste.
     def users_waiting(self):
-        return -min(self.free_places(), 0)
+        return max(self.eventregistration_set.count() - self.places, 0)
 
-    def is_attending(self, user):
-        pass
+    # Returnerer antall brukere som er registrerte, og som dermed
+    # enten er påmeldte eller står på venteliste.
+    def users_registered(self):
+        return self.eventregistration_set.count()
+
+    # Returnerer True dersom brukeren er registrert, False ellers.
+    def is_registered(self, user):
+        try:
+            self.eventregistration_set.get(user=user)
+            return True
+        except EventRegistration.DoesNotExist:
+            return False
 
     def registration_required(self):
         return self.registration_deadline is not None
@@ -95,6 +111,42 @@ class Event(SiteContent):
             return u"Du er påmeldt."
         else:
             return u"Du står på venteliste."
+
+    # Endrer kønummeret til brukeren 'user' med 'places', eller til
+    # topp/bunn av ventelisten.
+    def move_user(self, user, places):
+        if places == 0:
+            return
+        e_regs = self.eventregistration_set.all()
+        u_reg = e_regs.get(user=user)
+
+        old = u_reg.place
+        new = old + places
+        new = max(1, new)
+        new = min(self.users_registered(), new)
+
+        if new > old:
+            step = 1
+            interval = xrange(old, new, step)
+        elif new < old:
+            step = -1
+            interval = xrange(old-1, new-1, step)
+        else:
+            return
+
+        for i in interval:
+            o_reg = e_regs[i]
+            o_reg.place -= step
+            o_reg.save()
+
+        u_reg.place=new
+        u_reg.save()
+
+    def up_user(self, user, places):
+        self.move_user(user, -places)
+
+    def down_user(self, user, places):
+        self.move_user(user, places)
 
     def test_event_fields(self):
         assert isinstance(self.location, str) or isinstance(self.location, unicode)
@@ -132,6 +184,9 @@ class EventRegistration(models.Model):
     user = models.ForeignKey(User, blank=False, null=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
     place = models.PositiveIntegerField(blank=False, null=True)
+
+    def __unicode__(self):
+        return u'EventRegistration: %s, %d: %s' % (self.event, self.place, self.user)
 
 
 class EventPenalty(models.Model):
