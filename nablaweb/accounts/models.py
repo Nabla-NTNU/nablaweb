@@ -12,6 +12,5 @@ class UserProfile(models.Model):
     wants_email = models.BooleanField("Motta kullmail", default = True)
     about = models.TextField("Biografi",blank = True)
     ntnu_card_number = models.CharField("NTNU kortnr",max_length = 20, blank = True)
-
     def __unicode__(self):
         return "< %s profile >" % self.user.username

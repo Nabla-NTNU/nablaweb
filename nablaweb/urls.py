@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     (r'^medlemmer/(?P<username>\w+)/', 'accounts.views.view_member_profile'),
     (r'^arrangement/', include('nablaweb.arrangement.urls')),
 
-
+    (r'^avatar/', include('avatar.urls')),
     # Midlertidige urler (kommer mest sannsynlig til aa forandres)
     (r'^profile/edit/$', 'accounts.views.edit_profile'),
 
