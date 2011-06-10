@@ -1,0 +1,8 @@
+{% if updated %}
+<p>Brukerprofil oppdatert</p>
+{% endif %}
+<form action="" method="post">{% csrf_token %}
+{{ userForm.as_p }}
+{{ profileForm.as_p }}
+<input type="submit" value="Send inn" />
+</form>
