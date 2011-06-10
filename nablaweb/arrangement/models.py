@@ -54,16 +54,16 @@ class Event(SiteContent):
         return u'%s, %s' % (self.headline, self.event_start.strftime('%d/%m/%y'))
 
     def free_places(self):
-        return self.places - self.eventregistration_set.count()
+        return max(self.places - self.eventregistration_set.count(), 0)
 
     def is_full(self):
-        return self.free_places() <= 0
+        return self.free_places() == 0
 
     def users_attending(self):
         return min(self.eventregistration_set.count(), self.places)
 
     def users_waiting(self):
-        return -min(self.free_places(), 0)
+        return max(self.eventregistration_set.count() - self.places, 0)
 
     def is_attending(self, user):
         pass
