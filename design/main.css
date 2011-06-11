@@ -1,0 +1,61 @@
+.centeredContainer {
+	width: 1300px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	font-size: 100%;
+	font-family: helvetica, sans-serif;
+}
+
+#head {
+	width: 100%;
+	height: 155px;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	background-color: #323c3e;
+	background-position: left top;
+	background-origin: border-box;
+	-webkit-background-origin: border-box;
+
+	border-bottom: 1px solid #0e0e0e;
+}
+
+#head img, #head h1{
+	float: left;
+}
+
+#head img {
+	width: 70px;
+}
+
+table.loginBox {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	float: right;
+	width: 305px;
+}
+
+table.loginBox td {
+	font-size: 0.9em;
+	color: #efba3b;
+}
+
+table.loginBox th {
+	color: #b89030;
+}
+
+.loginBox td.hJustert {
+	text-align: right;
+}
+
+.clear {
+	clear: both;
+	display: block;
+}
