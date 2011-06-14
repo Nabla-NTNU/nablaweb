@@ -88,7 +88,7 @@ class Event(SiteContent):
         return self.registration_deadline is not None
 
     def has_waiting_list(self):
-        return self.has_queue is not None
+        return bool(self.has_queue)
 
     def register_user(self, user):
         if self.registration_deadline is None:
@@ -157,7 +157,15 @@ class Event(SiteContent):
 
         u_reg.number = new
         u_reg.save()
-        
+
+    def resize(self):
+        if not self.registration_required():
+            for reg in self.eventregistration_set.all():
+                reg.delete()
+        elif not self.has_waiting_list():
+            for reg in self.eventregistration_set.all()[self.places:]:
+                reg.delete()
+
     def test_event_fields(self):
         assert isinstance(self.location, str) or isinstance(self.location, unicode)
         assert self.location != '' and self.location != u''
@@ -194,7 +202,7 @@ def test():
     u = User.objects.get(username='oyvinlek')
     for r in e.eventregistration_set.all():
         r.delete()
-    for us in User.objects.all()[:20]:
+    for us in User.objects.all():
         e.register_user(us)
     return e, u
 

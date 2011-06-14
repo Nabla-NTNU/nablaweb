@@ -37,6 +37,7 @@ def create_or_edit_event(request, event_id=None):
                 event.last_changed_by = request.user
             event.test_event_fields()
             event.save()
+            event.resize()
             return HttpResponseRedirect(reverse('arrangement.views.show_event', args=(event.id,)))
     return render_to_response('arrangement/create_event.html', {'form': form}, context_instance=RequestContext(request))
 
