@@ -6,6 +6,7 @@
 <h2>{{ event.headline }}</h2>
 
 {% if event.registration_required %}
+<form action="" method="post">{% csrf_token %}
   <p>
     Plasser: {{ event.places }}<br />
     Påmeldte: {{ event.users_attending }}<br />
@@ -14,20 +15,31 @@
     {% endif %}
   </p>
   {% if registrations %}
-    <table border="1">
-      <tr>
-        <td>Plass</td>
-        <td>Navn</td>
-      </tr>
-      {% for registration in registrations %}
-      <tr>
-        <td>{{ registration.place }}</td>
-        <td>{{ registration.user }}</td>
-      </tr>
-      {% endfor %}
-    </table>
+  <select name="action">
+    {% for int_name, ext_name in actions.iteritems %}
+    <option value="{{ int_name }}">{{ ext_name }}</option>
+    {% endfor %}
+  </select>
+  <input type="text" name="text" size="10" maxlength="10" />
+  <input type="submit" name="commit_changes" value="Utfør endringer" />
+
+  <table border="1">
+    <tr>
+      <td>Plass</td>
+      <td>Navn</td>
+      <td align="center">X</td>
+    </tr>
+    {% for registration in registrations %}
+    <tr>
+      <td>{{ forloop.counter }} ({{ registration.number }})</td>
+      <td>{{ registration.user }}</td>
+      <td><input type="checkbox" name="user" value="{{ registration.user }}" {% if check_boxes %}checked{% endif %} /></td>
+    </tr>
+    {% endfor %}
+  </table>
   {% else %}
     Det er ingen påmeldte brukere.
   {% endif %}
+</form>
 {% endif %}
 {% endblock %}

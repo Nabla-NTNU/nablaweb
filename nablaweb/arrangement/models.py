@@ -97,57 +97,67 @@ class Event(SiteContent):
             return u"Påmeldingen har stengt."
         elif self.is_full() and self.has_queue is False:
             return u"Fullt."
-        registration = self.eventregistration_set.filter(user=user)
-        if registration:
-            registration = registration[0]
-        else:
+
+        try:
+            registration = self.eventregistration_set.get(user=user)
+        except EventRegistration.DoesNotExist:
+            last_number = self.eventregistration_set.aggregate(models.Max('number'))['number__max']
+            if last_number is None: last_number = 0
             registration = EventRegistration(
                 event=self,
                 user=user,
-                place=self.eventregistration_set.count()+1,
+                number=last_number+1 # 10
                 )
             registration.save()
-        if registration.place <= self.places:
+
+        # TODO: Fiks betingelsen under
+        if registration.number <= self.places:
             return u"Du er påmeldt."
         else:
             return u"Du står på venteliste."
 
-    # Endrer kønummeret til brukeren 'user' med 'places', eller til
-    # topp/bunn av ventelisten.
-    def move_user(self, user, places):
-        if places == 0:
-            return
-        e_regs = self.eventregistration_set.all()
+    # Melder brukeren av arrangementet. I praksis sørger metoden bare
+    # for at brukeren ikke er påmeldt lengre, uavhengig av status før.
+    def deregister_user(self, user):
+        try: # Dersom brukeren er påmeldt
+            u_reg = self.eventregistration_set.get(user=user)
+            u_reg.delete()
+        except EventRegistration.DoesNotExist:
+            pass
+
+    def move_user_to_place(self, user, place):
+        e_regs = self.eventregistration_set.all().order_by('number')
+        regs = len(e_regs)
         u_reg = e_regs.get(user=user)
 
-        old = u_reg.place
-        new = old + places
-        new = max(1, new)
-        new = min(self.users_registered(), new)
+        current = u_reg.number
+        place = max(1, place)
+        place = min(regs, place)
+        place -= 1 # Justering til 0-indeksering
 
-        if new > old:
-            step = 1
-            interval = xrange(old, new, step)
-        elif new < old:
-            step = -1
-            interval = xrange(old-1, new-1, step)
-        else:
+        if e_regs[place] == u_reg:
             return
+        elif place == 0:
+            new = e_regs[0].number - 1 # 10
+        elif place == regs-1:
+            new = e_regs[place].number + 1 # 10
+        else:
+            o_reg = e_regs[place]
+            new = prev_num = o_reg.number
+            if new > current: prev_num = new = new+1
+            while o_reg.number == prev_num and o_reg != u_reg:
+                prev_num += 1
+                o_reg.number = prev_num
+                o_reg.save()
+                place += 1
+                if place < regs:
+                    o_reg = e_regs[place]
+                else:
+                    break
 
-        for i in interval:
-            o_reg = e_regs[i]
-            o_reg.place -= step
-            o_reg.save()
-
-        u_reg.place=new
+        u_reg.number = new
         u_reg.save()
-
-    def up_user(self, user, places):
-        self.move_user(user, -places)
-
-    def down_user(self, user, places):
-        self.move_user(user, places)
-
+        
     def test_event_fields(self):
         assert isinstance(self.location, str) or isinstance(self.location, unicode)
         assert self.location != '' and self.location != u''
@@ -179,14 +189,24 @@ class Event(SiteContent):
             assert isinstance(self.has_queue, bool)
 
 
+def test():
+    e = Event.objects.get(id=1)
+    u = User.objects.get(username='oyvinlek')
+    for r in e.eventregistration_set.all():
+        r.delete()
+    for us in User.objects.all()[:20]:
+        e.register_user(us)
+    return e, u
+
+
 class EventRegistration(models.Model):
     event = models.ForeignKey(Event, blank=False, null=True)
     user = models.ForeignKey(User, blank=False, null=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
-    place = models.PositiveIntegerField(blank=False, null=True)
+    number = models.PositiveIntegerField(blank=False, null=True)
 
     def __unicode__(self):
-        return u'EventRegistration: %s, %d: %s' % (self.event, self.place, self.user)
+        return u'EventRegistration: %s, %d: %s' % (self.event, self.number, self.user)
 
 
 class EventPenalty(models.Model):
