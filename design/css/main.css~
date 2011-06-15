@@ -1,0 +1,103 @@
+.centeredContainer {
+	width: 90%;
+	margin: 0 auto;
+	padding: 0;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	font-size: 100%;
+	font-family: helvetica, sans-serif;
+	height: 100%;
+}
+
+#head {
+	width: 100%;
+	height: 140px;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	background-color: #323c3e;
+	background-position: left top;
+	background-origin: border-box;
+	-webkit-background-origin: border-box;
+
+	border-bottom: 1px solid #0e0e0e;
+}
+
+#head img, #head h1{
+	float: left;
+}
+
+#head img {
+	width: 70px;
+}
+
+#neck {
+	width: 100%;
+	height: 155px;
+	background-color: #dbe7bc;
+	background-position: left top;
+	background-image: url('../img/neck_background.jpg');
+	background-repeat: repeat-x;
+	-moz-background-size: 467px 140px;
+	background-size: 467px 140px;
+
+}
+
+div.lcontainer {
+	float: left;
+}
+
+#sekk {
+	width: 110px;
+	border: 0;
+	margin: 20px 0 0 0;
+}
+
+.clear {
+	clear: both;
+	display: block;
+	width: 0px;
+	height: 0px;
+}
+
+#neck h3.overskrift {
+	width: 300px;
+	height: 18px;
+	margin: 0 0 8px 0;
+	padding: 0 0 10px 20px;
+	background-image: url('../img/for_arr_overskrift.png');
+	background-size: 300px 18px;
+	-moz-background-size: 300px 18px;
+	background-repeat: no-repeat;
+	background-position: bottom left;
+	color: #2f6662;
+}
+
+#neck a {
+	text-decoration: none;
+	margin: 0;
+	padding: 0;
+}
+
+#nesteArrang {
+	float: left;
+	margin: 0.5% 0 0 3.1%;
+}
+
+#kalender {
+	float: left;
+	margin: 0.5% 0 0 20%;
+}
+
+#body {
+	width: 100%;
+	background-image: url('../img/body_background.png');
+	repeat: repeat-x;
+	background-position: left top;
+	background-color: #9cbbca;
+	border-top: 1px solid black;
+}

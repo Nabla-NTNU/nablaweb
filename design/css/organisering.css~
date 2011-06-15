@@ -1,0 +1,38 @@
+#body div.left {
+	width: 5%;
+}
+#body div.middle {
+	width: 60%;
+}
+
+#body div.right {
+	width: 30%;
+}
+
+#body div.left, #body div.middle, #body div.right {
+	float: left;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 1px solid blue;
+}
+
+#body div.middle div.marginLeft {
+	width: 20%;
+}
+
+#body div.middle div.marginRight {
+	width: 59%;
+}
+
+#body div.middle div.marginCenter {
+	width: 20%
+}
+
+#body div.middle div.marginLeft, #body div.middle div.marginRight, #body div.middle div.marginCenter {
+	float: left;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 1px solid red;
+}

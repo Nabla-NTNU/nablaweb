@@ -1,0 +1,20 @@
+table.loginBox {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	float: right;
+	width: 305px;
+}
+
+table.loginBox td {
+	font-size: 0.9em;
+	color: #efba3b;
+}
+
+table.loginBox th {
+	color: #b89030;
+}
+
+.loginBox td.hJustert {
+	text-align: right;
+}

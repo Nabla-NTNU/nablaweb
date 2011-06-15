@@ -1,0 +1,65 @@
+#nesteArrang table, #nesteArrang table div {
+	margin: 0;
+	padding: 0;
+}
+
+#nesteArrang table td {
+	margin: 0;
+	padding: 0 10px 10px 0;
+}
+
+#nesteArrang table div.dato, #nesteArrang table div.innh {
+	float: left;
+}
+
+#nesteArrang table div.dato {
+	background-image: url('../img/kalender_dag.png');
+	height: 35px;
+	width: 32px;
+	background-repeat: no-repeat;
+	background-position: left top;
+	background-size: 32px 35px;
+	-moz-background-size: 32px 35px;
+	padding: 0;
+	margin: 0;
+}
+
+#nesteArrang table div.innh {
+	padding: 0 0 0 5px;
+	margin: 0;
+}
+
+#nesteArrang table div.month {
+	color: white;
+	font-size: 0.5em;
+	font-weight: bold;
+}
+
+#nesteArrang table div.month, #nesteArrang table div.day {
+	width: 100%;
+	text-align: center;
+}
+
+#nesteArrang table div.day {
+	color: black;
+	font-size: 0.8em;
+}
+
+#nesteArrang table div.innh h4 {
+	font-size: 0.9em;
+}
+
+#nesteArrang table div.innh a {
+	text-decoration: none;
+	color: black;
+}
+
+#nesteArrang table div.innh h4, #nesteArrang table div.innh p {
+	margin: 0;
+	padding: 0;
+}
+
+#nesteArrang table div.innh p {
+	font-size: 0.8em;
+}
+
