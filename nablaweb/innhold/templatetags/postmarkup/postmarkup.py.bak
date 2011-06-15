@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: UTF-8 -*-
 
 """
 Post Markup
@@ -114,7 +114,6 @@ def create(include=None, exclude=None, use_pygments=True, **kwargs):
             u"http://dictionary.reference.com/browse/%s", u'dictionary.com', **kwargs)
 
     add_tag(ImgTag, u'img')
-    add_tag(VideoTag, u'video')
     add_tag(ListTag, u'list')
     add_tag(ListItemTag, u'*')
 
@@ -416,21 +415,6 @@ class ImgTag(TagBase):
         contents = strip_bbcode(contents).replace(u'"', "%22")
 
         return u'<img src="%s"></img>' % contents
-
-
-class VideoTag(TagBase):
-
-    def __init__(self, name, **kwargs):
-        TagBase.__init__(self, name, inline=True)
-
-    def render_open(self, parser, node_index):
-
-        contents = self.get_contents(parser)
-        self.skip_contents(parser)
-
-        contents = strip_bbcode(contents).replace(u'"', "%22")
-        
-        return u'<video src="%s" controls="controls">HTML5 Video</video>' % contents
 
 
 class ListTag(TagBase):
