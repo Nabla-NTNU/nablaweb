@@ -3,36 +3,88 @@
 }
 #body div.middle {
 	width: 60%;
+	overflow: hidden;
 }
 
 #body div.right {
 	width: 30%;
 }
 
-#body div.left, #body div.middle, #body div.right {
+#body div.left, #body div.middle, #body div.right, #body div.middle div.leftMargin, #body div.middle div.centerMargin {
 	float: left;
-	height: 100%;
+	min-height: 100%;
+	margin: 0 0 -9999px 0;
+	padding: 0 0 9999px 0;
+}
+
+#body div.middle div.leftMargin {
+	width: 43px;
+	background-image: url('../img/left_margin.png');
+	background-position: left top;
+	background-repeat: no-repeat;
+}
+
+#body div.middle div.centerMargin {
+	width: 497px;
+}
+
+#body div.middle div.centerMargin div.box {
+	width: 100%;
+	background-image: url('../img/box_right.png');
+	background-position: right bottom;
+	background-repeat: no-repeat;
 	margin: 0;
 	padding: 0;
-	border: 1px solid blue;
 }
 
-#body div.middle div.marginLeft {
-	width: 20%;
+#body div.topBox, #body div.middleBox, #body div.footBox {
+	margin: 0 17px 0 0;
+	width: 480px;
 }
 
-#body div.middle div.marginRight {
-	width: 59%;
+#body div.topBox {
+	height: 60px;
+	background-image: url('../img/top_box.png');
+	background-position: top left;
+	background-repeat: no-repeat;
+
+	z-index: 1;
 }
 
-#body div.middle div.marginCenter {
-	width: 20%
+#body div.middle div.middleBox {
+	width: 476px;
+	height: auto;
+       	background-image: url('../img/middle_box.png');
+	background-repeat: repeat-x;
+	background-position: top left;;
+	background-color: white;
+
+	border-left: 2px solid #7bd2cc;
+	border-right: 2px solid #7bd2cc;
+	border-bottom: 2px solid #7bd2cc;
+	border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 8px;
+	-moz-border-bottom-left-radius: 8px;
+	-moz-border-bottom-right-radius: 8px;
+
+	z-index: 2;
 }
 
-#body div.middle div.marginLeft, #body div.middle div.marginRight, #body div.middle div.marginCenter {
-	float: left;
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	border: 1px solid red;
+#body div.footBox {
+	height: 24px;
+	background-image: url('../img/foot_box.png');
+	background-position: bottom right;
+	background-repeat: no-repeat;
+	clear: both;
+}
+
+#body div.innh {
+	width: 436px;
+
+	margin: 0 0 0 40px;
+	padding:0;
+	position: relative;
+	top: -15px;
+
+	z-index: 3;
 }

@@ -15,5 +15,11 @@ Rød kalender double: d50f12
 
 Gradient fra hvit til blå inni innholdboks: cdedf9
 
+Side-tab i innh: 41b2da
+Artikkel-detaljer: 8c9598
+Artikkel-tekst: 545a5c
+
 Størrelse på streker:
 60px
+
+Størrelse på kant rundt innhold boks: 2px

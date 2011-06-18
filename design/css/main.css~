@@ -99,5 +99,5 @@ div.lcontainer {
 	repeat: repeat-x;
 	background-position: left top;
 	background-color: #9cbbca;
-	border-top: 1px solid black;
+	overflow: hidden;
 }
