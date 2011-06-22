@@ -1,6 +1,14 @@
 #body div.left {
 	width: 7%;
 }
+
+#body div.left #sitLogo {
+	width: 90%;
+	padding: 0;
+	margin: 60px 10% 0 0;
+	border: 0;
+}
+
 #body div.middle {
 	width: 60%;
 	overflow: hidden;

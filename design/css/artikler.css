@@ -77,3 +77,11 @@
 #body div.innh a:hover, #body div.innh a:active {
 	color: #545a5c;
 }
+
+#body div.innh div.innhWrapper div.social {
+	width: 100%;
+	font-size: 0.8em;
+	margin: 10px 0 0 0;
+	padding: 0;
+	color: #8c9598;
+}

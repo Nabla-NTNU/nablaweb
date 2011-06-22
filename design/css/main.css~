@@ -1,5 +1,5 @@
 .centeredContainer {
-	width: 90%;
+	width: 950px;
 	margin: 0 auto;
 	padding: 0;
 }
@@ -90,14 +90,19 @@ div.lcontainer {
 
 #kalender {
 	float: left;
-	margin: 0.5% 0 0 20%;
+	margin: 0.5% 0 0 5%;
 }
 
 #body {
 	width: 100%;
 	background-image: url('../img/body_background.png');
-	repeat: repeat-x;
+	background-repeat: repeat-x;
 	background-position: left top;
 	background-color: #9cbbca;
 	overflow: hidden;
+}
+
+div {
+	margin: 0;
+	padding: 0;
 }

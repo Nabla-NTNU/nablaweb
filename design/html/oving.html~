@@ -12,6 +12,7 @@
 		<link type="text/css" rel="stylesheet" href="../css/kalender.css" />
 		<link type="text/css" rel="stylesheet" href="../css/organisering.css" />
 		<link type="text/css" rel="stylesheet" href="../css/artikler.css" />
+		<link type="text/css" rel="stylesheet" href="../css/right_sidebar.css" />
 	</head>
 
 <body>
@@ -35,10 +36,10 @@
 				<th colspan="2">Login</th>
 			</tr>
 			<tr>
-				<td>Brukernavn</td> <td class="hJustert"><input type="text" value="Skriv her" name="username" size="30" /></td>
+				<td>Brukernavn</td> <td class="hJustert"><input type="text" placeholder="Username" name="username" size="30" /></td>
 			</tr>
 			<tr>
-				<td>Passord</td> <td class="hJustert"><input type="password" value="" name="paswd" size="30" /></td>
+				<td>Passord</td> <td class="hJustert"><input type="password" placeholder="Password" name="paswd" size="30" /></td>
 			</tr>
 			<tr>
 				<td colspan="2" class="hJustert"><input type="submit" value="Submit" /></td>
@@ -247,14 +248,14 @@
 	<div id="body">
 	<div class="centeredContainer">
 
-		<!-- Her kommer mesteparten av innholdet til å være. Detter er da den
+		<!-- Her kommer mesteparten av innholdet til å være. Dett er er da den
 		sentrerte boksen som inneholder reklame, artikler, søk, sidemeny osv.
 		omtrent alt som ikke er i head eller neck. -->
 
 		<div class="left">
 
 			<!-- Ment til å inneholde eventuell reklame -->
-			&nbsp;
+			<img id="sitLogo" src="../img/sit_tapir_bw.png" />
 
 		</div>
 		<div class="middle">
@@ -296,10 +297,42 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 		</div>
 		<div class="right">
 
-			 Her skal det være en del navigasjonsrelatert i tillegg til
+			<!-- Her skal det være en del navigasjonsrelatert i tillegg til
 			ekstra informasjon som f.eks. "vi gratulerer" "quote of the day"
-			osv. 
-			&nbsp;
+			osv. -->
+			<form action="search.py" method="get">
+				<div id="sok"><input class="box" type="text" placeholder="Søk..." name="sok" size="25" /><input type="image" id="searchKnapp" src="../img/go_knapp.png" name="submit" /></div>
+			</form>
+
+			<ul class="nav">
+				<li class="top"><a href="kontakt.html">Kontakt</a></li>
+				<li><a href="ny_student.html">Ny Student?</a></li>
+				<li class="bottom"><a href="siste_nytt.html">Hva Skjer?</a></li>
+				<li class="hover"><a href="nabladet.html">Siste Nablad</a></li>
+				<li class="top"><a href="bedpresser.html">Bedpresser</a></li>
+				<li><a href="login.html">Log Inn</a></li>
+				<li class="bottom"><a href="wiki.html">Fag Wiki</a></li>
+			</ul>
+
+			<div id="sideCeller">
+				<ul>
+					<li class="start">
+					<h2>Vi gratulerer</h2>
+					<ul class="bursdag">
+						<li>Torstein E. Penne</li>
+						<li>Haakon Bakka</li>
+					</ul>
+					</li>
+					<li>
+					<cite class="quote">Quote of the day</cite>
+					<cite>Iver Brevik ~ Fluid forelesning</cite>
+					</li>
+					<li class="end">
+					<a href="nabladet.html"><div class="img"></div></a>
+					<h5>Ukens nablad!</h5>
+					</li>
+				</ul>
+			</div>
 
 		</div>
 

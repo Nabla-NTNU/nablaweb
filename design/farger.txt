@@ -19,6 +19,10 @@ Side-tab i innh: 41b2da
 Artikkel-detaljer: 8c9598
 Artikkel-tekst: 545a5c
 
+Farge på grønn knapp
+inni: 2aca2a
+kant: 1d8e1d
+
 Størrelse på streker:
 60px
 
