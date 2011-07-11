@@ -1,6 +1,4 @@
-# nyheter/models.py
-
-from innhold.models import SiteContent
+from content.models import SiteContent
 
 class News(SiteContent):
     class Meta(SiteContent.Meta):

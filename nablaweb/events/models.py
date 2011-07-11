@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# arrangement/models.py
-
 
 from django.db import models
 from django.contrib.auth.models import User
-from innhold.models import SiteContent
-
+from content.models import SiteContent
 import datetime
 
 

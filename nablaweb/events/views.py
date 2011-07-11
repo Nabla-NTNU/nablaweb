@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# arrangement/views.py
 
-from nablaweb.arrangement.models import Event
-from nablaweb.arrangement.forms import EventForm
+from nablaweb.events.models import Event
+from nablaweb.events.forms import EventForm
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, RequestContext, loader
@@ -13,7 +12,9 @@ import datetime
 import re
 from collections import OrderedDict
 
+
 # Administrasjon
+
 
 def create_or_edit_event(request, event_id=None):
     if event_id is None:
@@ -38,8 +39,8 @@ def create_or_edit_event(request, event_id=None):
             event.test_event_fields()
             event.save()
             event.resize()
-            return HttpResponseRedirect(reverse('arrangement.views.show_event', args=(event.id,)))
-    return render_to_response('arrangement/create_event.html', {'form': form}, context_instance=RequestContext(request))
+            return HttpResponseRedirect(reverse('events.views.show_event', args=(event.id,)))
+    return render_to_response('events/create_event.html', {'form': form}, context_instance=RequestContext(request))
 
 
 def administer(request, event_id):
@@ -77,7 +78,7 @@ def administer(request, event_id):
     # TODO: Endre til HttpResponseRedirect eller triks med POST/GET,
     # for å unngå at samme handling utføres flere ganger når brukeren
     # laster siden på nytt.
-    return render_to_response('arrangement/administer_event.html',
+    return render_to_response('events/administer_event.html',
                               {'event': event, 'registrations': registrations, 'actions': actions, 'check_boxes': check_boxes},
                               context_instance=RequestContext(request))
 
@@ -93,12 +94,12 @@ def delete(request, event_id):
 # Offentlig
 
 def list_events(request):
-    return render_to_response('arrangement/list_events.html', {'content_list': Event.objects.all()})
+    return render_to_response('events/list_events.html', {'content_list': Event.objects.all()})
 
 
 def show_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    return render_to_response('arrangement/base_event.html', {'content': event})
+    return render_to_response('events/base_event.html', {'content': event})
 
 
 # Bruker
@@ -106,20 +107,20 @@ def show_event(request, event_id):
 def show_user(request):
     event_list = request.user.eventregistration_set.all()
     penalty_list = request.user.eventpenalty_set.all()
-    return render_to_response('arrangement/showuser.html', {'event_list': event_list, 'penalty_list': penalty_list, 'member': request.user})
+    return render_to_response('events/showuser.html', {'event_list': event_list, 'penalty_list': penalty_list, 'member': request.user})
 
 
 def register_user(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     message = event.register_user(request.user)
-    return render_to_response('arrangement/base_event.html', {'content': event, 'messages': (message,)})
+    return render_to_response('events/base_event.html', {'content': event, 'messages': (message,)})
 
 
 # Eksporter
 
 def ical_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    template = loader.get_template('arrangement/icalendar.ics')
+    template = loader.get_template('events/icalendar.ics')
     context = Context({'event_list': (event,),})
     response = HttpResponse(template.render(context), mimetype='text/calendar')
     response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.title.replace(' ', '_')

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-# arrangement/forms.py
 
 from django import forms
-from arrangement.models import Event
-from innhold.forms import SiteContentForm
+from events.models import Event
+from content.forms import SiteContentForm
 import datetime
+
 
 DATE_FORMATS = ['%Y-%m-%d %H:%M:%S',
                 '%Y-%m-%d %H:%M',
@@ -16,6 +16,7 @@ DATE_FORMATS = ['%Y-%m-%d %H:%M:%S',
                 '%d/%m/%y %H:%M:%S',
                 '%d/%m/%y %H:%M',
                 '%d/%m/%y',]
+
 
 DATE_FORMAT = DATE_FORMATS[1]
 

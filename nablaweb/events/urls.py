@@ -1,8 +1,7 @@
-# arrangement/urls.py
-
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('arrangement.views',
+
+urlpatterns = patterns('events.views',
 # Administrasjon
     (r'^opprett/$', 'create_or_edit_event'),
     (r'^(?P<event_id>\d{1,8})/admin$', 'administer'),

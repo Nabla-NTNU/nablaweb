@@ -11,9 +11,9 @@ urlpatterns = patterns('',
     (r'^$', 'views.index'),
     (r'^login/$', 'accounts.views.login_user'),
     (r'^logout/$', 'accounts.views.logout_user'),
-    (r'^nyheter/', include('nablaweb.nyheter.urls')),	
+    (r'^nyheter/', include('nablaweb.news.urls')),	
     (r'^medlemmer/(?P<username>\w+)/', 'accounts.views.view_member_profile'),
-    (r'^arrangement/', include('nablaweb.arrangement.urls')),
+    (r'^arrangement/', include('nablaweb.events.urls')),
 
     (r'^avatar/', include('avatar.urls')),
     # Midlertidige urler (kommer mest sannsynlig til aa forandres)
