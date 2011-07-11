@@ -55,22 +55,30 @@ class Event(SiteContent):
     # umiddelbart gir brukeren en garantert plass, og ikke bare
     # ventelisteplass.
     def free_places(self):
-        return max(self.places - self.eventregistration_set.count(), 0)
+        try: return max(self.places - self.eventregistration_set.count(), 0)
+        # Dersom arrangementet ikke krever påmelding er self.places None.
+        except TypeError: return 0
 
+    # Returnerer False (True) dersom arrangementet (ikke) har ledige plasser.
     def is_full(self):
         return self.free_places() == 0
 
     # Returnerer antall brukere som er påmeldt.
     def users_attending(self):
-        return min(self.eventregistration_set.count(), self.places)
+        if self.registration_required():
+            return min(self.eventregistration_set.count(), self.places)
+        else: return 0
 
     # Returnerer antall brukere som står på venteliste.
     def users_waiting(self):
-        return max(self.eventregistration_set.count() - self.places, 0)
+        try: return max(self.eventregistration_set.count() - self.places, 0)
+        # Dersom arrangementet ikke krever påmelding er self.places None.
+        except TypeError: return 0
 
     # Returnerer antall brukere som er registrerte, og som dermed
     # enten er påmeldte eller står på venteliste.
     def users_registered(self):
+        # Alternativt: self.users_attending() + self.users_waiting()
         return self.eventregistration_set.count()
 
     # Returnerer True dersom brukeren er registrert, False ellers.
