@@ -89,12 +89,15 @@ class Event(SiteContent):
         except EventRegistration.DoesNotExist:
             return False
 
+    # Returnerer True dersom arrangementet krever påmelding, False ellers.
     def registration_required(self):
         return self.registration_deadline is not None
 
+    # Returnerer True dersom arrangementet har venteliste, False ellers.
     def has_waiting_list(self):
         return bool(self.has_queue)
 
+    # TODO: Trenger en bedre måte å gi tilbakemeldinger på enn spesialiserte tekststrenger.
     def register_user(self, user):
         if self.registration_deadline is None:
             return u"Ingen påmelding."
@@ -130,47 +133,81 @@ class Event(SiteContent):
         except EventRegistration.DoesNotExist:
             pass
 
+    # Flytter brukeren til den oppgitte plassen, eller først/sist dersom 
+    # plassnummeret er for lavt/høyt.
+    # TODO: Håndterer ikke tilfeller der brukeren ikke er påmeldt.
     def move_user_to_place(self, user, place):
+        # Henter ut alle brukerregistreringer, ordnet etter kønummer.
         e_regs = self.eventregistration_set.all().order_by('number')
+
+        # Hvor mange registreringer det er.
         regs = len(e_regs)
+
+        # Hent ut registreringen til brukeren som skal flyttes.
         u_reg = e_regs.get(user=user)
 
+        # Hent ut nåværende kønummer.
         current = u_reg.number
-        place = max(1, place)
-        place = min(regs, place)
-        place -= 1 # Justering til 0-indeksering
 
+        # Dersom "ønsket" plass er ikke-positiv, endre til 1.
+        place = max(1, place)
+
+        # Dersom "ønsket" plass er høyere enn antall påmeldte, endre til siste plass.
+        place = min(regs, place)
+
+        # Gjør om til 0-indeksering.
+        place -= 1
+
+        # Det trivielle tilfellet: Brukeren er allerede på riktig plass.
         if e_regs[place] == u_reg:
             return
+
+        # Den nye plassen er første plass.
         elif place == 0:
+            # Gi brukeren et kønummer som er lavere enn det nåværende laveste.
             new = e_regs[0].number - 1 # 10
+
+        # Den nye plassen er siste plass.
         elif place == regs-1:
+            # Gi brukeren et kønummer som er høyere enn det nåværende høyeste.
             new = e_regs[place].number + 1 # 10
+
         else:
+            # Hent ut registreringen som opptar plassen brukeren skal flyttes til
             o_reg = e_regs[place]
+
+            # Hent ut kønummeret som tilsvarerer plassen.
             new = prev_num = o_reg.number
+
             if new > current: prev_num = new = new+1
             while o_reg.number == prev_num and o_reg != u_reg:
                 prev_num += 1
                 o_reg.number = prev_num
                 o_reg.save()
                 place += 1
-                if place < regs:
-                    o_reg = e_regs[place]
-                else:
-                    break
+                if place < regs: o_reg = e_regs[place]
+                else: break
 
+        # Lagre det nye kønummeret.
         u_reg.number = new
         u_reg.save()
 
+    # Sletter overflødige registreringer.
     def resize(self):
+        # Dersom registrering ikke trengs lengre.
         if not self.registration_required():
+            # Slett alle registreringer.
+            # TODO: Optimalisering.
             for reg in self.eventregistration_set.all():
                 reg.delete()
+
+        # Dersom arrangementet ikke har venteliste lengre.
         elif not self.has_waiting_list():
+            # Slett alle registreringer som tilsvarer en plass på venteliste.
             for reg in self.eventregistration_set.all()[self.places:]:
                 reg.delete()
 
+    # Tester at feltene har verdier som lovet i kommentarene ovenfor.
     def test_event_fields(self):
         assert isinstance(self.location, str) or isinstance(self.location, unicode)
         assert self.location != '' and self.location != u''

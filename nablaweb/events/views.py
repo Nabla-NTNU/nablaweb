@@ -15,7 +15,6 @@ from collections import OrderedDict
 
 # Administrasjon
 
-
 def create_or_edit_event(request, event_id=None):
     if event_id is None:
         event = Event()
