@@ -89,6 +89,17 @@ class WaitingListTest(TestCase):
             self.event.move_user_to_place(user, reg.number+1)
             self.test_ordering()
 
+    def test_random_moves(self):
+        regs = self.event.eventregistration_set.count()
+        for i in xrange(regs):
+            reg = random.choice(self.event.eventregistration_set.all())
+            user = reg.user
+            place = random.randint(1, regs)
+            self.event.move_user_to_place(user, place)
+            reg = self.event.eventregistration_set.get(user=user)
+            self.assertEqual(reg.number, place)
+            self.test_ordering()
+
     def test_deregister_user(self):
         while self.event.users_registered() != 0:
             reg = random.choice(self.event.eventregistration_set.all())
