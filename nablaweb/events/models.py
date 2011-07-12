@@ -109,16 +109,13 @@ class Event(SiteContent):
         try:
             registration = self.eventregistration_set.get(user=user)
         except EventRegistration.DoesNotExist:
-            last_number = self.eventregistration_set.aggregate(models.Max('number'))['number__max']
-            if last_number is None: last_number = 0
             registration = EventRegistration(
                 event=self,
                 user=user,
-                number=last_number+1 # 10
+                number=self.eventregistration_set.count()+1
                 )
             registration.save()
 
-        # TODO: Fiks betingelsen under
         if registration.number <= self.places:
             return u"Du er påmeldt."
         else:
@@ -127,9 +124,16 @@ class Event(SiteContent):
     # Melder brukeren av arrangementet. I praksis sørger metoden bare
     # for at brukeren ikke er påmeldt lengre, uavhengig av status før.
     def deregister_user(self, user):
-        try: # Dersom brukeren er påmeldt
-            u_reg = self.eventregistration_set.get(user=user)
-            u_reg.delete()
+        # Dersom brukeren er påmeldt.
+        try:
+            # Flytt brukeren til siste plass, for å oppdatere plassnumrene til
+            # brukerne som er etter denne brukeren.
+            self.move_user_to_place(user, 1e12)
+
+            # Fjern registreringen.
+            self.eventregistration_set.get(user=user).delete()
+
+        # Ingenting å gjøre dersom brukeren ikke er påmeldt.
         except EventRegistration.DoesNotExist:
             pass
 
@@ -137,56 +141,33 @@ class Event(SiteContent):
     # plassnummeret er for lavt/høyt.
     # TODO: Håndterer ikke tilfeller der brukeren ikke er påmeldt.
     def move_user_to_place(self, user, place):
-        # Henter ut alle brukerregistreringer, ordnet etter kønummer.
-        e_regs = self.eventregistration_set.all().order_by('number')
+        # Antall registreringer.
+        regs = self.eventregistration_set.count()
 
-        # Hvor mange registreringer det er.
-        regs = len(e_regs)
+        # Dersom "ønsket" plass er ikke-positiv, endre til 1.
+        new = max(1, place)
+
+        # Dersom "ønsket" plass er høyere enn antall påmeldte, endre til siste plass.
+        new = min(regs, new)
 
         # Hent ut registreringen til brukeren som skal flyttes.
-        u_reg = e_regs.get(user=user)
+        u_reg = self.eventregistration_set.get(user=user)
 
         # Hent ut nåværende kønummer.
         current = u_reg.number
 
-        # Dersom "ønsket" plass er ikke-positiv, endre til 1.
-        place = max(1, place)
+        # Brukeren er allerede på riktig plass.
+        if current == new: return
 
-        # Dersom "ønsket" plass er høyere enn antall påmeldte, endre til siste plass.
-        place = min(regs, place)
+        # Brukeren skal oppover på ventelisten, dvs. lavere kønummer.
+        elif new < current:
+            # Flytt brukere mellom ny og gammel plass nedover.
+            self.eventregistration_set.filter(number__range=(new, current-1)).update(number=models.F('number')+1)
 
-        # Gjør om til 0-indeksering.
-        place -= 1
-
-        # Det trivielle tilfellet: Brukeren er allerede på riktig plass.
-        if e_regs[place] == u_reg:
-            return
-
-        # Den nye plassen er første plass.
-        elif place == 0:
-            # Gi brukeren et kønummer som er lavere enn det nåværende laveste.
-            new = e_regs[0].number - 1 # 10
-
-        # Den nye plassen er siste plass.
-        elif place == regs-1:
-            # Gi brukeren et kønummer som er høyere enn det nåværende høyeste.
-            new = e_regs[place].number + 1 # 10
-
+        # Brukeren skal nedover på ventelisten, dvs. høyere kønummer.
         else:
-            # Hent ut registreringen som opptar plassen brukeren skal flyttes til
-            o_reg = e_regs[place]
-
-            # Hent ut kønummeret som tilsvarerer plassen.
-            new = prev_num = o_reg.number
-
-            if new > current: prev_num = new = new+1
-            while o_reg.number == prev_num and o_reg != u_reg:
-                prev_num += 1
-                o_reg.number = prev_num
-                o_reg.save()
-                place += 1
-                if place < regs: o_reg = e_regs[place]
-                else: break
+            # Flytt brukere mellom ny og gammel plass  oppover.
+            self.eventregistration_set.filter(number__range=(current+1, new)).update(number=models.F('number')-1)
 
         # Lagre det nye kønummeret.
         u_reg.number = new
@@ -250,9 +231,16 @@ def test():
 
 
 class EventRegistration(models.Model):
+    # Hvilket arrangement registreringen gjelder.
     event = models.ForeignKey(Event, blank=False, null=True)
+
+    # Brukeren som er registrert.
     user = models.ForeignKey(User, blank=False, null=True)
+
+    # Datoen brukeren ble registrert.
     date = models.DateTimeField(auto_now_add=True, null=True)
+
+    # Kønummer som tilsvarer plass i køen.
     number = models.PositiveIntegerField(blank=False, null=True)
 
     def __unicode__(self):
@@ -260,7 +248,10 @@ class EventRegistration(models.Model):
 
 
 class EventPenalty(models.Model):
+    # Hvilket arrangement straffen gjelder.
     event = models.ForeignKey(Event)
+
+    # Brukeren straffen gjelder.
     user = models.ForeignKey(User)
 
     def __unicode__(self):

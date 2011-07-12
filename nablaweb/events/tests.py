@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from events.models import Event
 import datetime
-
+import random
 
 class WaitingListTest(TestCase):
     def setUp(self):
@@ -87,4 +87,11 @@ class WaitingListTest(TestCase):
         for user in User.objects.all():
             reg = self.event.eventregistration_set.get(user=user)
             self.event.move_user_to_place(user, reg.number+1)
+            self.test_ordering()
+
+    def test_deregister_user(self):
+        while self.event.users_registered() != 0:
+            reg = random.choice(self.event.eventregistration_set.all())
+            user = reg.user
+            self.event.deregister_user(user)
             self.test_ordering()
