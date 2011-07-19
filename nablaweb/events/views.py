@@ -91,14 +91,6 @@ def delete(request, event_id):
 
 # Offentlig
 
-def list_events(request):
-    return render_to_response('events/event_list.html', {'content_list': Event.objects.all()})
-
-
-def show_event(request, event_id):
-    event = get_object_or_404(Event, pk=event_id)
-    return render_to_response('events/event_detail.html', {'content': event})
-
 
 # Bruker
 
