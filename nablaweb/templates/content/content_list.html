@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Innholdsliste {% endblock %}
+{% block title %}{{ block.super }} Innhold{% endblock %}
 
 {% block content %}
 {% for content in content_list %}

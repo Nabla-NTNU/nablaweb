@@ -39,7 +39,7 @@ def create_or_edit_event(request, event_id=None):
             event.save()
             event.resize()
             return HttpResponseRedirect(reverse('events.views.show_event', args=(event.id,)))
-    return render_to_response('events/create_event.html', {'form': form}, context_instance=RequestContext(request))
+    return render_to_response('events/event_create.html', {'form': form}, context_instance=RequestContext(request))
 
 
 def administer(request, event_id):
@@ -77,7 +77,7 @@ def administer(request, event_id):
     # TODO: Endre til HttpResponseRedirect eller triks med POST/GET,
     # for å unngå at samme handling utføres flere ganger når brukeren
     # laster siden på nytt.
-    return render_to_response('events/administer_event.html',
+    return render_to_response('events/event_administer.html',
                               {'event': event, 'registrations': registrations, 'actions': actions, 'check_boxes': check_boxes},
                               context_instance=RequestContext(request))
 
@@ -93,12 +93,12 @@ def delete(request, event_id):
 # Offentlig
 
 def list_events(request):
-    return render_to_response('events/list_events.html', {'content_list': Event.objects.all()})
+    return render_to_response('events/event_list.html', {'content_list': Event.objects.all()})
 
 
 def show_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    return render_to_response('events/base_event.html', {'content': event})
+    return render_to_response('events/event_detail.html', {'content': event})
 
 
 # Bruker
@@ -106,20 +106,20 @@ def show_event(request, event_id):
 def show_user(request):
     event_list = request.user.eventregistration_set.all()
     penalty_list = request.user.eventpenalty_set.all()
-    return render_to_response('events/showuser.html', {'event_list': event_list, 'penalty_list': penalty_list, 'member': request.user})
+    return render_to_response('events/event_showuser.html', {'event_list': event_list, 'penalty_list': penalty_list, 'member': request.user})
 
 
 def register_user(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     message = event.register_user(request.user)
-    return render_to_response('events/base_event.html', {'content': event, 'messages': (message,)})
+    return render_to_response('events/event_detail.html', {'content': event, 'messages': (message,)})
 
 
 # Eksporter
 
 def ical_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    template = loader.get_template('events/icalendar.ics')
+    template = loader.get_template('events/event_icalendar.ics')
     context = Context({'event_list': (event,),})
     response = HttpResponse(template.render(context), mimetype='text/calendar')
     response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.title.replace(' ', '_')

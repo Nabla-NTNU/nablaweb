@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Nytt innhold{% endblock %}
+{% block title %}{{ block.super }} Nytt innhold{% endblock %}
 
 {% block content %}
 {% if form.errors %}

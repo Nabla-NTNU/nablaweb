@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} {{ content.headline }}{% endblock %}
+
+{% block content %}
+{% include "content/content_base.html" %}
+{% endblock %}
