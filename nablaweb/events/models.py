@@ -51,6 +51,11 @@ class Event(SiteContent):
     def __unicode__(self):
         return u'%s, %s' % (self.headline, self.event_start.strftime('%d/%m/%y'))
 
+    # Overlagre for å automatisk vedlikeholde ventelisten.
+    def save(self, *args, **kwargs):
+        super(Event, self).save(*args, **kwargs)
+        self._prune_queue()
+
     # Returnerer antall ledige plasser, dvs antall plasser som
     # umiddelbart gir brukeren en garantert plass, og ikke bare
     # ventelisteplass.
@@ -174,7 +179,7 @@ class Event(SiteContent):
         u_reg.save()
 
     # Sletter overflødige registreringer.
-    def resize(self):
+    def _prune_queue(self):
         # Dersom registrering ikke trengs lengre.
         if not self.registration_required():
             # Slett alle registreringer.
