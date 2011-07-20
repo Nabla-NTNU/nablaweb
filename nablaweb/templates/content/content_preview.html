@@ -17,13 +17,13 @@
 {% endfor %}
 <input type="hidden" name="{{ stage_field }}" value="2" />
 <input type="hidden" name="{{ hash_field }}" value="{{ hash_value }}" />
-<p><input type="submit" value="Submit" /></p>
+<p><input type="submit" value="Lagre" /></p>
 </form>
 
 <h1>Or edit it again</h1>
 
 {% block preview_form %}
-{% include "content/content_form_base.html" %}
+{% include form_base %}
 {% endblock %}
 
 {% endblock %}

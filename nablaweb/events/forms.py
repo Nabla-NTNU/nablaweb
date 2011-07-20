@@ -102,9 +102,11 @@ class EventForm(SiteContentForm):
 
         return cleaned_data
 
+
 class EventFormPreview(SiteContentFormPreview):
     form_template = 'events/event_form.html'
     preview_template = 'events/event_preview.html'
+    form_base = 'events/event_form_base.html'
 
     def done(self, request, cleaned_data):
         return super(EventFormPreview, self).done(request, cleaned_data, Model=Event, success_view='event_detail')

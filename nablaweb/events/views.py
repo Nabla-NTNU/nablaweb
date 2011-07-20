@@ -1,19 +1,28 @@
 # -*- coding: utf-8 -*-
 
 
-from nablaweb.events.models import Event
-from nablaweb.events.forms import EventForm
+import datetime
+import re
+from collections import OrderedDict
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, RequestContext, loader
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-import datetime
-import re
-from collections import OrderedDict
+from nablaweb.content.views import ContentUpdateView
+from nablaweb.events.models import Event
+from nablaweb.events.forms import EventForm
 
 
 # Administrasjon
+
+class EventUpdateView(ContentUpdateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'events/event_form.html'
+    form_base = 'events/event_form_base.html'
+    success_detail = 'event_detail'
+
 
 def administer(request, event_id):
     event = get_object_or_404(Event, pk=event_id)

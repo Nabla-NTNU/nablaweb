@@ -2,15 +2,16 @@
 
 
 from django.conf.urls.defaults import *
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, UpdateView
 from nablaweb.events.models import Event
 from nablaweb.events.forms import EventForm, EventFormPreview
+from nablaweb.events.views import EventUpdateView
 
 urlpatterns = patterns('events.views',
 
     # Administrasjon
-    # (r'^(?P<event_id>\d{1,8})/endre$', ),
     (r'^opprett/$', EventFormPreview(form=EventForm)),
+    (r'^(?P<pk>\d{1,8})/endre$', EventUpdateView.as_view()),
     (r'^(?P<event_id>\d{1,8})/admin$', 'administer'),
     (r'^(?P<event_id>\d{1,8})/slett$', 'delete'),
 
