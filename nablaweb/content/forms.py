@@ -19,3 +19,8 @@ class SiteContentFormPreview(FormPreview):
         content.created_by = request.user
         content.save()
         return HttpResponseRedirect(reverse(success_view, args=(content.id,)))
+
+    def process_preview(self, request, form, context):
+        content = form.save(commit=False)
+        content.created_by = request.user
+        context['content'] = content
