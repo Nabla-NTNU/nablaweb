@@ -23,6 +23,11 @@ class EventUpdateView(ContentUpdateView):
     form_base = 'events/event_form_base.html'
     success_detail = 'event_detail'
 
+    def get_initial(self):
+        initial = super(EventUpdateView, self).get_initial()
+        initial['registration_required'] = self.object.registration_deadline is not None
+        return initial
+
 
 def administer(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
