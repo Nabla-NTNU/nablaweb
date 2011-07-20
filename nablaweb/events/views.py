@@ -15,32 +15,6 @@ from collections import OrderedDict
 
 # Administrasjon
 
-def create_or_edit_event(request, event_id=None):
-    if event_id is None:
-        event = Event()
-    else:
-        event = get_object_or_404(Event, id=event_id)
-    if request.method != 'POST':
-        form = EventForm(instance=event,
-                         initial={'registration_required': event.registration_deadline is not None},
-                         )
-    else:
-        form = EventForm(data=request.POST,
-                         instance=event,
-                         initial={'registration_required': event.registration_deadline is not None},
-                         )
-        if form.is_valid():
-            event = form.save(commit=False)
-            if event_id is None:
-                event.created_by = request.user
-            else:
-                event.last_changed_by = request.user
-            event.test_event_fields()
-            event.save()
-            return HttpResponseRedirect(reverse('events.views.show_event', args=(event.id,)))
-    return render_to_response('events/event_create.html', {'form': form}, context_instance=RequestContext(request))
-
-
 def administer(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     registrations = event.eventregistration_set.all().order_by('number')

@@ -1,8 +1,7 @@
-{% extends "content/content_create.html" %}
-
-{% block title %}Nytt arrangement{% endblock %}
+{% extends "content/content_form_base.html" %}
 
 {% block form_fields %}
+  {{ block.super }}
 
   <div class="field">
     {{ form.location.errors }}

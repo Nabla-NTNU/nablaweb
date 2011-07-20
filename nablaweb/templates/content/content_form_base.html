@@ -1,15 +1,10 @@
-{% extends "base.html" %}
-
-{% block title %}{{ block.super }} Nytt innhold{% endblock %}
-
-{% block content %}
 {% if form.errors %}
 <p>Vennligst rett opp i feilene under.</p>
 {% endif %}
 
 <p>
 <form action="" method="post">{% csrf_token %}
-  <input type="hidden" name="event_type" value="{{ event_type }}">
+  {% block form_fields %}
   <div class="field">
     {{ form.headline.errors }}
     <label for="id_headline">Tittel:</label>
@@ -25,8 +20,8 @@
     <label for="id_body">Brodtekst:</Label>
     {{ form.body }}
   </div>
-  {% block form_fields %}{% endblock %}
-  <input type="submit" value="Lagre">
+  {% endblock %}
+  <input type="hidden" name="{{ stage_field }}" value="1" />
+  <input type="submit" value="Vis">
 </form>
 </p>
-{% endblock %}

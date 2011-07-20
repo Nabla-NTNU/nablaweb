@@ -2,8 +2,8 @@
 
 
 from django import forms
-from events.models import Event
-from content.forms import SiteContentForm
+from nablaweb.events.models import Event
+from nablaweb.content.forms import SiteContentForm, SiteContentFormPreview
 import datetime
 
 
@@ -98,4 +98,13 @@ class EventForm(SiteContentForm):
                 if name in self._errors:
                     del self._errors[name]
 
+        del cleaned_data['registration_required']
+
         return cleaned_data
+
+class EventFormPreview(SiteContentFormPreview):
+    form_template = 'events/event_form.html'
+    preview_template = 'events/event_preview.html'
+
+    def done(self, request, cleaned_data):
+        return super(EventFormPreview, self).done(request, cleaned_data, Model=Event, success_view='event_detail')

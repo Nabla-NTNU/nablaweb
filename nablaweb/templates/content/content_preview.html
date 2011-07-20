@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} Godkjenn innhold.{% endblock %}
+
+{% block content %}
+
+<h1>Preview your submission</h1>
+
+{% block preview_detail %}
+{% include "content/content_base.html" %}
+{% endblock %}
+
+<p>Security hash: {{ hash_value }}</p>
+
+<form action="" method="post">{% csrf_token %}
+{% for field in form %}{{ field.as_hidden }}
+{% endfor %}
+<input type="hidden" name="{{ stage_field }}" value="2" />
+<input type="hidden" name="{{ hash_field }}" value="{{ hash_value }}" />
+<p><input type="submit" value="Submit" /></p>
+</form>
+
+<h1>Or edit it again</h1>
+
+{% block preview_form %}
+{% include "content/content_form_base.html" %}
+{% endblock %}
+
+{% endblock %}
