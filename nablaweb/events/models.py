@@ -8,9 +8,6 @@ import datetime
 
 
 class Event(SiteContent):
-    class Meta(SiteContent.Meta):
-        verbose_name_plural = "arrangement"
-
     # Indikerer hvem som står bak arrangementet.
     # Dette feltet er valgfritt.
     organizer = models.CharField(max_length=100, blank=True)
@@ -48,12 +45,16 @@ class Event(SiteContent):
     # Dette feltet er bare satt hvis registration_deadline er satt.
     has_queue = models.NullBooleanField(null=True, blank=True)
 
+    class Meta(SiteContent.Meta):
+        verbose_name_plural = "arrangement"
+
     def __unicode__(self):
         return u'%s, %s' % (self.headline, self.event_start.strftime('%d/%m/%y'))
 
     # Overlagre for å automatisk vedlikeholde ventelisten.
     def save(self, *args, **kwargs):
         super(Event, self).save(*args, **kwargs)
+        self.test_event_fields()
         self._prune_queue()
 
     # Returnerer antall ledige plasser, dvs antall plasser som
@@ -70,9 +71,9 @@ class Event(SiteContent):
 
     # Returnerer antall brukere som er påmeldt.
     def users_attending(self):
-        if self.registration_required():
-            return min(self.eventregistration_set.count(), self.places)
-        else: return 0
+        try: return min(self.eventregistration_set.count(), self.places)
+        # Dersom arrangementet ikke krever påmelding er self.places None.
+        except TypeError: return 0
 
     # Returnerer antall brukere som står på venteliste.
     def users_waiting(self):
@@ -182,16 +183,12 @@ class Event(SiteContent):
     def _prune_queue(self):
         # Dersom registrering ikke trengs lengre.
         if not self.registration_required():
-            # Slett alle registreringer.
-            # TODO: Optimalisering.
-            for reg in self.eventregistration_set.all():
-                reg.delete()
+            self.eventregistration_set.delete()
 
-        # Dersom arrangementet ikke har venteliste lengre.
+        # Dersom arrangementet ikke har venteliste lengre,
+        # eller antall plasser reduseres.
         elif not self.has_waiting_list():
-            # Slett alle registreringer som tilsvarer en plass på venteliste.
-            for reg in self.eventregistration_set.all()[self.places:]:
-                reg.delete()
+            self.eventregistration_set.filter(number__gt=self.places).delete()
 
     # Tester at feltene har verdier som lovet i kommentarene ovenfor.
     def test_event_fields(self):
@@ -225,16 +222,6 @@ class Event(SiteContent):
             assert isinstance(self.has_queue, bool)
 
 
-def test():
-    e = Event.objects.get(id=1)
-    u = User.objects.get(username='oyvinlek')
-    for r in e.eventregistration_set.all():
-        r.delete()
-    for us in User.objects.all():
-        e.register_user(us)
-    return e, u
-
-
 class EventRegistration(models.Model):
     # Hvilket arrangement registreringen gjelder.
     event = models.ForeignKey(Event, blank=False, null=True)
@@ -250,6 +237,14 @@ class EventRegistration(models.Model):
 
     def __unicode__(self):
         return u'EventRegistration: %s, %d: %s' % (self.event, self.number, self.user)
+
+    # Returnerer True dersom registreringen er en plass på venteliste.
+    def is_waiting_place(self):
+        return self.number > self.event.places
+
+    # Returnerer True dersom registreringen er en garantert plass.
+    def is_attending_place(self):
+        return self.number <= self.event.places
 
 
 class EventPenalty(models.Model):

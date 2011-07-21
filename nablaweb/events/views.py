@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, RequestContext, loader
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.views.generic import TemplateView
 from nablaweb.content.views import ContentUpdateView
 from nablaweb.events.models import Event
 from nablaweb.events.forms import EventForm
@@ -82,10 +83,16 @@ def delete(request, event_id):
 
 # Bruker
 
-def show_user(request):
-    event_list = request.user.eventregistration_set.all()
-    penalty_list = request.user.eventpenalty_set.all()
-    return render_to_response('events/event_showuser.html', {'event_list': event_list, 'penalty_list': penalty_list, 'member': request.user})
+class UserEventView(TemplateView):
+    template_name = 'events/event_showuser.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super(UserEventView, self).get_context_data(**kwargs)
+        user = self.request.user
+        context_data['user'] = user
+        context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start')
+        context_data['penalty_list'] = user.eventpenalty_set.all()
+        return context_data
 
 
 def register_user(request, event_id):

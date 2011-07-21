@@ -30,7 +30,11 @@
       <td align="center">X</td>
     </tr>
     {% for registration in registrations %}
-    <tr>
+    {% if registration.is_attending_place %}
+    <tr bgcolor="#00FF00">
+    {% else %}{% if registration.is_waiting_place %}
+    <tr bgcolor="#FFFF00">
+    {% endif %}{% endif %}
       <td>{{ forloop.counter }} ({{ registration.number }})</td>
       <td>{{ registration.user }}</td>
       <td><input type="checkbox" name="user" value="{{ registration.user }}" {% if check_boxes %}checked{% endif %} /></td>

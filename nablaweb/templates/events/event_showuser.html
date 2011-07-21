@@ -1,15 +1,27 @@
-{{ member.username }}<br/>
+{% extends "base.html" %}
 
-{% if event_list %}
-Du er påmeldt til følgende arrangement:
-<ul>
-{% for event in event_list %}
-<li><a href="{{ event.id }}"/>{{ event }}</a></li>
-{% endfor %}
-</ul>
+{% block content %}
+
+<h2>{{ user.username }}</h2><br/>
+
+{% if eventregistration_list %}
+Påmeldt:
+<table>
+  {% for eventregistration in eventregistration_list %}
+  <tr>
+    {% if eventregistration.is_attending_place %}
+    <td bgcolor="#00FF00">
+    {% else %}{% if eventregistration.is_waiting_place %}
+    <td bgcolor="#FFFF00">
+    {% endif %}{% endif %}
+      <a href="{{ eventregistration.event.id }}"/>{{ eventregistration.event }}</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
 {% endif %}
 
-Du har {{ penalty_list|length }} prikk{{penalty_list|length|pluralize:"er"}}.
+Du har {{ penalty_list|length }} prikk{{ penalty_list|length|pluralize:"er" }}.
 {% if penalty_list %}
 <ul>
 {% for penalty in penalty_list %}
@@ -17,3 +29,5 @@ Du har {{ penalty_list|length }} prikk{{penalty_list|length|pluralize:"er"}}.
 {% endfor %}
 </ul>
 {% endif %}
+
+{% endblock %}

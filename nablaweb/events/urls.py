@@ -5,7 +5,7 @@ from django.conf.urls.defaults import *
 from django.views.generic import DetailView, ListView, UpdateView
 from nablaweb.events.models import Event
 from nablaweb.events.forms import EventForm, EventFormPreview
-from nablaweb.events.views import EventUpdateView
+from nablaweb.events.views import EventUpdateView, UserEventView
 
 urlpatterns = patterns('events.views',
 
@@ -26,7 +26,7 @@ urlpatterns = patterns('events.views',
         name='event_detail',),
 
     # Bruker
-    (r'^mine$', 'show_user'),
+    (r'^mine$', UserEventView.as_view()),
     (r'^(?P<event_id>\d{1,8})/registrering$', 'register_user'),
 
     # Eksporter

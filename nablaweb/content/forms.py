@@ -1,9 +1,14 @@
+# -*- coding: utf-8 -*-
+
+
+import datetime
 from django.forms import ModelForm
 from django.contrib.formtools.preview import FormPreview
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from nablaweb.content.models import SiteContent
 from django.shortcuts import get_object_or_404
+
 
 class SiteContentForm(ModelForm):
     class Meta:
@@ -24,6 +29,7 @@ class SiteContentFormPreview(FormPreview):
     def process_preview(self, request, form, context):
         content = form.save(commit=False)
         content.created_by = request.user
+        content.created_date = datetime.datetime.now()
         context['content'] = content
 
     def get_context(self, request, form):
