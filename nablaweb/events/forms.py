@@ -107,6 +107,11 @@ class EventFormPreview(SiteContentFormPreview):
     form_template = 'events/event_form.html'
     preview_template = 'events/event_preview.html'
     form_base = 'events/event_form_base.html'
+    success_view = 'event_detail'
 
-    def done(self, request, cleaned_data):
-        return super(EventFormPreview, self).done(request, cleaned_data, Model=Event, success_view='event_detail')
+    def get_initial(self, request):
+        initial = super(EventFormPreview, self).get_initial(request)
+        if self.is_updating():
+            original = self.get_instance()
+            initial['registration_required'] = original.registration_required()
+        return initial

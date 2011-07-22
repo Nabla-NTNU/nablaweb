@@ -183,7 +183,7 @@ class Event(SiteContent):
     def _prune_queue(self):
         # Dersom registrering ikke trengs lengre.
         if not self.registration_required():
-            self.eventregistration_set.delete()
+            self.eventregistration_set.all().delete()
 
         # Dersom arrangementet ikke har venteliste lengre,
         # eller antall plasser reduseres.

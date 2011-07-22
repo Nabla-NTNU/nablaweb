@@ -5,13 +5,13 @@ from django.conf.urls.defaults import *
 from django.views.generic import DetailView, ListView
 from nablaweb.news.models import News
 from nablaweb.news.forms import NewsForm, NewsFormPreview
-from nablaweb.news.views import NewsUpdateView
 
-urlpatterns = patterns('news.views',
+
+urlpatterns = patterns('nablaweb.news.views',
 
     # Administrasjon
     (r'^opprett/$', NewsFormPreview(form=NewsForm)),
-    (r'^(?P<pk>\d{1,8})/endre/$', NewsUpdateView.as_view()),
+    (r'^(?P<pk>\d{1,8})/endre/$', NewsFormPreview(form=NewsForm)),
 
     # Offentlig
     (r'^$',
