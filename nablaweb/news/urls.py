@@ -2,10 +2,8 @@
 
 
 from django.conf.urls.defaults import *
-from django.views.generic import DetailView, ListView
-from nablaweb.news.models import News
 from nablaweb.news.forms import NewsForm, NewsFormPreview
-
+from nablaweb.news.views import NewsDetailView, NewsListView
 
 urlpatterns = patterns('nablaweb.news.views',
 
@@ -14,12 +12,8 @@ urlpatterns = patterns('nablaweb.news.views',
     (r'^(?P<pk>\d{1,8})/endre/$', NewsFormPreview(form=NewsForm)),
 
     # Offentlig
-    (r'^$',
-     ListView.as_view(model=News,
-                      queryset=News.objects.all().order_by('-created_date')[:5],
-                      context_object_name='content_list',)),
+    (r'^$', NewsListView.as_view()),
     url(r'^(?P<pk>\d{1,8})/$',
-        DetailView.as_view(model=News,
-                           context_object_name='content',),
+        NewsDetailView.as_view(),
         name='news_detail',),
 )

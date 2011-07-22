@@ -1,14 +1,30 @@
 {% extends "base.html" %}
 
+
 {% block title %}{{ block.super }} Innhold{% endblock %}
 
+
 {% block content %}
+
 {% for content in content_list %}
 <p>{{ content.headline }}</p>
-{% block after_headline%}{% endblock %}
 <p><em>{{ content.lead_paragraph }}</em></p>
-{% block after_lead_paragraph %}{% endblock %}
 <p><a href="{{ content.id }}"/>Les mer</a></p>
-{% if not forloop.last %}<br />{% endif %}
+<br />
 {% endfor %}
+
+{% comment %}
+TODO: Fiks språk. page -> side
+{% endcomment %}
+
+{% if is_paginated %}
+{% if page_obj.has_previous %}
+<a href="?page={{ page_obj.previous_page_number }}">nyere</a>
+{% endif %}
+
+{% if page_obj.has_next %}
+<a href="?page={{ page_obj.next_page_number }}">eldre</a>
+{% endif %}
+{% endif %}
+
 {% endblock %}

@@ -2,10 +2,9 @@
 
 
 from django.conf.urls.defaults import *
-from django.views.generic import DetailView, ListView, UpdateView
 from nablaweb.events.models import Event
 from nablaweb.events.forms import EventForm, EventFormPreview
-from nablaweb.events.views import UserEventView
+from nablaweb.events.views import EventDetailView, EventListView, UserEventView
 
 urlpatterns = patterns('nablaweb.events.views',
 
@@ -16,13 +15,9 @@ urlpatterns = patterns('nablaweb.events.views',
     (r'^(?P<event_id>\d{1,8})/slett$', 'delete'),
 
     # Offentlig
-    (r'^$',
-     ListView.as_view(model=Event,
-                      queryset=Event.objects.all().order_by('-created_date')[:5],
-                      context_object_name='content_list',)),
+    (r'^$', EventListView.as_view()),
     url(r'^(?P<pk>\d{1,8})/$',
-        DetailView.as_view(model=Event,
-                           context_object_name='content',),
+        EventDetailView.as_view(),
         name='event_detail',),
 
     # Bruker

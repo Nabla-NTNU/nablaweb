@@ -4,12 +4,13 @@
 import datetime
 import re
 from collections import OrderedDict
-from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template import Context, RequestContext, loader
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response, get_object_or_404
+from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView
+from nablaweb.content.views import SiteContentListView, SiteContentDetailView
 from nablaweb.events.models import Event
 from nablaweb.events.forms import EventForm
 
@@ -65,6 +66,13 @@ def delete(request, event_id):
 
 
 # Offentlig
+
+class EventListView(SiteContentListView):
+    model = Event
+
+
+class EventDetailView(SiteContentDetailView):
+    model = Event
 
 
 # Bruker
