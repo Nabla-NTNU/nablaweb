@@ -11,17 +11,17 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView
 from nablaweb.content.views import SiteContentListView, SiteContentDetailView
-from nablaweb.events.models import Event
 from nablaweb.events.forms import EventForm
+from nablaweb.events.models import Event
 
 
 # Administrasjon
 
-def administer(request, event_id):
-    event = get_object_or_404(Event, pk=event_id)
-    registrations = event.eventregistration_set.all().order_by('number')
-    actions = OrderedDict([('mov','Flytt til'), ('del','Fjern'), ('add','Legg til'), ('mrk','Merk alle')])
-    check_boxes = False
+def administer(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    actions = OrderedDict([('mov','Flytt til'),
+                           ('del','Fjern'),
+                           ('add','Legg til'),])
 
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -46,22 +46,17 @@ def administer(request, event_id):
                 user = User.objects.get(username=text)
                 event.register_user(user)
             except User.DoesNotExist: pass
-        elif action == 'mrk':
-            check_boxes = True
 
-    # TODO: Endre til HttpResponseRedirect eller triks med POST/GET,
-    # for å unngå at samme handling utføres flere ganger når brukeren
-    # laster siden på nytt.
+        # Unngå at handlingen utføres på nytt dersom brukeren laster siden om igjen
+        return HttpResponseRedirect(reverse('event_admin', kwargs={'pk': pk}))
+
+    registrations = event.eventregistration_set.all().order_by('number')
     return render_to_response('events/event_administer.html',
-                              {'event': event, 'registrations': registrations, 'actions': actions, 'check_boxes': check_boxes},
+                              {'event': event, 'registrations': registrations, 'actions': actions, 'method': 'GET'},
                               context_instance=RequestContext(request))
 
 
-def edit(request, event_id):
-    return HttpResponse("Not implemented.")
-
-
-def delete(request, event_id):
+def delete(request, pk):
     return HttpResponse("Not implemented.")
 
 

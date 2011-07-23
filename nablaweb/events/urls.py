@@ -11,8 +11,10 @@ urlpatterns = patterns('nablaweb.events.views',
     # Administrasjon
     (r'^opprett/$', EventFormPreview(form=EventForm)),
     (r'^(?P<pk>\d{1,8})/endre$', EventFormPreview(form=EventForm)),
-    (r'^(?P<event_id>\d{1,8})/admin$', 'administer'),
-    (r'^(?P<event_id>\d{1,8})/slett$', 'delete'),
+    url(r'^(?P<pk>\d{1,8})/admin$',
+        'administer',
+        name='event_admin'),
+    (r'^(?P<pk>\d{1,8})/slett$', 'delete'),
 
     # Offentlig
     (r'^$', EventListView.as_view()),
