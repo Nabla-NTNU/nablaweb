@@ -1,8 +1,10 @@
 {% extends "content/content_form_base.html" %}
 
 {% block form_fields %}
-  {{ block.super }}
+{{ block.super }}
 
+<fieldset>
+  <legend>Hvor og når</legend>
   <div class="field">
     {{ form.location.errors }}
     <label for="id_location">Sted:</label>
@@ -18,7 +20,10 @@
     <label for="id_event_end">Slutt:</label>
     {{ form.event_end }}
   </div>
+</fieldset>
 
+<fieldset>
+  <legend>Registrering</legend>
   <div class="field">
     {{ form.registration_required.errors }}
     <label for="id_registration_required">Påmelding:</label>
@@ -35,6 +40,11 @@
     {{ form.registration_deadline }}
   </div>
   <div class="field">
+    {{ form.registration_start.errors }}
+    <label for="id_start_deadline">Påmeldingsstart:</label>
+    {{ form.registration_start }}
+  </div>
+  <div class="field">
     {{ form.deregistration_deadline.errors }}
     <label for="id_deregistration_deadline">Avmeldingsfrist:</label>
     {{ form.deregistration_deadline }}
@@ -44,5 +54,6 @@
     <label for="id_has_queue">Venteliste:</label>
     {{ form.has_queue }}
   </div>
+</fieldset>
 
 {% endblock %}

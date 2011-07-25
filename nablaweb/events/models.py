@@ -29,9 +29,16 @@ class Event(SiteContent):
     # Datoen er ikke senere enn event_start.
     registration_deadline = models.DateTimeField(null=True, blank=True)
 
+    # Når påmeldingen starter.
+    # Dette feltet er valgfritt.
+    # Dette feltet er bare satt hvis registration_deadline er satt.
+    # Datoen er ikke senere enn registration_deadline.
+    registration_start = models.DateTimeField(null=True, blank=True)
+
     # Frist for å melde seg av arrangementet.
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_deadline er satt.
+    # Datoen er ikke tidligere enn registration_start, hvis dette er satt.
     # Datoen er ikke senere enn event_start.
     deregistration_deadline = models.DateTimeField(null=True, blank=True)
 
@@ -211,15 +218,25 @@ class Event(SiteContent):
         else:
             assert self.places is None
             assert self.deregistration_deadline is None
+            assert self.registration_start is None
             assert self.has_queue is None
+
+        if self.registration_start is not None:
+            assert isinstance(self.registration_start, datetime.datetime)
+            assert self.registration_start <= self.registration_deadline
 
         if self.deregistration_deadline is not None:
             assert isinstance(self.deregistration_deadline, datetime.datetime)
             assert self.deregistration_deadline <= self.event_start
-            assert self.deregistration_deadline >= self.registration_deadline
-
+            if self.registration_start is not None:
+                assert self.deregistration_deadline >= self.registration_start
+            
         if self.has_queue is not None:
             assert isinstance(self.has_queue, bool)
+
+        if self.places is not None:
+            assert isinstance(self.places, int)
+            assert self.places >= 0
 
 
 class EventRegistration(models.Model):

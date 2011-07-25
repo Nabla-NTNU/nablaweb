@@ -2,23 +2,26 @@
 
 {% block form_fields %}
 
-<div class="field">
-  {{ form.headline.errors }}
-  <label for="id_headline">Tittel:</label>
-  {{ form.headline }}
-</div>
+<fieldset>
+  <legend>Hva</legend>
+  <div class="field">
+    {{ form.headline.errors }}
+    <label for="id_headline">Tittel:</label>
+    {{ form.headline }}
+  </div>
 
-<div class="field">
-  {{ form.lead_paragraph.errors }}
-  <label for="id_lead_paragraph">Ingress:</label>
-  {{ form.lead_paragraph }}
-</div>
+  <div class="field">
+    {{ form.lead_paragraph.errors }}
+    <label for="id_lead_paragraph">Ingress:</label>
+    {{ form.lead_paragraph }}
+  </div>
 
-<div class="field">
-  {{ form.body.errors }}
-  <label for="id_body">Brodtekst:</Label>
-  {{ form.body }}
-</div>
+  <div class="field">
+    {{ form.body.errors }}
+    <label for="id_body">Brodtekst:</Label>
+    {{ form.body }}
+  </div>
+</fieldset>
 
 {% endblock %}
 
