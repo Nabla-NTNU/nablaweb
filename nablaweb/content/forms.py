@@ -2,7 +2,7 @@
 
 
 import datetime
-from django.forms import ModelForm
+from django.forms import ModelForm, CharField
 from django.contrib.formtools.preview import FormPreview
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -11,7 +11,14 @@ from django.template import RequestContext
 from nablaweb.content.models import SiteContent
 
 
+class SiteContentCharField(CharField):
+    default_error_messages = {
+        'required': u'Dette feltet er påkrevd.',
+        }
+
+
 class SiteContentForm(ModelForm):
+    headline = SiteContentCharField()
     class Meta:
         model = SiteContent
 

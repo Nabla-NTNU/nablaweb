@@ -4,6 +4,7 @@
 from django.forms import DateTimeField, DateTimeInput, BooleanField
 from nablaweb.events.models import Event
 from nablaweb.content.forms import SiteContentForm, SiteContentFormPreview
+from nablaweb.content.forms import SiteContentCharField as EventCharField
 import datetime
 
 
@@ -18,14 +19,20 @@ DATE_FORMATS = ['%Y-%m-%d %H:%M:%S',
                 '%d/%m/%y %H:%M',
                 '%d/%m/%y',]
 
+
 # Standardformatet som brukes til å vise datoer i inputfeltet.
-DATE_FORMAT = DATE_FORMATS[1]
+DATE_FORMAT = DATE_FORMATS[7]
 
 
 class EventDateTimeField(DateTimeField):
     # Bytt datowidget og aksepterte datoformat.
     input_formats = DATE_FORMATS
     widget = DateTimeInput(format=DATE_FORMAT)
+
+    default_error_messages = {
+        'invalid': u'Ugyldig dato. Prøv formatet "DD/MM/ÅÅ HH:MM".',
+        'required': u'Denne datoen er påkrevd.',
+        }
 
 
 class EventForm(SiteContentForm):
@@ -35,6 +42,9 @@ class EventForm(SiteContentForm):
     registration_start = EventDateTimeField(required=False)
     registration_deadline = EventDateTimeField(required=False)
     deregistration_deadline = EventDateTimeField(required=False)
+
+    # For å få norske feilmeldinger.
+    location = EventCharField()
 
     # I stedet for NullBooleanField.
     has_queue = BooleanField(required=False)
