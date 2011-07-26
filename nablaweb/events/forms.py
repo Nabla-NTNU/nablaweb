@@ -132,7 +132,7 @@ class EventFormPreview(SiteContentFormPreview):
     form_template = 'events/event_form.html'
     preview_template = 'events/event_preview.html'
     form_base = 'events/event_form_base.html'
-    success_view = 'event_detail'
+    success_detail = 'event_detail'
 
     def get_initial(self, request):
         initial = super(EventFormPreview, self).get_initial(request)

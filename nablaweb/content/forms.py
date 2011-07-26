@@ -67,7 +67,7 @@ class SiteContentFormPreview(UpdateableModelFormPreview):
         else:
             content.created_by = request.user
         content.save()
-        return HttpResponseRedirect(reverse(self.success_view, args=(content.id,)))
+        return HttpResponseRedirect(reverse(self.success_detail, args=(content.id,)))
 
     def process_preview(self, request, form, context):
         content = form.save(commit=False)
