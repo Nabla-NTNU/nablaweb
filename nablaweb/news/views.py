@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from nablaweb.content.views import SiteContentListView, SiteContentDetailView
+from nablaweb.content.views import SiteContentListView, SiteContentDetailView, SiteContentDeleteView
 from nablaweb.news.models import News
 
 
@@ -10,4 +10,8 @@ class NewsListView(SiteContentListView):
 
 
 class NewsDetailView(SiteContentDetailView):
+    model = News
+
+
+class NewsDeleteView(SiteContentDeleteView):
     model = News

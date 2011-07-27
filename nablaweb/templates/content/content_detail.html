@@ -3,5 +3,7 @@
 {% block title %}{{ block.super }} {{ content.headline }}{% endblock %}
 
 {% block content %}
+{% block include %}
 {% include "content/content_base.html" %}
+{% endblock %}
 {% endblock %}

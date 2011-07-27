@@ -64,6 +64,11 @@ class Event(SiteContent):
         self.test_event_fields()
         self._prune_queue()
 
+    # Overlagre for å slette registreringer sammen med arrangementet.
+    def delete(self, *args, **kwargs):
+        self.eventregistration_set.all().delete()
+        super(Event, self).delete(*args, **kwargs)
+
     # Returnerer antall ledige plasser, dvs antall plasser som
     # umiddelbart gir brukeren en garantert plass, og ikke bare
     # ventelisteplass.

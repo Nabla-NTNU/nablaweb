@@ -10,7 +10,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView
-from nablaweb.content.views import SiteContentListView, SiteContentDetailView
+from nablaweb.content.views import SiteContentListView, SiteContentDetailView, SiteContentDeleteView
 from nablaweb.events.forms import EventForm
 from nablaweb.events.models import Event
 
@@ -56,8 +56,8 @@ def administer(request, pk):
                               context_instance=RequestContext(request))
 
 
-def delete(request, pk):
-    return HttpResponse("Not implemented.")
+class EventDeleteView(SiteContentDeleteView):
+    model = Event
 
 
 # Offentlig

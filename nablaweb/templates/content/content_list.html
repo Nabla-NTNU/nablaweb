@@ -11,6 +11,8 @@
 <p><em>{{ content.lead_paragraph }}</em></p>
 <p><a href="{{ content.id }}"/>Les mer</a></p>
 <br />
+{% empty %}
+Tomt.
 {% endfor %}
 
 {% comment %}
