@@ -18,12 +18,13 @@
 	padding: 0 5px 0 5px;
 	vertical-align: top;
 	height: 20px;
-	background-image: url('../img/search_box_overlay.png');
-	background-repeat: repeat-x;
+	box-shadow: inset 0px 1px 2px 1px rgba(21, 25, 26, 1);
+	-moz-box-shadow: inset 0px 1px 2px 1px rgba(21, 25, 26, 1);
+	-webkit-box-shadow: inset 0px 1px 2px 1px rgba(21, 25, 26, 1);
 }
 
-#body div.right #sok input.box:focus {
-	border: 0;
+#body div.right #sok:focus {
+	border: none;
 }
 
 #body div.right #searchKnapp {
@@ -83,7 +84,7 @@
 	padding: 0 0 0 30px;
 	overflow: hidden;
 	background: transparent url('../img/border_fade.png') top left repeat-y;
-	color: #151717;
+	color: #cdedf9;
 }
 
 #body div.right #sideCeller ul {
@@ -109,14 +110,28 @@
 }
 
 #body div.right #sideCeller ul.bursdag li {
-	background: transparent url('../img/party_hat.png') top left no-repeat;
-	background-size: 16px 25px;
-	-moz-background-size: 16px 25px;
-	-webkit-background-size: 16px 25px;
 	border-bottom: 0;
 	padding: 0 0 0 30px;
-	height: 25px;
+	height: 15px;
 	margin: 2px 0 0 0;
+	font-size: 0.8em;
+	color: #bcc8cc;
+}
+
+#sideCeller ul.bursdag li:before {
+	content: "<";
+	padding-right: 6px;
+}
+
+#sideCeller ul.bursdag li:before, #sideCeller ul.bursdag li:after {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #cdedf9;
+}
+
+#sideCeller ul.bursdag li:after {
+	content: ">";
+	padding-left: 6px;
 }
 
 #body div.right #sideCeller h2 {
@@ -126,18 +141,20 @@
 	background-size: 30px 29px;
 	height: 30px;
 
-	font-family: georgia, serif;
+	font-family: Limelight, georgia, serif;
 	font-size: 1.5em;
+	text-shadow: 2px 2px 2px #15191a;
 }
 
 #body div.right #sideCeller cite.quote {
 	font-size: 1.3em;
 	font-style: italic;
-	font-weight: bold;
+	font-weight: normal;
+	font-family: Damion, sans-serif;
 	display: inline;
 	margin: 0;
 	position: relative;
-	padding: 0 10px 0 10px;
+	padding: 0 15px 0 10px;
 }
 
 #body div.right #sideCeller cite.quote:before, #body div.right #sideCeller cite.quote:after {
@@ -182,10 +199,13 @@
 	margin: 0 0 0 10px;
 	font-size: 1.1em;
 	float: left;
+	font-family: Limelight, sans-serif;
+	text-shadow: 2px 2px 2px #15191a;
 }
 
 #body div.right #sideCeller li.end a {
 	text-decoration: none;
+	color: #cdedf9;
 }
 
 #body div.right #sideCeller div.fb {
