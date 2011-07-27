@@ -1,5 +1,5 @@
-from content.models import SiteContent
+from content.models import Content
 
-class News(SiteContent):
-    class Meta(SiteContent.Meta):
+class News(Content):
+    class Meta(Content.Meta):
         verbose_name_plural = "news"

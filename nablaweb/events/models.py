@@ -3,11 +3,11 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-from content.models import SiteContent
+from content.models import Content
 import datetime
 
 
-class Event(SiteContent):
+class Event(Content):
     # Indikerer hvem som står bak arrangementet.
     # Dette feltet er valgfritt.
     organizer = models.CharField(max_length=100, blank=True)
@@ -52,7 +52,7 @@ class Event(SiteContent):
     # Dette feltet er bare satt hvis registration_deadline er satt.
     has_queue = models.NullBooleanField(null=True, blank=True)
 
-    class Meta(SiteContent.Meta):
+    class Meta(Content.Meta):
         verbose_name_plural = "arrangement"
 
     def __unicode__(self):

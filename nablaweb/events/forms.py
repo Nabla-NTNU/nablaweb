@@ -3,8 +3,8 @@
 
 from django.forms import DateTimeField, DateTimeInput, BooleanField
 from nablaweb.events.models import Event
-from nablaweb.content.forms import SiteContentForm, SiteContentFormPreview
-from nablaweb.content.forms import SiteContentCharField as EventCharField
+from nablaweb.content.forms import ContentForm, ContentFormPreview
+from nablaweb.content.forms import ContentCharField as EventCharField
 import datetime
 
 
@@ -35,7 +35,7 @@ class EventDateTimeField(DateTimeField):
         }
 
 
-class EventForm(SiteContentForm):
+class EventForm(ContentForm):
     # Spesifiser datowidget og aksepterte datoformat.
     event_start = EventDateTimeField(required=True)
     event_end = EventDateTimeField(required=False)
@@ -55,7 +55,7 @@ class EventForm(SiteContentForm):
     # for de andre registreringsrelaterte feltene, som i tillegg slettes.
     registration_required = BooleanField(required=False)
 
-    class Meta(SiteContentForm.Meta):
+    class Meta(ContentForm.Meta):
         model = Event
 
     def clean(self):
@@ -128,7 +128,7 @@ class EventForm(SiteContentForm):
         return cleaned_data
 
 
-class EventFormPreview(SiteContentFormPreview):
+class EventFormPreview(ContentFormPreview):
     form_template = 'events/event_form.html'
     preview_template = 'events/event_preview.html'
     form_base = 'events/event_form_base.html'

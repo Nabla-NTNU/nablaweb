@@ -3,12 +3,12 @@
 
 from django.core.urlresolvers import reverse
 from django.views.generic import DetailView, ListView, DeleteView
-from nablaweb.content.models import SiteContent
+from nablaweb.content.models import Content
 from nablaweb.news.models import News
 
 
-class SiteContentListView(ListView):
-    model = SiteContent
+class ContentListView(ListView):
+    model = Content
     context_object_name = 'content_list'
     paginate_by = 5
 
@@ -17,13 +17,13 @@ class SiteContentListView(ListView):
         return queryset
 
 
-class SiteContentDetailView(DetailView):
-    model = SiteContent
+class ContentDetailView(DetailView):
+    model = Content
     context_object_name = 'content'
 
 
-class SiteContentDeleteView(DeleteView):
-    model = SiteContent
+class ContentDeleteView(DeleteView):
+    model = Content
     context_object_name = 'content'
     
     def get_success_url(self):
