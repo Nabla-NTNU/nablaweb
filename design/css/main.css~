@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Tienne|Patrick+Hand|Stardos+Stencil|Redressed|La+Belle+Aurore|Limelight|Muli|Wire+One|Jura|Damion|VT323|Bangers|Buda:300|UnifrakturMaguntia|Bentham|IM+Fell+DW+Pica+SC|Lobster&v2);
+
 .centeredContainer {
 	width: 950px;
 	margin: 0 auto;
@@ -29,6 +31,12 @@ body {
 
 #head img, #head h1{
 	float: left;
+}
+
+#head h1 {
+	font-family: Limelight, Arial, sans-serif;
+	color: #cdedf9;
+	text-shadow: -1px -1px 1px #a8c2cc;
 }
 
 #head img {
@@ -85,7 +93,7 @@ div.lcontainer {
 
 #nesteArrang {
 	float: left;
-	margin: 0.5% 0 0 3.1%;
+	margin: 0.5% 0 0 0;
 }
 
 #kalender {
@@ -98,7 +106,7 @@ div.lcontainer {
 	background-image: url('../img/body_background.png');
 	background-repeat: repeat-x;
 	background-position: left top;
-	background-color: #9cbbca;
+	background-color: #7e98a3;
 	overflow: hidden;
 }
 

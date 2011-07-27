@@ -81,7 +81,7 @@
 #body div.innh div.innhWrapper div.social {
 	width: 100%;
 	font-size: 0.8em;
-	margin: 20px 0 0 0;
+	margin: 10px 0 0 0;
 	padding: 0;
 	color: #8c9598;
 }

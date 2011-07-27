@@ -343,7 +343,7 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 					</li>
 					<li class="end">
 					<a href="nabladet.html"><div class="img"></div></a>
-					<h5>Ukens nablad!</h5>
+					<a href="nabladet.html"><h5>Ukens nablad!</h5></a>
 					<!-- Facebook like knapp -->
 					<div class="fb">
 						<div id="fb-root"></div><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like href="http://www.nabla.no/nabladet/2010" send="false" layout="button_count" width="450" show_faces="false" font=""></fb:like>
