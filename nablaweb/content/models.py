@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class SiteContent(models.Model):
+class Content(models.Model):
     created_date = models.DateTimeField(auto_now_add=True, null=True)
     created_by = models.ForeignKey(User, related_name="%(class)s_created", editable=False, blank=False, null=True)
     last_changed_date = models.DateTimeField(auto_now=True, null=True)

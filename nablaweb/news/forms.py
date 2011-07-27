@@ -1,12 +1,12 @@
-from nablaweb.content.forms import SiteContentForm, SiteContentFormPreview
+from nablaweb.content.forms import ContentForm, ContentFormPreview
 from nablaweb.news.models import News
 
 
-class NewsForm(SiteContentForm):
-    class Meta(SiteContentForm.Meta):
+class NewsForm(ContentForm):
+    class Meta(ContentForm.Meta):
         model = News
 
-class NewsFormPreview(SiteContentFormPreview):
+class NewsFormPreview(ContentFormPreview):
     form_template = 'news/news_form.html'
     preview_template = 'news/news_preview.html'
     form_base = 'news/news_form_base.html'

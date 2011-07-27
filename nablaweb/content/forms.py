@@ -8,19 +8,19 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from nablaweb.content.models import SiteContent
+from nablaweb.content.models import Content
 
 
-class SiteContentCharField(CharField):
+class ContentCharField(CharField):
     default_error_messages = {
         'required': u'Dette feltet er påkrevd.',
         }
 
 
-class SiteContentForm(ModelForm):
-    headline = SiteContentCharField()
+class ContentForm(ModelForm):
+    headline = ContentCharField()
     class Meta:
-        model = SiteContent
+        model = Content
 
 
 class UpdateableModelFormPreview(FormPreview):
@@ -49,7 +49,7 @@ class UpdateableModelFormPreview(FormPreview):
         except KeyError: pass
 
 
-class SiteContentFormPreview(UpdateableModelFormPreview):
+class ContentFormPreview(UpdateableModelFormPreview):
     form_template = 'content/content_form.html'
     preview_template = 'content/content_preview.html'
     form_base = 'content/content_form_base.html'
@@ -83,6 +83,6 @@ class SiteContentFormPreview(UpdateableModelFormPreview):
         context['content'] = content
 
     def get_context(self, request, form):
-        context = super(SiteContentFormPreview, self).get_context(request, form)
+        context = super(ContentFormPreview, self).get_context(request, form)
         context['form_base'] = self.form_base
         return context
