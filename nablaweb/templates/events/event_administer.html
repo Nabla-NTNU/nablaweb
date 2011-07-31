@@ -17,7 +17,7 @@
 <form action="" method="post">{% csrf_token %}
 
   <select name="action">
-    {% for int_name, ext_name in actions.iteritems %}
+    {% for int_name, ext_name in actions %}
     <option value="{{ int_name }}">{{ ext_name }}</option>
     {% endfor %}
   </select>
