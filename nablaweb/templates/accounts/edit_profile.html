@@ -7,9 +7,6 @@
 <p>Trykk <a href="/avatar/change/">her</a> for å endre profilbilde.</p>
 
 
-{% if updated %}
-<p>Brukerprofil oppdatert</p>
-{% endif %}
 <form action="" method="post">{% csrf_token %}
 {{ userForm.as_p }}
 {{ profileForm.as_p }}

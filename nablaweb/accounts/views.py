@@ -7,8 +7,14 @@ from django.contrib.auth.models import User
 from accounts.forms import LoginForm, UserForm, ProfileForm
 from accounts.models import UserProfile
 from django.contrib import messages
+from django.views.decorators.http import require_http_methods, require_GET, require_POST
+
+from django.contrib.auth.decorators import login_required
+
 
 ## Login/logout
+
+@require_http_methods(['POST','GET'])
 def login_user(request):
     if request.method == 'GET':
         return login_get(request)
@@ -17,21 +23,26 @@ def login_user(request):
     else:
         raise Http404
 
+@require_GET
 def login_get(request):
     login_form = LoginForm()
     return render_to_response('accounts/login.html', 
                                 {'login_form': login_form}, 
                                 context_instance=RequestContext(request))
-
+@require_POST
 def login_post(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
     
+    #Hvis bruker ble autentisert log inn og 
     if user is not None:
         login(request,user)
         messages.add_message(request, messages.INFO, 'Du ble logget inn')
-        return redirect("/")
+        if request.META.has_key('HTTP_REFERER'):
+            return redirect(request.META['HTTP_REFERER'])
+        else:
+            redirect("/")
     else:
         login_form = LoginForm({'username':username})
         messages.add_message(request, messages.ERROR, 'Feil brukernavn/passord!')
@@ -43,26 +54,26 @@ def login_post(request):
 def logout_user(request):
     messages.add_message(request, messages.INFO, 'Logget ut')
     logout(request)
-    return redirect("/")
+    
+    if request.META.has_key('HTTP_REFERER'):
+        return redirect(request.META['HTTP_REFERER'])
+    else:
+         redirect("/")
 
 
 ## Brukerprofil 
+@login_required
 def view_member_profile(request, username):
     member = get_object_or_404(User, username=username)
     return render_to_response("accounts/view_member_profile.html", {'member': member}, context_instance=RequestContext(request))
     
+
+@login_required
 def edit_profile(request):
     user = request.user;
     updated = False
 
-    # TODO: Lag bedre løsning for ikke innlogget
-    if  not(user.is_authenticated()):
-        return HttpResponseRedirect("/login/")
-
-    
     userProfile = UserProfile.objects.get_or_create(user=user)[0]
-    
-
     
     if request.method == 'GET': 
         userForm = UserForm(instance=user)
@@ -73,7 +84,11 @@ def edit_profile(request):
         if userForm.is_valid() and profileForm.is_valid() :
             userForm.save()
             profileForm.save()
-            updated = True
-    return render_to_response("accounts/edit_profile.html", {'userForm': userForm, 'profileForm': profileForm, 'updated':updated}, context_instance=RequestContext(request))
+            messages.add_message(request, messages.INFO, 'Profil oppdatert.')
+        else:
+            messages.add_message(request, messages.INFO, 'Du har skrevet inn noe feil.')
+
+
+    return render_to_response("accounts/edit_profile.html", {'userForm': userForm, 'profileForm': profileForm }, context_instance=RequestContext(request))
 
 
