@@ -4,9 +4,9 @@ from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
 from accounts.forms import LoginForm, UserForm, ProfileForm
 from accounts.models import UserProfile
+from django.contrib import messages
 
 ## Login/logout
 def login_user(request):
@@ -30,14 +30,18 @@ def login_post(request):
     
     if user is not None:
         login(request,user)
+        messages.add_message(request, messages.INFO, 'Du ble logget inn')
         return redirect("/")
     else:
         login_form = LoginForm({'username':username})
+        messages.add_message(request, messages.ERROR, 'Feil brukernavn/passord!')
+
         return render_to_response('accounts/login.html', 
-                                    {'login_form': login_form, 'failed_login':True}, 
+                                    {'login_form': login_form}, 
                                     context_instance=RequestContext(request))
 
 def logout_user(request):
+    messages.add_message(request, messages.INFO, 'Logget ut')
     logout(request)
     return redirect("/")
 
@@ -55,14 +59,11 @@ def edit_profile(request):
     if  not(user.is_authenticated()):
         return HttpResponseRedirect("/login/")
 
-    # Lag userprofile i tilfelle den ikke finnes 
-    try:
-        userProfile = user.get_profile()
-    except ObjectDoesNotExist:
-        userProfile = UserProfile()
-        userProfile.user = user
-        userProfile.save()
- 
+    
+    userProfile = UserProfile.objects.get_or_create(user=user)[0]
+    
+
+    
     if request.method == 'GET': 
         userForm = UserForm(instance=user)
         profileForm = ProfileForm(instance=userProfile)
@@ -74,4 +75,5 @@ def edit_profile(request):
             profileForm.save()
             updated = True
     return render_to_response("accounts/edit_profile.html", {'userForm': userForm, 'profileForm': profileForm, 'updated':updated}, context_instance=RequestContext(request))
+
 

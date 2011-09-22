@@ -6,7 +6,7 @@
 
 </head>
 <body>
-<h1> Nabla </h1>
+  <h1><a href="/">Nabla</a></h1>
 
 
 
@@ -14,11 +14,28 @@
 Velkommen {{ user.get_full_name }}!<br />
 <a href="/logout/">Logg ut</a>
 {% else %}
-<a href="/login/">Logg inn</a>
+<form method="post" action="/login/" />
+
+    {% csrf_token %}
+	<label for="id_username">Brukernavn:</label>
+	<input type="text" name="username" id="id_username" />
+	<label for="id_password">Passord:</label>
+	<input type="password" name="password" id="id_password" />   
+    <input type="submit" value="Logg inn"/>
+</form>
 {% endif %}
 <br />
 
 <hr />
+{% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+{% endif %}
+
+
 {% block content %} Av en eller annen grunn er det ikke noe her {% endblock %}
 
 </body>

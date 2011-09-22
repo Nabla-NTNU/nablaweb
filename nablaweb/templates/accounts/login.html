@@ -5,9 +5,6 @@
 
 {% block content %}
 
-    {% if failed_login %}
-        Feil brukernavn eller passord!
-    {% endif %}
     <form method="post" action="/login/" />
     <ul>
     {% csrf_token %}

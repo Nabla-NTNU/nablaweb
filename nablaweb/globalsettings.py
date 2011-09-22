@@ -109,3 +109,10 @@ INSTALLED_APPS = (
 )
 
 AUTH_PROFILE_MODULE= 'accounts.UserProfile'
+LOGIN_URL = '/login/'
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.contrib.messages.context_processors.messages',
+   )
+
