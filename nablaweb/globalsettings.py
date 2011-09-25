@@ -99,6 +99,7 @@ INSTALLED_APPS = (
     'avatar',
     'events',
     'content',
+    'jobs',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
