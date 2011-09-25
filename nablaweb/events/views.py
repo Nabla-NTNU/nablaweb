@@ -2,6 +2,7 @@
 
 
 import datetime
+from django.contrib import messages as django_messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
@@ -10,7 +11,6 @@ from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView
 from nablaweb.content.views import ContentListView, ContentDetailView, ContentDeleteView
 from nablaweb.events.models import Event
-
 
 # Administrasjon
 
@@ -101,9 +101,18 @@ class UserEventView(TemplateView):
 
 
 def register_user(request, event_id):
+    messages = {
+        'noreg': 'Ingen registrering.',
+        'closed': 'Påmeldingen har stengt.',
+        'full': 'Arrangementet er fullt.',
+        'attend': 'Du er påmeldt.',
+        'queue': 'Du står på venteliste.',
+        }
     event = get_object_or_404(Event, pk=event_id)
-    message = event.register_user(request.user)
-    return render_to_response('events/event_detail.html', {'content': event, 'messages': (message,)})
+    token = event.register_user(request.user)
+    message = messages[token]
+    django_messages.add_message(request, django_messages.INFO, message)
+    return HttpResponseRedirect(reverse('event_detail', kwargs={'pk': event_id}))
 
 
 # Eksporter

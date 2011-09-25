@@ -115,14 +115,15 @@ class Event(Content):
     def has_waiting_list(self):
         return bool(self.has_queue)
 
-    # TODO: Trenger en bedre måte å gi tilbakemeldinger på enn spesialiserte tekststrenger.
+    # Forsøker å melde brukeren på arrangementet.  Returnerer en
+    # tekststreng som indikerer hvor vellykket operasjonen var.
     def register_user(self, user):
         if self.registration_deadline is None:
-            return u"Ingen påmelding."
+            return 'noreg'
         elif datetime.datetime.now() > self.registration_deadline:
-            return u"Påmeldingen har stengt."
+            return 'closed'
         elif self.is_full() and self.has_queue is False:
-            return u"Fullt."
+            return 'full'
 
         try:
             registration = self.eventregistration_set.get(user=user)
@@ -135,9 +136,9 @@ class Event(Content):
             registration.save()
 
         if registration.number <= self.places:
-            return u"Du er påmeldt."
+            return 'attend'
         else:
-            return u"Du står på venteliste."
+            return 'queue'
 
     # Melder brukeren av arrangementet. I praksis sørger metoden bare
     # for at brukeren ikke er påmeldt lengre, uavhengig av status før.
