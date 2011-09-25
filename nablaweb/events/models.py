@@ -119,26 +119,28 @@ class Event(Content):
     # tekststreng som indikerer hvor vellykket operasjonen var.
     def register_user(self, user):
         if self.registration_deadline is None:
-            return 'noreg'
+            msg = 'noreg'
         elif datetime.datetime.now() > self.registration_deadline:
-            return 'closed'
-        elif self.is_full() and self.has_queue is False:
-            return 'full'
-
-        try:
-            registration = self.eventregistration_set.get(user=user)
-        except EventRegistration.DoesNotExist:
-            registration = EventRegistration(
-                event=self,
-                user=user,
-                number=self.eventregistration_set.count()+1
-                )
-            registration.save()
-
-        if registration.number <= self.places:
-            return 'attend'
+            msg = 'closed'
         else:
-            return 'queue'
+            # TODO: Bruk select_for_update(), når den blir tilgjengelig.
+            # https://docs.djangoproject.com/en/dev/ref/models/querysets/#select-for-update
+            regs = self.eventregistration_set # .select_for_update()
+            places = self.places
+            try:
+                reg = regs.get(user=user)
+            except EventRegistration.DoesNotExist:
+                number=regs.count()+1
+                if number > places and not self.has_waiting_list():
+                    msg = 'full'
+                else:
+                    reg = regs.create(event=self, user=user, number=number)
+            if reg.number <= places:
+                msg = 'attend'
+            else:
+                msg = 'queue'
+        return msg
+
 
     # Melder brukeren av arrangementet. I praksis sørger metoden bare
     # for at brukeren ikke er påmeldt lengre, uavhengig av status før.
@@ -160,8 +162,12 @@ class Event(Content):
     # plassnummeret er for lavt/høyt.
     # TODO: Håndterer ikke tilfeller der brukeren ikke er påmeldt.
     def move_user_to_place(self, user, place):
+        # TODO: Bruk select_for_update(), når den blir tilgjengelig.
+        # https://docs.djangoproject.com/en/dev/ref/models/querysets/#select-for-update
+        reg_set = self.eventregistration_set # .select_for_update()
+
         # Antall registreringer.
-        regs = self.eventregistration_set.count()
+        regs = reg_set.count()
 
         # Dersom "ønsket" plass er ikke-positiv, endre til 1.
         new = max(1, place)
@@ -170,7 +176,7 @@ class Event(Content):
         new = min(regs, new)
 
         # Hent ut registreringen til brukeren som skal flyttes.
-        u_reg = self.eventregistration_set.get(user=user)
+        u_reg = reg_set.get(user=user)
 
         # Hent ut nåværende kønummer.
         current = u_reg.number
@@ -181,12 +187,12 @@ class Event(Content):
         # Brukeren skal oppover på ventelisten, dvs. lavere kønummer.
         elif new < current:
             # Flytt brukere mellom ny og gammel plass nedover.
-            self.eventregistration_set.filter(number__range=(new, current-1)).update(number=models.F('number')+1)
+            reg_set.filter(number__range=(new, current-1)).update(number=models.F('number')+1)
 
         # Brukeren skal nedover på ventelisten, dvs. høyere kønummer.
         else:
             # Flytt brukere mellom ny og gammel plass  oppover.
-            self.eventregistration_set.filter(number__range=(current+1, new)).update(number=models.F('number')-1)
+            reg_set.filter(number__range=(current+1, new)).update(number=models.F('number')-1)
 
         # Lagre det nye kønummeret.
         u_reg.number = new
