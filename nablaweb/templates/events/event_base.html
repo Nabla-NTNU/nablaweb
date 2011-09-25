@@ -2,13 +2,6 @@
 
 {% block base_after_headline %}
 
-{% if messages %}
-Koden som genererte meg bør flyttes.<br />
-{% for message in messages %}
-{{ message }}<br />
-{% endfor %}
-{% endif %}
-
 {% if content.organizer %}
 Arrangør: {{ content.organizer }}<br />
 {% endif %}
