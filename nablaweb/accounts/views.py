@@ -91,4 +91,9 @@ def edit_profile(request):
 
     return render_to_response("accounts/edit_profile.html", {'userForm': userForm, 'profileForm': profileForm }, context_instance=RequestContext(request))
 
-
+## Brukerliste
+@login_required
+def list(request):
+	users = User.objects.all()
+	return render_to_response("accounts/list.html", {'users': users}, context_instance=RequestContext(request))
+	
