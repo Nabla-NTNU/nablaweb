@@ -36,13 +36,10 @@ def login_post(request):
     user = authenticate(username=username, password=password)
     
     #Hvis bruker ble autentisert log inn og 
-    if user is not None:
+    if user is not None and user.is_active:
         login(request,user)
         messages.add_message(request, messages.INFO, 'Du ble logget inn')
-        if request.META.has_key('HTTP_REFERER'):
-            return redirect(request.META['HTTP_REFERER'])
-        else:
-            redirect("/")
+        return redirect(request.META.get('HTTP_REFERER','/'))
     else:
         login_form = LoginForm({'username':username})
         messages.add_message(request, messages.ERROR, 'Feil brukernavn/passord!')
@@ -54,11 +51,8 @@ def login_post(request):
 def logout_user(request):
     messages.add_message(request, messages.INFO, 'Logget ut')
     logout(request)
-    
-    if request.META.has_key('HTTP_REFERER'):
-        return redirect(request.META['HTTP_REFERER'])
-    else:
-         redirect("/")
+    return redirect(request.META.get('HTTP_REFERER','/'))
+
 
 
 ## Brukerprofil 
@@ -92,3 +86,6 @@ def edit_profile(request):
     return render_to_response("accounts/edit_profile.html", {'userForm': userForm, 'profileForm': profileForm }, context_instance=RequestContext(request))
 
 
+
+def user_register(request)t):
+    return HttpResponse("HEI")
