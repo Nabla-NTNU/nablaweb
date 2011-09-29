@@ -8,8 +8,10 @@ from accounts.forms import LoginForm, UserForm, ProfileForm
 from accounts.models import UserProfile
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
+from django.views.generic import TemplateView
 
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, InvalidPage
 
 
 ## Login/logout
@@ -91,9 +93,31 @@ def edit_profile(request):
 
     return render_to_response("accounts/edit_profile.html", {'userForm': userForm, 'profileForm': profileForm }, context_instance=RequestContext(request))
 
-## Brukerliste
 @login_required
 def list(request):
-	users = User.objects.all()
-	return render_to_response("accounts/list.html", {'users': users}, context_instance=RequestContext(request))
+
+	u"""Lister opp brukere med pagination."""
+
+	user_list = User.objects.all()
+	paginator = Paginator(user_list, 20) # Antall brukere per side 
+	
+	# Sjekk om brukeren har valgt side
+	try: 
+		page = int(request.GET.get('side'))
+	except:
+		# Start på side 1 hvis siden ikke er valgt
+		page = 1
+
+	
+	# Prøv å hente en den valgte siden
+	try:
+		users = paginator.page(page)
+	except (EmptyPage, InvalidPage):
+		# Hent den siste siden om siden ikke er gyldig
+		users = paginator.page(paginator.num_pages)
+
+	return render_to_response("accounts/list.html", 
+							  {'users': users}, 
+							  context_instance=RequestContext(request)
+							 )
 	
