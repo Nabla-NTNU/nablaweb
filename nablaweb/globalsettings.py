@@ -118,3 +118,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
    )
 
+
+# Hvor passwd-fila til ntnulinuxserverne ligger på gauss. Må bli lastet ned
+# regelmessig med cron eller noe lignende.
+NTNU_PASSWD = '/home/hiasen/passwd'
