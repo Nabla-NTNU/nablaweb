@@ -130,17 +130,16 @@ class Event(Content):
             try:
                 reg = regs.get(user=user)
             except EventRegistration.DoesNotExist:
-                number=regs.count()+1
+                number = regs.count() + 1
                 if number > places and not self.has_waiting_list():
                     msg = 'full'
                 else:
                     reg = regs.create(event=self, user=user, number=number)
-            if reg.number <= places:
-                msg = 'attend'
-            else:
-                msg = 'queue'
+                    if reg.number <= places:
+                        msg = 'attend'
+                    else:
+                        msg = 'queue'
         return msg
-
 
     # Melder brukeren av arrangementet. I praksis sørger metoden bare
     # for at brukeren ikke er påmeldt lengre, uavhengig av status før.
@@ -158,9 +157,9 @@ class Event(Content):
         except EventRegistration.DoesNotExist:
             pass
 
-    # Flytter brukeren til den oppgitte plassen, eller først/sist dersom 
-    # plassnummeret er for lavt/høyt.
-    # TODO: Håndterer ikke tilfeller der brukeren ikke er påmeldt.
+    # Flytter brukeren til den oppgitte plassen, eller først/sist
+    # dersom plassnummeret er for lavt/høyt. Returnerer det nye
+    # plassnummeret, eller None dersom brukeren ikke er påmeldt.
     def move_user_to_place(self, user, place):
         # TODO: Bruk select_for_update(), når den blir tilgjengelig.
         # https://docs.djangoproject.com/en/dev/ref/models/querysets/#select-for-update
@@ -175,14 +174,16 @@ class Event(Content):
         # Dersom "ønsket" plass er høyere enn antall påmeldte, endre til siste plass.
         new = min(regs, new)
 
-        # Hent ut registreringen til brukeren som skal flyttes.
-        u_reg = reg_set.get(user=user)
+        # Forsøk å hente ut registreringen til brukeren som skal flyttes.
+        try: u_reg = reg_set.get(user=user)
+        # Returner dersom brukeren ikke er påmeldt.
+        except EventRegistration.DoesNotExist: return None
 
         # Hent ut nåværende kønummer.
         current = u_reg.number
 
         # Brukeren er allerede på riktig plass.
-        if current == new: return
+        if current == new: return new
 
         # Brukeren skal oppover på ventelisten, dvs. lavere kønummer.
         elif new < current:
@@ -191,12 +192,14 @@ class Event(Content):
 
         # Brukeren skal nedover på ventelisten, dvs. høyere kønummer.
         else:
-            # Flytt brukere mellom ny og gammel plass  oppover.
+            # Flytt brukere mellom ny og gammel plass oppover.
             reg_set.filter(number__range=(current+1, new)).update(number=models.F('number')-1)
 
         # Lagre det nye kønummeret.
         u_reg.number = new
         u_reg.save()
+
+        return new
 
     # Sletter overflødige registreringer.
     def _prune_queue(self):
