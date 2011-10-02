@@ -13,44 +13,44 @@ class Event(Content):
     organizer = models.CharField(max_length=100, blank=True)
 
     # Hvor arrangementet foregår.
-    location = models.CharField(max_length=100, blank=False)
+    location = models.CharField(verbose_name="Sted", max_length=100, blank=False)
 
     # Når arrangementet starter.
-    event_start = models.DateTimeField(null=True, blank=False)
+    event_start = models.DateTimeField(verbose_name="Start", null=True, blank=False)
 
     # Når arrangementet slutter.
     # Dette feltet er valgfritt.
     # Datoen er ikke tidligere enn event_start.
-    event_end = models.DateTimeField(null=True, blank=True)
+    event_end = models.DateTimeField(verbose_name="Slutt", null=True, blank=True)
 
     # Frist for å melde seg på arrangementet.
     # Dette feltet er valgfritt.
     # At dette feltet er satt er ekvivalent med at arrangementet krever påmelding.
     # Datoen er ikke senere enn event_start.
-    registration_deadline = models.DateTimeField(null=True, blank=True)
+    registration_deadline = models.DateTimeField(verbose_name="Påmeldingsfrist", null=True, blank=True)
 
     # Når påmeldingen starter.
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_deadline er satt.
     # Datoen er ikke senere enn registration_deadline.
-    registration_start = models.DateTimeField(null=True, blank=True)
+    registration_start = models.DateTimeField(verbose_name="Påmeldingsstart", null=True, blank=True)
 
     # Frist for å melde seg av arrangementet.
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_deadline er satt.
     # Datoen er ikke tidligere enn registration_start, hvis dette er satt.
     # Datoen er ikke senere enn event_start.
-    deregistration_deadline = models.DateTimeField(null=True, blank=True)
+    deregistration_deadline = models.DateTimeField(verbose_name="Avmeldingsfrist",null=True, blank=True)
 
     # Hvor mange plasser arrangementet har.
     # Dette feltet er satt hvis og bare hvis registration_deadline er satt.
     # Antall plasser er et heltall ikke mindre enn null.
-    places = models.PositiveIntegerField(null=True, blank=True)
+    places = models.PositiveIntegerField(verbose_name="Plasser", null=True, blank=True)
 
     # Om arrangementet har venteliste.
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_deadline er satt.
-    has_queue = models.NullBooleanField(null=True, blank=True)
+    has_queue = models.NullBooleanField(verbose_name="Venteliste", null=True, blank=True)
 
     class Meta(Content.Meta):
         verbose_name_plural = "arrangement"
