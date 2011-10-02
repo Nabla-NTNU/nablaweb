@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     #(r'^stillinger/', include('nablaweb.jobs.urls')),
     (r'^accounts/', include('accounts.urls')),
     (r'^avatar/', include('avatar.urls')),
+    (r'^stillinger/', include('nablaweb.jobs.urls')),
     # Midlertidige urler (kommer mest sannsynlig til aa forandres)
     (r'^profile/edit/$', 'accounts.views.edit_profile'),
    
