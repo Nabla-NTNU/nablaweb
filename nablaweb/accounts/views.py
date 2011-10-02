@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
-from accounts.forms import LoginForm, UserForm, ProfileForm
+from accounts.forms import LoginForm, UserForm, ProfileForm, RegistrationForm
 from accounts.models import UserProfile
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
@@ -82,39 +82,48 @@ def edit_profile(request):
             profileForm.save()
             messages.add_message(request, messages.INFO, 'Profil oppdatert.')
         else:
-            messages.add_message(request, messages.INFO, 'Du har skrevet inn noe feil.')
+            messages.add_message(request, messages.ERROR, 'Du har skrevet inn noe feil.')
 
 
     return render_to_response("accounts/edit_profile.html", {'userForm': userForm, 'profileForm': profileForm }, context_instance=RequestContext(request))
 
 @login_required
 def list(request):
-
-	u"""Lister opp brukere med pagination."""
-
-	user_list = User.objects.all()
-	paginator = Paginator(user_list, 20) # Antall brukere per side 
+    """Lister opp brukere med pagination."""
+    user_list = User.objects.all()
+    paginator = Paginator(user_list, 20) # Antall brukere per side 
 	
 	# Sjekk om brukeren har valgt side
-	try: 
+    try: 
 		page = int(request.GET.get('side'))
-	except:
-		# Start på side 1 hvis siden ikke er valgt
-		page = 1
+    except:
+        # Start på side 1 hvis siden ikke er valgt
+        page = 1
 
 	
-	# Prøv å hente en den valgte siden
-	try:
-		users = paginator.page(page)
-	except (EmptyPage, InvalidPage):
-		# Hent den siste siden om siden ikke er gyldig
-		users = paginator.page(paginator.num_pages)
+    # Prøv å hente en den valgte siden
+    try:
+        users = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        # Hent den siste siden om siden ikke er gyldig
+        users = paginator.page(paginator.num_pages)
     return render_to_response("accounts/list.html", 
 							  {'users': users}, 
 							  context_instance=RequestContext(request)
 							 )
-	
 
 
-def user_register(request)t):
-    return HttpResponse("HEI")
+def user_register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            return HttpResponse("Riktig")
+    else:
+        form = RegistrationForm()
+    
+    return render_to_response("accounts/user_registration.html",
+                               {'form':form},
+                               context_instance=RequestContext(request)
+                               )
+def registration_confirmaiton_email(request, username):
+    return HttpResponse("")
