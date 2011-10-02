@@ -16,9 +16,12 @@ class RelevantForAdminForm(ModelForm):
 
 class AdvertAdmin(admin.ModelAdmin):
     relevant_for_form = RelevantForAdminForm
+    class Meta:
+        verbose_name_plural = "Adverts"
     
 class CompanyAdmin(admin.ModelAdmin):
-    pass
+    class Meta:
+        verbose_name_plural = "Companies"
 
 admin.site.register(Advert, AdvertAdmin)
 admin.site.register(Company, CompanyAdmin)
