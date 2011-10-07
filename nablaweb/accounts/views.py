@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response, redirect, get_object_or_404
+from django.shortcuts import render_to_response, redirect, get_object_or_404, render
 from django.template import RequestContext
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
@@ -59,9 +59,21 @@ def logout_user(request):
 
 ## Brukerprofil 
 @login_required
-def view_member_profile(request, username):
-    member = get_object_or_404(User, username=username)
-    return render_to_response("accounts/view_member_profile.html", {'member': member}, context_instance=RequestContext(request))
+def view_member_profile(request, username=None):
+
+    """Viser profilen til en oppgitt bruker. Om brukernavn ikke er oppgitt
+    vises profilen til brukeren selv."""
+
+    if username:
+        member = get_object_or_404(User, username=username)
+    else:
+        member = request.user
+    return render(
+        request, "accounts/view_member_profile.html", 
+        {'member': member})
+    # Render er identisk med render_to_response, men tar request som første
+    # argument istedenfor RequestContext(request) som tredje argument.
+    # Importeres fra django.shortcuts
     
 
 @login_required
