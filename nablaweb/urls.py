@@ -13,13 +13,10 @@ urlpatterns = patterns('',
     (r'^logout/$', 'accounts.views.logout_user'),
     (r'^nyheter/', include('nablaweb.news.urls')),	
     (r'^arrangement/', include('nablaweb.events.urls')),
-    #(r'^stillinger/', include('nablaweb.jobs.urls')),
     (r'^accounts/', include('accounts.urls')),
-    (r'^avatar/', include('avatar.urls')),
-    # Midlertidige urler (kommer mest sannsynlig til aa forandres)
-    (r'^profile/edit/$', 'accounts.views.edit_profile'),
+    (r'^avatar/', include('avatar.urls')),    
+    (r'^stillinger/', include('jobs.urls')),
    
-
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
      (r'^admin/doc/', include('django.contrib.admindocs.urls')),

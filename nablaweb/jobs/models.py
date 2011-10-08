@@ -19,3 +19,4 @@ class Advert(Content):
     expiry_date = models.DateTimeField(verbose_name="Forsvinner") # Naar annonsen skal fjernes, for eksempel samtidig som deadline_date
 
     info_file = models.FileField(upload_to="stillinger", blank=True, verbose_name="Informasjonsfil", help_text="Informasjon om stillingen")
+    antall_stillinger = models.IntegerField(verbose_name="Antall stillinger", blank=True, null=True)

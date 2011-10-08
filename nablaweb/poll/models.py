@@ -18,5 +18,3 @@ class Choice(models.Model):
     hidden = models.BooleanField('Gjemt') # Hvorvidt valget er gjemt
     def __unicode__(self):
         return self.choice
-
-# Create your models here.

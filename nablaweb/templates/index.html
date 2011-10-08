@@ -8,17 +8,26 @@
 
 Her finnes ting og tang som funker mer eller mindre:
 <ul>
-	<li><strong>Arrangement:</strong>
-		<ul>
-			<li><a href="/arrangement">Liste over arrangementer</a></li>
-		</ul>
-	</li>
+    <li><strong>Arrangement:</strong>
+        <ul>
+            <li><a href="/arrangement">Liste over arrangementer</a></li>
+        </ul>
+    </li>
 
 	<li><strong>Accounts:</strong>
 		<ul>
-			<li><a href="/profile/edit/">Endre profil</li>
-			<li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+			<li><a href="accounts/edit/">Endre profil</a></li>
+            {# Følgende linje fungerer fint hos meg (andreros). Får dere fremdeles feilmelding? #}
+			{#<li><a href="{% url accounts.views.list %}/accounts/list">Brukerliste</a></li>#}
+			<li><a href="/accounts/list">Brukerliste</a></li>
 		</ul>
 	</li>
+	
+	<li><strong>Stillingsannonser:</strong></li>
+	    <ul>
+	        <li><a href="/stillinger">Liste over stillingsannonser</a></li>
+	    </ul>
+	</li>
 </ul>
-{% endblock %}
+
+{% endblock content %}
