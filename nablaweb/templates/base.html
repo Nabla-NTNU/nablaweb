@@ -45,6 +45,24 @@ Velkommen {{ user.get_full_name }}!<br />
 
 {% block content %} Av en eller annen grunn er det ikke noe her {% endblock %}
 
+<br />
+
+{% block sidebar_event %}
+<div class="sidebar_element">
+    <strong>Kommende arrangement:</strong>
+    {# upcoming_events er tilgjengelig i alle templates pga context processor #}
+    {% if upcoming_events %}
+        <ul>
+            {% for event in upcoming_events %}
+            <li><a href="{% url event_detail event.id %}">{{ event.headline }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        Ingenting :(
+    {% endif %}
+</div>
+{% endblock sidebar_event %}
+
 </body>
 
 </html>
