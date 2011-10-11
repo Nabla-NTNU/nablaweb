@@ -10,27 +10,24 @@
 		font-family: Verdana;
 		font-size: 12px;
 		}
+
+    #container { display: table; width: 100%; }
+
+    #content { display: table-cell; width: 66%; }
+    #sidebar { display: table-cell; width: 33%; }
+
+    .sidebar-element {
+        background-color: white;
+        border: 1px solid #666;
+        padding: 5px;
+        margin: 5px;
+    }
 </style>
 </head>
 <body>
-  <h1><a href="/">Nabla</a></h1>
+<h1><a href="/">Nabla</a></h1>
 
 
-
-{% if user.is_authenticated %}
-Velkommen {{ user.get_full_name }}!<br />
-<a href="/logout/">Logg ut</a>
-{% else %}
-<form method="post" action="/login/" />
-
-    {% csrf_token %}
-	<label for="id_username">Brukernavn:</label>
-	<input type="text" name="username" id="id_username" />
-	<label for="id_password">Passord:</label>
-	<input type="password" name="password" id="id_password" />   
-    <input type="submit" value="Logg inn"/>
-</form>
-{% endif %}
 <br />
 
 <hr />
@@ -42,26 +39,71 @@ Velkommen {{ user.get_full_name }}!<br />
     </ul>
 {% endif %}
 
+<div id="container">
 
-{% block content %} Av en eller annen grunn er det ikke noe her {% endblock %}
+<div id="content">
+    {% block content %} Av en eller annen grunn er det ikke noe her {% endblock %}
+</div>
 
 <br />
 
-{% block sidebar_event %}
-<div class="sidebar_element">
-    <strong>Kommende arrangement:</strong>
-    {# upcoming_events er tilgjengelig i alle templates pga context processor #}
-    {% if upcoming_events %}
+<div id="sidebar">
+    <div class="sidebar-element userbox">
+        {% if user.is_authenticated %}
+            <strong>Pålogget:</strong> {{ user.get_full_name }}</a><br />
+            <ul>
+                <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
+                <li><a href="{% url accounts.views.view_member_profile %}">Vis profil</a></li>
+                <li><a href="/logout/">Logg ut</a></li>
+            </ul>
+        {% else %}
+            <strong>Logg på</strong> <br />
+            <form method="post" action="/login/" />
+                {% csrf_token %}
+                <label for="id_username">Brukernavn:</label>
+                <input type="text" name="username" id="id_username" /> <br />
+                <label for="id_password">Passord:</label>
+                <input type="password" name="password" id="id_password" />   
+                <input type="submit" value="Logg inn"/>
+            </form>
+            <br />
+            <ul>
+                <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
+                <li><a href="{% url django.contrib.auth.views.password_reset %}">Glemt passord</a></li>
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="sidebar-element navigation">
+        <strong>Meny</strong>
         <ul>
-            {% for event in upcoming_events %}
-            <li><a href="{% url event_detail event.id %}">{{ event.headline }}</a></li>
-            {% endfor %}
+            <li><a href="{% url event_list %}">Arrangement</a></li>
+            <li><a href="{% url news_list %}">Nyheter</a></li>
+            <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+            <li><a href="/stillinger/">Stillinger</a></li>
+            <li><a href="/admin">Admin</a></li>
         </ul>
-    {% else %}
-        Ingenting :(
-    {% endif %}
-</div>
-{% endblock sidebar_event %}
+    </div>
+
+    {% block sidebar_event %}
+    <div class="sidebar-element upcoming-events">
+        <strong>Kommende arrangement</strong>
+        {# upcoming_events er tilgjengelig i alle templates pga context processor #}
+        {% if upcoming_events %}
+            <ul>
+                {% for event in upcoming_events %}
+                <li><a href="{% url event_detail event.id %}">{{ event.headline }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            Ingenting :(
+        {% endif %}
+    </div>
+    {% endblock sidebar_event %}
+
+</div> <!-- end of sidebar -->
+
+</div> <!-- end of container -->
 
 </body>
 
