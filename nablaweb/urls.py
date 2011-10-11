@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     (r'^accounts/', include('accounts.urls')),
     (r'^avatar/', include('avatar.urls')),    
     (r'^stillinger/', include('jobs.urls')),
+    (r'^gallery/', include('gallery.urls')), # Kan ikke endres pga hardkoding i gallery-appen
    
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
