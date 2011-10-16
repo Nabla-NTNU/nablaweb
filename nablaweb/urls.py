@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     # Example:
     # (r'^nablaweb/', include('nablaweb.foo.urls')),
     
-    (r'^$', 'views.index'),
+    (r'^$', include('homepage.urls')),
     (r'^login/$', 'accounts.views.login_user'),
     (r'^logout/$', 'accounts.views.logout_user'),
     (r'^nyheter/', include('nablaweb.news.urls')),	
