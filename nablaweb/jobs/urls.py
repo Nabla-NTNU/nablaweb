@@ -7,9 +7,9 @@ from jobs.views import *
 
 urlpatterns = patterns('',
     (r'^$', EverythingList.as_view()),
-    #(r'^stillinger/(?P<year>\d{4})/$', 'jobs.views.datelist'),
-    #(r'^stillinger/(?P<year>\d{4})/(?P<month>\d{2})/$', 'jobs.views.datelist'),
-    #(r'^stillinger/(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$', 'jobs.views.datelist'),
+    (r'^(?P<year>\d{4})/$', DateList.as_view()),
+    (r'^(?P<year>\d{4})/(?P<month>\d{2})/$', DateList.as_view()),
+    (r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$', DateList.as_view()),
     (r'^(?P<company>\D{1,25})/$', CompanyList.as_view()),
-    #(r'^stillinger/(?P<company>\D{})/(?P<jobid>\d{3}/$)', 'jobs.views.jobview')
+    (r'^(?P<company>\D{})/(?P<jobid>\d{1,5})/$', ShowJob.as_view())
 )
