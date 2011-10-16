@@ -101,6 +101,21 @@
         {% endif %}
     </div>
     {% endblock sidebar_event %}
+    
+    {% block sidebar_jobs %}
+    <div class="sidebar-element upcoming-events">
+        <strong>Stillingsannonser</strong>
+        {% if active_jobs %}
+            <ul>
+                {% for job in active_jobs %}
+                <li>{{ job.headline }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            Tomt.
+        {% endif %}
+     </div>
+     {% endblock sidebar_jobs %}
 
 </div> <!-- end of sidebar -->
 
