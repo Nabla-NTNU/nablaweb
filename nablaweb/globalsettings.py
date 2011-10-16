@@ -103,6 +103,7 @@ INSTALLED_APPS = (
     'jobs',
     'gallery',
     'bedpres',
+    'homepage',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
