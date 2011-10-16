@@ -1,0 +1,10 @@
+Velkommen til som bruker på Nabla.no
+
+Brukernavn: {{username}}
+Passord: {{password}}
+
+
+Hilsen
+webkom
+
+
