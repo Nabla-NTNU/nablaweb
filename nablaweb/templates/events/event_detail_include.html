@@ -1,4 +1,60 @@
+{% load bbcode %}
+{% load humanize %}
+
+{% comment %}
+
+Innhold
+-------
+En event slik den vises på forsida.
+
+Skal inneholde:
+    overskrift
+    Les mer/påmelding lenker
+    sted
+    tid
+    dato
+
+Nyttige variabler
+--------
+event                   Event-objekt
+    id                  
+    headline            Tittelen
+    lead_paragraph      Ingressen. Bruk |bbcode
+    body                Bruk |bbcode
+    created_by          User-objekt
+        id
+        username        Forfatterens brukernavn
+        get_full_name   Forfatterens navn
+    event_start         Datetime-objekt.
+    location            Sted. 
+    registration_required Bool.
+    registration_deadline Datetime-objekt.
+    users_attending     Antall brukere som er påmeldt
+    free_places         Ledige plasser
+    places              Totale plasser
+
+URL til eventen:
+{% url event_detail event.id %}
+
+Filteret |naturalday kan funke på datoen.
+
+{% endcomment %}
+
 <div class="event">
-    <h3>{{ event.headline }}</h3>
-    Dette er et arrangement
+    <div class="event_text">
+        <h3>{{ event.headline }}</h3>
+        {{ event.lead_paragraph|bbcode }}
+
+        <p><a href="{% url event_detail event.id %}">Mer informasjon</a></p>
+    </div>
+
+    <div class="event_info">
+        <strong>Tid: </strong>{{ event.event_start|naturalday }}<br />
+        <strong>Sted: </strong>{{ event.location }}<br />
+        {% if event.registration_required %}<br />
+        <strong>Frist: </strong>{{ event.registration_deadline }}<br />
+        <strong>Deltakere: </strong>{{ event.users_attending }}<br />
+        <strong>Ledige: </strong>{{ event.free_places }}<br />
+        {% endif %}
+    </div>
 </div>

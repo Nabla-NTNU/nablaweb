@@ -1,3 +1,51 @@
+{% comment %}
+
+Innhold
+------
+All HTML for sidens baselayout.
+* Navigasjon
+    * Lenker til viktige apps
+    * Logg inn/ut
+    * Lenke for endring av brukerinfo
+
+Blokker
+------
+title       Sidens tittel 
+content     Innhold
+
+Nyttige views å lenke til
+-------------------------
+event_list              Liste over arrangement
+news_list               Liste over nyheter
+gallery.views.index     Galleriet
+accounts.views.list     Liste over brukere
+/stillinger/            Stillinger. TODO: Fjerne absolutt URL
+/admin/                 Skal kun vises for adminbrukere. Bruk user.is_admin
+accounts.views.user_register
+django.contrib.auth.views.password_reset
+
+Variabler
+--------
+upcoming_events
+    [0]
+        id
+        headline
+        body
+        event_start
+        location
+        registration_required
+
+active_jobs
+    [0]
+        id
+        headline
+
+messages
+    [0]         Meldingen
+        tags    HTML-klasser som skal brukes. F.eks. error, info etc.
+
+
+{% endcomment %}
 <html>
 
 <head>
@@ -22,6 +70,37 @@
         padding: 5px;
         margin: 5px;
     }
+
+    .event {
+        display: table;
+        width: 100%;
+        border-left: 5px solid maroon;
+        padding-left: 5px;
+    }
+
+    .news {
+        display: table;
+        width: 100%;
+        border-left: 5px solid blue;
+        padding-left: 5px;
+    }
+
+    .event_text {
+        display: table-cell;
+        width: 80%;
+    }
+
+    .event_info {
+        display: table-cell;
+        width: 20%;
+        background-color: white;
+        border: 1px solid #666;
+        padding: 5px;
+        margin: 5px;
+    }
+
+    hr { clear: both; }
+
 </style>
 </head>
 <body>

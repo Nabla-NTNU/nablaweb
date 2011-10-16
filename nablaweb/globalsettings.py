@@ -111,6 +111,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.flatpages',
+    'django.contrib.humanize',
 )
 
 AUTH_PROFILE_MODULE= 'accounts.UserProfile'

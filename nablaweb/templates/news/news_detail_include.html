@@ -1,4 +1,42 @@
+{% load bbcode %}
+{% load humanize %}
+
+{% comment %}
+
+Innhold
+-------
+En enkel nyhet uten body (kun ingress).
+Skal inneholde:
+    overskrift
+    ingress
+    forfatter
+    "Les mer"-lenke
+
+Variabler
+--------
+news                    News-objekt
+    id                  
+    headline            Tittelen
+    lead_paragraph      Ingressen
+    body            
+    created_by          User-objekt
+        id
+        username        Forfatterens brukernavn
+        get_full_name   Forfatterens navn
+
+URL til nyheten:
+{% url news_detail news.id %}
+
+{% endcomment %}
 <div class="news">
-    <h3>{{ news.headline }}</h3>
-    Dette er en nyhet
+    <div class="news_text">
+        <h3>{{ news.headline }}</h3>
+        {% if news.created_by %}
+        <p>Skrevet av {{ news.created_by.get_full_name }}</p>
+        {% endif %}
+
+        {{ news.lead_paragraph|bbcode }}
+
+        <p><a href="{% url news_detail news.id %}">Les mer</a></p>
+    </div>
 </div>
