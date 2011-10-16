@@ -108,7 +108,7 @@
         {% if active_jobs %}
             <ul>
                 {% for job in active_jobs %}
-                <li>{{ job.headline }}</li>
+                <li><a href="/stillinger/{{ job.id }}">{{ job.headline }}</a></li>
                 {% endfor %}
             </ul>
         {% else %}

@@ -2,9 +2,10 @@
 
 # Views for stillingsannonser-appen
 
+from django.views.generic import ListView, RedirectView
 from nablaweb.content.views import *
 from nablaweb.jobs.models import Advert, Company
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, get_list_or_404
 
 class GenericList(ListView):
     context_object_name = "content_list"
@@ -29,5 +30,12 @@ class CompanyList(GenericList):
 class DateList(GenericList):
     pass
     
-class ShowJob(DetailView):
-    pass
+class ShowJob(ContentDetailView):
+    model = Advert
+    template_name = "content/content_detail.html"
+
+class RedirectJob(RedirectView):
+    def get_redirect_url(self, **kwargs):
+        pid = get_object_or_404(Advert, pk=self.kwargs['pk'])
+        url = '/stillinger/' + pid.company.headline + '/' + str(pid.pk)
+        return url
