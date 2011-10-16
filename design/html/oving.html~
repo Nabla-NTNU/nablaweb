@@ -4,8 +4,10 @@
 		<meta name="copyright" content="WebKom" />
 		<meta name="author" content="Fredrik Nicolai Krohg" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>Ceres</title>
+		<title>{% block title %}Ceres{% endblock title%}</title>
+
 		<link type="text/css" rel="stylesheet" href="../css/main.css" />
+		{% block css %}
 		<link type="text/css" rel="stylesheet" href="../css/top_menu.css" />
 		<link type="text/css" rel="stylesheet" href="../css/login_table.css" />
 		<link type="text/css" rel="stylesheet" href="../css/arr_oversikt.css" />
@@ -13,6 +15,7 @@
 		<link type="text/css" rel="stylesheet" href="../css/organisering.css" />
 		<link type="text/css" rel="stylesheet" href="../css/artikler.css" />
 		<link type="text/css" rel="stylesheet" href="../css/right_sidebar.css" />
+		{% endblock css %}
 	</head>
 
 <body>
@@ -41,6 +44,7 @@
 	</div>
 	</div>
 
+	{% block neck %}
 	<div id="neck">
 	<div class="centeredContainer">
 
@@ -234,6 +238,7 @@
 
 	</div>
 	</div>
+	{% endblock neck %}
 
 	<div id="body">
 	<div class="centeredContainer">
@@ -290,9 +295,11 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 			<!-- Her skal det være en del navigasjonsrelatert i tillegg til
 			ekstra informasjon som f.eks. "vi gratulerer" "quote of the day"
 			osv. -->
+			<div id="sok">
 			<form action="search.py" method="get">
-				<div id="sok"><input class="box" type="text" placeholder="Søk..." name="sok" size="25" /><input type="image" id="searchKnapp" src="../img/go_knapp.png" name="submit" /></div>
+				<input class="box" type="text" placeholder="Søk..." name="sok" size="25" /><input type="image" id="searchKnapp" src="../img/go_knapp.png" name="submit" />
 			</form>
+			</div>
 
 			<ul class="nav">
 				<li class="top"><a href="kontakt.html">Kontakt</a></li>
