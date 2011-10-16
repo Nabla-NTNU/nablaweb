@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{% block title %}Bruker registrering{% endblock %}
+
+
+
+{% block content %}
+<form method="POST" action="" >
+  {% csrf_token %}
+  {{ form.as_p }}
+
+
+</form>
+
+{% endblock %}
