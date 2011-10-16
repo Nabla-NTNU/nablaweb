@@ -1,8 +1,3 @@
 # -*- coding: utf-8 -*-
 
-# Tester for stillingsannonser-appen
-
-from django.test import TestCase
-
-class JobsTests(TestCase):
-    pass
+# Automatisert testing av jobs-appen i NablaWeb-appen

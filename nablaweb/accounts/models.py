@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
@@ -14,3 +15,19 @@ class UserProfile(models.Model):
     ntnu_card_number = models.CharField("NTNU kortnr",max_length = 20, blank = True)
     def __unicode__(self):
         return "< %s profile >" % self.user.username
+
+
+## Ekstrainformasjon for grupper
+class GroupProfile(models.Model):
+    group = models.OneToOneField(Group, editable = False)
+    leaders = models.ManyToManyField(User, verbose_name ="Ledere", blank=True)
+    description = models.TextField(verbose_name = "Beskrivelse",blank = True)
+    mail_list = models.EmailField(verbose_name = "Epostliste",blank = True)
+
+    GROUP_TYPES = (
+        ('komite', 'Komité'),
+        ('kull', 'Kull'),
+        ('studprog', 'Studieprogram'),
+        )
+
+    group_type = models.CharField(max_length = 10,blank = True, choices = GROUP_TYPES)
