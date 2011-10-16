@@ -120,6 +120,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
     'events.context_processors.upcoming_events', # Legger til upcoming_events i alle templates.
+    'jobs.views.activej',
    )
 
 

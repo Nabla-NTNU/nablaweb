@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect, get_object_or_404, render
-from django.template import RequestContext
+from django.template import RequestContext, loader, Context
 from django.contrib.auth import logout, login, authenticate
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
 from accounts.forms import LoginForm, UserForm, ProfileForm, RegistrationForm
 from accounts.models import UserProfile
 from django.contrib import messages
@@ -13,6 +13,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, InvalidPage
 
+import datetime
 
 ## Login/logout
 
@@ -125,11 +126,39 @@ def list(request):
 							 )
 
 
+
+def get_name(ntnu_username):
+    regex = '^%s:' % username
+    process = subprocess.Popen(['grep',regex, settings.NTNU_PASSWD], shell=False, stdout=subprocess.PIPE)
+    full_name = process.communicate()[0].split(':')[4].split(" ")
+    last_name = full_name.pop()
+    first_name = " ".join(full_name)
+    return (first_name,last_name)
+
 def user_register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            return HttpResponse("Riktig")
+            username = form.cleaned_data['username'] 
+            studmail = username+"@stud.ntnu.no"
+            (user, created_user) = User.objects.get_or_create(username=username)
+
+            # At en aktivbruker kommer seg hit skal ikke skje. Dette skal skjekkes i forms
+            if user.is_active and user.date_joined.date == datetime.date.today():
+                raise Exception
+            
+
+            if not(user.email):
+                user.email = studmail
+            user_manager = UserManager()
+            password = user_manager.make_random_password()
+            user.set_password(password)
+            user.is_active = True
+            user.save() 
+            t = loader.get_template('accounts/registration_email.txt')
+            email_text = t.render(Context(locals()))
+            user.email_user('Bruker på nabla.no',email_text)
+            return HttpResponse('Epost sendt')
     else:
         form = RegistrationForm()
     
@@ -137,5 +166,4 @@ def user_register(request):
                                {'form':form},
                                context_instance=RequestContext(request)
                                )
-def registration_confirmaiton_email(request, username):
-    return HttpResponse("")
+
