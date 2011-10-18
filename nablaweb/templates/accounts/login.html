@@ -5,7 +5,7 @@
 
 {% block content %}
 
-    <form method="post" action="/login/" />
+<form method="post" action="/login/?next={{ next }}" />
     <ul>
     {% csrf_token %}
     {{ login_form.as_ul }}

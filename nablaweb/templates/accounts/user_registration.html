@@ -3,14 +3,16 @@
 
 {% block title %}Bruker registrering{% endblock %}
 
-
-
 {% block content %}
+
+<p>Her kan du registrere deg med ditt ntnubrukernavn.</p>
+<p>Hvis brukernavnet er et ekte ntnubrukernavn vil du motta en epost med passord.</p>
+
 <form method="POST" action="" >
   {% csrf_token %}
   {{ form.as_p }}
 
-
+  <input type="submit" />
 </form>
 
 {% endblock %}

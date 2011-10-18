@@ -19,37 +19,31 @@ import datetime
 
 @require_http_methods(['POST','GET'])
 def login_user(request):
+    redirect_to = request.REQUEST.get('next',request.META.get('HTTP_REFERER','/'))
+    if request.user.is_authenticated():
+        return redirect(redirect_to)
+
+
     if request.method == 'GET':
-        return login_get(request)
+        login_form = LoginForm()
     elif request.method == 'POST':
-        return login_post(request)
-    else:
-        raise Http404
+        
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        #Hvis bruker ble autentisert log inn og 
+        if user is not None and user.is_active:
+            login(request,user)
+            messages.add_message(request, messages.INFO, 'Du ble logget inn')
+            return redirect(redirect_to)
+        else:
+            login_form = LoginForm({'username':username})
+            messages.add_message(request, messages.ERROR, 'Feil brukernavn/passord!')
 
-@require_GET
-def login_get(request):
-    login_form = LoginForm()
-    return render_to_response('accounts/login.html', 
-                                {'login_form': login_form}, 
-                                context_instance=RequestContext(request))
-@require_POST
-def login_post(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    
-    #Hvis bruker ble autentisert log inn og 
-    if user is not None and user.is_active:
-        login(request,user)
-        messages.add_message(request, messages.INFO, 'Du ble logget inn')
-        return redirect(request.META.get('HTTP_REFERER','/'))
-    else:
-        login_form = LoginForm({'username':username})
-        messages.add_message(request, messages.ERROR, 'Feil brukernavn/passord!')
-
-        return render_to_response('accounts/login.html', 
-                                    {'login_form': login_form}, 
-                                    context_instance=RequestContext(request))
+    return render(request,'accounts/login.html', 
+                                {'login_form': login_form,
+                                  'next': redirect_to} 
+                                )
 
 def logout_user(request):
     messages.add_message(request, messages.INFO, 'Logget ut')
@@ -98,7 +92,11 @@ def edit_profile(request):
             messages.add_message(request, messages.ERROR, 'Du har skrevet inn noe feil.')
 
 
-    return render_to_response("accounts/edit_profile.html", {'userForm': userForm, 'profileForm': profileForm }, context_instance=RequestContext(request))
+    return render(request, 
+        "accounts/edit_profile.html", 
+        {'userForm': userForm, 
+          'profileForm': profileForm}, 
+        )
 
 @login_required
 def list(request):
@@ -120,9 +118,8 @@ def list(request):
     except (EmptyPage, InvalidPage):
         # Hent den siste siden om siden ikke er gyldig
         users = paginator.page(paginator.num_pages)
-    return render_to_response("accounts/list.html", 
-							  {'users': users}, 
-							  context_instance=RequestContext(request)
+    return render(request,"accounts/list.html", 
+							  {'users': users} 
 							 )
 
 
@@ -135,7 +132,9 @@ def get_name(ntnu_username):
     first_name = " ".join(full_name)
     return (first_name,last_name)
 
+
 def user_register(request):
+    
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -158,12 +157,14 @@ def user_register(request):
             t = loader.get_template('accounts/registration_email.txt')
             email_text = t.render(Context(locals()))
             user.email_user('Bruker på nabla.no',email_text)
-            return HttpResponse('Epost sendt')
+
+            messages.add_message(request, messages.INFO, 'Registreringsepost sendt til %s' % user.email)
+
+            return redirect('/')
     else:
         form = RegistrationForm()
     
-    return render_to_response("accounts/user_registration.html",
-                               {'form':form},
-                               context_instance=RequestContext(request)
+    return render(request,"accounts/user_registration.html",
+                               {'form':form}
                                )
 
