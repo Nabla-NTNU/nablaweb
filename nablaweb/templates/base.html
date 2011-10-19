@@ -110,6 +110,13 @@ messages
 <br />
 
 <hr />
+{# MESSAGES { #}
+{% comment %}
+    Inneholder meldinger til brukeren, med forskjellige css-klasser, som f.eks.
+    * error
+    * warning
+    * info
+{% endcomment %}
 {% if messages %}
     <ul class="messages">
       {% for message in messages %}
@@ -117,17 +124,22 @@ messages
       {% endfor %}
     </ul>
 {% endif %}
+{# END MESSAGES #}
 
 <div id="container">
 
 <div id="content">
+{# CONTENT  #}
+{# Dette skal puttes i en container. content inneholder selv en h1 #}
     {% block content %} Av en eller annen grunn er det ikke noe her {% endblock %}
+{# END CONTENT #}
 </div>
 
 <br />
 
 <div id="sidebar">
     <div class="sidebar-element userbox">
+    {# LOGINFELT { #}
         {% if user.is_authenticated %}
             <strong>Pålogget:</strong> {{ user.get_full_name }}</a><br />
             <ul>
@@ -151,10 +163,12 @@ messages
                 <li><a href="{% url django.contrib.auth.views.password_reset %}">Glemt passord</a></li>
             </ul>
         {% endif %}
+    {# END LOGINFELT #}
     </div>
 
     <div class="sidebar-element navigation">
         <strong>Meny</strong>
+    {# NAVIGASJON #}
         <ul>
             <li><a href="{% url event_list %}">Arrangement</a></li>
             <li><a href="{% url news_list %}">Nyheter</a></li>
@@ -163,6 +177,7 @@ messages
             <li><a href="/stillinger/">Stillinger</a></li>
             <li><a href="/admin">Admin</a></li>
         </ul>
+    {# END NAVIGASJON #}
     </div>
 
     {% block sidebar_event %}
