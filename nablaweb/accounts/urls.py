@@ -2,9 +2,10 @@
 
 
 from django.conf.urls.defaults import *
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from accounts.models import UserProfile
-
+from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 
 urlpatterns = patterns('django.contrib.auth.views',
     (r'password/reset/$', 'password_reset'),
@@ -19,5 +20,6 @@ urlpatterns += patterns('nablaweb.accounts.views',
     (r'view/', 'view_member_profile'),
     (r'view/(?P<username>\w+)/', 'view_member_profile'),
     (r'register/','user_register'),
+#    (r'test/', DetailView.as_view(model=User, id=1)),
 )
 

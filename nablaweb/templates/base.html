@@ -43,8 +43,7 @@
 
 	</div>
 	</div>
-
-	{% block neck %}
+    
 	<div id="neck">
 	<div class="centeredContainer">
 
@@ -73,6 +72,7 @@
 							<p>{{ event.free_places}}/{{ event.places }}</p>
 						</div>
 					</td>
+                    {% endfor %}
 				</tr>
 				<tr>
 					{% for event in upcoming_events|slice:"3:" %}
@@ -90,6 +90,7 @@
 							<p>{{ event.free_places }}/{{ event.places }}</p>
 						</div>
 					</td>
+                    {% endfor %}
 				</tr>
 			</table>
 		</div>
@@ -157,7 +158,8 @@
 									plainCurrentDR
 								{% else %}
 									plainDR
-							{% endif %}
+							    {% endif %}
+                            {% endif %}
 						{% else %}
 							{% if forloop.counter != 10 %}
 								{% if dag.arr %}
@@ -236,7 +238,6 @@
 
 	</div>
 	</div>
-	{% endblock neck %}
 
 	<div id="body">
 	<div class="centeredContainer">

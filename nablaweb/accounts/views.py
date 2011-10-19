@@ -69,7 +69,12 @@ def view_member_profile(request, username=None):
     # Render er identisk med render_to_response, men tar request som første
     # argument istedenfor RequestContext(request) som tredje argument.
     # Importeres fra django.shortcuts
-    
+
+from django.views.generic import DetailView 
+class UserDetailView(DetailView):
+     model = User
+     template_name = "test.html"
+
 
 @login_required
 def edit_profile(request):
