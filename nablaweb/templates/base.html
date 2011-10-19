@@ -99,9 +99,15 @@ messages
         margin: 5px;
     }
 
+    .message { padding: 0.7em; }
+
     hr { clear: both; }
 
 </style>
+{# Inkluder jQuery #}
+<link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />	
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
 </head>
 <body>
 <h1><a href="/">Nabla</a></h1>
@@ -118,11 +124,15 @@ messages
     * info
 {% endcomment %}
 {% if messages %}
-    <ul class="messages">
       {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        <div class="ui-widget">
+            <div class="ui-state-highlight ui-corner-all {{ message.tags }}" 
+                 style="margin-top: 20px; padding: 0 .7em;"> 
+                 <p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+                {{ message }}</p>
+			</div>
+		</div>
       {% endfor %}
-    </ul>
 {% endif %}
 {# END MESSAGES #}
 

@@ -60,6 +60,9 @@ MEDIA_ROOT = ''
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = ''
 
+# f.eks. http://nabla.no/static/
+STATIC_URL = ''
+
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
@@ -118,6 +121,7 @@ AUTH_PROFILE_MODULE= 'accounts.UserProfile'
 LOGIN_URL = '/login/'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.static',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
     'events.context_processors.upcoming_events', # Legger til upcoming_events i alle templates.
