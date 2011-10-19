@@ -32,7 +32,7 @@ class DateList(GenericList):
     
 class ShowJob(ContentDetailView):
     model = Advert
-    template_name = "content/content_detail.html"
+    template_name = "jobs/jobs_detail.html"
 
 class RedirectJob(RedirectView):
     def get_redirect_url(self, **kwargs):
