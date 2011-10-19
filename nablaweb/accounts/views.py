@@ -104,25 +104,10 @@ def edit_profile(request):
         )
 
 @login_required
-def list(request):
+def list(request, year=None):
     """Lister opp brukere med pagination."""
-    user_list = User.objects.all()
-    paginator = Paginator(user_list, 20) # Antall brukere per side 
+    users = User.objects.all()
 	
-	# Sjekk om brukeren har valgt side
-    try: 
-		page = int(request.GET.get('side'))
-    except:
-        # Start på side 1 hvis siden ikke er valgt
-        page = 1
-
-	
-    # Prøv å hente en den valgte siden
-    try:
-        users = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        # Hent den siste siden om siden ikke er gyldig
-        users = paginator.page(paginator.num_pages)
     return render(request,"accounts/list.html", 
 							  {'users': users} 
 							 )
