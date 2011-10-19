@@ -1,0 +1,230 @@
+{% comment %}
+
+Innhold
+------
+All HTML for sidens baselayout.
+* Navigasjon
+    * Lenker til viktige apps
+    * Logg inn/ut
+    * Lenke for endring av brukerinfo
+
+Blokker
+------
+title       Sidens tittel 
+content     Innhold
+
+Nyttige views å lenke til
+-------------------------
+event_list              Liste over arrangement
+news_list               Liste over nyheter
+gallery.views.index     Galleriet
+accounts.views.list     Liste over brukere
+/stillinger/            Stillinger. TODO: Fjerne absolutt URL
+/admin/                 Skal kun vises for adminbrukere. Bruk user.is_admin
+accounts.views.user_register
+django.contrib.auth.views.password_reset
+
+Variabler
+--------
+upcoming_events
+    [0]
+        id
+        headline
+        body
+        event_start
+        location
+        registration_required
+
+active_jobs
+    [0]
+        id
+        headline
+
+messages
+    [0]         Meldingen
+        tags    HTML-klasser som skal brukes. F.eks. error, info etc.
+
+
+{% endcomment %}
+<html>
+
+<head>
+
+<title>{% block title %}Nablaweb{% endblock %}</title>
+
+<style type="text/css">
+	body {
+		background-color:#eee;
+		font-family: Verdana;
+		font-size: 12px;
+		}
+
+    #container { display: table; width: 100%; }
+
+    #content { display: table-cell; width: 66%; }
+    #sidebar { display: table-cell; width: 33%; }
+
+    .sidebar-element {
+        background-color: white;
+        border: 1px solid #666;
+        padding: 5px;
+        margin: 5px;
+    }
+
+    .event {
+        display: table;
+        width: 100%;
+        border-left: 5px solid maroon;
+        padding-left: 5px;
+    }
+
+    .news {
+        display: table;
+        width: 100%;
+        border-left: 5px solid blue;
+        padding-left: 5px;
+    }
+
+    .event_text {
+        display: table-cell;
+        width: 80%;
+    }
+
+    .event_info {
+        display: table-cell;
+        width: 20%;
+        background-color: white;
+        border: 1px solid #666;
+        padding: 5px;
+        margin: 5px;
+    }
+
+    .message { padding: 0.7em; }
+
+    hr { clear: both; }
+
+</style>
+{# Inkluder jQuery #}
+<link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />	
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
+</head>
+<body>
+<h1><a href="/">Nabla</a></h1>
+
+
+<br />
+
+<hr />
+{# MESSAGES { #}
+{% comment %}
+    Inneholder meldinger til brukeren, med forskjellige css-klasser, som f.eks.
+    * error
+    * warning
+    * info
+{% endcomment %}
+{% if messages %}
+      {% for message in messages %}
+        <div class="ui-widget">
+            <div class="ui-state-highlight ui-corner-all {{ message.tags }}" 
+                 style="margin-top: 20px; padding: 0 .7em;"> 
+                 <p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+                {{ message }}</p>
+			</div>
+		</div>
+      {% endfor %}
+{% endif %}
+{# END MESSAGES #}
+
+<div id="container">
+
+<div id="content">
+{# CONTENT  #}
+{# Dette skal puttes i en container. content inneholder selv en h1 #}
+    {% block content %} Av en eller annen grunn er det ikke noe her {% endblock %}
+{# END CONTENT #}
+</div>
+
+<br />
+
+<div id="sidebar">
+    <div class="sidebar-element userbox">
+    {# LOGINFELT { #}
+        {% if user.is_authenticated %}
+            <strong>Pålogget:</strong> {{ user.get_full_name }}</a><br />
+            <ul>
+                <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
+                <li><a href="{% url accounts.views.view_member_profile %}">Vis profil</a></li>
+                <li><a href="/logout/">Logg ut</a></li>
+            </ul>
+        {% else %}
+            <strong>Logg på</strong> <br />
+            <form method="post" action="/login/" />
+                {% csrf_token %}
+                <label for="id_username">Brukernavn:</label>
+                <input type="text" name="username" id="id_username" /> <br />
+                <label for="id_password">Passord:</label>
+                <input type="password" name="password" id="id_password" />   
+                <input type="submit" value="Logg inn"/>
+            </form>
+            <br />
+            <ul>
+                <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
+                <li><a href="{% url django.contrib.auth.views.password_reset %}">Glemt passord</a></li>
+            </ul>
+        {% endif %}
+    {# END LOGINFELT #}
+    </div>
+
+    <div class="sidebar-element navigation">
+        <strong>Meny</strong>
+    {# NAVIGASJON #}
+        <ul>
+            <li><a href="{% url event_list %}">Arrangement</a></li>
+            <li><a href="{% url news_list %}">Nyheter</a></li>
+            <li><a href="{% url gallery.views.index %}">Galleri</a></li>
+            <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+            <li><a href="/stillinger/">Stillinger</a></li>
+            <li><a href="/admin">Admin</a></li>
+        </ul>
+    {# END NAVIGASJON #}
+    </div>
+
+    {% block sidebar_event %}
+    <div class="sidebar-element upcoming-events">
+        <strong>Kommende arrangement</strong>
+        {# upcoming_events er tilgjengelig i alle templates pga context processor #}
+        {% if upcoming_events %}
+            <ul>
+                {% for event in upcoming_events %}
+                <li><a href="{% url event_detail event.id %}">{{ event.headline }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            Ingenting :(
+        {% endif %}
+    </div>
+    {% endblock sidebar_event %}
+    
+    {% block sidebar_jobs %}
+    <div class="sidebar-element upcoming-events">
+        <strong>Stillingsannonser</strong>
+        {% if active_jobs %}
+            <ul>
+                {% for job in active_jobs %}
+                <li><a href="/stillinger/{{ job.id }}">{{ job.headline }} ved {{ job.company.headline }}</a><br>Frist: {{ job.deadline_date }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            Tomt.
+        {% endif %}
+     </div>
+     {% endblock sidebar_jobs %}
+
+</div> <!-- end of sidebar -->
+
+</div> <!-- end of container -->
+
+</body>
+
+</html>
