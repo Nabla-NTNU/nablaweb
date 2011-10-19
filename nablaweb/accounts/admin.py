@@ -16,7 +16,6 @@ except:
 
 admin.site.register(Group, ExtendedGroupAdmin)
 
-
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
 

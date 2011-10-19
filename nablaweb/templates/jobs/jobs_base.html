@@ -10,9 +10,21 @@ Denne stillingsannonsen er rettet mot studenter ved {{ content.get_relevant_for_
 
 {% block base_after_headline %}{% endblock %}
 
+<p>
 {% if content.deadline_date %}
-<p><strong>Søkefrist: {{ content.deadline_date }}</strong></p>
+<strong>Søkefrist: {{ content.deadline_date }}</strong>
+{% if content.expiry_date %}
+{% if content.show_expiry_date %}
+<br />
 {% endif %}
+{% endif %}
+{% endif %}
+{% if content.expiry_date %}
+{% if content.show_expiry_date %}
+<strong>Stillingannonsen forsvinner {{ content.expiry_date }}</strong>
+{% endif %}
+{% endif %}
+</p>
 
 {% if content.lead_paragraph %}
 <p><strong>{{ content.lead_paragraph }}</strong></p>
