@@ -4,10 +4,10 @@
         <meta name="copyright" content="WebKom" />
         <meta name="author" content="Fredrik Nicolai Krohg" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>{% block title %}Ceres{% endblock title%}</title>
+        <title>{% block title %}Nabla{% endblock title%}</title>
 
-        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/main.css" />
         {% block css %}
+        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/main.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/top_menu.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/login_table.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/arr_oversikt.css" />
@@ -16,9 +16,12 @@
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/artikler.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/right_sidebar.css" />
         <link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />    
+        {% endblock css %}
+
+        {% block js %}
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
-        {% endblock css %}
+        {% endblock js %}
     </head>
 
 <body>
@@ -36,13 +39,16 @@
 		<span class="clear">&nbsp;</span>
         <img src="{{ STATIC_URL}}img/nabla.png" /><h1>Linjeforeningen Nabla</h1>
 
-		<form action="login.php" method="post">
-		<ul class="loginBox">
-			<li><input type="text" class="field" placeholder="Username" name="username" size="20" /></li>
-			<li><input type="password" class="field" placeholder="Password" name="paswd" size="20" /></li>
-			<li><input type="submit" value="Logg inn" /></li>
-		</ul>
+        {% if not user.is_authenticated %}
+		<form action="/login/" method="post">
+            {% csrf_token %}
+            <ul class="loginBox">
+                <li><input type="text" class="field" placeholder="Username" name="username" size="20" /></li>
+                <li><input type="password" class="field" placeholder="Password" name="password" size="20" /></li>
+                <li><input type="submit" value="Logg inn" /></li>
+            </ul>
 		</form>
+        {% endif %}
 
 	</div>
 	</div>
@@ -256,6 +262,23 @@
 
 		</div>
 		<div class="middle">
+        {# MESSAGES { #}
+        {% comment %}
+            Inneholder meldinger til brukeren, med forskjellige css-klasser, som f.eks.
+            * error
+            * warning
+            * info
+        {% endcomment %}
+        {% if messages %}
+              {% for message in messages %}
+                <div class="ui-widget">
+                    <div class="ui-state-highlight ui-corner-all {{ message.tags }}"> 
+                         <p><span class="ui-icon ui-icon-info"></span><p>{{ message }}</p>
+                    </div>
+                </div>
+              {% endfor %}
+        {% endif %}
+        {# END MESSAGES #}
 			<div class="leftMargin">
 				&nbsp;
 			</div>
