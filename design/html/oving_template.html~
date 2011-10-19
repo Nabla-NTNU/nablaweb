@@ -58,7 +58,7 @@
 
 			<table cellspacing="0" cellpadding="0">
 				<tr>
-					{% for event in upcoming_events[0:2] %}
+					{% for event in upcoming_events|slice:":3" %}
 					<td>
 						<div class="dato">
 							<div class="month">
