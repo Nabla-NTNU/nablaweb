@@ -4,10 +4,10 @@
         <meta name="copyright" content="WebKom" />
         <meta name="author" content="Fredrik Nicolai Krohg" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>{% block title %}Ceres{% endblock title%}</title>
+        <title>{% block title %}Nabla{% endblock title%}</title>
 
-        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/main.css" />
         {% block css %}
+        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/main.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/top_menu.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/login_table.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/arr_oversikt.css" />
@@ -16,9 +16,12 @@
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/artikler.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/right_sidebar.css" />
         <link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />    
+        {% endblock css %}
+
+        {% block js %}
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
-        {% endblock css %}
+        {% endblock js %}
     </head>
 
 <body>
@@ -27,22 +30,28 @@
 
 		
 		<ul id="headMenu">
-			<li><a href="omnabla.html">Om Nabla</a></li>
-			<li><a href="bedrifter.html">Bedrifter</a></li>
-			<li><a href="sosialt.html">Sosialt</a></li>
-			<li id="ar"><a href="arrangementer.html">Arrangementer</a></li>
-			<li id="forumKnapp"><a href="forum.html">FORUM</a></li>
+			<li><a href="#">Om Nabla</a></li>
+			<li><a href="#">Bedrifter</a></li>
+			<li><a href="#">Sosialt</a></li>
+            <li id="ar"><a href="{% url event_list %}">Arrangementer</a></li>
+			<li id="forumKnapp"><a href="#">FORUM</a></li>
 		</ul>
 		<span class="clear">&nbsp;</span>
-        <img src="{{ STATIC_URL}}img/nabla.png" /><h1>Linjeforeningen Nabla</h1>
+        <a style="text-decoration:none;"href="{% url homepage.views.start %}">
+            <img src="{{ STATIC_URL}}img/nabla.png" />
+            <h1>Linjeforeningen Nabla</h1>
+        </a>
 
-		<form action="login.php" method="post">
-		<ul class="loginBox">
-			<li><input type="text" class="field" placeholder="Username" name="username" size="20" /></li>
-			<li><input type="password" class="field" placeholder="Password" name="paswd" size="20" /></li>
-			<li><input type="submit" value="Logg inn" /></li>
-		</ul>
+        {% if not user.is_authenticated %}
+		<form action="/login/" method="post">
+            {% csrf_token %}
+            <ul class="loginBox">
+                <li><input type="text" class="field" placeholder="Username" name="username" size="20" /></li>
+                <li><input type="password" class="field" placeholder="Password" name="password" size="20" /></li>
+                <li><input type="submit" value="Logg inn" /></li>
+            </ul>
 		</form>
+        {% endif %}
 
 	</div>
 	</div>
@@ -71,8 +80,10 @@
 							</div>
 						</div>
 						<div class="innh">
-							<a href="devel.nabla.no/arrangement{{ event.id }}"><h4>{{ event.headline }}</h4></a>
+							<a href="{% url event_detail event.id %}"><h4>{{ event.headline }}</h4></a>
+                            {% if event.places %}
 							<p>{{ event.free_places}}/{{ event.places }}</p>
+                            {% endif %}
 						</div>
 					</td>
                     {% endfor %}
@@ -89,8 +100,10 @@
 							</div>
 						</div>
 						<div class="innh">
-							<a href="devel.nabla.no/arrangement{{ event.id }}"><h4>{{ event.headline }}</h4></a>
+							<a href="{% url event_detail event.id %}"><h4>{{ event.headline }}</h4></a>
+                            {% if event.places %}
 							<p>{{ event.free_places }}/{{ event.places }}</p>
+                            {% endif %}
 						</div>
 					</td>
                     {% endfor %}
@@ -252,10 +265,27 @@
 		<div class="left">
 
 			<!-- Ment til å inneholde eventuell reklame -->
-			<img id="sitLogo" src="../img/sit_tapir_bw.png" />
+            <img id="sitLogo" src="{{ STATIC_URL}}img/sit_tapir_bw.png" />
 
 		</div>
 		<div class="middle">
+        {# MESSAGES { #}
+        {% comment %}
+            Inneholder meldinger til brukeren, med forskjellige css-klasser, som f.eks.
+            * error
+            * warning
+            * info
+        {% endcomment %}
+        {% if messages %}
+              {% for message in messages %}
+                <div class="ui-widget">
+                    <div class="ui-state-highlight ui-corner-all {{ message.tags }}"> 
+                         <p><span class="ui-icon ui-icon-info"></span><p>{{ message }}</p>
+                    </div>
+                </div>
+              {% endfor %}
+        {% endif %}
+        {# END MESSAGES #}
 			<div class="leftMargin">
 				&nbsp;
 			</div>
@@ -268,6 +298,7 @@
 					<div class="middleBox">
 
 						<div class="innh">
+                            {% block content %}
 							<h2>Arrangementoverskrift</h2>
 							<div class="meta">
 								Arrangement
@@ -282,6 +313,8 @@
 Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla risus tortor, eleifend ut euismod eu, sodales sit amet urna. Integer et ipsum sem, non euismod lorem. Duis pellentesque purus ut nibh volutpat scelerisque consectetur eros viverra. Vivamus pharetra molestie mauris, nec gravida nisi tincidunt nec. Ut egestas varius tincidunt. Vivamus quis eros orci. Vivamus in orci non velit auctor porta vitae a arcu. Vestibulum nibh turpis, mollis et adipiscing euismod, viverra vitae ligula.
 								</div>
 							</div>
+                            {% endblock content %}
+
 						</div>
 
 					</div>
@@ -304,13 +337,18 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 			</div>
 
 			<ul class="nav">
-				<li class="top"><a href="kontakt.html">Kontakt</a></li>
-				<li><a href="ny_student.html">Ny Student?</a></li>
-				<li class="bottom"><a href="siste_nytt.html">Hva Skjer?</a></li>
-				<li class="hover"><a href="nabladet.html">Siste Nablad</a></li>
-				<li class="top"><a href="bedpresser.html">Bedpresser</a></li>
-				<li><a href="login.html">Log Inn</a></li>
-				<li class="bottom"><a href="wiki.html">Fag Wiki</a></li>
+                <li class="top"><a href="{% url homepage.views.start %}">Forsida</a></li>
+				<li><a href="ny_student.html">List item</a></li>
+                <li><a href="{% url event_list %}">Arrangement</a></li>
+                <li><a href="{% url news_list %}">Nyheter</a></li>
+                <li><a href="{% url gallery.views.index %}">Galleriet</a></li>
+                <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+                <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
+				<li class="bottom"><a href="siste_nytt.html">List item</a></li>
+				<li class="hover"><a href="nabladet.html">List item</a></li>
+                <li class="top"><a href="{% url bedpres_list %}">Bedriftspresentasjoner</a></li>
+				<li><a href="/logout/">Logg ut</a></li>
+				<li class="bottom"><a href="wiki.html">List item</a></li>
 			</ul>
 
 			<div id="sideCeller">

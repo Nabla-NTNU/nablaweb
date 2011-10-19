@@ -4,7 +4,7 @@
 
 <h1>Komponenter og nullvektorer</h1>
 
-<table id="user_list">
+<table id="user_list" width="100%">
 <tr>
 	<th>Brukernavn</th>
 	<th>Navn</th>
@@ -29,7 +29,7 @@
 		{# Grupper brukeren er med i #}
         {# TODO: Bruk img istedenfor #}
 			{% for group in user.groups.all %}
-				{{ group.name }}
+            <img alt="{{ group.name }}" src="{{ STATIC_URL }}img/komite-ikon/{{ group.name|lower }}.png" />
 			{% endfor %}
 		</td>
 

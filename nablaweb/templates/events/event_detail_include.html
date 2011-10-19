@@ -40,21 +40,31 @@ Filteret |naturalday kan funke på datoen.
 
 {% endcomment %}
 
-<div class="event">
-    <div class="event_text">
-        <h3>{{ event.headline }}</h3>
-        {{ event.lead_paragraph|bbcode }}
+        <h2>{{ event.headline }}</h2>
+        <div class="meta">Arrangement</div>
 
-        <p><a href="{% url event_detail event.id %}">Mer informasjon</a></p>
-    </div>
-
-    <div class="event_info">
-        <strong>Tid: </strong>{{ event.event_start|naturalday }}<br />
-        <strong>Sted: </strong>{{ event.location }}<br />
-        {% if event.registration_required %}<br />
-        <strong>Frist: </strong>{{ event.registration_deadline }}<br />
-        <strong>Deltakere: </strong>{{ event.users_attending }}<br />
-        <strong>Ledige: </strong>{{ event.free_places }}<br />
-        {% endif %}
-    </div>
-</div>
+        <div class="innhWrapper">
+            <div class="detaljer">
+                <span class="tid">Postet {{ event.created_date|naturalday }}</span>
+                <a  class="person" 
+                    {% if event.created_by %}
+                    href="{% url accounts.views.view_member_profile event.created_by.username %}"
+                    {% endif %}>
+                    {{ event.created_by.get_full_name }}</a>
+            </div>
+            <div class="tekstOgBilde">
+                <p class="eventInfo">
+                    <strong>Tid: </strong>{{ event.event_start|naturalday|capfirst }}<br />
+                    <strong>Sted: </strong>{{ event.location }}<br />
+                    {% if event.registration_required %}<br />
+                    <strong>Frist: </strong>{{ event.registration_deadline }}<br />
+                    <strong>Deltakere: </strong>{{ event.users_attending }}<br />
+                    <strong>Ledige: </strong>{{ event.free_places }}<br />
+                    {% else %}
+                        Påmelding er ikke nødvendig
+                    {% endif %}
+                </p>
+                {{ event.lead_paragraph|bbcode }}
+                <p><a href="{% url event_detail event.id %}">Les mer</a></p>
+            </div>
+        </div>

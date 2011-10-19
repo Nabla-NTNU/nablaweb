@@ -31,3 +31,6 @@ class GroupProfile(models.Model):
         )
 
     group_type = models.CharField(max_length = 10,blank = True, choices = GROUP_TYPES)
+
+    def __unicode__(self):
+        return self.group.name
