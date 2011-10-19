@@ -46,7 +46,10 @@ Filteret |naturalday kan funke på datoen.
         <div class="innhWrapper">
             <div class="detaljer">
                 <span class="tid">Postet {{ event.created_date|naturalday }}</span>
-                <a class="person" href="{% url accounts.views.view_member_profile %}">
+                <a  class="person" 
+                    {% if event.created_by %}
+                    href="{% url accounts.views.view_member_profile event.created_by.username %}"
+                    {% endif %}>
                     {{ event.created_by.get_full_name }}</a>
             </div>
             <div class="tekstOgBilde">
