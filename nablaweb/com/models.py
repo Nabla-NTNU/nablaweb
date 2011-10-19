@@ -10,7 +10,7 @@ class ComPage:
     # Gruppemedlemmene hentes fra gruppen med samme navn som Committee-klassen sin name gjort om til lowercase og space gjort om til underscore
     # Leder hentes fra samme sted
     com = models.ForeignKey('accounts.GroupProfile')
-    description = models.CharField(max_length=2000, verbose_name="Beskrivelse av komiteen", help_text="Denne beskrivelsen utgjør teksten som står på gruppens side."
+    description = models.CharField(max_length=2000, verbose_name="Beskrivelse av komiteen", help_text="Denne beskrivelsen utgjør teksten som står på gruppens side.")
     
     # Egne gruppenyheter?
 
