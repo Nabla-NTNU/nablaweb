@@ -78,7 +78,9 @@
 						</div>
 						<div class="innh">
 							<a href="devel.nabla.no/arrangement{{ event.id }}"><h4>{{ event.headline }}</h4></a>
+                            {% if event.places %}
 							<p>{{ event.free_places}}/{{ event.places }}</p>
+                            {% endif %}
 						</div>
 					</td>
                     {% endfor %}
@@ -96,7 +98,9 @@
 						</div>
 						<div class="innh">
 							<a href="devel.nabla.no/arrangement{{ event.id }}"><h4>{{ event.headline }}</h4></a>
+                            {% if event.places %}
 							<p>{{ event.free_places }}/{{ event.places }}</p>
+                            {% endif %}
 						</div>
 					</td>
                     {% endfor %}
@@ -258,7 +262,7 @@
 		<div class="left">
 
 			<!-- Ment til å inneholde eventuell reklame -->
-			<img id="sitLogo" src="../img/sit_tapir_bw.png" />
+            <img id="sitLogo" src="{{ STATIC_URL}}img/sit_tapir_bw.png" />
 
 		</div>
 		<div class="middle">
@@ -291,6 +295,7 @@
 					<div class="middleBox">
 
 						<div class="innh">
+                            {% block content %}
 							<h2>Arrangementoverskrift</h2>
 							<div class="meta">
 								Arrangement
@@ -305,6 +310,8 @@
 Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla risus tortor, eleifend ut euismod eu, sodales sit amet urna. Integer et ipsum sem, non euismod lorem. Duis pellentesque purus ut nibh volutpat scelerisque consectetur eros viverra. Vivamus pharetra molestie mauris, nec gravida nisi tincidunt nec. Ut egestas varius tincidunt. Vivamus quis eros orci. Vivamus in orci non velit auctor porta vitae a arcu. Vestibulum nibh turpis, mollis et adipiscing euismod, viverra vitae ligula.
 								</div>
 							</div>
+                            {% endblock content %}
+
 						</div>
 
 					</div>
