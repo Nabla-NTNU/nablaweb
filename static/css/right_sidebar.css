@@ -59,6 +59,15 @@
 	background-image: url('../img/liste_punkt_last.png');
 }
 
+#body div.right ul.nav li a {
+    display: block;
+}
+
+#body div.right ul.nav li a:hover {
+    text-decoration: underline;
+}
+
+
 #body div.right ul.nav li.hover {
 	background-image: none;
 	background-color: rgba(255, 255, 255, 0.8);
