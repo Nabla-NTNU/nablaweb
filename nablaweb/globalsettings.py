@@ -108,6 +108,7 @@ INSTALLED_APPS = (
     'bedpres',
     'homepage',
     'com',
+    'quotes',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
