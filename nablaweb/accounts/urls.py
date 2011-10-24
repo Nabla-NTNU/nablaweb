@@ -5,7 +5,6 @@ from django.conf.urls.defaults import *
 from django.views.generic import ListView, DetailView
 from accounts.models import UserProfile
 from django.contrib.auth.models import User
-from django.contrib.auth.models import User
 
 urlpatterns = patterns('django.contrib.auth.views',
     (r'password/reset/$', 'password_reset'),

@@ -28,19 +28,19 @@
 	<div id="head">
 	<div class="centeredContainer">
 
+		<a style="text-decoration:none;"href="{% url homepage.views.start %}">
+		    <img src="{{ STATIC_URL}}img/nabla.png" />
+		    <h1>Nabla</h1>
+		</a>
 		
 		<ul id="headMenu">
 			<li><a href="#">Om Nabla</a></li>
 			<li><a href="#">Bedrifter</a></li>
 			<li><a href="#">Sosialt</a></li>
-            <li id="ar"><a href="{% url event_list %}">Arrangementer</a></li>
+			<li id="ar"><a href="{% url event_list %}">Arrangementer</a></li>
 			<li id="forumKnapp"><a href="#">FORUM</a></li>
 		</ul>
 		<span class="clear">&nbsp;</span>
-        <a style="text-decoration:none;"href="{% url homepage.views.start %}">
-            <img src="{{ STATIC_URL}}img/nabla.png" />
-            <h1>Linjeforeningen Nabla</h1>
-        </a>
 
         {% if user.is_authenticated %}
             <p>Logget inn: <a href="{% url accounts.views.edit_profile %}">{{ user.username }}</a> | <a href="/logout/">Logg ut</a></p>
@@ -358,8 +358,9 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 					</ul>
 					</li>
 					<li>
-					<cite class="quote">Quote of the day</cite>
-					<cite>Iver Brevik ~ Fluid forelesning</cite>
+                        {{ random_quote.info }}<br />
+                        <cite class="quote">{{ random_quote }}</cite>
+                        <cite>{{ random_quote.author }}</cite>
 					</li>
 					<li class="end">
 					<a href="nabladet.html"><div class="img"></div></a>

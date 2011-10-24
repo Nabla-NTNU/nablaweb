@@ -108,6 +108,7 @@ INSTALLED_APPS = (
     'bedpres',
     'homepage',
     'com',
+    'quotes',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -127,6 +128,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'events.context_processors.upcoming_events', # Legger til upcoming_events i alle templates.
     'jobs.views.activej',
+    'quotes.context_processors.random_quote',
    )
 
 

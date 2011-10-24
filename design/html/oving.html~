@@ -4,10 +4,9 @@
 		<meta name="copyright" content="WebKom" />
 		<meta name="author" content="Fredrik Nicolai Krohg" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>{% block title %}Ceres{% endblock title%}</title>
+		<title>Ceres</title>
 
 		<link type="text/css" rel="stylesheet" href="../css/main.css" />
-		{% block css %}
 		<link type="text/css" rel="stylesheet" href="../css/top_menu.css" />
 		<link type="text/css" rel="stylesheet" href="../css/login_table.css" />
 		<link type="text/css" rel="stylesheet" href="../css/arr_oversikt.css" />
@@ -15,7 +14,6 @@
 		<link type="text/css" rel="stylesheet" href="../css/organisering.css" />
 		<link type="text/css" rel="stylesheet" href="../css/artikler.css" />
 		<link type="text/css" rel="stylesheet" href="../css/right_sidebar.css" />
-		{% endblock css %}
 	</head>
 
 <body>
@@ -44,7 +42,6 @@
 	</div>
 	</div>
 
-	{% block neck %}
 	<div id="neck">
 	<div class="centeredContainer">
 
@@ -238,7 +235,6 @@
 
 	</div>
 	</div>
-	{% endblock neck %}
 
 	<div id="body">
 	<div class="centeredContainer">
