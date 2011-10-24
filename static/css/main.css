@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Tienne|Patrick+Hand|Stardos+Stencil|Redressed|La+Belle+Aurore|Limelight|Muli|Wire+One|Jura|Damion|VT323|Bangers|Buda:300|UnifrakturMaguntia|Bentham|IM+Fell+DW+Pica+SC|Lobster&v2);
+@import url(http://fonts.googleapis.com/css?family=Tienne|Patrick+Hand|Stardos+Stencil|Redressed|La+Belle+Aurore|Limelight|Muli|Wire+One|Jura|Damion|VT323|Bangers|Buda:300|UnifrakturMaguntia|Bentham|IM+Fell+DW+Pica+SC|Lobster|Tenor+Sans&v2);
 
 .centeredContainer {
 	width: 950px;
@@ -22,6 +22,8 @@ body {
 	padding: 0;
 	margin: 0;
 	background-color: #323c3e;
+	background-image: url('../img/background_new.jpg');
+	background-repeat: repeat;
 	background-position: left top;
 	background-origin: border-box;
 	-webkit-background-origin: border-box;
@@ -36,11 +38,11 @@ body {
 #head h1 {
 	font-family: Limelight, Arial, sans-serif;
 	color: #cdedf9;
-	text-shadow: -1px -1px 1px #a8c2cc;
+	text-shadow: 0px -1px 1px #eeeeef;
 }
 
 #head img {
-	width: 70px;
+	width: 90px;
 }
 
 #neck {
@@ -57,12 +59,6 @@ body {
 
 div.lcontainer {
 	float: left;
-}
-
-#sekk {
-	width: 110px;
-	border: 0;
-	margin: 20px 0 0 0;
 }
 
 .clear {
@@ -113,4 +109,9 @@ div.lcontainer {
 div {
 	margin: 0;
 	padding: 0;
+}
+
+
+.message p {
+    background-color: #ffff88;
 }
