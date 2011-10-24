@@ -114,3 +114,8 @@ div {
 	margin: 0;
 	padding: 0;
 }
+
+
+.message p {
+    background-color: #ffff88;
+}
