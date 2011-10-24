@@ -11,3 +11,5 @@ den som viser alt. (Halvveis min feil)
 I tillegg bør reverse urls brukes der det er mulig. Bruk altså {% url
 event_detail event.id %} fremfor /arrangement/{{ event.id }}. Dette gjør det
 enormt mye lettere å endre url til f.eks. /events/ senere.
+
+-- Andreas
