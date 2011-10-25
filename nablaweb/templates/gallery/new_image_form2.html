@@ -1,9 +1,0 @@
-<h3>Last opp et nytt bilde til {{ album.title }}</h3>
-
-<form action="/gallery/album/{{ album.id }}/add/" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <ul>
-    {{ form.as_ul}}
-    </ul>
-    <p><input type="submit" value="Send" /></p>
-</form>

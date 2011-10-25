@@ -1,8 +1,0 @@
-<h3>Lag et nytt album</h3>
-
-<form action="/gallery/album/add2/" method="post">{% csrf_token %}
-    <ul>
-    {{ form.as_ul }}
-    </ul>
-    <p><input type="submit" value="Send" /></p>
-</form>

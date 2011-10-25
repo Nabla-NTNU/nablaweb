@@ -1,0 +1,7 @@
+<h3>Last opp et nytt bilde til {{ album.title }}</h3>
+
+<form action="/gallery/album/{{ album.id }}/add_pic/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit" value="Send" /></p>
+</form>

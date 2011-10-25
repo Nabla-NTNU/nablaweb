@@ -3,6 +3,7 @@ from django.conf.urls.defaults import *
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
+from django.conf import settings
 
 urlpatterns = patterns('',
     # Example:
@@ -18,7 +19,8 @@ urlpatterns = patterns('',
     (r'^avatar/', include('avatar.urls')),
     # Midlertidige urler (kommer mest sannsynlig til aa forandres)
     (r'^profile/edit/$', 'accounts.views.edit_profile'),
-   
+    (r'^gallery/', include('gallery.urls')),
+    (r'^nabla_media/(?P<path>.*)$','django.views.static.serve',{'document_root': getattr(settings, 'MEDIA_ROOT', None)}),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

@@ -5,30 +5,14 @@
     <tr width="20%">
     {% for album in album_list %}
         <td>
-            <a href="/gallery/album/{{ album.id }}">
+            <a href="album/{{ album.id }}">
             <img src="/nabla_media/{% if album.picture_set.all.0.thumbnail %}{{ album.picture_set.all.0.thumbnail }}{% else %}graphics/gallery_thumb_empty.jpg{% endif %}"></img>
 	        </a></br>
-            {% if delete_mode %}
-                {% ifequal album.id album_delete.id %}
-                    Sikker?
-                        <a href="/gallery/album/delete/{{album.id}}/conf/1" name="Accept">
-                            <img src="/nabla_media/graphics/icon-yes.gif" border=0 width=15 length=15></img>
-                        </a>
-                        <a href="/gallery/album/delete/0/conf/0" name="Deny">
-                            <img src="/nabla_media/graphics/icon_deletelink.gif" border=0 width=15 length=15></img>
-                        </a>
-                {% else %}
-                    {{ album.title }}
-                    <a href="/gallery/album/delete/{{album.id}}/conf/0">
-                        <img src="/nabla_media/graphics/icon_deletelink.gif" border=0 width=15 length=15></img>
-                    </a>
-                {% endifequal %}
-            {% endif %}          
-        </p>
+            {{ album.title }}
         </td>
         {% if forloop.counter|divisibleby:"3" %}
-        </tr>
-        <tr>
+            </tr>
+            <tr>
         {% endif %}
     {% endfor %}
     </tr>
@@ -36,25 +20,8 @@
 {% else %}
     <p>Det har ikke blitt lagt ut noen bilder enda</p>
 {% endif %}
-
-{% if not delete_mode %}
-    <p>
-    Lag nytt album
-        <a href="/gallery/album/add/">
-            <img src="/nabla_media/graphics/icon_addlink.gif" border=0 width=15 length=15></img>
-        </a>
-    </p>
-    <p>
-    Slett album
-        <a href="/gallery/album/delete/0/conf/0">
-            <img src="/nabla_media/graphics/icon_deletelink.gif" border=0 width=15 length=15></img>
-        </a>
-    </p>
-{% else %}
-     <p>
-        Ferdig å slette album
-        <a href="/gallery">
-            <img src="/nabla_media/graphics/icon-yes.gif" border=0 width=15 length=15></img>
-        </a>
-    </p>
-{% endif %}
+<p>
+    <a href="opprett">
+        Lag nytt album
+    </a>
+</p>
