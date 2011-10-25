@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load classname %}
+
+
+{% block title %}{{ block.super }}{% endblock %}
+
+
+{% block content %}
+
+{% for content in content_list %}
+    <div class="content_list_object">
+        {% with type=content|classname %}
+
+        {% if type == "news" %}
+            {% include "news/news_detail_include.html" with news=content %}
+        {% endif %}
+        {% if type == "event" or type == "bedpres" %}
+            {% include "events/event_detail_include.html" with event=content %}
+        {% endif %}
+
+        {% endwith %}
+    </div>
+    <hr />
+
+{% empty %}
+Tomt.
+{% endfor %}
+
+{% comment %}
+TODO: Fiks språk. page -> side
+{% endcomment %}
+
+{% if is_paginated %}
+{% if page_obj.has_previous %}
+<a href="?page={{ page_obj.previous_page_number }}">nyere</a>
+{% endif %}
+
+{% if page_obj.has_next %}
+<a href="?page={{ page_obj.next_page_number }}">eldre</a>
+{% endif %}
+{% endif %}
+
+{% endblock %}

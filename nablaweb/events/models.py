@@ -13,44 +13,44 @@ class Event(Content):
     organizer = models.CharField(max_length=100, blank=True)
 
     # Hvor arrangementet foregår.
-    location = models.CharField(max_length=100, blank=False)
+    location = models.CharField(verbose_name="Sted", max_length=100, blank=False)
 
     # Når arrangementet starter.
-    event_start = models.DateTimeField(null=True, blank=False)
+    event_start = models.DateTimeField(verbose_name="Start", null=True, blank=False)
 
     # Når arrangementet slutter.
     # Dette feltet er valgfritt.
     # Datoen er ikke tidligere enn event_start.
-    event_end = models.DateTimeField(null=True, blank=True)
+    event_end = models.DateTimeField(verbose_name="Slutt", null=True, blank=True)
 
     # Frist for å melde seg på arrangementet.
     # Dette feltet er valgfritt.
     # At dette feltet er satt er ekvivalent med at arrangementet krever påmelding.
     # Datoen er ikke senere enn event_start.
-    registration_deadline = models.DateTimeField(null=True, blank=True)
+    registration_deadline = models.DateTimeField(verbose_name="Påmeldingsfrist", null=True, blank=True)
 
     # Når påmeldingen starter.
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_deadline er satt.
     # Datoen er ikke senere enn registration_deadline.
-    registration_start = models.DateTimeField(null=True, blank=True)
+    registration_start = models.DateTimeField(verbose_name="Påmeldingsstart", null=True, blank=True)
 
     # Frist for å melde seg av arrangementet.
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_deadline er satt.
     # Datoen er ikke tidligere enn registration_start, hvis dette er satt.
     # Datoen er ikke senere enn event_start.
-    deregistration_deadline = models.DateTimeField(null=True, blank=True)
+    deregistration_deadline = models.DateTimeField(verbose_name="Avmeldingsfrist",null=True, blank=True)
 
     # Hvor mange plasser arrangementet har.
     # Dette feltet er satt hvis og bare hvis registration_deadline er satt.
     # Antall plasser er et heltall ikke mindre enn null.
-    places = models.PositiveIntegerField(null=True, blank=True)
+    places = models.PositiveIntegerField(verbose_name="Plasser", null=True, blank=True)
 
     # Om arrangementet har venteliste.
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_deadline er satt.
-    has_queue = models.NullBooleanField(null=True, blank=True)
+    has_queue = models.NullBooleanField(verbose_name="Venteliste", null=True, blank=True)
 
     class Meta(Content.Meta):
         verbose_name_plural = "arrangement"
@@ -130,17 +130,16 @@ class Event(Content):
             try:
                 reg = regs.get(user=user)
             except EventRegistration.DoesNotExist:
-                number=regs.count()+1
+                number = regs.count() + 1
                 if number > places and not self.has_waiting_list():
                     msg = 'full'
                 else:
                     reg = regs.create(event=self, user=user, number=number)
-            if reg.number <= places:
-                msg = 'attend'
-            else:
-                msg = 'queue'
+                    if reg.number <= places:
+                        msg = 'attend'
+                    else:
+                        msg = 'queue'
         return msg
-
 
     # Melder brukeren av arrangementet. I praksis sørger metoden bare
     # for at brukeren ikke er påmeldt lengre, uavhengig av status før.
@@ -158,9 +157,9 @@ class Event(Content):
         except EventRegistration.DoesNotExist:
             pass
 
-    # Flytter brukeren til den oppgitte plassen, eller først/sist dersom 
-    # plassnummeret er for lavt/høyt.
-    # TODO: Håndterer ikke tilfeller der brukeren ikke er påmeldt.
+    # Flytter brukeren til den oppgitte plassen, eller først/sist
+    # dersom plassnummeret er for lavt/høyt. Returnerer det nye
+    # plassnummeret, eller None dersom brukeren ikke er påmeldt.
     def move_user_to_place(self, user, place):
         # TODO: Bruk select_for_update(), når den blir tilgjengelig.
         # https://docs.djangoproject.com/en/dev/ref/models/querysets/#select-for-update
@@ -175,14 +174,16 @@ class Event(Content):
         # Dersom "ønsket" plass er høyere enn antall påmeldte, endre til siste plass.
         new = min(regs, new)
 
-        # Hent ut registreringen til brukeren som skal flyttes.
-        u_reg = reg_set.get(user=user)
+        # Forsøk å hente ut registreringen til brukeren som skal flyttes.
+        try: u_reg = reg_set.get(user=user)
+        # Returner dersom brukeren ikke er påmeldt.
+        except EventRegistration.DoesNotExist: return None
 
         # Hent ut nåværende kønummer.
         current = u_reg.number
 
         # Brukeren er allerede på riktig plass.
-        if current == new: return
+        if current == new: return new
 
         # Brukeren skal oppover på ventelisten, dvs. lavere kønummer.
         elif new < current:
@@ -191,12 +192,14 @@ class Event(Content):
 
         # Brukeren skal nedover på ventelisten, dvs. høyere kønummer.
         else:
-            # Flytt brukere mellom ny og gammel plass  oppover.
+            # Flytt brukere mellom ny og gammel plass oppover.
             reg_set.filter(number__range=(current+1, new)).update(number=models.F('number')-1)
 
         # Lagre det nye kønummeret.
         u_reg.number = new
         u_reg.save()
+
+        return new
 
     # Sletter overflødige registreringer.
     def _prune_queue(self):

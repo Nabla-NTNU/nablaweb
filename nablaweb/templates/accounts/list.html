@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Komponenter og nullvektorer</h2>
+
+<table id="user_list" width="100%">
+<thead>
+	<th>Brukernavn</th>
+	<th>Navn</th>
+	<th>Grupper</th>
+</thead>
+{% for user in users %}
+	<tr class="{% cycle odd even %}">
+	
+		<td class="cell_username">
+		{# Brukernavn med lenke til profilen #}
+			<a href="{% url accounts.views.view_member_profile user.username %}">
+				{{ user.username }}
+			</a>
+		</td>
+
+		<td class="cell_name">
+			{{ user.first_name }}
+			{{ user.last_name }}
+		</td>
+
+		<td class="cell_groups"> 
+		{# Grupper brukeren er med i #}
+        {# TODO: Bruk img istedenfor #}
+			{% for group in user.groups.all %}
+            <img alt="{{ group.name }}" src="{{ STATIC_URL }}img/komite-ikon/{{ group.name|lower }}.png" />
+			{% endfor %}
+		</td>
+
+	</tr>
+{% endfor %}
+</table>
+
+{% comment %}
+<div class="pagination">
+	<span class="step-links">
+		{% if users.has_previous %}
+			<a href="?side={{ users.previous_page_number }}">forrige</a>
+		{% endif %}
+
+		<span class="current">
+			Side {{ users.number }} av {{ users.paginator.num_pages }}.
+		</span>
+
+		{% if users.has_next %}
+			<a href="?side={{ users.next_page_number }}">neste</a>
+		{% endif %}
+	</span>
+</div>
+{% endcomment %}
+
+{%endblock%}

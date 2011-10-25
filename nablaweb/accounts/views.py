@@ -1,72 +1,80 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response, redirect, get_object_or_404
-from django.template import RequestContext
+from django.shortcuts import render_to_response, redirect, get_object_or_404, render
+from django.template import RequestContext, loader, Context
 from django.contrib.auth import logout, login, authenticate
-from django.contrib.auth.models import User
-from accounts.forms import LoginForm, UserForm, ProfileForm
+from django.contrib.auth.models import User, UserManager
+from accounts.forms import LoginForm, UserForm, ProfileForm, RegistrationForm
 from accounts.models import UserProfile
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
+from django.views.generic import TemplateView
 
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, InvalidPage
 
+import datetime
 
 ## Login/logout
 
 @require_http_methods(['POST','GET'])
 def login_user(request):
+    redirect_to = request.REQUEST.get('next',request.META.get('HTTP_REFERER','/'))
+    if request.user.is_authenticated():
+        return redirect(redirect_to)
+
+
     if request.method == 'GET':
-        return login_get(request)
+        login_form = LoginForm()
     elif request.method == 'POST':
-        return login_post(request)
-    else:
-        raise Http404
-
-@require_GET
-def login_get(request):
-    login_form = LoginForm()
-    return render_to_response('accounts/login.html', 
-                                {'login_form': login_form}, 
-                                context_instance=RequestContext(request))
-@require_POST
-def login_post(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    
-    #Hvis bruker ble autentisert log inn og 
-    if user is not None:
-        login(request,user)
-        messages.add_message(request, messages.INFO, 'Du ble logget inn')
-        if request.META.has_key('HTTP_REFERER'):
-            return redirect(request.META['HTTP_REFERER'])
+        
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        #Hvis bruker ble autentisert log inn og 
+        if user is not None and user.is_active:
+            login(request,user)
+            messages.add_message(request, messages.INFO, 'Du ble logget inn')
+            return redirect(redirect_to)
         else:
-            redirect("/")
-    else:
-        login_form = LoginForm({'username':username})
-        messages.add_message(request, messages.ERROR, 'Feil brukernavn/passord!')
+            login_form = LoginForm({'username':username})
+            messages.add_message(request, messages.ERROR, 'Feil brukernavn/passord!')
 
-        return render_to_response('accounts/login.html', 
-                                    {'login_form': login_form}, 
-                                    context_instance=RequestContext(request))
+    return render(request,'accounts/login.html', 
+                                {'login_form': login_form,
+                                  'next': redirect_to} 
+                                )
 
 def logout_user(request):
     messages.add_message(request, messages.INFO, 'Logget ut')
     logout(request)
-    
-    if request.META.has_key('HTTP_REFERER'):
-        return redirect(request.META['HTTP_REFERER'])
-    else:
-         redirect("/")
+    return redirect(request.META.get('HTTP_REFERER','/'))
+
 
 
 ## Brukerprofil 
 @login_required
-def view_member_profile(request, username):
-    member = get_object_or_404(User, username=username)
-    return render_to_response("accounts/view_member_profile.html", {'member': member}, context_instance=RequestContext(request))
-    
+def view_member_profile(request, username=None):
+
+    """Viser profilen til en oppgitt bruker. Om brukernavn ikke er oppgitt
+    vises profilen til brukeren selv."""
+
+    if username:
+        member = get_object_or_404(User, username=username)
+    else:
+        member = request.user
+    return render(
+        request, "accounts/view_member_profile.html", 
+        {'member': member})
+    # Render er identisk med render_to_response, men tar request som første
+    # argument istedenfor RequestContext(request) som tredje argument.
+    # Importeres fra django.shortcuts
+
+from django.views.generic import DetailView 
+class UserDetailView(DetailView):
+     model = User
+     template_name = "test.html"
+
 
 @login_required
 def edit_profile(request):
@@ -86,14 +94,67 @@ def edit_profile(request):
             profileForm.save()
             messages.add_message(request, messages.INFO, 'Profil oppdatert.')
         else:
-            messages.add_message(request, messages.INFO, 'Du har skrevet inn noe feil.')
+            messages.add_message(request, messages.ERROR, 'Du har skrevet inn noe feil.')
 
 
-    return render_to_response("accounts/edit_profile.html", {'userForm': userForm, 'profileForm': profileForm }, context_instance=RequestContext(request))
+    return render(request, 
+        "accounts/edit_profile.html", 
+        {'userForm': userForm, 
+          'profileForm': profileForm}, 
+        )
 
-## Brukerliste
 @login_required
-def list(request):
-	users = User.objects.all()
-	return render_to_response("accounts/list.html", {'users': users}, context_instance=RequestContext(request))
+def list(request, year=None):
+    """Lister opp brukere med pagination."""
+    users = User.objects.all()
 	
+    return render(request,"accounts/list.html", 
+							  {'users': users} 
+							 )
+
+
+
+def get_name(ntnu_username):
+    regex = '^%s:' % username
+    process = subprocess.Popen(['grep',regex, settings.NTNU_PASSWD], shell=False, stdout=subprocess.PIPE)
+    full_name = process.communicate()[0].split(':')[4].split(" ")
+    last_name = full_name.pop()
+    first_name = " ".join(full_name)
+    return (first_name,last_name)
+
+
+def user_register(request):
+    
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username'] 
+            studmail = username+"@stud.ntnu.no"
+            (user, created_user) = User.objects.get_or_create(username=username)
+
+            # At en aktivbruker kommer seg hit skal ikke skje. Dette skal skjekkes i forms
+            if user.is_active and user.date_joined.date == datetime.date.today():
+                raise Exception
+            
+
+            if not(user.email):
+                user.email = studmail
+            user_manager = UserManager()
+            password = user_manager.make_random_password()
+            user.set_password(password)
+            user.is_active = True
+            user.save() 
+            t = loader.get_template('accounts/registration_email.txt')
+            email_text = t.render(Context(locals()))
+            user.email_user('Bruker på nabla.no',email_text)
+
+            messages.add_message(request, messages.INFO, 'Registreringsepost sendt til %s' % user.email)
+
+            return redirect('/')
+    else:
+        form = RegistrationForm()
+    
+    return render(request,"accounts/user_registration.html",
+                               {'form':form}
+                               )
+

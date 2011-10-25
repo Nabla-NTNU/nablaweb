@@ -1,0 +1,41 @@
+{% load bbcode %}
+
+{% block base %}
+<h1>{{ content.headline }} </h1>
+{% if content.relevant_for %}
+Denne stillingsannonsen er rettet mot studenter ved {{ content.get_relevant_for_display }}.<br />
+{% endif %}
+<em>Publisert {{content.created_date|date:"r" }} av {{ content.created_by }}<br />
+{% if content.has_been_edited %}Sist endret {{content.last_changed_date|date:"r" }} av {{ content.last_changed_by }}<br />{% endif %}</em>
+
+{% block base_after_headline %}{% endblock %}
+
+<p>
+{% if content.deadline_date %}
+<strong>Søkefrist: {{ content.deadline_date }}</strong>
+{% if content.expiry_date %}
+{% if content.show_expiry_date %}
+<br />
+{% endif %}
+{% endif %}
+{% endif %}
+{% if content.expiry_date %}
+{% if content.show_expiry_date %}
+<strong>Stillingannonsen forsvinner {{ content.expiry_date }}</strong>
+{% endif %}
+{% endif %}
+</p>
+
+{% if content.lead_paragraph %}
+<p><strong>{{ content.lead_paragraph }}</strong></p>
+{% endif %}
+
+{% if content.body %}
+<p>{{ content.body|bbcode }}</p>
+{% endif %}
+
+{% if content.info_file %}
+<p><strong>Vedlagt fil: {{ content.info_file.open }} </strong></p>
+{% endif %}
+
+{% endblock %}

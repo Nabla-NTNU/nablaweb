@@ -9,19 +9,19 @@ urlpatterns = patterns('',
     # Example:
     # (r'^nablaweb/', include('nablaweb.foo.urls')),
     
-    (r'^$', 'views.index'),
+    (r'^$', include('homepage.urls')),
     (r'^login/$', 'accounts.views.login_user'),
     (r'^logout/$', 'accounts.views.logout_user'),
     (r'^nyheter/', include('nablaweb.news.urls')),	
     (r'^arrangement/', include('nablaweb.events.urls')),
-    #(r'^stillinger/', include('nablaweb.jobs.urls')),
+    (r'^bedpres/', include('nablaweb.bedpres.urls')),
     (r'^accounts/', include('accounts.urls')),
-    (r'^avatar/', include('avatar.urls')),
-    # Midlertidige urler (kommer mest sannsynlig til aa forandres)
-    (r'^profile/edit/$', 'accounts.views.edit_profile'),
-    (r'^gallery/', include('gallery.urls')),
-    (r'^nabla_media/(?P<path>.*)$','django.views.static.serve',{'document_root': getattr(settings, 'MEDIA_ROOT', None)}),
-
+    (r'^avatar/', include('avatar.urls')),    
+    (r'^stillinger/', include('jobs.urls')),
+    (r'^komite/', include('com.urls')),
+    (r'^gallery/', include('gallery.urls')), # Kan ikke endres pga hardkoding i gallery-appen
+    (r'^sitat/', include('quotes.urls')),
+    
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
      (r'^admin/doc/', include('django.contrib.admindocs.urls')),

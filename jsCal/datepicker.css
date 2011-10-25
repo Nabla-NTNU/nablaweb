@@ -1,0 +1,149 @@
+
+
+body
+	{
+	max-width: 800px;
+	margin: 0px auto;
+	}
+
+
+
+
+/* KALENDER SPESIFIKASJONER(!) */
+
+/* Dato/tid - inputSTØRRELSE*/
+.dato_tid_input_tid
+	{
+	width: 90px;
+	}
+.dato_tid_input_dato
+	{
+	width: 115px;
+	}
+
+/* Kalenderens IKON */
+img.tcalIcon
+	{
+	cursor: pointer;
+	margin-left: 1px;
+	vertical-align: middle;
+	}
+
+/* Kalenderens RAMMER/FORM */
+div#tcal 
+	{
+	position: absolute;
+	visibility: hidden;
+	z-index: 100;
+	width: 180px;
+	padding: 2px 0 0 0;
+	}
+
+/* Kalenderens TABELLER */
+div#tcal table
+	{
+	width: 100%;
+	border: 1px solid silver;
+	border-collapse: collapse;
+	background-color: white;
+	}
+
+/* NAVIGASJONS-BAR */
+div#tcal table.ctrl
+	{
+	border-bottom: 0;
+	}
+
+/* NAVIGASJONS-KNAPPER */
+div#tcal table.ctrl td 
+	{
+	width: 15px;
+	height: 20px;
+	}
+
+/* Månede/År  BAR */
+div#tcal table.ctrl th
+	{
+	background-color: white;
+	color: black;
+	border: 0;
+	}
+
+/* Ukedager BAR */
+div#tcal th 
+	{
+	border: 1px solid silver;
+	border-collapse: collapse;
+	text-align: center;
+	padding: 3px 0;
+	font-family: tahoma, verdana, arial;
+	font-size: 10px;
+	background-color: gray;
+	color: white;
+	}
+
+/* dato-CELLER */
+div#tcal td 
+	{
+	border: 0;
+	border-collapse: collapse;
+	text-align: center;
+	padding: 2px 0;
+	font-family: tahoma, verdana, arial;
+	font-size: 11px;
+	width: 22px;
+	cursor: pointer;
+	}
+
+/* Dato-cellers-BAKGRUNN
+OBS! For å hindre konflikt må de arrangeres som gjort her, fra (øverst) minst, til (nederst) mest viktig */
+div#tcal td.othermonth
+	{
+	color: silver;
+	}
+
+div#tcal td.weekend
+	{
+	background-color: #ACD6F5;
+	}
+
+div#tcal td.today
+	{
+	border: 1px solid red;
+	}
+
+div#tcal td.selected
+	{
+	background-color: #FFB3BE;
+	}
+
+/* iframe element for å undertrykke vindukontroll av IE5/6 */
+iframe#tcalIF
+	{
+	position: absolute;
+	visibility: hidden;
+	z-index: 98;
+	border: 0;
+	}
+
+/* Transparent skyggeeffekt */
+div#tcalShade
+	{
+	position: absolute;
+	visibility: hidden;
+	z-index: 99;
+	}
+
+div#tcalShade table 
+	{
+	border: 0;
+	border-collapse: collapse;
+	width: 100%;
+	}
+
+div#tcalShade table td
+	{
+	border: 0;
+	border-collapse: collapse;
+	padding: 0;
+	}

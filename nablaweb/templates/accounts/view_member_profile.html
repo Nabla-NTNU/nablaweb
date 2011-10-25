@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load bbcode %}
 
 {% block title %}Medlem: {{member.get_full_name }} {% endblock %}
 
@@ -7,12 +8,38 @@
 
 {% block content %}
 
-<h4>{{member.get_full_name}}</h4>
+<h2>{{member.get_full_name}}</h2>
 
 <table>
-<tr><td>Epost: </td><td>{{member.email}}</td><tr>
-<tr><td>Hjemmeside: </td><td><a href="{{member.get_profile.web_page}}" target="_blank" >{{member.get_profile.web_page}}</a></td><tr>
-<tr><td>Bursdag: </td><td>{{member.get_profile.birthday}}</td><tr>
+    <tr>
+        <td>Epost: </td>
+        <td>{{member.email}}</td>
+    </tr>
+
+    <tr>
+        <td>Hjemmeside: </td>
+        <td><a href="{{member.get_profile.web_page}}" target="_blank" >{{member.get_profile.web_page}}</a></td>
+    </tr>
+
+    <tr>
+        <td>Bursdag: </td>
+        <td>{{member.get_profile.birthday}}</td>
+    </tr>
+
+    <tr>
+        <td>Medlem av: </td>
+        <td>
+            <ul>
+            {% for group in member.groups.all %}
+                <li>{{ group.name }}</li>
+            {% empty %}
+                Ingenting
+            {% endfor %}
+            </ul>
+        </td>
+    </tr>
 </table>
+
+<div id="user_about">{{ member.get_profile.about|bbcode }}</div>
 
 {% endblock %}

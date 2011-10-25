@@ -1,5 +1,5 @@
-{% extends "content/content_detail.html" %}
+{% extends "base.html" %}
 
-{% block include %}
-{% include "events/event_base.html" %}
+{% block content %}
+{% include "events/event_detail_include.html" with event=object %}
 {% endblock %}
