@@ -1,6 +1,9 @@
 #body div.middle {
 	width: 700px;
 	overflow: hidden;
+
+	position: relative;
+	top: -49px;
 }
 
 #body div.right {
