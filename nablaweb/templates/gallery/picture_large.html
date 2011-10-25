@@ -1,19 +1,19 @@
 <p><a href="/gallery/">Galleri</a> >> <a href="/gallery/album/{{ album.id }}">{{ album.title }}</a> >> </p>
 
-<h3> {{ picture.title }} </h3>
-<a href="/gallery/album/{{ album.id }}/picture/{% ifnotequal current total %}{{ current|add:'1' }}{% else %}1{% endifnotequal %}">
+<a href="/gallery/album/{{ album.id }}/picture/{{ next_picture.album_picnr }}">
     <img src="/nabla_media/{{ picture.picture }}" width=800></img>
 </a>
-
 <p>
-{% ifnotequal current 1 %}
-    <a href="/gallery/album/{{ album.id }}/picture/{{ current|add:"-1" }}">Forrige bilde</a>   
-{% endifnotequal %}
- <a href="/gallery/album/{{ album.id }}">Tilbake til albumet</a> 
-{% ifnotequal current total %}
-    <a href="/gallery/album/{{ album.id }}/picture/{{ current|add:"1" }}">Neste bilde</a>
-{% endifnotequal %}
+    Bilde {% for i in album.picture_set.all %}{% ifequal i.id picture.id %}{{ forloop.counter }}{% endifequal %}{% endfor %} av {{ album.picture_set.all|length }}, sett {{ picture.number_of_hits }} ganger.
+</p>
+<p>
+    <a href="/gallery/album/{{ album.id }}/picture/{{ previous_picture.album_picnr }}">Forrige bilde</a>
+    <a href="/gallery/album/{{ album.id }}">Tilbake til albumet</a>
+    <a href="/gallery/album/{{ album.id }}/picture/{{ next_picture.album_picnr }}">Neste bilde</a>
+</p>
+<p> 
+    {{ picture.description|safe }}
+    <a href="edit">Endre beskrivelse</a>
+    <a href="delete">Slett bildet</a>
 </p>
 
-<p>Bilde {{ current }}/{{ total }}</p> 
-<p> {{ picture.description }} </p>

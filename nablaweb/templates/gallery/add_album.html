@@ -1,0 +1,5 @@
+<h3>Lag et nytt album</h3>
+<form action="/gallery/opprett/" method="post">{% csrf_token %}
+    {{form.as_p}}
+    <p><input type="submit" value="Lagre" /></p>
+</form>

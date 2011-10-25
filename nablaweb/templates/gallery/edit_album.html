@@ -1,0 +1,9 @@
+<h3>Endre {{ album.title }}</h3>
+<form action="/gallery/album/{{ album.id }}/edit/" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <p>
+        <input type="submit" value="Lagre" />
+    </p>
+</form>
+<button onClick="parent.location='/gallery/album/{{ album.id }}'">Avbryt</button>
