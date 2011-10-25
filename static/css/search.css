@@ -1,0 +1,32 @@
+#head #searchBox {
+	border: 0;
+	margin: 27px 0 0 0;
+	padding: 0;
+	float: right;
+	width: 220px;
+	background: url('../img/search.png') no-repeat top left;
+	height: 39px;
+}
+
+#head #searchBox * {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+#head #searchBox input.field {
+	width: 160px;
+	height: 20px;
+	margin: 10px 0px 0px 10px;
+	vertical-align: top;
+	background: none;
+}
+
+#head #searchBox input.submit {
+	float: right;
+	width: 35px;
+	height: 24px;
+	margin: 7px 5px 0 0;
+	background: none;
+	cursor: pointer;
+}
