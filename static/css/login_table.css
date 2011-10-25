@@ -26,6 +26,8 @@
 }
 
 #loginBox input.box {
+	width: 15px;
+	height: 15px;
 	margin: 20px 0 0 12px;
 }
 
