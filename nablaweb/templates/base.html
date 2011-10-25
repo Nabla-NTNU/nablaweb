@@ -15,7 +15,8 @@
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/organisering.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/artikler.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/right_sidebar.css" />
-        <link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />    
+	<link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />	
+	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/search.css" />
         {% endblock css %}
 
         {% block js %}
@@ -31,16 +32,20 @@
 		<a style="text-decoration:none;"href="{% url homepage.views.start %}">
 		    <img src="{{ STATIC_URL}}img/nabla.png" />
 		    <h1>Nabla</h1>
-		</a>
+	    </a>
+	    <div id="searchBox">
+		    <form action="search.py" method="post">
+			    <input class="field" type="text" placeholder="Search" name="sok" size="10" />
+			    <input class="submit" type="submit" value="" />
+		    </form>
+	    </div>
 		
 		<ul id="headMenu">
 			<li><a href="#">Om Nabla</a></li>
-			<li><a href="#">Bedrifter</a></li>
-			<li><a href="#">Sosialt</a></li>
+			<li class="bLeft"><a href="#">Bedrifter</a></li>
+			<li class="bLeft"><a href="#">Sosialt</a></li>
 			<li id="ar"><a href="{% url event_list %}">Arrangementer</a></li>
-			<li id="forumKnapp"><a href="#">FORUM</a></li>
 		</ul>
-		<span class="clear">&nbsp;</span>
 
         {% if user.is_authenticated %}
             <p>Logget inn: <a href="{% url accounts.views.edit_profile %}">{{ user.username }}</a> | <a href="/logout/">Logg ut</a></p>
@@ -264,12 +269,6 @@
 		sentrerte boksen som inneholder reklame, artikler, søk, sidemeny osv.
 		omtrent alt som ikke er i head eller neck. -->
 
-		<div class="left">
-
-			<!-- Ment til å inneholde eventuell reklame -->
-            <img id="sitLogo" src="{{ STATIC_URL}}img/sit_tapir_bw.png" />
-
-		</div>
 		<div class="middle">
 			<div class="leftMargin">
 				&nbsp;
@@ -331,10 +330,13 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 			<!-- Her skal det være en del navigasjonsrelatert i tillegg til
 			ekstra informasjon som f.eks. "vi gratulerer" "quote of the day"
 			osv. -->
-			<div id="sok">
-			<form action="search.py" method="get">
-                <input class="box" type="text" placeholder="Søk..." name="sok" size="25" /><input type="image" id="searchKnapp" src="{{ STATIC_URL }}img/go_knapp.png" name="submit" />
-			</form>
+			<div id="loginBox">
+				<form action="login.py" method="post">
+					<input type="text" placeholder="Username" nmae="uname" size="10" />
+					<input type="password" class="pwd" placeholder="Password" name="pwd" size="10" />
+					<input class="box" type="checkbox" name="cookie" value="yes" />
+					<input class="submit" type="submit" value="" src="../img/login_button.png" />
+				</form>
 			</div>
 
 			<ul class="nav">

@@ -1,6 +1,6 @@
 #headMenu {
 	margin: 0;
-	padding: 0;
+	padding: 32px 0 0 0;
 	list-style: none;
 }
 
@@ -12,37 +12,21 @@
 	display: block;
 	width: 80px;
 	height: 29px;
-	background: url('../img/gradient_top_menu.jpg') 0 0;
 	text-align: center;
 	text-decoration: none;
-	color: white;
+	color: #2e2e2e;
+	text-shadow: -1px -1px 1px #eeeeef;
 	padding: 4px 0 0 0;
 }
 
-#headMenu li a:hover {
-	background: url('../img/gradient_top_menu.jpg') 0 -34px;
+#headMenu li.bLeft a:link, #headMenu li.bLeft a:visited, #headMenu li.bLeft a:hover, #headMenu li.bLeft a:active {
+	background: url('../img/separator.jpg');
+	background-repeat: repeat-y;
+	background-position: left top;
 }
 
-#headMenu li a:active {
-	background: url('../img/gradient_top_menu.jpg') 0 -68px;
-}
 
 #headMenu #ar a {
 	width: 130px;
 }
 
-#headMenu #forumKnapp a:link, #headMenu #forumKnapp a:visited, #headMenu #forumKnapp a:hover, #headMenu #forumKnapp a:active {
-	margin: 0 0 0 70px;
-	border: 1px solid #2a2924;
-	background-color: #BCC8CC;
-	background-image: none;
-	height: 30px;
-	color: #555;
-
-	box-shadow: 0px 1px 5px #000000;
-	-webkit-box-shadow: 0px 1px 5px #15191a;
-}
-
-#headMenu #forumKnapp a:hover, #headMenu #forumKnapp a:active {
-	background-color: #cedbe0;
-}
