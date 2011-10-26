@@ -1,5 +1,3 @@
-{% load avatar_tags %}
-
 <!DOCTYPE HTML>
 <html>
     <head>
@@ -17,8 +15,7 @@
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/organisering.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/artikler.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/right_sidebar.css" />
-	<link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />	
-	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/search.css" />
+        <link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />    
         {% endblock css %}
 
         {% block js %}
@@ -34,21 +31,17 @@
 		<a style="text-decoration:none;"href="{% url homepage.views.start %}">
 		    <img src="{{ STATIC_URL}}img/nabla.png" />
 		    <h1>Nabla</h1>
-	    </a>
-	    <div id="searchBox">
-		    <form action="search.py" method="post">
-			    <input class="field" type="text" placeholder="Search" name="sok" size="10" />
-			    <input class="submit" type="submit" value="" />
-		    </form>
-	    </div>
+		</a>
 		
 		<ul id="headMenu">
 			<li><a href="#">Om Nabla</a></li>
-			<li class="bLeft"><a href="#">Bedrifter</a></li>
-			<li class="bLeft"><a href="#">Sosialt</a></li>
+			<li><a href="#">Bedrifter</a></li>
+			<li><a href="#">Sosialt</a></li>
 			<li id="ar"><a href="{% url event_list %}">Arrangementer</a></li>
+			<li id="forumKnapp"><a href="#">FORUM</a></li>
 		</ul>
-        {% comment %}
+		<span class="clear">&nbsp;</span>
+
         {% if user.is_authenticated %}
             <p>Logget inn: <a href="{% url accounts.views.edit_profile %}">{{ user.username }}</a> | <a href="/logout/">Logg ut</a></p>
         {% else %}
@@ -61,7 +54,6 @@
             </ul>
 		</form>
         {% endif %}
-        {% endcomment %}
 
 	</div>
 	</div>
@@ -121,11 +113,6 @@
 			</table>
 		</div>
 
-		<!-- På infopanelet skal det stå en liste over hvilke arrangementer som hender når bruker holder over en dag i kalenderen. Det skal også komme opp informasjon der når serveren sender brukeren en melding. Hvis ingen av disse tilfellene intreffer skal det default stå reklame eller slide-show av forskjellige egne arrangementer. -->
-		<div id="infoPanel">
-			&nbsp;
-		</div>
-
 		<!-- Kalenderen med dager der current er merket med en vertikal strek
 		og dager det foregår arrangementer er merket med en eksatra runding på
 		rundingen med tallet for dagen. På siden skal det i utgangspunktet ikke
@@ -140,7 +127,7 @@
 			<a href="kalender.html"><h3 class="overskrift">Mai.</h3></a>
 			<table cellpadding="0" cellspacing="0">
 				<tr>
-					{% for dag in dager|slice:":10" %}
+					{% for dag in dager|slice:":11" %}
 					<td class="
 					{% if forloop.counter != 10 %}
 						{% if dag.arr %}
@@ -227,7 +214,7 @@
 					{% endfor %}
 				</tr>
 				<tr>
-					{% for dag in dager|slice:"20:30" %}
+					{% for dag in dager|slice:"20:31" %}
 					<td class="
 					{% if forloop.counter != 10 %}
 						{% if dag.arr %}
@@ -277,6 +264,12 @@
 		sentrerte boksen som inneholder reklame, artikler, søk, sidemeny osv.
 		omtrent alt som ikke er i head eller neck. -->
 
+		<div class="left">
+
+			<!-- Ment til å inneholde eventuell reklame -->
+            <img id="sitLogo" src="{{ STATIC_URL}}img/sit_tapir_bw.png" />
+
+		</div>
 		<div class="middle">
 			<div class="leftMargin">
 				&nbsp;
@@ -338,66 +331,28 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 			<!-- Her skal det være en del navigasjonsrelatert i tillegg til
 			ekstra informasjon som f.eks. "vi gratulerer" "quote of the day"
 			osv. -->
-            {% if user.is_authenticated %}
-
-            <!-- Viser brukerinformasjon -->
-            <div id="userBox">
-                <div id="usercontainer">
-                    <div id="avatar">
-                        <a href="{% url accounts.views.edit_profile %}">
-                            {% avatar user.username 80 %}
-                        </a>
-                    </div>
-
-                    <div id="userlinks">
-                        <a href="{% url accounts.views.edit_profile %}">
-                            <span class="ui-icon ui-icon-contact"
-                                  style="float:left;"></span>
-                            Endre profil
-                        </a>
-                    </div>
-                </div>
-
-                <div id="userinfo">
-                    <a href="{% url accounts.views.view_member_profile %}">
-                        {{ user.get_full_name }}
-                    </a>
-                </div>
-            </div>
-
-            {% else %}
-
-            <!-- Viser loginboksen -->
-			<div id="loginBox">
-				<form action="/login/" method="post">
-                    {% csrf_token %}
-					<input type="text" placeholder="Brukernavn" name="username" size="10" />
-					<input type="password" class="pwd" placeholder="Passord" name="password" size="10" />
-					<input class="box" type="checkbox" name="cookie" value="yes" />
-					<input class="submit" type="submit" value="" src="../img/login_button.png" />
-				</form>
+            {% comment %}
+			<div id="sok">
+			<form action="search.py" method="get">
+                <input class="box" type="text" placeholder="Søk..." name="sok" size="25" /><input type="image" id="searchKnapp" src="{{ STATIC_URL }}img/go_knapp.png" name="submit" />
+			</form>
 			</div>
+            {% endcomment %}
 
-            {% endif %}
-
-			<div id="navWrapper">
-				<ul class="nav">
-					<li class="top"><a href="{% url homepage.views.start %}">Forsida</a></li>
-					<li><a href="{% url event_list %}">Arrangement</a></li>
-					<li><a href="{% url bedpres_list %}">Bedriftspresentasjoner</a></li>
-                    <li><a href="{% url jobs_list %}">Stillingsannonser</a></li>
-					<li><a href="{% url news_list %}">Nyheter</a></li>
-					<li><a href="{% url gallery.views.index %}">Galleriet</a></li>
-					<li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
-					<li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
-					<li class="bottom"><a href="/logout/">Logg ut</a></li>
-				</ul>
-			</div>
+			<ul class="nav">
+                <li class="top"><a href="{% url homepage.views.start %}">Forsida</a></li>
+                <li><a href="{% url event_list %}">Arrangement</a></li>
+                <li><a href="{% url bedpres_list %}">Bedriftspresentasjoner</a></li>
+                <li><a href="{% url news_list %}">Nyheter</a></li>
+                <li><a href="{% url gallery.views.index %}">Galleriet</a></li>
+                <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+                <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
+				<li class="bottom"><a href="/logout/">Logg ut</a></li>
+			</ul>
 
 			<div id="sideCeller">
-                <div></div>
-                {% comment %}
 				<ul>
+                    {% comment %}
 					<li class="start">
 					<h2>Vi gratulerer</h2>
 					<ul class="bursdag">
@@ -405,6 +360,7 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 						<li>Haakon Bakka</li>
 					</ul>
 					</li>
+
 					<li>
                         {{ random_quote.info }}<br />
                         <cite class="quote">{{ random_quote }}</cite>
@@ -414,14 +370,13 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 					<a href="nabladet.html"><div class="img"></div></a>
 					<h5>Ukens nablad!</h5>
 					</li>
+                    {% endcomment %}
 				</ul>
-                {% endcomment %}
 			</div>
 
 		</div>
 
-		<div class="clear"></div>
-		</div>
+	</div>
 	</div>
 
 </body>

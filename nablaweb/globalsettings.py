@@ -58,10 +58,10 @@ MEDIA_ROOT = ''
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # f.eks. http://nabla.no/static/
-STATIC_URL = ''
+STATIC_URL = '/static/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -129,6 +129,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'events.context_processors.upcoming_events', # Legger til upcoming_events i alle templates.
     'jobs.views.activej',
     'quotes.context_processors.random_quote',
+    'events.context_processors.current_month_calendar',
    )
 
 

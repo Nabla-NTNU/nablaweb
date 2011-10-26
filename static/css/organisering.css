@@ -1,39 +1,29 @@
-#body div.left {
-	width: 7%;
-}
-
-#body div.left #sitLogo {
-	width: 90%;
-	padding: 0;
-	margin: 60px 10% 0 0;
-	border: 0;
-}
-
 #body div.middle {
-	width: 60%;
+	width: 700px;
 	overflow: hidden;
+
+	position: relative;
+	top: -49px;
 }
 
 #body div.right {
-	width: 30%;
+	width: 250px;
 }
 
-#body div.left, #body div.middle, #body div.right, #body div.middle div.leftMargin, #body div.middle div.centerMargin {
+#body div.middle, #body div.right, #body div.middle div.leftMargin, #body div.middle div.centerMargin {
 	float: left;
-	min-height: 100%;
-	margin: 0 0 -9999px 0;
-	padding: 0 0 9999px 0;
 }
 
 #body div.middle div.leftMargin {
-	width: 43px;
+	width: 41px;
+	height: 263px;
 	background-image: url('../img/left_margin.png');
 	background-position: left top;
 	background-repeat: no-repeat;
 }
 
 #body div.middle div.centerMargin {
-	width: 497px;
+	width: 655px;
 }
 
 #body div.middle div.centerMargin div.box {
@@ -46,12 +36,12 @@
 }
 
 #body div.topBox, #body div.middleBox, #body div.footBox {
-	margin: 0 17px 0 0;
-	width: 480px;
+	margin: 0 22px 0 0;
+	width: 633px;
 }
 
 #body div.topBox {
-	height: 60px;
+	height: 111px;
 	background-image: url('../img/top_box.png');
 	background-position: top left;
 	background-repeat: no-repeat;
@@ -60,26 +50,18 @@
 }
 
 #body div.middle div.middleBox {
-	width: 476px;
+	width: 633px;
 	height: auto;
        	background-image: url('../img/middle_box.png');
-	background-repeat: repeat-x;
+	background-repeat: repeat-y;
 	background-position: top left;;
 	background-color: white;
-
-	border-left: 2px solid #7bd2cc;
-	border-right: 2px solid #7bd2cc;
-	border-bottom: 2px solid #7bd2cc;
-	border-bottom-right-radius: 8px;
-	border-bottom-left-radius: 8px;
-	-moz-border-bottom-left-radius: 8px;
-	-moz-border-bottom-right-radius: 8px;
 
 	z-index: 2;
 }
 
 #body div.footBox {
-	height: 24px;
+	height: 43px;
 	background-image: url('../img/foot_box.png');
 	background-position: bottom right;
 	background-repeat: no-repeat;
@@ -87,12 +69,17 @@
 }
 
 #body div.innh {
-	width: 436px;
+	width: 561px;
 
-	margin: 0 0 0 40px;
+	margin: 0 0 0 71px;
 	padding:0;
 	position: relative;
-	top: -15px;
+	top: -40px;
 
 	z-index: 3;
 }
+/*
+#body img {
+  width: 100%;
+}*/
+

@@ -1,40 +1,71 @@
-#body div.right #sok {
-	background-image: url('../img/nabla_liten.png');
-	background-position: left center;
-	background-repeat: no-repeat;
-	background-size: 30px 29px;
-	-moz-background-size: 30px 29px;
-	-webkit-background-size: 30px 29px;
-	margin: 55px 0 0 0;
-	padding: 0 0 0 33px;
-	height: 29px;
+#userBox {
+    margin-left: 50px;
+    margin-top: 20px;
+    width: 207px;
+    padding: 5px;
+    background-color: #aaa;
+    border: 2px solid #ddd;
+    border-radius: 9px;
+    -moz-border-radius: 9px;
+    -webkit-border-radius: 9px;
 }
 
-#body div.right #sok input.box {
-	border: 1px solid #b7b7b7;
-	border-radius: 9px;
-	-moz-border-radius: 9px;
-	-webkit-border-radius: 9px;
-	padding: 0 5px 0 5px;
-	vertical-align: top;
-	height: 20px;
-	box-shadow: inset 0px 1px 2px 1px rgba(21, 25, 26, 1);
-	-moz-box-shadow: inset 0px 1px 2px 1px rgba(21, 25, 26, 1);
-	-webkit-box-shadow: inset 0px 1px 2px 1px rgba(21, 25, 26, 1);
-}
+    #userBox a{
+        border:0;
+    }
 
-#body div.right #sok * {
-	border: none;
-}
+    #userlinks a, #userinfo a {
+        text-decoration: none;
+        border-bottom: 1px dotted #333;
+        color: black;
+    }
 
-#body div.right #searchKnapp {
-	height: 24px;
-}
+    #userBox a:hover {
+        background-color: #ddd;
+        color: #222;
+    }
 
-#body div.right ul.nav {
-	list-style-type: none;
-	margin: 30px 0 0 50px;
+    #userBox #usercontainer {
+        display: table-row;
+    }
+
+    #userBox #avatar {
+        display: table-cell;
+        vertical-align: top;
+        width: 80px;
+    }
+
+    #userBox #avatar img {
+        border: 1px solid white;
+    }
+
+    #userBox #userlinks {
+        display: table-cell;
+        vertical-align: middle;
+        padding-left: 6px;
+    }
+
+    #userBox #userinfo {
+        border-top:1px solid #999;
+        margin-left: -5px;
+        margin-right: -5px;
+        text-align: center;
+        padding: 3px;
+    }
+
+#body div.right #navWrapper {
+	margin: 10px 0 0 26px;
 	padding: 0;
+	border: 0;
+	width: 224px;
+	height: 177px;
+	background: url('../img/menu_panel.png') no-repeat top left;
+}
+
+#body div.right ul.nav { /* Andreas var her */
+	list-style-type: none;
+	margin: 0;
+	padding: 8px 0 8px 0;
 }
 
 #body div.right ul.nav a {
@@ -45,8 +76,8 @@
 
 #body div.right ul.nav li {
 	background-image: url('../img/liste_punkt_midt.png');
+	background-position: 45px 0px;
 	background-repeat: no-repeat;
-	background-position: top left;
 	height: 19px;
 	padding: 0 0 4px 25px;
 }
@@ -59,16 +90,7 @@
 	background-image: url('../img/liste_punkt_last.png');
 }
 
-#body div.right ul.nav li a {
-    display: block;
-}
-
-#body div.right ul.nav li a:hover {
-    text-decoration: underline;
-}
-
-
-#body div.right ul.nav li.hover {
+#body div.right ul.nav li:hover {
 	background-image: none;
 	background-color: rgba(255, 255, 255, 0.8);
 	border-style: solid;
@@ -77,13 +99,10 @@
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
-	position: relative;
-	left: -110px;
-	padding: 0 0 4px 135px;
 	z-index: 6;
 }
 
-#body div.right ul.nav li.hover a {
+#body div.right ul.nav li:hover a {
 	color: #454545;
 }
 

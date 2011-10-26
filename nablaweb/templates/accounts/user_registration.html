@@ -5,14 +5,14 @@
 
 {% block content %}
 
-<p>Her kan du registrere deg med ditt ntnubrukernavn.</p>
-<p>Hvis brukernavnet er et ekte ntnubrukernavn vil du motta en epost med passord.</p>
+Her kan du registrere deg med ditt ntnubrukernavn.
+Hvis brukernavnet er godkjent vil du motta en epost med passord.
 
 <form method="POST" action="" >
   {% csrf_token %}
   {{ form.as_p }}
 
-  <input type="submit" />
+  <input type="submit" value="Send" />
 </form>
 
 {% endblock %}
