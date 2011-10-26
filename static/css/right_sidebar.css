@@ -65,6 +65,7 @@
     #userBox #avatar {
         display: table-cell;
         vertical-align: top;
+        width: 80px;
     }
 
     #userBox #avatar img {
