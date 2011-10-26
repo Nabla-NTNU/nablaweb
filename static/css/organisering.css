@@ -63,6 +63,7 @@
 
 #body div.footBox {
 	height: 43px;
+	margin-top: -8px;
 	background-image: url('../img/foot_box.png');
 	background-position: bottom right;
 	background-repeat: no-repeat;
