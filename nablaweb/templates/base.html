@@ -1,3 +1,5 @@
+{% load avatar_tags %}
+
 <!DOCTYPE HTML>
 <html>
     <head>
@@ -138,7 +140,7 @@
 			<a href="kalender.html"><h3 class="overskrift">Mai.</h3></a>
 			<table cellpadding="0" cellspacing="0">
 				<tr>
-					{% for dag in dager|slice:":11" %}
+					{% for dag in dager|slice:":10" %}
 					<td class="
 					{% if forloop.counter != 10 %}
 						{% if dag.arr %}
@@ -225,7 +227,7 @@
 					{% endfor %}
 				</tr>
 				<tr>
-					{% for dag in dager|slice:"20:31" %}
+					{% for dag in dager|slice:"20:30" %}
 					<td class="
 					{% if forloop.counter != 10 %}
 						{% if dag.arr %}
@@ -336,6 +338,36 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 			<!-- Her skal det være en del navigasjonsrelatert i tillegg til
 			ekstra informasjon som f.eks. "vi gratulerer" "quote of the day"
 			osv. -->
+            {% if user.is_authenticated %}
+
+            <!-- Viser brukerinformasjon -->
+            <div id="userBox">
+                <div id="usercontainer">
+                    <div id="avatar">
+                        <a href="{% url accounts.views.edit_profile %}">
+                            {% avatar user.username 80 %}
+                        </a>
+                    </div>
+
+                    <div id="userlinks">
+                        <a href="{% url accounts.views.edit_profile %}">
+                            <span class="ui-icon ui-icon-contact"
+                                  style="float:left;"></span>
+                            Endre profil
+                        </a>
+                    </div>
+                </div>
+
+                <div id="userinfo">
+                    <a href="{% url accounts.views.view_member_profile %}">
+                        {{ user.get_full_name }}
+                    </a>
+                </div>
+            </div>
+
+            {% else %}
+
+            <!-- Viser loginboksen -->
 			<div id="loginBox">
 				<form action="/login/" method="post">
                     {% csrf_token %}
@@ -346,6 +378,7 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 				</form>
 			</div>
 
+<<<<<<< HEAD
 			<div id="navWrapper">
 				<ul class="nav">
 					<li class="top"><a href="{% url homepage.views.start %}">Forsida</a></li>
@@ -358,6 +391,21 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 					<li class="bottom"><a href="/logout/">Logg ut</a></li>
 				</ul>
 			</div>
+=======
+            {% endif %}
+
+			<ul class="nav">
+                <li class="top"><a href="{% url homepage.views.start %}">Forsida</a></li>
+                <li><a href="{% url event_list %}">Arrangement</a></li>
+                <li><a href="{% url bedpres_list %}">Bedriftspresentasjoner</a></li>
+                <li><a href="{% url jobs_list %}">Stillingsannonser</a></li>
+                <li><a href="{% url news_list %}">Nyheter</a></li>
+                <li><a href="{% url gallery.views.index %}">Galleriet</a></li>
+                <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+                <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
+				<li class="bottom"><a href="/logout/">Logg ut</a></li>
+			</ul>
+>>>>>>> c23a08bccdfeb56f099534638a503a2d5dc92cd5
 
 			<div id="sideCeller">
                 <div></div>

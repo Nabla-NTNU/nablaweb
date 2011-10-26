@@ -61,7 +61,7 @@ class Event(Content):
     # Overlagre for å automatisk vedlikeholde ventelisten.
     def save(self, *args, **kwargs):
         super(Event, self).save(*args, **kwargs)
-        self.test_event_fields()
+        #self.test_event_fields()
         self._prune_queue()
 
     # Overlagre for å slette registreringer sammen med arrangementet.
