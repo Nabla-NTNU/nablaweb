@@ -135,7 +135,7 @@
 			<a href="kalender.html"><h3 class="overskrift">Mai.</h3></a>
 			<table cellpadding="0" cellspacing="0">
 				<tr>
-					{% for dag in dager|slice:":11" %}
+					{% for dag in dager|slice:":10" %}
 					<td class="
 					{% if forloop.counter != 10 %}
 						{% if dag.arr %}
@@ -222,7 +222,7 @@
 					{% endfor %}
 				</tr>
 				<tr>
-					{% for dag in dager|slice:"20:31" %}
+					{% for dag in dager|slice:"20:30" %}
 					<td class="
 					{% if forloop.counter != 10 %}
 						{% if dag.arr %}
@@ -379,6 +379,7 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
                 <li class="top"><a href="{% url homepage.views.start %}">Forsida</a></li>
                 <li><a href="{% url event_list %}">Arrangement</a></li>
                 <li><a href="{% url bedpres_list %}">Bedriftspresentasjoner</a></li>
+                <li><a href="{% url jobs_list %}">Stillingsannonser</a></li>
                 <li><a href="{% url news_list %}">Nyheter</a></li>
                 <li><a href="{% url gallery.views.index %}">Galleriet</a></li>
                 <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
