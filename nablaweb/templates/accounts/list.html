@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load avatar_tags %}
 
 {% block content %}
 
@@ -6,14 +7,17 @@
 <br />
 <table id="user_list" width="100%">
 <thead>
+    <th>Bilde</th>
 	<th>Brukernavn</th>
 	<th>Navn</th>
 	<th>Grupper</th>
 </thead>
 {% for user in users %}
 	<tr class="{% cycle odd even %}">
-	
-		<td class="cell_username">
+        <td class="cell_avatar">
+            {% avatar user 30 %}
+        </td>
+		<td >
 		{# Brukernavn med lenke til profilen #}
 			<a href="{% url accounts.views.view_member_profile user.username %}">
 				{{ user.username }}

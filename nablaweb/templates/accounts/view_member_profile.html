@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load avatar_tags %}
 {% load bbcode %}
 
 {% block title %}Medlem: {{member.get_full_name }} {% endblock %}
@@ -9,8 +9,10 @@
 {% block content %}
 
 <h2>{{member.get_full_name}}</h2>
+<br />
 <table>
     <tr>
+      <td rowspan=4 >{% avatar user 100 %}</td>
         <td>Epost: </td>
         <td>{{member.email}}</td>
     </tr>
