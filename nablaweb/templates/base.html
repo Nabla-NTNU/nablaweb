@@ -378,12 +378,14 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 				</form>
 			</div>
 
-<<<<<<< HEAD
+            {% endif %}
+
 			<div id="navWrapper">
 				<ul class="nav">
 					<li class="top"><a href="{% url homepage.views.start %}">Forsida</a></li>
 					<li><a href="{% url event_list %}">Arrangement</a></li>
 					<li><a href="{% url bedpres_list %}">Bedriftspresentasjoner</a></li>
+                    <li><a href="{% url jobs_list %}">Stillingsannonser</a></li>
 					<li><a href="{% url news_list %}">Nyheter</a></li>
 					<li><a href="{% url gallery.views.index %}">Galleriet</a></li>
 					<li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
@@ -391,21 +393,6 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 					<li class="bottom"><a href="/logout/">Logg ut</a></li>
 				</ul>
 			</div>
-=======
-            {% endif %}
-
-			<ul class="nav">
-                <li class="top"><a href="{% url homepage.views.start %}">Forsida</a></li>
-                <li><a href="{% url event_list %}">Arrangement</a></li>
-                <li><a href="{% url bedpres_list %}">Bedriftspresentasjoner</a></li>
-                <li><a href="{% url jobs_list %}">Stillingsannonser</a></li>
-                <li><a href="{% url news_list %}">Nyheter</a></li>
-                <li><a href="{% url gallery.views.index %}">Galleriet</a></li>
-                <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
-                <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
-				<li class="bottom"><a href="/logout/">Logg ut</a></li>
-			</ul>
->>>>>>> c23a08bccdfeb56f099534638a503a2d5dc92cd5
 
 			<div id="sideCeller">
                 <div></div>
