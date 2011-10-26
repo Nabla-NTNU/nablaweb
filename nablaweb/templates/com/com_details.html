@@ -1,0 +1,9 @@
+{% extends "com_base.html" %}
+
+{% block include %}
+<h1>{ page.com.name }</h1>
+<dl>{% for person in members %}
+    <dt>{ person.user.name } (ble med i { page.com.name } { person.joined_date })</dt>
+    <dd>{ person.story }</dt>{% endfor %}
+</dl>
+{% endblock include %}
