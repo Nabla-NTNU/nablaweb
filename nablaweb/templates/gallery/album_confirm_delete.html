@@ -3,5 +3,5 @@ Er du sikker på at du vil slette "{{album.title}}"<br />
 <form action="" method="post">{% csrf_token %}
     <input type="submit" value="Slett"/>
 </form>
-<button onClick="window.location='/gallery/album/{{ album.id }}'">Avbryt</button>
+<button onClick="window.location='{% url gallery.views.album album.id %}'">Avbryt</button>
 {% endblock %}

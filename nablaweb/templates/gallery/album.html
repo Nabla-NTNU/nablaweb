@@ -1,4 +1,4 @@
-<p><a href="/gallery/">Galleri</a> >> </p>
+<p><a href="{% url gallery.views.index %}">Galleri</a> >> </p>
 <h1> {{ album.title }} </h1>
 <p>{{ album.description }}</p>
 
@@ -7,7 +7,7 @@
     <tr width=20>
     {% for picture in album.picture_set.all %}
         <td>
-            <a href="picture/{{ picture.album_picnr }}"><img src="/nabla_media/{{ picture.thumbnail }}" width = 200 border=1 /></a>
+            <a href="{% url gallery.views.picture_large album.id picture.album_picnr %}"><img src="{{ picture.getThumbnailUrl }}" width = 200 border=1 /></a>
         </td>
         {% if forloop.counter|divisibleby:"3" %}
             </tr>
@@ -19,14 +19,14 @@
 {% else %}
     <p>Dette albummet har ingen bilder enda<p>
 {% endif %}
-<a href="/gallery/">Gå tilbake til galleriet</a>
+<a href="{% url gallery.views.index %}">Gå tilbake til galleriet</a>
 
 <!-- Dersom logget inn + rettigheter: -->
     <p>
-        <a href="/gallery/album/{{ album.id }}/add_pic/">
+        <a href="{% url gallery.views.add_picture album.id %}">
             Legg til bilde
         </a>
-        <a href="/gallery/album/{{ album.id }}/del/">
+        <a href="{% url gallery_AlbumDeleteView album.id %}">
             Slett album
         </a>
     </p>

@@ -11,5 +11,5 @@ urlpatterns = patterns('gallery.views',
     (r'^album/(?P<album_id>\d{1,8})/picture/(?P<picture_id>\d{1,8})/delete/$', 'delete_picture'),
     (r'^opprett/$', 'add_album'),
     
-    (r'^album/(?P<pk>\d{1,8})/del/$', AlbumDeleteView.as_view()),
+    url(r'^album/(?P<pk>\d{1,8})/del/$', AlbumDeleteView.as_view(), name='gallery_AlbumDeleteView'),
 )

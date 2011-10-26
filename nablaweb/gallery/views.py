@@ -26,8 +26,8 @@ def index(request):
     album_list = Album.objects.all()
     return render_to_response('gallery/index.html', {'album_list': album_list})
 
-def album(request, album_id):
-    a = get_object_or_404(Album, pk=album_id)
+def album(request, *args, **kwargs):
+    a = get_object_or_404(Album, pk=kwargs.get('album_id'))
     return render_to_response('gallery/album.html', {'album': a})
 
 
@@ -82,8 +82,8 @@ def add_album(request):
     return render_to_response('gallery/add_album.html', {'form': form,}, context_instance=RequestContext(request))
     
 """ ___EDIT ALBUM___ """
-def edit_album(request, album_id):
-    album = get_object_or_404(Album, pk=album_id)
+def edit_album(request, *args, **kwargs):
+    album = get_object_or_404(Album, pk=kwargs.get('album_id'))
     if (request.method == 'POST'):
         form = AlbumEditForm(request.POST)
         print form.base_fields['title']
@@ -106,7 +106,7 @@ class AlbumDeleteView(DeleteView):
     context_object_name = 'album'
     
     def get_success_url(self):
-        return HttpResponseRedirect(reverse('gallery.views.index', args=()))
+        return reverse('gallery.views.index')
 
 """ ___ADD PICTURE___ """
 def add_picture(request,*args,**kwargs):
@@ -123,9 +123,9 @@ def add_picture(request,*args,**kwargs):
     return render_to_response('gallery/add_picture.html', {'form': form,'album':current_album}, context_instance=RequestContext(request))
 
 """ ___EDIT PICTURE___ """
-def edit_picture(request, album_id, picture_id):
-    album = get_object_or_404(Album, pk=album_id)
-    picture = get_object_or_404(Picture, pk=album.picture_set.get(album_picnr=picture_id).id)
+def edit_picture(request, *args, **kwargs):
+    album = get_object_or_404(Album, pk=kwargs.get('album_id'))
+    picture = get_object_or_404(Picture, pk=album.picture_set.get(album_picnr=kwargs.get('picture_id')).id)
     if (request.method == 'POST'):
         form = PictureEditForm(request.POST)
         if form.is_valid():
@@ -137,7 +137,6 @@ def edit_picture(request, album_id, picture_id):
     return render_to_response('gallery/edit_picture.html', {'form':form, 'album':album, 'picture':picture}, context_instance=RequestContext(request))
     
 """ ___DELETE PICTURE___ """
-# Tar inn album_id og picture_id som kwargs
 def delete_picture(request, *args, **kwargs):
     album = get_object_or_404(Album, pk=kwargs.get('album_id'))
     picture = get_object_or_404(Picture, pk=album.picture_set.get(album_picnr=kwargs.get('picture_id')).id)

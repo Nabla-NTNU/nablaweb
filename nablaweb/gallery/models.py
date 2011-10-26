@@ -55,7 +55,6 @@ class Album(models.Model):
         super(Album,self).save()
         return self.pic_increment
     
-    #TODO: Redundant?
     def update_last_date_changed(self):
         self.date_last_changed = datetime.datetime.now()
         super(Album,self).save()
@@ -89,7 +88,6 @@ class Album(models.Model):
         self.folder_path = folder_path
         super(Album,self).save()
         if album_renamed:
-            print u'ALBUM RENAMED!'
             for pic in self.picture_set.all():
                 pic.album_has_been_renamed()
 
@@ -160,6 +158,12 @@ class Picture(models.Model):
         self.number_of_hits += 1
         self.save()
         
+    def getPictureUrl(self):
+        return u'%s%s' % (getattr(settings, 'MEDIA_URL', None),self.picture)
+    
+    def getThumbnailUrl(self):
+        return u'%s%s' % (getattr(settings, 'MEDIA_URL', None),self.thumbnail)
+    
     # Overlagrer slettefunksjonen for å kunne slette bildefilene
     # og oppdatere at albummet har blitt oppdatert/endret
     def delete(self, *args, **kwargs):
@@ -181,9 +185,7 @@ class Picture(models.Model):
     # Overlagrer lagringsfunksjonen
     def save(self, *args, **kwargs):
         # Lagrer bildet.
-        print self.picture.path
         super(Picture, self).save(*args,**kwargs)
-        print self.picture.path
         # Oppdaterer albummet om at det har blitt endret.
         self.album.update_last_date_changed()
         
@@ -194,13 +196,14 @@ class Picture(models.Model):
             # Dette skal ideelt aldri skje, da det vil stoppes i form-godkjenningen
             try:
                 img = Image.open(self.picture.path)
+                print img.filename
             except:
                 pass
             else:
                 # Endrer størrelse på bilder
                 (width, height) = img.size
-                resizedImage = img.resize(scale_dimensions(width, height, lowest_side = PICTURE_DIM))
-                thumbnail = img.resize(scale_dimensions(width, height, lowest_side = PICTURE_DIM_THUMB))
+                resizedImage = img.resize(scale_dimensions(width, height, lowest_side = PICTURE_DIM), Image.ANTIALIAS)
+                thumbnail = img.resize(scale_dimensions(width, height, lowest_side = PICTURE_DIM_THUMB), Image.ANTIALIAS)
                 
                 # Ordner filnavn
                 # Dersom bildet har blitt flyttet fra et album til et annet, 
@@ -215,12 +218,18 @@ class Picture(models.Model):
                 if not self.album_picnr+1 or rename_boolean:
                     self.album_picnr = self.album.getNewPictureName()
     
-                imagefile = StringIO.StringIO()
-                #TODO: Hva gjør denne linjen?
-                resizedImage.save(imagefile, 'JPEG')
     
-                filename_thumb = unicode(self.album_picnr) + '-thumb.jpg'
-                filename = unicode(self.album_picnr) + '.jpg'
+                
+                imagefile = StringIO.StringIO()
+                #TODO: Redundant?
+                resizedImage.save(imagefile, img.format)
+                
+                # Finner filtype-extension:
+                imagetype = unicode(self.picture.path).split('.')[-1]
+                
+                # Lager filnavn:
+                filename_thumb = u'%s-thumb.%s' % (unicode(self.album_picnr),imagetype)
+                filename = u'%s.%s' % (unicode(self.album_picnr),imagetype)
 
                 save_path = self.album.folder_path
                 # Tvinger Album til å lage mapper dersom de ikke finnes
@@ -231,12 +240,12 @@ class Picture(models.Model):
                 
                 # Lagrer thumbnail
                 imagefile = open(os.path.join(save_path, filename), 'w')
-                resizedImage.save(imagefile, 'JPEG')
+                resizedImage.save(imagefile, img.format)
                 imagefile.close()
                 
                 # Lagrer thumbnail
                 imagefile = open(os.path.join(save_path, filename_thumb), 'w')
-                thumbnail.save(imagefile, 'JPEG')
+                thumbnail.save(imagefile, img.format)
                 imagefile.close()
                     
                 # Django bruker 'MEDIA_ROOT' som root for ImageFields:

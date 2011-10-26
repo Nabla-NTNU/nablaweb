@@ -1,19 +1,28 @@
-<p><a href="/gallery/">Galleri</a> >> <a href="/gallery/album/{{ album.id }}">{{ album.title }}</a> >> </p>
+<p><a href="{% url gallery.views.index %}">Galleri</a> >> <a href="{% url gallery.views.album album.id %}">{{ album.title }}</a> >> </p>
 
-<a href="/gallery/album/{{ album.id }}/picture/{{ next_picture.album_picnr }}">
-    <img src="/nabla_media/{{ picture.picture }}" width=800></img>
+<a href="{% url gallery.views.picture_large album.id next_picture.album_picnr %}">
+    <img src="{{ picture.getPictureUrl }}" width=800></img>
 </a>
-<p>
-    Bilde {% for i in album.picture_set.all %}{% ifequal i.id picture.id %}{{ forloop.counter }}{% endifequal %}{% endfor %} av {{ album.picture_set.all|length }}, sett {{ picture.number_of_hits }} ganger.
-</p>
-<p>
-    <a href="/gallery/album/{{ album.id }}/picture/{{ previous_picture.album_picnr }}">Forrige bilde</a>
-    <a href="/gallery/album/{{ album.id }}">Tilbake til albumet</a>
-    <a href="/gallery/album/{{ album.id }}/picture/{{ next_picture.album_picnr }}">Neste bilde</a>
-</p>
-<p> 
-    {{ picture.description|safe }}
-    <a href="edit">Endre beskrivelse</a>
-    <a href="delete">Slett bildet</a>
-</p>
 
+<p>
+    Bilde {% for i in album.picture_set.all %}{% ifequal i.id picture.id %}{{ forloop.counter }}{% endifequal %}{% endfor %} av {{ album.picture_set.all|length }}, lastet opp {{ picture.date_published }} av {{ picture.owner }}. Bildet er sett {{ picture.number_of_hits }} ganger.
+</p>
+<p>
+    <a href="{% url gallery.views.picture_large album.id previous_picture.album_picnr %}">Forrige bilde</a> | 
+    <a href="{% url gallery.views.album album.id %}">Tilbake til albumet</a> | 
+    <a href="{% url gallery.views.picture_large album.id next_picture.album_picnr %}">Neste bilde</a>
+</p>
+{% if picture.description %}
+    <p>
+        {{ picture.description|safe }}
+        <br/>
+        Beskrivelsen ble sist endret {{picture.last_changed_date}}.
+    </p>
+{% endif %}
+<!-- Brukerrettiheter -->
+<p>
+    <a href="{% url gallery.views.edit_picture album.id picture.album_picnr %}">Endre beskrivelse</a>
+</p>
+<p>
+    <a href="{% url gallery.views.delete_picture album.id picture.album_picnr %}">Slett bildet</a>
+</p>
