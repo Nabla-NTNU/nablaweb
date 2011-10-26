@@ -1,0 +1,219 @@
+#body div.right #sok {
+	background-image: url('../img/nabla_liten.png');
+	background-position: left center;
+	background-repeat: no-repeat;
+	background-size: 30px 29px;
+	-moz-background-size: 30px 29px;
+	-webkit-background-size: 30px 29px;
+	margin: 55px 0 0 0;
+	padding: 0 0 0 33px;
+	height: 29px;
+}
+
+#body div.right #sok input.box {
+	border: 1px solid #b7b7b7;
+	border-radius: 9px;
+	-moz-border-radius: 9px;
+	-webkit-border-radius: 9px;
+	padding: 0 5px 0 5px;
+	vertical-align: top;
+	height: 20px;
+	box-shadow: inset 0px 1px 2px 1px rgba(21, 25, 26, 1);
+	-moz-box-shadow: inset 0px 1px 2px 1px rgba(21, 25, 26, 1);
+	-webkit-box-shadow: inset 0px 1px 2px 1px rgba(21, 25, 26, 1);
+}
+
+#body div.right #sok * {
+	border: none;
+}
+
+#body div.right #searchKnapp {
+	height: 24px;
+}
+
+#body div.right ul.nav { /* Andreas var her */
+	/* Måtte slette litt for å få det til å funke -Nicolai */
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#body div.right ul.nav a {
+	color: #cdedf9;
+	font-size: 0.85em;
+	text-decoration: none;
+}
+
+#body div.right ul.nav li {
+	background-image: url('../img/liste_punkt_midt.png');
+	background-position: 45px 0px;
+	background-repeat: no-repeat;
+	height: 19px;
+	padding: 0 0 4px 75px;
+}
+
+#body div.right ul.nav li.top {
+	background-image: url('../img/liste_punkt_first.png');
+}
+
+#body div.right ul.nav li.bottom {
+	background-image: url('../img/liste_punkt_last.png');
+}
+
+/*
+#body div.right ul.nav li:hover { /* Andreas var her */
+    background-color: #888;
+}
+*/
+
+
+#body div.right ul.nav li:hover {
+	background-color: rgba(255, 255, 255, 0.8);
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgba(255, 255, 255, 0.8);
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	z-index: 6;
+}
+
+#body div.right ul.nav li:hover a {
+	color: #454545;
+}
+
+#body div.right #sideCeller {
+	width: 242px;
+	margin: 30px 0 0 0;
+	padding: 0 0 0 30px;
+	overflow: hidden;
+	background: transparent url('../img/border_fade.png') top left repeat-y;
+	color: #cdedf9;
+}
+
+#body div.right #sideCeller ul {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	list-style: none;
+}
+
+#body div.right #sideCeller ul li {
+	background: transparent;
+	border-bottom: 2px solid #323c3e;
+	padding: 10px 0 20px 0;
+}
+
+#body div.right #sideCeller ul li.end {
+	border: 0;
+}
+
+#body div.right #sideCeller ul li.start {
+	padding: 0 0 20px 0;
+}
+
+#body div.right #sideCeller ul.bursdag li {
+	border-bottom: 0;
+	padding: 0 0 0 30px;
+	height: 15px;
+	margin: 2px 0 0 0;
+	font-size: 0.8em;
+	color: #bcc8cc;
+}
+
+#sideCeller ul.bursdag li:before {
+	content: "<";
+	padding-right: 6px;
+}
+
+#sideCeller ul.bursdag li:before, #sideCeller ul.bursdag li:after {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #cdedf9;
+}
+
+#sideCeller ul.bursdag li:after {
+	content: ">";
+	padding-left: 6px;
+}
+
+#body div.right #sideCeller h2 {
+	margin: 0 0 10px 0;
+	padding: 0 0 0 35px;
+	background: transparent url('../img/cake.png') top left no-repeat;
+	background-size: 30px 29px;
+	height: 30px;
+
+	font-family: Limelight, georgia, serif;
+	font-size: 1.5em;
+	text-shadow: 2px 2px 2px #15191a;
+}
+
+#body div.right #sideCeller cite.quote {
+	font-size: 1.3em;
+	font-style: italic;
+	font-weight: normal;
+	font-family: Damion, sans-serif;
+	display: inline;
+	margin: 0;
+	position: relative;
+	padding: 0 15px 0 10px;
+}
+
+#body div.right #sideCeller cite.quote:before, #body div.right #sideCeller cite.quote:after {
+	display: block;
+	width: 12px;
+	height: 10px;
+	content: "";
+	position: absolute;
+}
+
+#body div.right #sideCeller cite.quote:before {
+	background: transparent url('../img/quotes.png') top left no-repeat;
+}
+
+#body div.right #sideCeller cite.quote:after {
+	background: transparent url('../img/quotes2.png') top left no-repeat;
+	right: 0;
+	bottom: 0;
+}
+
+#body div.right #sideCeller cite {
+	font-size: 0.7em;
+	font-style: normal;
+	display: block;
+	margin: 4px 0 0 0;
+}
+
+#body div.right #sideCeller div.img {
+	float: left;
+	width: 50px;
+	height: 56px;
+	background: url('../img/Nabladet.png') top left no-repeat;
+	margin: 0;
+	padding: 0;
+}
+
+#body div.right #sideCeller div.img:hover {
+	background: url('../img/Nabladet.gif') top left no-repeat;
+}
+
+#body div.right #sideCeller h5 {
+	margin: 0 0 0 10px;
+	font-size: 1.1em;
+	float: left;
+	font-family: Limelight, sans-serif;
+	text-shadow: 2px 2px 2px #15191a;
+}
+
+#body div.right #sideCeller li.end a {
+	text-decoration: none;
+	color: #cdedf9;
+}
+
+#body div.right #sideCeller div.fb {
+	float: left;
+	width: 100px;
+	margin: 4px 0 0 10px;
+}
