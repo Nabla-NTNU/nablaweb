@@ -12,10 +12,15 @@
         {% with type=content|classname %}
 
         {% if type == "news" %}
-            {% include "news/news_detail_include.html" with news=content %}
+            {% include "news/news_detail.html" with news=content ajax="True" summary="True" %}
         {% endif %}
-        {% if type == "event" or type == "bedpres" %}
-            {% include "events/event_detail_include.html" with event=content %}
+
+        {% if type == "event" %}
+            {% include "events/event_detail.html" with event=content ajax="True" summary="True" %}
+        {% endif %}
+
+        {% if type == "bedpres" %}
+            {% include "bedpres/bedpres_detail.html" with bedpres=content ajax="True" summary="True" %}
         {% endif %}
 
         {% endwith %}

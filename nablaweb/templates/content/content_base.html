@@ -1,17 +1,63 @@
+{% extends ajax|yesno:"ajax.html,base.html" %}
 {% load bbcode %}
+{% load humanize %}
+{% load classname %}
 
-{% block base %}
-<h2>{{ content.headline }} </h2>
-<em>Publisert {{content.created_date|date:"r" }} av {{ content.created_by }}<br />
-{% if content.has_been_edited %}Sist endret {{content.last_changed_date|date:"r" }} av {{ content.last_changed_by }}<br />{% endif %}</em>
+{% block content %}
 
-{% block base_after_headline %}{% endblock %}
+<h2>{% block headline %}{{ content.headline }}{% endblock %}</h2>
 
-{% if content.lead_paragraph %}
-<p><strong>{{ content.lead_paragraph }}</strong></p>
-{% endif %}
+{# Informasjon om hvilken type content dette er #}
+<div class="meta">
+    {% block content_type %}
+        Endre {{ content|classname }}/{{ content|classname }}_base.html
+    {% endblock %}
+</div>
 
-{% if content.body %}
-<p>{{ content.body|bbcode }}</p>
-{% endif %}
+<div class="innhWrapper">
+
+{# Dato-informasjon eller annet #}
+{% block content_info %}
+<div class="detaljer">
+    <span class="tid">Postet {{ content.created_date|naturalday }}</span>
+    <a class="person"
+        {% if content.created_by %}
+        href="{% url accounts.views.view_member_profile content.created_by.username %}"
+        {% endif %}>
+        {{ event.created_by.get_full_name }}
+    </a>
+</div>
 {% endblock %}
+
+{# Denne blokken kan inneholde f.eks. event-informasjon. #}
+{% block after_headline %}{% endblock %}
+
+{# Ingressen #}
+{% block lead_paragraph %}
+    {% if content.lead_paragraph %}
+        <p><strong>{{ content.lead_paragraph }}</strong></p>
+    {% endif %}
+{% endblock %}
+
+{# Denne blokken kan inneholde noe #}
+{% block after_lead_paragraph %}{% endblock %}
+
+{# Hovedteksten #}
+{% if not summary %}
+    {% block body %}
+        {% if content.body %}
+            <p>{{ content.body|bbcode }}</p>
+        {% endif %}
+    {% endblock %}
+{% endif %}
+
+{# Denne blokken kan inneholde f.eks. påmelding til event #}
+{% block after_body %}{% endblock %}
+
+{% if summary %}
+    <p class="readmore">{% block readmore %}{% endblock %}</p>
+{% endif %}
+
+</div><!--innhWrapper-->
+
+{% endblock content %}
