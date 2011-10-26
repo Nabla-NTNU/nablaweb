@@ -1,5 +1,5 @@
 {% extends "events/event_preview.html" %}
 
 {% block preview_detail %}
-{% include "bedpres/bedpres_base.html" %}
+    {% include "bedpres/bedpres_detail.html" with ajax="True" %}
 {% endblock %}

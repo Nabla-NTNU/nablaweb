@@ -1,9 +1,9 @@
 {% extends "content/content_preview.html" %}
 
 {% block preview_detail %}
-{% include "events/event_base.html" %}
+    {% include "events/event_detail.html" with ajax="True"%}
 {% endblock %}
 
 {% block preview_form %}
-{% include form_base %}
+    {% include form_base %}
 {% endblock %}
