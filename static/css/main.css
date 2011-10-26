@@ -71,16 +71,10 @@ div.lcontainer {
 }
 
 #neck h3.overskrift {
-	width: 300px;
-	height: 18px;
 	margin: 0 0 8px 0;
 	padding: 0 0 10px 20px;
-	background-image: url('../img/for_arr_overskrift.png');
-	background-size: 300px 18px;
-	-moz-background-size: 300px 18px;
-	background-repeat: no-repeat;
-	background-position: bottom left;
-	color: #2f6662;
+	color: #232323;
+	font-family: Jura, Helvetica, sans-serif;
 }
 
 #neck a {
