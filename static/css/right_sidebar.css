@@ -31,17 +31,19 @@
 	height: 24px;
 }
 
-#body div.right ul.nav { /* Andreas var her */
-	list-style-type: none;
-	margin: 30px 0 0 50px;
-    width:207px;
+#body div.right #navWrapper {
+	margin: 10px 0 0 49px;
 	padding: 0;
-    background-color: #999999;
-    border: 1px solid #ddd;
-    border-radius:9px;
-    -moz-border-radius:9px;
-    -webkit-border-radius: 9px;
-    padding: 5px;
+	width: 224px;
+	height: 177px;
+	background: url('../img/manu_panel.png') no-repeat top left;
+}
+
+#body div.right ul.nav { /* Andreas var her */
+	/* Måtte slette litt for å få det til å funke -Nicolai */
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
 }
 
 #body div.right ul.nav a {
@@ -52,10 +54,10 @@
 
 #body div.right ul.nav li {
 	background-image: url('../img/liste_punkt_midt.png');
+	background-position: 45px 0px;
 	background-repeat: no-repeat;
-	background-position: top left;
 	height: 19px;
-	padding: 0 0 4px 25px;
+	padding: 0 0 4px 75px;
 }
 
 #body div.right ul.nav li.top {
@@ -66,17 +68,14 @@
 	background-image: url('../img/liste_punkt_last.png');
 }
 
-#body div.right ul.nav li a {
-    display: block;
-}
-
+/*
 #body div.right ul.nav li:hover { /* Andreas var her */
     background-color: #888;
 }
+*/
 
 
-#body div.right ul.nav li.hover {
-	background-image: none;
+#body div.right ul.nav li:hover {
 	background-color: rgba(255, 255, 255, 0.8);
 	border-style: solid;
 	border-width: 1px;
@@ -84,13 +83,10 @@
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
-	position: relative;
-	left: -110px;
-	padding: 0 0 4px 135px;
 	z-index: 6;
 }
 
-#body div.right ul.nav li.hover a {
+#body div.right ul.nav li:hover a {
 	color: #454545;
 }
 

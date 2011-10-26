@@ -63,12 +63,6 @@ div.lcontainer {
 	float: left;
 }
 
-#sekk {
-	width: 110px;
-	border: 0;
-	margin: 20px 0 0 0;
-}
-
 .clear {
 	clear: both;
 	display: block;
@@ -98,6 +92,14 @@ div.lcontainer {
 #nesteArrang {
 	float: left;
 	margin: 0.5% 0 0 0;
+}
+
+#infoPanel {
+	float: left;
+	margin: 20px 0 0 0;
+	background: url('../img/info_panel.png') no-repeat top left;
+	width: 236px;
+	height: 132px;
 }
 
 #kalender {
