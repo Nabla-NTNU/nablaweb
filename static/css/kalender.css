@@ -6,56 +6,56 @@
 #kalender table td {
 	margin: 0;
 	padding: 0;
-	width: 32px;
-	height: 37px;
+	width: 48px;
+	height: 48px;
 }
 
 #kalender table td.plain {
-	background: url('../img/kalender_sprite.png') 0px -117px;
+	background: url('../img/kalender_sprite.png') 0px -147px;
 }
 
 #kalender table td.double {
-	background: url('../img/kalender_sprite.png') -33px -117px;
+	background: url('../img/kalender_sprite.png') -49px -147px;
 }
 
 #kalender table td.doubleCurrent {
-	background: url('../img/kalender_sprite.png') -66px -117px;
+	background: url('../img/kalender_sprite.png') -98px -147px;
 }
 
 #kalender table td.plainCurrent {
-	background: url('../img/kalender_sprite.png') -99px -117px;
+	background: url('../img/kalender_sprite.png') -147px -147px;
 }
 
 #kalender table td.plainR {
-	background: url('../img/kalender_sprite.png') 0px -78px;
+	background: url('../img/kalender_sprite.png') 0px -98px;
 }
 
 #kalender table td.doubleR {
-	background: url('../img/kalender_sprite.png') -33px -78px;
+	background: url('../img/kalender_sprite.png') -49px -98px;
 }
 
 #kalender table td.doubleCurrentR {
-	background: url('../img/kalender_sprite.png') -66px -78px;
+	background: url('../img/kalender_sprite.png') -98px -98px;
 }
 
 #kalender table td.plainCurrentR {
-	background: url('../img/kalender_sprite.png') -99px -78px;
+	background: url('../img/kalender_sprite.png') -147px -98px;
 }
 
 #kalender table td.plainD {
-	background: url('../img/kalender_sprite.png') 0px -39px;
+	background: url('../img/kalender_sprite.png') 0px -49px;
 }
 
 #kalender table td.doubleD {
-	background: url('../img/kalender_sprite.png') -33px -39px;
+	background: url('../img/kalender_sprite.png') -49px -49px;
 }
 
 #kalender table td.doubleCurrentD {
-	background: url('../img/kalender_sprite.png') -66px -39px;
+	background: url('../img/kalender_sprite.png') -98px -49px;
 }
 
 #kalender table td.plainCurrentD {
-	background: url('../img/kalender_sprite.png') -99px -39px;
+	background: url('../img/kalender_sprite.png') -147px -49px;
 }
 
 #kalender table td.plainDR {
@@ -63,13 +63,13 @@
 }
 
 #kalender table td.doubleDR {
-	background: url('../img/kalender_sprite.png') -33px 0px;
+	background: url('../img/kalender_sprite.png') -49px 0px;
 }
 
 #kalender table td.doubleCurrentDR {
-	background: url('../img/kalender_sprite.png') -66px 0px;
+	background: url('../img/kalender_sprite.png') -98px 0px;
 }
 
 #kalender table td.plainCurrentDR {
-	background: url('../img/kalender_sprite.png') -99px 0px;
+	background: url('../img/kalender_sprite.png') -147px 0px;
 }
