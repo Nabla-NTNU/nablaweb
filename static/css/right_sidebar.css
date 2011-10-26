@@ -53,6 +53,14 @@
         padding: 3px;
     }
 
+#body div.right #navWrapper {
+	margin: 10px 0 0 26px;
+	padding: 0;
+	border: 0;
+	width: 224px;
+	height: 177px;
+	background: url('../img/menu_panel.png') no-repeat top left;
+}
 
 #body div.right ul.nav { /* Andreas var her */
 	list-style-type: none;
