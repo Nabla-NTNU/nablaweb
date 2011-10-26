@@ -1,9 +1,14 @@
-{% extends "com_base.html" %}
+{% extends "base.html" %}
 
+{% block title %}{{ block.super }}{{ page.com.name }}{% endblock %}
+
+{% block content %}
 {% block include %}
-<h1>{ page.com.name }</h1>
+{% include "content/content_base.html" %}
+<h1>{{ com.com.name }}</h1>
 <dl>{% for person in members %}
-    <dt>{ person.user.name } (ble med i { page.com.name } { person.joined_date })</dt>
-    <dd>{ person.story }</dt>{% endfor %}
+    <dt>{{ person.user.name }} (ble med i {{ page.com.name }} {{ person.joined_date }})</dt>
+    <dd>{{ person.story }}</dt>{% endfor %}
 </dl>
 {% endblock include %}
+{% endblock content %}
