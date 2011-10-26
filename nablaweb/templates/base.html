@@ -44,10 +44,10 @@
 	    </div>
 		
 		<ul id="headMenu">
-			<li><a href="#">Om Nabla</a></li>
-			<li class="bLeft"><a href="#">Bedrifter</a></li>
-			<li class="bLeft"><a href="#">Sosialt</a></li>
-			<li id="ar"><a href="{% url event_list %}">Arrangementer</a></li>
+			<li><a href="/om/">Om Nabla</a></li>
+			<li class="bLeft"><a href="/bedrifter/">Bedrifter</a></li>
+			<li class="bLeft"><a href="/sosialt/">Sosialt</a></li>
+			<li id="ar" class="bLeft"><a href="{% url event_list %}">Arrangementer</a></li>
 		</ul>
         {% comment %}
         {% if user.is_authenticated %}
@@ -157,7 +157,7 @@
 		mndArr over denne månedens arrangementer samt en variabel currentDate som gir
 		den nåværende datoen i et TimeDateField format. -->
 		<div id="kalender">
-			<a href="kalender.html"><h3 class="overskrift">Mai.</h3></a>
+            <a href="kalender.html"><h3 class="overskrift">{{ currentDate|date:"F" }}</h3></a>
 			<table cellpadding="0" cellspacing="0">
 				<tr>
 					{% for dag in dager|slice:":10" %}
@@ -191,6 +191,7 @@
 							{% endif %}
 						{% endif %}
 					{% endif %}">
+                    {{ dag.day }} 
 					</td>
 					{% endfor %}
 				</tr>

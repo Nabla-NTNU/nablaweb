@@ -11,6 +11,15 @@ def upcoming_events(request):
 
     return {'upcoming_events': upcoming_events}
 
+class Day(object):
+    def __init__(self, arr, day):
+        self.arr = arr
+        self.date =day 
+    
+    def __unicode__(self):
+        return u'<Dayobject: dag:%s arr:%s' % (self.date,self.arr)
+    def __str__(self):
+        return __unicode__(self)
 
 
 def current_month_calendar(request):
@@ -19,10 +28,8 @@ def current_month_calendar(request):
     year = today.year
     numdays = calendar.mdays[month]
     events_of_month = Event.objects.filter(event_start__gt=date(year,month,1), event_start__lt=date(year,month+1,1))
-    class Day(object):
-        def __init__(self, arr, day):
-            self.arr = arr
-            self.dag =day 
+
     days =[Day(True,i+1) if bool(events_of_month.filter(event_start=date(year,month,i+1)))  else Day(False,i+1) for i in range(numdays) ]
-    
-    return {'dager': days, 'currentDate': today.day}
+
+    print days
+    return {'dager': days, 'currentDate': today}

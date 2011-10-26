@@ -33,6 +33,7 @@
 	background-repeat: no-repeat;
 	margin: 0;
 	padding: 0;
+	vertical-align: text-top;
 }
 
 #body div.topBox, #body div.middleBox, #body div.footBox {
@@ -52,11 +53,11 @@
 #body div.middle div.middleBox {
 	width: 633px;
 	height: auto;
-       	background-image: url('../img/middle_box.png');
+    background-image: url('../img/middle_box.png');
 	background-repeat: repeat-y;
 	background-position: top left;;
 	background-color: white;
-
+    margin-bottom: -99999px;
 	z-index: 2;
 }
 
@@ -66,6 +67,7 @@
 	background-position: bottom right;
 	background-repeat: no-repeat;
 	clear: both;
+	margin-top: 99999px;
 }
 
 #body div.innh {

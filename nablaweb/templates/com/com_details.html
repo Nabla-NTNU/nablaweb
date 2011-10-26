@@ -5,9 +5,11 @@
 {% block content %}
 {% block include %}
 <h1>{{ com.com.group.name }}</h1>
+<p>{{ com.description }}</p>
 <dl>{% for person in members %}
     <dt><strong>{{ person.user.user.first_name }} {{ person.user.user.last_name }}</strong> (ble med i {{ com.com.group.name }} {{ person.joined_date }})</dt>
     <dd>{{ person.story }}</dt>{% endfor %}
 </dl>
+<p><small>Sist endret {{ com.last_changed_date }} av {{ com.last_changed_by }}.</small></p>
 {% endblock include %}
 {% endblock content %}
