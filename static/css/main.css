@@ -13,6 +13,8 @@ body {
 	font-size: 100%;
 	font-family: helvetica, sans-serif;
 	height: 100%;
+
+	background: url('../img/body_background_new.jpg') repeat top left;
 }
 
 #head {
