@@ -7,29 +7,7 @@
 
 {% block content %}
 
-{% for content in content_list %}
-    <div class="content_list_object">
-        {% with type=content|classname %}
-
-        {% if type == "news" %}
-            {% include "news/news_detail.html" with news=content ajax="True" summary="True" %}
-        {% endif %}
-
-        {% if type == "event" %}
-            {% include "events/event_detail.html" with event=content ajax="True" summary="True" %}
-        {% endif %}
-
-        {% if type == "bedpres" %}
-            {% include "bedpres/bedpres_detail.html" with bedpres=content ajax="True" summary="True" %}
-        {% endif %}
-
-        {% endwith %}
-    </div>
-    <hr />
-
-{% empty %}
-Tomt.
-{% endfor %}
+{% include "content/content_list.html" with ajax="True" %}
 
 {% comment %}
 TODO: Fiks språk. page -> side

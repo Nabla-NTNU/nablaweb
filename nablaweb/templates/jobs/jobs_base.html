@@ -1,41 +1,37 @@
+{% extends "content/content_detail.html" %}
 {% load bbcode %}
 
-{% block base %}
-<h1>{{ content.headline }} </h1>
-{% if content.relevant_for %}
-Denne stillingsannonsen er rettet mot studenter ved {{ content.get_relevant_for_display }}.<br />
-{% endif %}
-<em>Publisert {{content.created_date|date:"r" }} av {{ content.created_by }}<br />
-{% if content.has_been_edited %}Sist endret {{content.last_changed_date|date:"r" }} av {{ content.last_changed_by }}<br />{% endif %}</em>
+{% block readmore %}
+    <a href="{% url jobs_detail content.company content.id %}">Les mer og meld deg på her</a>
+{% endblock %}
 
-{% block base_after_headline %}{% endblock %}
+{# over ingress #}
+{% block after_headline %}
+    {% if content.relevant_for %}
+        Denne stillingsannonsen er rettet mot studenter ved {{ content.get_relevant_for_display }}.<br />
+    {% endif %}
+{% endblock %}
 
-<p>
-{% if content.deadline_date %}
-<strong>Søkefrist: {{ content.deadline_date }}</strong>
-{% if content.expiry_date %}
-{% if content.show_expiry_date %}
-<br />
-{% endif %}
-{% endif %}
-{% endif %}
-{% if content.expiry_date %}
-{% if content.show_expiry_date %}
-<strong>Stillingannonsen forsvinner {{ content.expiry_date }}</strong>
-{% endif %}
-{% endif %}
-</p>
 
-{% if content.lead_paragraph %}
-<p><strong>{{ content.lead_paragraph }}</strong></p>
-{% endif %}
+{# etter ingress #}
+{% block after_lead_paragraph %}
+    <p>
+        {% if content.deadline_date %}
+            <strong>Søkefrist: {{ content.deadline_date }}</strong>
+            {% if content.expiry_date %}
+                {% if content.show_expiry_date %}
+                    <br />
+                {% endif %}
+            {% endif %}
+        {% endif %}
 
-{% if content.body %}
-<p>{{ content.body|bbcode }}</p>
-{% endif %}
-
-{% if content.info_file %}
-<p><strong>Vedlagt fil: {{ content.info_file.open }} </strong></p>
-{% endif %}
-
+        {% if content.expiry_date %}
+            {% if content.show_expiry_date %}
+                <strong>Stillingannonsen forsvinner {{ content.expiry_date }}</strong>
+            {% endif %}
+        {% endif %}
+    </p>
+    {% if content.info_file %}
+        <p><strong>Vedlagt fil: {{ content.info_file.open }} </strong></p>
+    {% endif %}
 {% endblock %}

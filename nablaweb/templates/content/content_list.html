@@ -1,31 +1,49 @@
-{% extends "base.html" %}
-
-
-
+{% extends ajax|yesno:"ajax.html,base.html" %}
+{% load classname %}
 
 {% block content %}
 
-{% for content in content_list %}
-<h2>{{ content.headline }}</h2>
-<p><em>{{ content.lead_paragraph }}</em></p>
-<p><a href="{{ content.id }}"/>Les mer</a></p>
-<br />
-{% empty %}
-Tomt.
-{% endfor %}
+    {% for content in content_list %}
+        <div class="content_list_object">
+            {% with type=content|classname %}
 
-{% comment %}
-TODO: Fiks språk. page -> side
-{% endcomment %}
+            {% if type == "news" %}
+                {% include "news/news_detail.html" with news=content ajax="True" summary="True" %}
+            {% endif %}
 
-{% if is_paginated %}
-{% if page_obj.has_previous %}
-<a href="?page={{ page_obj.previous_page_number }}">nyere</a>
-{% endif %}
+            {% if type == "event" %}
+                {% include "events/event_detail.html" with event=content ajax="True" summary="True" %}
+            {% endif %}
 
-{% if page_obj.has_next %}
-<a href="?page={{ page_obj.next_page_number }}">eldre</a>
-{% endif %}
-{% endif %}
+            {% if type == "bedpres" %}
+                {% include "bedpres/bedpres_detail.html" with bedpres=content ajax="True" summary="True" %}
+            {% endif %}
+
+            {% if type == "advert" %}
+                {% include "jobs/jobs_detail.html" with job=content ajax="True" summary="True" %}
+            {% endif %}
+
+
+
+            {% endwith %}
+        </div>
+
+    {% empty %}
+        Det er ingenting her. Det var dumt.
+    {% endfor %}
+
+    {% comment %}
+    TODO: Fiks språk. page -> side
+    {% endcomment %}
+
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">nyere</a>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">eldre</a>
+        {% endif %}
+    {% endif %}
 
 {% endblock %}

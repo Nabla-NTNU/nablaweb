@@ -8,11 +8,13 @@
 <h2>{% block headline %}{{ content.headline }}{% endblock %}</h2>
 
 {# Informasjon om hvilken type content dette er #}
+{% if content_type %}
 <div class="meta">
     {% block content_type %}
-        Endre {{ content|classname }}/{{ content|classname }}_base.html
+        {{ content_type }}
     {% endblock %}
 </div>
+{% endif %}
 
 <div class="innhWrapper">
 
@@ -35,7 +37,9 @@
 {# Ingressen #}
 {% block lead_paragraph %}
     {% if content.lead_paragraph %}
-        <p><strong>{{ content.lead_paragraph }}</strong></p>
+        {% if not summary %}<strong>{% endif %}
+            <p>{{ content.lead_paragraph|bbcode }}</p>
+        {% if not summary %}</strong>{% endif %}
     {% endif %}
 {% endblock %}
 
