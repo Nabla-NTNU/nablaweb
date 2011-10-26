@@ -48,3 +48,8 @@
 	padding: 0 1px 0 5px;
 	border-width: 1px;
 }
+
+
+#loginBox input:focus { /* andreas var her */
+    outline: none; /* fjerner stygg border ved focus */
+}

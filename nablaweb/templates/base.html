@@ -1,3 +1,5 @@
+{% load avatar_tags %}
+
 <!DOCTYPE HTML>
 <html>
     <head>
@@ -331,6 +333,36 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 			<!-- Her skal det være en del navigasjonsrelatert i tillegg til
 			ekstra informasjon som f.eks. "vi gratulerer" "quote of the day"
 			osv. -->
+            {% if user.is_authenticated %}
+
+            <!-- Viser brukerinformasjon -->
+            <div id="userBox">
+                <div id="usercontainer">
+                    <div id="avatar">
+                        <a href="{% url accounts.views.edit_profile %}">
+                            {% avatar user.username 80 %}
+                        </a>
+                    </div>
+
+                    <div id="userlinks">
+                        <a href="{% url accounts.views.edit_profile %}">
+                            <span class="ui-icon ui-icon-contact"
+                                  style="float:left;"></span>
+                            Endre profil
+                        </a>
+                    </div>
+                </div>
+
+                <div id="userinfo">
+                    <a href="{% url accounts.views.view_member_profile %}">
+                        {{ user.get_full_name }}
+                    </a>
+                </div>
+            </div>
+
+            {% else %}
+
+            <!-- Viser loginboksen -->
 			<div id="loginBox">
 				<form action="/login/" method="post">
                     {% csrf_token %}
@@ -340,6 +372,8 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 					<input class="submit" type="submit" value="" src="../img/login_button.png" />
 				</form>
 			</div>
+
+            {% endif %}
 
 			<ul class="nav">
                 <li class="top"><a href="{% url homepage.views.start %}">Forsida</a></li>
