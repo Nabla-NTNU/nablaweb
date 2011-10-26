@@ -6,7 +6,6 @@
 {% if content.has_been_edited %}Sist endret {{content.last_changed_date|date:"r" }} av {{ content.last_changed_by }}<br />{% endif %}</em>
 
 {% block base_after_headline %}{% endblock %}
-
 {% if content.lead_paragraph %}
 <p><strong>{{ content.lead_paragraph }}</strong></p>
 {% endif %}

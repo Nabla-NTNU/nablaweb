@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends ajax|yesno:"ajax.html,base.html" %}
 
 {% block title %}{{ block.super }} {{ content.headline }}{% endblock %}
 
