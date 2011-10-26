@@ -11,7 +11,8 @@ class GenericList(ListView):
     context_object_name = "content_list"
     template_name = "content/content_list.html"
     
-class EverythingList(GenericList):
+class EverythingList(ContentListView):
+    template_name = "jobs/jobs_list.html"
     @staticmethod
     def active_jobs(request):
         active_jobs = Advert.objects.filter()
