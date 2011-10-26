@@ -90,8 +90,9 @@ div.lcontainer {
 }
 
 #nesteArrang {
+	width: 300px;
+	margin: 20px 10px 0 0;
 	float: left;
-	margin: 0.5% 0 0 0;
 }
 
 #infoPanel {
@@ -104,7 +105,7 @@ div.lcontainer {
 
 #kalender {
 	float: left;
-	margin: 0.5% 0 0 5%;
+	margin: 20px 0 0 10px;
 }
 
 
