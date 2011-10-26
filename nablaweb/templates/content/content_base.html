@@ -10,7 +10,7 @@
 {# Informasjon om hvilken type content dette er #}
 <div class="meta">
     {% block content_type %}
-        Endre {{ content|classname }}/{{ content|classname }}_detail
+        Endre {{ content|classname }}/{{ content|classname }}_base.html
     {% endblock %}
 </div>
 
@@ -55,7 +55,7 @@
 {% block after_body %}{% endblock %}
 
 {% if summary %}
-    {% block readmore %}{% endblock %}
+    <p class="readmore">{% block readmore %}{% endblock %}</p>
 {% endif %}
 
 </div><!--innhWrapper-->
