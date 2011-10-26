@@ -95,14 +95,6 @@ div.lcontainer {
 	float: left;
 }
 
-#infoPanel {
-	float: left;
-	margin: 20px 0 0 0;
-	background: url('../img/info_panel.png') no-repeat top left;
-	width: 236px;
-	height: 132px;
-}
-
 #kalender {
 	float: left;
 	margin: 20px 0 0 10px;
