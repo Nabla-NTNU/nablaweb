@@ -53,21 +53,21 @@
 #body div.middle div.middleBox {
 	width: 633px;
 	height: auto;
-       	background-image: url('../img/middle_box.png');
+    background-image: url('../img/middle_box.png');
 	background-repeat: repeat-y;
 	background-position: top left;;
 	background-color: white;
-
+    margin-bottom: -8px;
 	z-index: 2;
 }
 
 #body div.footBox {
 	height: 43px;
-	margin-top: -8px;
 	background-image: url('../img/foot_box.png');
 	background-position: bottom right;
 	background-repeat: no-repeat;
 	clear: both;
+	margin-top: 8px;
 }
 
 #body div.innh {
