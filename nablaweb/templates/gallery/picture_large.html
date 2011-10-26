@@ -1,7 +1,12 @@
+{% extends "gallery/gallery_base.html" %}
+
+{% block title %}Galleri{% endblock %}
+
+{% block content %} 
 <p><a href="{% url gallery.views.index %}">Galleri</a> >> <a href="{% url gallery.views.album album.id %}">{{ album.title }}</a> >> </p>
 
 <a href="{% url gallery.views.picture_large album.id next_picture.album_picnr %}">
-    <img src="{{ picture.getPictureUrl }}" width=800></img>
+    <img src="{{ picture.getPictureUrl }}" width=500></img>
 </a>
 
 <p>
@@ -26,3 +31,4 @@
 <p>
     <a href="{% url gallery.views.delete_picture album.id picture.album_picnr %}">Slett bildet</a>
 </p>
+{% endblock %}

@@ -1,5 +1,5 @@
-from django.conf.urls.defaults import *
 from gallery.views import AlbumDeleteView
+from django.conf.urls.defaults import *
 
 urlpatterns = patterns('gallery.views',
     (r'^$','index'),
@@ -12,4 +12,5 @@ urlpatterns = patterns('gallery.views',
     (r'^opprett/$', 'add_album'),
     
     url(r'^album/(?P<pk>\d{1,8})/del/$', AlbumDeleteView.as_view(), name='gallery_AlbumDeleteView'),
+    
 )

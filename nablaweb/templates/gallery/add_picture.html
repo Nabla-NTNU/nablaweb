@@ -1,7 +1,13 @@
-<h3>Last opp et nytt bilde til {{ album.title }}</h3>
+{% extends "gallery/gallery_base.html" %}
+
+{% block title %}Galleri{% endblock %}
+
+{% block content %} 
+<h2>Last opp et nytt bilde til {{ album.title }}</h2>
 
 <form action="{% url gallery.views.add_picture album.id %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <p><input type="submit" value="Send" /></p>
 </form>
+{% endblock %}

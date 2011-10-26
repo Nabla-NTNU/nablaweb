@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from PIL import Image
-import os
-import hashlib
-import StringIO
+#from PIL import Image
+#import os
+#import hashlib
+#import StringIO
 
 from django.views.generic import DeleteView
 from django.template import Context, loader, RequestContext
@@ -14,7 +14,7 @@ from django.core.files import *
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from gallery.forms import *
-#from django.template import RequestContext
+
 
 #TODO: -Stripper ikke input paa noen forms, dvs man kan fortsatt bruke tekstinput til aa laste opp html, javascript ect.
 #       (Update) Ser ut til at Django tar seg av dette likevel. 100% trygt?
@@ -24,11 +24,11 @@ from gallery.forms import *
 
 def index(request):
     album_list = Album.objects.all()
-    return render_to_response('gallery/index.html', {'album_list': album_list})
+    return render_to_response('gallery/index.html', {'album_list': album_list}, context_instance=RequestContext(request))
 
 def album(request, *args, **kwargs):
     a = get_object_or_404(Album, pk=kwargs.get('album_id'))
-    return render_to_response('gallery/album.html', {'album': a})
+    return render_to_response('gallery/album.html', {'album': a},context_instance=RequestContext(request))
 
 
 def picture_large(request, *args, **kwargs):
@@ -60,7 +60,7 @@ def picture_large(request, *args, **kwargs):
     """
     picture.increment_number_of_hits()
     return render_to_response('gallery/picture_large.html',
-                             {'picture': picture, 'album': album, 'next_picture':next_picture, 'previous_picture':previous_picture})
+                             {'picture': picture, 'album': album, 'next_picture':next_picture, 'previous_picture':previous_picture},context_instance=RequestContext(request))
 
 
 

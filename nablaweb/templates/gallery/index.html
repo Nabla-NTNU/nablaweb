@@ -1,13 +1,19 @@
-<h1>Nablas Bildearkiv</h1>
+{% extends "gallery/gallery_base.html" %}
+
+{% block title %}Galleri{% endblock %}
+
+{% block content %} 
+<h2>Nablas Bildearkiv</h2>
 <p>Her kan du finne og laste opp bilder fra Nabla-arrangement</p>
 {% if album_list %}
     <table>
-    <tr width="20%">
+    <tr>
     {% for album in album_list %}
-        <td>
+        <td width="150px">
             <a href="{% url gallery.views.album album.id %}">
-            <img src="{% if album.picture_set.all.0.thumbnail %}{{ album.picture_set.all.0.getThumbnailUrl }}{% else %}No Image{% endif %}"></img>
-	        </a></br>
+            <img src="{% if album.picture_set.all.0.thumbnail %}{{ album.picture_set.all.0.getThumbnailUrl }}{% else %}No Image{% endif %}", width="100px"></img>
+	        </a>
+	        </br>
             {{ album.title }}
         </td>
         {% if forloop.counter|divisibleby:"3" %}
@@ -25,3 +31,4 @@
         Lag nytt album
     </a>
 </p>
+{% endblock %}

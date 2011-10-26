@@ -1,4 +1,9 @@
-<h3>Endre {{ album.title }}</h3>
+{% extends "gallery/gallery_base.html" %}
+
+{% block title %}Galleri{% endblock %}
+
+{% block content %} 
+<h2>Endre {{ album.title }}</h2>
 <form action="{% url gallery.views.edit_album album.id %}" method="post">
     {% csrf_token %}
     {{form.as_p}}
@@ -7,3 +12,4 @@
     </p>
 </form>
 <button onClick="parent.location='{% url gallery.views.album album.id %}'">Avbryt</button>
+{% endblock %}

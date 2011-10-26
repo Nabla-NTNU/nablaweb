@@ -1,4 +1,9 @@
-<h3>Endre bilde {{ picture.album_picnr }} in {{ album.title }}</h3>
+{% extends "gallery/gallery_base.html" %}
+
+{% block title %}Galleri{% endblock %}
+
+{% block content %} 
+<h2>Endre bilde {{ picture.album_picnr }} in {{ album.title }}</h2>
 
 <img src="{{ picture.getThumbnailUrl }}" width=180></img>
 
@@ -8,3 +13,4 @@
     <p><input type="submit" value="Send" /></p>
 </form>
 <a href="{% url gallery.views.picture_large album.id picture.album_picnr %}">Avbryt</a>
+{% endblock %}

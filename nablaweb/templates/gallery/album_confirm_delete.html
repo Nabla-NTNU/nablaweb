@@ -1,3 +1,7 @@
+{% extends "gallery/gallery_base.html" %}
+
+{% block title %}Galleri{% endblock %}
+
 {% block album %}
 Er du sikker på at du vil slette "{{album.title}}"<br />
 <form action="" method="post">{% csrf_token %}
