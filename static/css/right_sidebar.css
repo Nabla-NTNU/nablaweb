@@ -31,6 +31,62 @@
 	height: 24px;
 }
 
+#userBox {
+    margin-left: 50px;
+    margin-top: 20px;
+    width: 207px;
+    padding: 5px;
+    background-color: #aaa;
+    border: 2px solid #ddd;
+    border-radius: 9px;
+    -moz-border-radius: 9px;
+    -webkit-border-radius: 9px;
+}
+
+    #userBox a{
+        border:0;
+    }
+
+    #userlinks a, #userinfo a {
+        text-decoration: none;
+        border-bottom: 1px dotted #333;
+        color: black;
+    }
+
+    #userBox a:hover {
+        background-color: #ddd;
+        color: #222;
+    }
+
+    #userBox #usercontainer {
+        display: table-row;
+    }
+
+    #userBox #avatar {
+        display: table-cell;
+        vertical-align: top;
+        width: 80px;
+    }
+
+    #userBox #avatar img {
+        border: 1px solid white;
+    }
+
+    #userBox #userlinks {
+        display: table-cell;
+        vertical-align: middle;
+        padding-left: 6px;
+    }
+
+    #userBox #userinfo {
+        border-top:1px solid #999;
+        margin-left: -5px;
+        margin-right: -5px;
+        text-align: center;
+        padding: 3px;
+    }
+
+
 #body div.right ul.nav { /* Andreas var her */
 	/* Måtte slette litt for å få det til å funke -Nicolai */
 	list-style-type: none;
