@@ -1,7 +1,8 @@
 #userBox {
-    margin-left: 50px;
-    margin-top: 20px;
-    width: 207px;
+/*    margin-left: 50px;
+    margin-top: 20px; */
+    margin: 30px 0 0 26px;
+    width: 208px;
     padding: 5px;
     background-color: #aaa;
     border: 2px solid #ddd;
