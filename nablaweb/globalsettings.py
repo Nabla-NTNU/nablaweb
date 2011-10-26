@@ -129,6 +129,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'events.context_processors.upcoming_events', # Legger til upcoming_events i alle templates.
     'jobs.views.activej',
     'quotes.context_processors.random_quote',
+    'events.context_processors.current_month_calendar',
    )
 
 

@@ -78,3 +78,8 @@
 
 	z-index: 3;
 }
+
+#body img {
+  width: 100%;
+}
+

@@ -133,7 +133,7 @@
 			<a href="kalender.html"><h3 class="overskrift">Mai.</h3></a>
 			<table cellpadding="0" cellspacing="0">
 				<tr>
-					{% for dag in dager|slice:":11" %}
+					{% for dag in dager|slice:":10" %}
 					<td class="
 					{% if forloop.counter != 10 %}
 						{% if dag.arr %}
@@ -220,7 +220,7 @@
 					{% endfor %}
 				</tr>
 				<tr>
-					{% for dag in dager|slice:"20:31" %}
+					{% for dag in dager|slice:"20:30" %}
 					<td class="
 					{% if forloop.counter != 10 %}
 						{% if dag.arr %}

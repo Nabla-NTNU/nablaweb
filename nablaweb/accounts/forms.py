@@ -48,7 +48,7 @@ class RegistrationForm(forms.Form):
                 return self.cleaned_data
 
         except User.DoesNotExist:
-
+            raise forms.ValidationError(("Brukernavn ikke registrert i nabladatabase"))
             if is_ntnu_username(username):
                 return self.cleaned_data
             else:
