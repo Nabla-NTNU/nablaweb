@@ -10,7 +10,7 @@
 	color: #cdceff;
 }
 
-#infoPanel div {
+#infoPanel div.wrapper {
 	margin: 18px 20px 17px 20px;
 	height: 97px;
 	overflow: hidden;

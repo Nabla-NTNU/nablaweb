@@ -124,7 +124,7 @@
 
 		<!-- På infopanelet skal det stå en liste over hvilke arrangementer som hender når bruker holder over en dag i kalenderen. Det skal også komme opp informasjon der når serveren sender brukeren en melding. Hvis ingen av disse tilfellene intreffer skal det default stå reklame eller slide-show av forskjellige egne arrangementer. -->
 		<div id="infoPanel">
-			<div>
+			<div class="wrapper">
 				{% block info%}
 					
 				{# MESSAGES { #}
@@ -137,7 +137,7 @@
 				{% if messages %}
 				      {% for message in messages %}
 				    <div class="message {{ message.tags }}"> 
-					<p>{{ message }}</p>
+					    <p>>> {{ message }}</p>
 				    </div>
 				      {% endfor %}
 				{% endif %}

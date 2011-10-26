@@ -57,6 +57,7 @@
 	background-repeat: repeat-y;
 	background-position: top left;;
 	background-color: white;
+/*Hack for fiksing av problem med at middle div boksen får er uønsket nedre margin*/
     margin-bottom: -99999px;
 	z-index: 2;
 }
