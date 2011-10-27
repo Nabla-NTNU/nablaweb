@@ -20,3 +20,10 @@
 /nablaweb/templates/index.html~
 /nablaweb/urls.py~
 /nablaweb/nabla_development.db
+/nablaweb/feedback/admin.py~
+/nablaweb/feedback/forms.py~
+/nablaweb/feedback/models.py~
+/nablaweb/feedback/views.py~
+/nablaweb/templates/feedback/feedback_base.html~
+/nablaweb/templates/feedback/feedback_form.html~
+/nablaweb/templates/feedback/feedback_success.html~
