@@ -109,6 +109,7 @@ INSTALLED_APPS = (
     'homepage',
     'com',
     'quotes',
+    'feedback',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
