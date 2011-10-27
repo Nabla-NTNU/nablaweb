@@ -14,11 +14,10 @@ urlpatterns = patterns('django.contrib.auth.views',
 )
 
 urlpatterns += patterns('nablaweb.accounts.views',
-    (r'edit/', 'edit_profile'),
-	(r'list/', 'list'),
-    (r'view/', 'view_member_profile'),
-    (r'view/(?P<username>\w+)/', 'view_member_profile'),
-    (r'register/','user_register'),
+    (r'edit/$', 'edit_profile'),
+	(r'view/$', 'list'),
+    (r'view/(?P<username>\w+)/$', 'view_member_profile'),
+    (r'register/$','user_register'),
 #    (r'test/', DetailView.as_view(model=User, id=1)),
 )
 

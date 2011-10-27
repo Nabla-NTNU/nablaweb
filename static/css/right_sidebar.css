@@ -62,14 +62,46 @@
 	padding: 0;
 	border: 0;
 	width: 224px;
-	height: 177px;
-	background: url('../img/menu_panel.png') no-repeat top left;
+
+	position: relative; /* For å posisjonere absolute inni denne */
 }
 
-#body div.right ul.nav { /* Andreas var her */
+/* For å få menyen til å scale bruker jeg absolute positioning */
+
+#body #navWrapper div.top, #body #navWrapper div.middle, #body #navWrapper div.foot {
+	width: 100%;
+	position: absolute;
+	z-index: 1;
+}
+
+#body #navWrapper div.top {
+	height: 177px;
+	background: url('../img/menu_panel_top.png') no-repeat top left;
+	top: 0px;
+}
+
+#body #navWrapper div.middle {
+	height: auto;
+	background: url('../img/menu_panel_middle.png') repeat-y top left;
+	top: 177px;
+	bottom: 7px
+}
+
+#body #navWrapper div.foot {
+	height: 7px;
+	background: url('../img/menu_panel_foot.png') no-repeat top left;
+	bottom: 0px;
+}
+
+/* Disse div-elementene står for bakgrunnen til listen */
+
+#body div.right #navWrapper ul.nav { /* Andreas var her */
 	list-style-type: none;
 	margin: 0;
 	padding: 8px 0 8px 0;
+
+	position: relative;
+	z-index: 2;
 }
 
 #body div.right ul.nav a {

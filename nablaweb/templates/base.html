@@ -354,7 +354,7 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
                 </div>
 
                 <div id="userinfo">
-                    <a href="{% url accounts.views.view_member_profile %}">
+                    <a href="{% url accounts.views.view_member_profile user.username %}">
                         {{ user.get_full_name }}
                     </a>
                 </div>
@@ -382,9 +382,16 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
                     <li><a href="{% url jobs_list %}">Stillingsannonser</a></li>
 					<li><a href="{% url news_list %}">Nyheter</a></li>
 					<li><a href="{% url gallery.views.index %}">Galleriet</a></li>
-					<li class="bottom"><a href="{% url accounts.views.list %}">Brukerliste</a></li>
-					<li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
+					<li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+					<li class="bottom"><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
 				</ul>
+				<div class="clear">&nbsp;</div>
+				<div class="top">
+				</div>
+				<div class="middle">
+				</div>
+				<div class="foot">
+				</div>
 			</div>
 
 			<div id="sideCeller">
