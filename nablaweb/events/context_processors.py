@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from events.models import Event
-from datetime import date
+from datetime import date, datetime
 import calendar
+
 def upcoming_events(request):
     """Legger globalt til en template-variabel upcoming_events"""
 
     # TODO: Denne må filtreres slik at den ikke viser eldre events
-    upcoming_events = Event.objects.all()[:6]
+    upcoming_events = Event.objects.all().filter(event_start__gte=datetime.now()).order_by('event_start')[:6]
 
     return {'upcoming_events': upcoming_events}
 
