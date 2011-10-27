@@ -112,10 +112,10 @@
 
 #body div.right ul.nav li {
 	background-image: url('../img/liste_punkt_midt.png');
-	background-position: 45px 0px;
+	background-position: 30px 0px;
 	background-repeat: no-repeat;
 	height: 19px;
-	padding: 0 0 4px 75px;
+	padding: 0 0 4px 55px;
 }
 
 #body div.right ul.nav li.top {

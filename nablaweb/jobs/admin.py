@@ -5,7 +5,7 @@
 from django.contrib import admin
 from django.forms import ModelForm
 from django.forms import MultipleChoiceField
-from jobs.models import Advert, Company, RelevantForChoices, TagChoices
+from jobs.models import Advert, Company, RelevantForChoices, TagChoices, YearChoices
 
 #class RelevantForAdminForm(ModelForm):
 #    RELEVANT_FOR_CHOICES = ((u'B', u'Biofysikk'), (u'T', u'Teknisk fysikk'), (u'I', u'Industriell matematikk'))
@@ -21,12 +21,28 @@ class CompanyAdmin(admin.ModelAdmin):
     pass
         
 class RelevantForChoicesAdmin(admin.ModelAdmin):
-    pass
+    def get_model_perms(self, request):
+        if request.user.is_superuser:
+            return super(RelevantForChoicesAdmin, self).get_model_perms(request)
+        if request.user.has_perm("jobs.can_see_static_models"):
+            return {}
+        else:
+            return super(RelevantForChoicesAdmin, self).get_model_perms(request)
     
 class TagChoicesAdmin(admin.ModelAdmin):
     pass
+    
+class YearChoicesAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request):
+        if request.user.is_superuser:
+            return super(YearChoicesAdmin, self).get_model_perms(request)
+        if request.user.has_perm("jobs.can_see_static_models"):
+            return {}
+        else:
+            return super(YearChoicesAdmin, self).get_model_perms(request)
 
 admin.site.register(Advert, AdvertAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(RelevantForChoices, RelevantForChoicesAdmin)
 admin.site.register(TagChoices, TagChoicesAdmin)
+admin.site.register(YearChoices, YearChoicesAdmin)
