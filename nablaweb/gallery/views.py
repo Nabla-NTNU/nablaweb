@@ -13,6 +13,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.core.files import *
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+
 from gallery.forms import *
 
 
@@ -70,6 +72,7 @@ def picture_large(request, *args, **kwargs):
 """##############################################################################"""
 
 """ ___ADD ALBUM___ """
+@login_required
 def add_album(request):
     if (request.method == 'POST'):
         form = AlbumForm(request.POST)
@@ -82,6 +85,7 @@ def add_album(request):
     return render_to_response('gallery/add_album.html', {'form': form,}, context_instance=RequestContext(request))
     
 """ ___EDIT ALBUM___ """
+@login_required
 def edit_album(request, *args, **kwargs):
     album = get_object_or_404(Album, pk=kwargs.get('album_id'))
     if (request.method == 'POST'):
@@ -100,7 +104,6 @@ def edit_album(request, *args, **kwargs):
     return render_to_response('gallery/edit_album.html', {'form': form,'album':album}, context_instance=RequestContext(request))
     
 """ ___DELETE ALBUM___ """
-
 class AlbumDeleteView(DeleteView):
     model = Album
     context_object_name = 'album'
@@ -109,6 +112,7 @@ class AlbumDeleteView(DeleteView):
         return reverse('gallery.views.index')
 
 """ ___ADD PICTURE___ """
+@login_required
 def add_picture(request,*args,**kwargs):
     album_id = kwargs.get('album_id')
     current_album = get_object_or_404(Album, pk=album_id)
@@ -123,6 +127,7 @@ def add_picture(request,*args,**kwargs):
     return render_to_response('gallery/add_picture.html', {'form': form,'album':current_album}, context_instance=RequestContext(request))
 
 """ ___EDIT PICTURE___ """
+@login_required
 def edit_picture(request, *args, **kwargs):
     album = get_object_or_404(Album, pk=kwargs.get('album_id'))
     picture = get_object_or_404(Picture, pk=album.picture_set.get(album_picnr=kwargs.get('picture_id')).id)
@@ -137,6 +142,7 @@ def edit_picture(request, *args, **kwargs):
     return render_to_response('gallery/edit_picture.html', {'form':form, 'album':album, 'picture':picture}, context_instance=RequestContext(request))
     
 """ ___DELETE PICTURE___ """
+@login_required
 def delete_picture(request, *args, **kwargs):
     album = get_object_or_404(Album, pk=kwargs.get('album_id'))
     picture = get_object_or_404(Picture, pk=album.picture_set.get(album_picnr=kwargs.get('picture_id')).id)
