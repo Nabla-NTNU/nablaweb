@@ -32,7 +32,10 @@
 	<div id="head">
 	<div class="centeredContainer">
 
-		<div id="nablaNav">&nbsp;</div>
+		<!-- Trenger en variabel her som viser hvilken hovedside man er under
+		Har i css'en kalt de forskjellige klassene one, two osv. etter rekkefølgen
+	i toppen der nabla-logoen er one	-->
+		<div id="nablaNav" class="{{ category }}one">&nbsp;</div>
 		<a style="text-decoration:none;"href="{% url homepage.views.start %}">
 		    <img src="{{ STATIC_URL}}img/nabla.png" />
 		    <h1>Nabla</h1>

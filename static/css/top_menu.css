@@ -1,11 +1,29 @@
+/* Nabla markøren som viser under hvilken kategori du er. */
+
 #head #nablaNav {
 	position: absolute;
-	top 0px;
+	top: 0px;
 	z-index: 1;
 
 	background: url('../img/nabla_inset.png') no-repeat top left;
 	width: 24px;
 	height: 22px;
+}
+
+#head div.one {
+	left: 110px;
+}
+#head div.two {
+	left: 220px;
+}
+#head div.three {
+	left: 300px;
+}
+#head div.four {
+	left: 380px;
+}
+#head div.five {
+	left: 480px;
 }
 
 #headMenu {
