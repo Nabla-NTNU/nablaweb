@@ -414,8 +414,8 @@ class ImgTag(TagBase):
         self.skip_contents(parser)
 
         contents = strip_bbcode(contents).replace(u'"', "%22")
-
-        return u'<img src="%s"></img>' % contents
+#Midlertidig fiks, hiasen
+        return u'<img style="width: 500px" src="%s"></img>' % contents
 
 
 class VideoTag(TagBase):
