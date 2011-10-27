@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     (r'^komite/', include('com.urls')),
     (r'^gallery/', include('gallery.urls')), # Kan ikke endres pga hardkoding i gallery-appen
     (r'^sitat/', include('quotes.urls')),
+    #(r'^feedback/', include('feedback.urls')),
     
     # For aa vise bilder i runserver
     #(r'^nabla_media/(?P<path>.*)$','django.views.static.serve',{'document_root': getattr(settings, 'MEDIA_ROOT', None)}),

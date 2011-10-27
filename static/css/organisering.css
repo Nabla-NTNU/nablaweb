@@ -53,7 +53,7 @@
 #body div.middle div.middleBox {
 	width: 633px;
 	height: auto;
-    background-image: url('../img/middle_box.png');
+  background-image: url('../img/middle_box.png');
 	background-repeat: repeat-y;
 	background-position: top left;;
 	background-color: white;
@@ -81,8 +81,5 @@
 
 	z-index: 3;
 }
-/*
-#body img {
-  width: 100%;
-}*/
+
 

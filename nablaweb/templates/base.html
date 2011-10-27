@@ -17,9 +17,9 @@
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/organisering.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/artikler.css" />
         <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/right_sidebar.css" />
-	<link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />	
-	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/search.css" />
-	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/info.css" />
+        <link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />	
+        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/search.css" />
+        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/info.css" />
         {% endblock css %}
 
         {% block js %}
@@ -36,12 +36,14 @@
 		    <img src="{{ STATIC_URL}}img/nabla.png" />
 		    <h1>Nabla</h1>
 	    </a>
+        {% comment %}
 	    <div id="searchBox">
 		    <form action="search.py" method="post">
 			    <input class="field" type="text" placeholder="Search" name="sok" size="10" />
 			    <input class="submit" type="submit" value="" />
 		    </form>
 	    </div>
+        {% endcomment %}
 		
 		<ul id="headMenu">
 			<li><a href="/om/">Om Nabla</a></li>
