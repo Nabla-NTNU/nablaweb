@@ -110,6 +110,7 @@ INSTALLED_APPS = (
     'com',
     'quotes',
     'feedback',
+    'math_captcha',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -137,3 +138,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 # Hvor passwd-fila til ntnulinuxserverne ligger på gauss. Må bli lastet ned
 # regelmessig med cron eller noe lignende.
 NTNU_PASSWD = '/home/hiasen/passwd'
+
+# MATH CAPTCHA
+MATH_CAPTCHA_QUESTION = ''
+MATH_CAPTCHA_NUMBERS = range(0,40)
+MATH_CAPTCHA_OPERATORS = '+-*/%'

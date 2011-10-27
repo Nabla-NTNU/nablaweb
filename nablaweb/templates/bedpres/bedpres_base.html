@@ -1,5 +1,9 @@
 {% extends "events/event_base.html" %}
 
+{% block readmore %}
+    <a href="{% url bedpres_detail content.id %}">Les mer eller meld deg på</a>
+{% endblock %}
+
 {% block content_type %}
     Bedpres
 {% endblock %}
