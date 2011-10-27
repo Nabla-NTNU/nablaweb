@@ -31,5 +31,4 @@ def current_month_calendar(request):
 
     days =[Day(True,i+1) if bool(events_of_month.filter(event_start=date(year,month,i+1)))  else Day(False,i+1) for i in range(numdays) ]
 
-    print days
     return {'dager': days, 'currentDate': today}
