@@ -1,3 +1,13 @@
+#head #nablaNav {
+	position: absolute;
+	top 0px;
+	z-index: 1;
+
+	background: url('../img/nabla_inset.png') no-repeat top left;
+	width: 24px;
+	height: 22px;
+}
+
 #headMenu {
 	margin: 0;
 	padding: 32px 0 0 0;

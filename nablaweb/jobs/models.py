@@ -5,16 +5,28 @@
 from django.db import models
 from content.models import Content
 
+class YearChoices(models.Model):
+    year = models.IntegerField(blank=False, verbose_name="Klasse", help_text="Klasse: 1, 2, 3, 4 og 5")
+    
+    class Meta:
+        verbose_name = "Klasse"
+        verbose_name_plural = "Klasser"
+        permissions = (
+            ("can_see_static_models", "Can see mostly static models"),
+        )
+    
+    def __unicode__(self):
+        return u'%s' %(str(self.year))
+
 class RelevantForChoices(models.Model):
-    RELEVANT_FOR_CHOICES = ((u'B', u'Biofysikk'), (u'T', u'Teknisk fysikk'), (u'I', u'Industriell matematikk'))
-    choice = models.CharField(max_length=50, verbose_name="Valg", help_text='Mulige valg for "relevant for" når man legger til stillingsannonser.')
+    studieretning = models.CharField(max_length=50, verbose_name="Valg", help_text='Mulige valg for "relevant for" når man legger til stillingsannonser.')
     
     class Meta:
         verbose_name = 'Mulig valg for "relevant for"'
         verbose_name_plural = 'Mulige valg for "relevant for"'
     
     def __unicode__(self):
-        return u'%s' % (self.choice)
+        return u'%s' % (self.studieretning)
         
 class TagChoices(models.Model):
     tag = models.CharField(max_length=100, verbose_name="Tags", help_text="Tags for stillingsannonsen. Eksempler: deltid, sommerjobb, fulltid, utlandet, by. Søkbar.")
@@ -38,8 +50,8 @@ class Company(Content):
 class Advert(Content):
     company = models.ForeignKey('Company')
     
-    # relevant_for = models.CharField(max_length=30, choices=RELEVANT_FOR_CHOICES, blank=False, verbose_name="Relevant for", help_text="Hvem som har interesse av stillingsannonsen") # Hvem som har interesse av aa se stillingsannonsene
-    relevant_for = models.ManyToManyField(RelevantForChoices)
+    relevant_for_group = models.ManyToManyField(RelevantForChoices)
+    relevant_for_year = models.ManyToManyField(YearChoices, blank=True, null=True, verbose_name="Årskull", help_text="Hvilke klasser stillingsannonsen er relevant for")
     tags = models.ManyToManyField(TagChoices)
     
     deadline_date = models.DateTimeField(verbose_name="Frist", blank=True) # Naar frist for soeking er, med klokkeslett
