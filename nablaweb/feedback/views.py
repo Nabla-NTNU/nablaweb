@@ -12,7 +12,6 @@ def feedback_form(request):
         form = FeedbackModelForm(request.POST)
         # print request.META.get("REMOTE_ADDR")
         if form.is_valid():
-            print form.cleaned_data.get("created_by")
             if request.user.is_authenticated(): created_by = unicode(request.user)
             else: created_by = form.cleaned_data.get("created_by")
             
