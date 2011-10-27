@@ -13,7 +13,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.core.files import *
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.auth.contrib.decorators import login_required
+from django.contrib.auth.decorators import login_required
 
 from gallery.forms import *
 
@@ -104,7 +104,6 @@ def edit_album(request, *args, **kwargs):
     return render_to_response('gallery/edit_album.html', {'form': form,'album':album}, context_instance=RequestContext(request))
     
 """ ___DELETE ALBUM___ """
-@login_required
 class AlbumDeleteView(DeleteView):
     model = Album
     context_object_name = 'album'
