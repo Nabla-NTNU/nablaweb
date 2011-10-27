@@ -27,3 +27,5 @@
 /nablaweb/templates/feedback/feedback_base.html~
 /nablaweb/templates/feedback/feedback_form.html~
 /nablaweb/templates/feedback/feedback_success.html~
+/nablaweb/globalsettings.py~
+/nabla_development.db
