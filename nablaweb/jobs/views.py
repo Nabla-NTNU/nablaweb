@@ -4,7 +4,7 @@
 
 from django.views.generic import ListView, RedirectView
 from nablaweb.content.views import *
-from nablaweb.jobs.models import Advert, Company
+from nablaweb.jobs.models import *
 from django.shortcuts import get_object_or_404, get_list_or_404
 
 class GenericList(ListView):

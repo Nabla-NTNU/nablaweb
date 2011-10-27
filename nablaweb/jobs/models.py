@@ -12,7 +12,7 @@ class YearChoices(models.Model):
         verbose_name = "Klasse"
         verbose_name_plural = "Klasser"
         permissions = (
-            ("can_see_static_models", "Can see mostly static models"),
+            ("can_see_static_models", "Can see static models"),
         )
     
     def __unicode__(self):
