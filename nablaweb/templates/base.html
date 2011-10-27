@@ -354,7 +354,7 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
                 </div>
 
                 <div id="userinfo">
-                    <a href="{% url accounts.views.view_member_profile %}">
+                    <a href="{% url accounts.views.view_member_profile user.username %}">
                         {{ user.get_full_name }}
                     </a>
                 </div>

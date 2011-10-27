@@ -10,13 +10,11 @@
 <h2>{% block headline %}{{ content.headline }}{% endblock %}</h2>
 
 {# Informasjon om hvilken type content dette er #}
-{% if content_type %}
 <div class="meta">
     {% block content_type %}
         {{ content_type }}
     {% endblock %}
 </div>
-{% endif %}
 
 <div class="innhWrapper">
 
