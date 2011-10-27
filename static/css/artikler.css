@@ -30,6 +30,10 @@
 #body div.innh div.innhWrapper {
 	margin: 0 71px 0 0;
 	clear: both;
+
+	/* Default tekst i content */
+	font-size: 0.82em;
+	color: #545a5c;
 }
 
 #body div.innh div.detaljer {
@@ -37,7 +41,7 @@
 	margin: 0;
 	padding: 0;
 
-	font-size: 0.8em;
+	font-size: 0.98em;
 	color: #8c9598;
 }
 
@@ -68,6 +72,8 @@
 #body div.innh a.kommentarer {
 	background-image: url('../img/komboks.png');
 }
+
+/* Dette har du gjort ikke sant andreas? -Nicolai */
 
 #body div.innh a:link, #body div.innh a:visited {
 	color: #41b2da;
