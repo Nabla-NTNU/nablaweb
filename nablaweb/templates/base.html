@@ -31,10 +31,11 @@
 <body>
 	<div id="head">
 	<div class="centeredContainer">
-
-		<!-- Trenger en variabel her som viser hvilken hovedside man er under
+        {% comment %}
+		 Trenger en variabel her som viser hvilken hovedside man er under
 		Har i css'en kalt de forskjellige klassene one, two osv. etter rekkefølgen
 	i toppen der nabla-logoen er one	-->
+    {% endcomment %}
 		<div id="nablaNav" class="{{ category }}one"></div>
 		<a style="text-decoration:none;"href="{% url homepage.views.start %}">
 		    <img src="{{ STATIC_URL}}img/nabla.png" />
@@ -63,13 +64,15 @@
 	<div class="centeredContainer">
 
 		<div id="nesteArrang">
-			<a href="arr.html"><h3 class="overskrift">Kommende arrangementer</h3></a>
+          <a href="/arrangement/""><h3 class="overskrift">Kommende arrangementer</h3></a>
 
+        {% comment %}
 			<!-- Denne tabellen skal bli generert av django slik at det er
 			relevante arrangementer som blir presentert, så lenge den bruker
 			css klassene riktig skal det ikke være noe problem, foreslår å
 			bruke 6 arrangementer slik jeg har satt det opp. -->
 
+        {% endcomment %}
 			<table cellspacing="0" cellpadding="0">
 				<tr>
 					{% for event in upcoming_events|slice:":3" %}
@@ -114,7 +117,9 @@
 			</table>
 		</div>
 
+        {% comment %}
 		<!-- På infopanelet skal det stå en liste over hvilke arrangementer som hender når bruker holder over en dag i kalenderen. Det skal også komme opp informasjon der når serveren sender brukeren en melding. Hvis ingen av disse tilfellene intreffer skal det default stå reklame eller slide-show av forskjellige egne arrangementer. -->
+        {% endcomment %}
 		<div id="infoPanel">
 			<div class="wrapper">
 				{% block info%}
@@ -138,6 +143,7 @@
 			</div>
 		</div>
 
+        {% comment %}
 		<!-- Kalenderen med dager der current er merket med en vertikal strek
 		og dager det foregår arrangementer er merket med en eksatra runding på
 		rundingen med tallet for dagen. På siden skal det i utgangspunktet ikke
@@ -148,8 +154,9 @@
 		<!-- Dette trenger denne delen av koden fra django. Trenger en liste kalt
 		mndArr over denne månedens arrangementer samt en variabel currentDate som gir
 		den nåværende datoen i et TimeDateField format. -->
+        {% endcomment %}
 		<div id="kalender">
-            <a href="kalender.html"><h3 class="overskrift">{{ currentDate|date:"F" }}</h3></a>
+            <a href="/arrangement/"><h3 class="overskrift">{{ currentDate|date:"F" }}</h3></a>
 			<table cellpadding="0" cellspacing="0">
 				<tr>
 					{% for dag in dager|slice:":10" %}
@@ -286,10 +293,11 @@
 	<div id="body">
 	<div class="centeredContainer">
 
+        {% comment %}
 		<!-- Her kommer mesteparten av innholdet til å være. Dett er er da den
 		sentrerte boksen som inneholder reklame, artikler, søk, sidemeny osv.
 		omtrent alt som ikke er i head eller neck. -->
-
+        {% endcomment %}
 		<div class="middle">
 			<div class="leftMargin">
 			</div>
@@ -330,9 +338,11 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 		</div>
 		<div class="right">
 
+        {% comment %}
 			<!-- Her skal det være en del navigasjonsrelatert i tillegg til
 			ekstra informasjon som f.eks. "vi gratulerer" "quote of the day"
 			osv. -->
+        {% endcomment %}
             {% if user.is_authenticated %}
 
             <!-- Viser brukerinformasjon -->
