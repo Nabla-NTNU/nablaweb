@@ -64,7 +64,7 @@
 	<div class="centeredContainer">
 
 		<div id="nesteArrang">
-			<a href="arr.html"><h3 class="overskrift">Kommende arrangementer</h3></a>
+          <a href="/arrangement/""><h3 class="overskrift">Kommende arrangementer</h3></a>
 
         {% comment %}
 			<!-- Denne tabellen skal bli generert av django slik at det er
@@ -156,7 +156,7 @@
 		den nåværende datoen i et TimeDateField format. -->
         {% endcomment %}
 		<div id="kalender">
-            <a href="kalender.html"><h3 class="overskrift">{{ currentDate|date:"F" }}</h3></a>
+            <a href="/arrangement/"><h3 class="overskrift">{{ currentDate|date:"F" }}</h3></a>
 			<table cellpadding="0" cellspacing="0">
 				<tr>
 					{% for dag in dager|slice:":10" %}
