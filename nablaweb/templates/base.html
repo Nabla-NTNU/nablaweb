@@ -49,20 +49,6 @@
 			<li class="bLeft"><a href="/sosialt/">Sosialt</a></li>
 			<li id="ar" class="bLeft"><a href="{% url event_list %}">Arrangementer</a></li>
 		</ul>
-        {% comment %}
-        {% if user.is_authenticated %}
-            <p>Logget inn: <a href="{% url accounts.views.edit_profile %}">{{ user.username }}</a> | <a href="/logout/">Logg ut</a></p>
-        {% else %}
-		<form action="/login/" method="post">
-            {% csrf_token %}
-            <ul class="loginBox">
-                <li><input type="text" class="field" placeholder="Username" name="username" size="20" /></li>
-                <li><input type="password" class="field" placeholder="Password" name="password" size="20" /></li>
-                <li><input type="submit" value="Logg inn" /></li>
-            </ul>
-		</form>
-        {% endif %}
-        {% endcomment %}
 
 	</div>
 	</div>
@@ -358,6 +344,12 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
                                   style="float:left;"></span>
                             Endre profil
                         </a>
+                        <br />
+                        <a href="/logout/">
+                            <span class="ui-icon ui-icon-extlink"
+                                  style="float:left;"></span>
+                            Logg ut
+                        </a>
                     </div>
                 </div>
 
@@ -390,9 +382,8 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
                     <li><a href="{% url jobs_list %}">Stillingsannonser</a></li>
 					<li><a href="{% url news_list %}">Nyheter</a></li>
 					<li><a href="{% url gallery.views.index %}">Galleriet</a></li>
-					<li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+					<li class="bottom"><a href="{% url accounts.views.list %}">Brukerliste</a></li>
 					<li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
-					<li class="bottom"><a href="/logout/">Logg ut</a></li>
 				</ul>
 			</div>
 
