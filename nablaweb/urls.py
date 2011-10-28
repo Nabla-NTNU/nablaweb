@@ -1,10 +1,10 @@
+# -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
-from django.conf import settings
 
 urlpatterns = patterns('',
     # Example:
@@ -16,15 +16,16 @@ urlpatterns = patterns('',
     (r'^nyheter/', include('nablaweb.news.urls')),	
     (r'^arrangement/', include('nablaweb.events.urls')),
     (r'^bedpres/', include('nablaweb.bedpres.urls')),
-    (r'^accounts/', include('accounts.urls')),
+    (r'^brukere/', include('accounts.urls')),
     (r'^avatar/', include('avatar.urls')),    
     (r'^stillinger/', include('jobs.urls')),
     (r'^komite/', include('com.urls')),
     (r'^gallery/', include('gallery.urls')), # Kan ikke endres pga hardkoding i gallery-appen
     (r'^sitat/', include('quotes.urls')),
     (r'^feedback/', include('feedback.urls')),
+    (r'^kommentarer/', include('django.contrib.comments.urls')),
     
-    # For aa vise bilder i runserver
+    # For å vise bilder i runserver
     #(r'^nabla_media/(?P<path>.*)$','django.views.static.serve',{'document_root': getattr(settings, 'MEDIA_ROOT', None)}),
     
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
