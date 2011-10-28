@@ -121,7 +121,7 @@ div {
 
     .comment .avatar {
         display: table-cell;
-        width: 15%;
+        width: 70px;
         vertical-align: top;
     }
 
@@ -131,10 +131,11 @@ div {
     
     .comment .bubble_container {
         display: table-cell;
+        width: 85%;
         vertical-align: top;
     }
 
-        .comment .bubble_container .bubble_arrow {
+        .comment .bubble_arrow {
             background-image: url(../img/comment_arrow.png);
             background-repeat: no-repeat;
             background-position: 0 10px;
@@ -142,11 +143,32 @@ div {
             width: 20px;
         }
 
-        .comment .bubble_container .bubble {
+        .comment  .bubble {
             display: table-cell;
             background-color: white;
             border-radius: 15px;
             padding: 10px;
+            overflow: hidden;
+        }
+
+        .comment .bubble .info {
+            color: #999;
+        }
+
+
+        .comment .bubble textarea {
+            outline: none;
+            border: 0;
+            width: 370px;
+        }
+
+        .comment .submit {
+            text-align: center;
+        }
+        
+        .comment .submit input {
+            width: 46%;
+            padding: 5px;
         }
 
 

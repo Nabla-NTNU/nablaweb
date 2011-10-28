@@ -69,11 +69,8 @@
         {% load comments %}
         {% get_comment_count for content as comment_count %}
 
-        {# Vis overskriften og kommentarene kun hvis det er noen kommentarer #}
-        {% if comment_count %}
-            <h3>Kommentarer</h3>
-            {% render_comment_list for content %}
-        {% endif %}
+        <h3>Kommentarer</h3>
+        {% render_comment_list for content %}
 
         {% if user.is_authenticated %}
             {# Vis kommentar-formen #}

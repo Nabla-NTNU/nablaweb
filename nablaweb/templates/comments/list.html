@@ -1,5 +1,6 @@
 {% load humanize %}
 {% load avatar_tags %}
+{% load wordbreak %}
 
 {% for comment in comment_list %}
 <div class="comment" id="c{{ comment.id }}">
@@ -16,7 +17,7 @@
                 <span class="date">{{ comment.submit_date|naturalday }}</span>:
             </div>
             {% load markup %}
-            {{ comment.comment|markdown }}
+            {{ comment.comment|wordbreak:"50"|markdown }}
         </div>
     </div>
 </div>
