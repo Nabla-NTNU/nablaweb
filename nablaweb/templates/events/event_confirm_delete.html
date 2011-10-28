@@ -1,5 +1,5 @@
 {% extends "content/content_confirm_delete.html" %}
 
 {% block include %}
-{% include "events/event_base.html" %}
+    {% include "events/event_base.html" with ajax="True" %}
 {% endblock %}
