@@ -1,31 +1,36 @@
 *.pyc
 *.swp
-/nablaweb/gallery/forms.py~
-/nablaweb/gallery/models.py~
-/nablaweb/gallery/urls.py~
-/nablaweb/gallery/views.py~
-/nablaweb/settings.py~
-/nablaweb/templates/content/content_confirm_delete.html~
-/nablaweb/templates/gallery/add_album.html~
-/nablaweb/templates/gallery/add_picture.html~
-/nablaweb/templates/gallery/album_confirm_delete.html~
-/nablaweb/templates/gallery/album.html~
-/nablaweb/templates/gallery/delete_picture.html~
-/nablaweb/templates/gallery/edit_album.html~
-/nablaweb/templates/gallery/edit_picture.html~
-/nablaweb/templates/gallery/index.html~
-/nablaweb/templates/gallery/new_image_form2.html~
-/nablaweb/templates/gallery/new_image_form.html~
-/nablaweb/templates/gallery/picture_large.html~
-/nablaweb/templates/index.html~
-/nablaweb/urls.py~
-/nablaweb/nabla_development.db
-/nablaweb/feedback/admin.py~
-/nablaweb/feedback/forms.py~
-/nablaweb/feedback/models.py~
-/nablaweb/feedback/views.py~
-/nablaweb/templates/feedback/feedback_base.html~
-/nablaweb/templates/feedback/feedback_form.html~
-/nablaweb/templates/feedback/feedback_success.html~
-/nablaweb/globalsettings.py~
-/nabla_development.db
+
+# Wat? - andreros
+#
+# /nablaweb/gallery/forms.py~
+# /nablaweb/gallery/models.py~
+# /nablaweb/gallery/urls.py~
+# /nablaweb/gallery/views.py~
+nablaweb/settings.py
+# /nablaweb/templates/content/content_confirm_delete.html~
+# /nablaweb/templates/gallery/add_album.html~
+# /nablaweb/templates/gallery/add_picture.html~
+# /nablaweb/templates/gallery/album_confirm_delete.html~
+# /nablaweb/templates/gallery/album.html~
+# /nablaweb/templates/gallery/delete_picture.html~
+# /nablaweb/templates/gallery/edit_album.html~
+# /nablaweb/templates/gallery/edit_picture.html~
+# /nablaweb/templates/gallery/index.html~
+# /nablaweb/templates/gallery/new_image_form2.html~
+# /nablaweb/templates/gallery/new_image_form.html~
+# /nablaweb/templates/gallery/picture_large.html~
+# /nablaweb/templates/index.html~
+# /nablaweb/urls.py~
+# /nablaweb/feedback/admin.py~
+# /nablaweb/feedback/forms.py~
+# /nablaweb/feedback/models.py~
+# /nablaweb/feedback/views.py~
+# /nablaweb/templates/feedback/feedback_base.html~
+# /nablaweb/templates/feedback/feedback_form.html~
+# /nablaweb/templates/feedback/feedback_success.html~
+# /nablaweb/globalsettings.py~
+nablaweb/nabla_development.db
+nabla_development.db
+sqlite.db
+media/

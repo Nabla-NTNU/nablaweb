@@ -16,8 +16,11 @@
                 <span class="namedatedivider">sa</span>
                 <span class="date">{{ comment.submit_date|naturalday }}</span>:
             </div>
-            {% load markup %}
-            {{ comment.comment|wordbreak:"50"|markdown }}
+            <div class="text">
+                {% load markup %}
+                {# Urlize er en extension som gjør linker klikkbare. Failer silently #}
+                {{ comment.comment|markdown:"safe,urlize" }}
+            </div>
         </div>
     </div>
 </div>

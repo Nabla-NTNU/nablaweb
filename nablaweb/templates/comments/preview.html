@@ -4,33 +4,28 @@
 {% block title %}{% trans "Preview your comment" %}{% endblock %}
 
 {% block content %}
-  {% load comments %}
-  <form action="{% comment_form_target %}" method="post">{% csrf_token %}
-    {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
+    <h2>{% trans "Forhåndsvisning av kommentar" %}</h2>
     {% if form.errors %}
-    <h1>{% blocktrans count form.errors|length as counter %}Please correct the error below{% plural %}Please correct the errors below{% endblocktrans %}</h1>
+        <h3>{% blocktrans count form.errors|length as counter %}Please correct the error below{% plural %}Please correct the errors below{% endblocktrans %}</h3>
     {% else %}
-    <h1>{% trans "Preview your comment" %}</h1>
-      <blockquote>{{ comment|linebreaks }}</blockquote>
-      <p>
-      {% trans "and" %} <input type="submit" name="submit" class="submit-post" value="{% trans "Post your comment" %}" id="submit" /> {% trans "or make changes" %}:
-      </p>
+        <div class="comment">
+            <div class="avatar">
+                {% load avatar_tags %}
+                {% avatar user.username 60 %}
+            </div>
+
+            <div class="bubble_container">
+                <div class="bubble_arrow"></div>
+                <div class="bubble">
+                    <div class="text">
+                        {% load markup %}
+                        {# Urlize er en extension som gjør linker klikkbare. Failer silently #}
+                        {{ form.data.comment|markdown:"safe,urlize" }}
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endif %}
-    {% for field in form %}
-      {% if field.is_hidden %}
-        <div>{{ field }}</div>
-      {% else %}
-        {% if field.errors %}{{ field.errors }}{% endif %}
-        <p
-          {% if field.errors %} class="error"{% endif %}
-          {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
-          {{ field.label_tag }} {{ field }}
-        </p>
-      {% endif %}
-    {% endfor %}
-    <p class="submit">
-    <input type="submit" name="submit" class="submit-post" value="{% trans "Post" %}" />
-    <input type="submit" name="preview" class="submit-preview" value="{% trans "Preview" %}" />
-    </p>
-  </form>
+
+    {% include "comments/form.html" %}
 {% endblock %}

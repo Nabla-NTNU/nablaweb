@@ -149,10 +149,14 @@ div {
             border-radius: 15px;
             padding: 10px;
             overflow: hidden;
+            width: 400px;
         }
 
         .comment .bubble .info {
             color: #999;
+        }
+
+        .comment .bubble .text a {
         }
 
 
@@ -160,6 +164,7 @@ div {
             outline: none;
             border: 0;
             width: 370px;
+            font-family: Verdana;
         }
 
         .comment .submit {
@@ -170,6 +175,10 @@ div {
             width: 46%;
             padding: 5px;
         }
+
+        .comment h1 { font-size: 1.7em; }
+        .comment h2 { font-size: 1.5em; }
+        .comment h3 { font-size: 1.2em; }
 
 
 
