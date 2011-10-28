@@ -111,19 +111,17 @@ INSTALLED_APPS = (
     'quotes',
     'feedback',
     'math_captcha',
-    'custom_comments',
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.markup',
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.flatpages',
     'django.contrib.humanize',
 )
-
-COMMENTS_APP = 'custom_comments'
 
 AUTH_PROFILE_MODULE= 'accounts.UserProfile'
 LOGIN_URL = '/login/'

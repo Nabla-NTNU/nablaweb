@@ -1,10 +1,23 @@
-<dl id="comments">
-  {% for comment in comment_list %}
-    <dt id="c{{ comment.id }}">
-        {{ comment.submit_date }} - {{ comment.name }}
-    </dt>
-    <dd>
-        <p>{{ comment.comment }}</p>
-    </dd>
-  {% endfor %}
-</dl>
+{% load humanize %}
+{% load avatar_tags %}
+
+{% for comment in comment_list %}
+<div class="comment" id="c{{ comment.id }}">
+    <div class="avatar">
+        {% avatar comment.user.username 60 %}
+    </div>
+
+    <div class="bubble_container">
+        <div class="bubble_arrow"></div>
+        <div class="bubble">
+            <div class="info">
+                <span class="name">{{ comment.user.get_full_name }}</span> 
+                <span class="namedatedivider">sa</span>
+                <span class="date">{{ comment.submit_date|naturalday }}</span>:
+            </div>
+            {% load markup %}
+            {{ comment.comment|markdown }}
+        </div>
+    </div>
+</div>
+{% endfor %}
