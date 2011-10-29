@@ -10,11 +10,20 @@
         <title>Nabla: {% block title %}Linjeforeningen for Fysikk og Matematikk-studiet på NTNU{% endblock title%}</title>
 
         {% block css %}
-        {% include_media "all.css" %}
+            {% include_media "all.css" %}
         {% endblock css %}
 
         {% block js %}
-        {% include_media "all.js" %}
+            {% include_media "all.js" %}
+
+            <script type="text/javascript">
+            $(function() {
+                // Legger til en datepicker på alt med klasse datepicker
+                $.datepicker.setDefaults($.datepicker.regional['no']);
+                $('.datepicker').datepicker({ firstDay: 1, dateFormat: "dd.mm.yy" });
+            });
+            </script>
+
         {% endblock js %}
     </head>
 

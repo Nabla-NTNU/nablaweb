@@ -10,12 +10,12 @@
     <label for="id_location">Sted:</label>
     {{ form.location }}
   </div>
-  <div class="field datetime">
+  <div class="field">
     {{ form.event_start.errors }}
     <label for="id_event_start">Start:</label>
     {{ form.event_start }}
   </div>
-  <div class="field datetime">
+  <div class="field">
     {{ form.event_end.errors }}
     <label for="id_event_end">Slutt:</label>
     {{ form.event_end }}
@@ -24,11 +24,6 @@
 
 <script>
 
-$(function() {
-    // Velger dato-feltene
-    $.datepicker.setDefaults($.datepicker.regional['no']);
-    $('.datepicker input[name$="0"]').datepicker({ firstDay: 1, dateFormat: "DD, d MM, yy" });
-});
 
 </script>
 
