@@ -1,5 +1,24 @@
+# Bytecode
 *.pyc
+
+# Vim swap files
 *.swp
+
+# Personlige settings
+nablaweb/settings.py
+
+# Databaser
+nablaweb/nabla_development.db
+nabla_development.db
+sqlite.db
+
+# Media-mapper (opplastede brukerbilder o.l.)
+media/
+
+# Disse genereres ved å kjøre ./manage.py generatemedia
+# (Kun nødvendig for production)
+nablaweb/_generated_media/
+nablaweb/_generated_media_names.py
 
 # Wat? - andreros
 #
@@ -7,7 +26,6 @@
 # /nablaweb/gallery/models.py~
 # /nablaweb/gallery/urls.py~
 # /nablaweb/gallery/views.py~
-nablaweb/settings.py
 # /nablaweb/templates/content/content_confirm_delete.html~
 # /nablaweb/templates/gallery/add_album.html~
 # /nablaweb/templates/gallery/add_picture.html~
@@ -30,7 +48,5 @@ nablaweb/settings.py
 # /nablaweb/templates/feedback/feedback_form.html~
 # /nablaweb/templates/feedback/feedback_success.html~
 # /nablaweb/globalsettings.py~
-nablaweb/nabla_development.db
-nabla_development.db
-sqlite.db
-media/
+#
+

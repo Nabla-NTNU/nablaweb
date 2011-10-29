@@ -1,0 +1,6 @@
+# Installer python-saker og ting
+sudo apt-get install python-pip
+sudo pip install -r dependencies.txt
+
+# Markdown extensions
+Les markdown_extensions/readme

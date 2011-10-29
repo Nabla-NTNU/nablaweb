@@ -27,7 +27,7 @@
 $(function() {
     // Velger dato-feltene
     $.datepicker.setDefaults($.datepicker.regional['no']);
-    $('.datetime input[name$="0"]').datepicker($.datepicker.regional[ "no" ]);
+    $('.datepicker input[name$="0"]').datepicker({ firstDay: 1, dateFormat: "DD, d MM, yy" });
 });
 
 </script>

@@ -1,5 +1,0 @@
-# sudo apt-get install python-pip
-# Deretter: sudo pip install markdown (f.eks.)
-markdown
-django
-django-math-captcha
