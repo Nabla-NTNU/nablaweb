@@ -10,17 +10,27 @@
     <label for="id_location">Sted:</label>
     {{ form.location }}
   </div>
-  <div class="field">
+  <div class="field datetime">
     {{ form.event_start.errors }}
     <label for="id_event_start">Start:</label>
     {{ form.event_start }}
   </div>
-  <div class="field">
+  <div class="field datetime">
     {{ form.event_end.errors }}
     <label for="id_event_end">Slutt:</label>
     {{ form.event_end }}
   </div>
 </fieldset>
+
+<script>
+
+$(function() {
+    // Velger dato-feltene
+    $.datepicker.setDefaults($.datepicker.regional['no']);
+    $('.datetime input[name$="0"]').datepicker($.datepicker.regional[ "no" ]);
+});
+
+</script>
 
 <fieldset>
   <legend>Registrering</legend>
