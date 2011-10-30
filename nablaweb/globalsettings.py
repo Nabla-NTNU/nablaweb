@@ -141,6 +141,7 @@ INSTALLED_APPS = (
     'com',
     'quotes',
     'feedback',
+    'nabladet',
     # Eksterne ting
     'math_captcha', # sudo pip install django-match-captcha
     'mediagenerator', # sudo pip install django-mediagenerator

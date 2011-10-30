@@ -23,7 +23,11 @@
                 {% include "jobs/jobs_detail.html" with job=content ajax="True" summary="True" %}
             {% endif %}
 
+            {% if type == "nablad" %}
+                {% include "nabladet/nablad_detail.html" with nablad=content ajax="True" summary="True" %}
+            {% endif %}
 
+            <!-- Er det ingenting her? Sjekk content_list.html -->
 
             {% endwith %}
         </div>
