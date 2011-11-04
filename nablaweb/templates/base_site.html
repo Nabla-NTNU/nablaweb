@@ -7,7 +7,7 @@
         <meta name="copyright" content="WebKom" />
         <meta name="author" content="Fredrik Nicolai Krohg" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Nabla: {% block title %}Linjeforeningen for Fysikk og Matematikk-studiet på NTNU{% endblock title%}</title>
+        <title>Nabla: {% block title %}linjeforeningen for Fysikk og matematikk ved NTNU{% endblock title%}</title>
 
         {% block css %}
             {% include_media "all.css" %}
@@ -23,6 +23,8 @@
                 $('.datepicker').datepicker({ firstDay: 1, dateFormat: "dd.mm.yy" });
             });
             </script>
+            
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
         {% endblock js %}
     </head>
