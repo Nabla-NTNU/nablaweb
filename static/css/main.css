@@ -111,3 +111,92 @@ div {
 	margin: 0;
 	padding: 0;
 }
+
+/* Kommentarer */
+
+.comment {
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+    .comment .avatar {
+        display: table-cell;
+        width: 70px;
+        vertical-align: top;
+    }
+
+        .comment .avatar img {
+            border-radius: 5px;
+        }
+    
+    .comment .bubble_container {
+        display: table-cell;
+        width: 85%;
+        vertical-align: top;
+    }
+
+        .comment .bubble_arrow {
+            background-image: url(../img/comment_arrow.png);
+            background-repeat: no-repeat;
+            background-position: 0 10px;
+            display: table-cell;
+            width: 20px;
+        }
+
+        .comment  .bubble {
+            display: table-cell;
+            background-color: white;
+            border-radius: 15px;
+            padding: 10px;
+            overflow: hidden;
+            width: 400px;
+        }
+
+        .comment .bubble .info {
+            color: #999;
+        }
+
+        .comment .bubble .text a {
+        }
+
+
+        .comment .bubble textarea {
+            outline: none;
+            border: 0;
+            width: 370px;
+            font-family: Verdana;
+        }
+
+        .comment .submit {
+            text-align: center;
+        }
+        
+        .comment .submit input {
+            width: 46%;
+            padding: 5px;
+        }
+
+        .comment h1 { font-size: 1.7em; }
+        .comment h2 { font-size: 1.5em; }
+        .comment h3 { font-size: 1.2em; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

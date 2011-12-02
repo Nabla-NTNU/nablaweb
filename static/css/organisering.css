@@ -57,8 +57,6 @@
 	background-repeat: repeat-y;
 	background-position: top left;;
 	background-color: white;
-/*Hack for fiksing av problem med at middle div boksen får er uønsket nedre margin*/
-    margin-bottom: -99999px;
 	z-index: 2;
 }
 
@@ -68,7 +66,6 @@
 	background-position: bottom right;
 	background-repeat: no-repeat;
 	clear: both;
-	margin-top: 99999px;
 }
 
 #body div.innh {

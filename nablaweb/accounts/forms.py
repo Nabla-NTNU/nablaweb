@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.forms import DateField, DateInput
 from accounts.models import UserProfile
 from django.contrib.auth.models import User
 from accounts.models import UserProfile
@@ -16,6 +17,7 @@ class UserForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
+    birthday = DateField(required=False, widget=DateInput(attrs={'placeholder': 'DD.MM.YY', 'class': 'date'}))
     class Meta:
         model = UserProfile
         exclude = ('user',)

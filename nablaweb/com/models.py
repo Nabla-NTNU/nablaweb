@@ -23,8 +23,8 @@ class ComPage(models.Model):
         return self.last_changed_by is not None
     
     class Meta:
-        verbose_name = "Komitéside"
-        verbose_name_plural = "Komitésider"
+        verbose_name = "komitéside"
+        verbose_name_plural = "komitésider"
         
     # Egne gruppenyheter?
 
@@ -36,5 +36,5 @@ class ComMember(models.Model):
     joined_date = models.DateField(verbose_name="Ble med", help_text="Datoen personen ble med i komiteen")
     
     class Meta:
-        verbose_name = "Komitémedlem"
-        verbose_name_plural = "Komitémedlemmer"
+        verbose_name = "komitémedlem"
+        verbose_name_plural = "komitémedlemmer"

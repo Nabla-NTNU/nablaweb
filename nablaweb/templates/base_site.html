@@ -1,0 +1,446 @@
+{% load avatar_tags %}
+{% load media %}
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta name="copyright" content="WebKom" />
+        <meta name="author" content="Fredrik Nicolai Krohg" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Nabla: {% block title %}linjeforeningen for Fysikk og matematikk ved NTNU{% endblock title%}</title>
+
+        {% block css %}
+            {% include_media "all.css" %}
+        {% endblock css %}
+
+        {% block js %}
+            {% include_media "all.js" %}
+
+            <script type="text/javascript">
+            $(function() {
+                // Legger til en datepicker på alt med klasse datepicker
+                $.datepicker.setDefaults($.datepicker.regional['no']);
+                $('.datepicker').datepicker({ firstDay: 1, dateFormat: "dd.mm.yy" });
+            });
+            </script>
+            
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        {% endblock js %}
+    </head>
+
+<body>
+	<div id="head">
+	<div class="centeredContainer">
+        {% comment %}
+		 Trenger en variabel her som viser hvilken hovedside man er under
+		Har i css'en kalt de forskjellige klassene one, two osv. etter rekkefølgen
+	i toppen der nabla-logoen er one	-->
+    {% endcomment %}
+		<div id="nablaNav" class="{{ category }}one"></div>
+		<a style="text-decoration:none;"href="{% url homepage.views.start %}">
+		    <img src="{{ STATIC_URL}}img/nabla.png" />
+		    <h1>Nabla</h1>
+	    </a>
+        {% comment %}
+	    <div id="searchBox">
+		    <form action="search.py" method="post">
+			    <input class="field" type="text" placeholder="Search" name="sok" size="10" />
+			    <input class="submit" type="submit" value="" />
+		    </form>
+	    </div>
+        {% endcomment %}
+		
+		<ul id="headMenu">
+			<li><a href="/om/">Om Nabla</a></li>
+			<li class="bLeft"><a href="/bedrifter/">Bedrifter</a></li>
+			<li class="bLeft"><a href="/sosialt/">Sosialt</a></li>
+			<li id="ar" class="bLeft"><a href="{% url event_list %}">Arrangementer</a></li>
+		</ul>
+
+	</div>
+	</div>
+    
+	<div id="neck">
+	<div class="centeredContainer">
+
+		<div id="nesteArrang">
+          <a href="/arrangement/"><h3 class="overskrift">Kommende arrangementer</h3></a>
+
+        {% comment %}
+			<!-- Denne tabellen skal bli generert av django slik at det er
+			relevante arrangementer som blir presentert, så lenge den bruker
+			css klassene riktig skal det ikke være noe problem, foreslår å
+			bruke 6 arrangementer slik jeg har satt det opp. -->
+
+        {% endcomment %}
+			<table cellspacing="0" cellpadding="0">
+				<tr>
+					{% for event in upcoming_events|slice:":3" %}
+					<td>
+						<div class="dato">
+							<div class="month">
+								{{ event.event_start|date:"M" }}
+							</div>
+							<div class="day">
+								{{ event.event_start|date:"j" }}
+							</div>
+						</div>
+						<div class="innh">
+							<a href="{% url event_detail event.id %}"><h4>{{ event.headline }}</h4></a>
+                            {% if event.places %}
+							<p>{{ event.free_places}}/{{ event.places }}</p>
+                            {% endif %}
+						</div>
+					</td>
+                    {% endfor %}
+				</tr>
+				<tr>
+					{% for event in upcoming_events|slice:"3:" %}
+					<td>
+						<div class="dato">
+							<div class="month">
+								{{ event.event_start|date:"M" }}
+							</div>
+							<div class="day">
+								{{ event.event_start|date:"j" }}
+							</div>
+						</div>
+						<div class="innh">
+							<a href="{% url event_detail event.id %}"><h4>{{ event.headline }}</h4></a>
+                            {% if event.places %}
+							<p>{{ event.free_places }}/{{ event.places }}</p>
+                            {% endif %}
+						</div>
+					</td>
+                    {% endfor %}
+				</tr>
+			</table>
+		</div>
+
+        {% comment %}
+		<!-- På infopanelet skal det stå en liste over hvilke arrangementer som hender når bruker holder over en dag i kalenderen. Det skal også komme opp informasjon der når serveren sender brukeren en melding. Hvis ingen av disse tilfellene intreffer skal det default stå reklame eller slide-show av forskjellige egne arrangementer. -->
+        {% endcomment %}
+		<div id="infoPanel">
+			<div class="wrapper">
+				{% block info%}
+					
+				{# MESSAGES { #}
+				{% comment %}
+				    Inneholder meldinger til brukeren, med forskjellige css-klasser, som f.eks.
+				    * error
+				    * warning
+				    * info
+				{% endcomment %}
+				{% if messages %}
+				      {% for message in messages %}
+				    <div class="message {{ message.tags }}"> 
+					    <p>&gt;&gt; {{ message }}</p>
+				    </div>
+				      {% endfor %}
+				{% endif %}
+				{# END MESSAGES #}
+				{% endblock info %}
+			</div>
+		</div>
+
+        {% comment %}
+		<!-- Kalenderen med dager der current er merket med en vertikal strek
+		og dager det foregår arrangementer er merket med en eksatra runding på
+		rundingen med tallet for dagen. På siden skal det i utgangspunktet ikke
+		være noe men hvis en bruker trykker på en dag med noe på skal informasjonen
+		slide ut på siden. Kalenderen blir generert fra django slik at hvilken
+		klasse hver dag tilhører tar django seg av. -->
+
+		<!-- Dette trenger denne delen av koden fra django. Trenger en liste kalt
+		mndArr over denne månedens arrangementer samt en variabel currentDate som gir
+		den nåværende datoen i et TimeDateField format. -->
+        {% endcomment %}
+		<div id="kalender">
+            <a href="/arrangement/"><h3 class="overskrift">{{ currentDate|date:"F" }}</h3></a>
+			<table cellpadding="0" cellspacing="0">
+				<tr>
+					{% for dag in dager|slice:":10" %}
+					<td class="
+					{% if forloop.counter != 10 %}
+						{% if dag.arr %}
+							{% if currentDate == dag.date %}
+								doubleCurrentR
+							{% else %}
+								doubleR
+							{% endif %}
+						{% else %}
+							{% if currentDate == dag.date %}
+								plainCurrentR
+							{% else %}
+								plainR
+							{% endif %}
+						{% endif %}
+					{% else %}
+						{% if dag.arr %}
+							{% if currentDate == dag.date %}
+								doubleCurrentD
+							{% else %}
+								doubleD
+							{% endif %}
+						{% else %}
+							{% if currentDate == dag.date %}
+								plainCurrentD
+							{% else %}
+								plainD
+							{% endif %}
+						{% endif %}
+					{% endif %}">
+                    {{ dag.day }} 
+					</td>
+					{% endfor %}
+				</tr>
+				<tr>
+					{% for dag in dager|slice:"20:10:-1" %}
+					<td class="
+						{% if forloop.counter == 1 %}
+							{% if dag.arr %}
+								{% if currentDate == dag.date %}
+									doubleCurrentDR
+								{% else %}
+									doubleDR
+								{% endif %}
+							{% else %}
+								{% if currentDate == dag.date %}
+									plainCurrentDR
+								{% else %}
+									plainDR
+							    {% endif %}
+                            {% endif %}
+						{% else %}
+							{% if forloop.counter != 10 %}
+								{% if dag.arr %}
+									{% if currentDate == dag.date %}
+										doubleCurrentR
+									{% else %}
+										doubleR
+									{% endif %}
+								{% else %}
+									{% if currentDate == dag.date %}
+										plainCurrentR
+									{% else %}
+										plainR
+									{% endif %}
+								{% endif %}
+							{% else %}
+								{% if dag.arr %}
+									{% if currentDate == dag.date %}
+										doubleCurrent
+									{% else %}
+										double
+									{% endif %}
+								{% else %}
+									{% if currentDate == dag.date %}
+										plainCurrent
+									{% else %}
+										plain
+									{% endif %}
+								{% endif %}
+							{% endif %}
+						{% endif %}
+						">
+						</td>
+					{% endfor %}
+				</tr>
+				<tr>
+					{% for dag in dager|slice:"20:30" %}
+					<td class="
+					{% if forloop.counter != 10 %}
+						{% if dag.arr %}
+							{% if currentDate == dag.date %}
+								doubleCurrentR
+							{% else %}
+								doubleR
+							{% endif %}
+						{% else %}
+							{% if currentDate == dag.date %}
+								plainCurrentR
+							{% else %}
+								plainR
+							{% endif %}
+						{% endif %}
+					{% else %}
+						{% if dag.arr %}
+							{% if currentDate == dag.date %}
+								doubleCurrentD
+							{% else %}
+								doubleD
+							{% endif %}
+						{% else %}
+							{% if currentDate == dag.date %}
+								plainCurrentD
+							{% else %}
+								plainD
+							{% endif %}
+						{% endif %}
+					{% endif %}">
+					</td>
+					{% endfor %}
+				</tr>
+			</table>
+
+		</div>
+
+		<span class="clear">&nbsp;</span>
+
+	</div>
+	</div>
+
+	<div id="body">
+	<div class="centeredContainer">
+
+        {% comment %}
+		<!-- Her kommer mesteparten av innholdet til å være. Dett er er da den
+		sentrerte boksen som inneholder reklame, artikler, søk, sidemeny osv.
+		omtrent alt som ikke er i head eller neck. -->
+        {% endcomment %}
+		<div class="middle">
+			<div class="leftMargin">
+			</div>
+			<div class="centerMargin">
+				<div class="box">
+
+					<div class="topBox">
+					</div>
+					<div class="middleBox">
+
+						<div class="clear">&nbsp;</div>
+						<div class="innh">
+
+                            {% block content %}
+							<h2>Arrangementoverskrift</h2>
+							<div class="meta">
+								Arrangement
+							</div>
+							<div class="innhWrapper">
+								<div class="detaljer">
+									<span class="tid">Postet 12. mai 2011 ~ 01:13</span>
+									<a class="person" href="fredrkro_profil.html">Fredrik Nicolai Krohg</a> 
+									<a class="kommentarer" href="kommentarer.html">4 Kommentarer</a>
+								</div>
+								<div class="tekstOgBilde">
+Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla risus tortor, eleifend ut euismod eu, sodales sit amet urna. Integer et ipsum sem, non euismod lorem. Duis pellentesque purus ut nibh volutpat scelerisque consectetur eros viverra. Vivamus pharetra molestie mauris, nec gravida nisi tincidunt nec. Ut egestas varius tincidunt. Vivamus quis eros orci. Vivamus in orci non velit auctor porta vitae a arcu. Vestibulum nibh turpis, mollis et adipiscing euismod, viverra vitae ligula.
+								</div>
+							</div>
+                            {% endblock content %}
+
+						</div>
+						<div class="clear">&nbsp;</div>
+					</div>
+					<div class="footBox">
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="right">
+
+        {% comment %}
+			<!-- Her skal det være en del navigasjonsrelatert i tillegg til
+			ekstra informasjon som f.eks. "vi gratulerer" "quote of the day"
+			osv. -->
+        {% endcomment %}
+            {% if user.is_authenticated %}
+
+            <!-- Viser brukerinformasjon -->
+            <div id="userBox">
+                <div id="usercontainer">
+                    <div id="avatar">
+                        <a href="{% url accounts.views.edit_profile %}">
+                            {% avatar user.username 80 %}
+                        </a>
+                    </div>
+
+                    <div id="userlinks">
+                        <a href="{% url accounts.views.edit_profile %}">
+                            <span class="ui-icon ui-icon-contact"
+                                  style="float:left;"></span>
+                            Endre profil
+                        </a>
+                        <br />
+                        <a href="/logout/">
+                            <span class="ui-icon ui-icon-extlink"
+                                  style="float:left;"></span>
+                            Logg ut
+                        </a>
+                    </div>
+                </div>
+
+                <div id="userinfo">
+                    <a href="{% url accounts.views.view_member_profile user.username %}">
+                        {{ user.get_full_name }}
+                    </a>
+                </div>
+            </div>
+
+            {% else %}
+
+            <!-- Viser loginboksen -->
+			<div id="loginBox">
+				<form action="/login/" method="post">
+                    {% csrf_token %}
+					<input type="text" placeholder="Brukernavn" name="username" size="10" />
+					<input type="password" class="pwd" placeholder="Passord" name="password" size="10" />
+					<input class="submit" type="submit" value="" src="../img/login_button.png" />
+				</form>
+			</div>
+
+            {% endif %}
+
+			<div id="navWrapper">
+				<ul class="nav">
+					<li class="top"><a href="{% url homepage.views.start %}">Forsida</a></li>
+					<li><a href="{% url event_list %}">Arrangement</a></li>
+					<li><a href="{% url bedpres_list %}">Bedriftspresentasjoner</a></li>
+                    <li><a href="{% url jobs_list %}">Stillingsannonser</a></li>
+					<li><a href="{% url news_list %}">Nyheter</a></li>
+					<li><a href="{% url gallery.views.index %}">Galleriet</a></li>
+					<li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+					<li class="bottom"><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
+				</ul>
+				<div class="clear">&nbsp;</div>
+				<div class="top">
+				</div>
+				<div class="middle">
+				</div>
+				<div class="foot">
+				</div>
+			</div>
+
+			<div id="sideCeller">
+                <div></div>
+                {% comment %}
+				<ul>
+					<li class="start">
+					<h2>Vi gratulerer</h2>
+					<ul class="bursdag">
+						<li>Torstein E. Penne</li>
+						<li>Haakon Bakka</li>
+					</ul>
+					</li>
+					<li>
+                        {{ random_quote.info }}<br />
+                        <cite class="quote">{{ random_quote }}</cite>
+                        <cite>{{ random_quote.author }}</cite>
+					</li>
+					<li class="end">
+					<a href="nabladet.html"><div class="img"></div></a>
+					<h5>Ukens nablad!</h5>
+					</li>
+				</ul>
+                {% endcomment %}
+			</div>
+
+		</div>
+
+		<div class="clear"></div>
+		</div>
+	</div>
+
+</body>
+</html>

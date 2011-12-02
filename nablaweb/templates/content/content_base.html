@@ -1,4 +1,4 @@
-{% extends ajax|yesno:"ajax.html,base.html" %}
+{% extends "base.html" %}
 {% load bbcode %}
 {% load humanize %}
 {% load classname %}
@@ -59,7 +59,28 @@
 {% block after_body %}{% endblock %}
 
 {% if summary %}
+    {# Les-mer link #}
     <p class="readmore">{% block readmore %}{% endblock %}</p>
+{% else %}
+
+    {# Kommentarer #}
+    <div id="comments">
+        {# Last kommentarer og hent antall kommentarer #}
+        {% load comments %}
+        {% get_comment_count for content as comment_count %}
+
+        <h3>Kommentarer</h3>
+        {% render_comment_list for content %}
+
+        {% if user.is_authenticated %}
+            {# Vis kommentar-formen #}
+            {% render_comment_form for content %}
+
+            {# Fjern denne linjen om den ikke brukes #}
+            {% get_comment_form for content as comment_form %}
+        {% endif %}
+    </div>
+
 {% endif %}
 
 </div><!--innhWrapper-->

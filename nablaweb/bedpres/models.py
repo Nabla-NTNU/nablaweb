@@ -7,10 +7,11 @@ from events.models import Event
 
 
 class BedPres(Event):
-    BPCID = models.CharField(verbose_name="BPC-id", max_length=16, blank=True)
+    bpcid = models.CharField(verbose_name="BPC-id", max_length=16, blank=True)
 
     class Meta(Event.Meta):
-        verbose_name_plural = "Bedriftspresentasjoner"
+        verbose_name = "bedriftspresentasjon"
+        verbose_name_plural = "bedriftspresentasjoner"
 
     def register_user(self, user):
         super(Event, self).register_user(user)

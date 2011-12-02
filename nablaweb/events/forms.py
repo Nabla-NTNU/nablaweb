@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
-from django.forms import SplitDateTimeField, BooleanField
+from django.forms import SplitDateTimeField, BooleanField 
 from nablaweb.events.models import Event
-from nablaweb.content.forms import ContentForm, ContentFormPreview
+from nablaweb.content.forms import ContentForm, ContentFormPreview, CustomSplitDateTimeWidget
 from nablaweb.content.forms import ContentCharField as EventCharField
 import datetime
 
@@ -11,23 +11,31 @@ import datetime
 # Hvilke datoformat som aksepteres fra brukeren.
 DATE_FORMATS = ['%Y-%m-%d',
                 '%d/%m/%Y',
-                '%d/%m/%y',]
+                '%d/%m/%y',
+                '%d.%m.%Y',
+                '%d.%m.%y',
+                '%d.%n.%Y',
+                '%d.%n.%y',]
 
 TIME_FORMATS = ['%H:%M:%S',
-                '%H:%M',]
-
+                '%H:%M'
+                '%H',]
 
 class EventSplitDateTimeField(SplitDateTimeField):
 
     default_error_messages = {
-        'invalid_date': u'Ugyldig dato. Prøv formatet "DD/MM/ÅÅ".',
+        'invalid_date': u'Ugyldig dato. Prøv formatet "DD.MM.ÅÅÅÅ".',
         'invalid_time': u'Ugyldig tid. Prøv formatet "HH:MM".',
         'required': u'Dette tidspunktet er påkrevd.',
         }
 
+
     def __init__(self, *args, **kwargs):
         kwargs.update(input_date_formats=DATE_FORMATS,
-                      input_time_formats=TIME_FORMATS)
+                      input_time_formats=TIME_FORMATS,
+                      widget=CustomSplitDateTimeWidget(
+                          date_attrs={'placeholder': 'DD.MM.ÅÅÅÅ', 'class': 'datefield datepicker'},
+                          time_attrs={'placeholder': 'TT:MM', 'class': 'timefield'}))
         super(EventSplitDateTimeField, self).__init__(*args, **kwargs)
 
 

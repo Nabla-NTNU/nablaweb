@@ -2,7 +2,7 @@
 
 
 import datetime
-from django.forms import ModelForm, CharField
+from django.forms import ModelForm, CharField, SplitDateTimeWidget, DateInput, TimeInput
 from django.contrib.formtools.preview import FormPreview
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -86,3 +86,10 @@ class ContentFormPreview(UpdateableModelFormPreview):
         context = super(ContentFormPreview, self).get_context(request, form)
         context['form_base'] = self.form_base
         return context
+
+class CustomSplitDateTimeWidget(SplitDateTimeWidget):
+    def __init__(self, attrs=None, date_attrs=None, time_attrs=None, date_format=None, time_format=None):
+        widgets = (
+            DateInput(attrs=date_attrs, format=date_format),
+            TimeInput(attrs=time_attrs, format=time_format))
+        super(SplitDateTimeWidget, self).__init__(widgets, attrs)

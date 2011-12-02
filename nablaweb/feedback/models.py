@@ -11,4 +11,5 @@ class Feedback(models.Model):
     body = models.TextField(verbose_name="Innhold", blank=False)
     
     def __unicode__(self):
-        return self.headline
+        return u'"%s" av %s' % (self.headline,self.created_by)
+        
