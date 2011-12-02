@@ -26,8 +26,10 @@ def current_month_calendar(request):
     today = date.today()
     month = today.month
     year = today.year
+    first_day_current_month = date(year,month,1)
+    first_day_next_month = date(year,month+1,1) if month!=12 else date(year+1,1,1)
     numdays = calendar.mdays[month]
-    events_of_month = Event.objects.filter(event_start__gt=date(year,month,1), event_start__lt=date(year,month+1,1))
+    events_of_month = Event.objects.filter(event_start__gt=first_day_current_month, event_start__lt=first_day_next_month)
 
     days =[Day(True,i+1) if bool(events_of_month.filter(event_start=date(year,month,i+1)))  else Day(False,i+1) for i in range(numdays) ]
 
