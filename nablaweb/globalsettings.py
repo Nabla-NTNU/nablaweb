@@ -133,7 +133,6 @@ INSTALLED_APPS = (
     'accounts',
     'avatar',
     'events',
-    'content',
     'jobs',
     'gallery',
     'bedpres',

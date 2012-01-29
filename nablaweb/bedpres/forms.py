@@ -2,7 +2,7 @@
 
 
 from nablaweb.bedpres.models import BedPres
-from nablaweb.events.forms import EventForm, EventFormPreview
+from nablaweb.events.forms import EventForm
 import bpc_core
 
 
