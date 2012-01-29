@@ -3,16 +3,16 @@
 
 from django.conf.urls.defaults import *
 from nablaweb.events.models import Event
-from nablaweb.events.forms import EventForm, EventFormPreview
+from nablaweb.events.forms import EventForm
 from nablaweb.events.views import EventDetailView, EventListView, EventDeleteView, UserEventView
 
 
 urlpatterns = patterns('nablaweb.events.views',
 
     # Administrasjon
-    (r'^opprett/$', EventFormPreview(form=EventForm)),
-    (r'^(?P<pk>\d{1,8})/endre$', EventFormPreview(form=EventForm)),
-    (r'^(?P<pk>\d{1,8})/slette$', EventDeleteView.as_view()),
+#    (r'^opprett/$', EventFormPreview(form=EventForm)),
+#    (r'^(?P<pk>\d{1,8})/endre$', EventFormPreview(form=EventForm)),
+#    (r'^(?P<pk>\d{1,8})/slette$', EventDeleteView.as_view()),
     url(r'^(?P<pk>\d{1,8})/admin$',
         'administer',
         name='event_admin'),
