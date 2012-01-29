@@ -3,7 +3,7 @@
 # Views for stillingsannonser-appen
 
 from django.views.generic import ListView, RedirectView
-from nablaweb.content.views import *
+from nablaweb.news.views import *
 from nablaweb.jobs.models import *
 from django.shortcuts import get_object_or_404, get_list_or_404
 
@@ -11,7 +11,7 @@ class GenericList(ListView):
     context_object_name = "content_list"
     template_name = "content/content_list.html"
     
-class EverythingList(ContentListView):
+class EverythingList(NewsListView):
     template_name = "jobs/jobs_list.html"
     @staticmethod
     def active_jobs(request):
@@ -31,7 +31,7 @@ class CompanyList(GenericList):
 class DateList(GenericList):
     pass
     
-class ShowJob(ContentDetailView):
+class ShowJob(NewsDetailView):
     model = Advert
     template_name = "jobs/jobs_detail.html"
 

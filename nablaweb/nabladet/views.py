@@ -1,9 +1,9 @@
-from content.views import ContentListView, ContentDetailView, ContentDeleteView
+from news.views import NewsListView, NewsDetailView, NewsDeleteView
 from nabladet.models import Nablad
 
-class NabladDetailView(ContentDetailView):
+class NabladDetailView(NewsDetailView):
     model = Nablad
 
-class NabladListView(ContentListView):
+class NabladListView(NewsListView):
     model = Nablad
 
