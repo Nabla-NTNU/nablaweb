@@ -3,8 +3,8 @@
 
 from django.forms import SplitDateTimeField, BooleanField 
 from nablaweb.events.models import Event
-from nablaweb.content.forms import ContentForm, ContentFormPreview, CustomSplitDateTimeWidget
-from nablaweb.content.forms import ContentCharField as EventCharField
+from nablaweb.news.forms import NewsForm, CustomSplitDateTimeWidget
+from nablaweb.news.forms import NewsCharField as EventCharField
 import datetime
 
 
@@ -21,14 +21,13 @@ TIME_FORMATS = ['%H:%M:%S',
                 '%H:%M'
                 '%H',]
 
-class EventSplitDateTimeField(SplitDateTimeField):
 
+class EventSplitDateTimeField(SplitDateTimeField):
     default_error_messages = {
         'invalid_date': u'Ugyldig dato. Prøv formatet "DD.MM.ÅÅÅÅ".',
         'invalid_time': u'Ugyldig tid. Prøv formatet "HH:MM".',
         'required': u'Dette tidspunktet er påkrevd.',
         }
-
 
     def __init__(self, *args, **kwargs):
         kwargs.update(input_date_formats=DATE_FORMATS,
@@ -39,7 +38,7 @@ class EventSplitDateTimeField(SplitDateTimeField):
         super(EventSplitDateTimeField, self).__init__(*args, **kwargs)
 
 
-class EventForm(ContentForm):
+class EventForm(NewsForm):
     # Spesifiser datowidget og aksepterte datoformat.
     event_start = EventSplitDateTimeField(required=True)
     event_end = EventSplitDateTimeField(required=False)
@@ -59,7 +58,7 @@ class EventForm(ContentForm):
     # for de andre registreringsrelaterte feltene, som i tillegg slettes.
     registration_required = BooleanField(required=False)
 
-    class Meta(ContentForm.Meta):
+    class Meta(NewsForm.Meta):
         model = Event
 
     def clean(self):
@@ -130,17 +129,3 @@ class EventForm(ContentForm):
         del cleaned_data['registration_required']
 
         return cleaned_data
-
-
-class EventFormPreview(ContentFormPreview):
-    form_template = 'events/event_form.html'
-    preview_template = 'events/event_preview.html'
-    form_base = 'events/event_form_base.html'
-    success_detail = 'event_detail'
-
-    def get_initial(self, request):
-        initial = super(EventFormPreview, self).get_initial(request)
-        if self.is_updating():
-            original = self.get_instance()
-            initial['registration_required'] = original.registration_required()
-        return initial

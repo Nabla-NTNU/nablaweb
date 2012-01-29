@@ -9,7 +9,7 @@ from events.models import Event
 class BedPres(Event):
     bpcid = models.CharField(verbose_name="BPC-id", max_length=16, blank=True)
 
-    class Meta(Event.Meta):
+    class Meta:
         verbose_name = "bedriftspresentasjon"
         verbose_name_plural = "bedriftspresentasjoner"
 

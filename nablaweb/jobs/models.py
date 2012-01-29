@@ -3,7 +3,7 @@
 # Modeller for stillingsannonser-appen
 
 from django.db import models
-from content.models import Content
+from news.models import News
 
 class YearChoices(models.Model):
     year = models.IntegerField(blank=False, verbose_name="Klasse", help_text="Klasse: 1, 2, 3, 4 og 5")
@@ -38,7 +38,7 @@ class TagChoices(models.Model):
     def __unicode__(self):
         return u'%s' % (self.tag)
 
-class Company(Content):
+class Company(News):
     # Headline er bedriftens navn. Body ment for informasjon om bedriften. Lead_paragraph evt. for en liten blurb om bedriften.
     # Website er bedriftens nettside.    
     website = models.CharField(max_length=200, blank=True, verbose_name="Nettside")
@@ -47,7 +47,7 @@ class Company(Content):
         verbose_name = "Bedrift"
         verbose_name_plural = "Bedrifter"
 
-class Advert(Content):
+class Advert(News):
     company = models.ForeignKey('Company')
     
     relevant_for_group = models.ManyToManyField(RelevantForChoices)

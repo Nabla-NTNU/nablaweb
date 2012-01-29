@@ -3,11 +3,11 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-from content.models import Content
+from news.models import News
 import datetime
 
 
-class Event(Content):
+class Event(News):
     # Indikerer hvem som står bak arrangementet.
     # Dette feltet er valgfritt.
     organizer = models.CharField(max_length=100, blank=True)
@@ -52,7 +52,8 @@ class Event(Content):
     # Dette feltet er bare satt hvis registration_deadline er satt.
     has_queue = models.NullBooleanField(verbose_name="venteliste", null=True, blank=True)
 
-    class Meta(Content.Meta):
+#    class Meta(News.Meta):
+    class Meta:
         verbose_name = "arrangement"
         verbose_name_plural = "arrangement"
 

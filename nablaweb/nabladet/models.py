@@ -1,9 +1,9 @@
 from django.db import models
-from content.models import Content
+from news.models import News
 
 # Create your models here.
 
-class Nablad(Content):
+class Nablad(News):
     pub_date = models.DateField(verbose_name='publisert',  blank=True, null=True)
     file = models.FileField(upload_to='nabladet', verbose_name='PDF-fil')
 

@@ -9,7 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView
-from nablaweb.content.views import ContentListView, ContentDetailView, ContentDeleteView
+from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
 from nablaweb.events.models import Event
 
 # Administrasjon
@@ -72,17 +72,17 @@ def administer(request, pk,
                               context_instance=RequestContext(request))
 
 
-class EventDeleteView(ContentDeleteView):
+class EventDeleteView(NewsDeleteView):
     model = Event
 
 
 # Offentlig
 
-class EventListView(ContentListView):
+class EventListView(NewsListView):
     model = Event
 
 
-class EventDetailView(ContentDetailView):
+class EventDetailView(NewsDetailView):
     model = Event
 
 

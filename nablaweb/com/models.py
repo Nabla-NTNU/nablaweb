@@ -3,7 +3,7 @@
 # Modeller for kom-appen
 
 from django.db import models
-from content.models import Content
+from news.models import News
 from accounts.models import UserProfile, GroupProfile
 
 class ComPage(models.Model):

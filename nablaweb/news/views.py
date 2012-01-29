@@ -1,17 +1,29 @@
 # -*- coding: utf-8 -*-
 
 
-from nablaweb.content.views import ContentListView, ContentDetailView, ContentDeleteView
+from django.core.urlresolvers import reverse
+from django.views.generic import DetailView, ListView, DeleteView
 from nablaweb.news.models import News
 
 
-class NewsListView(ContentListView):
+class NewsListView(ListView):
     model = News
+    context_object_name = 'news_list'
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = self.model.objects.all().order_by('-created_date')
+        return queryset
 
 
-class NewsDetailView(ContentDetailView):
+class NewsDetailView(DetailView):
     model = News
+    context_object_name = 'news'
 
 
-class NewsDeleteView(ContentDeleteView):
+class NewsDeleteView(DeleteView):
     model = News
+    context_object_name = 'news'
+    
+    def get_success_url(self):
+        return reverse("%s_list" % self.model._meta.object_name.lower())
