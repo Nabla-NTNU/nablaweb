@@ -52,7 +52,6 @@ class Event(News):
     # Dette feltet er bare satt hvis registration_deadline er satt.
     has_queue = models.NullBooleanField(verbose_name="venteliste", null=True, blank=True)
 
-#    class Meta(News.Meta):
     class Meta:
         verbose_name = "arrangement"
         verbose_name_plural = "arrangement"
@@ -299,3 +298,4 @@ class EventPenalty(models.Model):
 
     def __unicode__(self):
         return u'EventPenalty: %s, %s' % (self.event, self.user)
+

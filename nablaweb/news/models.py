@@ -11,9 +11,9 @@ class News(models.Model):
     last_changed_date = models.DateTimeField(verbose_name="Redigeringsdato", auto_now=True, null=True)
     last_changed_by = models.ForeignKey(User, verbose_name="Endret av", related_name="%(class)s_edited", editable=False, blank=True, null=True)
 
-    headline = models.CharField(verbose_name="Tittel", max_length=100, blank=False)
-    lead_paragraph = models.TextField(verbose_name="Ingress", blank=True)
-    body = models.TextField(verbose_name="Innhold", blank=True)
+    headline = models.CharField(verbose_name="tittel", max_length=100, blank=False)
+    lead_paragraph = models.TextField(verbose_name="ingress", blank=True)
+    body = models.TextField(verbose_name="innhold", blank=True)
 
     class Meta:
         verbose_name = "nyhet"

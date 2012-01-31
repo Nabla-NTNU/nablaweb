@@ -59,26 +59,46 @@
 				
 				<!-- navigasjonslenker -->
 				<ul class="nav">
-					<li class="/"><a href="#">Hjem</a></li>
-					<li><a href="/arrangement/">Arrangement</a></li>
-					<li><a href="#">Karriere</a></li>
+            
 					<li class="dropdown">
 						<a href="#komiteer"
 							class="dropdown-toggle"
 							data-toggle="dropdown">
-							Komiteer
+                            Development
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu" >
+                            <li><a href="{% url event_list %}">event_list</a></li>
+                            <li><a href="{% url bedpres_list %}">bedpres_list</a></li>
+                            <li><a href="{% url jobs_list %}">jobs_list</a></li>
+                            <li><a href="{% url news_list %}">news_list</a></li>
+                            <li><a href="{% url gallery.views.index %}">gallery.views.index</a></li>
+                            <li><a href="{% url accounts.views.list %}">accounts.views.list</a></li>
+                            <li><a href="{% url accounts.views.user_register %}">accounts.views.user_register</a></li>
+						</ul>
+					</li>
+
+                    <!--
+					<li class="/"><a href="#">Hjem</a></li>
+					<li><a href="/arrangement/">Arrangement</a></li>
+					<li><a href="/karriere/">Karriere</a></li>
+					<li class="dropdown">
+						<a href="#komiteer"
+							class="dropdown-toggle"
+							data-toggle="dropdown">
+							komiteer
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu">
-							<li ><a href="#"><i class="icon star"></i> Styret</a></li>
-							<li><a href="#"><i class="icon glass"></i> Festkomiteen</a></li>
-							<li><a href="#"><i class="icon envelope"></i> Bedriftskomiteen</a></li>
-							<li class="active"><a href="#"><i class="icon white"></i> Kjellerstyret</a></li>
-							<li><a href="#"><i class="icon signal"></i> Edukom</a></li>
-							<li><a href="#"><i class="icon cog"></i> Webkomiteen</a></li>
-							<li><a href="#"><i class="icon pencil"></i> Redaksjonen</a></li>
-							<li><a href="#"><i class="icon music"></i> Maxwells Muntre Musikanter</a></li>
-							<li><a href="#"><i class="icon picture"></i> Ekskursjonskomiteen</a></li>
+							<li ><a href="#"><i class="icon star"></i> styret</a></li>
+							<li><a href="#"><i class="icon glass"></i> festkomiteen</a></li>
+							<li><a href="#"><i class="icon envelope"></i> bedriftskomiteen</a></li>
+							<li class="active"><a href="#"><i class="icon white"></i> kjellerstyret</a></li>
+							<li><a href="#"><i class="icon signal"></i> edukom</a></li>
+							<li><a href="#"><i class="icon cog"></i> webkomiteen</a></li>
+							<li><a href="#"><i class="icon pencil"></i> redaksjonen</a></li>
+							<li><a href="#"><i class="icon music"></i> maxwells muntre musikanter</a></li>
+							<li><a href="#"><i class="icon picture"></i> ekskursjonskomiteen</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -111,6 +131,9 @@
 						</ul>
 					</li>
 				</ul>
+
+                Fjernet alt som ikke fungerer enda.
+                -->
 				
 				<!-- søkefelt -->
 				<!--

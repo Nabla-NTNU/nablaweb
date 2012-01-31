@@ -63,6 +63,7 @@
     <p class="readmore">{% block readmore %}{% endblock %}</p>
 {% else %}
 
+    {% if content %}
     {# Kommentarer #}
     <div id="comments">
         {# Last kommentarer og hent antall kommentarer #}
@@ -80,6 +81,7 @@
             {% get_comment_form for content as comment_form %}
         {% endif %}
     </div>
+    {% endif %}
 
 {% endif %}
 
