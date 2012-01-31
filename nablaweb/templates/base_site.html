@@ -161,52 +161,21 @@
 	<!-- main container -->
 	<div class="container">
 	  
-		<!-- main frontpage row -->
+		<!-- main row -->
 		<div class="row">
 		
-			<!-- content container -->
+			<!-- content -->
 			<div class="span8">
-				
-				<!-- featured item -->
-				<div class="row">
-					<div class="span8">
-						<!--<img src="http://placehold.it/620x200/F9F7ED">-->
-						<img src="http://lorempixel.com/620/200/people/6">
-						<h2>Nabla og Timini-revy</h2>
-						<p>Denne siden viser eksempler på hvordan de forskjellige sidene kan se ut. Det er ikke meningen at alt skal havne på den samme siden. Det er bare for å gjøre det lettere for meg. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-						<p><a class="btn" href="#">Les mer &raquo;</a></p>
-					</div>
-				</div>
-				<hr>
-				<!-- end featured item -->
-				
-				<!-- pair of items #2 -->
-				<div class="row">
-					<div class="span4">
-						<!--<img src="http://placehold.it/300x150/4096EE/000">-->
-						<img src="http://lorempixel.com/300/150/abstract/4">
-						<h2>Åre-depositum</h2>
-						<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-						<p><a class="btn" href="#">Les mer &raquo;</a></p>
-					</div>
-					
-					<div class="span4">
-						<!--<img src="http://placehold.it/300x100">-->
-						<img src="http://lorempixel.com/300/150/sports/7">
-						<h2>Heading</h2>
-						<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-						<p><a class="btn" href="#">Les mer &raquo;</a></p>
-					</div>
-				</div>
-				<!-- end pair of items #2 -->
-				
-				
+			{% block content %}	
+            <h2>Her burde det vært noe</h2>
+            {% endblock content %}	
 			</div> 
 			<!-- end content container -->
 			
 			<!-- sidebar -->
 			<div class="span4">
-			
+
+                {% block sidebar %}
 				<!-- kommende arrangement -->
 				<h2>Kommende arrangement</h2>
 				<div class="well" style="padding: 8px 0;">
@@ -224,15 +193,15 @@
 				<!-- end kommende arrangement -->
 				
 				<!-- reklame -->
-				<!--<img src="http://placehold.it/300x250/CDEB8B/36393D">-->
 				<img src="http://lorempixel.com/300/250/technics/1/Reklame">
 				<!-- end reklame -->
-				
+			    {% endblock sidebar %}
+
 			</div>
 			<!-- end sidebar -->
 			
 		</div>
-		<!-- end frontpage row -->
+		<!-- end main row -->
 		
 
     </div>

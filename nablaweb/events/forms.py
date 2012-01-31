@@ -18,7 +18,7 @@ DATE_FORMATS = ['%Y-%m-%d',
                 '%d.%n.%y',]
 
 TIME_FORMATS = ['%H:%M:%S',
-                '%H:%M'
+                '%H:%M',
                 '%H',]
 
 
