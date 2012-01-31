@@ -2,7 +2,7 @@ body {
 	background-color: #333; /* Background-color of footer */
 }
 
-/* Div which holds all parts of page except footer */
+/* Div that holds all parts of page except footer */
 #whitebox {
 	background-color: white; 
 	padding-top: 60px; 
@@ -10,7 +10,7 @@ body {
 }
 
 /* Makes nav link color brighter */
-.container > .nav > li > a { color: #ccc; }
+.container > .nav > li > a, .container li.dropdown > a { color: #ccc; }
 
 /* Looks prettier */
 h2 { margin-bottom: 5px; }

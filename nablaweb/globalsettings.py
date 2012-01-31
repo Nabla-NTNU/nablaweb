@@ -59,7 +59,7 @@ USE_L10N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, '..', 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -72,7 +72,7 @@ STATIC_URL = '/static/'
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/admin/'
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # django-mediagenerator setings (spør meg (andreros) om du lurer på noe)
 ##############################################################################
@@ -91,7 +91,9 @@ DEV_MEDIA_URL = '/dev_static_generated/'   # Serve files at localhost:8000/DEV_M
 PRODUCTION_MEDIA_URL = 'http://localhost/nablaweb/_generated_media/' 
 
 # Full path to static folder
+# Variabelen heter media fordi mediagenerator ikke er helt up to date
 GLOBAL_MEDIA_DIRS = (os.path.join(PROJECT_ROOT, '..', 'static'),)
+
 
 # Hent media bundles (ting som skal kombineres/kompileres/komprimeres)
 from media_bundles import *
@@ -142,7 +144,7 @@ INSTALLED_APPS = (
     'feedback',
     'nabladet',
     # Eksterne ting
-    'math_captcha', # sudo pip install django-match-captcha
+    'math_captcha', # sudo pip install django-math-captcha
     'mediagenerator', # sudo pip install django-mediagenerator
     # Djangoting
     'django.contrib.auth',

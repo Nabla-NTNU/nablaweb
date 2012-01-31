@@ -6,7 +6,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 admin.autodiscover()
 
-from settings import GLOBAL_MEDIA_DIRS
+from settings import GLOBAL_MEDIA_DIRS, MEDIA_ROOT
 
 urlpatterns = patterns('',
     # Example:
@@ -30,6 +30,9 @@ urlpatterns = patterns('',
     
     # For å dele static files på /static/ under DEBUG
     (r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root': GLOBAL_MEDIA_DIRS[0]}),
+
+    # For å dele media files på /media/ under DEBUG
+    (r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root': MEDIA_ROOT}),
     
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

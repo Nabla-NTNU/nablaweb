@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="iso-8859-1">
+    <meta charset="utf-8">
     <title>Nabla: {% block title %}linjeforeningen for Fysikk og matematikk ved NTNU{% endblock title %}</title>
     <meta name="description" content="Hjemmesiden til linjeforeningen Nabla, for studentene på fysikk og matematikk-masterprogrammet på NTNU">
     <meta name="author" content="Webkomiteen i Nabla">
@@ -53,13 +53,12 @@
 			<!-- navbar container -->
 			<div class="container">
 				<a class="brand" href="#">
-                    <img src="{{ STATIC_URL }}img/nabla-white.svg">
+                    <img src="{{ STATIC_URL }}img/nabla-white.svg" alt="">
 					Nabla
 				</a>
 				
 				<!-- navigasjonslenker -->
 				<ul class="nav">
-            
 					<li class="dropdown">
 						<a href="#komiteer"
 							class="dropdown-toggle"
@@ -68,111 +67,56 @@
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu" >
-                            <li><a href="{% url event_list %}">event_list</a></li>
-                            <li><a href="{% url bedpres_list %}">bedpres_list</a></li>
-                            <li><a href="{% url jobs_list %}">jobs_list</a></li>
-                            <li><a href="{% url news_list %}">news_list</a></li>
-                            <li><a href="{% url gallery.views.index %}">gallery.views.index</a></li>
-                            <li><a href="{% url accounts.views.list %}">accounts.views.list</a></li>
-                            <li><a href="{% url accounts.views.user_register %}">accounts.views.user_register</a></li>
+                            <li><a href="{% url event_list %}">Arrangement: event_list</a></li>
+                            <li><a href="{% url bedpres_list %}">Bedriftspresentasjoner: bedpres_list</a></li>
+                            <li><a href="{% url jobs_list %}">Stillinger: jobs_list</a></li>
+                            <li><a href="{% url news_list %}">Nyheter: news_list</a></li>
+                            <li><a href="{% url gallery.views.index %}">Vis galleri: gallery.views.index</a></li>
+                            <li><a href="{% url accounts.views.list %}">Brukerliste: accounts.views.list</a></li>
+                            <li><a href="{% url accounts.views.user_register %}">Registrer bruker: accounts.views.user_register</a></li>
 						</ul>
 					</li>
 
+                    <!-- søkefelt -->
                     <!--
-					<li class="/"><a href="#">Hjem</a></li>
-					<li><a href="/arrangement/">Arrangement</a></li>
-					<li><a href="/karriere/">Karriere</a></li>
-					<li class="dropdown">
-						<a href="#komiteer"
-							class="dropdown-toggle"
-							data-toggle="dropdown">
-							komiteer
-							<b class="caret"></b>
-						</a>
-						<ul class="dropdown-menu">
-							<li ><a href="#"><i class="icon star"></i> styret</a></li>
-							<li><a href="#"><i class="icon glass"></i> festkomiteen</a></li>
-							<li><a href="#"><i class="icon envelope"></i> bedriftskomiteen</a></li>
-							<li class="active"><a href="#"><i class="icon white"></i> kjellerstyret</a></li>
-							<li><a href="#"><i class="icon signal"></i> edukom</a></li>
-							<li><a href="#"><i class="icon cog"></i> webkomiteen</a></li>
-							<li><a href="#"><i class="icon pencil"></i> redaksjonen</a></li>
-							<li><a href="#"><i class="icon music"></i> maxwells muntre musikanter</a></li>
-							<li><a href="#"><i class="icon picture"></i> ekskursjonskomiteen</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="#omnabla"
-							class="dropdown-toggle"
-							data-toggle="dropdown">
-							Om Nabla
-							<b class="caret"></b>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Komiteer</a></li>
-							<li><a href="#">Historie</a></li>
-							<li><a href="#">Lover</a></li>
-							<li><a href="#">Møtereferater</a></li>
-						</ul>
-					</li>
-					
-					<li><a href="#">Forum</a></li>
-					<li class="dropdown">
-						<a href="nyttig"
-							class="dropdown-toggle"
-							data-toggle="dropdown">
-							Nyttig
-							<b class="caret"></b>
-						</a>
-						<ul class="dropdown-menu">
-							
-							<li><a href="#">Wiki</a></li>
-							<li><a href="#">Brukerliste</a></li>
-						</ul>
-					</li>
-				</ul>
+                    <form class="navbar-search pull-left" action="">
+                        <input type="text" class="search-query span2" placeholder="Søk">
+                    </form>
+                    -->
+                    
+                    {% if user.is_authenticated %}
+                    <!-- bruker-dropdown -->
+                    <ul class="nav pull-right">
+                        <li class="dropdown pull-right">
+                            <a href="#bruker"
+                                class="dropdown-toggle"
+                                data-toggle="dropdown">
+                                <span class="icon white user"></span>{{ user.username }}
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url accounts.views.view_member_profile user.username %}">Vis profil</a></li>
+                                <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/logout">Logg ut</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- end bruker-dropdown -->
+                    {% else %}
 
-                Fjernet alt som ikke fungerer enda.
-                -->
-				
-				<!-- søkefelt -->
-				<!--
-				<form class="navbar-search pull-left" action="">
-					<input type="text" class="search-query span2" placeholder="Søk">
-				</form>
-				-->
-				
-                {% if user.is_authenticated %}
-				<!-- bruker-dropdown -->
-				<ul class="nav pull-right">
-					<li class="dropdown pull-right">
-						<a href="#bruker"
-							class="dropdown-toggle"
-							data-toggle="dropdown">
-                            <span class="icon white user"></span>{{ user.username }}
-							<b class="caret"></b>
-						</a>
-						<ul class="dropdown-menu">
-                            <li><a href="{% url accounts.views.view_member_profile user.username %}">Vis profil</a></li>
-                            <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
-							<li class="divider"></li>
-							<li><a href="/logout">Logg ut</a></li>
-						</ul>
-					</li>
-				</ul>
-				<!-- end bruker-dropdown -->
-                {% else %}
-
-                <!-- loginboks -->
-                <form class="navbar-form pull-right" action="/login/" method="post">
-                    {% csrf_token %}
-                    <input class="span1" type="text" placeholder="Bruker" name="username" />
-                    <input class="span1" type="password"  placeholder="Passord" name="password" />
-                    <input class="submit" type="submit" value="Login" />
-                </form>
-                <!-- end loginboks -->
-                {% endif %}
-				
+                    <!-- loginboks -->
+                    <div>
+                    <form class="navbar-form pull-right" action="/login/" method="post">
+                        {% csrf_token %}
+                        <input class="span1" type="text" placeholder="Bruker" name="username" />
+                        <input class="span1" type="password"  placeholder="Passord" name="password" />
+                        <input class="submit" type="submit" value="Login" />
+                    </form>
+                    </div>
+                    <!-- end loginboks -->
+                    {% endif %}
+			    </ul>	
 			</div>
 			<!-- end navbar container -->
 			
@@ -183,7 +127,7 @@
     
 	<!-- main container -->
 	<div class="container">
-	  
+        {% block main %} 
 		<!-- main row -->
 		<div class="row">
 		
@@ -214,18 +158,20 @@
 					</ul>
 				</div>
 				<!-- end kommende arrangement -->
-				
-				<!-- reklame -->
-				<img src="http://lorempixel.com/300/250/technics/1/Reklame">
-				<!-- end reklame -->
 			    {% endblock sidebar %}
+
+                {% block ad %}
+				<!-- reklame -->
+				<img src="http://lorempixel.com/300/250/technics/1/Reklame" alt="Reklame">
+				<!-- end reklame -->
+                {% endblock ad %}
 
 			</div>
 			<!-- end sidebar -->
 			
 		</div>
 		<!-- end main row -->
-		
+	    {% endblock main %}	
 
     </div>
 	<!-- end main container  -->
@@ -261,8 +207,8 @@
 				<div class="span4" id="twitterbox">
 					<h2>Nabla på Twitter</h2>
 					<!--<img src="img/twitter.svg" class="pull-right"-->
-					<p><a href="#" class="author">@nabla</a>: Påmeldingen til Energy Micro-bedriftspresentasjonen åpner i mandag kl. 12:00</a></p>
-					<p><a href="#" class="author">@nabla</a>: Påmeldingen til Åre er nå åpnet for førsteklassingene</a></p>
+					<p><a href="#" class="author">@nabla</a>: Påmeldingen til Energy Micro-bedriftspresentasjonen åpner i mandag kl. 12:00</p>
+					<p><a href="#" class="author">@nabla</a>: Påmeldingen til Åre er nå åpnet for førsteklassingene</p>
 				</div>
 				
 			</div>

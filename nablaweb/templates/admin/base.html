@@ -10,50 +10,7 @@
 {% block extrahead %}{% endblock %}
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
 
-<style type="text/css">
-    /* Spesielle styles for adminsiden.
-     * Vurder å kopiere admin-cssen til static-mappen
-     * og gjør det der. */
-body {
-    background-image: url({{ STATIC_URL }}img/admin/background.png);
-}
-#header {
-    background-image: url({{ STATIC_URL}}img/body_background_new.jpg);
-    border-bottom: 1px solid #2d2d2d;
-    color: black;
-    border-bottom: 1px solid #2d2d2d;
-}
 
-#header #user-tools a {
-    color: #2d2d2d;
-}
-#branding {
-    display: table-row;
-}
-
-#branding img {
-    display: table-cell;
-    width: 45px;
-    height: 40px;
-    padding: 5px;
-}
-#branding h1 {
-    display: table-cell;
-    font-size: 200%;
-    position: relative;
-    top: -12px;
-    font-family: Limelight, Arial, sans-serif;
-    color: #2D2D2D;
-    text-shadow: -1px -1px 1px #EEEEEF;
-}
-
-#container {
-    max-width: 1000px;
-    width: 100%;
-    margin: auto;
-}
-
-</style>
 </head>
 {% load i18n %}
 
@@ -66,7 +23,7 @@ body {
     <!-- Header -->
     <div id="header">
         <div id="branding">
-            <a href="/"><img src="{{ STATIC_URL }}img/nabla_admin.png" /></a>
+            <!--<a href="/"><img src="{{ STATIC_URL }}img/nabla_admin.png" /></a>-->
                 {% block branding %}{% endblock %}
         </div>
         {% if user.is_active and user.is_staff %}
