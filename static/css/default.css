@@ -1,0 +1,54 @@
+body { 
+	background-color: #333; /* Background-color of footer */
+}
+
+/* Div which holds all parts of page except footer */
+#whitebox {
+	background-color: white; 
+	padding-top: 60px; 
+	padding-bottom: 40px;
+}
+
+/* Makes nav link color brighter */
+.container > .nav > li > a { color: #ccc; }
+
+/* Looks prettier */
+h2 { margin-bottom: 5px; }
+h3 { margin-bottom: 5px; }
+
+/* Nabla logo is a huge svg, so rescale and position it */
+.brand img { height: 18px; margin-bottom: -1px; margin-right: -3px;}
+.brand { font-family:Helvetica; }
+
+/* FOOTER */
+	footer { 
+		background-color: #333;
+		border-top:6px solid #111;
+		color: #ccc; 
+		padding-top: 30px; 
+		padding-bottom: 30px;
+	}
+		
+	/* h2 is black, so make it white */
+	footer h2 {
+		color: #eee; 
+	}
+	footer a { color: #bddeff; }
+	footer #last-comments-box > dl > dd { padding-bottom: 15px; }
+
+/* Custom icons */
+	/* Custom added icons */
+	.icon.custom{background-image:url(../img/facebook-icon.png);}
+	.icon.facebook{background-position:0px 0px;}
+	
+	/* Transparent glyph icons */
+	.icon.red{background-image:url(../img/glyphicons-halflings-sprite-red.png);}
+
+/* Fix for navbar in mobile mode */
+@media (max-width: 480px) {
+	/* No longer fixed on top of screen */
+	.navbar { position: static; }
+	
+	/* Since navbar is no longer floating, no need for extra padding */
+	#whitebox { padding-top: 0; }
+}

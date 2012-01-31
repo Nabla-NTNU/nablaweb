@@ -6,6 +6,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 admin.autodiscover()
 
+from settings import GLOBAL_MEDIA_DIRS
+
 urlpatterns = patterns('',
     # Example:
     # (r'^nablaweb/', include('nablaweb.foo.urls')),
@@ -26,8 +28,8 @@ urlpatterns = patterns('',
     (r'^nabladet/', include('nabladet.urls')),
     (r'^kommentarer/', include('django.contrib.comments.urls')),
     
-    # For å vise bilder i runserver
-    #(r'^nabla_media/(?P<path>.*)$','django.views.static.serve',{'document_root': getattr(settings, 'MEDIA_ROOT', None)}),
+    # For å dele static files på /static/ under DEBUG
+    (r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root': GLOBAL_MEDIA_DIRS[0]}),
     
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

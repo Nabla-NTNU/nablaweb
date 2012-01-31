@@ -1,59 +1,62 @@
+{% load avatar_tags %}
+{% load media %}
+
 <!DOCTYPE HTML>
 <html>
     <head>
         <meta name="copyright" content="WebKom" />
         <meta name="author" content="Fredrik Nicolai Krohg" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>{% block title %}Nabla{% endblock title%}</title>
+        <title>Nabla: {% block title %}linjeforeningen for Fysikk og matematikk ved NTNU{% endblock title%}</title>
 
         {% block css %}
-        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/main.css" />
-        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/top_menu.css" />
-        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/login_table.css" />
-        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/arr_oversikt.css" />
-        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/kalender.css" />
-        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/organisering.css" />
-        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/artikler.css" />
-        <link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/right_sidebar.css" />
-        <link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />    
+            {% include_media "all.css" %}
         {% endblock css %}
 
         {% block js %}
-        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.2.min.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
+            {% include_media "all.js" %}
+
+            <script type="text/javascript">
+            $(function() {
+                // Legger til en datepicker på alt med klasse datepicker
+                $.datepicker.setDefaults($.datepicker.regional['no']);
+                $('.datepicker').datepicker({ firstDay: 1, dateFormat: "dd.mm.yy" });
+            });
+            </script>
+            
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
         {% endblock js %}
     </head>
 
 <body>
 	<div id="head">
 	<div class="centeredContainer">
-
+        {% comment %}
+		 Trenger en variabel her som viser hvilken hovedside man er under
+		Har i css'en kalt de forskjellige klassene one, two osv. etter rekkefølgen
+	i toppen der nabla-logoen er one	-->
+    {% endcomment %}
+		<div id="nablaNav" class="{{ category }}one"></div>
 		<a style="text-decoration:none;"href="{% url homepage.views.start %}">
 		    <img src="{{ STATIC_URL}}img/nabla.png" />
 		    <h1>Nabla</h1>
-		</a>
+	    </a>
+        {% comment %}
+	    <div id="searchBox">
+		    <form action="search.py" method="post">
+			    <input class="field" type="text" placeholder="Search" name="sok" size="10" />
+			    <input class="submit" type="submit" value="" />
+		    </form>
+	    </div>
+        {% endcomment %}
 		
 		<ul id="headMenu">
-			<li><a href="#">Om Nabla</a></li>
-			<li><a href="#">Bedrifter</a></li>
-			<li><a href="#">Sosialt</a></li>
-			<li id="ar"><a href="{% url event_list %}">Arrangementer</a></li>
-			<li id="forumKnapp"><a href="#">FORUM</a></li>
+			<li><a href="/om/">Om Nabla</a></li>
+			<li class="bLeft"><a href="/bedrifter/">Bedrifter</a></li>
+			<li class="bLeft"><a href="/sosialt/">Sosialt</a></li>
+			<li id="ar" class="bLeft"><a href="{% url event_list %}">Arrangementer</a></li>
 		</ul>
-		<span class="clear">&nbsp;</span>
-
-        {% if user.is_authenticated %}
-            <p>Logget inn: <a href="{% url accounts.views.edit_profile %}">{{ user.username }}</a> | <a href="/logout/">Logg ut</a></p>
-        {% else %}
-		<form action="/login/" method="post">
-            {% csrf_token %}
-            <ul class="loginBox">
-                <li><input type="text" class="field" placeholder="Username" name="username" size="20" /></li>
-                <li><input type="password" class="field" placeholder="Password" name="password" size="20" /></li>
-                <li><input type="submit" value="Logg inn" /></li>
-            </ul>
-		</form>
-        {% endif %}
 
 	</div>
 	</div>
@@ -62,13 +65,15 @@
 	<div class="centeredContainer">
 
 		<div id="nesteArrang">
-			<a href="arr.html"><h3 class="overskrift">Kommende arrangementer</h3></a>
+          <a href="/arrangement/"><h3 class="overskrift">Kommende arrangementer</h3></a>
 
+        {% comment %}
 			<!-- Denne tabellen skal bli generert av django slik at det er
 			relevante arrangementer som blir presentert, så lenge den bruker
 			css klassene riktig skal det ikke være noe problem, foreslår å
 			bruke 6 arrangementer slik jeg har satt det opp. -->
 
+        {% endcomment %}
 			<table cellspacing="0" cellpadding="0">
 				<tr>
 					{% for event in upcoming_events|slice:":3" %}
@@ -113,6 +118,33 @@
 			</table>
 		</div>
 
+        {% comment %}
+		<!-- På infopanelet skal det stå en liste over hvilke arrangementer som hender når bruker holder over en dag i kalenderen. Det skal også komme opp informasjon der når serveren sender brukeren en melding. Hvis ingen av disse tilfellene intreffer skal det default stå reklame eller slide-show av forskjellige egne arrangementer. -->
+        {% endcomment %}
+		<div id="infoPanel">
+			<div class="wrapper">
+				{% block info%}
+					
+				{# MESSAGES { #}
+				{% comment %}
+				    Inneholder meldinger til brukeren, med forskjellige css-klasser, som f.eks.
+				    * error
+				    * warning
+				    * info
+				{% endcomment %}
+				{% if messages %}
+				      {% for message in messages %}
+				    <div class="message {{ message.tags }}"> 
+					    <p>&gt;&gt; {{ message }}</p>
+				    </div>
+				      {% endfor %}
+				{% endif %}
+				{# END MESSAGES #}
+				{% endblock info %}
+			</div>
+		</div>
+
+        {% comment %}
 		<!-- Kalenderen med dager der current er merket med en vertikal strek
 		og dager det foregår arrangementer er merket med en eksatra runding på
 		rundingen med tallet for dagen. På siden skal det i utgangspunktet ikke
@@ -123,11 +155,12 @@
 		<!-- Dette trenger denne delen av koden fra django. Trenger en liste kalt
 		mndArr over denne månedens arrangementer samt en variabel currentDate som gir
 		den nåværende datoen i et TimeDateField format. -->
+        {% endcomment %}
 		<div id="kalender">
-			<a href="kalender.html"><h3 class="overskrift">Mai.</h3></a>
+            <a href="/arrangement/"><h3 class="overskrift">{{ currentDate|date:"F" }}</h3></a>
 			<table cellpadding="0" cellspacing="0">
 				<tr>
-					{% for dag in dager|slice:":11" %}
+					{% for dag in dager|slice:":10" %}
 					<td class="
 					{% if forloop.counter != 10 %}
 						{% if dag.arr %}
@@ -158,6 +191,7 @@
 							{% endif %}
 						{% endif %}
 					{% endif %}">
+                    {{ dag.day }} 
 					</td>
 					{% endfor %}
 				</tr>
@@ -214,7 +248,7 @@
 					{% endfor %}
 				</tr>
 				<tr>
-					{% for dag in dager|slice:"20:31" %}
+					{% for dag in dager|slice:"20:30" %}
 					<td class="
 					{% if forloop.counter != 10 %}
 						{% if dag.arr %}
@@ -260,45 +294,24 @@
 	<div id="body">
 	<div class="centeredContainer">
 
+        {% comment %}
 		<!-- Her kommer mesteparten av innholdet til å være. Dett er er da den
 		sentrerte boksen som inneholder reklame, artikler, søk, sidemeny osv.
 		omtrent alt som ikke er i head eller neck. -->
-
-		<div class="left">
-
-			<!-- Ment til å inneholde eventuell reklame -->
-            <img id="sitLogo" src="{{ STATIC_URL}}img/sit_tapir_bw.png" />
-
-		</div>
+        {% endcomment %}
 		<div class="middle">
 			<div class="leftMargin">
-				&nbsp;
 			</div>
 			<div class="centerMargin">
 				<div class="box">
 
 					<div class="topBox">
-						&nbsp;
 					</div>
 					<div class="middleBox">
 
+						<div class="clear">&nbsp;</div>
 						<div class="innh">
 
-                        {# MESSAGES { #}
-                        {% comment %}
-                            Inneholder meldinger til brukeren, med forskjellige css-klasser, som f.eks.
-                            * error
-                            * warning
-                            * info
-                        {% endcomment %}
-                        {% if messages %}
-                              {% for message in messages %}
-                            <div class="message {{ message.tags }}"> 
-                                <p>{{ message }}</p>
-                            </div>
-                              {% endfor %}
-                        {% endif %}
-                        {# END MESSAGES #}
                             {% block content %}
 							<h2>Arrangementoverskrift</h2>
 							<div class="meta">
@@ -317,10 +330,9 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
                             {% endblock content %}
 
 						</div>
-
+						<div class="clear">&nbsp;</div>
 					</div>
 					<div class="footBox">
-						&nbsp;
 					</div>
 
 				</div>
@@ -328,31 +340,82 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 		</div>
 		<div class="right">
 
+        {% comment %}
 			<!-- Her skal det være en del navigasjonsrelatert i tillegg til
 			ekstra informasjon som f.eks. "vi gratulerer" "quote of the day"
 			osv. -->
-            {% comment %}
-			<div id="sok">
-			<form action="search.py" method="get">
-                <input class="box" type="text" placeholder="Søk..." name="sok" size="25" /><input type="image" id="searchKnapp" src="{{ STATIC_URL }}img/go_knapp.png" name="submit" />
-			</form>
-			</div>
-            {% endcomment %}
+        {% endcomment %}
+            {% if user.is_authenticated %}
 
-			<ul class="nav">
-                <li class="top"><a href="{% url homepage.views.start %}">Forsida</a></li>
-                <li><a href="{% url event_list %}">Arrangement</a></li>
-                <li><a href="{% url bedpres_list %}">Bedriftspresentasjoner</a></li>
-                <li><a href="{% url news_list %}">Nyheter</a></li>
-                <li><a href="{% url gallery.views.index %}">Galleriet</a></li>
-                <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
-                <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
-				<li class="bottom"><a href="/logout/">Logg ut</a></li>
-			</ul>
+            <!-- Viser brukerinformasjon -->
+            <div id="userBox">
+                <div id="usercontainer">
+                    <div id="avatar">
+                        <a href="{% url accounts.views.edit_profile %}">
+                            {% avatar user.username 80 %}
+                        </a>
+                    </div>
+
+                    <div id="userlinks">
+                        <a href="{% url accounts.views.edit_profile %}">
+                            <span class="ui-icon ui-icon-contact"
+                                  style="float:left;"></span>
+                            Endre profil
+                        </a>
+                        <br />
+                        <a href="/logout/">
+                            <span class="ui-icon ui-icon-extlink"
+                                  style="float:left;"></span>
+                            Logg ut
+                        </a>
+                    </div>
+                </div>
+
+                <div id="userinfo">
+                    <a href="{% url accounts.views.view_member_profile user.username %}">
+                        {{ user.get_full_name }}
+                    </a>
+                </div>
+            </div>
+
+            {% else %}
+
+            <!-- Viser loginboksen -->
+			<div id="loginBox">
+				<form action="/login/" method="post">
+                    {% csrf_token %}
+					<input type="text" placeholder="Brukernavn" name="username" size="10" />
+					<input type="password" class="pwd" placeholder="Passord" name="password" size="10" />
+					<input class="submit" type="submit" value="" src="../img/login_button.png" />
+				</form>
+			</div>
+
+            {% endif %}
+
+			<div id="navWrapper">
+				<ul class="nav">
+					<li class="top"><a href="{% url homepage.views.start %}">Forsida</a></li>
+					<li><a href="{% url event_list %}">Arrangement</a></li>
+					<li><a href="{% url bedpres_list %}">Bedriftspresentasjoner</a></li>
+                    <li><a href="{% url jobs_list %}">Stillingsannonser</a></li>
+					<li><a href="{% url news_list %}">Nyheter</a></li>
+					<li><a href="{% url gallery.views.index %}">Galleriet</a></li>
+					<li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+					<li class="bottom"><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
+				</ul>
+				<div class="clear">&nbsp;</div>
+				<div class="top">
+				</div>
+				<div class="middle">
+				</div>
+				<div class="foot">
+				</div>
+			</div>
 
 			<div id="sideCeller">
+                <div></div>
+                {% comment %}
 				<ul>
-                    {% comment %}
 					<li class="start">
 					<h2>Vi gratulerer</h2>
 					<ul class="bursdag">
@@ -360,7 +423,6 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 						<li>Haakon Bakka</li>
 					</ul>
 					</li>
-
 					<li>
                         {{ random_quote.info }}<br />
                         <cite class="quote">{{ random_quote }}</cite>
@@ -370,13 +432,14 @@ Morbi quis mattis sem. Vestibulum eget elit dolor, non venenatis risus. Nulla ri
 					<a href="nabladet.html"><div class="img"></div></a>
 					<h5>Ukens nablad!</h5>
 					</li>
-                    {% endcomment %}
 				</ul>
+                {% endcomment %}
 			</div>
 
 		</div>
 
-	</div>
+		<div class="clear"></div>
+		</div>
 	</div>
 
 </body>
