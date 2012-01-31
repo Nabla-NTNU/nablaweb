@@ -34,11 +34,10 @@
 
 
     <!-- Fav and touch icons, for screen and mobile -->
-    <!-- Legg til disse etterhvert som ikon blir laget 
     <link rel="shortcut icon" href="{{STATIC_URL }}img/favicon.ico">
     <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png"> -->
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
   </head>
 
   <body>
@@ -70,13 +69,15 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" >
-                        <li><a href="{% url event_list %}">Arrangement: event_list</a></li>
-                        <li><a href="{% url bedpres_list %}">Bedriftspresentasjoner: bedpres_list</a></li>
-                        <li><a href="{% url jobs_list %}">Stillinger: jobs_list</a></li>
-                        <li><a href="{% url news_list %}">Nyheter: news_list</a></li>
-                        <li><a href="{% url gallery.views.index %}">Vis galleri: gallery.views.index</a></li>
-                        <li><a href="{% url accounts.views.list %}">Brukerliste: accounts.views.list</a></li>
-                        <li><a href="{% url accounts.views.user_register %}">Registrer bruker: accounts.views.user_register</a></li>
+                        <li><a href="{% url event_list %}">event_list</a></li>
+                        <li><a href="{% url bedpres_list %}">bedpres_list</a></li>
+                        <li><a href="{% url jobs_list %}">jobs_list</a></li>
+                        <li><a href="{% url news_list %}">news_list</a></li>
+                        <li><a href="{% url gallery.views.index %}">galleri: gallery.views.index</a></li>
+                        <li><a href="{% url accounts.views.list %}">accounts.views.list</a></li>
+                        <li><a href="{% url accounts.views.user_register %}">accounts.views.user_register</a></li>
+                        <li><a href="{% url feedback.views.feedback_form %}">feedback.views.feedback_form</a></li>
+                        <li><a href="{% url nablad_list %}">nablad_list</a></li>
                     </ul>
                 </li>
             </ul>
@@ -163,10 +164,8 @@
                             <a href="{% url event_detail event.id %}">
                                 <time 
                                     class="label important"
-                                    datetime="{{ event.event_start|date:"c" }}">
-                                    {{ event.event_start|date:"j.M" }}
-                                </time> 
-                                {{ event.headline }}
+                                    datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.M" }}</time> 
+                                 {{ event.headline }}
                             </a>
                         </li>
                         {% endfor %}

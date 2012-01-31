@@ -84,6 +84,7 @@ class EventListView(NewsListView):
 
 class EventDetailView(NewsDetailView):
     model = Event
+    context_object_name = "event"
 
 
 # Bruker

@@ -3,15 +3,29 @@
 {% load humanize %}
 
 {% block content %}
+
 <h2>{{ news.headline }}</h2>
 {{ news.body|markdown }}
+
 {% endblock %}
 
+
+
+
+
 {% block sidebar %}
+
 <table class="table">
 
     <!-- Publisert -->
-    <tr><td>Publisert</td><td>{{ news.created_date|naturalday }} kl. {{ news.created_date|date:"G:i" }}</td></tr>
+    <tr>
+        <td>Publisert</td>
+        <td>
+            <time datetime="{{ news.created_date|date:"c" }}">
+                {{ news.created_date|naturalday }} kl. {{ news.created_date|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
     
     <!-- Av -->
     {% if news.created_by %}
@@ -19,7 +33,14 @@
     {% endif %}
 
     <!-- Sist endret -->
-    <tr><td>Sist endret</td><td>{{ news.last_changed_date|naturalday }} kl. {{ news.last_changed_date|date:"G:i" }}</td></tr>
+    <tr>
+        <td>Sist endret</td>
+        <td>
+            <time datetime="{{ news.last_changed_date|date:"c" }}">
+                {{ news.last_changed_date|naturalday }} kl. {{ news.last_changed_date|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
 
     <!-- Av -->
     {% if news.last_changed_by %}

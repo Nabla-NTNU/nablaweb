@@ -1,1 +1,98 @@
-{% extends "events/event_base.html" %}
+{% extends "base.html" %}
+{% load markup %}
+{% load humanize %}
+
+{% block content %}
+
+<h2>{{ event.headline }}</h2>
+{{ event.body|markdown }}
+
+{% endblock %}
+
+
+
+
+
+{% block sidebar %}
+
+<table class="table">
+
+    <!-- Fra -->
+    <tr>
+        <td>Starter</td>
+        <td>
+            <time datetime="{{ event.event_start|date:"c" }}">
+                {{ event.event_start|naturalday }} kl. {{ event.event_start|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+
+    <!-- Til -->
+    {% if event.event_end %}
+    <tr>
+        <td>Slutter</td>
+        <td>
+            <time datetime="{{ event.event_end|date:"c" }}">
+                {{ event.event_end|naturalday }} kl. {{ event.event_end|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+    {% endif %}
+
+    <!-- Sted -->
+    <tr><td>Sted</td><td>{{ event.location }}</td></tr>
+
+    <!-- Registrering åpner -->
+    {% if event.registration_start %}
+    <tr>
+        <td>Registrering åpner</td>
+        <td>
+            <time datetime="{{ event.registration_start|date:"c" }}">
+                {{ event.registration_start|naturalday }} kl. {{ event.registration_start|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+    {% endif %}
+
+    <!-- Publisert -->
+    <tr>
+        <td>Publisert</td>
+        <td>
+            <time datetime="{{ event.created_date|date:"c" }}">
+                {{ event.created_date|naturalday }} kl. {{ event.created_date|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+    
+    <!-- Av -->
+    {% if event.created_by %}
+    <tr><td>Av</td><td>{{ event.created_by.username }}</td></tr>
+    {% endif %}
+
+    <!-- Sist endret -->
+    <tr>
+        <td>Sist endret</td>
+        <td>
+            <time datetime="{{ event.last_changed_date|date:"c" }}">
+                {{ event.last_changed_date|naturalday }} kl. {{ event.last_changed_date|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+
+    <!-- Av -->
+    {% if event.last_changed_by %}
+    <tr><td>Av</td><td>{{ event.last_changed_by.username }}</td></tr>
+    {% endif %}
+
+</table>
+
+<div class="well" style="padding: 8px 0;">
+    <ul class="nav list">
+        <li class="nav-header">Admin</li>
+        <li><a href="{% url event_admin event.id %}"><i class="icon"></i> Administrer</a></li>
+        <li><a href="#endre"><i class="icon pencil"></i> Endre</a></li>
+        <li><a href="#slett"><i class="icon trash"></i> Slett</a></li>
+    </ul>
+</div>
+
+{% endblock %}
