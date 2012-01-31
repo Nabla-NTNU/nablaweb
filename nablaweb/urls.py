@@ -6,7 +6,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 admin.autodiscover()
 
-from settings import GLOBAL_MEDIA_DIRS, MEDIA_ROOT
+from settings import GLOBAL_MEDIA_DIRS, MEDIA_ROOT, STATIC_URL
 
 urlpatterns = patterns('',
     # Example:
@@ -33,6 +33,10 @@ urlpatterns = patterns('',
 
     # For å dele media files på /media/ under DEBUG
     (r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root': MEDIA_ROOT}),
+
+    # Redirecte til favicon
+    (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': STATIC_URL + 'img/favicon.ico'}),
+    
     
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
