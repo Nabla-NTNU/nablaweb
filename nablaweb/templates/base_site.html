@@ -65,7 +65,7 @@
                     <a href="#komiteer"
                         class="dropdown-toggle"
                         data-toggle="dropdown">
-                        Development
+                        Pages
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" >
@@ -79,6 +79,9 @@
                         <li><a href="{% url feedback.views.feedback_form %}">feedback.views.feedback_form</a></li>
                         <li><a href="{% url nablad_list %}">nablad_list</a></li>
                     </ul>
+                </li>
+                <li>
+                    <a href="/admin">Admin</a>
                 </li>
             </ul>
             <!-- end navigasjonslenker -->
@@ -202,38 +205,70 @@
         <div class="row">
         
             <!-- kontakt -->
-            <div class="span4" id="contact-box">
-                <h2>Kontakt oss</h2>
-                <p>Lurer du på noe? Er du en bedrift som vil komme i kontakt med fysikk og matematikk-studenter? Send en mail til:</p>
-                <address>nabla@nabla.no</address>
+            <div class="span4 kontakt">
+                <h2>Kontakt</h2>
+                <table class="table table-condensed">
+                    <tbody>
+                        <tr><td>Styret</td><td>nabla&nabla;nabla.no</td></tr>
+                        <tr><td>Bedriftskomiteen</td><td>bedkom&nabla;nabla.no</td></tr>
+                        <tr><td>Festkomiteen</td><td>festkom&nabla;nabla.no</td></tr>
+                        <tr><td>Kjellerstyre</td><td>nablakjelleren&nabla;nabla.no</td></tr>
+                        <tr><td>Arrkom</td><td>alumnikom&nabla;nabla.no</td></tr>
+                        <tr><td>Redaksjonen</td><td>nabladet&nabla;nabla.no</td></tr>
+                        <tr><td>Webkomiteen</td><td>webkom&nabla;nabla.no</td></tr>
+                    </tbody>
+                </table>
             </div>
             <!-- end kontakt -->
             
-            <!-- siste kommentarer -->
-            <div class="span4" id="last-comments-box">
-                <h2>Siste kommentarer</h2>
-                <dl>
-                    <dt>John Doe (Kjøp og salg av bøker)</dt>
-                    <dd><a href="#">Noen som selger bøker i kvante og termisk?</a></dd>
-                    
-                    <dt>John-Kåre Bobby (Åre-tur!)</dt>
-                    <dd><a href="#">Dette blir kjempeartig altså. Oh yeah!</a></dd>
-                    
-                    <dt>Kåre Torheim (Diskusjon om snegler)</dt>
-                    <dd><a href="#">Jadde, det går sikkert kjempe bra lorem ipsum dolor sit amet denne kommentarer er ganske [..]</a></dd>
-
-                </dl>
+            <!-- omnabla -->
+            <div class="span4">
+                <h2>Om Nabla</h2>
+                <p>Nabla er linjeforeningen for sivilingeniørprogrammet Fysikk og matematikk på NTNU. Du kan lese mer om studiet på <a href="http://www.ntnu.no/studier/mtfyma">NTNU sine nettsider</a></p>
+                <p><b>Postadresse:</b></p>
+                <address>
+                    Nabla <br>
+                    NT-fakultetet <br>
+                    Realfagbygget, NTNU <br>
+                    N-7491 Trondheim <br>
+                    Norway
+                </address>
             </div>
-            <!-- end siste kommentarer -->
-            
+            <!-- end omnabla -->
+
             <!-- twitterbox -->
             <div class="span4" id="twitterbox">
-                <h2>Nabla på Twitter</h2>
-                <!--<img src="img/twitter.svg" class="pull-right"-->
-                <p><a href="#" class="author">@nabla</a>: Påmeldingen til Energy Micro-bedriftspresentasjonen åpner i mandag kl. 12:00</p>
-                <p><a href="#" class="author">@nabla</a>: Påmeldingen til Åre er nå åpnet for førsteklassingene</p>
+
+                <script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
+                <script>
+                new TWTR.Widget({
+                    version: 2,
+                    type: 'profile',
+                    rpp: 4,
+                    interval: 30000,
+                    width: 'auto',
+                    height: 300,
+                    theme: {
+                        shell: {
+                            background: '#222',
+                            color: '#ffffff'
+                        },
+                        tweets: {
+                            background: '#111',
+                            color: '#abd2eb'
+                        }
+                    },
+                    features: {
+                        scrollbar: false,
+                        loop: false,
+                        live: false,
+                        behavior: 'all'
+                    }
+                }).render().setUser('nabla_ntnu').start();
+                </script>
             </div>
             <!-- end twitterbox -->
+
             
         </div><!-- row -->
         </div><!-- container -->

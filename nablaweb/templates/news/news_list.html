@@ -3,12 +3,13 @@
 {% block title %}Nyheter{% endblock %}
 
 {% block content %}
-<div class="span8">
 {% for news in news_list %}
-    <h2>{{ news.headline }}</h2>
-    <p>{{ news.lead_paragraph }}</p>
-    <p><a class="btn" href="{% url news_detail news.id %}">Les mer &raquo;</a></p>
-    <hr>
+    <div class="row">
+        <div class="span8">
+            <h2>{{ news.headline }}</h2>
+            <p>{{ news.lead_paragraph }}</p>
+            <p><a class="btn" href="{% url news_detail news.id %}">Les mer &raquo;</a></p>
+        </div>
+    </div>
 {% endfor %}
-</div>
 {% endblock content %}

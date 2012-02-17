@@ -1,5 +1,5 @@
 body { 
-	background-color: #333; /* Background-color of footer */
+	background-color: #000; /* Background-color of footer */
 }
 
 /* Div that holds all parts of page except footer */
@@ -22,19 +22,36 @@ h3 { margin-bottom: 5px; }
 
 /* FOOTER */
 	footer { 
-		background-color: #333;
 		border-top:6px solid #111;
 		color: #ccc; 
 		padding-top: 30px; 
 		padding-bottom: 30px;
+    background-image: -webkit-gradient(
+        linear,
+            left bottom,
+                left top,
+                    color-stop(0.25, rgb(15,20,28)),
+                        color-stop(0, rgb(0,0,0))
+                        );
+
 	}
 		
 	/* h2 is black, so make it white */
 	footer h2 {
-		color: #eee; 
+		color: #ccc; 
 	}
 	footer a { color: #bddeff; }
-	footer #last-comments-box > dl > dd { padding-bottom: 15px; }
+
+    footer .kontakt table {
+    }
+        footer .kontakt table th {
+        }
+        footer .kontakt table td {
+            border-top: 0;
+        }
+        footer .kontakt table td:first-child {
+            color: white;
+        }
 
 /* Custom icons */
 	/* Custom added icons */
