@@ -82,16 +82,30 @@ class EventListView(NewsListView):
     model = Event
     context_object_name = "event_list"
 
+    # TODO: For performance reasons, only fetch the needed events.
+    # That is, from Monday in the first week, to Sunday in the last week.
+
     def get_context_data(self, **kwargs):
+        # Get the context from the superclass
         context = super(EventListView, self).get_context_data(**kwargs)
 
-        # Build the calendar
-        from datetime import datetime, date, timedelta
+        # Functions to be used
+        from datetime import date, timedelta
 
-        # Parameters
-        year = 2012
-        month = 2
-        weeks = 5
+        today = date.today()
+
+        # Set parameters from url. (/year/month)
+        try:
+            year = int(self.args[0])
+        except IndexError:
+            year = today.year
+
+        try:
+            month = int(self.args[1])
+        except IndexError:
+            month = today.month
+
+        weeks = 5 # Weeks to be displayed
 
         # Get the monday at the start of the calendar
         first = date(year, month, 1)
@@ -99,7 +113,8 @@ class EventListView(NewsListView):
         last_sunday = first + timedelta(weeks=weeks, days=6)
 
         # Object to add to context
-        calendar = {'month': first, 'weeks': []}
+        calendar = {'first': first, 'weeks': []}
+
 
         for week in range(0, weeks):
             # Add an empty week, with weeknumber
@@ -112,11 +127,19 @@ class EventListView(NewsListView):
                 if day.weekday() == 0:
                     calendar['weeks'][week]['weeknumber'] = day.isocalendar()[1]
 
-                # Get the events
-                events = [event for event in context['event_list'] if event.event_start.date() == day]
+                # Get the events which start at the current day,
+                # or between two dates if an end date exists
+                events = [event for event in context['event_list'] 
+                        if ( event.event_end and event.event_start.date() <= day 
+                        and day <= event.event_end.date() ) or event.event_start.date() == day]
 
                 # Add it to the week
-                calendar['weeks'][week]['days'].append({ 'date': day.day, 'events': events })
+                calendar['weeks'][week]['days'].append({
+                    'date': day.day, 
+                    'events': events,
+                    'differentmonth': (day.month != month),
+                    'current': (day == today),
+                })
 
 
         # Add it to the request context

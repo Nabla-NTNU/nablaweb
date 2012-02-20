@@ -4,27 +4,57 @@
 
 {% block main %}
 
-<h2>{{ calendar.month }} {{ calendar.year }}</h2>
-<table class="table table-bordered" cellpadding=20>
-<tr>
-    <th>Uke#</th><th>Man</th><th>Tir</th><th>Ons</th><th>Tor</th><th>Fre</th>
-    <th>Lør</th><th>Søn</th>
-</tr>
-{% for week in calendar.weeks %}
-<tr>
-    <td>{{ week.weeknumber }}</td>
-    {% for day in week.days %}
-    <td>
-        {{ day.date }}
-        <ul>
-            {% for event in day.events %}
-            <li>{{ event.headline }}</li>
+<!-- calendar row -->
+<div class="row">
+<div class="span12">
+<div id="calWrapper">
+
+    <table class="table table-bordered equal">
+
+    <thead>
+        <caption> <h2>{{ calendar.first|date:"F Y"|capfirst }}</h2> </caption>
+        <tr>
+            <th class="uke">Uke</th>
+            <th>Man</th>
+            <th>Tir</th>
+            <th>Ons</th>
+            <th>Tor</th>
+            <th>Fre</th>
+            <th>Lør</th>
+            <th>Søn</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for week in calendar.weeks %}
+        <tr>
+            <td>{{ week.weeknumber }}</td>
+            {% for day in week.days %}
+            <td class="
+                    {% if day.differentmonth %} differentmonth {% endif %}
+                    {% if day.current %} current {% endif %}
+                ">
+
+                <div class="cell">
+                    <b>{{ day.date }}.</b>
+                    <ul class="events">
+                        {% for event in day.events %}
+                        <a href="{% url event_detail event.id %}">
+                            <li class="red">{{ event.headline }}</li>
+                        </a>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </td>
             {% endfor %}
-        </ul>
-    </td>
-    {% endfor %}
-</tr>
-{% endfor %}
-</table>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+    </table>
+
+</div> <!-- calWrapper -->
+</div> <!-- end span12 -->
+</div> <!-- end calendar row -->
 
 {% endblock main %}

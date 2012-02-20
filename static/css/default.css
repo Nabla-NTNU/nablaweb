@@ -1,34 +1,38 @@
-body { 
-	background-color: #000; /* Background-color of footer */
-}
+/* MAIN */
+    body { 
+        background-color: #000; /* Background-color of footer */
+    }
 
-/* Div that holds all parts of page except footer */
-#whitebox {
-	background-color: white; 
-	padding-top: 60px; 
-	padding-bottom: 40px;
-    border-bottom: 2px solid black;
-}
+    /* Div that holds all parts of page except footer */
+    #whitebox {
+        background-color: white; 
+        padding-top: 60px; 
+        padding-bottom: 40px;
+        border-bottom: 2px solid black;
+    }
 
-/* Makes nav link color brighter */
-.container > .nav > li > a, .container li.dropdown > a { color: #ccc; }
+    /* Makes nav link color brighter */
+    .container > .nav > li > a, .container li.dropdown > a { color: #ccc; }
+    
+    /* Nabla logo is a huge svg, so rescale and position it */
+    .brand img { height: 18px; margin-bottom: -1px; margin-right: -3px;}
+    .brand { font-family:Helvetica; }
 
-/* Looks prettier */
-h2 { margin-bottom: 5px; }
-h3 { margin-bottom: 5px; }
+    /* Looks prettier */
+    h2 { margin-bottom: 5px; }
+    h3 { margin-bottom: 5px; }
 
-/* Nabla logo is a huge svg, so rescale and position it */
-.brand img { height: 18px; margin-bottom: -1px; margin-right: -3px;}
-.brand { font-family:Helvetica; }
 
-/* Some floats for articles */
-img[alt=right] {
-    float: right;
-}
+/* MISC */
 
-img[alt=left] {
-    float: left;
-}
+    /* Some floats for articles */
+    img[alt=right] {
+        float: right;
+    }
+
+    img[alt=left] {
+        float: left;
+    }
 
 /* FOOTER */
 	footer { 
@@ -81,3 +85,81 @@ img[alt=left] {
 	/* Since navbar is no longer floating, no need for extra padding */
 	#whitebox { padding-top: 0; }
 }
+
+
+/* CALENDAR */
+    /* Setting cells to equal width. */
+    table.equal td, table.equal th {
+        width: 113px;
+    }
+
+    /* Resizing week table cells */
+    #calWrapper table.equal th.uke, #calWrapper table.equal td.uke {
+        width: 40px;
+    }
+
+    /* Costumizing list element inside calendar */
+    ul.events {
+        list-style: none;
+        margin: 0 0 9px 0;
+    }
+    ul.events li {
+        padding-left: 19px;
+        font-size: 0.85em;
+    }
+    ul.events li.blue {
+        background: url('../img/cal-blue.png') no-repeat 0px 2px;
+    }
+    ul.events li.green {
+        background: url('../img/cal-green.png') no-repeat 0px 2px;
+    }
+    ul.events li.red {
+        background: url('../img/cal-red.png') no-repeat 0px 2px;
+    }
+
+    /* Adding background to table, making it stand out! */
+    #calWrapper {
+      /*  background-color: #ededed;
+        border: 1px solid #dddddd;
+        padding: 2px;
+        margin: none; */
+    }
+    table.equal td, table.equal th {
+        background-color: white;
+        padding: 15px;
+    }
+    table.equal caption {
+        /*background-color: #ededed;*/
+    }
+
+    /* Using first-child selector to do the syles on the week column. */
+    #calWrapper table.equal td:first-child {
+        font-weight: bold;
+        font-size: 1.2em;
+        text-align: center;
+        vertical-align: middle;
+        width: 30px;
+    }
+
+    #calWrapper table .cell {
+        min-height: 50px;
+    }
+
+    #calWrapper table td.differentmonth {
+        color: #aaa;
+    }
+
+    #calWrapper table td.current {
+        outline: 1px solid maroon;
+    }
+
+    /* Adding color to headings and week column */
+    #calWrapper table.equal td:first-child, #calWrapper table.equal th {
+        background: #f1fdf2;
+        padding: 10px;
+    }
+    /*And to the odd columns */
+    #calWrapper  td:nth-child(odd) {
+        /*background: #ecf3ed;*/
+    }
+    /*ecf3ed*/
