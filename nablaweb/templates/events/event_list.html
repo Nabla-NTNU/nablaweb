@@ -1,3 +1,30 @@
-{% extends "content/content_list.html" %}
+{% extends "base.html" %}
 
-{% block title %}{{ block.super }}: Arrangement{% endblock %}
+{% block title %}Arrangement{% endblock %}
+
+{% block main %}
+
+<h2>{{ calendar.month }} {{ calendar.year }}</h2>
+<table class="table table-bordered" cellpadding=20>
+<tr>
+    <th>Uke#</th><th>Man</th><th>Tir</th><th>Ons</th><th>Tor</th><th>Fre</th>
+    <th>Lør</th><th>Søn</th>
+</tr>
+{% for week in calendar.weeks %}
+<tr>
+    <td>{{ week.weeknumber }}</td>
+    {% for day in week.days %}
+    <td>
+        {{ day.date }}
+        <ul>
+            {% for event in day.events %}
+            <li>{{ event.headline }}</li>
+            {% endfor %}
+        </ul>
+    </td>
+    {% endfor %}
+</tr>
+{% endfor %}
+</table>
+
+{% endblock main %}

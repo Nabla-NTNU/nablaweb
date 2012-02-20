@@ -5,7 +5,7 @@ from django.conf.urls.defaults import *
 from nablaweb.news.forms import NewsForm
 from nablaweb.news.views import NewsDetailView, NewsListView, NewsDeleteView
 
-urlpatterns = patterns('nablaweb.news.views',
+urlpatterns = patterns('news.views',
 
     # Administrasjon
 #    (r'^opprett/$', NewsFormPreview(form=NewsForm)),

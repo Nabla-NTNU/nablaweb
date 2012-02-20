@@ -23,11 +23,12 @@ class BedPresSelectFromBPC(ListView):
 
 class BedPresListView(EventListView):
     model = BedPres
+    context_object_name = "bedpres_list"
 
 
 class BedPresDetailView(EventDetailView):
     model = BedPres
-
+    context_object_name = "bedpres"
 
 # Bruker
 

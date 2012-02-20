@@ -80,6 +80,48 @@ class EventDeleteView(NewsDeleteView):
 
 class EventListView(NewsListView):
     model = Event
+    context_object_name = "event_list"
+
+    def get_context_data(self, **kwargs):
+        context = super(EventListView, self).get_context_data(**kwargs)
+
+        # Build the calendar
+        from datetime import datetime, date, timedelta
+
+        # Parameters
+        year = 2012
+        month = 2
+        weeks = 5
+
+        # Get the monday at the start of the calendar
+        first = date(year, month, 1)
+        first_monday = first - timedelta(days=first.weekday())
+        last_sunday = first + timedelta(weeks=weeks, days=6)
+
+        # Object to add to context
+        calendar = {'month': first, 'weeks': []}
+
+        for week in range(0, weeks):
+            # Add an empty week, with weeknumber
+            calendar['weeks'].append({'days': []})
+            for daynumber in range(0, 7):
+                # Get the day
+                day = first_monday + timedelta(days=week * 7 + daynumber)
+
+                # If monday, get the weeknumber and add to current week
+                if day.weekday() == 0:
+                    calendar['weeks'][week]['weeknumber'] = day.isocalendar()[1]
+
+                # Get the events
+                events = [event for event in context['event_list'] if event.event_start.date() == day]
+
+                # Add it to the week
+                calendar['weeks'][week]['days'].append({ 'date': day.day, 'events': events })
+
+
+        # Add it to the request context
+        context['calendar'] = calendar
+        return context
 
 
 class EventDetailView(NewsDetailView):

@@ -116,6 +116,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
 )
 
@@ -146,6 +147,7 @@ INSTALLED_APPS = (
     # Eksterne ting
     'math_captcha', # sudo pip install django-math-captcha
     'mediagenerator', # sudo pip install django-mediagenerator
+    'debug_toolbar',
     # Djangoting
     'django.contrib.auth',
     'django.contrib.comments',
@@ -159,6 +161,9 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
 )
 
+# Legg til IP-en din her for å vise debug-toolbar.
+INTERNAL_IPS = ['127.0.0.1', ]
+
 AUTH_PROFILE_MODULE= 'accounts.UserProfile'
 LOGIN_URL = '/login/'
 
@@ -169,7 +174,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'events.context_processors.upcoming_events', # Legger til upcoming_events i alle templates.
     'jobs.views.activej',
     'quotes.context_processors.random_quote',
-    'events.context_processors.current_month_calendar',
+    #'events.context_processors.current_month_calendar', 
+    # fjernet fordi den bruker en sql request per dag
    )
 
 

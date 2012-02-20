@@ -7,6 +7,7 @@ body {
 	background-color: white; 
 	padding-top: 60px; 
 	padding-bottom: 40px;
+    border-bottom: 2px solid black;
 }
 
 /* Makes nav link color brighter */
@@ -31,17 +32,19 @@ img[alt=left] {
 
 /* FOOTER */
 	footer { 
-		border-top:6px solid #111;
+		border-top:2px solid #666;
 		color: #ccc; 
 		padding-top: 30px; 
 		padding-bottom: 30px;
-    background-image: -webkit-gradient(
-        linear,
+
+        /* TODO: Add cross-browser support */
+        background-image: -webkit-gradient(
+            linear,
             left bottom,
-                left top,
-                    color-stop(0.25, rgb(15,20,28)),
-                        color-stop(0, rgb(0,0,0))
-                        );
+            left top,
+            color-stop(0.50, rgb(20,25,33)),
+            color-stop(0, rgb(0,0,0))
+        );
 
 	}
 		

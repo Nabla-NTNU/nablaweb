@@ -1,3 +1,18 @@
-{% extends "content/content_list.html" %}
+{% extends "base.html" %}
+{% load markup %}
 
 {% block title %}Nabladet{% endblock %}
+
+{% block content %}
+{% if news_list %} wtf {% endif %}
+{% for nablad in nablad_list %}
+    <div class="row">
+        <div class="span8">
+            <!--<h2>{{ nablad.headline }}</h2>-->
+            {{ nablad.lead_paragraph|markdown }}
+            <p><a class="btn" href="{% url nablad_detail nablad.id %}">Les mer &raquo;</a></p>
+        </div>
+    </div>
+    <hr>
+{% endfor %}
+{% endblock content %}
