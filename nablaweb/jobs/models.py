@@ -4,6 +4,7 @@
 
 from django.db import models
 from news.models import News
+from content.models import Content
 
 class YearChoices(models.Model):
     year = models.IntegerField(blank=False, verbose_name="Klasse", help_text="Klasse: 1, 2, 3, 4 og 5")
@@ -38,17 +39,23 @@ class TagChoices(models.Model):
     def __unicode__(self):
         return u'%s' % (self.tag)
 
-class Company(News):
+class Company(Content):
     # Headline er bedriftens navn. Body ment for informasjon om bedriften. Lead_paragraph evt. for en liten blurb om bedriften.
     # Website er bedriftens nettside.    
     website = models.CharField(max_length=200, blank=True, verbose_name="Nettside")
+    name = models.CharField(verbose_name="navn", max_length=200, blank=False)
+    description = models.TextField(verbose_name="beskrivelse", blank=True)
     
     class Meta:
-        verbose_name = "Bedrift"
-        verbose_name_plural = "Bedrifter"
+        verbose_name = "bedrift"
+        verbose_name_plural = "bedrifter"
 
-class Advert(News):
+class Advert(Content):
     company = models.ForeignKey('Company')
+
+    headline = models.CharField(max_length=200, blank=False, verbose_name="tittel")
+    lead_paragraph = models.TextField(verbose_name="ingress", blank=True)
+    body = models.TextField(verbose_name="beskrivelse", blank=True)
     
     relevant_for_group = models.ManyToManyField(RelevantForChoices)
     relevant_for_year = models.ManyToManyField(YearChoices, blank=True, null=True, verbose_name="Årskull", help_text="Hvilke klasser stillingsannonsen er relevant for")
@@ -64,5 +71,8 @@ class Advert(News):
     contact_info = models.CharField(max_length=1500, blank=True, verbose_name="Kontaktinformasjon", help_text="Kontaktinformasjon for søkere")
 
     class Meta:
-        verbose_name = "Stillingsannonse"
-        verbose_name_plural = "Stillingsannonser"
+        verbose_name = "stillingsannonse"
+        verbose_name_plural = "stillingsannonser"
+
+    def __unicode__(self):
+        return self.headline
