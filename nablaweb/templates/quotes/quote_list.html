@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load markup %}
+
+{% block title %}Sitater{% endblock %}
+
+{% block content %}
+{% for quote in quote_list %}
+    <div class="row">
+        <div class="span8">
+            {{ quote.quote }}
+            <p><em>-- {{ quote.author }}</em></p>
+        </div>
+    </div>
+    <hr>
+{% endfor %}
+{% endblock content %}

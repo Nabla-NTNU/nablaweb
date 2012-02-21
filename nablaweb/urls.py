@@ -9,9 +9,6 @@ admin.autodiscover()
 from settings import GLOBAL_MEDIA_DIRS, MEDIA_ROOT, STATIC_URL
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^nablaweb/', include('nablaweb.foo.urls')),
-    
     (r'^$', include('news.urls')),
     (r'^login/$', 'accounts.views.login_user'),
     (r'^logout/$', 'accounts.views.logout_user'),
@@ -23,7 +20,7 @@ urlpatterns = patterns('',
     (r'^stillinger/', include('jobs.urls')),
     (r'^komite/', include('com.urls')),
     (r'^gallery/', include('gallery.urls')), # Kan ikke endres pga hardkoding i gallery-appen
-    (r'^sitat/', include('quotes.urls')),
+    (r'^sitater/', include('quotes.urls')),
     (r'^feedback/', include('feedback.urls')),
     (r'^nabladet/', include('nabladet.urls')),
     (r'^kommentarer/', include('django.contrib.comments.urls')),
