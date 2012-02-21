@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 
 class ListAllQuotes(ListView):
     model = Quote
-    context_object_name = "content_list"
+    context_object_name = "quote_list"
     paginate_by = 10
 
     template_name = "quotes/quotes_list.html"
