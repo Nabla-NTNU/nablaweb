@@ -2,6 +2,7 @@
 from django.conf.urls.defaults import *
 from django.views.generic.edit import CreateView
 from quotes.models import Quote
+from quotes.views import *
 
 urlpatterns = patterns('quotes.views',
     url(r'^$', ListAllQuotes.as_view(), name='jobs_list'),
