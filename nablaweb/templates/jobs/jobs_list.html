@@ -1,3 +1,17 @@
-{% extends "content/content_list.html" %}
+{% extends "base.html" %}
+{% load markup %}
 
 {% block title %}Stillingsannonser{% endblock %}
+
+{% block content %}
+{% for job in jobs_list %}
+    <div class="row">
+        <div class="span8">
+            <h2>{{ job.headline }} i {{ job.company.headline }}</h2>
+            {{ job.lead_paragraph|markdown }}
+            <p><a class="btn" href="{% url jobs_detail job.id %}">Les mer &raquo;</a></p>
+        </div>
+    </div>
+    <hr>
+{% endfor %}
+{% endblock content %}

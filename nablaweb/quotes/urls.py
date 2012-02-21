@@ -5,7 +5,7 @@ from quotes.models import Quote
 from quotes.views import *
 
 urlpatterns = patterns('quotes.views',
-    url(r'^$', ListAllQuotes.as_view(), name='jobs_list'),
+    url(r'^$', ListAllQuotes.as_view(), name='quote_list'),
     (r'^legg-til', CreateView.as_view(
         model=Quote
     )),
