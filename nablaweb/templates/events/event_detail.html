@@ -7,11 +7,13 @@
 {% block content %}
 
 <div class="row"><div class="span8">
+        <img class="header_picture" alt="" src="{{ event.picture.url }}" width="620">
 <h2>{{ event.headline }}</h2>
 {{ event.description|markdown }}
 </div></div>
 <hr>
 
+{% if event.related_news %}
 <p>Relaterte nyheter:</p>
 <div class="row">
     {% for news in event.related_news.all %}
@@ -23,6 +25,7 @@
     {% endfor %}
 </div>
 <hr>
+{% endif %}
 
 {% endblock %}
 
@@ -72,36 +75,6 @@
     </tr>
     {% endif %}
 
-    <!-- Publisert -->
-    <tr>
-        <td>Publisert</td>
-        <td>
-            <time datetime="{{ event.created_date|date:"c" }}">
-                {{ event.created_date|naturalday }} kl. {{ event.created_date|date:"G:i" }}
-            </time>
-        </td>
-    </tr>
-    
-    <!-- Av -->
-    {% if event.created_by %}
-    <tr><td>Av</td><td>{{ event.created_by.get_full_name }}</td></tr>
-    {% endif %}
-
-    <!-- Sist endret -->
-    <tr>
-        <td>Sist endret</td>
-        <td>
-            <time datetime="{{ event.last_changed_date|date:"c" }}">
-                {{ event.last_changed_date|naturalday }} kl. {{ event.last_changed_date|date:"G:i" }}
-            </time>
-        </td>
-    </tr>
-
-    <!-- Av -->
-    {% if event.last_changed_by %}
-    <tr><td>Av</td><td>{{ event.last_changed_by.get_full_name }}</td></tr>
-    {% endif %}
-
     <tr>
         <td style="text-align: center;" colspan="2">
             {% if event.registration_required %}
@@ -121,6 +94,61 @@
     <div class="bar" style="width: {{ event.percent_full }}%;"></div>
 </div>
 {% endif %}
+
+
+<h3>Meta</h3>
+<table class="table table-condensed content-info">
+
+
+    <!-- Publisert -->
+    <tr>
+        <td>Publisert</td>
+        <td>
+            <time datetime="{{ event.created_date|date:"c" }}">
+                {{ event.created_date|naturalday }} kl. {{ event.created_date|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+    
+    <!-- Av -->
+    {% if event.created_by %}
+    <tr>
+        <td>Av</td>
+        <td>
+            <a href="{% url accounts.views.view_member_profile event.created_by.username %}">
+                {{ event.created_by.get_full_name }}
+            </a>
+        </td>
+    </tr>
+    {% endif %}
+
+    {% if event.has_been_edited %}
+
+    <!-- Sist endret -->
+    <tr>
+        <td>Sist endret</td>
+        <td>
+            <time datetime="{{ event.last_changed_date|date:"c" }}">
+                {{ event.last_changed_date|naturalday }} kl. {{ event.last_changed_date|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+
+    <!-- Av -->
+    {% if event.last_changed_by %}
+    <tr>
+        <td>Av</td>
+        <td>
+            <a href="{% url accounts.views.view_member_profile event.last_changed_by.username %}">
+                {{ event.last_changed_by.get_full_name }}
+            </a>
+        </td>
+    </tr>
+    {% endif %}
+
+    {% endif %}
+
+</table>
 
 <div class="well" style="padding: 8px 0;">
     <ul class="nav list">

@@ -12,6 +12,8 @@ class Event(Content):
     
     headline = models.CharField(max_length=100, blank=False, null=False)
 
+    picture = models.ImageField(upload_to="event_pictures")
+
     description = models.TextField(blank=False, null=False)
 
     related_news = models.ManyToManyField(News, blank=True, null=True)
