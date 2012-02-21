@@ -39,23 +39,23 @@ class EventSplitDateTimeField(SplitDateTimeField):
 
 class EventForm(NewsForm):
     # Spesifiser datowidget og aksepterte datoformat.
-    event_start = EventSplitDateTimeField(required=True)
-    event_end = EventSplitDateTimeField(required=False)
-    registration_start = EventSplitDateTimeField(required=False)
-    registration_deadline = EventSplitDateTimeField(required=False)
-    deregistration_deadline = EventSplitDateTimeField(required=False)
+    event_start = EventSplitDateTimeField(required=True, label="Starter")
+    event_end = EventSplitDateTimeField(required=False, label="Slutter")
+    registration_start = EventSplitDateTimeField(required=False, label="Påmelding åpner")
+    registration_deadline = EventSplitDateTimeField(required=False, label="Påmelding stenger")
+    deregistration_deadline = EventSplitDateTimeField(required=False, label="Avmelding stenger")
 
     # For å få norske feilmeldinger.
-    location = EventCharField()
+    location = EventCharField(label="Sted")
 
     # I stedet for NullBooleanField.
-    has_queue = BooleanField(required=False)
+    has_queue = BooleanField(required=False, label="Har venteliste", help_text="Hvis arrangementet har venteliste, går det ann å melde seg på selv etter at det er fullt. Man havner da på venteliste, og blir automatisk meldt på om det blir ledig.")
 
     # Lar brukeren spesifisere om arrangementet krever påmelding.
     # Internt er dette ekvivalent med at registration_deadline er satt.
     # Dersom registration_required ikke er True ignoreres de mottatte data 
     # for de andre registreringsrelaterte feltene, som i tillegg slettes.
-    registration_required = BooleanField(required=False)
+    registration_required = BooleanField(required=False, label="Registrering kreves")
 
     class Meta(NewsForm.Meta):
         model = Event

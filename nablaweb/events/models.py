@@ -10,20 +10,17 @@ import datetime
 
 class Event(Content):
     
-    headline = models.CharField(max_length=100, blank=False, null=False)
-
-    picture = models.ImageField(upload_to="event_pictures")
-
-    description = models.TextField(blank=False, null=False)
-
-    related_news = models.ManyToManyField(News, blank=True, null=True)
+    headline = models.CharField("overskrift", max_length=100, blank=False, null=False)
+    picture = models.ImageField(verbose_name="bilde", upload_to="event_pictures", blank=True, null=True, help_text="Vises over overskriften. Optimal bredde er 620px")
+    description = models.TextField(verbose_name="beskrivelse", blank=False, null=False, help_text="En kort beskrivelse av hva arrangementet går ut på. Prøv å bruke nyheter til å legge ut praktisk informasjon.")
+    related_news = models.ManyToManyField(News, verbose_name="relaterte nyheter", blank=True, null=True, help_text="Nyheter som er relatert til dette arrangementet")
 
     # Indikerer hvem som står bak arrangementet.
     # Dette feltet er valgfritt.
-    organizer = models.CharField(max_length=100, blank=True)
+    organizer = models.CharField(verbose_name="organisert av", max_length=100, blank=True, help_text="Den som står bak arrangementet")
 
     # Hvor arrangementet foregår.
-    location = models.CharField(verbose_name="sted", max_length=100, blank=False)
+    location = models.CharField(u"sted", max_length=100, blank=False)
 
     # Når arrangementet starter.
     event_start = models.DateTimeField(verbose_name="start", null=True, blank=False)
@@ -43,24 +40,24 @@ class Event(Content):
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_deadline er satt.
     # Datoen er ikke senere enn registration_deadline.
-    registration_start = models.DateTimeField(verbose_name="påmeldingsstart", null=True, blank=True)
+    registration_start = models.DateTimeField(verbose_name="påmelding åpner", null=True, blank=True)
 
     # Frist for å melde seg av arrangementet.
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_deadline er satt.
     # Datoen er ikke tidligere enn registration_start, hvis dette er satt.
     # Datoen er ikke senere enn event_start.
-    deregistration_deadline = models.DateTimeField(verbose_name="avmeldingsfrist",null=True, blank=True)
+    deregistration_deadline = models.DateTimeField(verbose_name="avmelding stenger",null=True, blank=True)
 
     # Hvor mange plasser arrangementet har.
     # Dette feltet er satt hvis og bare hvis registration_deadline er satt.
     # Antall plasser er et heltall ikke mindre enn null.
-    places = models.PositiveIntegerField(verbose_name="plasser", null=True, blank=True)
+    places = models.PositiveIntegerField(verbose_name="antall plasser", null=True, blank=True)
 
     # Om arrangementet har venteliste.
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_deadline er satt.
-    has_queue = models.NullBooleanField(verbose_name="venteliste", null=True, blank=True)
+    has_queue = models.NullBooleanField(verbose_name="har venteliste", null=True, blank=True, help_text="Om ventelisten er på, vil det være mulig å melde seg på selv om arrangementet er fullt. De som er i ventelisten vil automatisk bli påmeldt etter hvert som plasser blir ledige.")
 
     class Meta:
         verbose_name = "arrangement"

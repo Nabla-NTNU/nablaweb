@@ -53,7 +53,7 @@
         <div class="container">
 
             <!-- Nabla logo -->
-            <a class="brand" href="#">
+            <a class="brand" href="/">
                 <img src="{{ STATIC_URL }}img/nabla-white.svg" alt="">
                 Nabla
             </a>
@@ -61,29 +61,27 @@
             
             <!-- navigasjonslenker -->
             <ul class="nav">
+                <li><a href="/">Hjem</a></li>
+                <li><a href="{% url event_list %}">Arrangement</a></li>
+                <li><a href="{% url jobs_list %}">Karriere</a></li>
                 <li class="dropdown">
                     <a href="#komiteer"
                         class="dropdown-toggle"
                         data-toggle="dropdown">
-                        Pages
+                        Annet nyttig
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" >
-                        <li><a href="{% url event_list %}">event_list</a></li>
-                        <li><a href="{% url bedpres_list %}">bedpres_list</a></li>
-                        <li><a href="{% url jobs_list %}">jobs_list</a></li>
-                        <li><a href="{% url news_list %}">news_list</a></li>
-                        <li><a href="{% url quote_list %}">quote_list</a></li>
-                        <li><a href="{% url gallery.views.index %}">galleri: gallery.views.index</a></li>
-                        <li><a href="{% url accounts.views.list %}">accounts.views.list</a></li>
-                        <li><a href="{% url accounts.views.user_register %}">accounts.views.user_register</a></li>
-                        <li><a href="{% url feedback.views.feedback_form %}">feedback.views.feedback_form</a></li>
-                        <li><a href="{% url nablad_list %}">nablad_list</a></li>
+                        <li><a href="{% url quote_list %}">Gullkorn</a></li>
+                        <li><a href="{% url gallery.views.index %}">Galleri</a></li>
+                        <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+                        <li><a href="{% url feedback.views.feedback_form %}">Gi tilbakemelding</a></li>
+                        <li><a href="{% url nablad_list %}">Nabladet</a></li>
+                        <td><a href="{% url accounts.views.user_register %}">Registrer deg</a></li></td>
                     </ul>
                 </li>
-                <li>
-                    <a href="/admin">Admin</a>
-                </li>
+
+
             </ul>
             <!-- end navigasjonslenker -->
 
@@ -109,8 +107,9 @@
                     <ul class="dropdown-menu">
                         <li><a href="{% url accounts.views.view_member_profile user.username %}">Vis profil</a></li>
                         <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
-                        <li class="divider"></li>
                         <li><a href="/logout">Logg ut</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/admin">Admin</a></li>
                     </ul>
                 </li>
             </ul>
@@ -119,14 +118,16 @@
             {% else %}
 
             <!-- loginboks -->
-            <div>
             <form class="navbar-form pull-right" action="/login/" method="post">
                 {% csrf_token %}
-                <input class="span1" type="text" placeholder="Bruker" name="username" />
-                <input class="span1" type="password"  placeholder="Passord" name="password" />
-                <input class="submit" type="submit" value="Login" />
+                <table style="line-height: 35px"
+                    <tr>
+                        <td><input class="span1" type="text" placeholder="Bruker" name="username" /></td>
+                        <td><input class="span1" type="password"  placeholder="Passord" name="password" /></td>
+                        <td><input class="submit" type="submit" value="Login" /></td>
+                    </tr>
+                </table>
             </form>
-            </div>
             <!-- end loginboks -->
 
             {% endif %}
@@ -141,10 +142,21 @@
     
     <!-- main container -->
     <div class="container">
-        {% block main %} 
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags %}{{ message.tags}}{% endif %}">
+                    {#<a class="close" data-dismiss="alert">×</a>#}
+                    <b>Info:</b> {{ message }} 
+                </div>
+            {% endfor %}
+        {% endif %}
+
 
         <!-- main row -->
         <div class="row">
+
+            {% block main %}
         
             <!-- content -->
             <div class="span8">

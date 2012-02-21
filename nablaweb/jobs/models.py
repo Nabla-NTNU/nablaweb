@@ -45,6 +45,7 @@ class Company(Content):
     website = models.CharField(max_length=200, blank=True, verbose_name="Nettside")
     name = models.CharField(verbose_name="navn", max_length=200, blank=False)
     description = models.TextField(verbose_name="beskrivelse", blank=True)
+    picture = models.ImageField(upload_to="company_pictures", null=True, blank=True)
     
     class Meta:
         verbose_name = "bedrift"
@@ -52,6 +53,7 @@ class Company(Content):
 
 class Advert(Content):
     company = models.ForeignKey('Company')
+    picture = models.ImageField(upload_to="job_advert_pictures", null=True, blank=True)
 
     headline = models.CharField(max_length=200, blank=False, verbose_name="tittel")
     lead_paragraph = models.TextField(verbose_name="ingress", blank=True)

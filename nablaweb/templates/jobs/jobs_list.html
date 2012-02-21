@@ -4,14 +4,18 @@
 {% block title %}Stillingsannonser{% endblock %}
 
 {% block content %}
-{% for job in jobs_list %}
-    <div class="row">
-        <div class="span8">
-            <h2>{{ job.headline }} i {{ job.company.name }}</h2>
-            {{ job.lead_paragraph|markdown }}
-            <p><a class="btn" href="{% url jobs_detail job.id %}">Les mer &raquo;</a></p>
+{% if jobs_list %}
+    {% for job in jobs_list %}
+        <div class="row">
+            <div class="span8">
+                <h2>{{ job.headline }} i {{ job.company.name }}</h2>
+                {{ job.lead_paragraph|markdown }}
+                <p><a class="btn" href="{% url jobs_detail job.id %}">Les mer &raquo;</a></p>
+            </div>
         </div>
-    </div>
-    <hr>
-{% endfor %}
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>Vi har for øyeblikket ingen stillingsannonser</p>
+{% endif %}
 {% endblock content %}

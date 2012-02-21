@@ -4,7 +4,9 @@
 
 {% block content %}
 
-<!--<h2>{{ news.headline }}</h2>-->
+<img alt="" src="{{ news.picture.url }}">
+<h2>{{ news.headline }}</h2>
+{{ news.lead_paragraph|markdown }}
 {{ news.body|markdown }}
 
 {% endblock %}
@@ -15,7 +17,9 @@
 
 {% block sidebar %}
 
-<table class="table">
+<!-- meta -->
+<h3>Meta</h3>
+<table class="table table-condensed">
 
     <!-- Publisert -->
     <tr>
@@ -48,14 +52,85 @@
     {% endif %}
 
 </table>
+<!-- end meta -->
 
-<div class="related_events">
-    <h2>events</h2>
+<!-- relaterte events -->
+<h3>Relaterte events</h3>
 {% for event in news.event_set.all %}
-    <a href="{% url event_detail event.id %}">{{ event.headline }}</a>
-{% endfor %}
+    <table class="table table-bordered  table-striped">
 
-</div>
+    <thead>
+        <tr><th colspan="2">{{ event.headline }}</th></tr>
+    </thead>
+
+    <tbody>
+
+        <!-- Fra -->
+        <tr>
+            <td>Starter</td>
+            <td>
+                <time datetime="{{ event.event_start|date:"c" }}">
+                {{ event.event_start|naturalday }} kl. {{ event.event_start|date:"G:i" }}
+                </time>
+            </td>
+        </tr>
+
+        <!-- Til -->
+        {% if event.event_end %}
+        <tr>
+            <td>Slutter</td>
+            <td>
+                <time datetime="{{ event.event_end|date:"c" }}">
+                    {{ event.event_end|naturalday }} kl. {{ event.event_end|date:"G:i" }}
+                </time>
+            </td>
+        </tr>
+        {% endif %}
+
+        <!-- Sted -->
+        <tr><td>Sted</td><td>{{ event.location }}</td></tr>
+
+        <!-- Registrering åpner -->
+        {% if event.registration_start %}
+        <tr>
+            <td>Registrering åpner</td>
+            <td>
+                <time datetime="{{ event.registration_start|date:"c" }}">
+                    {{ event.registration_start|naturalday }} kl. {{ event.registration_start|date:"G:i" }}
+                </time>
+            </td>
+        </tr>
+        {% endif %}
+
+        <tr>
+            <td style="text-align: center;" colspan="2">
+                {% if event.registration_required %}
+                    Påmelding kreves
+                {% else %}
+                    Påmelding unødvendig
+                {% endif %}
+            </td>
+        </tr>
+
+        {% if event.registration_required %}
+        <tr><td colspan="2">
+                <div style="margin:0;" class="progress{% if event.percent_full > 90 %} danger{% endif %}">
+                    <div class="bar" style="width: {{ event.percent_full }}%;"></div>
+                </div>
+        </td></tr>
+        {% endif %}
+    </tbody>
+
+    <tfoot>
+        <tr><td colspan="2">
+            <a href="{% url event_detail event.id %}" class="btn primary">Les mer</a>
+            <a href="#notimplemented" class="btn"><span class="icon custom facebook"></span> Vis på Facebook</a>
+        </td></tr>
+    </tfoot>
+
+    </table>
+{% endfor %}
+<!-- end relaterte events -->
 
 <div class="well" style="padding: 8px 0;">
     <ul class="nav list">
