@@ -5,7 +5,12 @@
 {% block content %}
 
 <h2>{{ event.headline }}</h2>
-{{ event.body|markdown }}
+{{ event.description|markdown }}
+
+{% for news in event.related_news.all %}
+    <h2>{{ news.headline }}</h2>
+    {{ news.lead_paragraph }}
+{% endfor %}
 
 {% endblock %}
 

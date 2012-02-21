@@ -32,22 +32,30 @@
     <tr><td>Av</td><td>{{ news.created_by.username }}</td></tr>
     {% endif %}
 
-    <!-- Sist endret -->
-    <tr>
-        <td>Sist endret</td>
-        <td>
-            <time datetime="{{ news.last_changed_date|date:"c" }}">
-                {{ news.last_changed_date|naturalday }} kl. {{ news.last_changed_date|date:"G:i" }}
-            </time>
-        </td>
-    </tr>
+    {% if news.has_been_edited %}
+        <!-- Sist endret -->
+        <tr>
+            <td>Sist endret</td>
+            <td>
+                <time datetime="{{ news.last_changed_date|date:"c" }}">
+                    {{ news.last_changed_date|naturalday }} kl. {{ news.last_changed_date|date:"G:i" }}
+                </time>
+            </td>
+        </tr>
 
-    <!-- Av -->
-    {% if news.last_changed_by %}
-    <tr><td>Av</td><td>{{ news.last_changed_by.username }}</td></tr>
+        <!-- Av -->
+        <tr><td>Av</td><td>{{ news.last_changed_by.username }}</td></tr>
     {% endif %}
 
 </table>
+
+<div class="related_events">
+    <h2>events</h2>
+{% for event in news.event_set.all %}
+    <a href="{% url event_detail event.id %}">{{ event.headline }}</a>
+{% endfor %}
+
+</div>
 
 <div class="well" style="padding: 8px 0;">
     <ul class="nav list">

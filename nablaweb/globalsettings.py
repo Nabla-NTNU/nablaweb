@@ -132,6 +132,7 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     # Våre ting
+    'content',
     'news',
     'accounts',
     'avatar',

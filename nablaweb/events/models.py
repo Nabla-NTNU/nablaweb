@@ -3,11 +3,19 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+from content.models import Content
 from news.models import News
 import datetime
 
 
-class Event(News):
+class Event(Content):
+    
+    headline = models.CharField(max_length=100, blank=False, null=False)
+
+    description = models.TextField(blank=False, null=False)
+
+    related_news = models.ManyToManyField(News, blank=True, null=True)
+
     # Indikerer hvem som står bak arrangementet.
     # Dette feltet er valgfritt.
     organizer = models.CharField(max_length=100, blank=True)
