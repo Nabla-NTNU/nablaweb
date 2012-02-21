@@ -3,6 +3,7 @@ from django.contrib import admin
 
 class ContentAdmin(admin.ModelAdmin):
 
+
     def save_model(self, request, obj, form, change):
         obj.last_changed_by = request.user
 

@@ -2,15 +2,27 @@
 {% load markup %}
 {% load humanize %}
 
+{% block title %}{{ event.headline }}{% endblock %}
+
 {% block content %}
 
+<div class="row"><div class="span8">
 <h2>{{ event.headline }}</h2>
 {{ event.description|markdown }}
+</div></div>
+<hr>
 
-{% for news in event.related_news.all %}
-    <h2>{{ news.headline }}</h2>
-    {{ news.lead_paragraph }}
-{% endfor %}
+<p>Relaterte nyheter:</p>
+<div class="row">
+    {% for news in event.related_news.all %}
+    <div class="span8">
+        <h3>{{ news.headline }}</h3>
+        {{ news.lead_paragraph|markdown }}
+        <p><a class="btn" href="{% url news_detail news.id %}">Les mer &raquo;</a></p>
+    </div>
+    {% endfor %}
+</div>
+<hr>
 
 {% endblock %}
 
@@ -20,14 +32,15 @@
 
 {% block sidebar %}
 
-<table class="table">
+<h3>Informasjon</h3>
+<table class="table table-bordered table-condensed table-striped content-info">
 
     <!-- Fra -->
     <tr>
         <td>Starter</td>
         <td>
             <time datetime="{{ event.event_start|date:"c" }}">
-                {{ event.event_start|naturalday }} kl. {{ event.event_start|date:"G:i" }}
+                <b>{{ event.event_start|naturalday }} kl. {{ event.event_start|date:"G:i" }}</b>
             </time>
         </td>
     </tr>
@@ -71,7 +84,7 @@
     
     <!-- Av -->
     {% if event.created_by %}
-    <tr><td>Av</td><td>{{ event.created_by.username }}</td></tr>
+    <tr><td>Av</td><td>{{ event.created_by.get_full_name }}</td></tr>
     {% endif %}
 
     <!-- Sist endret -->
@@ -86,10 +99,28 @@
 
     <!-- Av -->
     {% if event.last_changed_by %}
-    <tr><td>Av</td><td>{{ event.last_changed_by.username }}</td></tr>
+    <tr><td>Av</td><td>{{ event.last_changed_by.get_full_name }}</td></tr>
     {% endif %}
 
+    <tr>
+        <td style="text-align: center;" colspan="2">
+            {% if event.registration_required %}
+                Påmelding kreves
+            {% else %}
+                Påmelding unødvendig
+            {% endif %}
+        </td>
+    </tr>
+
+
 </table>
+
+{% if event.registration_required %}
+<h3>{{ event.users_registered }} påmeldte</h3>
+<div class="progress">
+    <div class="bar" style="width: {{ event.percent_full }}%;"></div>
+</div>
+{% endif %}
 
 <div class="well" style="padding: 8px 0;">
     <ul class="nav list">

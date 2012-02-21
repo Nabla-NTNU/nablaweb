@@ -65,7 +65,7 @@ class Event(Content):
         verbose_name_plural = "arrangement"
 
     def __unicode__(self):
-        return u'%s, %s' % (self.headline, self.event_start.strftime('%d/%m/%y'))
+        return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
 
     # Overlagre for å automatisk vedlikeholde ventelisten.
     def save(self, *args, **kwargs):
@@ -101,6 +101,10 @@ class Event(Content):
         try: return max(self.eventregistration_set.count() - self.places, 0)
         # Dersom arrangementet ikke krever påmelding er self.places None.
         except TypeError: return 0
+    
+    # Returnerer hvor mange prosent av plassene som er tatt
+    def percent_full(self):
+        return self.users_attending() * 100 / self.places
 
     # Returnerer antall brukere som er registrerte, og som dermed
     # enten er påmeldte eller står på venteliste.

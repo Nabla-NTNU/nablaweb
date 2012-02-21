@@ -2,6 +2,7 @@
 
 
 from django.forms import SplitDateTimeField, BooleanField 
+from django.contrib.admin.widgets import AdminSplitDateTime
 from nablaweb.events.models import Event
 from nablaweb.news.forms import NewsForm, CustomSplitDateTimeWidget
 from nablaweb.news.forms import NewsCharField as EventCharField
@@ -32,9 +33,7 @@ class EventSplitDateTimeField(SplitDateTimeField):
     def __init__(self, *args, **kwargs):
         kwargs.update(input_date_formats=DATE_FORMATS,
                       input_time_formats=TIME_FORMATS,
-                      widget=CustomSplitDateTimeWidget(
-                          date_attrs={'placeholder': 'DD.MM.ÅÅÅÅ', 'class': 'datefield datepicker'},
-                          time_attrs={'placeholder': 'TT:MM', 'class': 'timefield'}))
+                      widget=AdminSplitDateTime())
         super(EventSplitDateTimeField, self).__init__(*args, **kwargs)
 
 

@@ -3,6 +3,7 @@
 
 # Vim swap files
 *.swp
+*.swo
 
 # Personlige settings
 nablaweb/settings.py
