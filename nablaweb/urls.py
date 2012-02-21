@@ -23,7 +23,7 @@ urlpatterns = patterns('',
     (r'^stillinger/', include('jobs.urls')),
     (r'^komite/', include('com.urls')),
     (r'^gallery/', include('gallery.urls')), # Kan ikke endres pga hardkoding i gallery-appen
-    (r'^sitat/', include('quotes.urls')),
+    (r'^sitater/', include('quotes.urls')),
     (r'^feedback/', include('feedback.urls')),
     (r'^nabladet/', include('nabladet.urls')),
     (r'^kommentarer/', include('django.contrib.comments.urls')),
