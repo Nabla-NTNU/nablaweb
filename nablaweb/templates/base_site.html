@@ -77,7 +77,7 @@
                         <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
                         <li><a href="{% url feedback.views.feedback_form %}">Gi tilbakemelding</a></li>
                         <li><a href="{% url nablad_list %}">Nabladet</a></li>
-                        <td><a href="{% url accounts.views.user_register %}">Registrer deg</a></li></td>
+                        <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
                     </ul>
                 </li>
 
@@ -120,7 +120,7 @@
             <!-- loginboks -->
             <form class="navbar-form pull-right" action="/login/" method="post">
                 {% csrf_token %}
-                <table style="line-height: 35px"
+                <table style="line-height: 35px">
                     <tr>
                         <td><input class="span1" type="text" placeholder="Bruker" name="username" /></td>
                         <td><input class="span1" type="password"  placeholder="Passord" name="password" /></td>
@@ -154,14 +154,14 @@
 
 
         <!-- main row -->
+            {% block main %}
         <div class="row">
 
-            {% block main %}
         
             <!-- content -->
             <div class="span8">
                 {% block content %} 
-                <h2>Her burde det vært noe</h2>
+                <h2>content-blocken er tom. Kontakt webkom@nabla.no.</h2>
                 {% endblock content %}  
             </div> 
             <!-- end content container -->
@@ -203,9 +203,9 @@
             <!-- end sidebar -->
             
         </div>
+            {% endblock main %} 
         <!-- end main row -->
 
-        {% endblock main %} 
 
     </div>
     <!-- end main container  -->

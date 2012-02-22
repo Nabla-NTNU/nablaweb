@@ -3,11 +3,20 @@
 {% block title %}Galleri{% endblock %}
 
 {% block content %} 
-<p><a href="{% url gallery.views.index %}">Galleri</a> >> </p>
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url gallery.views.index %}">Galleri</a>
+        <span class="divider">\</span>
+    </li>
+    <li class="active">
+        {{ album.title }}
+    </li>
+</ul>
+
 <h2> {{ album.title }} </h2>
 <p>{{ album.description }}</p>
 
-{% if album.picture_set.all %}
+{% if album.picture_set %}
     <table>
     <tr>
     {% for picture in album.picture_set.all %}
@@ -22,7 +31,7 @@
     </tr>
     </table>
 {% else %}
-    <p>Dette albummet har ingen bilder enda<p>
+    <p>Dette albumet har ingen bilder enda.<p>
 {% endif %}
 <a href="{% url gallery.views.index %}">Gå tilbake til galleriet</a>
 

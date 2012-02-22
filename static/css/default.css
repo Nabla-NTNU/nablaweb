@@ -163,3 +163,22 @@
         /*background: #ecf3ed;*/
     }
     /*ecf3ed*/
+
+    #calWrapper table caption .current {
+        font-size: 30px;
+        line-height: 30px;
+    }
+    #calWrapper table caption a{
+        padding: 20px;
+        font-size: 20px;    
+        line-height: 50px;
+    }
+
+    #calWrapper table caption h2 {
+        margin-bottom: 20px;
+    }
+
+/* EDIT PROFILE PAGE */
+.centertext {
+    text-align: center;
+}

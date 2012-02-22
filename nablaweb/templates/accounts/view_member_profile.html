@@ -7,39 +7,54 @@
 
 
 {% block content %}
+<div class="row">
+    <div class="span2">
+        <div class="thumbnail">
+            {% avatar member 140 %}
+        </div>
+    </div>
+    <div class="span6">
+        <h2>{{member.get_full_name}}</h2>
+        <br />
+        <table class="table table-striped table-bordered">
+            <tr>
+                <td>Brukernavn</td>
+                <td>{{ member.username }}</td>
+            <tr>
+                <td>Epost </td>
+                <td>{{member.email}}</td>
+            </tr>
 
-<h2>{{member.get_full_name}}</h2>
-<br />
-<table>
-    <tr>
-      <td rowspan=4 >{% avatar member 100 %}</td>
-        <td>Epost: </td>
-        <td>{{member.email}}</td>
-    </tr>
+            <tr>
+                <td>Hjemmeside </td>
+                {% if member.get_profile.web_page %}
+                <td><a href="{{member.get_profile.web_page}}" target="_blank" >{{member.get_profile.web_page}}</a></td>
+                {% else %}
+                <td><a href="http://folk.ntnu.no/{{ member.username }}">http://folk.ntnu.no/{{ member.username }}</a></td>
+                {% endif %}
+            </tr>
 
-    <tr>
-        <td>Hjemmeside: </td>
-        <td><a href="{{member.get_profile.web_page}}" target="_blank" >{{member.get_profile.web_page}}</a></td>
-    </tr>
+            <tr>
+                <td>Bursdag </td>
+                <td>{{member.get_profile.birthday}}</td>
+            </tr>
 
-    <tr>
-        <td>Bursdag: </td>
-        <td>{{member.get_profile.birthday}}</td>
-    </tr>
+            <tr>
+                <td>Medlem av </td>
+                <td>
+                    <ul class="unstyled">
+                        {% for group in member.groups.all %}
+                            <li><span class="icon"></span> {{ group.name }}</li>
+                        {% empty %}
+                            Ingenting
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div><!--span6-->
 
-    <tr>
-        <td>Medlem av: </td>
-        <td>
-            <ul>
-            {% for group in member.groups.all %}
-                <li>{{ group.name }}</li>
-            {% empty %}
-                Ingenting
-            {% endfor %}
-            </ul>
-        </td>
-    </tr>
-</table>
+</div>
 
 <div id="user_about">{{ member.get_profile.about|bbcode }}</div>
 

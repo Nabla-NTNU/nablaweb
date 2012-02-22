@@ -3,7 +3,20 @@
 {% block title %}Galleri{% endblock %}
 
 {% block content %} 
-<p><a href="{% url gallery.views.index %}">Galleri</a> >> <a href="{% url gallery.views.album album.id %}">{{ album.title }}</a> >> </p>
+
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url gallery.views.index %}">Galleri</a>
+        <span class="divider">\</span>
+    </li>
+    <li>
+        <a href="{% url gallery.views.album album.id %}">{{ album.title }}</a>
+        <span class="divider">\</span>
+    </li>
+    <li class="active">
+        Vis bilde
+    </li>
+</ul>
 
 <a href="{% url gallery.views.picture_large album.id next_picture.album_picnr %}">
     <img src="{{ picture.getPictureUrl }}" width=500></img>

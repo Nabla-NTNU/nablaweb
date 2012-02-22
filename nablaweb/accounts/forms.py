@@ -17,7 +17,7 @@ class UserForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
-    birthday = DateField(required=False, widget=DateInput(attrs={'placeholder': 'DD.MM.YY', 'class': 'date'}))
+    birthday = DateField(label="Bursdag", required=False, widget=DateInput(attrs={'placeholder': 'DD.MM.YY', 'class': 'date'}))
     class Meta:
         model = UserProfile
         exclude = ('user',)

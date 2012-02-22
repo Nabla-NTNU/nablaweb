@@ -141,6 +141,9 @@ class EventListView(NewsListView):
                     'current': (day == today),
                 })
 
+        # Add next and previous
+        calendar['prev'] = first_monday - timedelta(days=1)
+        calendar['next'] = first + timedelta(days=31)
 
         # Add it to the request context
         context['calendar'] = calendar

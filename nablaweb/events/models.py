@@ -300,6 +300,7 @@ class EventRegistration(models.Model):
 
 
 
+
 class EventPenalty(models.Model):
     # Hvilket arrangement straffen gjelder.
     event = models.ForeignKey(Event)

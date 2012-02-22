@@ -22,8 +22,8 @@ TEMP_DIR = os.path.join(getattr(settings, 'MEDIA_ROOT', None),TEMP_FOLDER)
 
 """ Innstillinger for opplastede bilders oppløsning """
 
-PICTURE_DIM = 720
-PICTURE_DIM_THUMB = 180
+PICTURE_DIM = 620
+PICTURE_DIM_THUMB = 140
 
 """ Globale funksjoner """
 

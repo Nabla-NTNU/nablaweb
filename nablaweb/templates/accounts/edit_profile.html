@@ -3,17 +3,27 @@
 {% block title %}Endre bruker {% endblock %}
 
 {% block content %} 
-{% avatar user 200 %}
-<p>Trykk <a href="/avatar/change/">her</a> for å endre profilbilde.</p>
+<div class="row">
+    <div class="span2 centertext">
+        <div class="thumbnail">
+            {% avatar user 140 %}
+        </div>
+            <a class="btn" style="margin-top: 5px;" href="/avatar/change/">Endre profilbilde</a>
+    </div>
 
+    <div class="span6">
+        <form action="" method="post">{% csrf_token %}
 
-<form action="" method="post">{% csrf_token %}
-<table>
-{{ userForm.as_table }}
-{{ profileForm.as_table }}
-</table>
-<input type="submit" value="Send inn" />
-</form>
+            <table>
+                {{ userForm.as_table }}
+                {{ profileForm.as_table }}
+            </table>
 
+            <button type="submit" class="btn primary">Lagre endringer</button>
+
+        </form>
+    </div>
+
+</div>
 {% endblock %}
 

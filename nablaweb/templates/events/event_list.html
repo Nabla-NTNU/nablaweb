@@ -11,8 +11,25 @@
 
     <table class="table table-bordered equal">
 
+    <caption> 
+        <h2>Arrangementoversikt {{ calendar.first.year }}</h2>
+
+        <span>
+            <a href="{% url event_list calendar.prev.year calendar.prev.month %}">
+                {{ calendar.prev|date:"F"|capfirst }}
+            </a>
+        </span> 
+
+        <span class="current">{{ calendar.first|date:"F"|capfirst }}</span> 
+
+        <span>
+            <a href="{% url event_list calendar.next.year calendar.next.month %}">
+                {{ calendar.next|date:"F"|capfirst }}
+            </a>
+        </span> 
+
+    </caption>
     <thead>
-        <caption> <h2>{{ calendar.first|date:"F Y"|capfirst }}</h2> </caption>
         <tr>
             <th class="uke">Uke</th>
             <th>Man</th>
@@ -39,9 +56,7 @@
                     <b>{{ day.date }}.</b>
                     <ul class="events">
                         {% for event in day.events %}
-                        <a href="{% url event_detail event.id %}">
-                            <li class="red">{{ event.headline }}</li>
-                        </a>
+                        <li class="red"><a href="{% url event_detail event.id %}">{{ event.headline }}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -55,6 +70,38 @@
 
 </div> <!-- calWrapper -->
 </div> <!-- end span12 -->
-</div> <!-- end calendar row -->
+</div><!-- row -->
+
+<div class="row">
+    <div class="span4">
+    <h2>Påmeldinger</h2>
+        <table class="table table-bordered table-striped">
+        {% for reg in user.eventregistration_set.all %}
+        <tr>
+            <td><a href="{% url event_detail reg.event.id %}">{{ reg.event.headline }}</a></td>
+            <td>
+                {% if reg.is_waiting_place %}
+                    På venteliste
+                {% endif %}
+
+                {% if reg.is_attending_place %}
+                    <span class="icon check"></span> Har plass
+                {% endif %}
+            </td>
+            </td>
+        </tr>
+        </table>
+        {% endfor %}
+    </div>
+
+    <div class="span4">
+        <h2>Prikker</h2>
+        <p>Om du er påmeldt, men ikke møter opp på arrangement, kan du bli
+        straffet i form av prikker. Jo flere prikker, jo lengre må du vente for
+        å melde deg på et arrangement.</p>
+        <p>Du har ingen prikker. Godt jobbet!</p>
+    </div>
+</div>
+
 
 {% endblock main %}
