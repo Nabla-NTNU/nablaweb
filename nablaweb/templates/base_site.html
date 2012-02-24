@@ -3,29 +3,19 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
-    <title>Nabla: {% block title %}linjeforeningen for Fysikk og matematikk ved NTNU{% endblock title %}</title>
-    <meta name="description" content="Hjemmesiden til linjeforeningen Nabla, for studentene på fysikk og matematikk-masterprogrammet på NTNU">
-    <meta name="author" content="Webkomiteen i Nabla">
+    <title>
+    Nabla: {% block title %}linjeforeningen for Fysikk og matematikk ved NTNU{% endblock title %}
+    </title>
+    <meta name="description" content="Hjemmesiden til linjeforeningen Nabla, for studentene på fysikk og matematikk-masterprogrammet på NTNU.">
+    <meta name="author" content="Nabla">
 
     <!-- HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    
-    <!-- Scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-dropdown.js"></script>
-        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-    <script>
-        $(function() {
-            // Legger til en datepicker på alt med klasse datepicker
-            $.datepicker.setDefaults($.datepicker.regional['no']);
-            $('.datepicker').datepicker({ firstDay: 1, dateFormat: "dd.mm.yy" });
-        });
-    </script>
 
     <!-- Styles -->
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet"><!-- Do not modify -->
@@ -38,254 +28,273 @@
     <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
-  </head>
+</head>
 
-  <body>
-    
-    <!-- Denne boksen gir hele siden hvit bakgrunn, for å imitere sticky footer -->
-    <div id="whitebox" class="box-shadow">
-    
-    <!-- navbar and navbar-inner -->
-    <div class="navbar navbar-fixed">
-    <div class="navbar-inner">
-    
-        <!-- navbar container -->
-        <div class="container">
+<body>
 
-            <!-- Nabla logo -->
-            <a class="brand" href="/">
-                <img src="{{ STATIC_URL }}img/nabla-white.svg" alt="">
-                Nabla
-            </a>
-            <!-- end Nabla logo-->
-            
-            <!-- navigasjonslenker -->
-            <ul class="nav">
-                <li><a href="/">Hjem</a></li>
-                <li><a href="{% url event_list %}">Arrangement</a></li>
-                <li><a href="{% url jobs_list %}">Karriere</a></li>
-                <li class="dropdown">
-                    <a href="#komiteer"
-                        class="dropdown-toggle"
-                        data-toggle="dropdown">
-                        Annet nyttig
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu" >
-                        <li><a href="{% url quote_list %}">Gullkorn</a></li>
-                        <li><a href="{% url gallery.views.index %}">Galleri</a></li>
-                        <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
-                        <li><a href="{% url feedback.views.feedback_form %}">Gi tilbakemelding</a></li>
-                        <li><a href="{% url nablad_list %}">Nabladet</a></li>
-                        <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
-                    </ul>
-                </li>
+<!-- Denne boksen gir hele siden hvit bakgrunn, for å imitere sticky footer -->
+<div id="whitebox" class="box-shadow">
 
+<!-- navbar and navbar-inner -->
+<div class="navbar navbar-fixed">
+<div class="navbar-inner">
 
-            </ul>
-            <!-- end navigasjonslenker -->
-
-            <!-- søkefelt -->
-            <!--
-            <form class="navbar-search pull-left" action="">
-                <input type="text" class="search-query span2" placeholder="Søk">
-            </form>
-            -->
-            <!-- end søkefelt -->
-                
-            {% if user.is_authenticated %}
-
-            <!-- bruker-dropdown -->
-            <ul class="nav pull-right">
-                <li class="dropdown pull-right">
-                    <a href="#bruker"
-                        class="dropdown-toggle"
-                        data-toggle="dropdown">
-                        <span class="icon white user"></span>{{ user.username }}
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url accounts.views.view_member_profile user.username %}">Vis profil</a></li>
-                        <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
-                        <li><a href="/logout">Logg ut</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/admin">Admin</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <!-- end bruker-dropdown -->
-
-            {% else %}
-
-            <!-- loginboks -->
-            <form class="navbar-form pull-right" action="/login/" method="post">
-                {% csrf_token %}
-                <table style="line-height: 35px">
-                    <tr>
-                        <td><input class="span1" type="text" placeholder="Bruker" name="username" /></td>
-                        <td><input class="span1" type="password"  placeholder="Passord" name="password" /></td>
-                        <td><input class="submit" type="submit" value="Login" /></td>
-                    </tr>
-                </table>
-            </form>
-            <!-- end loginboks -->
-
-            {% endif %}
-
-        </div>
-        <!-- end navbar container -->
-            
-    </div>
-    </div>
-    <!-- end navbar and navbar-inner -->
-
-    
-    <!-- main container -->
+    <!-- navbar container -->
     <div class="container">
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{% if message.tags %}{{ message.tags}}{% endif %}">
-                    {#<a class="close" data-dismiss="alert">×</a>#}
-                    <b>Info:</b> {{ message }} 
-                </div>
-            {% endfor %}
+        <!-- Nabla logo -->
+        <a class="brand" href="/?">
+            <img src="{{ STATIC_URL }}img/nabla-white.svg" alt="">
+            Nabla
+        </a>
+        <!-- end Nabla logo-->
+        
+        <!-- navigasjonslenker -->
+        <ul class="nav main">
+            <li><a href="/?">Hjem</a></li>
+            <li><a href="{% url event_list %}">Arrangement</a></li>
+            <li><a href="{% url jobs_list %}">Karriere</a></li>
+            <li class="dropdown">
+                <a href="#komiteer"
+                    class="dropdown-toggle no-ajaxy"
+                    data-toggle="dropdown">
+                    Annet nyttig
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" >
+                    <li><a href="{% url quote_list %}">Gullkorn</a></li>
+                    <li><a href="{% url gallery.views.index %}">Galleri</a></li>
+                    <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+                    <li><a href="{% url feedback.views.feedback_form %}">Gi tilbakemelding</a></li>
+                    <li><a href="{% url nablad_list %}">Nabladet</a></li>
+                    <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
+                </ul>
+            </li>
+
+
+        </ul>
+        <!-- end navigasjonslenker -->
+
+        <!-- søkefelt -->
+        <!--
+        <form class="navbar-search pull-left" action="">
+            <input type="text" class="search-query span2" placeholder="Søk">
+        </form>
+        -->
+        <!-- end søkefelt -->
+            
+        {% if user.is_authenticated %}
+
+        <!-- bruker-dropdown -->
+        <ul class="nav pull-right">
+            <li class="dropdown pull-right">
+                <a href="#bruker"
+                    class="dropdown-toggle no-ajaxy"
+                    data-toggle="dropdown">
+                    <span class="icon white user"></span>{{ user.username }}
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url accounts.views.view_member_profile user.username %}">Vis profil</a></li>
+                    <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
+                    <li><a class="no-ajaxy" href="/logout">Logg ut</a></li>
+                    <li class="divider"></li>
+                    <li><a class="no-ajaxy" href="/admin">Admin</a></li>
+                </ul>
+            </li>
+        </ul>
+        <!-- end bruker-dropdown -->
+
+        {% else %}
+
+        <!-- loginboks -->
+        <form class="navbar-form pull-right" action="/login/" method="post">
+            {% csrf_token %}
+            <table style="line-height: 35px">
+                <tr>
+                    <td><input class="span1" type="text" placeholder="Bruker" name="username" /></td>
+                    <td><input class="span1" type="password"  placeholder="Passord" name="password" /></td>
+                    <td><input class="submit" type="submit" value="Login" /></td>
+                </tr>
+            </table>
+        </form>
+        <!-- end loginboks -->
+
         {% endif %}
 
-
-        <!-- main row -->
-            {% block main %}
-        <div class="row">
-
+    </div>
+    <!-- end navbar container -->
         
-            <!-- content -->
-            <div class="span8">
-                {% block content %} 
-                <h2>content-blocken er tom. Kontakt webkom@nabla.no.</h2>
-                {% endblock content %}  
-            </div> 
-            <!-- end content container -->
-            
-            <!-- sidebar -->
-            <div class="span4">
+</div>
+</div>
+<!-- end navbar and navbar-inner -->
 
-                {% block sidebar %}
 
-                <!-- kommende arrangement -->
-                <h2>Kommende arrangement</h2>
-                <div class="well" style="padding: 8px 0;">
-                    <ul class="nav list">
-                        {% for event in upcoming_events %}
-                        <li>
-                            <a href="{% url event_detail event.id %}">
-                                <time 
-                                    class="label important"
-                                    datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.M" }}</time> 
-                                 {{ event.headline }}
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <!-- end kommende arrangement -->
+<!-- main container -->
+<div class="container" id="mainblock">
 
-                {% endblock sidebar %}
-
-                {% block ad %}
-
-                <!-- reklame -->
-                <img src="http://lorempixel.com/300/250/technics/1/Reklame" alt="Reklame">
-                <!-- end reklame -->
-
-                {% endblock ad %}
-
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags %}{{ message.tags}}{% endif %}">
+                {#<a class="close" data-dismiss="alert">×</a>#}
+                <b>Info:</b> {{ message }} 
             </div>
-            <!-- end sidebar -->
-            
+        {% endfor %}
+    {% endif %}
+
+
+    <!-- main row -->
+    {% block main %}
+    <div class="row">
+
+    
+        <!-- content -->
+        <div class="span8">
+            {% block content %} 
+            <h2>content-blocken er tom. Kontakt webkom@nabla.no.</h2>
+            {% endblock content %}  
+        </div> 
+        <!-- end content container -->
+        
+        <!-- sidebar -->
+        <div class="span4">
+
+            {% block sidebar %}
+
+            <!-- kommende arrangement -->
+            <h2>Kommende arrangement</h2>
+            <div class="well" style="padding: 8px 0;">
+                <ul class="nav list">
+                    {% for event in upcoming_events %}
+                    <li>
+                        <a href="{% url event_detail event.id %}">
+                            <time 
+                                class="label important"
+                                datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.M" }}</time> 
+                             {{ event.headline }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- end kommende arrangement -->
+
+            {% endblock sidebar %}
+
+            {% block ad %}
+
+            <!-- reklame -->
+            <img src="http://lorempixel.com/300/250/technics/1/Reklame" alt="Reklame">
+            <!-- end reklame -->
+
+            {% endblock ad %}
+
         </div>
-            {% endblock main %} 
-        <!-- end main row -->
-
-
-    </div>
-    <!-- end main container  -->
-    
-    </div>
-    <!-- end whitebox -->
-    
-    <footer>
-        <div class="container">
-        <div class="row">
+        <!-- end sidebar -->
         
-            <!-- kontakt -->
-            <div class="span4 kontakt">
-                <h2>Kontakt</h2>
-                <table class="table table-condensed">
-                    <tbody>
-                        <tr><td>Styret</td><td>nabla&nabla;nabla.no</td></tr>
-                        <tr><td>Bedriftskomiteen</td><td>bedkom&nabla;nabla.no</td></tr>
-                        <tr><td>Festkomiteen</td><td>festkom&nabla;nabla.no</td></tr>
-                        <tr><td>Kjellerstyre</td><td>nablakjelleren&nabla;nabla.no</td></tr>
-                        <tr><td>Arrkom</td><td>alumnikom&nabla;nabla.no</td></tr>
-                        <tr><td>Redaksjonen</td><td>nabladet&nabla;nabla.no</td></tr>
-                        <tr><td>Webkomiteen</td><td>webkom&nabla;nabla.no</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- end kontakt -->
-            
-            <!-- omnabla -->
-            <div class="span4">
-                <h2>Om Nabla</h2>
-                <p>Nabla er linjeforeningen for sivilingeniørprogrammet Fysikk og matematikk på NTNU. Du kan lese mer om studiet på <a href="http://www.ntnu.no/studier/mtfyma">NTNU sine nettsider</a></p>
-                <p><b>Postadresse:</b></p>
-                <address>
-                    Nabla <br>
-                    NT-fakultetet <br>
-                    Realfagbygget, NTNU <br>
-                    N-7491 Trondheim <br>
-                    Norway
-                </address>
-            </div>
-            <!-- end omnabla -->
+    </div>
+    {% endblock main %} 
+    <!-- end main row -->
 
-            <!-- twitterbox -->
-            <div class="span4" id="twitterbox">
+</div>
+<!-- end main container  -->
 
-                <script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
-                <script>
-                new TWTR.Widget({
-                    version: 2,
-                    type: 'profile',
-                    rpp: 4,
-                    interval: 30000,
-                    width: 'auto',
-                    height: 300,
-                    theme: {
-                        shell: {
-                            background: '#222',
-                            color: '#ffffff'
-                        },
-                        tweets: {
-                            background: '#111',
-                            color: '#abd2eb'
-                        }
+</div>
+<!-- end whitebox -->
+
+<footer>
+    <div class="container">
+    <div class="row">
+    
+        <!-- kontakt -->
+        <div class="span4 kontakt">
+            <h2>Kontakt</h2>
+            <table class="table table-condensed">
+                <tbody>
+                    <tr><td>Styret</td><td>nabla&nabla;nabla.no</td></tr>
+                    <tr><td>Bedriftskomiteen</td><td>bedkom&nabla;nabla.no</td></tr>
+                    <tr><td>Festkomiteen</td><td>festkom&nabla;nabla.no</td></tr>
+                    <tr><td>Kjellerstyre</td><td>nablakjelleren&nabla;nabla.no</td></tr>
+                    <tr><td>Arrkom</td><td>alumnikom&nabla;nabla.no</td></tr>
+                    <tr><td>Redaksjonen</td><td>nabladet&nabla;nabla.no</td></tr>
+                    <tr><td>Webkomiteen</td><td>webkom&nabla;nabla.no</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- end kontakt -->
+        
+        <!-- om nabla -->
+        <div class="span4">
+            <h2>Om Nabla</h2>
+            <p>Nabla er linjeforeningen for sivilingeniørprogrammet Fysikk og matematikk på NTNU. Du kan lese mer om studiet på <a href="http://www.ntnu.no/studier/mtfyma">NTNU sine nettsider</a></p>
+            <p><b>Postadresse:</b></p>
+            <address>
+                Nabla <br>
+                NT-fakultetet <br>
+                Realfagbygget, NTNU <br>
+                N-7491 Trondheim <br>
+                Norway
+            </address>
+        </div>
+        <!-- end om nabla -->
+
+        <!-- twitterbox -->
+        <div class="span4" id="twitterbox">
+
+            <script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
+            <script>
+            new TWTR.Widget({
+                version: 2,
+                type: 'profile',
+                rpp: 4,
+                interval: 30000,
+                width: 'auto',
+                height: 300,
+                theme: {
+                    shell: {
+                        background: '#222',
+                        color: '#ffffff'
                     },
-                    features: {
-                        scrollbar: false,
-                        loop: false,
-                        live: false,
-                        behavior: 'all'
+                    tweets: {
+                        background: '#111',
+                        color: '#abd2eb'
                     }
-                }).render().setUser('nabla_ntnu').start();
-                </script>
-            </div>
-            <!-- end twitterbox -->
+                },
+                features: {
+                    scrollbar: false,
+                    loop: false,
+                    live: false,
+                    behavior: 'all'
+                }
+            }).render().setUser('nabla_ntnu').start();
+            </script>
+        </div>
+        <!-- end twitterbox -->
 
-            
-        </div><!-- row -->
-        </div><!-- container -->
-    </footer>
+        
+    </div><!-- row -->
+    </div><!-- container -->
+</footer>
 
-  </body>
+<!-- Scripts are loaded at the bottom to improve page loading speed.
+     TODO: Make a build script that combines and compresses them. -->
+
+<!-- Obligatory jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+<!-- Bootstrap dropdown -->
+<script src="{{ STATIC_URL }}js/bootstrap-dropdown.js"></script>
+
+<!-- jQuery ScrollTo Plugin -->
+<script defer src="http://balupton.github.com/jquery-scrollto/scripts/jquery.scrollto.min.js"></script>
+
+<!-- History.js --> 
+<script src="{{ STATIC_URL }}js/jquery.history.js"></script>
+
+<!-- Enable parsing TeX. Put TeX inside \[ \mathbb{Escaped\ brackets} \] -->
+<script type="text/javascript" 
+        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        </script>
+
+</body>
 </html>
