@@ -28,6 +28,10 @@
     <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
+
+    <!-- Obligatory jQuery -->
+    <!-- Loaded at the top for easier use -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -240,7 +244,7 @@
 
         <!-- twitterbox -->
         <div class="span4" id="twitterbox">
-
+            <!-- Standard Twitter-widget -->
             <script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
             <script>
             new TWTR.Widget({
@@ -277,21 +281,40 @@
 </footer>
 
 <!-- Scripts are loaded at the bottom to improve page loading speed.
-     TODO: Make a build script that combines and compresses them. -->
+     TODO: Make a build script that combines and compresses them -->
 
-<!-- Obligatory jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
 
 <!-- Bootstrap dropdown -->
 <script src="{{ STATIC_URL }}js/bootstrap-dropdown.js"></script>
 
-<!-- jQuery ScrollTo Plugin -->
-<script defer src="http://balupton.github.com/jquery-scrollto/scripts/jquery.scrollto.min.js"></script>
+<!-- History.js -->
+{# Skaper krøll med Django Toolbar #} 
+<!--<script src="{{ STATIC_URL }}js/jquery.history.js"></script>-->
 
-<!-- History.js --> 
-<script src="{{ STATIC_URL }}js/jquery.history.js"></script>
+<!-- Enable parsing TeX. -->
+<script type="text/x-mathjax-config">
 
-<!-- Enable parsing TeX. Put TeX inside \[ \mathbb{Escaped\ brackets} \] -->
+// Differences from standard config:
+//  - $tex$ is allowed.
+//  - LaTeX inside <code> tags now works.
+MathJax.Hub.Config({
+    tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ]
+    }
+});
+
+// Hooks the event which is triggered when a Latex equation is rendered, and
+// adds the class .equation to the parent <code> element. This is because
+// Markdown creates code elements around equations.
+MathJax.Hub.Register.MessageHook("New Math", function( message ) {
+    var script = MathJax.Hub.getJaxFor( message[1]).SourceElement();
+    $(script).parent("code").addClass("jax");
+})
+
+</script>
+
 <script type="text/javascript" 
         src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
         </script>

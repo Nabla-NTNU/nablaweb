@@ -170,13 +170,14 @@ LOGIN_URL = '/login/'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
+    'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
     'events.context_processors.upcoming_events', # Legger til upcoming_events i alle templates.
     'jobs.views.activej',
     'quotes.context_processors.random_quote',
     #'events.context_processors.current_month_calendar', 
-    # fjernet fordi den bruker en sql request per dag
+    # fjernet fordi den bruker en sql request per dag i mnd
    )
 
 
@@ -188,3 +189,7 @@ NTNU_PASSWD = '/home/hiasen/passwd'
 MATH_CAPTCHA_QUESTION = ''
 MATH_CAPTCHA_NUMBERS = range(0,40)
 MATH_CAPTCHA_OPERATORS = '+-*/%'
+
+DEBUG_TOOLBAR_CONFIG = {
+    "INTERCEPT_REDIRECTS": False,
+}

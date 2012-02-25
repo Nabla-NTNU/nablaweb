@@ -6,7 +6,7 @@
     /* Div that holds all parts of page except footer */
     #whitebox {
         background-color: white; 
-        padding-top: 60px; 
+        /*padding-top: 60px; */
         padding-bottom: 40px;
         border-bottom: 2px solid black;
     }
@@ -22,6 +22,11 @@
     h2 { margin-bottom: 5px; }
     h3 { margin-bottom: 5px; }
 
+    /* Fix for grid inside a well */
+    .well .row {
+
+    }
+
 
 /* MISC */
 
@@ -32,6 +37,26 @@
 
     img[alt=left] {
         float: left;
+    }
+
+    /* Remove code styling from rendered LaTeX */
+    code.jax {
+        font: inherit;
+        font-size: 120%;
+        background: inherit;
+        border: none;
+        color: inherit;
+        margin: 0px;
+    }
+
+    .add-comment textarea {
+        width: 98%;
+        height: 100px;
+    }
+
+    .MathJax_Display {
+        margin-top: -9px !important;
+        margin-bottom:-15px !important;
     }
 
 /* FOOTER */
@@ -71,11 +96,11 @@
 
 /* Custom icons */
 	/* Custom added icons */
-	.icon.custom{background-image:url(../img/facebook-icon.png);}
-	.icon.facebook{background-position:0px 0px;}
+	.icon-custom{background-image:url(../img/facebook-icon.png);}
+	.icon-facebook{background-position:0px 0px;}
 	
 	/* Transparent glyph icons */
-	.icon.red{background-image:url(../img/glyphicons-halflings-sprite-red.png);}
+	.icon-red{background-image:url(../img/glyphicons-halflings-red.png);}
 
 /* Fix for navbar in mobile mode */
 @media (max-width: 480px) {
@@ -92,12 +117,10 @@
     table.equal td, table.equal th {
         width: 113px;
     }
-
     /* Resizing week table cells */
     #calWrapper table.equal th.uke, #calWrapper table.equal td.uke {
         width: 40px;
     }
-
     /* Costumizing list element inside calendar */
     ul.events {
         list-style: none;
@@ -116,7 +139,6 @@
     ul.events li.red {
         background: url('../img/cal-red.png') no-repeat 0px 2px;
     }
-
     /* Adding background to table, making it stand out! */
     #calWrapper {
       /*  background-color: #ededed;
@@ -131,7 +153,6 @@
     table.equal caption {
         /*background-color: #ededed;*/
     }
-
     /* Using first-child selector to do the syles on the week column. */
     #calWrapper table.equal td:first-child {
         font-weight: bold;
@@ -140,18 +161,13 @@
         vertical-align: middle;
         width: 30px;
     }
-
     #calWrapper table .cell {
         min-height: 50px;
     }
-
     #calWrapper table td.differentmonth {
         color: #aaa;
     }
-
-    #calWrapper table td.current {
-        outline: 1px solid maroon;
-    }
+    #calWrapper table td.current { outline: 1px solid maroon; }
 
     /* Adding color to headings and week column */
     #calWrapper table.equal td:first-child, #calWrapper table.equal th {
@@ -163,7 +179,6 @@
         /*background: #ecf3ed;*/
     }
     /*ecf3ed*/
-
     #calWrapper table caption .current {
         font-size: 30px;
         line-height: 30px;
@@ -174,11 +189,14 @@
         line-height: 50px;
     }
 
-    #calWrapper table caption h2 {
-        margin-bottom: 20px;
-    }
+    #calWrapper table caption h2 { margin-bottom: 20px; }
 
 /* EDIT PROFILE PAGE */
-.centertext {
-    text-align: center;
-}
+    .centertext { text-align: center; }
+
+/* COMMENTS */
+    form.add-comment { margin-top: 20px; }
+    form.add-comment .control-group:first-of-type { padding-top: 9px;}
+    .comment .info { margin-bottom: 10px; } 
+    .comment .author { font-weight: bold; } 
+    .comment .date { color: #999; }

@@ -16,6 +16,9 @@ sqlite.db
 # Media-mapper (opplastede brukerbilder o.l.)
 media/
 
+# Mappe som blir laget av pip av og til
+build/
+
 # Disse genereres ved å kjøre ./manage.py generatemedia
 # (Kun nødvendig for production)
 nablaweb/_generated_media/
