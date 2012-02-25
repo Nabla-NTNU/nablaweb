@@ -3,6 +3,10 @@
         background-color: #000; /* Background-color of footer */
     }
 
+    .navbar-inner {
+        /*min-height: 50px;*/
+    }
+
     /* Div that holds all parts of page except footer */
     #whitebox {
         background-color: white; 
@@ -12,11 +16,21 @@
     }
 
     /* Makes nav link color brighter */
-    .container > .nav > li > a, .container li.dropdown > a { color: #ccc; }
+    /*.container > .nav > li > a, .container li.dropdown > a { color: #ccc; }*/
     
     /* Nabla logo is a huge svg, so rescale and position it */
-    .brand img { height: 18px; margin-bottom: -1px; margin-right: -3px;}
-    .brand { font-family:Helvetica; }
+    .brand img { 
+        height: 16px; 
+        position: relative; 
+        
+    }
+    .navbar .brand { 
+        
+    }
+
+    .navbar .nav > li > a {
+        
+    }
 
     /* Looks prettier */
     h2 { margin-bottom: 5px; }
@@ -103,7 +117,7 @@
 	.icon-red{background-image:url(../img/glyphicons-halflings-red.png);}
 
 /* Fix for navbar in mobile mode */
-@media (max-width: 480px) {
+@media (max-width: 0px) {
 	/* No longer fixed on top of screen */
 	.navbar { position: static; }
 	
@@ -195,6 +209,9 @@
     .centertext { text-align: center; }
 
 /* COMMENTS */
+    .comments-header {
+        margin-top: 30px;
+    }
     form.add-comment { margin-top: 20px; }
     form.add-comment .control-group:first-of-type { padding-top: 9px;}
     .comment .info { margin-bottom: 10px; } 

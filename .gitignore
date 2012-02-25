@@ -13,6 +13,9 @@ nablaweb/nabla_development.db
 nabla_development.db
 sqlite.db
 
+# Filer som genereres lokalt
+dependencies/twitter-bootstrap/bootstrap
+
 # Media-mapper (opplastede brukerbilder o.l.)
 media/
 

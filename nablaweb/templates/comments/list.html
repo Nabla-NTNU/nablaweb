@@ -1,6 +1,6 @@
 {% load humanize %}
 {% load avatar_tags %}
-{% load wordbreak %}
+{% load markup %}
 
 {% for comment in comment_list %}
 
@@ -23,9 +23,10 @@
                         </span>
                         <span class="date">{{ comment.submit_date|naturalday }}</span>
                     </div>
-                    {% load markup %}
+                    
                     {# Urlize er en extension som gjør linker klikkbare. Failer silently #}
-                    {{ comment.comment|markdown:"safe,urlize" }}
+                    {# {{ comment|escape|markdown:"safe,urlize" }} #}
+                    {{ comment.comment|striptags|markdown:"safe,urlize" }}
 
                     {# urlize.py hentes fra https://github.com/r0wb0t/markdown-urlize #}
                     {# og puttes i /usr/lib/pymodules/python2.7/markdown/extensions #}

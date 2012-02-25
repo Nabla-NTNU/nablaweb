@@ -18,8 +18,8 @@
     <![endif]-->
 
     <!-- Styles -->
-    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet"><!-- Do not modify -->
-    <link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet"><!-- Do not modify -->
+    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet"><!-- Do not modify -->
+    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" rel="stylesheet"><!-- Do not modify -->
     <link href="{{ STATIC_URL }}css/default.css" rel="stylesheet"><!-- Go ahead -->
 
 
@@ -95,7 +95,7 @@
                 <a href="#bruker"
                     class="dropdown-toggle no-ajaxy"
                     data-toggle="dropdown">
-                    <span class="icon white user"></span>{{ user.username }}
+                    <span class="icon-white icon-user"></span>{{ user.username }}
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
@@ -125,6 +125,8 @@
         <!-- end loginboks -->
 
         {% endif %}
+
+        
 
     </div>
     <!-- end navbar container -->
@@ -168,12 +170,12 @@
             <!-- kommende arrangement -->
             <h2>Kommende arrangement</h2>
             <div class="well" style="padding: 8px 0;">
-                <ul class="nav list">
+                <ul class="nav nav-list">
                     {% for event in upcoming_events %}
                     <li>
                         <a href="{% url event_detail event.id %}">
                             <time 
-                                class="label important"
+                                class="label label-important"
                                 datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.M" }}</time> 
                              {{ event.headline }}
                         </a>
@@ -285,8 +287,8 @@
 
 
 
-<!-- Bootstrap dropdown -->
-<script src="{{ STATIC_URL }}js/bootstrap-dropdown.js"></script>
+<!-- Bootstrap. Det er mulig å velge kun komponenter som skal brukes -->
+<script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
 
 <!-- History.js -->
 {# Skaper krøll med Django Toolbar #} 
