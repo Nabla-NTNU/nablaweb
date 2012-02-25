@@ -5,26 +5,39 @@
 
 {% block content %}
     <h2>{% trans "Forhåndsvisning av kommentar" %}</h2>
-    {% if form.errors %}
+    {% if form.errors %} 
         <h3>{% blocktrans count form.errors|length as counter %}Please correct the error below{% plural %}Please correct the errors below{% endblocktrans %}</h3>
     {% else %}
-        <div class="comment">
-            <div class="avatar">
+
+        <div class="row comment" id="c{{ comment.id }}">
+
+            <div class="avatar span1">
                 {% load avatar_tags %}
                 {% avatar user.username 60 %}
             </div>
 
-            <div class="bubble_container">
-                <div class="bubble_arrow"></div>
-                <div class="bubble">
-                    <div class="text">
-                        {% load markup %}
-                        {# Urlize er en extension som gjør linker klikkbare. Failer silently #}
-                        {{ form.data.comment|markdown:"safe,urlize" }}
+            <div class="span7">
+                
+                <div class="text">
+                    <div class="info">
+                        <span class="author">
+                            <a href="{% url accounts.views.view_member_profile user.username %}">
+                                {{ user.get_full_name }} 
+                            </a>
+                        </span>
+                        <span class="date">i dag</span>
                     </div>
+                    {% load markup %}
+                    {# Urlize er en extension som gjør linker klikkbare. Failer silently #}
+                    {{ form.data.comment|markdown:"safe,urlize" }}
+
                 </div>
+
             </div>
+
         </div>
+
+
     {% endif %}
 
     {% include "comments/form.html" %}

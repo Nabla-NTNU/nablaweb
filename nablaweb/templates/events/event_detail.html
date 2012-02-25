@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% load markup %}
 {% load humanize %}
+{% load comments %}
 
 {% block title %}{{ event.headline }}{% endblock %}
 
 {% block content %}
 
 <div class="row"><div class="span8">
-        <img class="header_picture" alt="" src="{{ event.picture.url }}" width="620">
+        <img class="header_picture" alt="" 
+             src="{% if event.picture %}{{ event.picture.url }}{% endif %}" width="620">
 <h2>{{ event.headline }}</h2>
 {{ event.description|markdown }}
 </div></div>
@@ -26,6 +28,23 @@
 </div>
 <hr>
 {% endif %}
+
+{# Comments #}
+    {% get_comment_count for event as comment_count %}
+
+    {% if comment_count > 0 %}
+        <h3 class="comments-header">Kommentarer</h3>
+    {% endif %}
+
+    {% render_comment_list for event %}
+
+    {% if user.is_authenticated %}
+        {% render_comment_form for event %}
+    {% else %}
+        <p class="well">Logg inn for å skrive en kommentar</p>
+    {% endif %}
+{# end Comments #}
+
 
 {% endblock %}
 
@@ -144,8 +163,8 @@
     </tr>
 
     <tr><td colspan="2" style="text-align: center;">
-        <a href="{% url event_detail event.id %}" class="btn primary">Meld deg på</a>
-        <a href="#notimplemented" class="btn"><span class="icon custom facebook"></span> Vis på Facebook</a>
+        <a href="{% url event_detail event.id %}" class="btn btn-primary">Meld deg på</a>
+        <a href="#notimplemented" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
     </td></tr>
 
 </table>
@@ -162,11 +181,11 @@
 
 
 <div class="well" style="padding: 8px 0;">
-    <ul class="nav list">
+    <ul class="nav nav-list">
         <li class="nav-header">Admin</li>
-        <li><a href="{% url event_admin event.id %}"><i class="icon"></i> Administrer</a></li>
-        <li><a href="#endre"><i class="icon pencil"></i> Endre</a></li>
-        <li><a href="#slett"><i class="icon trash"></i> Slett</a></li>
+        <li><a href="{% url event_admin event.id %}"><i class="icon-glass"></i> Administrer</a></li>
+        <li><a href="#endre"><i class="icon-pencil"></i> Endre</a></li>
+        <li><a href="#slett"><i class="icon-trash"></i> Slett</a></li>
     </ul>
 </div>
 

@@ -1,42 +1,163 @@
 {% load comments i18n %}
 {% load avatar_tags %}
+{% load markup %}
 
-<div class="comment" id="c{{ comment.id }}">
-    <div class="avatar">
-        {% avatar user.username 60 %}
-    </div>
 
-    <div class="bubble_container">
+<form action="{% comment_form_target %}" method="post" class="add-comment well">
+    {% csrf_token %}
+    <fieldset>
 
-    <form action="{% comment_form_target %}" method="post">{% csrf_token %}
+        <legend>Legg til en kommentar</legend>
 
-        <div class="bubble_arrow"></div>
-        <div class="bubble">
+        {% comment %}
+        Hvis vi er på den originale siden, hent nåværende URL.  Hvis noe gikk
+        galt, og vi havnet på forhåndsvisningen, bruk URL fra den originale
+        siden, som ble POSTet via next-feltet
+        {% endcomment %}
+        <input type="hidden" name="next" 
+               value="{% if request.POST.next %}{{ request.POST.next }}{% else %}{{ request.get_full_path }}{% endif %}">
+        {% for field in form %}
+           
+            {% if field.is_hidden %}
 
-            {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
-            {% for field in form %}
-                {% if field.is_hidden %}
-                    <div>{{ field }}</div>
-                {% else %}
-                {# Stygg hack for å fjerne disse feltene #}
+                {{ field }}
+
+            {% else %}
+
+                {# Fjern uønskede felt, ved å sjekke svartliste feltnavn #}
                 {% if field.name != "name" and field.name != "email" and field.name != "url" %}
-                    {% if field.errors %}{{ field.errors }}{% endif %}
-                        <p
-                            {% if field.errors %} class="error"{% endif %}
-                            {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
-                            {{ field }}
-                        </p>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
 
-            <p class="submit">
-                <input type="submit" name="post" class="submit-post" value="Legg til kommentar" />
-                <input type="submit" name="preview" class="submit-preview" value="{% trans "Preview" %}" />
-            </p>
+                    {# Vis feltet hvis det er godkjent #}
+                    <div class="control-group {% if field.errors %}error {% endif %}"
+                         {% if field.name == 'honeypot' %}style="display:none;"{% endif %}>
+                        <label class="control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+                        <div class="controls"
+                             >
+
+                            {{ field }}
+                            {{ field.size }}
+
+                                <div class="help-block">
+                                    {{ field.help_text }}
+                                    {{ field.errors }}
+                                </div>
+                           
+                            
+                        </div>
+                    </div>
+                {% endif %}
+
+            {% endif %}
+
+        {% endfor %}
+
+        <div class="form-actions">
+            <button type="submit" name="post" class="btn btn-primary">Lagre</button>
+            <button type="submit" name="preview" class="btn">Forhåndsvis</button>
+        </div>
+
+    </fieldset>
+
+    <p>
+        Kommentarene bruker Markdown og MathJax. 
+        <button style="display:none;" class="btn comment-help">Vis hjelp</button>
+        <button style="display:none;" class="btn comment-help">Gjem hjelp</button>
+    </p>
+
+    <div class="comment-help">
+
+
+        <div class="row-fluid">
+            <div class="span7"><pre class="tex2jax_ignore">Heisann, [Lenketekst](http://google.com), 
+**bold**, _kursiv_. 
+Og litt `kode`.
+            </pre></div>
+            <div class="span5">
+                <p>Heisann, <a href="http://google.com">Lenketekst.com</a>, <strong>bold</strong>, <em>kursiv</em>. Og litt <code>kode</code>.</p>
             </div>
         </div>
 
-    </form>
+        <div class="row-fluid">
+            <div class="span7"><pre class="tex2jax_ignore">Jeg kan skrive store ligninger:
 
-</div>
+`$$ \int_0^\infty \frac1{x^2}\, dx = y. $$`
+Og små ligninger `$ \int\,som\ dette$`.
+            </pre></div>
+            <div class="span5">
+                <p>Jeg kan skrive store ligninger:</p>
+
+                <p><code>$$ \int_0^\infty \frac1{x^2}\, dx = y. $$</code></p>
+
+                <p>Og små ligninger <code>$ \int x^5\, dx$</code>.</p>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span7"><pre class="tex2jax_ignore">Liste:
+
+* Ein
+* To
+* Tri
+
+Numerert liste:
+
+1. Ein
+2. To
+    * Fire
+    * Fem
+3. Tre
+            </pre></div>
+            <div class="span5">
+                <p>Liste:</p>
+
+                <ul>
+                    <li>Ein</li>
+                    <li>To</li>
+                    <li>Tri</li>
+                </ul>
+
+                <p>Numerert liste:</p>
+
+                <ol>
+                    <li>Ein</li>
+                    <li>To
+                        <ul>
+                            <li>Fire</li>
+                            <li>Fem</li>
+                        </ul>
+                    </li>
+                    <li>Tre</li>
+                </ol>
+
+
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span7"><pre class="tex2jax_ignore">&gt; Slik som dette siterer jeg noen. Du trenger kun en &gt; i starten av hver paragraf. 
+            </pre></div>
+            <div class="span5">
+
+                <blockquote>
+                  <p>Slik som dette siterer jeg noen. Du trenger kun en &gt; i starten av hver paragraf.</p>
+                </blockquote>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var commentHelp   = $("div.comment-help").hide();
+        var commentHelpButtons = $("button.comment-help").show();
+        commentHelpButtons.last().hide();
+
+        $("button.comment-help").on("click", function( e ) {
+            commentHelpButtons.toggle();
+            commentHelp.slideToggle();
+            e.preventDefault();
+        });
+        
+    </script>
+
+</form>
