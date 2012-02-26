@@ -30,33 +30,36 @@ class Event(Content):
     # Datoen er ikke tidligere enn event_start.
     event_end = models.DateTimeField(verbose_name="slutt", null=True, blank=True)
 
+    # Om arrangementet krever påmelding.
+    # Dette feltet er påkrevd.
+    registration_required = models.BooleanField(verbose_name="påmelding", null=False, blank=False)
+
     # Frist for å melde seg på arrangementet.
-    # Dette feltet er valgfritt.
-    # At dette feltet er satt er ekvivalent med at arrangementet krever påmelding.
+    # Dette feltet er satt hvis registration_required er sann.
     # Datoen er ikke senere enn event_start.
     registration_deadline = models.DateTimeField(verbose_name="påmeldingsfrist", null=True, blank=True)
 
     # Når påmeldingen starter.
     # Dette feltet er valgfritt.
-    # Dette feltet er bare satt hvis registration_deadline er satt.
+    # Dette feltet er bare satt hvis registration_required er sann.
     # Datoen er ikke senere enn registration_deadline.
     registration_start = models.DateTimeField(verbose_name="påmelding åpner", null=True, blank=True)
 
     # Frist for å melde seg av arrangementet.
     # Dette feltet er valgfritt.
-    # Dette feltet er bare satt hvis registration_deadline er satt.
+    # Dette feltet er bare satt hvis registration_required er sann.
     # Datoen er ikke tidligere enn registration_start, hvis dette er satt.
     # Datoen er ikke senere enn event_start.
     deregistration_deadline = models.DateTimeField(verbose_name="avmelding stenger",null=True, blank=True)
 
     # Hvor mange plasser arrangementet har.
-    # Dette feltet er satt hvis og bare hvis registration_deadline er satt.
+    # Dette feltet er satt hvis og bare hvis registration_required er sann.
     # Antall plasser er et heltall ikke mindre enn null.
     places = models.PositiveIntegerField(verbose_name="antall plasser", null=True, blank=True)
 
     # Om arrangementet har venteliste.
     # Dette feltet er valgfritt.
-    # Dette feltet er bare satt hvis registration_deadline er satt.
+    # Dette feltet er bare satt hvis registration_required er sann.
     has_queue = models.NullBooleanField(verbose_name="har venteliste", null=True, blank=True, help_text="Om ventelisten er på, vil det være mulig å melde seg på selv om arrangementet er fullt. De som er i ventelisten vil automatisk bli påmeldt etter hvert som plasser blir ledige.")
 
     class Meta:
@@ -118,12 +121,6 @@ class Event(Content):
             return True
         except EventRegistration.DoesNotExist:
             return False
-
-    # Returnerer True dersom arrangementet krever påmelding, False ellers.
-    def registration_required(self):
-        return self.registration_deadline is not None
-    registration_required.boolean = True
-    registration_required.short_description = "krever påmelding"
 
     # Returnerer True dersom arrangementet har venteliste, False ellers.
     def has_waiting_list(self):
@@ -218,7 +215,7 @@ class Event(Content):
     # Sletter overflødige registreringer.
     def _prune_queue(self):
         # Dersom registrering ikke trengs lengre.
-        if not self.registration_required():
+        if not self.registration_required:
             self.eventregistration_set.all().delete()
 
         # Dersom arrangementet ikke har venteliste lengre,

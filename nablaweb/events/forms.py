@@ -52,10 +52,9 @@ class EventForm(NewsForm):
     has_queue = BooleanField(required=False, label="Har venteliste", help_text="Hvis arrangementet har venteliste, går det ann å melde seg på selv etter at det er fullt. Man havner da på venteliste, og blir automatisk meldt på om det blir ledig.")
 
     # Lar brukeren spesifisere om arrangementet krever påmelding.
-    # Internt er dette ekvivalent med at registration_deadline er satt.
-    # Dersom registration_required ikke er True ignoreres de mottatte data 
+    # Dersom registration_required ikke er True ignoreres de mottatte data
     # for de andre registreringsrelaterte feltene, som i tillegg slettes.
-    registration_required = BooleanField(required=False, label="Registrering kreves")
+    registration_required = BooleanField(required=True, label="Registrering kreves")
 
     class Meta(NewsForm.Meta):
         model = Event
@@ -124,7 +123,5 @@ class EventForm(NewsForm):
                 # Ignorer feil relatert til feltet.
                 if name in self._errors:
                     del self._errors[name]
-
-        del cleaned_data['registration_required']
 
         return cleaned_data
