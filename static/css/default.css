@@ -214,6 +214,7 @@
     }
     form.add-comment { margin-top: 20px; }
     form.add-comment .control-group:first-of-type { padding-top: 9px;}
+    .comment .text { width: 100%; overflow: hidden; }
     .comment .info { margin-bottom: 10px; } 
     .comment .author { font-weight: bold; } 
     .comment .date { color: #999; }
