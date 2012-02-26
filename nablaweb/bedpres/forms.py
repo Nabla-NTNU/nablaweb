@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
+from django import forms
 from nablaweb.bedpres.models import BedPres
 from nablaweb.events.forms import EventForm
 import bpc_core
@@ -21,3 +22,22 @@ class BedPresForm(EventForm):
         self.fields['places'].widget.attrs['readonly'] = True
         self.fields['registration_required'].widget.attrs['readonly'] = True
         self.fields['bpcid'].widget.attrs['readonly'] = True
+
+
+class BPCForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        # http://jacobian.org/writing/dynamic-form-generation/
+
+        super(BPCForm, self).__init__(*args, **kwargs)
+
+        # Lag en liste med bedpresser som ikke finnes lokalt.
+        bpc_events = bpc_core.get_events()['event']
+        bpc_ids = [event['id'] for event in bpc_events]
+        local_events = BedPres.objects.filter(bpcid__in=bpc_ids)
+        local_ids = [event.id for event in local_events]
+        available_events = filter(lambda e: e['id'] not in local_ids, bpc_events)
+
+        choices = [(event['id'], event['title']) for event in available_events]
+
+        self.available_events = available_events
+        self.fields['events'] = forms.MultipleChoiceField(required=False, label="Tilgjengelig fra BPC", choices=choices, widget=forms.CheckboxSelectMultiple)

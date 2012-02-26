@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-
-import re
+import inspect
+import re # Validering av tidspunkt som strenger
+import json # BPC returnerer json
 from urllib import urlencode
 from urllib2 import urlopen, Request, URLError
 from datetime import datetime
-from phpserialize.phpserialize import unserialize
 
 
 # Samleunntak.
@@ -18,27 +18,33 @@ class BPCClientException(BPCException):
     def __init__(self, message):
         super(BPCClientException, self).__init__(message)
 
-# Feil som rapporteres av BPC.
+# Feil som skyldes BPC.
 class BPCResponseException(BPCException):
-    def __init__(self, message):
+    def __init__(self, message, response):
         super(BPCResponseException, self).__init__(message)
+        self.response = response
 
 
-BPC_URL = 'https://bpc.timini.no/bpc_testing/remote/'
-BPC_URL = 'https://bpc.timini.no/bpc/remote/'
+# Datoformatet brukt av BPC. ISO8601!
+BPC_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
+# URL til BPC-serveren.
+#BPC_URL = 'https://bpc.timini.no/bpc/remote/'
+BPC_URL = 'https://bpc.timini.no/bpc_testing/remote/' # Testserver
 
+# Informasjon som må sendes med hver forespørsel.
 SETTINGS = {
     'forening': '3',
-    'key': 'a88fb706bc435dba835b89ddb2ba4debacc3afe4',
-#    'key': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-    'method': 'serialized_array',
+#    'key': 'a88fb706bc435dba835b89ddb2ba4debacc3afe4',
+    'key': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    'method': 'json',
     'debug': 'false',
     'timing': 'false',
-    'version': '1.1',
+    'version': '1.5',
     }
 
-
+# Informasjon om typer forespørsler.
+# Brukes for å validere forespørsler før de sendes.
 REQUESTS = {
     'get_events':
         {'required': (),
@@ -58,49 +64,12 @@ REQUESTS = {
     'get_user_stats':
         {'required': ('username',),
          'optional': ('detailed_stats', 'fromdate', 'todate', 'event_type')},
+    'get_event_stats':
+        {'required': (),
+         'optional': ('fromdate', 'todate', 'event_type', 'attended', 'show_waitlist')},
     }
 
-
-# RESPONSES = {
-#     'get_events':
-#         {'event':
-#              {'required': ('id', 'title', 'description', 'time', 'place', 'web_page', 'logo', 'deadline', 'deadline_passed', 'is_advertised', 'registration_start', 'registration_started', 'seats', 'seats_available', 'this_attending', 'open_for', 'waitlist_enabled', 'count_waiting', 'web_page'),
-#               'optional': ('is_waiting', 'attending')}}
-#
-#     'add_attending':
-#         {'add_attending':
-#              {'required': (),
-#               'optional': ('waiting',)}}
-#
-#     'rem_attending':
-#         {'rem_attending':
-#              {'required': (),
-#               'optional': ()}}
-#
-#     'get_attending':
-#         {'users':
-#              {'required': ('user_id', 'fullname', 'username', 'reigstered', 'year'),
-#               'optional': ()}}
-#
-#     'get_waiting':
-#         {'users':
-#              {'required': ('user_id', 'fullname', 'username', 'reigstered', 'year'),
-#               'optional': ()}}
-#
-#     'get_user_stats':
-#         {'event':
-#              {'required': ('id', 'title', 'time', 'is_advertised', 'attended', 'on_waitlist'),
-#               'optional': ()}
-#          'user_stats':
-#              {'required': ('events', 'attended', 'on_waitlist'),
-#               'optional': ()}
-#          }
-#     }
-
-
-BPC_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
-
+# Typer feil som BPC kan rapportere om.
 BPC_ERRORS = {
     # Fatalt - Disse avbryter skriptet.
     '101': 'Feil eller ingen handshake',
@@ -157,6 +126,7 @@ def _validate_parameter(parameter, value):
 
 # Lag en dict som tilsvarer en gyldig spørring ved å kopiere
 # nødvendige felt over i en ny dict, sammen med innstillinger.
+# På den måten sendes kun relevant informasjon.
 def _create_valid_request(data):
     request = SETTINGS.copy()
 
@@ -176,113 +146,43 @@ def _create_valid_request(data):
     return request
 
 
-def make_request(data):
-    # TODO: Sjekk hvilke unntak som risikeres fra urlencode og urlopen.
+# _make_request kalles av en metode med et navn som er en gyldig verdi
+# for 'request', for gjøre en forespørsel av denne
+# typen. _make_request skal altså ikke brukes direkte. Ansvaret for
+# sjekking av at nødvendige argument er med flyttes dermed fra Python
+# sin funksjonskallmekanisme til _create_valid_request.
+def _make_request(**request):
+    request['request'] = inspect.stack()[1][3]
 
-    request = _create_valid_request(data)
-    request = Request(BPC_URL, urlencode(request))
+    # TODO: Sjekk hvilke unntak som risikeres fra urlencode og urlopen.
+    validated_request = _create_valid_request(request)
+    answer = Request(BPC_URL, urlencode(validated_request))
 
     try:
-        fd = urlopen(request)
+        fd = urlopen(answer)
         raw_data = fd.read()
-        fd.close()
     except URLError:
         raise BPCClientException("Could not contact server.")
+    finally:
+        fd.close()
 
-    return unserialize(raw_data)
+    response = json.loads(raw_data)
 
+    if 'error' in response:
+        error_id = response['error'][0].keys()[0]
+        raise BPCResponseException(BPC_ERRORS[error_id], response)
 
-def convert_names(bpc_info):
-    key_map = {
-        'count_waiting': 'count_waiting',
-        'waitlist_enabled': 'has_queue',
-        'description': 'description',
-        'is_advertised': 'is_advertised',
-        'title': 'headline',
-        'registration_start': 'registration_start',
-        'seats_available': 'seats_available',
-        'seats': 'places',
-        'min_year': 'min_year',
-        'open_for': 'open_for',
-        'deadline': 'registration_deadline',
-        'registration_started': 'registration_started',
-        'web_page': 'web_page',
-        'time': 'event_start',
-        'deadline_passed': 'deadline_passed',
-        'place': 'location',
-        'max_year': 'max_year',
-        'id': 'bpcid',
-        'logo': 'logo',
-        'this_attending': 'this_attending',
-        }
-    # TODO: Ta høyde for KeyError.
-    return dict((key_map[key], value) for (key, value) in bpc_info.iteritems())
+    return response
 
 
-def convert_types(bpc_info):
-    type_map = {
-        'count_waiting': int,
-        'has_queue': lambda x: bool(int(x)),
-        'description': str,
-        'is_advertised': lambda x: bool(int(x)),
-        'headline': str,
-        'registration_start': lambda x: datetime.strptime(x, BPC_TIME_FORMAT),
-        'seats_available': int,
-        'places': int,
-        'min_year': int,
-        'open_for': int,
-        'registration_deadline': lambda x: datetime.strptime(x, BPC_TIME_FORMAT),
-        'registration_started': lambda x: bool(int(x)),
-        'web_page': str,
-        'event_start': lambda x: datetime.strptime(x, BPC_TIME_FORMAT),
-        'deadline_passed': lambda x: bool(int(x)),
-        'location': str,
-        'max_year': int,
-        'bpcid': str,
-        'logo': str,
-        'this_attending': int,
-        }
-    return dict((key, type_map[key](value)) for (key, value) in  bpc_info.iteritems())
-
-def get_single_event(bedpres_id):
-    bpc_dict = make_request({'request': 'get_events',
-                               'event': bedpres_id})
-    event = bpc_dict.get('event')
-    if event is None:
-        raise BPCException(BPC_ERRORS['403'])
-    event = event.get(0)
-    return convert_types(convert_names(event))
+def get_events(**request): return _make_request(**request)
+def add_attending(**request): return _make_request(**request)
+def rem_attending(**request): return _make_request(**request)
+def get_attending(**request): return _make_request(**request)
+def get_waiting(**request): return _make_request(**request)
 
 
-def get_future_events():
-    bpc_dict = make_request({'request': 'get_events'})
-    events = bpc_dict.get('event')
-    if events is None:
-        raise BPCException(BPC_ERRORS['403'])
-    event_list = []
-    # TODO: Sorter på dato eller noe.
-    # TODO: Sjekk om de allerede er sortert på noe.
-    for number, event_info in events.iteritems():
-        event_list.append(convert_types(convert_names(event_info)))
-    return event_list
-
-# {'has_queue': '0',
-#  'registration_deadline': '2011-10-31 12:00:00',
-#  'this_attending': '5',
-#  'is_advertised': '1',
-#  'count_waiting': '0',
-#  'seats_available': 20,
-#  'title': 'Baker Hughes',
-#  'event_start': '2011-10-31 17:15:00',
-#  'summary': 'A top-tier oilfield service company with a century-long track record, Baker Hughes delivers solutions that help oil and gas operators make the most of their reservoirs.',
-#  'min_year': '1',
-#  'open_for': '1',
-#  'registration_start': '2011-10-27 17:00:00',
-#  'registration_started': '1',
-#  'web_page': 'http://www.bakerhughes.com/',
-#  'seats': '25',
-#  'deadline_passed': '0',
-#  'logo': 'http://bpc.timini.no/logo/bedpres.png',
-#  'max_year': '5',
-#  'bpcid': '305',
-#  'location': 'PTS'}
+if __name__ == '__main__':
+    print get_events()
+#{u'event': [{u'count_waiting': u'0', u'description_formatted': u'<p>Schlumberger Oilfield Services er petroleumsindustriens ledende leverand\xf8r av kompetanse og teknologiske l\xf8sninger innen utforskning og produksjon.</p>\n\n<p>Konsernet har over 100.000 ansatte fra 140 ulike nasjonaliteter i over 80 land.</p>\n\n<p>Schlumberger ble etablert i Norge allerede i 1966 og i dag befinner selskapets teknologiske kompetanse seg ved basene i Stavanger, Bergen og Oslo, med totalt 2.400 personer.</p>\n', u'waitlist_enabled': u'1', u'description': u'Schlumberger Oilfield Services er petroleumsindustriens ledende leverand\xf8r av kompetanse og teknologiske l\xf8sninger innen utforskning og produksjon.\r\n\r\nKonsernet har over 100.000 ansatte fra 140 ulike nasjonaliteter i over 80 land.\r\n\r\nSchlumberger ble etablert i Norge allerede i 1966 og i dag befinner selskapets teknologiske kompetanse seg ved basene i Stavanger, Bergen og Oslo, med totalt 2.400 personer.', u'is_advertised': u'1', u'title': u'Schlumberger', u'registration_start': u'2012-02-21 12:00:00', u'seats_available': 37, u'seats': u'50', u'min_year': u'3', u'open_for': u'3', u'place': u'R5', u'registration_started': u'1', u'web_page': u'http://www.slb.com/', u'time': u'2012-02-28 18:15:00', u'deadline_passed': u'0', u'deadline': u'2012-02-27 12:00:00', u'max_year': u'5', u'id': u'324', u'logo': u'http://bpc.timini.no/logo/bedpres.png', u'this_attending': u'13'}, {u'count_waiting': u'0', u'description_formatted': u'<p>Accenture is a global management consulting, technology services and outsourcing company, with more than 223,000 people serving clients in more than 120 countries. Combining unparalleled experience, comprehensive capabilities across all industries and business functions, and extensive research on the world\u2019s most successful companies, Accenture collaborates with clients to help them become high-performance businesses and governments. The company generated net revenues of US$21.6 billion for the fiscal year ended Aug. 31, 2010.</p>\n\n<p>Accenture inviterer til bedriftspresentasjon for siv.ing Fysikk og Matematikk klokken 17:15 i R8 p\xe5 realfagsbygget.</p>\n\n<p>Bespisning: Asiatisk buffet p\xe5 Kos</p>\n', u'waitlist_enabled': u'0', u'description': u'Accenture is a global management consulting, technology services and outsourcing company, with more than 223,000 people serving clients in more than 120 countries. Combining unparalleled experience, comprehensive capabilities across all industries and business functions, and extensive research on the world\u2019s most successful companies, Accenture collaborates with clients to help them become high-performance businesses and governments. The company generated net revenues of US$21.6 billion for the fiscal year ended Aug. 31, 2010.\r\n\r\nAccenture inviterer til bedriftspresentasjon for siv.ing Fysikk og Matematikk klokken 17:15 i R8 p\xe5 realfagsbygget.\r\n\r\nBespisning: Asiatisk buffet p\xe5 Kos', u'is_advertised': u'1', u'title': u'Accenture', u'registration_start': u'2012-02-20 12:00:00', u'seats_available': 0, u'seats': u'15', u'min_year': u'3', u'open_for': u'3', u'place': u'R8', u'registration_started': u'1', u'web_page': u'http://www.accenture.com/us-en/pages/index.aspx', u'time': u'2012-03-01 17:15:00', u'deadline_passed': u'0', u'deadline': u'2012-02-29 12:00:00', u'max_year': u'5', u'id': u'325', u'logo': u'http://bpc.timini.no/logo/bedpres.png', u'this_attending': u'15'}, {u'count_waiting': 0, u'description_formatted': u'<p>Det legges ut 14 ekstra plasser til presentasjonen p\xe5 torsdag. Disse plassene er \xe5pne for b\xe5de Timini og Nabla.</p>\n\n<p><strong>NB!</strong> Ikke meld deg p\xe5 her hvis du allerede har f\xe5tt plass.</p>\n', u'waitlist_enabled': u'1', u'description': u'Det legges ut 14 ekstra plasser til presentasjonen p\xe5 torsdag. Disse plassene er \xe5pne for b\xe5de Timini og Nabla.\r\n\r\n**NB!** Ikke meld deg p\xe5 her hvis du allerede har f\xe5tt plass.', u'is_advertised': u'1', u'title': u'Accenture - ekstra plasser', u'registration_start': u'2012-02-28 12:00:00', u'seats_available': 14, u'seats': u'14', u'min_year': u'3', u'open_for': u'3', u'place': u'R8', u'registration_started': u'0', u'web_page': u'http://www.accenture.com', u'time': u'2012-03-01 17:15:00', u'deadline_passed': u'0', u'deadline': u'2012-02-29 19:00:00', u'max_year': u'5', u'id': u'364', u'logo': u'http://bpc.timini.no/logo/accenture_logo-1203695520961.png', u'this_attending': u'0'}]}
+#{u'error': [{u'403': u'Error: No events.<br />'}]}

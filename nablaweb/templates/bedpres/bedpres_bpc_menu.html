@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Velg fra BPC{% endblock %}
+{% block title %}Hent bedriftspresentasjoner fra BPC{% endblock %}
 
 {% block content %}
-{% for bedpres in bedpres_list %}
-  <a href="{{ bedpres.bpcid }}">{{ bedpres.headline }}, {{ bedpres.event_start }}</a><br />
-{% empty %}
-  Det er ingen tilgjengelige bedriftspresentasjoner.
-{% endfor %}
+
+<form method="POST" action="">{% csrf_token %}
+  {{ form }}
+  <input type=submit value="Hent">
+</form>
+
 {% endblock %}

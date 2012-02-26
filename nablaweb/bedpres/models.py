@@ -7,7 +7,7 @@ from events.models import Event
 
 
 class BedPres(Event):
-    bpcid = models.CharField(verbose_name="BPC-id", max_length=16, blank=True)
+    bpcid = models.CharField(verbose_name="BPC-id", max_length=16, unique=True, blank=True)
 
     class Meta:
         verbose_name = "bedriftspresentasjon"
