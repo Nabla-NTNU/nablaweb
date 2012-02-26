@@ -35,15 +35,13 @@ class ComMembership(models.Model):
     story = models.TextField(verbose_name="Beskrivelse", help_text="Ansvarsområde eller lignende")
     joined_date = models.DateField(verbose_name="Ble med", help_text="Dato personen ble med i komiteen")
 
-    #self.com.com.user_set.add(self.user.user_id)
+    def save(self, *args, **kwargs):
+        self.com.user_set.add(self.user)
+        super(ComMembership, self).save(*args, **kwargs)
     
-#    def __init__(self):
-#        super(ComMembership, self).__init__(*args, **kwargs)
-#        self.com.user_set.add(self.user.user_id)
-#        print(self.user.username)
-    
-    def __del__(self): # Må fjerne brukeren fra gruppen når ComMembership-objektet slettes
-        pass
+    def delete(self, *args, **kwargs): # Må fjerne brukeren fra gruppen når ComMembership-objektet slettes
+        self.com.user_set.remove(self.user)
+        super(ComMembership, self).delete(*args, **kwargs)
     
     def __unicode__(self):
         return self.user.username
