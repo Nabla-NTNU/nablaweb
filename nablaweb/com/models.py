@@ -29,7 +29,6 @@ class ComPage(models.Model):
     # Egne gruppenyheter?
 
 class ComMembership(models.Model):
-    # Må automatisk lages når en bruker blir med i komité-gruppen
     user = models.ForeignKey('auth.User')
     com = models.ForeignKey('auth.Group', verbose_name="Komité")
     story = models.TextField(verbose_name="Beskrivelse", help_text="Ansvarsområde eller lignende")
@@ -39,7 +38,7 @@ class ComMembership(models.Model):
         self.com.user_set.add(self.user)
         super(ComMembership, self).save(*args, **kwargs)
     
-    def delete(self, *args, **kwargs): # Må fjerne brukeren fra gruppen når ComMembership-objektet slettes
+    def delete(self, *args, **kwargs):
         self.com.user_set.remove(self.user)
         super(ComMembership, self).delete(*args, **kwargs)
     
