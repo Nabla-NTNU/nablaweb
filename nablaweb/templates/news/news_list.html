@@ -7,7 +7,11 @@
 {% for news in news_list %}
     <div class="row">
         <div class="span8">
-            <img alt="" src="{% if news.picture %}{{ news.picture.url }}{% endif %}">
+
+            {% if news.picture %}
+                <img alt="" src="{{ news.picture.url }}">
+            {% endif %}
+
             <h2>{{ news.headline }}</h2>
             {{ news.lead_paragraph|markdown }}
             <p><a class="btn" href="{% url news_detail news.id %}">Les mer &raquo;</a></p>
