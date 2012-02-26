@@ -15,6 +15,7 @@ sqlite.db
 
 # Filer som genereres lokalt
 dependencies/twitter-bootstrap/bootstrap
+dependencies/twitter-bootstrap/docs/assets
 
 # Media-mapper (opplastede brukerbilder o.l.)
 media/

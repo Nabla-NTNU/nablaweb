@@ -114,7 +114,7 @@
         <!-- loginboks -->
         <form class="navbar-form pull-right" action="/login/" method="post">
             {% csrf_token %}
-            <table style="line-height: 35px">
+            <table>
                 <tr>
                     <td><input class="span1" type="text" placeholder="Bruker" name="username" /></td>
                     <td><input class="span1" type="password"  placeholder="Passord" name="password" /></td>
@@ -147,7 +147,6 @@
             </div>
         {% endfor %}
     {% endif %}
-
 
     <!-- main row -->
     {% block main %}
