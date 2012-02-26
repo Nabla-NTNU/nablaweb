@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
-from news.models import News
+from content.models import Content
 
 class Nablad(Content):
     pub_date = models.DateField(verbose_name='publisert',  blank=True, null=True, help_text="Publikasjonsdato")

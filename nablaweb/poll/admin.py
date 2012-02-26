@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from polls.models import Poll
 from django.contrib import admin
 
