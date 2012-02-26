@@ -76,42 +76,49 @@
 
     {% if user.is_authenticated %}
 
-    <div class="span4">
-    <h2>Påmeldinger</h2>
-        <table class="table table-bordered table-striped">
-        {% for reg in user.eventregistration_set.all %}
-        <tr>
-            <td><a href="{% url event_detail reg.event.id %}">{{ reg.event.headline }}</a></td>
-            <td>
-                {% if reg.is_waiting_place %}
-                    På venteliste
-                {% endif %}
+        <div class="span4">
+            <h2>Påmeldinger</h2>
+            <table class="table table-bordered table-striped">
 
-                {% if reg.is_attending_place %}
-                    <span class="icon check"></span> Har plass
-                {% endif %}
-            </td>
-            </td>
-        </tr>
-        </table>
-        {% endfor %}
-    </div>
+            {% for reg in user.eventregistration_set.all %}
+            <tr>
+                <td><a href="{% url event_detail reg.event.id %}">{{ reg.event.headline }}</a></td>
+                <td>
+                    {% if reg.is_waiting_place %}
+                        På venteliste
+                    {% endif %}
 
-    <div class="span4">
-        <h2>Prikker</h2>
-        <p>Om du er påmeldt, men ikke møter opp på arrangement, kan du bli
-        straffet i form av prikker. Jo flere prikker, jo lengre må du vente for
-        å melde deg på et arrangement.</p>
-        <p>Du har ingen prikker. Godt jobbet! (PS: Denne er ikke dynamisk)</p>
-    </div>
+                    {% if reg.is_attending_place %}
+                        <span class="icon check"></span> Har plass
+                    {% endif %}
+                </td>
+                </td>
+            </tr>
+            {% empty %}
+                <tr><td>Du er ikke meldt på noe</td></tr>
+            {% endfor %}
 
-    <div class="span4">&nbsp;</div>
+            </table>
+
+        </div>
+
+        <div class="span4">
+            <h2>Prikker</h2>
+            <p>Om du er påmeldt, men ikke møter opp på arrangement, kan du bli
+            straffet i form av prikker. Jo flere prikker, jo lengre må du vente for
+            å melde deg på et arrangement.</p>
+            <p>Du har ingen prikker. Godt jobbet! (PS: Denne er ikke dynamisk)</p>
+        </div>
+
+        <div class="span4">
+            <h2>Masse plass</h2> 
+        </div>
 
     {% else %}
 
-    <div class="span12">
-        <p>Logg på for å se hvilke arrangement du er påmeldt.</p>
-    </div>
+        <div class="span12">
+            <p>Logg på for å se hvilke arrangement du er påmeldt.</p>
+        </div>
 
     {% endif %}
 </div>

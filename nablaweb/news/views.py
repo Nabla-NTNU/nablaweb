@@ -9,7 +9,7 @@ from nablaweb.news.models import News
 class NewsListView(ListView):
     model = News
     context_object_name = 'news_list'
-    paginate_by = 5
+    paginate_by = 7
 
     def get_queryset(self):
         queryset = self.model.objects.all().order_by('-created_date')

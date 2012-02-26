@@ -73,6 +73,14 @@
         margin-bottom:-15px !important;
     }
 
+    .pagination {
+        text-align: center;
+    }
+
+    .center {
+        text-align: center;
+    }
+
 /* FOOTER */
 	footer { 
 		border-top:2px solid #666;

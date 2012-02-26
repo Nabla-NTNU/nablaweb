@@ -4,6 +4,8 @@
 {% block title %}Nyheter{% endblock %}
 
 {% block content %}
+
+
 {% for news in news_list %}
     <div class="row">
         <div class="span8">
@@ -19,4 +21,27 @@
     </div>
     <hr>
 {% endfor %}
+
+
+{# .... **Now the pagination section** .... #}
+{% if is_paginated %}
+    <div class="pagination">
+        <ul>
+            {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}">&larr; Eldre</a></li>
+            {% endif %}
+
+            <li class="active">
+            <a>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</a>
+            </li>
+
+            {% if page_obj.has_previous %}
+                <li><a href="?page={{ page_obj.previous_page_number }}">Nyere &rarr;</a></li>
+            {% endif %}
+
+
+        </ul>
+    </div>
+{% endif %}
+
 {% endblock content %}
