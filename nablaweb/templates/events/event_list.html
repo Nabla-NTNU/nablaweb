@@ -73,6 +73,9 @@
 </div><!-- row -->
 
 <div class="row">
+
+    {% if user.is_authenticated %}
+
     <div class="span4">
     <h2>Påmeldinger</h2>
         <table class="table table-bordered table-striped">
@@ -99,9 +102,18 @@
         <p>Om du er påmeldt, men ikke møter opp på arrangement, kan du bli
         straffet i form av prikker. Jo flere prikker, jo lengre må du vente for
         å melde deg på et arrangement.</p>
-        <p>Du har ingen prikker. Godt jobbet!</p>
+        <p>Du har ingen prikker. Godt jobbet! (PS: Denne er ikke dynamisk)</p>
     </div>
-</div>
 
+    <div class="span4">&nbsp;</div>
+
+    {% else %}
+
+    <div class="span12">
+        <p>Logg på for å se hvilke arrangement du er påmeldt.</p>
+    </div>
+
+    {% endif %}
+</div>
 
 {% endblock main %}
