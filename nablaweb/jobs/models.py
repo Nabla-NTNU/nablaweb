@@ -6,6 +6,9 @@ from django.db import models
 from news.models import News
 from content.models import Content
 
+# Det er litt stygt å bruke modeller for YearChoices og RelevantForChoices, men
+# det var den enkle måten å få riktige forms i admin.
+
 class YearChoices(models.Model):
     year = models.IntegerField(blank=False, verbose_name="Klasse", help_text="Klasse: 1, 2, 3, 4 og 5")
     
