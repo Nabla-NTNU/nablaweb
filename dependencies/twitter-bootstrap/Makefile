@@ -53,7 +53,7 @@ gh-pages: docs
 
 watch:
 	echo "Watching less files..."; \
-	watchr -e "watch('less/.*\.less') { system 'make' }"
+	watchr -e "watch('less/.*\.less') { system 'make -B' }"
 
 
-.PHONY: dist docs watch gh-pages
+.PHONY: bootstrap dist docs watch gh-pages
