@@ -10,9 +10,9 @@
     /* Div that holds all parts of page except footer */
     #whitebox {
         background-color: white; 
-        padding-top: 0px;
-        padding-bottom: 40px;
         border-bottom: 2px solid black;
+        padding-bottom: 40px;
+        padding-top: 0px;
     }
 
     /* Makes nav link color brighter */
@@ -55,19 +55,19 @@
 
     /* Remove code styling from rendered LaTeX */
     code.jax {
-        font: inherit;
-        font-size: 120%;
         background: inherit;
         border: none;
         color: inherit;
+        font-size: 120%;
+        font: inherit;
         margin: 0px;
     }
 
 
 
     .MathJax_Display {
-        margin-top: -9px !important;
         margin-bottom:-15px !important;
+        margin-top: 3px !important;
     }
 
     .pagination {
@@ -79,12 +79,7 @@
     }
 
 /* FOOTER */
-	footer { 
-		border-top:2px solid #666;
-		color: #ccc; 
-		padding-top: 30px; 
-		padding-bottom: 30px;
-
+    footer { 
         /* TODO: Add cross-browser support */
         background-image: -webkit-gradient(
             linear,
@@ -93,14 +88,20 @@
             color-stop(0.50, rgb(20,25,33)),
             color-stop(0, rgb(0,0,0))
         );
+        border-top:2px solid #666;
+        color: #ccc; 
+        padding-bottom: 30px;
+        padding-top: 30px; 
 
-	}
-		
-	/* h2 is black, so make it white */
-	footer h2 {
-		color: #ccc; 
-	}
-	footer a { color: #bddeff; }
+        
+
+    }
+        
+    /* h2 is black, so make it white */
+    footer h2 {
+        color: #ccc; 
+    }
+    footer a { color: #bddeff; }
 
     footer .kontakt table {
     }
@@ -114,94 +115,72 @@
         }
 
 /* Custom icons */
-	/* Custom added icons */
-	.icon-custom{background-image:url(../img/facebook-icon.png);}
-	.icon-facebook{background-position:0px 0px;}
-	
-	/* Transparent glyph icons */
-	.icon-red{background-image:url(../img/glyphicons-halflings-red.png);}
+    /* Custom added icons */
+    .icon-custom{background-image:url(../img/facebook-icon.png);}
+    .icon-facebook{background-position:0px 0px;}
+    
+    /* Red glyph icons */
+    .icon-red{background-image:url(../bootstrap/img/glyphicons-halflings-red.png);}
 
 
-/* CALENDAR */
-    /* Setting cells to equal width. */
-    table.equal td, table.equal th {
-        width: 113px;
+/* Event-kalender */
+.calendar { 
+    width: 100%;
+    margin-top:20px;
+    margin-bottom: 40px;
+    border-spacing: 3px;
+    border-collapse: separate;
+}
+    .calendar caption {
+        padding: 30px;
     }
-    /* Resizing week table cells */
-    #calWrapper table.equal th.uke, #calWrapper table.equal td.uke {
+    .calendar * { margin: 0; padding: 0;}
+    table td, table th { width: 113px; } /* All table cells */
+
+    /* First column */
+    .calendar th:first-child, .calendar td:first-child {
         width: 40px;
     }
-    /* Costumizing list element inside calendar */
-    ul.events {
-        list-style: none;
-        margin: 0 0 9px 0;
-    }
-    ul.events li {
-        padding-left: 19px;
-        font-size: 0.85em;
-    }
-    ul.events li.blue {
-        background: url('../img/cal-blue.png') no-repeat 0px 2px;
-    }
-    ul.events li.green {
-        background: url('../img/cal-green.png') no-repeat 0px 2px;
-    }
-    ul.events li.red {
-        background: url('../img/cal-red.png') no-repeat 0px 2px;
-    }
-    /* Adding background to table, making it stand out! */
-    #calWrapper {
-      /*  background-color: #ededed;
-        border: 1px solid #dddddd;
-        padding: 2px;
-        margin: none; */
-    }
-    table.equal td, table.equal th {
-        background-color: white;
-        padding: 15px;
-    }
-    table.equal caption {
-        /*background-color: #ededed;*/
-    }
-    /* Using first-child selector to do the syles on the week column. */
-    #calWrapper table.equal td:first-child {
-        font-weight: bold;
+    .calendar td:first-child { /* First column, except first row: Week digits */
         font-size: 1.2em;
+        font-weight: bold;
         text-align: center;
         vertical-align: middle;
         width: 30px;
     }
-    #calWrapper table .cell {
-        min-height: 50px;
-    }
-    #calWrapper table td.differentmonth {
-        color: #aaa;
-    }
-    #calWrapper table td.current { outline: 1px solid maroon; }
+    .calendar td.cell {
+        background-color: #f8f8f8;
 
-    /* Adding color to headings and week column */
-    #calWrapper table.equal td:first-child, #calWrapper table.equal th {
-        background: #f1fdf2;
-        padding: 10px;
+        border-radius: 3px;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+
+        border: 1px solid #ddd;
+        height: 100%;
+        margin: 2px;
+        padding: 5px;
+        padding-left: 6px;
+        vertical-align: top;
+    } 
+    .calendar .current.cell {
+
+        background-color:#DDEEFF;
+        border-color:#3399FF;
     }
-    /*And to the odd columns */
-    #calWrapper  td:nth-child(odd) {
-        /*background: #ecf3ed;*/
-    }
-    /*ecf3ed*/
-    #calWrapper table caption .current {
-        font-size: 30px;
-        line-height: 30px;
-    }
-    #calWrapper table caption a{
-        padding: 20px;
-        font-size: 20px;    
-        line-height: 50px;
+    .calendar .differentmonth.cell {
+        -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=4)";
+        filter: alpha(opacity=4);
+        opacity: 0.4;
     }
 
-    #calWrapper table caption h2 { margin-bottom: 20px; }
+    .calendar ul { list-style: none; min-height: 50px;}
+    .calendar ul li { padding-left: 5px; font-size: 0.85em; }
+    .calendar ul li.blue { background: url('../img/cal-blue.png') no-repeat 0px 2px; }
+    .calendar ul li.green { background: url('../img/cal-green.png') no-repeat 0px 2px; }
+    .calendar ul li.red { background: url('../img/cal-red.png') no-repeat 0px 2px; }
+    
 
-/* EDIT PROFILE PAGE */
+/* Endre profil. TODO: Bytt ut med .center; */
     .centertext { text-align: center; }
 
 /* COMMENTS */

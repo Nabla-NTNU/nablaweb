@@ -7,28 +7,27 @@
 <!-- calendar row -->
 <div class="row">
 <div class="span12">
-<div id="calWrapper">
 
-    <table class="table table-bordered equal">
+<h2>Kalender {{ calendar.first.year }}</h2>
+
+<table class="calendar">
 
     <caption> 
-        <h2>Arrangementoversikt {{ calendar.first.year }}</h2>
 
-        <span>
-            <a href="{% url event_list calendar.prev.year calendar.prev.month %}">
-                {{ calendar.prev|date:"F"|capfirst }}
-            </a>
-        </span> 
-
-        <span class="current">{{ calendar.first|date:"F"|capfirst }}</span> 
-
-        <span>
-            <a href="{% url event_list calendar.next.year calendar.next.month %}">
-                {{ calendar.next|date:"F"|capfirst }}
-            </a>
-        </span> 
+        <div class="pagination pagination-centered">
+            <ul>
+                <li>
+                    <a href="{% url event_list calendar.prev.year calendar.prev.month %}">&laquo;</a>
+                </li>
+                <li class="inactive"><a>{{ calendar.first|date:"F"|capfirst }}</a></li>
+                <li>
+                    <a href="{% url event_list calendar.next.year calendar.next.month %}">&raquo;</a>
+                </li>
+            </ul>
+        </div>
 
     </caption>
+
     <thead>
         <tr>
             <th class="uke">Uke</th>
@@ -47,28 +46,29 @@
         <tr>
             <td>{{ week.weeknumber }}</td>
             {% for day in week.days %}
-            <td class="
+            <td class="cell
                     {% if day.differentmonth %} differentmonth {% endif %}
                     {% if day.current %} current {% endif %}
                 ">
 
-                <div class="cell">
-                    <b>{{ day.date }}.</b>
-                    <ul class="events">
-                        {% for event in day.events %}
-                        <li class="red"><a href="{% url event_detail event.id %}">{{ event.headline }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
+                
+                <ul class="events">
+                    <li class="date"><b>{{ day.date }}.</b></li>
+                    {% for event in day.events %}
+                        <li>
+                            <b class=" icon-cog"></b>
+                            <a href="{% url event_detail event.id %}">{{ event.headline }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
             </td>
             {% endfor %}
         </tr>
         {% endfor %}
     </tbody>
 
-    </table>
+</table>
 
-</div> <!-- calWrapper -->
 </div> <!-- end span12 -->
 </div><!-- row -->
 
