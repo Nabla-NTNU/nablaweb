@@ -10,7 +10,7 @@
     /* Div that holds all parts of page except footer */
     #whitebox {
         background-color: white; 
-        /*padding-top: 60px; */
+        padding-top: 0px;
         padding-bottom: 40px;
         border-bottom: 2px solid black;
     }
@@ -63,10 +63,7 @@
         margin: 0px;
     }
 
-    .add-comment textarea {
-        width: 98%;
-        height: 100px;
-    }
+
 
     .MathJax_Display {
         margin-top: -9px !important;
@@ -123,15 +120,6 @@
 	
 	/* Transparent glyph icons */
 	.icon-red{background-image:url(../img/glyphicons-halflings-red.png);}
-
-/* Fix for navbar in mobile mode */
-@media (max-width: 0px) {
-	/* No longer fixed on top of screen */
-	.navbar { position: static; }
-	
-	/* Since navbar is no longer floating, no need for extra padding */
-	#whitebox { padding-top: 0; }
-}
 
 
 /* CALENDAR */
@@ -222,6 +210,10 @@
     }
     form.add-comment { margin-top: 20px; }
     form.add-comment .control-group:first-of-type { padding-top: 9px;}
+    form.add-comment textarea {
+        width: 98%;
+        height: 100px;
+    }
     .comment .text { width: 100%; overflow: hidden; }
     .comment .info { margin-bottom: 10px; } 
     .comment .author { font-weight: bold; } 

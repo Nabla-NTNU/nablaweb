@@ -18,9 +18,9 @@
     <![endif]-->
 
     <!-- Styles -->
-    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet"><!-- Do not modify -->
-    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" rel="stylesheet"><!-- Do not modify -->
-    <link href="{{ STATIC_URL }}css/default.css" rel="stylesheet"><!-- Go ahead -->
+    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet"><!-- Generated with LESS -->
+    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" rel="stylesheet"><!-- Generated with LESS -->
+    <link href="{{ STATIC_URL }}css/default.css" rel="stylesheet"><!-- Site specific, except for variables -->
 
 
     <!-- Fav and touch icons, for screen and mobile -->
@@ -40,93 +40,102 @@
 <div id="whitebox" class="box-shadow">
 
 <!-- navbar and navbar-inner -->
-<div class="navbar navbar-fixed">
+<div class="navbar">
 <div class="navbar-inner">
 
     <!-- navbar container -->
-    <div class="container">
+    <div class="container" style="width: 100%;">
 
-        <!-- Nabla logo -->
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+
         <a class="brand" href="/?">
             <img src="{{ STATIC_URL }}img/nabla-white.svg" alt="">
             Nabla
         </a>
-        <!-- end Nabla logo-->
+
+        <div class="nav-collapse"><!-- blir gjemt ved små skjermstørrelser -->
         
-        <!-- navigasjonslenker -->
-        <ul class="nav main">
-            <li><a href="/?">Hjem</a></li>
-            <li><a href="{% url event_list %}">Arrangement</a></li>
-            <li><a href="{% url jobs_list %}">Karriere</a></li>
-            <li class="dropdown">
-                <a href="#komiteer"
-                    class="dropdown-toggle no-ajaxy"
-                    data-toggle="dropdown">
-                    Annet nyttig
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu" >
-                    <li><a href="{% url quote_list %}">Gullkorn</a></li>
-                    <li><a href="{% url gallery.views.index %}">Galleri</a></li>
-                    <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
-                    <li><a href="{% url feedback.views.feedback_form %}">Gi tilbakemelding</a></li>
-                    <li><a href="{% url nablad_list %}">Nabladet</a></li>
-                    <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
-                </ul>
-            </li>
+            <!-- navigasjonslenker -->
+            <ul class="nav">
+                <li><a href="/?">Hjem</a></li>
+                <li><a href="{% url event_list %}">Arrangement</a></li>
+                <li><a href="{% url jobs_list %}">Karriere</a></li>
+
+                <li class="dropdown">
+                    <a href="#komiteer"
+                        class="dropdown-toggle no-ajaxy"
+                        data-toggle="dropdown">
+                        Annet nyttig
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" >
+                        <li><a href="{% url quote_list %}">Gullkorn</a></li>
+                        <li><a href="{% url gallery.views.index %}">Galleri</a></li>
+                        <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
+                        <li><a href="{% url feedback.views.feedback_form %}">Gi tilbakemelding</a></li>
+                        <li><a href="{% url nablad_list %}">Nabladet</a></li>
+                        <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
+                    </ul>
+                </li>
 
 
-        </ul>
-        <!-- end navigasjonslenker -->
+            </ul>
+            <!-- end navigasjonslenker -->
 
-        <!-- søkefelt -->
-        <!--
-        <form class="navbar-search pull-left" action="">
-            <input type="text" class="search-query span2" placeholder="Søk">
-        </form>
-        -->
-        <!-- end søkefelt -->
-            
-        {% if user.is_authenticated %}
+            <!-- søkefelt -->
+            <!--
+            <form class="navbar-search pull-left" action="">
+                <input type="text" class="search-query span2" placeholder="Søk">
+            </form>
+            -->
+            <!-- end søkefelt -->
+                
+            {% if user.is_authenticated %}
 
-        <!-- bruker-dropdown -->
-        <ul class="nav pull-right">
-            <li class="dropdown pull-right">
-                <a href="#bruker"
-                    class="dropdown-toggle no-ajaxy"
-                    data-toggle="dropdown">
-                    <span class="icon-white icon-user"></span>{{ user.username }}
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="{% url accounts.views.view_member_profile user.username %}">Vis profil</a></li>
-                    <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
-                    <li><a class="no-ajaxy" href="/logout">Logg ut</a></li>
-                    <li class="divider"></li>
-                    <li><a class="no-ajaxy" href="/admin">Admin</a></li>
-                </ul>
-            </li>
-        </ul>
-        <!-- end bruker-dropdown -->
+            <!-- bruker-dropdown -->
 
-        {% else %}
+            <ul class="nav pull-right">
+                <li class="dropdown pull-right">
+                    <a href="#bruker"
+                        class="dropdown-toggle no-ajaxy"
+                        data-toggle="dropdown">
+                        <span class="icon-white icon-user"></span> {{ user.username }}
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url accounts.views.view_member_profile user.username %}">Vis profil</a></li>
+                        <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
+                        <li><a class="no-ajaxy" href="/logout">Logg ut</a></li>
+                        <li class="divider"></li>
+                        <li><a class="no-ajaxy" href="/admin">Admin</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- end bruker-dropdown -->
 
-        <!-- loginboks -->
-        <form class="navbar-form pull-right" action="/login/" method="post">
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <td><input class="span1" type="text" placeholder="Bruker" name="username" /></td>
-                    <td><input class="span1" type="password"  placeholder="Passord" name="password" /></td>
-                    <td><input class="submit" type="submit" value="Login" /></td>
-                </tr>
-            </table>
-        </form>
-        <!-- end loginboks -->
+            {% else %}
 
-        {% endif %}
+            <!-- loginboks -->
+            <form class="navbar-form pull-right" action="/login/" method="post">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <td><input class="span1" type="text" placeholder="Bruker" name="username" /></td>
+                        <td><input class="span1" type="password"  placeholder="Passord" name="password" /></td>
+                        <td><input class="submit" type="submit" value="Login" /></td>
+                    </tr>
+                </table>
+            </form>
+            <!-- end loginboks -->
 
-        
+            {% endif %}
+
+        </div>
+        <!-- end nav-collapse-->
 
     </div>
     <!-- end navbar container -->
@@ -138,6 +147,9 @@
 
 <!-- main container -->
 <div class="container" id="mainblock">
+
+    
+
 
     {% if messages %}
         {% for message in messages %}
