@@ -169,7 +169,6 @@
         <!-- content -->
         <div class="span8">
             {% block content %} 
-            <h2>content-blocken er tom. Kontakt webkom@nabla.no.</h2>
             {% endblock content %}  
         </div> 
         <!-- end content container -->
@@ -179,6 +178,7 @@
 
             {% block sidebar %}
 
+            {% if upcoming_events %}
             <!-- kommende arrangement -->
             <h2>Kommende arrangement</h2>
             <div class="well" style="padding: 8px 0;">
@@ -196,11 +196,11 @@
                 </ul>
             </div>
             <!-- end kommende arrangement -->
+            {% endif %}
 
             {% endblock sidebar %}
 
             {% block ad %}
-
             <!-- reklame -->
             <img src="http://lorempixel.com/300/250/technics/1/Reklame" alt="Reklame">
             <!-- end reklame -->
