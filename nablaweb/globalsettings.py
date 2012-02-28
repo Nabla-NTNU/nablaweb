@@ -112,6 +112,7 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'mediagenerator.middleware.MediaMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'sessionprofile.middleware.SessionProfileMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -131,6 +132,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'sessionprofile',
     # Våre ting
     'content',
     'news',
