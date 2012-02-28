@@ -5,8 +5,8 @@
 $wgAuthDjangoConfig = array();
 
 $wgAuthDjangoConfig['DjangoHost']   = "localhost";   // Django MySQL Host Name.
-$wgAuthDjangoConfig['DjangoUser']   = "trygvwii";     // Django MySQL Username.
-$wgAuthDjangoConfig['DjangoPass']   = "ang74r89"; // Django MySQL Password.
+$wgAuthDjangoConfig['DjangoUser']   = "";     // Django MySQL Username.
+$wgAuthDjangoConfig['DjangoPass']   = ""; // Django MySQL Password.
 $wgAuthDjangoConfig['DjangoDBName'] = "nablaweb_devel";      // Django MySQL Database Name.
 
 $wgAuthDjangoConfig['AuthDjangoTable']      = 'authdjango';
