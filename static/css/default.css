@@ -42,7 +42,7 @@
     }
 
 
-/* MISC */
+/* Utility classes */
 
     /* Some floats for articles */
     img[alt=right] {
@@ -63,13 +63,6 @@
         margin: 0px;
     }
 
-
-
-    .MathJax_Display {
-        margin-bottom:-15px !important;
-        margin-top: 3px !important;
-    }
-
     .pagination {
         text-align: center;
     }
@@ -77,6 +70,20 @@
     .center {
         text-align: center;
     }
+
+    .input-append button.add-on {
+        height: inherit !important;
+    }
+
+
+/* MathJAX customisation */
+
+    .MathJax_Display {
+        margin-bottom:-15px !important;
+        margin-top: 3px !important;
+    }
+
+
 
 /* FOOTER */
     footer { 
