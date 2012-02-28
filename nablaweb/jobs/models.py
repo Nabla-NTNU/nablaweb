@@ -69,7 +69,7 @@ class Advert(Content):
     deadline_date = models.DateTimeField(verbose_name="Frist", blank=True, help_text="Søknadsfrist") # Naar frist for soeking er, med klokkeslett
     
     show_removal_date = models.BooleanField(default=False, help_text="Om fjerningsdato skal vises", verbose_name="Vis fjerningsdato?") # Hvorvidt removal_date skal vises i stillingsannonsen
-    removal_date = models.DateTimeField(verbose_name="Forsvinner", blank=True, help_text="Når annonsen fjernes, f.eks. samtidig som deadline") # Naar annonsen skal fjernes, for eksempel samtidig som deadline_date
+    removal_date = models.DateTimeField(verbose_name="Forsvinner", null=True, blank=True, help_text="Når annonsen fjernes, f.eks. samtidig som deadline") # Naar annonsen skal fjernes, for eksempel samtidig som deadline_date
 
     info_file = models.FileField(upload_to="stillinger", blank=True, verbose_name="Informasjonsfil", help_text="Informasjon om stillingen")
     antall_stillinger = models.IntegerField(verbose_name="Antall stillinger", blank=True, null=True, help_text="Antall stillinger som tilbys")
