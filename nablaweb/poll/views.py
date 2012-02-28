@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from poll.models import Poll, Choice
 from django.shortcut import get_object_or_404
 from django.http import RequestContext, HttpResponse, HttpResponseRedirect

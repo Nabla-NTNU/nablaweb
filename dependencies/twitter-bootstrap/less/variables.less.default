@@ -1,15 +1,15 @@
 // Variables.less
 // Variables to customize the look and feel of Bootstrap
-// Swatch: Spacelab
 // -----------------------------------------------------
+
 
 
 // GLOBAL VALUES
 // --------------------------------------------------
 
 // Links
-@linkColor:             #4183C4;
-@linkColorHover:        #4183C4;
+@linkColor:             #08c;
+@linkColorHover:        darken(@linkColor, 15%);
 
 // Grays
 @black:                 #000;
@@ -21,14 +21,14 @@
 @white:                 #fff;
 
 // Accent colors
-@blue:                  #4183C4;
-@blueDark:              #405A6A;
-@green:                 #84DE81;
-@red:                   #E5322C;
-@yellow:                #F4CA00;
-@orange:                #FF7D00;
-@pink:                  #F44B8C;
-@purple:                #405A6A;
+@blue:                  #049cdb;
+@blueDark:              #0064cd;
+@green:                 #46a546;
+@red:                   #9d261d;
+@yellow:                #ffc40d;
+@orange:                #f89406;
+@pink:                  #c3325f;
+@purple:                #7a43b6;
 
 // Typography
 @baseFontSize:          13px;
@@ -36,7 +36,7 @@
 @baseLineHeight:        18px;
 @textColor:             @grayDark;
 
-// sans
+// Buttons
 @primaryButtonBackground:    @linkColor;
 
 
@@ -47,48 +47,48 @@
 // Z-index master list
 // Used for a bird's eye view of components dependent on the z-axis
 // Try to avoid customizing these :)
-@zindexDropdown:        1000;
-@zindexPopover:         1010;
-@zindexTooltip:         1020;
-@zindexFixedNavbar:     1030;
-@zindexModalBackdrop:   1040;
-@zindexModal:           1050;
+@zindexDropdown:          1000;
+@zindexPopover:           1010;
+@zindexTooltip:           1020;
+@zindexFixedNavbar:       1030;
+@zindexModalBackdrop:     1040;
+@zindexModal:             1050;
 
 // Sprite icons path
 @iconSpritePath:          "../img/glyphicons-halflings.png";
 @iconWhiteSpritePath:     "../img/glyphicons-halflings-white.png";
 
 // Input placeholder text color
-@placeholderText:       @grayLight;
+@placeholderText:         @grayLight;
 
 // Hr border color
 @hrBorder:                @grayLighter;
 
 // Navbar
 @navbarHeight:                    40px;
-@navbarBackground:                #EAEAEA;
-@navbarBackgroundHighlight:       lighten(@navbarBackground, 15%);
+@navbarBackground:                @grayDarker;
+@navbarBackgroundHighlight:       @grayDark;
 @navbarLinkBackgroundHover:       transparent;
 
-@navbarText:                      @grayDarker;
-@navbarLinkColor:                 @grayDarker;
-@navbarLinkColorHover:            @linkColor;
+@navbarText:                      @grayLight;
+@navbarLinkColor:                 @grayLight;
+@navbarLinkColorHover:            @white;
 
 // Form states and alerts
-@warningText:             #393939;
-@warningBackground:       #F5F3B4;
+@warningText:             #c09853;
+@warningBackground:       #fcf8e3;
 @warningBorder:           darken(spin(@warningBackground, -10), 3%);
 
-@errorText:               @warningText;
-@errorBackground:         #FFE9E9;
+@errorText:               #b94a48;
+@errorBackground:         #f2dede;
 @errorBorder:             darken(spin(@errorBackground, -10), 3%);
 
-@successText:             #333;
-@successBackground:       #BEDEBE;
+@successText:             #468847;
+@successBackground:       #dff0d8;
 @successBorder:           darken(spin(@successBackground, -10), 5%);
 
-@infoText:                #1B3650;
-@infoBackground:          #E4F0FF;
+@infoText:                #3a87ad;
+@infoBackground:          #d9edf7;
 @infoBorder:              darken(spin(@infoBackground, -10), 7%);
 
 

@@ -8,8 +8,11 @@
 {% block content %}
 
 <div class="row"><div class="span8">
-        <img class="header_picture" alt="" 
-             src="{% if event.picture %}{{ event.picture.url }}{% endif %}" width="620">
+
+    {% if event.picture %}
+        <img class="header_picture" alt="" src="{{ event.picture.url }}" width="620">
+    {% endif %}
+
 <h2>{{ event.headline }}</h2>
 {{ event.description|markdown }}
 </div></div>

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # For tweeting
 import tweepy
 import imp

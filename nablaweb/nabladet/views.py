@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from news.views import NewsListView, NewsDetailView, NewsDeleteView
 from nabladet.models import Nablad
 

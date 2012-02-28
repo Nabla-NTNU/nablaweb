@@ -1,6 +1,22 @@
-# Installer python-saker og ting
+# Ikke kjør denne filen, skriv kommandoene. 
+# Selv om det kanskje funker å bare kjøre den.
+
+
+# Installer python-saker og ting #
 sudo apt-get install python-pip
 sudo pip install -r dependencies.txt
+# ELLER
+sudo pip install Django
+# for diverse ting som trengs
 
-# Markdown extensions
-Les markdown_extensions/readme
+# Markdown extensions #
+cd ../markdown_extensions
+sudo cp *.py /usr/local/lib/python2.7/dist-packages/markdown/extensions
+# ELLER
+sudo cp *.py /usr/lib/pymodules/python2.7/markdown/extensions
+# avhengig av hvilken mappe som eksisterer
+
+# Twitter bootstrap #
+cd ../twitter-bootstrap
+make bootstrap
+cd ..
