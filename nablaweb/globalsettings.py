@@ -151,7 +151,7 @@ INSTALLED_APPS = [
     'nabladet',
     # Eksterne ting
     'math_captcha', # sudo pip install django-math-captcha
-    'mediagenerator', # sudo pip install django-mediagenerator
+    #'mediagenerator', # sudo pip install django-mediagenerator
     #'debug_toolbar',
     # Djangoting
     'django.contrib.auth',

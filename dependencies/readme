@@ -4,9 +4,7 @@
 
 # Installer python-saker og ting #
 sudo apt-get install python-pip
-sudo pip install -r dependencies.txt
 # ELLER
-sudo pip install Django
 # for diverse ting som trengs
 
 # Markdown extensions #
@@ -17,6 +15,4 @@ sudo cp *.py /usr/lib/pymodules/python2.7/markdown/extensions
 # avhengig av hvilken mappe som eksisterer
 
 # Twitter bootstrap #
-cd ../twitter-bootstrap
-make bootstrap
-cd ..
+kjør make fra hovedmappen.
