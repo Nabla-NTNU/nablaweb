@@ -109,7 +109,7 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     # Fjernet: Ikke i bruk
     # 'mediagenerator.middleware.MediaMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -121,7 +121,7 @@ MIDDLEWARE_CLASSES = (
     # Sett denne i personlige settings, ettersom den gjør alt mye tregere
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
-)
+]
 
 ROOT_URLCONF = 'nablaweb.urls'
 
