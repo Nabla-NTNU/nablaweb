@@ -110,14 +110,16 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'mediagenerator.middleware.MediaMiddleware',
+    # Fjernet: Ikke i bruk
+    # 'mediagenerator.middleware.MediaMiddleware',
     'django.middleware.common.CommonMiddleware',
     'sessionprofile.middleware.SessionProfileMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # Sett denne i personlige settings, ettersom den gjør alt mye tregere
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
 )
 
@@ -131,7 +133,7 @@ TEMPLATE_DIRS = (
 	os.path.join(PROJECT_ROOT, 'templates'),
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'sessionprofile',
     # Våre ting
     'content',
@@ -150,7 +152,7 @@ INSTALLED_APPS = (
     # Eksterne ting
     'math_captcha', # sudo pip install django-math-captcha
     'mediagenerator', # sudo pip install django-mediagenerator
-    'debug_toolbar',
+    #'debug_toolbar',
     # Djangoting
     'django.contrib.auth',
     'django.contrib.comments',
@@ -162,7 +164,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.flatpages',
     'django.contrib.humanize',
-)
+]
 
 # Legg til IP-en din her for å vise debug-toolbar.
 INTERNAL_IPS = ['127.0.0.1', ]
