@@ -54,7 +54,7 @@ class EventForm(NewsForm):
     # Lar brukeren spesifisere om arrangementet krever påmelding.
     # Dersom registration_required ikke er True ignoreres de mottatte data
     # for de andre registreringsrelaterte feltene, som i tillegg slettes.
-    registration_required = BooleanField(required=True, label="Registrering kreves")
+    registration_required = BooleanField(required=False, label="Registrering kreves")
 
     class Meta(NewsForm.Meta):
         model = Event
