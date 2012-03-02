@@ -5,6 +5,14 @@
 
 <h2>Komponenter og nullvektorer</h2>
 <br />
+
+<form class="input-append" method="get" action="../search/" id="user-search">
+	<input placeholder="Ute av drift">
+	<button class="btn add-on" type="submit">
+		<i class="icon-search"></i>
+	</button>
+</form>
+
 <table id="user_list" class="table table-condensed table-striped table-bordered" width="100%">
 <thead>
 	<th>Brukernavn</th>
@@ -12,7 +20,7 @@
 	<th>Grupper</th>
 </thead>
 {% for user in users %}
-	<tr class="{% cycle odd even %}">
+	<tr>
 		<td >
 		{# Brukernavn med lenke til profilen #}
 			<a href="{% url accounts.views.view_member_profile user.username %}">

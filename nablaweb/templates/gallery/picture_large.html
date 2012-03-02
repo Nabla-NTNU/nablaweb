@@ -1,4 +1,6 @@
 {% extends "gallery/gallery_base.html" %}
+{% load markdown %}
+{% load mediawiki_links %}
 
 {% block title %}Galleri{% endblock %}
 
@@ -32,7 +34,7 @@
 </p>
 {% if picture.description %}
     <p>
-        {{ picture.description|safe }}
+        {{ picture.description|safe|markdown|wikilinks}}
         <br/>
         Beskrivelsen ble sist endret {{picture.last_changed_date}}.
     </p>

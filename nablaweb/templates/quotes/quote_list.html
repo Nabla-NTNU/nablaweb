@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 {% load markup %}
+{% load mediawiki_links %}
 
 {% block title %}Gullkorn{% endblock %}
-<h2>Gullkort</h2>
+<h2>Gullkorn</h2>
 <p>Her finner du en liste over artige sitat som er blitt ytret av personer med tilknytning til NTNU eller Nabla.</p>
 <hr>
 {% block content %}
 {% for quote in quote_list %}
     <div class="row">
         <div class="span8">
-            {{ quote.quote }}
+            {{ quote.quote|markdown|wikilinks}}
             <p><em>-- {{ quote.author }}</em></p>
         </div>
     </div>

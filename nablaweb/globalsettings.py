@@ -8,6 +8,10 @@
 #  - Media folder
 #  - Media url
 
+
+# Django settings
+#########################################
+
 import os
 
 DEBUG = True
@@ -74,29 +78,16 @@ STATIC_URL = '/static/'
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
-# django-mediagenerator setings (spør meg (andreros) om du lurer på noe)
-##############################################################################
-# mediagenerator kombinerer alle css og js-filer inn i en enkel fil. Dette
-# gjør siden får mange færre HTTP requests. Den gjør også at vi kan bruke
-# Compass/SASS til CSS-en, noe som er ytterst koselig.
-
-# Debug: Serve files at DEV_MEDIA_URL
+# True: Serve files at DEV_MEDIA_URL
 # False: Don't serve files (Do it yourself)
+# Noen som vet om denne variabelen brukes noe sted?
 MEDIA_DEV_MODE = DEBUG
-
-# Where mediagenerator serves files during debug
-DEV_MEDIA_URL = '/dev_static_generated/'   # Serve files at localhost:8000/DEV_MEDIA_URL
-
-# Where _generated_media_folder is available during production
-PRODUCTION_MEDIA_URL = 'http://localhost/nablaweb/_generated_media/' 
 
 # Full path to static folder
 # Variabelen heter media fordi mediagenerator ikke er helt up to date
+# Mediagenerator er ikke lenger i bruk, men variabelen brukes i urls.py
 GLOBAL_MEDIA_DIRS = (os.path.join(PROJECT_ROOT, '..', 'static'),)
 
-
-# Hent media bundles (ting som skal kombineres/kompileres/komprimeres)
-from media_bundles import *
 ##############################################################################
 
 # Make this unique, and don't share it with anybody.
@@ -109,17 +100,19 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
-MIDDLEWARE_CLASSES = (
-    'mediagenerator.middleware.MediaMiddleware',
+MIDDLEWARE_CLASSES = [
+    # Fjernet: Ikke i bruk
+    # 'mediagenerator.middleware.MediaMiddleware',
     'django.middleware.common.CommonMiddleware',
     'sessionprofile.middleware.SessionProfileMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # Sett denne i personlige settings, ettersom den gjør alt mye tregere
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
-)
+]
 
 ROOT_URLCONF = 'nablaweb.urls'
 
@@ -131,26 +124,41 @@ TEMPLATE_DIRS = (
 	os.path.join(PROJECT_ROOT, 'templates'),
 )
 
-INSTALLED_APPS = (
-    'sessionprofile',
-    # Våre ting
-    'content',
+INSTALLED_APPS = [
+    ################
+    # Interne ting #
+    ################
+    'content',  # Abstrakt: created, updated, created by, updated by. 
     'news',
-    'accounts',
+    'accounts', # Inneholder UserProfile med ekstra informasjon.
     'avatar',
     'events',
-    'jobs',
+    'jobs',     # Stillingsannonser og firmaer
     'gallery',
-    'bedpres',
-    'homepage',
-    'com',
-    'quotes',
-    'feedback',
-    'nabladet',
-    # Eksterne ting
-    'math_captcha', # sudo pip install django-math-captcha
-    'mediagenerator', # sudo pip install django-mediagenerator
-    'debug_toolbar',
+    'bedpres',  # Utvider events med BPC-tilkobling.
+    # 'homepage', # Viser news og events sammen. Ikke i bruk.
+    'com',      # Viser sider for komiteene.
+    'quotes',   # Tilfeldig sitat.
+    # 'feedback', # Feedback om siden til webkom. Bruk heller issue-tracker.
+    'nabladet', # Liste over nablad.
+
+    #################
+    # Eksterne ting #
+    #################
+
+    # Debug toolbar viser SQL som er kjørt under sidelastingen,
+    # templatevariabler, og litt til. For å skru den på, fjern kommentaren
+    # og legg IP til PC-en du laster siden med til i INTERNAL_IPS.
+    #'debug_toolbar',
+
+    # Sessionprofile gjør det mulig å logge direkte inn på blant annet Wikien,
+    # phpBB, og annet, hvis man er logget på Nablaweb
+    'sessionprofile',
+
+    # Django-image-cropping (pip install) gjør det mulig for brukere å croppe opplastede bilder
+    'easy_thumbnails',
+    'image_cropping',
+
     # Djangoting
     'django.contrib.auth',
     'django.contrib.comments',
@@ -160,38 +168,65 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.messages',
     'django.contrib.admin',
+    # Flatpages gjør at vi enkelt kan legge til sider som kun inneholder tekst,
+    # på hvilken url vi vil. Teksten lagres i databasen.
     'django.contrib.flatpages',
+    # Humanize legger til nyttige template-tags, som konverterer maskintid til
+    # menneskelig leselig tid, f.eks. "i går".
     'django.contrib.humanize',
-)
+]
 
-# Legg til IP-en din her for å vise debug-toolbar.
-INTERNAL_IPS = ['127.0.0.1', ]
 
-AUTH_PROFILE_MODULE= 'accounts.UserProfile'
-LOGIN_URL = '/login/'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
-    'events.context_processors.upcoming_events', # Legger til upcoming_events i alle templates.
+
+    'events.context_processors.upcoming_events',     
     'jobs.views.activej',
     'quotes.context_processors.random_quote',
+
     #'events.context_processors.current_month_calendar', 
     # fjernet fordi den bruker en sql request per dag i mnd
-   )
+)
 
+###########################
+# App-spesifikke settings #
+###########################
 
-# Hvor passwd-fila til ntnulinuxserverne ligger på gauss. Må bli lastet ned
-# regelmessig med cron eller noe lignende.
-NTNU_PASSWD = '/home/hiasen/passwd'
+# Contrib.auth
+##################################################
+AUTH_PROFILE_MODULE= 'accounts.UserProfile'
+LOGIN_URL = '/login/'
 
-# MATH CAPTCHA
+# Math captcha
+##################################################
 MATH_CAPTCHA_QUESTION = ''
 MATH_CAPTCHA_NUMBERS = range(0,40)
 MATH_CAPTCHA_OPERATORS = '+-*/%'
 
+
+# Debug toolbar
+###################################################
 DEBUG_TOOLBAR_CONFIG = {
     "INTERCEPT_REDIRECTS": False,
 }
+# Legg til IP-en din her for å vise debug-toolbar.
+INTERNAL_IPS = ['127.0.0.1', ]
+
+# Django-image-cropping
+###################################################
+from easy_thumbnails import defaults
+THUMBNAIL_PROCESSORS = (
+        'image_cropping.thumbnail_processors.crop_corners',
+) + defaults.PROCESSORS
+
+##########################
+# Andre interne settings #
+##########################
+
+# Hvor passwd-fila til ntnulinuxserverne ligger på gauss. Må bli lastet ned
+# regelmessig med cron eller noe lignende.
+NTNU_PASSWD = '/home/hiasen/passwd'
