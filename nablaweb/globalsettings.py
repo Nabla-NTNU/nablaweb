@@ -156,8 +156,8 @@ INSTALLED_APPS = [
     'sessionprofile',
 
     # Django-image-cropping (pip install) gjør det mulig for brukere å croppe opplastede bilder
-    'easy_thumbnails',
-    'image_cropping',
+    'easy_thumbnails', # thumbnail-taggen i templates
+    'image_cropping', # Admindelen
 
     # Djangoting
     'django.contrib.auth',
