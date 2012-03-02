@@ -2,11 +2,12 @@
 {% load markup %}
 {% load humanize %}
 {% load comments %}
+{% load thumbnail %}
 
 {% block content %}
 
 {% if news.picture %}
-    <img alt="header" src="{{ news.picture.url }}">
+    <img alt="header" width="100%" src="{% thumbnail news.picture 770x250 box=news.cropping %}">
 {% endif %}
 
 <h2>{{ news.headline }}</h2>
