@@ -1,6 +1,7 @@
 {% load humanize %}
 {% load avatar_tags %}
 {% load markup %}
+{% load mediawiki_links %}
 
 {% for comment in comment_list %}
 
@@ -26,7 +27,7 @@
                     
                     {# Urlize er en extension som gjør linker klikkbare. Failer silently #}
                     {# {{ comment|escape|markdown:"safe,urlize" }} #}
-                    {{ comment.comment|striptags|markdown:"safe,urlize" }}
+                    {{ comment.comment|striptags|markdown:"safe,urlize"|wikilinks}}
 
                     {# urlize.py hentes fra https://github.com/r0wb0t/markdown-urlize #}
                     {# og puttes i /usr/lib/pymodules/python2.7/markdown/extensions #}

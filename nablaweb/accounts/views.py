@@ -1,58 +1,55 @@
 # -*- coding: utf-8 -*-
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response, redirect, get_object_or_404, render
-from django.template import RequestContext, loader, Context
+from django.shortcuts import redirect, get_object_or_404, render
+from django.template import loader, Context
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User, UserManager
 from accounts.forms import LoginForm, UserForm, ProfileForm, RegistrationForm
 from accounts.models import UserProfile
 from django.contrib import messages
-from django.views.decorators.http import require_http_methods, require_GET, require_POST
-from django.views.generic import TemplateView
+from django.views.decorators.http import require_http_methods
 
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, InvalidPage
 
 import datetime
 
+
 ## Login/logout
 
-@require_http_methods(['POST','GET'])
+@require_http_methods(['POST', 'GET'])
 def login_user(request):
-    redirect_to = request.REQUEST.get('next',request.META.get('HTTP_REFERER','/'))
+    redirect_to = request.REQUEST.get('next', request.META.get('HTTP_REFERER', '/'))
     if request.user.is_authenticated():
         return redirect(redirect_to)
-
 
     if request.method == 'GET':
         login_form = LoginForm()
     elif request.method == 'POST':
-        
+
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-        #Hvis bruker ble autentisert log inn og 
+        #Hvis bruker ble autentisert log inn og
         if user is not None and user.is_active:
-            login(request,user)
+            login(request, user)
             messages.add_message(request, messages.INFO, 'Du ble logget inn')
             return redirect(redirect_to)
         else:
-            login_form = LoginForm({'username':username})
+            login_form = LoginForm({'username': username})
             messages.add_message(request, messages.ERROR, 'Feil brukernavn/passord!')
 
-    return render(request,'accounts/login.html', 
+    return render(request, 'accounts/login.html',
                                 {'login_form': login_form,
-                                  'next': redirect_to} 
+                                  'next': redirect_to}
                                 )
+
 
 def logout_user(request):
     messages.add_message(request, messages.INFO, 'Logget ut')
     logout(request)
-    return redirect(request.META.get('HTTP_REFERER','/'))
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
-
-## Brukerprofil 
+## Brukerprofil
 @login_required
 def view_member_profile(request, username=None):
 
@@ -64,53 +61,70 @@ def view_member_profile(request, username=None):
     else:
         member = request.user
     return render(
-        request, "accounts/view_member_profile.html", 
+        request, "accounts/view_member_profile.html",
         {'member': member})
     # Render er identisk med render_to_response, men tar request som første
     # argument istedenfor RequestContext(request) som tredje argument.
     # Importeres fra django.shortcuts
 
-from django.views.generic import DetailView 
+from django.views.generic import DetailView
+
+
 class UserDetailView(DetailView):
-     model = User
-     template_name = "test.html"
+    model = User
+    template_name = "test.html"
 
 
 @login_required
 def edit_profile(request):
-    user = request.user;
-    updated = False
+    user = request.user
 
     userProfile = UserProfile.objects.get_or_create(user=user)[0]
-    
-    if request.method == 'GET': 
+
+    if request.method == 'GET':
         userForm = UserForm(instance=user)
         profileForm = ProfileForm(instance=userProfile)
     elif request.method == 'POST':
         userForm = UserForm(request.POST, instance=user)
         profileForm = ProfileForm(request.POST, instance=userProfile)
-        if userForm.is_valid() and profileForm.is_valid() :
+        if userForm.is_valid() and profileForm.is_valid():
             userForm.save()
             profileForm.save()
             messages.add_message(request, messages.INFO, 'Profil oppdatert.')
         else:
             messages.add_message(request, messages.ERROR, 'Du har skrevet inn noe feil.')
 
-
-    return render(request, 
-        "accounts/edit_profile.html", 
-        {'userForm': userForm, 
-          'profileForm': profileForm}, 
+    return render(request,
+        "accounts/edit_profile.html",
+        {'userForm': userForm,
+          'profileForm': profileForm},
         )
 
+
 @login_required
-def list(request, year=None):
+def list(request):
     """Lister opp brukere med pagination."""
     users = User.objects.all()
-	
-    return render(request,"accounts/list.html", 
-							  {'users': users} 
-							 )
+
+    return render(request, "accounts/list.html", {'users': users})
+
+
+@login_required
+def search(request, query):
+    """ Returnerer brukerne med brukernavn, fornavn eller etternavn som
+        begynner på query """
+
+    from django.db.models import Q
+    from django.http import HttpResponse
+    from django.utils import simplejson
+
+    if not query:
+        return HttpResponse("")
+
+    users = User.objects.filter(Q(username__startswith=query) | Q(first_name__startswith=query) | Q(last_name__startswith=query))
+    data = simplejson.dumps([{"username": u.username, "first_name": u.first_name, "last_name": u.last_name} for u in users])
+    return HttpResponse(data, mimetype="application/json")
+
 
 
 

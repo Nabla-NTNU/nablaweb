@@ -2,13 +2,18 @@
 {% load markup %}
 {% load humanize %}
 {% load comments %}
+{% load mediawiki_links %}
+{% load thumbnail %}
 
 {% block content %}
 
-<img alt="header" src="{{ news.picture.url }}">
+{% if news.picture %}
+    <img alt="header" width="100%" src="{% thumbnail news.picture 770x250 box=news.cropping %}">
+{% endif %}
+
 <h2>{{ news.headline }}</h2>
-{{ news.lead_paragraph|markdown }}
-{{ news.body|markdown }}
+{{ news.lead_paragraph|markdown|wikilinks}}
+{{ news.body|markdown|wikilinks}}
 
 {# Comments #}
     {% get_comment_count for news as comment_count %}

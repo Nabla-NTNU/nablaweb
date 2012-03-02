@@ -1,4 +1,6 @@
 {% extends "gallery/gallery_base.html" %}
+{% load mediawiki_links %}
+{% load markdown %}
 
 {% block title %}Galleri{% endblock %}
 
@@ -14,7 +16,7 @@
 </ul>
 
 <h2> {{ album.title }} </h2>
-<p>{{ album.description }}</p>
+<p>{{ album.description|markdown|wikilinks}}</p>
 
 {% if album.picture_set %}
     <table>

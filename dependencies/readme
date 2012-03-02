@@ -1,6 +1,18 @@
-# Installer python-saker og ting
-sudo apt-get install python-pip
-sudo pip install -r dependencies.txt
+# Ikke kjør denne filen, skriv kommandoene. 
+# Selv om det kanskje funker å bare kjøre den.
+# Denne filen inneholder diverse som kan være forskjellig på hver maskin
 
-# Markdown extensions
-Les markdown_extensions/readme
+# Markdown extensions #
+cd ../markdown_extensions
+sudo cp *.py /usr/local/lib/python2.7/dist-packages/markdown/extensions
+# ELLER
+sudo cp *.py /usr/lib/pymodules/python2.7/markdown/extensions
+# avhengig av hvilken mappe som eksisterer
+
+# Twitter bootstrap #
+kjør make fra hovedmappen, eller twitter-bootstrap-mappen.
+
+# Django-image-cropping trenger noen static-filer. Om du bruker staticfiles-
+# appen er dette unødvendig.
+cd ../static
+ln -s /usr/local/lib/python2.7/dist-packages/image_cropping/static/image_cropping image_cropping

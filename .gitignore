@@ -15,45 +15,9 @@ sqlite.db
 
 # Filer som genereres lokalt
 dependencies/twitter-bootstrap/bootstrap
+dependencies/twitter-bootstrap/docs/assets
+dependencies/twitter-bootstrap/docs/build
 
 # Media-mapper (opplastede brukerbilder o.l.)
 media/
-
-# Mappe som blir laget av pip av og til
-build/
-
-# Disse genereres ved å kjøre ./manage.py generatemedia
-# (Kun nødvendig for production)
-nablaweb/_generated_media/
-nablaweb/_generated_media_names.py
-
-# Wat? - andreros
-#
-# /nablaweb/gallery/forms.py~
-# /nablaweb/gallery/models.py~
-# /nablaweb/gallery/urls.py~
-# /nablaweb/gallery/views.py~
-# /nablaweb/templates/content/content_confirm_delete.html~
-# /nablaweb/templates/gallery/add_album.html~
-# /nablaweb/templates/gallery/add_picture.html~
-# /nablaweb/templates/gallery/album_confirm_delete.html~
-# /nablaweb/templates/gallery/album.html~
-# /nablaweb/templates/gallery/delete_picture.html~
-# /nablaweb/templates/gallery/edit_album.html~
-# /nablaweb/templates/gallery/edit_picture.html~
-# /nablaweb/templates/gallery/index.html~
-# /nablaweb/templates/gallery/new_image_form2.html~
-# /nablaweb/templates/gallery/new_image_form.html~
-# /nablaweb/templates/gallery/picture_large.html~
-# /nablaweb/templates/index.html~
-# /nablaweb/urls.py~
-# /nablaweb/feedback/admin.py~
-# /nablaweb/feedback/forms.py~
-# /nablaweb/feedback/models.py~
-# /nablaweb/feedback/views.py~
-# /nablaweb/templates/feedback/feedback_base.html~
-# /nablaweb/templates/feedback/feedback_form.html~
-# /nablaweb/templates/feedback/feedback_success.html~
-# /nablaweb/globalsettings.py~
-#
 

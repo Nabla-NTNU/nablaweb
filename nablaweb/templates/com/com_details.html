@@ -1,13 +1,15 @@
 {% extends "base.html" %}
+{% load mediawiki_links %}
+{% load markup %}
 
 {% block title %}}{{ com.com.group.name }}{% endblock %}
 
 {% block content %}
 <h2>{{ com.com.group.name }}</h2>
-<p>{{ com.description }}</p>
+<p>{{ com.description|markdown|wikilinks}}</p>
 <dl>{% for person in members %}
     <dt><strong>{% if person.user.user.first_name %}{{ person.user.user.first_name }} {{ person.user.user.last_name }}{% else %}{{person.user.user.username}}{% endif %}</strong> (ble med i {{ com.com.group.name }} {{ person.joined_date }})</dt>
-    <dd>{{ person.story }}</dt>{% endfor %}
+    <dd>{{ person.story|markdown|wikilinks }}</dt>{% endfor %}
 </dl>
 <p><small>Sist endret {{ com.last_changed_date }}</small></p>
 {% endblock content %}
