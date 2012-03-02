@@ -24,21 +24,13 @@
         position: relative; 
         
     }
-    .navbar .brand { 
-        
-    }
-
-    .navbar .nav > li > a {
-        
-    }
 
     /* Looks prettier */
     h2 { margin-bottom: 5px; }
     h3 { margin-bottom: 5px; }
 
-    /* Fix for grid inside a well */
-    .well .row {
-
+    .navbar-form td {
+        width: 41px;
     }
 
 
