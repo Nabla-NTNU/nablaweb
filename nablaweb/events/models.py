@@ -12,6 +12,7 @@ import datetime
 class Event(Content):
     
     headline = models.CharField("overskrift", max_length=100, blank=False, null=False)
+    short_name = models.CharField("kort navn", max_length=20, blank=True, null=True, help_text="Brukes på steder hvor det ikke er plass til å skrive hele overskriften, for eksempel kalenderen.")
 
     picture = ImageCropField(verbose_name="bilde", upload_to="event_pictures", null=True, blank=True, 
             help_text="Bilder som er større enn 770x250 px ser best ut. Du kan beskjære bildet etter opplasting.")
