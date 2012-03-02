@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load mediawiki_links %}
 {% load markup %}
 
 {% block title %}Nyheter{% endblock %}
@@ -15,7 +16,7 @@
             {% endif %}
 
             <h2>{{ news.headline }}</h2>
-            {{ news.lead_paragraph|markdown }}
+            {{ news.lead_paragraph|markdown|wikilinks}}
             <p><a class="btn" href="{% url news_detail news.id %}">Les mer &raquo;</a></p>
         </div>
     </div>

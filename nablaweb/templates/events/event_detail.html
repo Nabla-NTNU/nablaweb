@@ -2,6 +2,7 @@
 {% load markup %}
 {% load humanize %}
 {% load comments %}
+{% load mediawiki_links %}
 
 {% block title %}{{ event.headline }}{% endblock %}
 
@@ -14,7 +15,7 @@
     {% endif %}
 
 <h2>{{ event.headline }}</h2>
-{{ event.description|markdown }}
+{{ event.description|markdown|wikilinks}}
 </div></div>
 <hr>
 
@@ -24,7 +25,7 @@
     {% for news in event.related_news.all %}
     <div class="span8">
         <h3>{{ news.headline }}</h3>
-        {{ news.lead_paragraph|markdown }}
+        {{ news.lead_paragraph|markdown|wikilinks}}
         <p><a class="btn" href="{% url news_detail news.id %}">Les mer &raquo;</a></p>
     </div>
     {% endfor %}
