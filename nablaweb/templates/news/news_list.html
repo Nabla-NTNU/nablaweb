@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load markup %}
+{% load thumbnail %}
 
 {% block title %}Nyheter{% endblock %}
 
@@ -11,7 +12,7 @@
         <div class="span8">
 
             {% if news.picture %}
-                <img alt="" src="{{ news.picture.url }}">
+                <img alt="" width="100%" src="{% thumbnail news.picture 770x250 box=news.cropping %}">
             {% endif %}
 
             <h2>{{ news.headline }}</h2>

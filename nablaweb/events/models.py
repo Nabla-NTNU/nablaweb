@@ -5,13 +5,18 @@ from django.db import models
 from django.contrib.auth.models import User
 from content.models import Content
 from news.models import News
+from image_cropping.fields import ImageRatioField, ImageCropField
 import datetime
 
 
 class Event(Content):
     
     headline = models.CharField("overskrift", max_length=100, blank=False, null=False)
-    picture = models.ImageField(verbose_name="bilde", upload_to="event_pictures", blank=True, null=True, help_text="Vises over overskriften. Optimal bredde er 620px")
+
+    picture = ImageCropField(verbose_name="bilde", upload_to="event_pictures", null=True, blank=True, 
+            help_text="Bilder som er større enn 770x250 px ser best ut. Du kan beskjære bildet etter opplasting.")
+    cropping = ImageRatioField('picture', '770x250', verbose_name="Beskjæring")
+
     description = models.TextField(verbose_name="beskrivelse", blank=False, null=False, help_text="En kort beskrivelse av hva arrangementet går ut på. Prøv å bruke nyheter til å legge ut praktisk informasjon.")
     related_news = models.ManyToManyField(News, verbose_name="relaterte nyheter", blank=True, null=True, help_text="Nyheter som er relatert til dette arrangementet")
 
