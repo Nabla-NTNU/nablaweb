@@ -8,6 +8,10 @@
 #  - Media folder
 #  - Media url
 
+
+# Django settings
+#########################################
+
 import os
 
 DEBUG = True
@@ -74,29 +78,16 @@ STATIC_URL = '/static/'
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
-# django-mediagenerator setings (spør meg (andreros) om du lurer på noe)
-##############################################################################
-# mediagenerator kombinerer alle css og js-filer inn i en enkel fil. Dette
-# gjør siden får mange færre HTTP requests. Den gjør også at vi kan bruke
-# Compass/SASS til CSS-en, noe som er ytterst koselig.
-
-# Debug: Serve files at DEV_MEDIA_URL
+# True: Serve files at DEV_MEDIA_URL
 # False: Don't serve files (Do it yourself)
+# Noen som vet om denne variabelen brukes noe sted?
 MEDIA_DEV_MODE = DEBUG
-
-# Where mediagenerator serves files during debug
-DEV_MEDIA_URL = '/dev_static_generated/'   # Serve files at localhost:8000/DEV_MEDIA_URL
-
-# Where _generated_media_folder is available during production
-PRODUCTION_MEDIA_URL = 'http://localhost/nablaweb/_generated_media/' 
 
 # Full path to static folder
 # Variabelen heter media fordi mediagenerator ikke er helt up to date
+# Mediagenerator er ikke lenger i bruk, men variabelen brukes i urls.py
 GLOBAL_MEDIA_DIRS = (os.path.join(PROJECT_ROOT, '..', 'static'),)
 
-
-# Hent media bundles (ting som skal kombineres/kompileres/komprimeres)
-from media_bundles import *
 ##############################################################################
 
 # Make this unique, and don't share it with anybody.
@@ -164,6 +155,10 @@ INSTALLED_APPS = [
     # phpBB, og annet, hvis man er logget på Nablaweb
     'sessionprofile',
 
+    # Django-image-cropping (pip install) gjør det mulig for brukere å croppe opplastede bilder
+    'easy_thumbnails',
+    'image_cropping',
+
     # Djangoting
     'django.contrib.auth',
     'django.contrib.comments',
@@ -181,11 +176,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 ]
 
-# Legg til IP-en din her for å vise debug-toolbar.
-INTERNAL_IPS = ['127.0.0.1', ]
 
-AUTH_PROFILE_MODULE= 'accounts.UserProfile'
-LOGIN_URL = '/login/'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
@@ -199,18 +190,43 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     #'events.context_processors.current_month_calendar', 
     # fjernet fordi den bruker en sql request per dag i mnd
-   )
+)
 
+###########################
+# App-spesifikke settings #
+###########################
 
-# Hvor passwd-fila til ntnulinuxserverne ligger på gauss. Må bli lastet ned
-# regelmessig med cron eller noe lignende.
-NTNU_PASSWD = '/home/hiasen/passwd'
+# Contrib.auth
+##################################################
+AUTH_PROFILE_MODULE= 'accounts.UserProfile'
+LOGIN_URL = '/login/'
 
-# MATH CAPTCHA
+# Math captcha
+##################################################
 MATH_CAPTCHA_QUESTION = ''
 MATH_CAPTCHA_NUMBERS = range(0,40)
 MATH_CAPTCHA_OPERATORS = '+-*/%'
 
+
+# Debug toolbar
+###################################################
 DEBUG_TOOLBAR_CONFIG = {
     "INTERCEPT_REDIRECTS": False,
 }
+# Legg til IP-en din her for å vise debug-toolbar.
+INTERNAL_IPS = ['127.0.0.1', ]
+
+# Django-image-cropping
+###################################################
+from easy_thumbnails import defaults
+THUMBNAIL_PROCESSORS = (
+        'image_cropping.thumbnail_processors.crop_corners',
+) + defaults.PROCESSORS
+
+##########################
+# Andre interne settings #
+##########################
+
+# Hvor passwd-fila til ntnulinuxserverne ligger på gauss. Må bli lastet ned
+# regelmessig med cron eller noe lignende.
+NTNU_PASSWD = '/home/hiasen/passwd'

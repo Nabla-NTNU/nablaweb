@@ -3,6 +3,7 @@
 {% load humanize %}
 {% load comments %}
 {% load mediawiki_links %}
+{% load thumbnail %}
 
 {% block title %}{{ event.headline }}{% endblock %}
 
@@ -11,7 +12,7 @@
 <div class="row"><div class="span8">
 
     {% if event.picture %}
-        <img class="header_picture" alt="" src="{{ event.picture.url }}" width="620">
+        <img alt="" width="100%" src="{% thumbnail event.picture 770x250 box=event.cropping %}">
     {% endif %}
 
 <h2>{{ event.headline }}</h2>

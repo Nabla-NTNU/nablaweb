@@ -111,8 +111,10 @@
                         <li><a href="{% url accounts.views.view_member_profile user.username %}">Vis profil</a></li>
                         <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
                         <li><a class="no-ajaxy" href="/logout">Logg ut</a></li>
+                        {% if user.is_staff %}
                         <li class="divider"></li>
                         <li><a class="no-ajaxy" href="/admin">Admin</a></li>
+                        {% endif %}
                     </ul>
                 </li>
             </ul>
