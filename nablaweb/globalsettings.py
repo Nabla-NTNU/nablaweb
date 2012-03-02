@@ -134,25 +134,36 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = [
-    'sessionprofile',
-    # Våre ting
-    'content',
+    ################
+    # Interne ting #
+    ################
+    'content',  # Abstrakt: created, updated, created by, updated by. 
     'news',
-    'accounts',
+    'accounts', # Inneholder UserProfile med ekstra informasjon.
     'avatar',
     'events',
-    'jobs',
+    'jobs',     # Stillingsannonser og firmaer
     'gallery',
-    'bedpres',
-    'homepage',
-    'com',
-    'quotes',
-    'feedback',
-    'nabladet',
-    # Eksterne ting
-    'math_captcha', # sudo pip install django-math-captcha
-    #'mediagenerator', # sudo pip install django-mediagenerator
+    'bedpres',  # Utvider events med BPC-tilkobling.
+    # 'homepage', # Viser news og events sammen. Ikke i bruk.
+    'com',      # Viser sider for komiteene.
+    'quotes',   # Tilfeldig sitat.
+    # 'feedback', # Feedback om siden til webkom. Bruk heller issue-tracker.
+    'nabladet', # Liste over nablad.
+
+    #################
+    # Eksterne ting #
+    #################
+
+    # Debug toolbar viser SQL som er kjørt under sidelastingen,
+    # templatevariabler, og litt til. For å skru den på, fjern kommentaren
+    # og legg IP til PC-en du laster siden med til i INTERNAL_IPS.
     #'debug_toolbar',
+
+    # Sessionprofile gjør det mulig å logge direkte inn på blant annet Wikien,
+    # phpBB, og annet, hvis man er logget på Nablaweb
+    'sessionprofile',
+
     # Djangoting
     'django.contrib.auth',
     'django.contrib.comments',
@@ -162,7 +173,11 @@ INSTALLED_APPS = [
     'django.contrib.markup',
     'django.contrib.messages',
     'django.contrib.admin',
+    # Flatpages gjør at vi enkelt kan legge til sider som kun inneholder tekst,
+    # på hvilken url vi vil. Teksten lagres i databasen.
     'django.contrib.flatpages',
+    # Humanize legger til nyttige template-tags, som konverterer maskintid til
+    # menneskelig leselig tid, f.eks. "i går".
     'django.contrib.humanize',
 ]
 
@@ -177,9 +192,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
-    'events.context_processors.upcoming_events', # Legger til upcoming_events i alle templates.
+
+    'events.context_processors.upcoming_events',     
     'jobs.views.activej',
     'quotes.context_processors.random_quote',
+
     #'events.context_processors.current_month_calendar', 
     # fjernet fordi den bruker en sql request per dag i mnd
    )
