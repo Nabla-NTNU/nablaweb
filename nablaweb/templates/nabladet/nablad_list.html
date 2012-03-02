@@ -8,9 +8,6 @@
 <h2>Nabladet</h2>
 <p>Nabladet er vårt kjøre tidsskrift, som blir publisert av redaksjonen flere ganger i semesteret.</p>
 
-{% if not nablad_list %}
-    <p>Ingen Nablad har blitt lagt til enda.</p>
-{% endif %}
 
 {% for nablad in nablad_list %}
     <div class="row">
@@ -21,6 +18,9 @@
         </div>
     </div>
     <hr>
+
+{% empty %}
+    <p>Ingen Nablad har blitt lagt til enda.</p>
 {% endfor %}
 
 {% endblock content %}
