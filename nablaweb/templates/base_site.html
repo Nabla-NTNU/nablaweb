@@ -170,44 +170,42 @@
 
 
         {% block sidebar %}
-
-            <h3>Om Nabla</h3>
-            <p>Nabla er linjeforeningen for sivilingeniørprogrammet <b>Fysikk og matematikk</b> på NTNU. Du kan lese mer om studiet på <a href="http://www.ntnu.no/studier/mtfyma">NTNU sine nettsider</a>. På denne nettsiden finner du informasjon om studiet, linjeforeningen, og hva som foregår.</p>
-
-            {% if upcoming_events %}
-            <!-- kommende arrangement -->
-            <h3>Kommende arrangement</h3>
-            <div class="well" style="padding: 8px 0;">
-                <ul class="nav nav-list">
-                    {% for event in upcoming_events %}
-                    <li>
-                        <a href="{% url event_detail event.id %}">
-                            <time 
-                                class="label label-important"
-                                datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.M" }}</time> 
-                             {{ event.headline }}
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <!-- end kommende arrangement -->
-            {% endif %}
-
+            <h3>Jeg er tom</h3>
+            <p>Denne blokken inneholder ikke noe nyttig. 
+               Hva med å sette den til et tomt innhold, eller putte noe nyttig her?</p>
         {% endblock sidebar %}
 
 
         <!-- reklame -->
         {% block ad %}
             <div class="box">
-            <div>
-                <img src="http://lorempixel.com/300/250/technics/1/Reklame" class="ad wide" alt="Reklame">
+                <img src="http://lorempixel.com/362/200/technics/1/Reklame" class="ad wide" alt="Reklame">
             </div>
+
+            <div class="box">
+                <img src="http://lorempixel.com/362/100/technics/2/Reklame" class="ad wide" alt="Reklame">
             </div>
         {% endblock ad %}
 
 
         {% block below_ad %}
+            <h3>Liste over blocks</h3>
+            <dl>
+                <dt>content</dt>
+                <dd>Innholdet til venstre</dd>
+
+                <dt>main</dt>
+                <dd>content og hele sidebaren</dd>
+
+                <dt>sidebar</dt>
+                <dd>Alt over reklamen</dd>
+
+                <dt>ad</dt>
+                <dd>Reklamen</dd>
+
+                <dt>below_ad</dt>
+                <dd>Alt under reklamen (denne teksten)</dd>
+            </dl>
         {% endblock %}
 
 
