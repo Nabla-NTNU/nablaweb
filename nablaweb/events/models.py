@@ -3,23 +3,13 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-from content.models import Content
 from news.models import News
-from image_cropping.fields import ImageRatioField, ImageCropField
 import datetime
 
 
-class Event(Content):
-    
-    headline = models.CharField("overskrift", max_length=100, blank=False, null=False)
+class Event(News):
     short_name = models.CharField("kort navn", max_length=20, blank=True, null=True, help_text="Brukes på steder hvor det ikke er plass til å skrive hele overskriften, for eksempel kalenderen.")
-
-    picture = ImageCropField(verbose_name="bilde", upload_to="event_pictures", null=True, blank=True, 
-            help_text="Bilder som er større enn 770x250 px ser best ut. Du kan beskjære bildet etter opplasting.")
-    cropping = ImageRatioField('picture', '770x250', verbose_name="Beskjæring")
-
-    description = models.TextField(verbose_name="beskrivelse", blank=False, null=False, help_text="En kort beskrivelse av hva arrangementet går ut på. Prøv å bruke nyheter til å legge ut praktisk informasjon.")
-    related_news = models.ManyToManyField(News, verbose_name="relaterte nyheter", blank=True, null=True, help_text="Nyheter som er relatert til dette arrangementet")
+    related_news = models.ManyToManyField(News, related_name="news", verbose_name="relaterte nyheter", blank=True, null=True, help_text="Nyheter som er relatert til dette arrangementet")
 
     # Indikerer hvem som står bak arrangementet.
     # Dette feltet er valgfritt.
@@ -56,7 +46,7 @@ class Event(Content):
     # Dette feltet er bare satt hvis registration_required er sann.
     # Datoen er ikke tidligere enn registration_start, hvis dette er satt.
     # Datoen er ikke senere enn event_start.
-    deregistration_deadline = models.DateTimeField(verbose_name="avmelding stenger",null=True, blank=True)
+    deregistration_deadline = models.DateTimeField(verbose_name="avmelding stenger", null=True, blank=True)
 
     # Hvor mange plasser arrangementet har.
     # Dette feltet er satt hvis og bare hvis registration_required er sann.
@@ -74,6 +64,10 @@ class Event(Content):
 
     def __unicode__(self):
         return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('event_detail', [str(self.id)])
 
     # Overlagre for å automatisk vedlikeholde ventelisten.
     def save(self, *args, **kwargs):

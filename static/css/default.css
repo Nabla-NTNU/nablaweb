@@ -43,6 +43,7 @@
         background-color: white;
         border: 1px solid #eee;
         padding: 3px;
+        margin-bottom: 5px;
     }
     .box img:last-child { margin-bottom: -4px; }
 

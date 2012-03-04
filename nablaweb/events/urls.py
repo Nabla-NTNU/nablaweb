@@ -2,9 +2,7 @@
 
 
 from django.conf.urls.defaults import *
-from nablaweb.events.models import Event
-from nablaweb.events.forms import EventForm
-from nablaweb.events.views import EventDetailView, EventListView, EventDeleteView, UserEventView
+from nablaweb.events.views import EventDetailView, EventListView, UserEventView
 
 
 urlpatterns = patterns('nablaweb.events.views',
@@ -27,7 +25,7 @@ urlpatterns = patterns('nablaweb.events.views',
         name='event_list'),
 
     url(r'^(?P<pk>\d{1,8})/$',
-        EventDetailView.as_view( context_object_name="event" ),
+        EventDetailView.as_view(context_object_name="event"),
         name='event_detail'),
 
     # Bruker

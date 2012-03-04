@@ -81,6 +81,7 @@ class EventDeleteView(NewsDeleteView):
 class EventListView(NewsListView):
     model = Event
     context_object_name = "event_list"
+    queryset = Event.objects.all()
 
     # TODO: For performance reasons, only fetch the needed events.
     # That is, from Monday in the first week, to Sunday in the last week.
@@ -105,7 +106,7 @@ class EventListView(NewsListView):
         except IndexError:
             month = today.month
 
-        weeks = 5 # Weeks to be displayed
+        weeks = 5  # Weeks to be displayed
 
         # Get the monday at the start of the calendar
         first = date(year, month, 1)
@@ -114,7 +115,6 @@ class EventListView(NewsListView):
 
         # Object to add to context
         calendar = {'first': first, 'weeks': []}
-
 
         for week in range(0, weeks):
             # Add an empty week, with weeknumber
