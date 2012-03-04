@@ -153,6 +153,12 @@ class EventListView(NewsListView):
 class EventDetailView(NewsDetailView):
     model = Event
     context_object_name = "event"
+    def get_context_data(self, **kwargs):
+        context = super(EventDetailView, self).get_context_data(**kwargs)
+        # Fnner ut om innlogget bruker er påmeldt arrangementet
+        context['is_registered'] = context['event'].eventregistration_set.filter(user=self.request.user).exists()
+        print(self.request)
+        return context
 
 
 # Bruker
