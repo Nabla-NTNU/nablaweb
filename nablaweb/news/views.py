@@ -19,7 +19,8 @@ class NewsListView(ListView):
         news_rows = [[n1, n2], [n3, n4]] etc.
         """
         context = super(NewsListView, self).get_context_data(**kwargs)
-        news_list = list(context['news_list'])
+
+        news_list = context['news_list']
 
         if news_list:
             context['featured_news'] = news_list[0]

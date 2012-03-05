@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Context, RequestContext, loader
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.contrib.auth.decorators import login_required
 from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
 from nablaweb.events.models import Event
@@ -79,7 +79,7 @@ class EventDeleteView(NewsDeleteView):
 
 # Offentlig
 
-class EventListView(NewsListView):
+class EventListView(ListView):
     model = Event
     context_object_name = "event_list"
     queryset = Event.objects.all()
@@ -112,7 +112,7 @@ class EventListView(NewsListView):
         # Get the monday at the start of the calendar
         first = date(year, month, 1)
         first_monday = first - timedelta(days=first.weekday())
-        last_sunday = first + timedelta(weeks=weeks, days=6)
+        #  last_sunday = first + timedelta(weeks=weeks, days=6)
 
         # Object to add to context
         calendar = {'first': first, 'weeks': []}
@@ -130,13 +130,13 @@ class EventListView(NewsListView):
 
                 # Get the events which start at the current day,
                 # or between two dates if an end date exists
-                events = [event for event in context['event_list'] 
-                        if ( event.event_end and event.event_start.date() <= day 
-                        and day <= event.event_end.date() ) or event.event_start.date() == day]
+                events = [event for event in context['event_list']
+                        if (event.event_end and event.event_start.date() <= day
+                        and day <= event.event_end.date()) or event.event_start.date() == day]
 
                 # Add it to the week
                 calendar['weeks'][week]['days'].append({
-                    'date': day.day, 
+                    'date': day.day,
                     'events': events,
                     'differentmonth': (day.month != month),
                     'current': (day == today),
@@ -154,11 +154,12 @@ class EventListView(NewsListView):
 class EventDetailView(NewsDetailView):
     model = Event
     context_object_name = "event"
+
     def get_context_data(self, **kwargs):
         context = super(EventDetailView, self).get_context_data(**kwargs)
         # Fnner ut om innlogget bruker er påmeldt arrangementet
         if self.request.user.is_anonymous():
-            context['is_registered']=False
+            context['is_registered'] = False
         else:
             context['is_registered'] = context['event'].eventregistration_set.filter(user=self.request.user).exists()
         print(self.request)
