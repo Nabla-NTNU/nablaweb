@@ -55,5 +55,5 @@ class RelevantForYearList(GenericJobsList):
 
 class ShowJob(DetailView):
     model = Advert
-    context_object_name = 'jobs_detail'
+    context_object_name = 'job'
     template_name = "jobs/jobs_detail.html"

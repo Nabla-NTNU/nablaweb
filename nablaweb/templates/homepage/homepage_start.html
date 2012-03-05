@@ -15,32 +15,3 @@
 
 
 
-{% block sidebar %}
-
-<h3>Om Nabla</h3>
-
-<p>Nabla er linjeforeningen for sivilingeniørprogrammet <b>Fysikk og matematikk</b> på NTNU. Du kan lese mer om studiet på <a href="http://www.ntnu.no/studier/mtfyma">NTNU sine nettsider</a>. På denne nettsiden finner du informasjon om studiet, linjeforeningen, og hva som foregår.</p>
-
-{% if upcoming_events %}
-
-    <h3>Kommende arrangement</h3>
-    <div class="well" style="padding: 8px 0;"><!-- kommende arrangement -->
-        <ul class="nav nav-list">
-
-            {% for event in upcoming_events %}
-            <li>
-                <a href="{% url event_detail event.id %}">
-                    <time 
-                        class="label label-important"
-                        datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.M" }}</time> 
-                     {{ event.headline }}
-                </a>
-            </li>
-            {% endfor %}
-
-        </ul>
-    </div><!-- end kommende arrangement -->
-
-{% endif %}
-
-{% endblock sidebar %}

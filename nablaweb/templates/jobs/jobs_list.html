@@ -12,6 +12,7 @@
                 <p><strong><a href="{% url jobs_company_list job.company.name %}">{{ job.company.name }}</a> | </strong>Søknadsfrist<strong> {{ job.deadline_date }}
                 </strong><br/><strong>Relevant for {{ job.relevant_for_group.all|join:", " }}, årskull {{ job.relevant_for_year.all|join:", " }}</strong></p>
                 {{ job.lead_paragraph|markdown }}
+                {{ job.body|markdown }}
                 <p><a class="btn" href="{% url jobs_detail job.id %}">Les mer &raquo;</a></p>
             </div>
         </div>

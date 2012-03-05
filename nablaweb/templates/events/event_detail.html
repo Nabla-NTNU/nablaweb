@@ -16,11 +16,12 @@
     {% endif %}
 
 <h2>{{ event.headline }}</h2>
-{{ event.description|markdown|wikilinks}}
+{{ event.lead_paragraph|markdown|wikilinks}}
+{{ event.body|markdown|wikilinks}}
 </div></div>
 <hr>
 
-{% if event.related_news %}
+{% if event.related_news.all %}
 <p>Relaterte nyheter:</p>
 <div class="row">
     {% for news in event.related_news.all %}
