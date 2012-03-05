@@ -181,7 +181,7 @@
 </table>
 
 {% if event.registration_required %}
-<h3>{{ event.users_registered }} påmeldte</h3>
+<h3>{{ event.users_attending }} påmeldt av {{ event.places }} plasser</h3>
 <div class="progress{% if event.percent_full > 90 %} danger{% endif %}">
     <div class="bar" style="width: {{ event.percent_full }}%;"></div>
 </div>

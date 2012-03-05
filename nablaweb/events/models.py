@@ -140,6 +140,7 @@ class Event(News):
             places = self.places
             try:
                 reg = regs.get(user=user)
+                msg = 'reg_exists'
             except EventRegistration.DoesNotExist:
                 number = regs.count() + 1
                 if number > places and not self.has_waiting_list():
