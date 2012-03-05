@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
 from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
 from nablaweb.events.models import Event
 
@@ -153,6 +154,15 @@ class EventListView(NewsListView):
 class EventDetailView(NewsDetailView):
     model = Event
     context_object_name = "event"
+    def get_context_data(self, **kwargs):
+        context = super(EventDetailView, self).get_context_data(**kwargs)
+        # Fnner ut om innlogget bruker er påmeldt arrangementet
+        if self.request.user.is_anonymous():
+            context['is_registered']=False
+        else:
+            context['is_registered'] = context['event'].eventregistration_set.filter(user=self.request.user).exists()
+        print(self.request)
+        return context
 
 
 # Bruker
@@ -168,7 +178,7 @@ class UserEventView(TemplateView):
         context_data['penalty_list'] = user.eventpenalty_set.all()
         return context_data
 
-
+@login_required
 def register_user(request, event_id):
     messages = {
         'noreg': 'Ingen registrering.',
@@ -176,6 +186,7 @@ def register_user(request, event_id):
         'full': 'Arrangementet er fullt.',
         'attend': 'Du er påmeldt.',
         'queue': 'Du står på venteliste.',
+        'reg_exists': 'Du er allerede påmeldt.',
         }
     event = get_object_or_404(Event, pk=event_id)
     token = event.register_user(request.user)

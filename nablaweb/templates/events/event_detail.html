@@ -159,7 +159,11 @@
     <tr>
         <td style="text-align: center;" colspan="2">
             {% if event.registration_required %}
-                Påmelding kreves
+                {% if is_registered %}
+                    Du er påmeldt
+                {% else %}
+                    Påmelding kreves
+                {% endif %}
             {% else %}
                 Påmelding unødvendig
             {% endif %}
@@ -169,21 +173,22 @@
     </tr>
 
     <tr><td colspan="2" style="text-align: center;">
-        <a href="{% url event_detail event.id %}" class="btn btn-primary">Meld deg på</a>
+        {% if event.registration_required and not is_registered %}
+        <a href="{% url nablaweb.events.views.register_user event.id %}" class="btn btn-primary">Meld deg på</a>
+        {% endif %}
         <a href="#notimplemented" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
     </td></tr>
 
 </table>
 
 {% if event.registration_required %}
-<h3>{{ event.users_registered }} påmeldte</h3>
+<h3>{{ event.users_attending }} påmeldt av {{ event.places }} plasser</h3>
 <div class="progress{% if event.percent_full > 90 %} danger{% endif %}">
     <div class="bar" style="width: {{ event.percent_full }}%;"></div>
 </div>
 
 
 {% endif %}
-
 
 
 <div class="well" style="padding: 8px 0;">

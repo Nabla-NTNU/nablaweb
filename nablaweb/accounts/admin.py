@@ -9,7 +9,7 @@ from accounts.models import GroupProfile, UserProfile
 
 
 class GroupAdminForm(forms.ModelForm):
-    users = forms.ModelMultipleChoiceField(queryset=User.objects.all(),
+    users = forms.ModelMultipleChoiceField(queryset=User.objects.filter(is_active=True),
                                            widget=FilteredSelectMultiple('Users', False),
                                            required=False)
     class Meta:

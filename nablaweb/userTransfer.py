@@ -26,7 +26,7 @@ def ordne_opp(g_bruker):
 def slett():
     User.objects.exclude(username='hiasen').delete()
 
-db = MySQLdb.connect(user="nabla",passwd="SDzGHQZwJaQpHcWs",db="nabla_web", cursorclass=MySQLdb.cursors.DictCursor)
+db = MySQLdb.connect(user="nabla",passwd="Ls29RA9PrdJr92ru",db="nabla_web", cursorclass=MySQLdb.cursors.DictCursor)
 
 c=db.cursor()
 c.execute("""SELECT totnavn,brukernavn,mail,kull,profil,adresse,postnr,poststed,bursdag,mobil, telefon ,nullvektor,ikke_kullmail, kortnummer, passord FROM `brukere` WHERE 
