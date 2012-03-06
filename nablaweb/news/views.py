@@ -11,7 +11,7 @@ class NewsListView(ListView):
     model = News
     context_object_name = 'news_list'
     paginate_by = 7  # Oddetall ser finest ut
-    queryset = News.objects.all().select_subclasses()  # InheritanceManager
+    queryset = News.objects.all()
 
     def get_context_data(self, **kwargs):
         """
