@@ -10,6 +10,23 @@ class EventRegistrationInline(admin.TabularInline):
 
 
 class EventAdmin(NewsAdmin):
+    fields = ("picture",
+              "cropping",
+              "headline",
+              "slug",
+              "short_name",
+              "lead_paragraph",
+              "body",
+              "organizer",
+              "location",
+              "event_start",
+              "event_end",
+              "registration_required",
+              "registration_deadline",
+              "registration_start",
+              "deregistration_deadline",
+              "places",
+              "has_queue")
     form = EventForm
     list_display = ['__unicode__', 'registration_required']
     date_hierarchy = 'event_start'

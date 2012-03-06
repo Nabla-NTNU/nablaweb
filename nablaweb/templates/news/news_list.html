@@ -61,7 +61,7 @@
 
             {% for event in upcoming_events %}
             <li>
-                <a href="{% url event_detail event.id %}">
+                <a href="{{ event.get_absolute_url }}">
                     <time 
                         class="label label-important"
                         datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.M" }}</time> 

@@ -28,7 +28,7 @@
     <div class="span8">
         <h3>{{ news.headline }}</h3>
         {{ news.lead_paragraph|markdown|wikilinks}}
-        <p><a class="btn" href="{% url news_detail news.id %}">Les mer &raquo;</a></p>
+        <p><a class="btn" href="{{ news.get_absolute_url }}">Les mer &raquo;</a></p>
     </div>
     {% endfor %}
 </div>
@@ -174,7 +174,7 @@
 
     <tr><td colspan="2" style="text-align: center;">
         {% if event.registration_required and not is_registered %}
-        <a href="{% url nablaweb.events.views.register_user event.id %}" class="btn btn-primary">Meld deg på</a>
+        <a href="{% url events.views.register_user event.id %}" class="btn btn-primary">Meld deg på</a>
         {% endif %}
         <a href="#notimplemented" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
     </td></tr>

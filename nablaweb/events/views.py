@@ -157,11 +157,12 @@ class EventDetailView(NewsDetailView):
 
     def get_context_data(self, **kwargs):
         context = super(EventDetailView, self).get_context_data(**kwargs)
+        object_name = self.object.content_type.model
         # Fnner ut om innlogget bruker er påmeldt arrangementet
         if self.request.user.is_anonymous():
             context['is_registered'] = False
         else:
-            context['is_registered'] = context['event'].eventregistration_set.filter(user=self.request.user).exists()
+            context['is_registered'] = context[object_name].eventregistration_set.filter(user=self.request.user).exists()
         print(self.request)
         return context
 
