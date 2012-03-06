@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from news.views import NewsListView, NewsDetailView
+from django.views.generic import ListView
+from news.views import NewsDetailView
 from nabladet.models import Nablad
 
 
@@ -9,7 +10,7 @@ class NabladDetailView(NewsDetailView):
     context_object_name = 'nablad'
 
 
-class NabladListView(NewsListView):
+class NabladListView(ListView):
     model = Nablad
     context_object_name = 'nablad_list'
     queryset = Nablad.objects.all()

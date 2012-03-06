@@ -74,6 +74,9 @@ class Content(models.Model):
     picture = ImageCropField(upload_to="news_pictures", null=True, blank=True, help_text="Bilder som er større enn 770x250 px ser best ut. Du kan beskjære bildet etter opplasting.")
     cropping = ImageRatioField('picture', '770x250', verbose_name="Beskjæring")
 
+    # Slugs
+    slug = models.SlugField(null=True, blank=True, help_text="Denne teksten vises i adressen til siden, og trengs vanligvis ikke å endres")
+
     class Meta:
         abstract = True
 
@@ -83,7 +86,10 @@ class Content(models.Model):
         Finner URL ved å reversere navnet på viewen.
         Krever at navnet på viewet er gitt ved modellnavn_detail
         """
-        return (self.content_type.model + "_detail", (), {'pk': self.pk})
+        return (self.content_type.model + "_detail", (), {
+            'pk': self.pk,
+            'slug': self.slug
+        })
 
     def has_been_edited(self):
         return abs((self.last_changed_date - self.created_date).seconds) > 1

@@ -29,7 +29,7 @@ activej = EverythingList.active_jobs
 
 class CompanyList(GenericJobsList):
     def get_queryset(self):
-        company = get_object_or_404(Company, name__iexact=self.kwargs['company'])
+        company = get_object_or_404(Company, pk=self.kwargs['pk'])
         return Advert.objects.filter(company=company)
 
 

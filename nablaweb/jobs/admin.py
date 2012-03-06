@@ -14,10 +14,17 @@ from jobs.models import Advert, Company, RelevantForChoices, TagChoices, YearCho
 #        model = Advert
 
 class AdvertAdmin(admin.ModelAdmin):
-#    relevant_for_form = RelevantForAdminForm
+    # relevant_for_form = RelevantForAdminForm
     pass
     
 class CompanyAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}
+    fields = ("picture",
+          "cropping",
+          "name",
+          "slug",
+          "website",
+          "description",)
     pass
         
 class RelevantForChoicesAdmin(admin.ModelAdmin):

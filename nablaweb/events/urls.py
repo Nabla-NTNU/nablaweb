@@ -24,7 +24,7 @@ urlpatterns = patterns('nablaweb.events.views',
         EventListView.as_view(),
         name='event_list'),
 
-    url(r'^(?P<pk>\d{1,8})/$',
+    url(r'^(?P<pk>\d{1,8})/(?P<slug>\w*)$',
         EventDetailView.as_view(context_object_name="event"),
         name='event_detail'),
 

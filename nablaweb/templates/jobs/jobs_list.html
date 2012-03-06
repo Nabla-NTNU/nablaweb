@@ -9,11 +9,11 @@
         <div class="row">
             <div class="span8">
                 <h2>{{ job.headline }}</h2>
-                <p><strong><a href="{% url jobs_company_list job.company.name %}">{{ job.company.name }}</a> | </strong>Søknadsfrist<strong> {{ job.deadline_date }}
+                <p><strong><a href="{{ job.company.get_absolute_url }}">{{ job.company.name }}</a> | </strong>Søknadsfrist<strong> {{ job.deadline_date }}
                 </strong><br/><strong>Relevant for {{ job.relevant_for_group.all|join:", " }}, årskull {{ job.relevant_for_year.all|join:", " }}</strong></p>
                 {{ job.lead_paragraph|markdown }}
                 {{ job.body|markdown }}
-                <p><a class="btn" href="{% url jobs_detail job.id %}">Les mer &raquo;</a></p>
+                <p><a class="btn" href="{{ job.get_absolute_url }}">Les mer &raquo;</a></p>
             </div>
         </div>
         <hr>
