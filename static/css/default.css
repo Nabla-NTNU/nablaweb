@@ -121,12 +121,6 @@
     /* Red glyph icons */
     .icon-red{background-image:url(../bootstrap/img/glyphicons-halflings-red.png);}
 
-.news_item.event { outline: 3px solid red; }
-.news_item.news  { outline: 3px solid white; }
-.news_item.nablad { outline: 3px solid green; }
-.news_item.bedpres { outline: 3px solid blue; }
-.news_item.advert { outline: 3px solid black; }
-
 /* Event-kalender */
 .calendar { 
     width: 100%;
