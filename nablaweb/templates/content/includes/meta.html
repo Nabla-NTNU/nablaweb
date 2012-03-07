@@ -1,0 +1,55 @@
+{% load humanize %}
+
+<h3>Meta</h3>
+<table class="table table-condensed content-info">
+
+
+    <!-- Publisert -->
+    <tr>
+        <td>Publisert</td>
+        <td>
+            <time datetime="{{ content.created_date|date:"c" }}">
+                {{ content.created_date|naturalday }} kl. {{ content.created_date|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+    
+    <!-- Av -->
+    {% if content.created_by %}
+    <tr>
+        <td>Av</td>
+        <td>
+            <a href="{% url accounts.views.view_member_profile content.created_by.username %}">
+                {{ content.created_by.get_full_name }}
+            </a>
+        </td>
+    </tr>
+    {% endif %}
+
+    {% if content.has_been_edited %}
+
+    <!-- Sist endret -->
+    <tr>
+        <td>Sist endret</td>
+        <td>
+            <time datetime="{{ content.last_changed_date|date:"c" }}">
+                {{ content.last_changed_date|naturalday }} kl. {{ content.last_changed_date|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+
+    <!-- Av -->
+    {% if content.last_changed_by %}
+    <tr>
+        <td>Av</td>
+        <td>
+            <a href="{% url accounts.views.view_member_profile content.last_changed_by.username %}">
+                {{ content.last_changed_by.get_full_name }}
+            </a>
+        </td>
+    </tr>
+    {% endif %}
+
+    {% endif %}
+
+</table>

@@ -4,7 +4,7 @@
 {% load classname %}
 
 
-<div class="span{% if narrow %}4{% else %}8{% endif %} {{ news|classname }}">
+<div class="span{% if narrow %}4{% else %}8{% endif %} news_item {{ news.content_type.model }}">
     {% if news.picture %}
 
         {% if narrow %}

@@ -11,7 +11,7 @@ class NewsListView(ListView):
     model = News
     context_object_name = 'news_list'
     paginate_by = 7  # Oddetall ser finest ut
-    queryset = News.objects.all()
+    queryset = News.objects.all().order_by('-pk')
 
     def get_context_data(self, **kwargs):
         """

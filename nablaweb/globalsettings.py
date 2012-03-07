@@ -108,6 +108,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'pybb.middleware.PybbMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Sett denne i personlige settings, ettersom den gjør alt mye tregere
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -174,6 +175,12 @@ INSTALLED_APPS = [
     # Humanize legger til nyttige template-tags, som konverterer maskintid til
     # menneskelig leselig tid, f.eks. "i går".
     'django.contrib.humanize',
+    
+    # Alt som er nodvendig for pybbm
+    'pybb',
+    'pytils',
+    'sorl.thumbnail',
+    'pure_pagination',
 ]
 
 
@@ -187,6 +194,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'events.context_processors.upcoming_events',     
     'jobs.views.activej',
     'quotes.context_processors.random_quote',
+    'pybb.context_processors.processor',
 
     #'events.context_processors.current_month_calendar', 
     # fjernet fordi den bruker en sql request per dag i mnd

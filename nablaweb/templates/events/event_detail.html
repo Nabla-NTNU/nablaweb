@@ -21,19 +21,7 @@
 </div></div>
 <hr>
 
-{% if event.related_news.all %}
-<p>Relaterte nyheter:</p>
-<div class="row">
-    {% for news in event.related_news.all %}
-    <div class="span8">
-        <h3>{{ news.headline }}</h3>
-        {{ news.lead_paragraph|markdown|wikilinks}}
-        <p><a class="btn" href="{{ news.get_absolute_url }}">Les mer &raquo;</a></p>
-    </div>
-    {% endfor %}
-</div>
-<hr>
-{% endif %}
+{% include "events/includes/related_news.html" with event=event %}
 
 {# Comments #}
     {% get_comment_count for event as comment_count %}
@@ -190,14 +178,14 @@
 
 {% endif %}
 
-
+{% if user.is_staff %}
 <div class="well" style="padding: 8px 0;">
     <ul class="nav nav-list">
         <li class="nav-header">Admin</li>
         <li><a href="{% url event_admin event.id %}"><i class="icon-glass"></i> Administrer</a></li>
-        <li><a href="#endre"><i class="icon-pencil"></i> Endre</a></li>
-        <li><a href="#slett"><i class="icon-trash"></i> Slett</a></li>
+        <li><a href="{% url admin:events_event_change event.id %}"><i class="icon-pencil"></i> Endre</a></li>
+        <li><a href="{% url admin:events_event_delete event.id %}"><i class="icon-trash"></i> Slett</a></li>
     </ul>
 </div>
-
+{%endif%}
 {% endblock %}
