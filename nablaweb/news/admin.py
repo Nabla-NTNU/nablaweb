@@ -6,6 +6,13 @@ from content.admin import ContentAdmin
 
 class NewsAdmin(ContentAdmin):
     form = NewsForm
+    fields = ("picture",
+              "cropping",
+              "headline",
+              "slug",
+              "lead_paragraph",
+              "body")
+    prepopulated_fields = {"slug": ("headline",)}
 
 
 admin.site.register(News, NewsAdmin)

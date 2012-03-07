@@ -16,23 +16,12 @@
     {% endif %}
 
 <h2>{{ event.headline }}</h2>
-{{ event.description|markdown|wikilinks}}
+{{ event.lead_paragraph|markdown|wikilinks}}
+{{ event.body|markdown|wikilinks}}
 </div></div>
 <hr>
 
-{% if event.related_news %}
-<p>Relaterte nyheter:</p>
-<div class="row">
-    {% for news in event.related_news.all %}
-    <div class="span8">
-        <h3>{{ news.headline }}</h3>
-        {{ news.lead_paragraph|markdown|wikilinks}}
-        <p><a class="btn" href="{% url news_detail news.id %}">Les mer &raquo;</a></p>
-    </div>
-    {% endfor %}
-</div>
-<hr>
-{% endif %}
+{% include "events/includes/related_news.html" with event=event %}
 
 {# Comments #}
     {% get_comment_count for event as comment_count %}
@@ -173,7 +162,7 @@
 
     <tr><td colspan="2" style="text-align: center;">
         {% if event.registration_required and not is_registered %}
-        <a href="{% url nablaweb.events.views.register_user event.id %}" class="btn btn-primary">Meld deg på</a>
+        <a href="{% url events.views.register_user event.id %}" class="btn btn-primary">Meld deg på</a>
         {% endif %}
         <a href="#notimplemented" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
     </td></tr>

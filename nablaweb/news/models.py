@@ -12,10 +12,6 @@ class News(Content):
     lead_paragraph = models.TextField(verbose_name="ingress", blank=True, help_text="Vises på forsiden og i artikkelen")
     body = models.TextField(verbose_name="brødtekst", blank=True, help_text="Vises kun i artikkelen")
 
-    @models.permalink
-    def get_absolute_url(self):
-        return ('news_detail', [str(self.id)])
-
     class Meta:
         verbose_name = "nyhet"
         verbose_name_plural = "nyheter"

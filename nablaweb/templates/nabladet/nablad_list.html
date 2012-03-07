@@ -14,7 +14,7 @@
         <div class="span8">
             <!--<h2>{{ nablad.headline }}</h2>-->
             {{ nablad.lead_paragraph|markdown }}
-            <p><a class="btn" href="{% url nablad_detail nablad.id %}">Les mer &raquo;</a></p>
+            <p><a class="btn" href="{{ nablad.get_absolute_url }">Les mer &raquo;</a></p>
         </div>
     </div>
     <hr>

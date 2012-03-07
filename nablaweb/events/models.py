@@ -65,10 +65,6 @@ class Event(News):
     def __unicode__(self):
         return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
 
-    @models.permalink
-    def get_absolute_url(self):
-        return ('event_detail', [str(self.id)])
-
     # Overlagre for å automatisk vedlikeholde ventelisten.
     def save(self, *args, **kwargs):
         super(Event, self).save(*args, **kwargs)

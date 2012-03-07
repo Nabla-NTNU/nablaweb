@@ -29,7 +29,7 @@ activej = EverythingList.active_jobs
 
 class CompanyList(GenericJobsList):
     def get_queryset(self):
-        company = get_object_or_404(Company, name__iexact=self.kwargs['company'])
+        company = get_object_or_404(Company, pk=self.kwargs['pk'])
         return Advert.objects.filter(company=company)
 
 
@@ -55,5 +55,5 @@ class RelevantForYearList(GenericJobsList):
 
 class ShowJob(DetailView):
     model = Advert
-    context_object_name = 'jobs_detail'
+    context_object_name = 'job'
     template_name = "jobs/jobs_detail.html"

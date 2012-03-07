@@ -1,1 +1,203 @@
-{% extends "bedpres/bedpres_base.html" %}
+{% extends "base.html" %}
+{% load markup %}
+{% load humanize %}
+{% load comments %}
+{% load mediawiki_links %}
+{% load thumbnail %}
+
+{% block title %}{{ bedpres.headline }}{% endblock %}
+
+{% block content %}
+
+<div class="row"><div class="span8">
+
+    {% if bedpres.picture %}
+        <img alt="" width="100%" src="{% thumbnail bedpres.picture 770x250 box=bedpres.cropping %}">
+    {% endif %}
+
+<h2>{{ bedpres.headline }}</h2>
+{{ bedpres.lead_paragraph|markdown|wikilinks}}
+{{ bedpres.body|markdown|wikilinks}}
+</div></div>
+<hr>
+
+{% if bedpres.related_news.all %}
+<p>Relaterte nyheter:</p>
+<div class="row">
+    {% for news in bedpres.related_news.all %}
+    <div class="span8">
+        <h3>{{ news.headline }}</h3>
+        {{ news.lead_paragraph|markdown|wikilinks}}
+        <p><a class="btn" href="{% url news_detail news.id %}">Les mer &raquo;</a></p>
+    </div>
+    {% endfor %}
+</div>
+<hr>
+{% endif %}
+
+{# Comments #}
+    {% get_comment_count for bedpres as comment_count %}
+
+    {% if comment_count > 0 %}
+        <h3 class="comments-header">Kommentarer</h3>
+    {% endif %}
+
+    {% render_comment_list for bedpres %}
+
+    {% if user.is_authenticated %}
+        {% render_comment_form for bedpres %}
+    {% else %}
+        <p class="well">Logg inn for å skrive en kommentar</p>
+    {% endif %}
+{# end Comments #}
+
+
+{% endblock %}
+
+
+
+
+
+{% block sidebar %}
+
+<h3>Meta</h3>
+<table class="table table-condensed content-info">
+
+
+    <!-- Publisert -->
+    <tr>
+        <td>Publisert</td>
+        <td>
+            <time datetime="{{ bedpres.created_date|date:"c" }}">
+                {{ bedpres.created_date|naturalday }} kl. {{ bedpres.created_date|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+    
+    <!-- Av -->
+    {% if bedpres.created_by %}
+    <tr>
+        <td>Av</td>
+        <td>
+            <a href="{% url accounts.views.view_member_profile bedpres.created_by.username %}">
+                {{ bedpres.created_by.get_full_name }}
+            </a>
+        </td>
+    </tr>
+    {% endif %}
+
+    {% if bedpres.has_been_edited %}
+
+    <!-- Sist endret -->
+    <tr>
+        <td>Sist endret</td>
+        <td>
+            <time datetime="{{ bedpres.last_changed_date|date:"c" }}">
+                {{ bedpres.last_changed_date|naturalday }} kl. {{ bedpres.last_changed_date|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+
+    <!-- Av -->
+    {% if bedpres.last_changed_by %}
+    <tr>
+        <td>Av</td>
+        <td>
+            <a href="{% url accounts.views.view_member_profile bedpres.last_changed_by.username %}">
+                {{ bedpres.last_changed_by.get_full_name }}
+            </a>
+        </td>
+    </tr>
+    {% endif %}
+
+    {% endif %}
+
+</table>
+<!-- end meta -->
+
+<!-- bedpres-info -->
+<h3>Informasjon</h3>
+<table class="table table-bordered table-striped content-info">
+
+    <!-- Fra -->
+    <tr>
+        <td>Starter</td>
+        <td>
+            <time datetime="{{ bedpres.event_start|date:"c" }}">
+                <b>{{ bedpres.event_start|naturalday }} kl. {{ bedpres.event_start|date:"G:i" }}</b>
+            </time>
+        </td>
+    </tr>
+
+    <!-- Til -->
+    {% if bedpres.bedpres_end %}
+    <tr>
+        <td>Slutter</td>
+        <td>
+            <time datetime="{{ bedpres.event_end|date:"c" }}">
+                {{ bedpres.event_end|naturalday }} kl. {{ bedpres.event_end|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+    {% endif %}
+
+    <!-- Sted -->
+    <tr><td>Sted</td><td>{{ bedpres.location }}</td></tr>
+
+    <!-- Registrering åpner -->
+    {% if bedpres.registration_start %}
+    <tr>
+        <td>Registrering åpner</td>
+        <td>
+            <time datetime="{{ bedpres.registration_start|date:"c" }}">
+                {{ bedpres.registration_start|naturalday }} kl. {{ bedpres.registration_start|date:"G:i" }}
+            </time>
+        </td>
+    </tr>
+    {% endif %}
+
+    <tr>
+        <td style="text-align: center;" colspan="2">
+            {% if bedpres.registration_required %}
+                {% if is_registered %}
+                    Du er påmeldt
+                {% else %}
+                    Påmelding kreves
+                {% endif %}
+            {% else %}
+                Påmelding unødvendig
+            {% endif %}
+        </td>
+
+
+    </tr>
+
+    <tr><td colspan="2" style="text-align: center;">
+        {% if bedpres.registration_required and not is_registered %}
+        <a href="{% url nablaweb.bedpress.views.register_user bedpres.id %}" class="btn btn-primary">Meld deg på</a>
+        {% endif %}
+        <a href="#notimplemented" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
+    </td></tr>
+
+</table>
+
+{% if bedpres.registration_required %}
+<h3>{{ bedpres.users_attending }} påmeldt av {{ bedpres.places }} plasser</h3>
+<div class="progress{% if bedpres.percent_full > 90 %} danger{% endif %}">
+    <div class="bar" style="width: {{ bedpres.percent_full }}%;"></div>
+</div>
+
+
+{% endif %}
+
+
+<div class="well" style="padding: 8px 0;">
+    <ul class="nav nav-list">
+        <li class="nav-header">Admin</li>
+        <li><a href="{% url bedpres_admin bedpres.id %}"><i class="icon-glass"></i> Administrer</a></li>
+        <li><a href="#endre"><i class="icon-pencil"></i> Endre</a></li>
+        <li><a href="#slett"><i class="icon-trash"></i> Slett</a></li>
+    </ul>
+</div>
+
+{% endblock %}
