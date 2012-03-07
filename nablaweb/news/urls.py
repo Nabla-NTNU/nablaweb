@@ -16,7 +16,7 @@ urlpatterns = patterns('news.views',
     url(r'^$',
         NewsListView.as_view(),
         name='news_list'),
-    url(r'^(?P<pk>\d{1,8})/(?P<slug>\w*)$',
+    url(r'^(?P<pk>\d{1,8})/(?P<slug>[-\w]*)$',
         NewsDetailView.as_view(),
         name='news_detail'),
 
