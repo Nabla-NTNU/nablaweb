@@ -8,6 +8,9 @@
 # Personlige settings
 nablaweb/settings.py
 
+# Wiki
+nablaweb/w
+
 # Databaser
 nablaweb/nabla_development.db
 nabla_development.db
