@@ -32,6 +32,7 @@ def login_user(request):
         if user is not None and user.is_active:
             login(request, user)
             messages.add_message(request, messages.INFO, 'Du ble logget inn')
+            UserProfile.objects.get_or_create(user=user)
             return redirect(redirect_to)
         else:
             login_form = LoginForm({'username': username})

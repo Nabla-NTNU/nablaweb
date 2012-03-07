@@ -28,6 +28,7 @@ class GroupProfile(models.Model):
         ('komite', 'Komité'),
         ('kull', 'Kull'),
         ('studprog', 'Studieprogram'),
+        ('stilling', 'Stilling'),
         )
 
     group_type = models.CharField(max_length = 10,blank = True, choices = GROUP_TYPES)
