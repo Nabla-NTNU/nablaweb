@@ -195,6 +195,20 @@ def register_user(request, event_id):
     django_messages.add_message(request, django_messages.INFO, message)
     return HttpResponseRedirect(reverse('event_detail', kwargs={'pk': event_id}))
 
+@login_required
+def deregister_user(request, event_id):
+    messages = {
+        'not_reg': 'Du verken var eller er påmeldt.',
+        'dereg_closed': 'Fristen for å melde seg av er gått ut.',
+        'not_allowed': 'Ta kontakt med ArrKom for å melde deg av.',
+        'dereg': 'Du er meldt av arrangementet.',
+        }
+    event = get_object_or_404(Event, pk=event_id)
+    token = event.deregister_user(request.user)
+    message = messages[token]
+    django_messages.add_message(request, django_messages.INFO, message)
+    return HttpResponseRedirect(reverse('event_detail', kwargs={'pk': event_id}))
+
 
 # Eksporter
 

@@ -152,18 +152,24 @@ class Event(News):
     # Melder brukeren av arrangementet. I praksis sørger metoden bare
     # for at brukeren ikke er påmeldt lengre, uavhengig av status før.
     def deregister_user(self, user):
-        # Dersom brukeren er påmeldt.
+        regs = self.eventregistration_set
         try:
-            # Flytt brukeren til siste plass, for å oppdatere plassnumrene til
-            # brukerne som er etter denne brukeren.
-            self.move_user_to_place(user, 1e12)
+            reg = regs.get(user=user)
+            
+            if self.deregistration_deadline is None:
+                msg = 'not_allowed'
+            elif self.deregistration_deadline < datetime.datetime.now():
+                msg = 'dereg_closed'
+            else:
+                self.move_user_to_place(user, 1e12)
+                self.eventregistration_set.get(user=user).delete()
+                msg = 'dereg'
 
-            # Fjern registreringen.
-            self.eventregistration_set.get(user=user).delete()
-
-        # Ingenting å gjøre dersom brukeren ikke er påmeldt.
+        # Brukeren er ikke påmeldt
         except EventRegistration.DoesNotExist:
-            pass
+            msg = 'not_reg'
+
+        return msg
 
     # Flytter brukeren til den oppgitte plassen, eller først/sist
     # dersom plassnummeret er for lavt/høyt. Returnerer det nye

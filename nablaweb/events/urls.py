@@ -31,6 +31,7 @@ urlpatterns = patterns('nablaweb.events.views',
     # Bruker
     (r'^mine$', UserEventView.as_view()),
     (r'^(?P<event_id>\d{1,8})/registrering$', 'register_user'),
+    (r'^(?P<event_id>\d{1,8})/avregistrering$', 'deregister_user'),
 
     # Eksporter
     (r'^(?P<event_id>\d{1,8})/eksporter$', 'ical_event'),
