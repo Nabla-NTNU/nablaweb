@@ -163,7 +163,6 @@ class EventDetailView(NewsDetailView):
             context['is_registered'] = False
         else:
             context['is_registered'] = context[object_name].eventregistration_set.filter(user=self.request.user).exists()
-        print(self.request)
         return context
 
 
