@@ -23,22 +23,7 @@
 
 {% include "events/includes/related_news.html" with event=event %}
 
-{# Comments #}
-    {% get_comment_count for event as comment_count %}
-
-    {% if comment_count > 0 %}
-        <h3 class="comments-header">Kommentarer</h3>
-    {% endif %}
-
-    {% render_comment_list for event %}
-
-    {% if user.is_authenticated %}
-        {% render_comment_form for event %}
-    {% else %}
-        <p class="well">Logg inn for å skrive en kommentar</p>
-    {% endif %}
-{# end Comments #}
-
+{% include "content/includes/comments.html" with content=event %}
 
 {% endblock %}
 
@@ -48,135 +33,9 @@
 
 {% block sidebar %}
 
-<h3>Meta</h3>
-<table class="table table-condensed content-info">
+{% include "content/includes/meta.html" with content=event %}
 
-
-    <!-- Publisert -->
-    <tr>
-        <td>Publisert</td>
-        <td>
-            <time datetime="{{ event.created_date|date:"c" }}">
-                {{ event.created_date|naturalday }} kl. {{ event.created_date|date:"G:i" }}
-            </time>
-        </td>
-    </tr>
-    
-    <!-- Av -->
-    {% if event.created_by %}
-    <tr>
-        <td>Av</td>
-        <td>
-            <a href="{% url accounts.views.view_member_profile event.created_by.username %}">
-                {{ event.created_by.get_full_name }}
-            </a>
-        </td>
-    </tr>
-    {% endif %}
-
-    {% if event.has_been_edited %}
-
-    <!-- Sist endret -->
-    <tr>
-        <td>Sist endret</td>
-        <td>
-            <time datetime="{{ event.last_changed_date|date:"c" }}">
-                {{ event.last_changed_date|naturalday }} kl. {{ event.last_changed_date|date:"G:i" }}
-            </time>
-        </td>
-    </tr>
-
-    <!-- Av -->
-    {% if event.last_changed_by %}
-    <tr>
-        <td>Av</td>
-        <td>
-            <a href="{% url accounts.views.view_member_profile event.last_changed_by.username %}">
-                {{ event.last_changed_by.get_full_name }}
-            </a>
-        </td>
-    </tr>
-    {% endif %}
-
-    {% endif %}
-
-</table>
-<!-- end meta -->
-
-<!-- event-info -->
-<h3>Informasjon</h3>
-<table class="table table-bordered table-striped content-info">
-
-    <!-- Fra -->
-    <tr>
-        <td>Starter</td>
-        <td>
-            <time datetime="{{ event.event_start|date:"c" }}">
-                <b>{{ event.event_start|naturalday }} kl. {{ event.event_start|date:"G:i" }}</b>
-            </time>
-        </td>
-    </tr>
-
-    <!-- Til -->
-    {% if event.event_end %}
-    <tr>
-        <td>Slutter</td>
-        <td>
-            <time datetime="{{ event.event_end|date:"c" }}">
-                {{ event.event_end|naturalday }} kl. {{ event.event_end|date:"G:i" }}
-            </time>
-        </td>
-    </tr>
-    {% endif %}
-
-    <!-- Sted -->
-    <tr><td>Sted</td><td>{{ event.location }}</td></tr>
-
-    <!-- Registrering åpner -->
-    {% if event.registration_start %}
-    <tr>
-        <td>Registrering åpner</td>
-        <td>
-            <time datetime="{{ event.registration_start|date:"c" }}">
-                {{ event.registration_start|naturalday }} kl. {{ event.registration_start|date:"G:i" }}
-            </time>
-        </td>
-    </tr>
-    {% endif %}
-
-    <tr>
-        <td style="text-align: center;" colspan="2">
-            {% if event.registration_required %}
-                {% if is_registered %}
-                    Du er påmeldt
-                {% else %}
-                    Påmelding kreves
-                {% endif %}
-            {% else %}
-                Påmelding unødvendig
-            {% endif %}
-        </td>
-
-
-    </tr>
-
-    <tr><td colspan="2" style="text-align: center;">
-        {% if event.registration_required and not is_registered %}
-        <a href="{% url events.views.register_user event.id %}" class="btn btn-primary">Meld deg på</a>
-        {% endif %}
-        <a href="#notimplemented" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
-    </td></tr>
-
-</table>
-
-{% if event.registration_required %}
-<h3>{{ event.users_attending }} påmeldt av {{ event.places }} plasser</h3>
-<div class="progress{% if event.percent_full > 90 %} danger{% endif %}">
-    <div class="bar" style="width: {{ event.percent_full }}%;"></div>
-</div>
-
-
-{% endif %}
+{% include "events/includes/info.html" with event=event %}
 
 {% if user.is_staff %}
 <div class="well" style="padding: 8px 0;">
