@@ -21,19 +21,7 @@
 </div></div>
 <hr>
 
-{% if event.related_news.all %}
-<p>Relaterte nyheter:</p>
-<div class="row">
-    {% for news in event.related_news.all %}
-    <div class="span8">
-        <h3>{{ news.headline }}</h3>
-        {{ news.lead_paragraph|markdown|wikilinks}}
-        <p><a class="btn" href="{{ news.get_absolute_url }}">Les mer &raquo;</a></p>
-    </div>
-    {% endfor %}
-</div>
-<hr>
-{% endif %}
+{% include "events/includes/related_news.html" with event=event %}
 
 {# Comments #}
     {% get_comment_count for event as comment_count %}
