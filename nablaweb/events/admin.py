@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
+from django.contrib.contenttypes.models import ContentType
 from events.forms import EventForm
 from events.models import Event, EventRegistration, EventPenalty
 from news.admin import NewsAdmin
@@ -36,6 +38,19 @@ class EventAdmin(NewsAdmin):
     list_filter = ['event_start', 'organizer', 'location']
     inlines = [EventRegistrationInline]
     actions_on_top = True
+
+    def queryset(self, request):
+        """
+        Henter objekter med content_type=Event
+
+        Dette er nødvendig for å ikke inkludere objekter av typen
+        BedPres i listen.
+        """
+        this_type = ContentType.objects.get_for_model(Event)
+        # NewsAdmin henter kun News, så superklassen til NewsAdmin må
+        # overskrives istedenfor superklassen til EventAdmin
+        qs = super(NewsAdmin, self).queryset(request)
+        return qs.filter(content_type=this_type)
 
 
 admin.site.register(Event, EventAdmin)

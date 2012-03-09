@@ -1,10 +1,10 @@
 from django.contrib import admin
-from events.admin import EventAdmin
+from content.admin import ContentAdmin
 from bedpres.models import BedPres
 from bedpres.forms import BedPresForm
 
 
-class BedPresAdmin(EventAdmin):
+class BedPresAdmin(ContentAdmin):
     fields = ("picture",
               "cropping",
               "bpcid",
