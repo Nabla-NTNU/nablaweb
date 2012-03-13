@@ -160,6 +160,11 @@ INSTALLED_APPS = [
     'easy_thumbnails', # thumbnail-taggen i templates
     'image_cropping', # Admindelen
 
+    # South migrations 
+    # Når det gjøres endringer i modeller må etterfulges av kommandoen
+    # ./manage.py migrate --auto
+    'south',
+
     # Djangoting
     'django.contrib.auth',
     'django.contrib.comments',
