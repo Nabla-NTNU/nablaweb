@@ -1,7 +1,7 @@
 {% extends "content/content_base.html" %}
 
 {% block readmore %}
-    <a href="{% url nablad_detail content.id %}">Les mer</a>
+    <a href="{% url nablad_detail nablad.id %}">Les mer</a>
 {% endblock %}
 
 {% block content_type %}
@@ -9,5 +9,5 @@
 {% endblock %}
 
 {% block after_body %}
-    <a href="{{ content.file.url }}">Last ned utgaven</a>
+    <a href="{{ nablad.file.url }}">Last ned utgaven</a>
 {% endblock %}

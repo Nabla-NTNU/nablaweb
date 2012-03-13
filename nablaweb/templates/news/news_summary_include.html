@@ -1,0 +1,22 @@
+{% load mediawiki_links %}
+{% load markup %}
+{% load thumbnail %}
+{% load classname %}
+
+
+<div class="span{% if narrow %}4{% else %}8{% endif %} news_item {{ news.content_type.model }}">
+    {% if news.picture %}
+
+        {% if narrow %}
+            <img alt="" width="100%" src="{% thumbnail news.picture 370x123 box=news.cropping %}">
+        {% else %}
+            <img alt="" width="100%" src="{% thumbnail news.picture 770x250 box=news.cropping %}">
+        {% endif %}
+
+    {% endif %}
+
+    <h2>{{ news.headline }}</h2>
+    {{ news.lead_paragraph|markdown|wikilinks}}
+
+        <p><a class="btn" href="{{ news.get_absolute_url }}">Les mer &raquo;</a></p>
+</div>

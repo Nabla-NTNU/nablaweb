@@ -1,37 +1,9 @@
 {% extends ajax|yesno:"ajax.html,base.html" %}
-{% load classname %}
 
 {% block content %}
-
+<div class="row">
     {% for content in content_list %}
-        <div class="content_list_object">
-            {% with type=content|classname %}
-
-            {% if type == "news" %}
-                {% include "news/news_detail.html" with news=content ajax="True" summary="True" %}
-            {% endif %}
-
-            {% if type == "event" %}
-                {% include "events/event_detail.html" with event=content ajax="True" summary="True" %}
-            {% endif %}
-
-            {% if type == "bedpres" %}
-                {% include "bedpres/bedpres_detail.html" with bedpres=content ajax="True" summary="True" %}
-            {% endif %}
-
-            {% if type == "advert" %}
-                {% include "jobs/jobs_detail.html" with job=content ajax="True" summary="True" %}
-            {% endif %}
-
-            {% if type == "nablad" %}
-                {% include "nabladet/nablad_detail.html" with nablad=content ajax="True" summary="True" %}
-            {% endif %}
-
-            <!-- Er det ingenting her? Sjekk content_list.html -->
-
-            {% endwith %}
-        </div>
-
+        {% include "content/content_homepage.html" %}
     {% empty %}
         Det er ingenting her. Det var dumt.
     {% endfor %}
@@ -49,5 +21,5 @@
             <a href="?page={{ page_obj.next_page_number }}">eldre</a>
         {% endif %}
     {% endif %}
-
+</div>
 {% endblock %}

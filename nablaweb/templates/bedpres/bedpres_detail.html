@@ -1,1 +1,51 @@
-{% extends "bedpres/bedpres_base.html" %}
+{% extends "base.html" %}
+{% load markup %}
+{% load humanize %}
+{% load comments %}
+{% load mediawiki_links %}
+{% load thumbnail %}
+
+{% block title %}{{ bedpres.headline }}{% endblock %}
+
+{% block content %}
+
+<div class="row"><div class="span8">
+
+    {% if bedpres.picture %}
+        <img alt="" width="100%" src="{% thumbnail bedpres.picture 770x250 box=bedpres.cropping %}">
+    {% endif %}
+
+<h2>{{ bedpres.headline }}</h2>
+{{ bedpres.lead_paragraph|markdown|wikilinks}}
+{{ bedpres.body|markdown|wikilinks}}
+</div></div>
+<hr>
+
+{% include "events/includes/related_news.html" with event=bedpres %}
+
+{% include "content/includes/comments.html" with content=bedpres %}
+
+{% endblock %}
+
+
+
+
+
+{% block sidebar %}
+
+{% include "content/includes/meta.html" with content=bedpres %}
+
+{% include "events/includes/info.html" with event=bedpres %}
+
+
+{% if user.is_staff %}
+<div class="well" style="padding: 8px 0;">
+    <ul class="nav nav-list">
+        <li class="nav-header">Admin</li>
+        <li><a href="{% url admin:bedpres_bedpres_change bedpres.id %}"><i class="icon-pencil"></i> Endre</a></li>
+        <li><a href="{% url admin:bedpres_bedpres_delete bedpres.id %}"><i class="icon-trash"></i> Slett</a></li>
+    </ul>
+</div>
+{%endif%}
+
+{% endblock %}

@@ -23,7 +23,6 @@ class BPCFormView(FormView):
 
     def form_valid(self, form):
         events_to_create = form.cleaned_data['events']
-        print dir(self)
         for event in form.available_events:
             if event['id'] in events_to_create:
                 # TODO: Sjekk hvorfor DateTimeField håndterer datostrengen fra BPC.

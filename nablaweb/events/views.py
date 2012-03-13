@@ -8,7 +8,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Context, RequestContext, loader
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
+from django.contrib.auth.decorators import login_required
 from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
 from nablaweb.events.models import Event
 
@@ -78,9 +79,10 @@ class EventDeleteView(NewsDeleteView):
 
 # Offentlig
 
-class EventListView(NewsListView):
+class EventListView(ListView):
     model = Event
     context_object_name = "event_list"
+    queryset = Event.objects.all()
 
     # TODO: For performance reasons, only fetch the needed events.
     # That is, from Monday in the first week, to Sunday in the last week.
@@ -105,16 +107,15 @@ class EventListView(NewsListView):
         except IndexError:
             month = today.month
 
-        weeks = 5 # Weeks to be displayed
+        weeks = 5  # Weeks to be displayed
 
         # Get the monday at the start of the calendar
         first = date(year, month, 1)
         first_monday = first - timedelta(days=first.weekday())
-        last_sunday = first + timedelta(weeks=weeks, days=6)
+        #  last_sunday = first + timedelta(weeks=weeks, days=6)
 
         # Object to add to context
         calendar = {'first': first, 'weeks': []}
-
 
         for week in range(0, weeks):
             # Add an empty week, with weeknumber
@@ -129,13 +130,13 @@ class EventListView(NewsListView):
 
                 # Get the events which start at the current day,
                 # or between two dates if an end date exists
-                events = [event for event in context['event_list'] 
-                        if ( event.event_end and event.event_start.date() <= day 
-                        and day <= event.event_end.date() ) or event.event_start.date() == day]
+                events = [event for event in context['event_list']
+                        if (event.event_end and event.event_start.date() <= day
+                        and day <= event.event_end.date()) or event.event_start.date() == day]
 
                 # Add it to the week
                 calendar['weeks'][week]['days'].append({
-                    'date': day.day, 
+                    'date': day.day,
                     'events': events,
                     'differentmonth': (day.month != month),
                     'current': (day == today),
@@ -154,6 +155,16 @@ class EventDetailView(NewsDetailView):
     model = Event
     context_object_name = "event"
 
+    def get_context_data(self, **kwargs):
+        context = super(EventDetailView, self).get_context_data(**kwargs)
+        object_name = self.object.content_type.model
+        # Fnner ut om innlogget bruker er påmeldt arrangementet
+        if self.request.user.is_anonymous():
+            context['is_registered'] = False
+        else:
+            context['is_registered'] = context[object_name].eventregistration_set.filter(user=self.request.user).exists()
+        return context
+
 
 # Bruker
 
@@ -168,7 +179,7 @@ class UserEventView(TemplateView):
         context_data['penalty_list'] = user.eventpenalty_set.all()
         return context_data
 
-
+@login_required
 def register_user(request, event_id):
     messages = {
         'noreg': 'Ingen registrering.',
@@ -176,9 +187,24 @@ def register_user(request, event_id):
         'full': 'Arrangementet er fullt.',
         'attend': 'Du er påmeldt.',
         'queue': 'Du står på venteliste.',
+        'reg_exists': 'Du er allerede påmeldt.',
         }
     event = get_object_or_404(Event, pk=event_id)
     token = event.register_user(request.user)
+    message = messages[token]
+    django_messages.add_message(request, django_messages.INFO, message)
+    return HttpResponseRedirect(reverse('event_detail', kwargs={'pk': event_id}))
+
+@login_required
+def deregister_user(request, event_id):
+    messages = {
+        'not_reg': 'Du verken var eller er påmeldt.',
+        'dereg_closed': 'Fristen for å melde seg av er gått ut.',
+        'not_allowed': 'Ta kontakt med ArrKom for å melde deg av.',
+        'dereg': 'Du er meldt av arrangementet.',
+        }
+    event = get_object_or_404(Event, pk=event_id)
+    token = event.deregister_user(request.user)
     message = messages[token]
     django_messages.add_message(request, django_messages.INFO, message)
     return HttpResponseRedirect(reverse('event_detail', kwargs={'pk': event_id}))

@@ -2,21 +2,17 @@
 
 
 from django.conf.urls.defaults import *
-from nablaweb.news.forms import NewsForm
-from nablaweb.news.views import NewsDetailView, NewsListView, NewsDeleteView
+from nablaweb.content.views import ContentListView  # , ContentDeleteView
 
-urlpatterns = patterns('news.views',
+urlpatterns = patterns('content.views',
 
     # Administrasjon
-#    (r'^opprett/$', NewsFormPreview(form=NewsForm)),
-#    (r'^(?P<pk>\d{1,8})/endre/$', NewsFormPreview(form=NewsForm)),
-#    (r'^(?P<pk>\d{1,8})/slette/$', NewsDeleteView.as_view()),
+#    (r'^opprett/$', ContentFormPreview(form=ContentForm)),
+#    (r'^(?P<pk>\d{1,8})/endre/$', ContentFormPreview(form=ContentForm)),
+#    (r'^(?P<pk>\d{1,8})/slette/$', ContentDeleteView.as_view()),
 
     # Offentlig
     url(r'^$',
-        NewsListView.as_view(),
-        name='news_list'),
-    url(r'^(?P<pk>\d{1,8})/$',
-        NewsDetailView.as_view(),
-        name='news_detail'),
+        ContentListView.as_view(),
+        name='content_list'),
 )

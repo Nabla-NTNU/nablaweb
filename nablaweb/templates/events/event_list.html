@@ -56,8 +56,8 @@
                     <li class="date"><b>{{ day.date }}.</b></li>
                     {% for event in day.events %}
                         <li>
-                            <b class=" icon-cog"></b>
-                            <a href="{% url event_detail event.id %}">{{ event.headline }}</a>
+                            <b class="icon-cog"></b>
+                            <a href="{{ event.get_absolute_url }}">{{ event.headline }}</a>
                         </li>
                     {% endfor %}
                 </ul>

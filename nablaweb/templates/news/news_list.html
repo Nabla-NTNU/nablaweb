@@ -1,30 +1,25 @@
 {% extends "base.html" %}
-{% load mediawiki_links %}
-{% load markup %}
-{% load thumbnail %}
 
 {% block title %}Nyheter{% endblock %}
 
 {% block content %}
 
+<div class="row">
+{% include "news/news_summary_include.html" with news=featured_news %}
+</div>
 
-{% for news in news_list %}
+<hr>
+
+{% for row in news_rows %}
+
     <div class="row">
-        <div class="span8">
-
-            {% if news.picture %}
-                <img alt="" width="100%" src="{% thumbnail news.picture 770x250 box=news.cropping %}">
-            {% endif %}
-
-            <h2>{{ news.headline }}</h2>
-            {{ news.lead_paragraph|markdown|wikilinks}}
-            <p><a class="btn" href="{% url news_detail news.id %}">Les mer &raquo;</a></p>
-        </div>
+    {% for news in row %}
+            {% include "news/news_summary_include.html" with narrow="True" %}
+    {% endfor %}
     </div>
+
     <hr>
-{% empty %}
-    <h2>Velkommen</h2>
-    <p>Du er havnet på linjeforeningen Nabla sin hjemmeside. Her vises det vanligvis nyheter, men ingen er lagt til enda.</p>
+
 {% endfor %}
 
 
@@ -36,7 +31,7 @@
                 <li><a href="?page={{ page_obj.next_page_number }}">&larr; Eldre</a></li>
             {% endif %}
 
-            <li class="active">
+            <li class="disabled">
             <a>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</a>
             </li>
 
@@ -50,3 +45,34 @@
 {% endif %}
 
 {% endblock content %}
+
+
+{% block sidebar %}
+
+<h3>Om Nabla</h3>
+
+<p>Nabla er linjeforeningen for sivilingeniørprogrammet <b>Fysikk og matematikk</b> på NTNU. Du kan lese mer om studiet på <a href="http://www.ntnu.no/studier/mtfyma">NTNU sine nettsider</a>. På denne nettsiden finner du informasjon om studiet, linjeforeningen, og hva som foregår.</p>
+
+{% if upcoming_events %}
+
+    <h3>Kommende arrangement</h3>
+    <div class="well" style="padding: 8px 0;"><!-- kommende arrangement -->
+        <ul class="nav nav-list">
+
+            {% for event in upcoming_events %}
+            <li>
+                <a href="{{ event.get_absolute_url }}">
+                    <time 
+                        class="label label-important"
+                        datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.M" }}</time> 
+                     {{ event.headline }}
+                </a>
+            </li>
+            {% endfor %}
+
+        </ul>
+    </div><!-- end kommende arrangement -->
+
+{% endif %}
+
+{% endblock sidebar %}

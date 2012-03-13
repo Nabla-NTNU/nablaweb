@@ -2,8 +2,8 @@
 
 
 from django.conf.urls.defaults import *
-from nablaweb.news.forms import NewsForm
-from nablaweb.news.views import NewsDetailView, NewsListView, NewsDeleteView
+#from nablaweb.news.forms import NewsForm
+from nablaweb.news.views import NewsDetailView, NewsListView  # , NewsDeleteView
 
 urlpatterns = patterns('news.views',
 
@@ -16,7 +16,8 @@ urlpatterns = patterns('news.views',
     url(r'^$',
         NewsListView.as_view(),
         name='news_list'),
-    url(r'^(?P<pk>\d{1,8})/$',
+    url(r'^(?P<pk>\d{1,8})/(?P<slug>[-\w]*)$',
         NewsDetailView.as_view(),
         name='news_detail'),
+
 )

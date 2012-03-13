@@ -26,7 +26,7 @@ def ordne_opp(g_bruker):
 def slett():
     User.objects.exclude(username='hiasen').delete()
 
-db = MySQLdb.connect(user="nabla",passwd="SDzGHQZwJaQpHcWs",db="nabla_web", cursorclass=MySQLdb.cursors.DictCursor)
+db = MySQLdb.connect(user="nabla",passwd="Ls29RA9PrdJr92ru",db="nabla_web", cursorclass=MySQLdb.cursors.DictCursor)
 
 c=db.cursor()
 c.execute("""SELECT totnavn,brukernavn,mail,kull,profil,adresse,postnr,poststed,bursdag,mobil, telefon ,nullvektor,ikke_kullmail, kortnummer, passord FROM `brukere` WHERE 
@@ -40,6 +40,9 @@ c.execute("""SELECT totnavn,brukernavn,mail, kull,nullvektor,ikke_kullmail FROM 
 
 inaktive_brukere=c.fetchall()
 
+komponenter = Group(name='komponenter')
+komponenter.save()
+
 
 for g_bruker in aktive_brukere:
     ordne_opp(g_bruker)
@@ -48,7 +51,13 @@ for g_bruker in aktive_brukere:
     u.first_name,u.last_name = totnavn_til_delt(g_bruker['totnavn'])
     #u.password = g_bruker['passord']
     u.set_password("foobar")
+    if not(g_bruker['nullvektor']):
+        komponenter.user_set.add(u)
     u.save()
+    if not(g_bruker['nullvektor']):
+        komponenter.user_set.add(u)
+        komponenter.save()
+
     profil =UserProfile.objects.get_or_create(user = u)[0]
     if not(g_bruker['bursdag'] is None):
         profil.birthday = g_bruker['bursdag']
@@ -77,6 +86,9 @@ for g_bruker in inaktive_brukere:
     u.first_name,u.last_name = totnavn_til_delt(g_bruker['totnavn'])
     u.is_active = False
     u.save()
+    if not(g_bruker['nullvektor']):
+        komponenter.user_set.add(u)
+        komponenter.save()
 '''
 
 c.execute("""SELECT brukere.brukernavn, stillinger.id, stillinger.tittel
@@ -107,7 +119,8 @@ komiteer = {
 13:Group(name='Kjellerstyret'),
 14:Group(name='Edukom'),
 15:Group(name='Redaksjonen'),
-16:Group(name='Webkom')}
+16:Group(name='Webkom'),
+}
 
 for x in range(1,17):
     komite = komiteer[x]

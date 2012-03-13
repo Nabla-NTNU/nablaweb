@@ -8,7 +8,7 @@ urlpatterns = patterns('nablad.views',
     url(r'^$', 
         NabladListView.as_view( context_object_name = "nablad_list" ),
         name='nablad_list'),
-    url(r'^(?P<pk>\d{1,8})/$', 
+    url(r'^(?P<pk>\d{1,8})/(?P<slug>[-\w]*)$', 
         NabladDetailView.as_view( context_object_name = "nablad" ),
         name='nablad_detail'),
 )

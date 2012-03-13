@@ -1,26 +1,17 @@
 {% extends "base.html" %}
 {% load classname %}
 
-
-{% block title %}{{ block.super }}{% endblock %}
-
-
 {% block content %}
 
-{% include "content/content_list.html" with ajax="True" %}
+{% for content in content_list %}
+    
+    {% include "content/content_list.html" %}
 
-{% comment %}
-TODO: Fiks språk. page -> side
-{% endcomment %}
+{% empty %}
+    Det er ingenting her. Det var dumt.
+{% endfor %}
 
-{% if is_paginated %}
-{% if page_obj.has_previous %}
-<a href="?page={{ page_obj.previous_page_number }}">nyere</a>
-{% endif %}
+{% endblock content %}
 
-{% if page_obj.has_next %}
-<a href="?page={{ page_obj.next_page_number }}">eldre</a>
-{% endif %}
-{% endif %}
 
-{% endblock %}
+

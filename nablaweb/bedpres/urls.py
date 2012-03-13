@@ -21,7 +21,7 @@ urlpatterns = patterns('nablaweb.bedpres.views',
     url(r'^$',
         BedPresListView.as_view( context_object_name = "bedpres_list" ),
         name='bedpres_list'),
-    url(r'^(?P<pk>\d{1,8})/$',
+    url(r'^(?P<pk>\d{1,8})/(?P<slug>[-\w]*)$',
         BedPresDetailView.as_view( context_object_name = "bedpres" ),
         name='bedpres_detail'),
 
