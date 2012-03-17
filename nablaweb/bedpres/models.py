@@ -15,14 +15,21 @@ class BedPres(Event):
         verbose_name_plural = "bedriftspresentasjoner"
 
     def register_user(self, user):
-        return NotImplemented
-        response = bpc_core.add_attending(
-            fullname=user.get_full_name(),
-            username=user.username,
-            card_no=sha1(user.ntnu_card_number).hexdigest(),
-            event=self.bpc_id,
-            year='1', # FIXME
-            )
+        # TODO feilhåndtering bør ikke skje her, men jeg fikk ikke til å ta i
+        # mot BPCResponseException i register_user view - hiasen
+        try:
+            response = bpc_core.add_attending(
+                fullname=user.get_full_name(),
+                username=user.username,
+                card_no=sha1(user.get_profile().ntnu_card_number).hexdigest(),
+                event=self.bpcid,
+                year='1', # FIXME
+                )
+        except bpc_core.BPCResponseException as exception:
+            return exception.message # TODO Bruke noen andre feilmeldinger. Er litt kryptiske for brukere
+        return "Du ble påmeldt"
+
+
 
     def deregister_user(self, user):
         return NotImplemented

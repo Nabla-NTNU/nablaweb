@@ -57,7 +57,7 @@
                     {% for event in day.events %}
                         <li>
                             <b class="icon-cog"></b>
-                            <a href="{{ event.get_absolute_url }}">{{ event.headline }}</a>
+                            <a href="{{ event.get_absolute_url }}">{{ event.short_name }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -82,7 +82,7 @@
 
             {% for reg in user.eventregistration_set.all %}
             <tr>
-                <td><a href="{% url event_detail reg.event.id %}">{{ reg.event.headline }}</a></td>
+                <td><a href="{{ reg.event.get_absolute_url }}">{{ reg.event.headline }}</a></td>
                 <td>
                     {% if reg.is_waiting_place %}
                         På venteliste

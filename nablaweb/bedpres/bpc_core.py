@@ -35,8 +35,8 @@ BPC_URL = 'https://bpc.timini.no/bpc_testing/remote/' # Testserver
 # Informasjon som må sendes med hver forespørsel.
 SETTINGS = {
     'forening': '3',
-#    'key': 'a88fb706bc435dba835b89ddb2ba4debacc3afe4',
-    'key': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    'key': 'a88fb706bc435dba835b89ddb2ba4debacc3afe4',
+#    'key': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
     'method': 'json',
     'debug': 'false',
     'timing': 'false',
@@ -133,7 +133,7 @@ def _create_valid_request(data):
     def _copy_parameters(parameters, raise_error, error_msg):
         for parameter in parameters:
             try:
-                request[parameter] = data[parameter]
+                request[parameter] = data[parameter].encode('utf-8')
                 _validate_parameter(parameter, data[parameter])
             except KeyError:
                 if raise_error:

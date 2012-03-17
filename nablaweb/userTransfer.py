@@ -40,10 +40,11 @@ c.execute("""SELECT totnavn,brukernavn,mail, kull,nullvektor,ikke_kullmail FROM 
 
 inaktive_brukere=c.fetchall()
 
-komponenter = Group(name='komponenter')
-komponenter.save()
+komponenter,new = Group.objects.get_or_create(name='komponenter')
+if new:
+    komponenter.save()
 
-
+kull = {}
 for g_bruker in aktive_brukere:
     ordne_opp(g_bruker)
     u = User.objects.get_or_create(username=g_bruker['brukernavn'])[0]
@@ -54,10 +55,13 @@ for g_bruker in aktive_brukere:
     if not(g_bruker['nullvektor']):
         komponenter.user_set.add(u)
     u.save()
-    if not(g_bruker['nullvektor']):
-        komponenter.user_set.add(u)
-        komponenter.save()
+    komponenter.save()
 
+    if not(g_bruker['kull'] is None):
+      kullet,new = Group.objects.get_or_create(name="kull"+str(g_bruker['kull']))
+      kullet.save()
+      kullet.user_set.add(u)
+      
     profil =UserProfile.objects.get_or_create(user = u)[0]
     if not(g_bruker['bursdag'] is None):
         profil.birthday = g_bruker['bursdag']
@@ -103,27 +107,36 @@ stillinger = {}
 for x in stillingsresultat:
     stillinger.setdefault(x['id'],[]).append(x['brukernavn'])
 
+
+for x in kull:
+    x.group_type = "kull"
+
+
 komiteer = {
-1:Group(name='Leder'),
-2:Group(name='Sekretaer'),
-3:Group(name='Kasserer'),
-4:Group(name='BN-leder'),
-5:Group(name='Festsjef'),
-6:Group(name='Kjellersjef'),
-7:Group(name='Ambassador'),
-8:Group(name='Nestleder'),
-9:Group(name='Redaktor'),
-10:Group(name='Websjef'),
-11:Group(name='BN'),
-12:Group(name='Festkom'),
-13:Group(name='Kjellerstyret'),
-14:Group(name='Edukom'),
-15:Group(name='Redaksjonen'),
-16:Group(name='Webkom'),
+1:Group.objects.get_or_create(name='Leder')[0],
+2:Group.objects.get_or_create(name='Sekretaer')[0],
+3:Group.objects.get_or_create(name='Kasserer')[0],
+4:Group.objects.get_or_create(name='BN-leder')[0],
+5:Group.objects.get_or_create(name='Festsjef')[0],
+6:Group.objects.get_or_create(name='Kjellersjef')[0],
+7:Group.objects.get_or_create(name='Ambassador')[0],
+8:Group.objects.get_or_create(name='Nestleder')[0],
+9:Group.objects.get_or_create(name='Redaktor')[0],
+10:Group.objects.get_or_create(name='Websjef')[0],
+11:Group.objects.get_or_create(name='BN')[0],
+12:Group.objects.get_or_create(name='Festkom')[0],
+13:Group.objects.get_or_create(name='Kjellerstyret')[0],
+14:Group.objects.get_or_create(name='Edukom')[0],
+15:Group.objects.get_or_create(name='Redaksjonen')[0],
+16:Group.objects.get_or_create(name='Webkom')[0],
 }
 
 for x in range(1,17):
     komite = komiteer[x]
+    if x <=10:
+        komite.group_type = "stilling";
+    else:
+        komite.group_type = "komite";
     komite.save()
     print(komite)
     brukere = stillinger[x]

@@ -193,7 +193,7 @@ def register_user(request, event_id):
     token = event.register_user(request.user)
     message = messages[token]
     django_messages.add_message(request, django_messages.INFO, message)
-    return HttpResponseRedirect(reverse('event_detail', kwargs={'pk': event_id}))
+    return HttpResponseRedirect(event.get_absolute_url())
 
 @login_required
 def deregister_user(request, event_id):
