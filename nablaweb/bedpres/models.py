@@ -38,5 +38,15 @@ class BedPres(Event):
             username=user.username,
             )
 
+    def is_registered(self, user):
+        try:
+            response = bpc_core.get_attending(event = self.bpcid)
+            usernames = [u['username'] for u in response['users']]
+            return user.username in usernames
+        except bpc_core.BPCResponseException:
+            return False 
+
+
+
     def move_user_to_place(self, user, place):
         return NotImplemented

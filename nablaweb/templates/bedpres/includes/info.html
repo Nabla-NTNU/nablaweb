@@ -58,7 +58,7 @@
     </tr>
 
     <tr><td colspan="2" style="text-align: center;">
-        {% if event.registration_required and not is_registered %}
+        {% if not is_registered %}
         <a href="{% url nablaweb.bedpres.views.register_user_view event.id %}" class="btn btn-primary">Meld deg på</a>
         {% endif %}
         <a href="#notimplemented" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>

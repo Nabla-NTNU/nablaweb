@@ -162,7 +162,7 @@ class EventDetailView(NewsDetailView):
         if self.request.user.is_anonymous():
             context['is_registered'] = False
         else:
-            context['is_registered'] = context[object_name].eventregistration_set.filter(user=self.request.user).exists()
+            context['is_registered'] = context[object_name].is_registered(self.request.user)
         return context
 
 
