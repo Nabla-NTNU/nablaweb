@@ -6,7 +6,13 @@ from nablaweb.events.views import EventListView, EventDetailView, EventDeleteVie
 from nablaweb.bedpres.forms import BPCForm
 from nablaweb.bedpres.models import BedPres
 from django.views.generic import FormView, ListView
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import  get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from django.contrib import messages as django_messages
 import bpc_core
+from bpc_core import BPCResponseException
 
 
 # Administrasjon
@@ -31,7 +37,7 @@ class BPCFormView(FormView):
                     bpcid = event['id'],
                     headline = event['title'],
 #                    picture = event['logo'],
-                    description = event['description'],
+                    body = event['description'],
                     organizer = event['title'],
                     location = event['place'],
                     event_start = event['time'],
@@ -48,6 +54,24 @@ class BPCFormView(FormView):
 
 
 # Offentlig
+oystein = BPCResponseException
+from django.http import HttpResponse
+@login_required
+def register_user_view(request, bedpres_id):
+    messages = {
+        'noreg': 'Ingen registrering.',
+        'closed': 'Påmeldingen har stengt.',
+        'full': 'Arrangementet er fullt.',
+        'attend': 'Du er påmeldt.',
+        'queue': 'Du står på venteliste.',
+        'reg_exists': 'Du er allerede påmeldt.',
+        }
+    event = get_object_or_404(BedPres, pk=bedpres_id)
+    message  = event.register_user(request.user)
+       
+#    message = messages[token]
+    django_messages.add_message(request, django_messages.INFO, message)
+    return HttpResponseRedirect(event.get_absolute_url())
 
 class BedPresListView(EventListView):
     model = BedPres

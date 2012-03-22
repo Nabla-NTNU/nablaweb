@@ -162,7 +162,7 @@ class EventDetailView(NewsDetailView):
         if self.request.user.is_anonymous():
             context['is_registered'] = False
         else:
-            context['is_registered'] = context[object_name].eventregistration_set.filter(user=self.request.user).exists()
+            context['is_registered'] = context[object_name].is_registered(self.request.user)
         return context
 
 
@@ -193,7 +193,7 @@ def register_user(request, event_id):
     token = event.register_user(request.user)
     message = messages[token]
     django_messages.add_message(request, django_messages.INFO, message)
-    return HttpResponseRedirect(reverse('event_detail', kwargs={'pk': event_id}))
+    return HttpResponseRedirect(event.get_absolute_url())
 
 @login_required
 def deregister_user(request, event_id):

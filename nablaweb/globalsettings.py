@@ -229,6 +229,13 @@ DEBUG_TOOLBAR_CONFIG = {
 # Legg til IP-en din her for å vise debug-toolbar.
 INTERNAL_IPS = ['127.0.0.1', ]
 
+#Funksjon for å starte debug toolbar
+
+def use_debug_toolbar(ip):
+    INSTALLED_APPS.append('debug_toolbar')
+    INTERNAL_IPS.append(ip)
+    MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+
 # Django-image-cropping
 ###################################################
 from easy_thumbnails import defaults
