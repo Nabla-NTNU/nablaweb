@@ -37,7 +37,7 @@ def is_ntnu_username(username):
 
 
 class RegistrationForm(forms.Form):
-    username = forms.CharField(label="NTNU-Brukernavn", required=True)
+    username = forms.CharField(label="NTNU-brukernavn", required=True)
     
     def clean(self):
         username = self.cleaned_data.get('username')
@@ -54,6 +54,6 @@ class RegistrationForm(forms.Form):
             if is_ntnu_username(username):
                 return self.cleaned_data
             else:
-                raise forms.ValidationError(("Ikke et ntnubrukernavn."))
+                raise forms.ValidationError(("Ikke et NTNU-brukernavn."))
 
 
