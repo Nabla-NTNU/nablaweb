@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}
+    {{ block.super }} - #nabla
+{% endblock %}
+
+{% block content %}
+    <iframe src="http://gauss.nt.ntnu.no:9090/?channels=nabla&uio=MTE9MjM20f" width="750" height="450"></iframe>
+    <p>Her kan du koble til Nablas chattekanal paa IRC-nettverket FreeNode.</p>
+{% endblock %}

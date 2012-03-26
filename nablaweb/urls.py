@@ -40,6 +40,7 @@ urlpatterns = patterns('',
      (r'^admin/', include(admin.site.urls)),
      
      (r'^forum/', include('pybb.urls', namespace='pybb')),
+     (r'^irc/', include('irc.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()
