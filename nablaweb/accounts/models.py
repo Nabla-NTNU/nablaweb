@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User, Group
-from pybb.models import PybbProfile
+#from pybb.models import PybbProfile
 
-class UserProfile(PybbProfile):
+#class UserProfile(PybbProfile):
+class UserProfile(models.Model):
     user = models.OneToOneField(User)
     telephone = models.CharField("Telefon", max_length = 15, blank=True)
     cell_phone = models.CharField("Mobil", max_length = 15, blank=True)
