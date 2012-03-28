@@ -13,17 +13,18 @@ class BedPresForm(EventForm):
 
     def __init__(self, *args, **kwargs):
         super(BedPresForm, self).__init__(*args, **kwargs)
-        # Fjernet disse fordi det var umulig å lage bedpreser.
 
-        #self.fields['event_start'].widget.attrs['readonly'] = True
-        #self.fields['registration_start'].widget.attrs['readonly'] = True
-        #self.fields['registration_deadline'].widget.attrs['readonly'] = True
-        #self.fields['deregistration_deadline'].widget.attrs['readonly'] = True
-        #self.fields['location'].widget.attrs['readonly'] = True
-        #self.fields['has_queue'].widget.attrs['readonly'] = True
-        #self.fields['places'].widget.attrs['readonly'] = True
-        #self.fields['registration_required'].widget.attrs['readonly'] = True
-        #self.fields['bpcid'].widget.attrs['readonly'] = True
+        # Disse er readonly fordi de er hentet fra BPC
+
+        self.fields['event_start'].widget.attrs['readonly'] = True
+        self.fields['registration_start'].widget.attrs['readonly'] = True
+        self.fields['registration_deadline'].widget.attrs['readonly'] = True
+        self.fields['deregistration_deadline'].widget.attrs['readonly'] = True
+        self.fields['location'].widget.attrs['readonly'] = True
+        self.fields['has_queue'].widget.attrs['readonly'] = True
+        self.fields['places'].widget.attrs['readonly'] = True
+        self.fields['registration_required'].widget.attrs['readonly'] = True
+        self.fields['bpcid'].widget.attrs['readonly'] = True
 
 
 class BPCForm(forms.Form):
