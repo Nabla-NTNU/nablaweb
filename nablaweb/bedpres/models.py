@@ -3,11 +3,13 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-from events.models import Event
+from events.models import AbstractEvent
 from hashlib import sha1
+from news.models import News
 import bpc_core
 
-class BedPres(Event):
+
+class BedPres(AbstractEvent):
     bpcid = models.CharField(verbose_name="BPC-id", max_length=16, unique=True, blank=True)
 
     class Meta:
@@ -29,10 +31,8 @@ class BedPres(Event):
             return exception.message # TODO Bruke noen andre feilmeldinger. Er litt kryptiske for brukere
         return "Du ble påmeldt"
 
-
-
     def deregister_user(self, user):
-        return NotImplemented
+        raise NotImplementedError
         response = bpc_core.rem_attending(
             event=self.bpc_id,
             username=user.username,
@@ -46,7 +46,5 @@ class BedPres(Event):
         except bpc_core.BPCResponseException:
             return False 
 
-
-
     def move_user_to_place(self, user, place):
-        return NotImplemented
+        raise NotImplementedError

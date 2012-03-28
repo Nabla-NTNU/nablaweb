@@ -23,7 +23,6 @@ class EventAdmin(NewsAdmin):
               "location",
               "event_start",
               "event_end",
-              "related_news",
               "registration_required",
               "registration_deadline",
               "registration_start",

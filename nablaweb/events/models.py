@@ -7,9 +7,8 @@ from news.models import News
 import datetime
 
 
-class Event(News):
+class AbstractEvent(News):
     short_name = models.CharField("kort navn", max_length=20, blank=True, null=True, help_text="Brukes på steder hvor det ikke er plass til å skrive hele overskriften, for eksempel kalenderen.")
-    related_news = models.ManyToManyField(News, related_name="news", verbose_name="relaterte nyheter", blank=True, null=True, help_text="Nyheter som er relatert til dette arrangementet")
 
     # Indikerer hvem som står bak arrangementet.
     # Dette feltet er valgfritt.
@@ -59,11 +58,50 @@ class Event(News):
     has_queue = models.NullBooleanField(verbose_name="har venteliste", null=True, blank=True, help_text="Om ventelisten er på, vil det være mulig å melde seg på selv om arrangementet er fullt. De som er i ventelisten vil automatisk bli påmeldt etter hvert som plasser blir ledige.")
 
     class Meta:
-        verbose_name = "arrangement"
-        verbose_name_plural = "arrangement"
+        abstract = True
 
     def __unicode__(self):
         return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
+
+    def free_places(self):
+        raise NotImplemented
+
+    def is_full(self):
+        raise NotImplemented
+
+    def users_attending(self):
+        raise NotImplemented
+
+    def users_waiting(self):
+        raise NotImplemented
+
+    def percent_full(self):
+        raise NotImplemented
+
+    def users_registered(self):
+        raise NotImplemented
+
+    def is_registered(self, user):
+        raise NotImplemented
+
+    def has_waiting_list(self):
+        raise NotImplemented
+
+    def register_user(self, user):
+        raise NotImplemented
+
+    def deregister_user(self, user):
+        raise NotImplementedError
+
+    def move_user_to_place(self, user, place):
+        raise NotImplementedError
+
+
+class Event(AbstractEvent):
+
+    class Meta:
+        verbose_name = "arrangement"
+        verbose_name_plural = "arrangement"
 
     # Overlagre for å automatisk vedlikeholde ventelisten.
     def save(self, *args, **kwargs):
@@ -297,8 +335,6 @@ class EventRegistration(models.Model):
     class Meta:
         verbose_name = 'påmelding'
         verbose_name_plural = 'påmeldte'
-
-
 
 
 class EventPenalty(models.Model):
