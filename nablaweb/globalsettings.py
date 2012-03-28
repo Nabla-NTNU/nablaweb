@@ -61,6 +61,9 @@ SITE_ID = 1
 # calendars according to the current locale
 USE_L10N = True
 
+# Additional paths to search for fixtures
+FIXTURE_DIRS = (os.path.join(PROJECT_ROOT, 'nablaweb', 'fixtures'),)
+
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, '..', 'media')
