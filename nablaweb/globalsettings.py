@@ -243,10 +243,3 @@ THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
 ) + defaults.PROCESSORS
 
-##########################
-# Andre interne settings #
-##########################
-
-# Hvor passwd-fila til ntnulinuxserverne ligger på gauss. Må bli lastet ned
-# regelmessig med cron eller noe lignende.
-NTNU_PASSWD = '/home/hiasen/passwd'
