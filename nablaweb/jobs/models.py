@@ -9,7 +9,6 @@ from news.models import News
 # Det er litt stygt å bruke modeller for YearChoices og RelevantForChoices, men
 # det var den enkle måten å få riktige forms i admin på.
 
-
 class YearChoices(models.Model):
     year = models.IntegerField(blank=False, verbose_name="Klasse", help_text="Klasse: 1, 2, 3, 4 og 5")
 
