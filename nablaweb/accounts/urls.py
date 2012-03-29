@@ -13,7 +13,7 @@ urlpatterns += patterns('nablaweb.accounts.views',
     (r'edit/$', 'edit_profile'),
     (r'view/$', 'list'),
     (r'view/(?P<username>\w+)/$', 'view_member_profile'),
-    (r'register/$', 'user_register'),
+    url(r'register/$', 'user_register', name='registration_register'),
     (r'search/(?P<query>\w+)/$', 'search'),
 #    (r'test/', DetailView.as_view(model=User, id=1)),
 )

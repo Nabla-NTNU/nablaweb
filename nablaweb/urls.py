@@ -10,8 +10,8 @@ from settings import GLOBAL_MEDIA_DIRS, MEDIA_ROOT, STATIC_URL
 
 urlpatterns = patterns('',
     (r'^$', include('news.urls')),
-    (r'^login/$', 'accounts.views.login_user'),
-    (r'^logout/$', 'accounts.views.logout_user'),
+    url(r'^login/$', 'accounts.views.login_user', name='auth_login'),
+    url(r'^logout/$', 'accounts.views.logout_user', name='auth_logout'),
     (r'^nyheter/', include('nablaweb.news.urls')),
     (r'^bedpres/', include('nablaweb.bedpres.urls')),
     (r'^arrangement/', include('nablaweb.events.urls')),
