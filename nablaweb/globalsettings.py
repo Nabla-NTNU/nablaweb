@@ -245,3 +245,12 @@ THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
 ) + defaults.PROCESSORS
 
+# Innstillinger for pybbm
+
+PYBB_DEFAULT_TITLE = 'Forum'
+PYBB_DEFAULT_AUTOSUBSCRIBE = False
+PYBB_FREEZE_FIRST_POST = False
+PYBB_SIGNATURE_MAX_LINES = 6
+PYBB_DEFAULT_TIME_ZONE = 1
+PYBB_MARKUP_ENGINES = 'markdown'
+PYBB_ENABLE_SELF_CSS = True
