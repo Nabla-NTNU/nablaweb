@@ -1,1 +1,5 @@
-# CSS-fil for pybbm. Avhenger av at PYBB_ENABLE_SELF_CSS i config er satt til true.
+/* CSS-fil for pybbm. Avhenger av at PYBB_ENABLE_SELF_CSS i config er satt til true. */
+
+h1 {
+    color: red;
+}
