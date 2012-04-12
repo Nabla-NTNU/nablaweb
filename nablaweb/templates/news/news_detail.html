@@ -5,6 +5,15 @@
 {% load mediawiki_links %}
 {% load thumbnail %}
 
+{% block morehead %}
+
+<meta property="og:image" content="{{ news.get_picture_url }}" />
+<meta property="og:title" content="{{ news.headline|striptags }}" />
+<meta property="og:type"  content="article" />
+<meta property="og:description" content="{% spaceless %}{{ news.lead_paragraph|striptags }}{% endspaceless %}" />
+
+{% endblock %}
+
 {% block content %}
 
 {% if news.picture %}

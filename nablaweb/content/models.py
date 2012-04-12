@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.base import ModelBase
 from django.db.models.query import QuerySet
 from image_cropping.fields import ImageRatioField, ImageCropField
-
+from django.contrib.sites.models import Site
 
 class PolymorphicMetaclass(ModelBase):
     """
@@ -93,3 +93,6 @@ class Content(models.Model):
 
     def has_been_edited(self):
         return abs((self.last_changed_date - self.created_date).seconds) > 1
+
+    def get_picture_url(self):
+        return 'http://%s%s%s' % (Site.objects.get_current().domain, settings.MEDIA_URL, self.picture().name)
