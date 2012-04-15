@@ -20,7 +20,7 @@
         <td>Av</td>
         <td>
             <a href="{% url accounts.views.view_member_profile content.created_by.username %}">
-                {{ content.created_by.get_full_name }}
+                {% if content.created_by.get_full_name %}{{ content.created_by.get_full_name }}{% else %}{{ content.created_by.username }}{% endif %}
             </a>
         </td>
     </tr>
@@ -44,7 +44,7 @@
         <td>Av</td>
         <td>
             <a href="{% url accounts.views.view_member_profile content.last_changed_by.username %}">
-                {{ content.last_changed_by.get_full_name }}
+                {% if content.last_changed_by.get_full_name %}{{ content.last_changed_by.get_full_name }}{% else %}{{ content.last_changed_by.username }}{% endif %}
             </a>
         </td>
     </tr>
