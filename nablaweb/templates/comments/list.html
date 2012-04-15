@@ -23,6 +23,9 @@
                             </a>
                         </span>
                         <span class="date">{{ comment.submit_date|naturalday }}</span>
+                        {% if user.is_staff %}
+                        (<a href="{% url comments-delete comment.id %}">fjern</a>)
+                        {% endif %}
                     </div>
                     
                     {# Urlize er en extension som gjør linker klikkbare. Failer silently #}

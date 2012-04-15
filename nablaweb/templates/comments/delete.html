@@ -4,12 +4,13 @@
 {% block title %}{% trans "Remove a comment" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "Really remove this comment?" %}</h1>
+<h2>{% trans "Really remove this comment?" %}</h2>
   <blockquote>{{ comment|linebreaks }}</blockquote>
   <form action="." method="post">{% csrf_token %}
+    <input type="hidden" name="next" value="{{ comment.content_object.get_absolute_url }}">
     {% if next %}<div><input type="hidden" name="next" value="{{ next }}" id="next" /></div>{% endif %}
     <p class="submit">
-    <input type="submit" name="submit" value="{% trans "Remove" %}" /> or <a href="{{ comment.get_absolute_url }}">cancel</a>
+    <input type="submit" name="submit" value="{% trans "Remove" %}" /> eller <a href="{{ comment.get_absolute_url }}">Avbryt</a>
     </p>
   </form>
 {% endblock %}
