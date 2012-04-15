@@ -99,7 +99,9 @@ class AbstractEvent(News):
 
     def move_user_to_place(self, user, place):
         raise NotImplementedError
-
+        
+    def get_short_name(self):
+        raise NotImplementedError
 
 class Event(AbstractEvent):
 
@@ -123,7 +125,14 @@ class Event(AbstractEvent):
         parsed = urlparse(self.facebook_url)
         noscheme = parsed.netloc + parsed.path
         self.facebook_url = 'http' + '://' + noscheme.replace("http://", "").replace("https://", "")
-
+    
+    # Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke.
+    def get_short_name(self):
+        if self.short_name:
+            return self.short_name
+        else:
+            return self.headline[0:18].capitalize() + '...'
+    
     # Returnerer antall ledige plasser, dvs antall plasser som
     # umiddelbart gir brukeren en garantert plass, og ikke bare
     # ventelisteplass.
