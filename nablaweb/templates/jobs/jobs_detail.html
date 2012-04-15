@@ -1,61 +1,45 @@
 {% extends "base.html" %}
 {% load markup %}
 {% load humanize %}
+{% load comments %}
+{% load mediawiki_links %}
+{% load thumbnail %}
+
+{% block title %}{{ job.headline }}{% endblock %}
 
 {% block content %}
 
+<div class="row"><div class="span8">
+
+    {% if event.picture %}
+        <img alt="" width="100%" src="{% thumbnail event.picture 770x250 box=event.cropping %}">
+    {% endif %}        
+
 <h2>{{ job.headline }}</h2>
-{{ job.lead_paragraph|markdown }}
-{{ job.body|markdown }}
+{{ job.lead_paragraph|markdown|wikilinks}}
+{{ job.body|markdown|wikilinks}}
+</div></div>
+<hr>
+
+{% include "content/includes/comments.html" with content=job %}
 
 {% endblock %}
 
-
-
-
-
 {% block sidebar %}
 
-<table class="table">
+{% include "content/includes/meta.html" with content=job %}
+{% include "jobs/info_include.html" with job=job %}
 
-    <!-- Publisert -->
-    <tr>
-        <td>Publisert</td>
-        <td>
-            <time datetime="{{ job.created_date|date:"c" }}">
-                {{ job.created_date|naturalday }} kl. {{ job.created_date|date:"G:i" }}
-            </time>
-        </td>
-    </tr>
-    
-    <!-- Av -->
-    {% if job.created_by %}
-    <tr><td>Av</td><td>{{ job.created_by.username }}</td></tr>
-    {% endif %}
-
-    <!-- Sist endret -->
-    <tr>
-        <td>Sist endret</td>
-        <td>
-            <time datetime="{{ job.last_changed_date|date:"c" }}">
-                {{ job.last_changed_date|naturalday }} kl. {{ job.last_changed_date|date:"G:i" }}
-            </time>
-        </td>
-    </tr>
-
-    <!-- Av -->
-    {% if job.last_changed_by %}
-    <tr><td>Av</td><td>{{ job.last_changed_by.username }}</td></tr>
-    {% endif %}
-
-</table>
+{% if user.is_staff %}
 
 <div class="well" style="padding: 8px 0;">
-    <ul class="nav list">
+    <ul class="nav nav-list">
         <li class="nav-header">Admin</li>
-        <li><a href="#endre"><i class="icon pencil"></i> Endre</a></li>
-        <li><a href="#slett"><i class="icon trash"></i> Slett</a></li>
+        <li><a href="#endre"><i class="icon-pencil"></i> Endre</a></li>
+        <li><a href="#slett"><i class="icon-trash"></i> Slett</a></li>
     </ul>
 </div>
+
+{% endif %}
 
 {% endblock %}

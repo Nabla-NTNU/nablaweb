@@ -1,0 +1,44 @@
+{% load humanize %}
+
+<h3>Informasjon</h3>
+<table class="table table-bordered table-striped content-info">
+
+    <!-- Fra -->
+    <tr>
+        <td>Bedrift</td>
+        <td>
+            <strong>{{ job.company.name }}</strong>
+        </td>
+    </tr>
+
+    <tr><td><ul>
+    <li><a href="{{ job.company.website }}">Nettside</a></li>
+    <li><a href="{% url company_detail job.company.id "" %}">Alle stillingsannonser</a></li>
+    </ul></td></tr>
+
+    <tr>
+        <td>Relevant for</td>
+        <td>
+            {{ job.relevant_for_group.all|join:", " }} (årskull {{ job.relevant_for_year.all|join:", " }})
+        </td>
+    </tr>
+
+    <tr>
+        <td>Søkefrist</td>
+        <td>
+            <time datetime="{{ job.deadline_date|date:"c" }}">
+                <strong>{{ job.deadline_date|naturalday }} kl. {{ job.deadline_date|date:"H:i" }}<strong>
+            </time>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Lagt inn</td>
+        <td>
+            <time datetime="{{ job.created_date|date:"c" }}">
+                {{ job.created_date|naturalday }} kl. {{ job.created_date|date:"H:i" }}
+            </time>
+        </td>
+    </tr>
+
+</table>
