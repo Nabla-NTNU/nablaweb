@@ -4,8 +4,13 @@ from django.forms import DateField, DateInput
 from accounts.models import UserProfile
 from django.contrib.auth.models import User
 from accounts.models import UserProfile
+
 import subprocess
 import settings
+
+class SearchForm(forms.Form):
+    searchstring = forms.CharField(max_length=50)
+
 class LoginForm(forms.Form):
     username = forms.CharField(label="Brukernavn")
     password = forms.CharField(widget=forms.PasswordInput, label="Passord", required=False)

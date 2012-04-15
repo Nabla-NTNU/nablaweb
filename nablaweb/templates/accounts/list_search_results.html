@@ -3,11 +3,11 @@
 
 {% block content %}
 
-<h2>Komponenter og nullvektorer</h2>
+<h2>Søkeresultater</h2>
 <br />
 
 <form class="input-append" method="post" action="/brukere/search/" id="user-search">{% csrf_token %}
-	<input placeholder="Søk i listen" name="searchstring" id="searchstring">
+	<input placeholder="Søk igjen" name="searchstring" id="searchstring">
 	<button class="btn add-on" type="submit">
 		<i class="icon-search"></i>
 	</button>

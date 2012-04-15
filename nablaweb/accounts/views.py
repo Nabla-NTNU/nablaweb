@@ -3,10 +3,11 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.template import loader, Context
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User, UserManager
-from accounts.forms import LoginForm, UserForm, ProfileForm, RegistrationForm
+from accounts.forms import LoginForm, UserForm, ProfileForm, RegistrationForm, SearchForm
 from accounts.models import UserProfile
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
+from django.http import HttpResponse, HttpResponsePermanentRedirect
 
 from django.contrib.auth.decorators import login_required
 
@@ -111,23 +112,24 @@ def list(request):
 
 
 @login_required
-def search(request, query):
+def search(request):
     """ Returnerer brukerne med brukernavn, fornavn eller etternavn som
         begynner på query """
 
     from django.db.models import Q
-    from django.http import HttpResponse
-    from django.utils import simplejson
 
-    if not query:
-        return HttpResponse("")
+    if not (request.method == 'POST'):
+        return HttpResponsePermanentRedirect("/brukere/view")
+    
+    form = SearchForm(request.POST)
+        
+    if form.is_valid():
+        query = form.cleaned_data['searchstring']
 
-    users = User.objects.filter(Q(username__startswith=query) | Q(first_name__startswith=query) | Q(last_name__startswith=query))
-    data = simplejson.dumps([{"username": u.username, "first_name": u.first_name, "last_name": u.last_name} for u in users])
-    return HttpResponse(data, mimetype="application/json")
-
-
-
+        users = User.objects.filter(Q(username__istartswith=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
+        return render(request, "accounts/list_search_results.html", {'users': users})
+    else:
+        return HttpResponsePermanentRedirect("/brukere/view")
 
 def get_name(ntnu_username):
     regex = '^%s:' % username

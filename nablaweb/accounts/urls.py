@@ -14,6 +14,7 @@ urlpatterns += patterns('nablaweb.accounts.views',
     (r'view/$', 'list'),
     (r'view/(?P<username>\w+)/$', 'view_member_profile'),
     url(r'register/$', 'user_register', name='registration_register'),
-    (r'search/(?P<query>\w+)/$', 'search'),
+#    url(r'search/?ss=(?P<query>\w+)/$', 'search', name='user_search'),
+    url(r'search/$', 'search', name='user_search'),
 #    (r'test/', DetailView.as_view(model=User, id=1)),
 )
