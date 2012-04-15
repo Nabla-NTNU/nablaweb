@@ -61,7 +61,9 @@
         {% if event.registration_required and not is_registered %}
         <a href="{% url nablaweb.events.views.register_user event.id %}" class="btn btn-primary">Meld deg på</a>
         {% endif %}
-        <a href="#notimplemented" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
+        {% if event.facebook_url %}
+        <a href="{{ event.facebook_url }}" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
+        {% endif %}
     </td></tr>
 
 </table>

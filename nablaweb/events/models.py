@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from news.models import News
 import datetime
-
+from urlparse import urlparse
 
 class AbstractEvent(News):
     short_name = models.CharField("kort navn", max_length=20, blank=True, null=True, help_text="Brukes på steder hvor det ikke er plass til å skrive hele overskriften, for eksempel kalenderen.")
@@ -56,6 +56,10 @@ class AbstractEvent(News):
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_required er sann.
     has_queue = models.NullBooleanField(verbose_name="har venteliste", null=True, blank=True, help_text="Om ventelisten er på, vil det være mulig å melde seg på selv om arrangementet er fullt. De som er i ventelisten vil automatisk bli påmeldt etter hvert som plasser blir ledige.")
+    
+    # URL til Facebook-siden til arrangementet
+    # Dette feltet er valgfritt.
+    facebook_url = models.CharField(verbose_name="facebook-url", blank=True, max_length=100, help_text="URL-en til det tilsvarende arrangementet på Facebook")
 
     class Meta:
         abstract = True
@@ -113,6 +117,12 @@ class Event(AbstractEvent):
     def delete(self, *args, **kwargs):
         self.eventregistration_set.all().delete()
         super(Event, self).delete(*args, **kwargs)
+
+    # Verifiserer formen på facebook-urlen, og endrer den hvis den er feil.
+    def clean(self):
+        parsed = urlparse(self.facebook_url)
+        noscheme = parsed.netloc + parsed.path
+        self.facebook_url = 'http' + '://' + noscheme.replace("http://", "").replace("https://", "")
 
     # Returnerer antall ledige plasser, dvs antall plasser som
     # umiddelbart gir brukeren en garantert plass, og ikke bare

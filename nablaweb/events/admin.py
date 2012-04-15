@@ -28,7 +28,8 @@ class EventAdmin(NewsAdmin):
               "registration_start",
               "deregistration_deadline",
               "places",
-              "has_queue")
+              "has_queue",
+              "facebook_url")
     form = EventForm
     list_display = ['__unicode__', 'registration_required']
     date_hierarchy = 'event_start'
