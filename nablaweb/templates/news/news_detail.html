@@ -47,42 +47,7 @@
 
 {% block sidebar %}
 
-<!-- meta -->
-<h3>Meta</h3>
-<table class="table table-condensed">
-
-    <!-- Publisert -->
-    <tr>
-        <td>Publisert</td>
-        <td>
-            <time datetime="{{ news.created_date|date:"c" }}">
-                {{ news.created_date|naturalday }} kl. {{ news.created_date|date:"G:i" }}
-            </time>
-        </td>
-    </tr>
-    
-    <!-- Av -->
-    {% if news.created_by %}
-    <tr><td>Av</td><td>{{ news.created_by.username }}</td></tr>
-    {% endif %}
-
-    {% if news.has_been_edited %}
-        <!-- Sist endret -->
-        <tr>
-            <td>Sist endret</td>
-            <td>
-                <time datetime="{{ news.last_changed_date|date:"c" }}">
-                    {{ news.last_changed_date|naturalday }} kl. {{ news.last_changed_date|date:"G:i" }}
-                </time>
-            </td>
-        </tr>
-
-        <!-- Av -->
-        <tr><td>Av</td><td>{{ news.last_changed_by.username }}</td></tr>
-    {% endif %}
-
-</table>
-<!-- end meta -->
+{% include "content/includes/meta.html" with content=news %}
 
 <!-- relaterte events -->
 <h3>Relaterte arrangement</h3>

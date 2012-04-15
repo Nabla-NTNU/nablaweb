@@ -9,7 +9,7 @@
         <td>Publisert</td>
         <td>
             <time datetime="{{ content.created_date|date:"c" }}">
-                {{ content.created_date|naturalday }} kl. {{ content.created_date|date:"G:i" }}
+                {{ content.created_date|naturalday }} kl. {{ content.created_date|date:"H:i" }}
             </time>
         </td>
     </tr>
@@ -33,7 +33,7 @@
         <td>Sist endret</td>
         <td>
             <time datetime="{{ content.last_changed_date|date:"c" }}">
-                {{ content.last_changed_date|naturalday }} kl. {{ content.last_changed_date|date:"G:i" }}
+                {{ content.last_changed_date|naturalday }} kl. {{ content.last_changed_date|date:"H:i" }}
             </time>
         </td>
     </tr>
