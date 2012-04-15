@@ -80,11 +80,11 @@ class EventForm(NewsForm):
         if registration_required is True:
             # Dersom places ikke har noen verdi og ikke har generert andre feil.
             if places is None and "places" not in self._errors:
-                self._errors["places"] = self.error_class([u'Antall plasser er påkrevd når "påmelding" er valgt.'])
+                self._errors["places"] = self.error_class([u'Antall plasser er påkrevd når "registrering kreves" er valgt.'])
 
             # Verifiser at en gyldig registreringsfrist er spesifisert.
             if not registration_deadline and "registration_deadline" not in self._errors:
-                self._errors["registration_deadline"] = self.error_class([u'Påmeldingsfrist er påkrevd når "påmelding" er valgt.'])
+                self._errors["registration_deadline"] = self.error_class([u'Påmeldingsfrist er påkrevd når "registrering kreves" er valgt.'])
 
             # Ved gyldig registreringsfrist, sjekk at denne ikke er etter at arrangementet starter.
             elif event_start and registration_deadline and registration_deadline > event_start:
