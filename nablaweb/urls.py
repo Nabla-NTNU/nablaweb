@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from nablaweb.news.feeds import RecentNews
 
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
@@ -41,6 +41,7 @@ urlpatterns = patterns('',
      
      (r'^forum/', include('pybb.urls', namespace='pybb')),
      (r'^irc/', include('irc.urls')),
+     url(r'^feed/', RecentNews()),
 )
 
 urlpatterns += staticfiles_urlpatterns()

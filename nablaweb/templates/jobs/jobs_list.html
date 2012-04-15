@@ -3,6 +3,10 @@
 
 {% block title %}Stillingsannonser{% endblock %}
 
+{% block more_head %}
+<link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
+{% endblock %}
+
 {% block content %}
 {% if jobs_list %}
     {% for job in jobs_list %}
