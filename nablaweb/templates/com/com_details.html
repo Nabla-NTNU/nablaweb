@@ -2,14 +2,18 @@
 {% load mediawiki_links %}
 {% load markup %}
 
-{% block title %}}{{ com.com.group.name }}{% endblock %}
+{% block title %}}{{ com.com.name }}{% endblock %}
 
 {% block content %}
-<h2>{{ com.com.group.name }}</h2>
+<h2>{{ com.com.name }}</h2>
 <p>{{ com.description|markdown|wikilinks}}</p>
 <dl>{% for person in members %}
-    <dt><strong>{% if person.user.user.first_name %}{{ person.user.user.first_name }} {{ person.user.user.last_name }}{% else %}{{person.user.user.username}}{% endif %}</strong> (ble med i {{ com.com.group.name }} {{ person.joined_date }})</dt>
-    <dd>{{ person.story|markdown|wikilinks }}</dt>{% endfor %}
+    <dt><strong>{% if person.user.user.first_name %}{{ person.user.user.first_name }} {{ person.user.user.last_name }}{% else %}{{person.user.user.username}}{% endif %}</strong>
+    <dt><strong><a href="{% url profile_link person.user.username %}">{% firstof person.user.get_full_name person.user.username %}</a></strong> (ble med {{ person.joined_date|date:"d. F Y" }})</dt>
+    <dd>{{ person.story|markdown|wikilinks }}</dt>
+    {% empty %}
+    <dt>Ingen medlemmer.</dt>
+    {% endfor %}
 </dl>
 <p><small>Sist endret {{ com.last_changed_date }}</small></p>
 {% endblock content %}

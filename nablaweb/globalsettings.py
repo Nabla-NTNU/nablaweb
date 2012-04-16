@@ -202,6 +202,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'jobs.views.activej',
     'quotes.context_processors.random_quote',
     'pybb.context_processors.processor',
+    'com.context_processors.com_context',
 
     #'events.context_processors.current_month_calendar', 
     # fjernet fordi den bruker en sql request per dag i mnd

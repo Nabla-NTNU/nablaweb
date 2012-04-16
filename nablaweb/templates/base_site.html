@@ -99,7 +99,22 @@
                         <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
                     </ul>
                 </li>
-
+                
+                <li class="dropdown">
+                    <a href="#komiteer"
+                        class="dropdown-toggle no-ajaxy"
+                        data-toggle="dropdown">
+                        Komiteer
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" >
+                        {% for com in coms %}
+                        <li><a href="{{ com.get_absolute_url }}">{{ com.com.name }}</a></li>
+                        {% empty %}
+                        <li><a>ALL GLORY TO THE HYPNOTOAD</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
 
             </ul>
             <!-- end navigasjonslenker -->
