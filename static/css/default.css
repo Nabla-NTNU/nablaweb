@@ -195,3 +195,19 @@
     .comment .info { margin-bottom: 10px; } 
     .comment .author { font-weight: bold; } 
     .comment .date { color: #999; }
+
+/* Tabell i jobs_list.html */
+
+    .jobslist_table {
+        width: 28em;
+        float: right;
+        margin-top: 15px;
+    }
+
+    .jobslist_td_title {
+        width: 25%;
+    }
+
+    .jobslist_td_content {
+        width: 75%;
+    }

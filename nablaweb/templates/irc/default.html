@@ -5,7 +5,18 @@
     {{ block.super }} - #nabla
 {% endblock %}
 
+{% block sidebar %}
+    <h3>Nabla-chat</h3>
+    <p>Her kan du koble til Nablas chattekanal på IRC-nettverket FreeNode.</p>
+    <p>Når du er logget på er det flere kommandoer du kan bruke:</p>
+    <ul><li><em>/nick &lang;nytt kallenavn&rang;</em> (endrer kallenavn)</li>
+    <li><em>/msg &lang;kallenavn&rang; &lang;melding&rang;</em> (privat melding)</li>
+    <li><em>/join &lang;kanal&rang;</em> (går inn i kanal)</li></ul>
+{% endblock%}
+
 {% block content %}
     <iframe src="http://gauss.nt.ntnu.no:9090/?channels=nabla&uio=MTE9MjM20f" width="750" height="450"></iframe>
-    <p>Her kan du koble til Nablas chattekanal på IRC-nettverket FreeNode.</p>
+{% endblock %}
+
+{% block below_ad %}
 {% endblock %}
