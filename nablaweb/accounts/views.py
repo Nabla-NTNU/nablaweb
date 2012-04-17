@@ -62,9 +62,12 @@ def view_member_profile(request, username=None):
         member = get_object_or_404(User, username=username)
     else:
         member = request.user
+        
+    penalty_list = member.eventpenalty_set.all()
+    
     return render(
         request, "accounts/view_member_profile.html",
-        {'member': member})
+        {'member': member, 'penalty_list': penalty_list})
     # Render er identisk med render_to_response, men tar request som første
     # argument istedenfor RequestContext(request) som tredje argument.
     # Importeres fra django.shortcuts

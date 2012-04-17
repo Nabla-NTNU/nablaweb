@@ -70,6 +70,26 @@
             </tr>
             {% endif %}
             
+            {% if user.is_staff %}
+            <tr>
+                <td>Prikker</td>
+                {% if penalty_list %}
+                <td>
+                    {{ penalty_list|length }} prikk{{penalty_list|length|pluralize:"er" }}.
+                    <ul>
+                    {% for penalty in penalty_list %}
+                    <li>{{ penalty.get_display_name }}</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+                {% else %}
+                <td>
+                    Ingen prikker.
+                </td>
+                {% endif %}
+            </tr>
+            {% endif %}
+            
         </table>
     </div><!--span6-->
 
