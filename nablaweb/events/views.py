@@ -90,6 +90,10 @@ class EventListView(ListView):
     def get_context_data(self, **kwargs):
         # Get the context from the superclass
         context = super(EventListView, self).get_context_data(**kwargs)
+        
+        # Penalties
+        user = self.request.user
+        context['penalty_list'] = user.eventpenalty_set.all()
 
         # Functions to be used
         from datetime import date, timedelta

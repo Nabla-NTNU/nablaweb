@@ -369,3 +369,5 @@ class EventPenalty(models.Model):
     def __unicode__(self):
         return u'EventPenalty: %s, %s' % (self.event, self.user)
 
+    def get_display_name(self):
+        return u'%s' % (self.event)
