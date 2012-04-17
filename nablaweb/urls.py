@@ -41,7 +41,7 @@ urlpatterns = patterns('',
      
      (r'^forum/', include('pybb.urls', namespace='pybb')),
      (r'^irc/', include('irc.urls')),
-     url(r'^feed/', RecentNews()),
+     url(r'^feed/$', RecentNews()),
 )
 
 urlpatterns += staticfiles_urlpatterns()
