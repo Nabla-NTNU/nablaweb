@@ -93,6 +93,7 @@ class EventListView(ListView):
 
         # Functions to be used
         from datetime import date, timedelta
+        from calendar import monthrange
 
         today = date.today()
 
@@ -106,8 +107,15 @@ class EventListView(ListView):
             month = int(self.args[1])
         except IndexError:
             month = today.month
-
-        weeks = 5  # Weeks to be displayed
+        
+        monthdays = monthrange(year, month)
+        weeknodelta = date(year, month, monthdays[1]).isocalendar()[1] - date(year, month, 1).isocalendar()[1]
+        
+        # Weeks to be displayed
+        if (weeknodelta == 5):
+            weeks = 6
+        else:
+            weeks = 5
 
         # Get the monday at the start of the calendar
         first = date(year, month, 1)

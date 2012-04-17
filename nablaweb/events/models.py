@@ -125,6 +125,9 @@ class Event(AbstractEvent):
         parsed = urlparse(self.facebook_url)
         noscheme = parsed.netloc + parsed.path
         self.facebook_url = 'http' + '://' + noscheme.replace("http://", "").replace("https://", "")
+        
+        if (self.facebook_url == "http://"):
+            self.facebook_url = ""
     
     # Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke.
     def get_short_name(self):
