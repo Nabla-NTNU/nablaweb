@@ -9,7 +9,8 @@ class ChoiceInline(admin.TabularInline):
     fields = ('choice', 'votes', )
 
 class PollAdmin(admin.ModelAdmin):
-    fields = ['publication_date', 'question', 'is_current']
+    fields = ['publication_date', 'question', 'is_current', 'users_voted', ]
+    readonly_fields = ['users_voted', ]
     list_display = ('question', 'publication_date', 'is_current')
     list_filter = ['publication_date']
     inlines = [ChoiceInline]
