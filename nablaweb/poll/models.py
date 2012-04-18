@@ -24,6 +24,12 @@ class Poll(models.Model):
             current_poll[0].save()
         super(Poll, self).save(*args, **kwargs)
         
+    def get_total_votes(self):
+        sum = 0
+        for i in self.choice_set.all():
+            sum += i.votes
+        return sum
+        
     class Meta:
         verbose_name = "avstemning"
         verbose_name_plural = "avstemninger"
@@ -31,7 +37,7 @@ class Poll(models.Model):
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)
     choice = models.CharField('Navn på valg', max_length=80)
-    votes = models.IntegerField('Antall stemmer', blank=True, null=True)
+    votes = models.IntegerField('Antall stemmer', blank=False, default=0)
     creation_date = models.DateTimeField('Lagt til', auto_now_add=True)
     added_by = models.CharField('Lagt til av', max_length=100) # Hvem som la til valget i avstemningen
     

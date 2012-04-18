@@ -6,7 +6,9 @@ from django.template import RequestContext
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def vote(request, poll_id):
     poll = get_object_or_404(Poll, pk=poll_id)
     redirect_to = request.REQUEST.get('next', request.META.get('HTTP_REFERER', '/'))
@@ -26,5 +28,5 @@ def vote(request, poll_id):
                 choice.votes = 1
             choice.save()
             poll.users_voted.add(request.user)
-            messages.add_message(request, messages.INFO, 'Du har stemt i avstemningen')
+            messages.add_message(request, messages.INFO, u'Du har svart på "%s"' % (poll.question))
             return redirect(redirect_to)

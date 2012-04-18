@@ -211,3 +211,31 @@
     .jobslist_td_content {
         width: 75%;
     }
+
+/* bargrafer fra http://djangosnippets.org/snippets/44/ */
+
+    ul.bargraph {
+        margin: 0;
+        padding: 0;
+        width: 190px;
+        background-color: #fff;
+    }
+      
+    ul.bargraph li {
+        font-size: 11px;
+        line-height: 20px;
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        border-bottom: 1px solid #ebeff2;
+        background-color: #fff;
+    }
+ 
+    ul.bargraph li span {
+        background-color: #a9d2f2;
+        display: block;
+        color: #125a95;
+        font-weight: bold;
+        padding: 0 0 0 5px;
+        white-space: nowrap;
+    }
