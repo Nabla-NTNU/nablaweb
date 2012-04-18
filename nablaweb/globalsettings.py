@@ -145,6 +145,7 @@ INSTALLED_APPS = [
     'quotes',   # Tilfeldig sitat.
     # 'feedback', # Feedback om siden til webkom. Bruk heller issue-tracker.
     'nabladet', # Liste over nablad.
+    'poll',
 
     #################
     # Eksterne ting #
@@ -203,6 +204,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'quotes.context_processors.random_quote',
     'pybb.context_processors.processor',
     'com.context_processors.com_context',
+    'poll.context_processors.poll_context',
 
     #'events.context_processors.current_month_calendar', 
     # fjernet fordi den bruker en sql request per dag i mnd

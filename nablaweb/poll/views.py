@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from poll.models import Poll, Choice
-from django.shortcut import get_object_or_404
-from django.http import RequestContext, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.template import RequestContext
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 def vote(request, poll_id):
     poll = get_object_or_404(Poll, pk=poll_id)
@@ -11,6 +13,9 @@ def vote(request, poll_id):
     except (KeyError, Choice.DoesNotExist):
         return HttpResponse("Du valgte ikke et svaralternativ.")
     else:
-        choice.votes += 1
+        if (choice.votes):
+            choice.votes += 1
+        else:
+            choice.votes = 1
         choice.save()
-        return HttpResponseRedirect(reverse('')) # redirect hvor?
+        return HttpResponseRedirect(reverse('news_list')) # redirect hvor?

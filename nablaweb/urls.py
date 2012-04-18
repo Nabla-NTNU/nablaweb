@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     (r'^feedback/', include('feedback.urls')),
     (r'^nabladet/', include('nabladet.urls')),
     (r'^kommentarer/', include('django.contrib.comments.urls')),
+    (r'^poll/', include('poll.urls')),
 
     # For å dele filer under utviklingen.
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': GLOBAL_MEDIA_DIRS[0]}),
