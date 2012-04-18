@@ -239,3 +239,42 @@
         padding: 0 0 0 5px;
         white-space: nowrap;
     }
+
+/* Søkefelt på toppen */
+
+.page-header {
+    overflow: hidden;    /* clear floats */     
+    padding: 0px;
+    border-bottom: 0px;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+.page-header div {
+    float: right;        /* float search content right */          
+}
+
+.input-prepend input {
+    float: left;
+}
+
+.input-prepend {
+    margin-bottom: 0px;
+}
+
+header .span4 .control-group {
+    margin-bottom: 0px;
+}
+
+input#searchtop {
+    margin-bottom: 0px;
+}
+
+header .span4 {
+    margin-top: 16px;
+}
+
+.input-prepend form {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}

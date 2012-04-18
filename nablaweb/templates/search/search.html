@@ -19,7 +19,11 @@
 
             {% for result in page.object_list %}
                 <p>
+                    {% if result.content_type == "news.news" %}
                     <a href="{{ result.object.get_absolute_url }}">{{ result.object.headline }}</a>
+                    {% elif result.content_type == "com.compage" %}
+                    <a href="{% url show_com_page result.object.get_canonical_name %}">{{ result.object.com.name }}</a>
+                    {% endif %}
                 </p>
             {% empty %}
                 <p>Ingen treff.</p>

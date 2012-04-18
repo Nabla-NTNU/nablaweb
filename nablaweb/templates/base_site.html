@@ -59,7 +59,25 @@
 
 
 <header>
+    <div class="page-header">
     <a href="/"><img src="{{ STATIC_URL }}img/nabla_logo_black.png" alt="Nabla"></a>
+    <div class="span4">
+        <div class="control-group">
+            <div class="controls">
+                <div class="input-prepend">
+                    <form class="input-append" method="get" action="/search/" id="search">
+                        <span class="headersearch">
+                        <input placeholder="Søk" name="q" id="searchtop"/>
+                        <button class="btn add-on" type="submit">
+                            <i class="icon-search"></i>
+                        </button>
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
 </header>
 
 
