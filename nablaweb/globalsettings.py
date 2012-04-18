@@ -189,6 +189,9 @@ INSTALLED_APPS = [
     'pybb',
     'pytils',
     'pure_pagination',
+    
+    # Haystack. Krever 2.0.0 beta samt Whoosh!
+    'haystack',
 ]
 
 
@@ -257,3 +260,11 @@ PYBB_SIGNATURE_MAX_LINES = 6
 PYBB_DEFAULT_TIME_ZONE = 1
 PYBB_MARKUP = 'markdown'
 PYBB_ENABLE_SELF_CSS = True
+
+import os
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+}

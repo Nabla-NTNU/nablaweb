@@ -35,14 +35,15 @@ urlpatterns = patterns('',
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
     # to INSTALLED_APPS to enable admin documentation:
-     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-     (r'^admin/', include(admin.site.urls)),
+    (r'^admin/', include(admin.site.urls)),
      
-     (r'^forum/', include('pybb.urls', namespace='pybb')),
-     (r'^irc/', include('irc.urls')),
-     url(r'^feed/$', RecentNews()),
+    (r'^forum/', include('pybb.urls', namespace='pybb')),
+    (r'^irc/', include('irc.urls')),
+    url(r'^feed/$', RecentNews()),
+    (r'^search/', include('haystack.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()
