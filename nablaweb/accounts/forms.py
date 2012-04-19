@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.forms import DateField, DateInput
+from django.forms import DateField, DateInput, BooleanField
 from accounts.models import UserProfile
 from django.contrib.auth.models import User
 from accounts.models import UserProfile
@@ -20,14 +20,11 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('first_name', 'last_name', 'email')
 
-
 class ProfileForm(forms.ModelForm):
     birthday = DateField(label="Bursdag", required=False, widget=DateInput(attrs={'placeholder': 'DD.MM.YY', 'class': 'date'}))
     class Meta:
         model = UserProfile
-        exclude = ('user',)
-
-
+        exclude = ('user','signature','signature_html','show_signatures','time_zone','post_count','autosubscribe','language',)
 
 def is_ntnu_username(username):
     """Skjekker om brukernavnet finnes i passwd-fila fra en av ntnus studlinuxservere"""
