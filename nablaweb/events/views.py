@@ -93,7 +93,8 @@ class EventListView(ListView):
         
         # Penalties
         user = self.request.user
-        context['penalty_list'] = user.eventpenalty_set.all()
+        if user.is_authenticated():
+            context['penalty_list'] = user.eventpenalty_set.all()
 
         # Functions to be used
         from datetime import date, timedelta
@@ -187,8 +188,9 @@ class UserEventView(TemplateView):
         context_data = super(UserEventView, self).get_context_data(**kwargs)
         user = self.request.user
         context_data['user'] = user
-        context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start')
-        context_data['penalty_list'] = user.eventpenalty_set.all()
+        if user.is_authenticated():
+            context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start')
+            context_data['penalty_list'] = user.eventpenalty_set.all()
         return context_data
 
 @login_required
