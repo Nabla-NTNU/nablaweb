@@ -51,7 +51,13 @@ except:
 
 admin.site.register(Group, ExtendedGroupAdmin)
 
+class UserProfileInlineForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        exclude = ('signature', 'signature_html','show_signatures','time_zone','autosubscribe','language','post_count',)
+
 class UserProfileInline(admin.StackedInline):
+    form = UserProfileInlineForm
     model = UserProfile
 
 class ExtendedUserAdmin(UserAdmin):

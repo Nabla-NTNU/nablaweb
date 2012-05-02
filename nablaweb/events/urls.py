@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-
 from django.conf.urls.defaults import *
 from nablaweb.events.views import EventDetailView, EventListView, UserEventView
-
+from nablaweb.events.feeds import RecentEvents
 
 urlpatterns = patterns('nablaweb.events.views',
 
@@ -29,10 +28,13 @@ urlpatterns = patterns('nablaweb.events.views',
         name='event_detail'),
 
     # Bruker
-    (r'^mine$', UserEventView.as_view()),
+    url(r'^mine$', UserEventView.as_view(), name="view_user_events"),
     (r'^(?P<event_id>\d{1,8})/registrering$', 'register_user'),
     (r'^(?P<event_id>\d{1,8})/avregistrering$', 'deregister_user'),
 
     # Eksporter
     (r'^(?P<event_id>\d{1,8})/eksporter$', 'ical_event'),
+    
+    # RSS-feed
+    url(r'^feed/$', RecentEvents()),
 )

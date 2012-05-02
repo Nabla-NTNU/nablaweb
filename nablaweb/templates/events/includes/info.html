@@ -9,7 +9,7 @@
         <td>Starter</td>
         <td>
             <time datetime="{{ event.event_start|date:"c" }}">
-                <b>{{ event.event_start|naturalday }} kl. {{ event.event_start|date:"G:i" }}</b>
+                <b>{{ event.event_start|naturalday }} kl. {{ event.event_start|date:"H:i" }}</b>
             </time>
         </td>
     </tr>
@@ -20,7 +20,7 @@
         <td>Slutter</td>
         <td>
             <time datetime="{{ event.event_end|date:"c" }}">
-                {{ event.event_end|naturalday }} kl. {{ event.event_end|date:"G:i" }}
+                {{ event.event_end|naturalday }} kl. {{ event.event_end|date:"H:i" }}
             </time>
         </td>
     </tr>
@@ -35,7 +35,7 @@
         <td>Registrering åpner</td>
         <td>
             <time datetime="{{ event.registration_start|date:"c" }}">
-                {{ event.registration_start|naturalday }} kl. {{ event.registration_start|date:"G:i" }}
+                {{ event.registration_start|naturalday }} kl. {{ event.registration_start|date:"H:i" }}
             </time>
         </td>
     </tr>
@@ -61,7 +61,9 @@
         {% if event.registration_required and not is_registered %}
         <a href="{% url nablaweb.events.views.register_user event.id %}" class="btn btn-primary">Meld deg på</a>
         {% endif %}
-        <a href="#notimplemented" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
+        {% if event.facebook_url %}
+        <a href="{{ event.facebook_url }}" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
+        {% endif %}
     </td></tr>
 
 </table>

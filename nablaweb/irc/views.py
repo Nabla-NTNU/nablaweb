@@ -2,14 +2,14 @@
 
 # Views for irc-appen
 
-from irc.models import *
 from django.template import Context, RequestContext, loader
+from django.shortcuts import render
 
-def ShowChannel(request, pk):
-    pass
+def showChannel(request):
+    return render(request, 'irc/default.html')
     
-def ShowChannelStats(request, pk):
+def showChannelStats(request):
     pass
 
-def ShowTotalStats(request):
+def showTotalStats(request):
     pass

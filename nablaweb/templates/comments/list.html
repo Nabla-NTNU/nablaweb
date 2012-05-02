@@ -19,18 +19,23 @@
                     <div class="info">
                         <span class="author">
                             <a href="{% url accounts.views.view_member_profile comment.user.username %}">
-                                {{ comment.user.get_full_name }} 
+                                {% firstof comment.user.get_full_name comment.user.username %}
                             </a>
                         </span>
                         <span class="date">{{ comment.submit_date|naturalday }}</span>
+                        {% if user.is_staff %}
+                        (<a href="{% url comments-delete comment.id %}">fjern</a>)
+                        {% endif %}
                     </div>
                     
                     {# Urlize er en extension som gjør linker klikkbare. Failer silently #}
                     {# {{ comment|escape|markdown:"safe,urlize" }} #}
-                    {{ comment.comment|striptags|markdown:"safe,urlize"|wikilinks}}
+                    {{ comment.comment|striptags|markdown:"safe,urlize"|wikilinks }}
 
                     {# urlize.py hentes fra https://github.com/r0wb0t/markdown-urlize #}
                     {# og puttes i /usr/lib/pymodules/python2.7/markdown/extensions #}
+                    {# eller /usr/lib/pymodules/python2.7/markdown/extensions/ #}
+                    {# avhengig av hvordan markdown er installert. #}
                 </div>
 
             </div>

@@ -195,3 +195,86 @@
     .comment .info { margin-bottom: 10px; } 
     .comment .author { font-weight: bold; } 
     .comment .date { color: #999; }
+
+/* Tabell i jobs_list.html */
+
+    .jobslist_table {
+        width: 28em;
+        float: right;
+        margin-top: 15px;
+    }
+
+    .jobslist_td_title {
+        width: 25%;
+    }
+
+    .jobslist_td_content {
+        width: 75%;
+    }
+
+/* bargrafer fra http://djangosnippets.org/snippets/44/ */
+
+    ul.bargraph {
+        margin: 0;
+        padding: 0;
+        width: 190px;
+        background-color: #fff;
+    }
+      
+    ul.bargraph li {
+        font-size: 11px;
+        line-height: 20px;
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        border-bottom: 1px solid #ebeff2;
+        background-color: #fff;
+    }
+ 
+    ul.bargraph li span {
+        background-color: #a9d2f2;
+        display: block;
+        color: #125a95;
+        font-weight: bold;
+        padding: 0 0 0 5px;
+        white-space: nowrap;
+    }
+
+/* Søkefelt på toppen */
+
+.page-header {
+    overflow: hidden;    /* clear floats */     
+    padding: 0px;
+    border-bottom: 0px;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+.page-header div {
+    float: right;        /* float search content right */          
+}
+
+.input-prepend input {
+    float: left;
+}
+
+.input-prepend {
+    margin-bottom: 0px;
+}
+
+header .span4 .control-group {
+    margin-bottom: 0px;
+}
+
+input#searchtop {
+    margin-bottom: 0px;
+}
+
+header .span4 {
+    margin-top: 16px;
+}
+
+.input-prepend form {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}

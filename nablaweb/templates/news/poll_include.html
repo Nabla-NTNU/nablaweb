@@ -1,0 +1,36 @@
+{% load humanize %}
+
+{% if poll %}
+
+{% if user in poll.users_voted.all %}
+
+<h3>{{ poll.question }}</h3>
+
+<ul class="bargraph">
+{% for choice in poll.choice_set.all %}
+    <li><span style="width: {% widthratio choice.votes poll.get_total_votes 190 %}px">{{ choice.choice }} &ndash; {{ choice.votes|add:"0" }} stemmer</span></li>
+{% endfor %}
+<li>Totalt {{ poll.get_total_votes }} stemmer.</li>
+</ul>
+
+{% else %}
+
+<h3>{{ poll.question }}</h3>
+
+<form action="/poll/{{ poll.id }}/vote/" method="post">{% csrf_token %}
+<fieldset>
+<div style="margin-left: 20px; margin-top: 13px;">
+{% for choice in poll.choice_set.all %}
+    <label for="choice{{ forloop.counter }}" style="display: inline;">
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" style="display: inline-block; margin-right: 5px; margin-bottom: 10px;"/>{{ choice.choice }}</label><br/>
+{% endfor %}
+</div>
+<div class="form-actions">
+<input type="submit" value="Vote" />
+</div>
+</fieldset>
+</form>
+
+{% endif %}
+
+{% endif %}

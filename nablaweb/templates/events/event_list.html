@@ -2,6 +2,10 @@
 
 {% block title %}Arrangement{% endblock %}
 
+{% block more_head %}
+<link rel="alternate" type="application/rss+xml" href="/arrangement/feed/" title="RSS feed">
+{% endblock %}
+
 {% block main %}
 
 <!-- calendar row -->
@@ -57,7 +61,7 @@
                     {% for event in day.events %}
                         <li>
                             <b class="icon-cog"></b>
-                            <a href="{{ event.get_absolute_url }}">{{ event.short_name }}</a>
+                            <a href="{{ event.get_absolute_url }}">{{ event.get_short_name }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -107,7 +111,12 @@
             <p>Om du er påmeldt, men ikke møter opp på arrangement, kan du bli
             straffet i form av prikker. Jo flere prikker, jo lengre må du vente for
             å melde deg på et arrangement.</p>
-            <p>Du har ingen prikker. Godt jobbet! (PS: Denne er ikke dynamisk)</p>
+            {% if penalty_list %}
+            <p>Du har {{ penalty_list|length }} prikk{{ penalty_list|length|pluralize:"er" }}:</p>
+            <ul>{% for penalty in penalty_list %}<li>{{ penalty.get_display_name }}</li>{% endfor %}</ul>
+            {% else %}
+            <p>Du har ingen prikker. Godt jobbet!</p>
+            {% endif %}
         </div>
 
         <div class="span4">

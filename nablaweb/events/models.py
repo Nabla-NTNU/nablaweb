@@ -5,11 +5,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from news.models import News
 import datetime
+from urlparse import urlparse
 
-
-class Event(News):
+class AbstractEvent(News):
     short_name = models.CharField("kort navn", max_length=20, blank=True, null=True, help_text="Brukes på steder hvor det ikke er plass til å skrive hele overskriften, for eksempel kalenderen.")
-    related_news = models.ManyToManyField(News, related_name="news", verbose_name="relaterte nyheter", blank=True, null=True, help_text="Nyheter som er relatert til dette arrangementet")
 
     # Indikerer hvem som står bak arrangementet.
     # Dette feltet er valgfritt.
@@ -57,13 +56,58 @@ class Event(News):
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_required er sann.
     has_queue = models.NullBooleanField(verbose_name="har venteliste", null=True, blank=True, help_text="Om ventelisten er på, vil det være mulig å melde seg på selv om arrangementet er fullt. De som er i ventelisten vil automatisk bli påmeldt etter hvert som plasser blir ledige.")
+    
+    # URL til Facebook-siden til arrangementet
+    # Dette feltet er valgfritt.
+    facebook_url = models.CharField(verbose_name="facebook-url", blank=True, max_length=100, help_text="URL-en til det tilsvarende arrangementet på Facebook")
+
+    class Meta:
+        abstract = True
+
+    def __unicode__(self):
+        return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
+
+    def free_places(self):
+        raise NotImplemented
+
+    def is_full(self):
+        raise NotImplemented
+
+    def users_attending(self):
+        raise NotImplemented
+
+    def users_waiting(self):
+        raise NotImplemented
+
+    def percent_full(self):
+        raise NotImplemented
+
+    def users_registered(self):
+        raise NotImplemented
+
+    def is_registered(self, user):
+        raise NotImplemented
+
+    def has_waiting_list(self):
+        raise NotImplemented
+
+    def register_user(self, user):
+        raise NotImplemented
+
+    def deregister_user(self, user):
+        raise NotImplementedError
+
+    def move_user_to_place(self, user, place):
+        raise NotImplementedError
+        
+    def get_short_name(self):
+        raise NotImplementedError
+
+class Event(AbstractEvent):
 
     class Meta:
         verbose_name = "arrangement"
         verbose_name_plural = "arrangement"
-
-    def __unicode__(self):
-        return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
 
     # Overlagre for å automatisk vedlikeholde ventelisten.
     def save(self, *args, **kwargs):
@@ -76,6 +120,22 @@ class Event(News):
         self.eventregistration_set.all().delete()
         super(Event, self).delete(*args, **kwargs)
 
+    # Verifiserer formen på facebook-urlen, og endrer den hvis den er feil.
+    def clean(self):
+        parsed = urlparse(self.facebook_url)
+        noscheme = parsed.netloc + parsed.path
+        self.facebook_url = 'http' + '://' + noscheme.replace("http://", "").replace("https://", "")
+        
+        if (self.facebook_url == "http://"):
+            self.facebook_url = ""
+    
+    # Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke.
+    def get_short_name(self):
+        if self.short_name:
+            return self.short_name
+        else:
+            return self.headline[0:18].capitalize() + '...'
+    
     # Returnerer antall ledige plasser, dvs antall plasser som
     # umiddelbart gir brukeren en garantert plass, og ikke bare
     # ventelisteplass.
@@ -299,8 +359,6 @@ class EventRegistration(models.Model):
         verbose_name_plural = 'påmeldte'
 
 
-
-
 class EventPenalty(models.Model):
     # Hvilket arrangement straffen gjelder.
     event = models.ForeignKey(Event)
@@ -311,3 +369,5 @@ class EventPenalty(models.Model):
     def __unicode__(self):
         return u'EventPenalty: %s, %s' % (self.event, self.user)
 
+    def get_display_name(self):
+        return u'%s' % (self.event)

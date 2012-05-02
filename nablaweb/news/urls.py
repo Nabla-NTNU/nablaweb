@@ -4,6 +4,7 @@
 from django.conf.urls.defaults import *
 #from nablaweb.news.forms import NewsForm
 from nablaweb.news.views import NewsDetailView, NewsListView  # , NewsDeleteView
+from nablaweb.news.feeds import RecentNews
 
 urlpatterns = patterns('news.views',
 

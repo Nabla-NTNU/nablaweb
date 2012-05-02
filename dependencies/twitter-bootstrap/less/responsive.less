@@ -122,6 +122,7 @@
 
 // LANDSCAPE PHONE TO SMALL DESKTOP & PORTRAIT TABLET
 // --------------------------------------------------
+// Opprinnelig til 767px
 
 @media (max-width: 767px) {
   // GRID & CONTAINERS
@@ -153,8 +154,9 @@
 
 // PORTRAIT TABLET TO DEFAULT DESKTOP
 // ----------------------------------
+// Originally 768px to 979px
 
-@media (min-width: 768px) and (max-width: 979px) {
+@media (min-width: 768px) and (max-width: 800px) {
 
   // Fixed grid
   #gridSystem > .generate(12, 42px, 20px);
@@ -167,11 +169,26 @@
 
 }
 
+// CUSTOM
+// -----------------
+// Makes the navbar menu not disappear too early.
 
+@media (min-width: 800px) and (max-width: 979px) {
+  // Fixed grid
+  // #gridSystem > .generate(12, 42px, 20px);
+  #gridSystem > .generate(12, 46px, 20px);
+
+  // Fluid grid
+  #fluidGridSystem > .generate(12, 5.801104972%, 2.762430939%);
+
+  // Input grid
+  #inputGridSystem > .generate(12, 42px, 20px);
+}
 
 // TABLETS AND BELOW
 // -----------------
-@media (max-width: 979px) {
+// Originally up to 979px
+@media (max-width: 800px) {
 
   // UNFIX THE TOPBAR
   // ----------------
@@ -280,6 +297,7 @@
   // Navbar button
   .btn-navbar {
     display: block;
+	/*margin-bottom: 5px;*/
   }
 
   // Hide everything in the navbar save .brand and toggle button */

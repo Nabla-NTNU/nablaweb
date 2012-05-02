@@ -1,0 +1,2 @@
+{{ object.com.name }}
+{{ object.description }}

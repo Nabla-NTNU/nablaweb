@@ -9,7 +9,6 @@ from news.models import News
 # Det er litt stygt å bruke modeller for YearChoices og RelevantForChoices, men
 # det var den enkle måten å få riktige forms i admin på.
 
-
 class YearChoices(models.Model):
     year = models.IntegerField(blank=False, verbose_name="Klasse", help_text="Klasse: 1, 2, 3, 4 og 5")
 
@@ -66,7 +65,7 @@ class Advert(News):
     relevant_for_year = models.ManyToManyField(YearChoices, blank=False, null=True, verbose_name="Årskull", help_text="Hvilke årskull stillingsannonsen er relevant for")
     tags = models.ManyToManyField(TagChoices, blank=True, verbose_name="Tags", help_text="F.eks. sommerjobb, bergen, kirkenes, olje, konsultering...")
 
-    deadline_date = models.DateTimeField(verbose_name="Frist", blank=True, help_text="Søknadsfrist")  # Naar frist for soeking er, med klokkeslett
+    deadline_date = models.DateTimeField(verbose_name="Frist", blank=True, null=True, help_text="Søknadsfrist")  # Naar frist for soeking er, med klokkeslett
 
     show_removal_date = models.BooleanField(default=False, help_text="Om fjerningsdato skal vises", verbose_name="Vis fjerningsdato?")  # Hvorvidt removal_date skal vises i stillingsannonsen
     removal_date = models.DateTimeField(verbose_name="Forsvinner", null=True, blank=True, help_text="Når annonsen fjernes, f.eks. samtidig som deadline")  # Naar annonsen skal fjernes, for eksempel samtidig som deadline_date

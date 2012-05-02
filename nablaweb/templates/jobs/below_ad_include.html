@@ -1,0 +1,8 @@
+{% load humanize %}
+
+<h3>Nyeste stillingsannonser</h3>
+<ul>
+{% for job in jobs %}
+<li>{{job.headline}} hos {{job.company.name}} <em>(lagt inn {{job.created_date}})</em></li>
+{% endfor %}
+</ul>

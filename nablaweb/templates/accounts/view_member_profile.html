@@ -15,7 +15,13 @@
         </div>
     </div>
     <div class="span6">
-        <h2>{{member.get_full_name}}</h2>
+        <h2>
+        {% if member.get_full_name %}
+            {{ member.get_full_name }}
+        {% else %}
+            {{ member.username }}
+        {% endif %}
+        </h2>
         <br />
         <table class="table table-striped table-bordered">
             <tr>
@@ -34,11 +40,13 @@
                 <td><a href="http://folk.ntnu.no/{{ member.username }}">http://folk.ntnu.no/{{ member.username }}</a></td>
                 {% endif %}
             </tr>
-
+            
+            {% if member.get_profile.birthday %}
             <tr>
                 <td>Bursdag </td>
                 <td>{{member.get_profile.birthday}}</td>
             </tr>
+            {% endif %}
 
             <tr>
                 <td>Medlem av </td>
@@ -52,11 +60,39 @@
                     </ul>
                 </td>
             </tr>
+            
+            {% if member.get_profile.about %}
+            <tr>
+                <td>Biografi</td>
+                <td>
+                    {{ member.get_profile.about|markdown|wikilinks}}
+                </td>
+            </tr>
+            {% endif %}
+            
+            {% if user.is_staff %}
+            <tr>
+                <td>Prikker</td>
+                {% if penalty_list %}
+                <td>
+                    {{ penalty_list|length }} prikk{{penalty_list|length|pluralize:"er" }}.
+                    <ul>
+                    {% for penalty in penalty_list %}
+                    <li>{{ penalty.get_display_name }}</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+                {% else %}
+                <td>
+                    Ingen prikker.
+                </td>
+                {% endif %}
+            </tr>
+            {% endif %}
+            
         </table>
     </div><!--span6-->
 
 </div>
-
-<div id="user_about">{{ member.get_profile.about|markdown|wikilinks}}</div>
 
 {% endblock %}

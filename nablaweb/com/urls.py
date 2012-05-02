@@ -8,5 +8,5 @@ from django.views.generic.simple import redirect_to
 
 urlpatterns = patterns('',
     (r'^$', redirect_to, {'url': '/'}),
-    (r'^(?P<slug>\D{1,25})/$', ShowPage.as_view()),
+    url(r'^(?P<slug>\D{1,85})/$', ShowPage.as_view(), name='show_com_page'),
 )

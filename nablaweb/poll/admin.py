@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from polls.models import Poll
+from poll.models import Poll, Choice
 from django.contrib import admin
 
-class ChoiceInline(admin.TabularInline)
+class ChoiceInline(admin.TabularInline):
     model = Choice
     extra = 5
+    fields = ('choice', 'votes', )
 
 class PollAdmin(admin.ModelAdmin):
-    fields = ['publication_date', 'question', 'creation_date', 'edit_date']
-    list_display = ('question', 'publication_date', 'creation_date', 'edit_date')
+    fields = ['publication_date', 'question', 'is_current', 'users_voted', ]
+    readonly_fields = ['users_voted', ]
+    list_display = ('question', 'publication_date', 'is_current')
     list_filter = ['publication_date']
     inlines = [ChoiceInline]
 

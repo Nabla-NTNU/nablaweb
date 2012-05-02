@@ -9,7 +9,7 @@
         <td>Publisert</td>
         <td>
             <time datetime="{{ content.created_date|date:"c" }}">
-                {{ content.created_date|naturalday }} kl. {{ content.created_date|date:"G:i" }}
+                {{ content.created_date|naturalday }} kl. {{ content.created_date|date:"H:i" }}
             </time>
         </td>
     </tr>
@@ -20,7 +20,7 @@
         <td>Av</td>
         <td>
             <a href="{% url accounts.views.view_member_profile content.created_by.username %}">
-                {{ content.created_by.get_full_name }}
+                {% if content.created_by.get_full_name %}{{ content.created_by.get_full_name }}{% else %}{{ content.created_by.username }}{% endif %}
             </a>
         </td>
     </tr>
@@ -33,7 +33,7 @@
         <td>Sist endret</td>
         <td>
             <time datetime="{{ content.last_changed_date|date:"c" }}">
-                {{ content.last_changed_date|naturalday }} kl. {{ content.last_changed_date|date:"G:i" }}
+                {{ content.last_changed_date|naturalday }} kl. {{ content.last_changed_date|date:"H:i" }}
             </time>
         </td>
     </tr>
@@ -44,7 +44,7 @@
         <td>Av</td>
         <td>
             <a href="{% url accounts.views.view_member_profile content.last_changed_by.username %}">
-                {{ content.last_changed_by.get_full_name }}
+                {% if content.last_changed_by.get_full_name %}{{ content.last_changed_by.get_full_name }}{% else %}{{ content.last_changed_by.username }}{% endif %}
             </a>
         </td>
     </tr>

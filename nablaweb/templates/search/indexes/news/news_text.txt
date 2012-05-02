@@ -1,0 +1,3 @@
+{{ object.headline }}
+{{ object.lead_paragraph }}
+{{ object.body }}

@@ -6,8 +6,8 @@
 <h2>Komponenter og nullvektorer</h2>
 <br />
 
-<form class="input-append" method="get" action="../search/" id="user-search">
-	<input placeholder="Ute av drift">
+<form class="input-append" method="post" action="/brukere/search/" id="user-search">{% csrf_token %}
+	<input placeholder="Søk i listen" name="searchstring" id="searchstring">
 	<button class="btn add-on" type="submit">
 		<i class="icon-search"></i>
 	</button>

@@ -90,9 +90,15 @@ class EventListView(ListView):
     def get_context_data(self, **kwargs):
         # Get the context from the superclass
         context = super(EventListView, self).get_context_data(**kwargs)
+        
+        # Penalties
+        user = self.request.user
+        if user.is_authenticated():
+            context['penalty_list'] = user.eventpenalty_set.all()
 
         # Functions to be used
         from datetime import date, timedelta
+        from calendar import monthrange
 
         today = date.today()
 
@@ -106,8 +112,15 @@ class EventListView(ListView):
             month = int(self.args[1])
         except IndexError:
             month = today.month
-
-        weeks = 5  # Weeks to be displayed
+        
+        monthdays = monthrange(year, month)
+        weeknodelta = date(year, month, monthdays[1]).isocalendar()[1] - date(year, month, 1).isocalendar()[1]
+        
+        # Weeks to be displayed
+        if (weeknodelta == 5):
+            weeks = 6
+        else:
+            weeks = 5
 
         # Get the monday at the start of the calendar
         first = date(year, month, 1)
@@ -175,8 +188,9 @@ class UserEventView(TemplateView):
         context_data = super(UserEventView, self).get_context_data(**kwargs)
         user = self.request.user
         context_data['user'] = user
-        context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start')
-        context_data['penalty_list'] = user.eventpenalty_set.all()
+        if user.is_authenticated():
+            context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start')
+            context_data['penalty_list'] = user.eventpenalty_set.all()
         return context_data
 
 @login_required

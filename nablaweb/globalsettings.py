@@ -61,6 +61,9 @@ SITE_ID = 1
 # calendars according to the current locale
 USE_L10N = True
 
+# Additional paths to search for fixtures
+FIXTURE_DIRS = (os.path.join(PROJECT_ROOT, 'nablaweb', 'fixtures'),)
+
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, '..', 'media')
@@ -142,6 +145,7 @@ INSTALLED_APPS = [
     'quotes',   # Tilfeldig sitat.
     # 'feedback', # Feedback om siden til webkom. Bruk heller issue-tracker.
     'nabladet', # Liste over nablad.
+    'poll',
 
     #################
     # Eksterne ting #
@@ -184,8 +188,10 @@ INSTALLED_APPS = [
     # Alt som er nodvendig for pybbm
     'pybb',
     'pytils',
-    'sorl.thumbnail',
     'pure_pagination',
+    
+    # Haystack. Krever 2.0.0 beta samt Whoosh!
+    'haystack',
 ]
 
 
@@ -200,6 +206,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'jobs.views.activej',
     'quotes.context_processors.random_quote',
     'pybb.context_processors.processor',
+    'com.context_processors.com_context',
+    'poll.context_processors.poll_context',
 
     #'events.context_processors.current_month_calendar', 
     # fjernet fordi den bruker en sql request per dag i mnd
@@ -243,10 +251,21 @@ THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
 ) + defaults.PROCESSORS
 
-##########################
-# Andre interne settings #
-##########################
+# Innstillinger for pybbm
 
-# Hvor passwd-fila til ntnulinuxserverne ligger på gauss. Må bli lastet ned
-# regelmessig med cron eller noe lignende.
-NTNU_PASSWD = '/home/hiasen/passwd'
+PYBB_DEFAULT_TITLE = 'Forum'
+PYBB_DEFAULT_AUTOSUBSCRIBE = False
+PYBB_FREEZE_FIRST_POST = False
+PYBB_SIGNATURE_MAX_LINES = 0
+PYBB_SIGNATURE_MAX_LENGTH = 0
+PYBB_DEFAULT_TIME_ZONE = 1
+PYBB_MARKUP = 'markdown'
+PYBB_ENABLE_SELF_CSS = True
+
+import os
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+}

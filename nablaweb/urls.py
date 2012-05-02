@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from nablaweb.news.feeds import RecentNews
 
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
@@ -10,8 +10,8 @@ from settings import GLOBAL_MEDIA_DIRS, MEDIA_ROOT, STATIC_URL
 
 urlpatterns = patterns('',
     (r'^$', include('news.urls')),
-    (r'^login/$', 'accounts.views.login_user'),
-    (r'^logout/$', 'accounts.views.logout_user'),
+    url(r'^login/$', 'accounts.views.login_user', name='auth_login'),
+    url(r'^logout/$', 'accounts.views.logout_user', name='auth_logout'),
     (r'^nyheter/', include('nablaweb.news.urls')),
     (r'^bedpres/', include('nablaweb.bedpres.urls')),
     (r'^arrangement/', include('nablaweb.events.urls')),
@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     (r'^feedback/', include('feedback.urls')),
     (r'^nabladet/', include('nabladet.urls')),
     (r'^kommentarer/', include('django.contrib.comments.urls')),
+    (r'^poll/', include('poll.urls')),
 
     # For å dele filer under utviklingen.
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': GLOBAL_MEDIA_DIRS[0]}),
@@ -34,12 +35,15 @@ urlpatterns = patterns('',
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
     # to INSTALLED_APPS to enable admin documentation:
-     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-     (r'^admin/', include(admin.site.urls)),
+    (r'^admin/', include(admin.site.urls)),
      
-     (r'^forum/', include('pybb.urls', namespace='pybb')),
+    (r'^forum/', include('pybb.urls', namespace='pybb')),
+    (r'^irc/', include('irc.urls')),
+    url(r'^feed/$', RecentNews()),
+    (r'^search/', include('haystack.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()
