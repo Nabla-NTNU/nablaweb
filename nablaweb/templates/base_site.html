@@ -156,7 +156,7 @@
                     <a href="#bruker"
                         class="dropdown-toggle no-ajaxy"
                         data-toggle="dropdown">
-                        <span class="icon-user"></span> {{ user.username }}
+                        <span class="icon-user"></span>{% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
