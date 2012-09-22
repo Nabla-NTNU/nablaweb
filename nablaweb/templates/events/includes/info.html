@@ -45,7 +45,11 @@
         <td style="text-align: center;" colspan="2">
             {% if event.registration_required %}
                 {% if is_registered %}
-                    Du er påmeldt
+                    {% if eventregistration.is_waiting_place %}
+                        Du er på venteliste
+                    {% else %}
+                        Du er påmeldt
+                    {% endif %}
                 {% else %}
                     Påmelding kreves
                 {% endif %}
