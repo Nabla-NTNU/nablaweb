@@ -5,21 +5,36 @@
 <h2>Påmeldte arrangementer og prikker ({{ user.username }})</h2>
 
 {% if eventregistration_list %}
-<p>Påmeldt:</p>
 <table class="table">
-  <tbody>
-  {% for eventregistration in eventregistration_list %}
-  <tr>
+    <caption></caption>
+    <thead>
+        <tr>
+            <th>Arrangement</th>
+            <th style="text-align:right;">Status</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <td colspan="10" class="muted">
+                <i class="icon-ok-sign"></i> Du er påmeldt arrangementet. <i class="icon-minus-sign"></i> Du står på venteliste og vil bli tildelt plass om mulig.
+            </td>
+        </tr> 
+    </tfoot>
+    <tbody>
+    {% for eventregistration in eventregistration_list %}
     {% if eventregistration.is_attending_place %}
-    <td bgcolor="#00FF00">
+        <tr bgcolor="#D0FFD0">
+            <td><a href="{{ eventregistration.event.get_absolute_url }}" style="text-decoration:none;"/>{{ eventregistration.event }}</a></td>
+            <td style="text-align:right;"><i class="icon-ok-sign"></i></td>
+        </tr>
     {% else %}{% if eventregistration.is_waiting_place %}
-    <td bgcolor="#FFFF00">
+        <tr bgcolor="#FFD0D0">
+            <td><a href="{{ eventregistration.event.get_absolute_url }}" style="text-decoration:none;"/>{{ eventregistration.event }}</a></td>
+            <td style="text-align:right;"><i class="icon-minus-sign"></i></td>
+        </tr>
     {% endif %}{% endif %}
-      <a href="{{ eventregistration.event.id }}"/>{{ eventregistration.event }}</a>
-    </td>
-  </tr>
-  {% endfor %}
-  </tbody>
+    {% endfor %}
+    </tbody>
 </table>
 {% endif %}
 
@@ -31,5 +46,6 @@
 {% endfor %}
 </ul>
 {% endif %}
+
 
 {% endblock %}
