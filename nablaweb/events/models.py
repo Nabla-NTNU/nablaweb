@@ -162,7 +162,10 @@ class Event(AbstractEvent):
     
     # Returnerer hvor mange prosent av plassene som er tatt
     def percent_full(self):
-        return self.users_attending() * 100 / self.places
+        if self.places != 0:
+            return self.users_attending() * 100 / self.places
+        else:
+            return 100
 
     # Returnerer antall brukere som er registrerte, og som dermed
     # enten er påmeldte eller står på venteliste.
