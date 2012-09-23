@@ -8,13 +8,16 @@ from com.models import ComPage, ComMembership
 
 class ComPageAdmin(admin.ModelAdmin):
     class Meta:
-        verbose_name = "Komitéside"
-        verbose_name_plural = "Komitésider"
+        verbose_name = "Komiteside"
+        verbose_name_plural = "Komitesider"
         
 class ComMembershipAdmin(admin.ModelAdmin):
+    list_display = ("user", "com", "joined_date")
+    ordering = ['-com']
+    list_filter = ["com"]
     class Meta:
-        verbose_name = "Komitémedlem"
-        verbose_name_plural = "Komitémedlemmer"
+        verbose_name = "Komitemedlem"
+        verbose_name_plural = "Komitemedlemmer"
 
 admin.site.register(ComPage, ComPageAdmin)
 admin.site.register(ComMembership, ComMembershipAdmin)

@@ -59,5 +59,5 @@ class ComMembership(models.Model):
         return force_unicode(self.user.username)
         
     class Meta:
-        verbose_name = "komitémedlem"
-        verbose_name_plural = "komitémedlemmer"
+        verbose_name = "komitemedlemskap"
+        verbose_name_plural = "komitemedlemskap"
