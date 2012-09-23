@@ -20,8 +20,7 @@ Vi bruker South, noe som fører til at du må gjøre dette:
     ./manage.py syncdb -all
 
 # Fungerer ikke css-en? #
-Vi bruker Twitter-Bootstrap, som må kompileres fra LESS til CSS.
+Vi bruker Twitter-Bootstrap, som må kompileres fra LESS til CSS. Skriv i /nablaweb:
 
-    cd dependencies/twitter-bootstrap
     make
 
