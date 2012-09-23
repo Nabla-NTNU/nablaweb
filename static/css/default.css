@@ -266,8 +266,9 @@ header .span4 .control-group {
     margin-bottom: 0px;
 }
 
-input#searchtop {
+form#searchtop {
     margin-bottom: 0px;
+    margin-top: 19px; /* Logohøyde minus høyden på formen */
 }
 
 header .span4 {
