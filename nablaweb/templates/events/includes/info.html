@@ -1,7 +1,16 @@
 {% load humanize %}
 
 <!-- event-info -->
-<h3>Informasjon</h3>
+<h3 class="pull-left">Informasjon </h3>
+
+{% if event.facebook_url %}
+<h3 class="pull-right">
+    <a target="_blank" href="{{ event.facebook_url }}" class="btn btn-mini">
+        <span class="icon-custom icon-facebook"></span> Vis på Facebook
+    </a>
+</h3>
+{% endif %}
+
 <table class="table table-bordered table-striped content-info">
 
     <!-- Fra -->
@@ -62,15 +71,19 @@
     </tr>
 
     <tr><td colspan="2" style="text-align: center;">
-        {% if event.registration_required and not is_registered %}
-        <a href="{% url nablaweb.events.views.register_user event.id %}" class="btn btn-primary">Meld deg på</a>
-        {% endif %}
-        {% if event.facebook_url %}
-        <a href="{{ event.facebook_url }}" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
+        {% if event.registration_required %}
+            {% if is_registered %}
+                <a href="{% url events.views.deregister_user event.id %}"
+                   class="btn btn-primary">Meld deg av</a>
+            {% else %}
+                <a href="{% url events.views.register_user event.id %}"
+                   class="btn btn-primary">Meld deg på</a>
+            {% endif %}
         {% endif %}
     </td></tr>
 
 </table>
+
 
 {% if event.registration_required %}
 <h3>{{ event.users_attending }} påmeldt av {{ event.places }} plasser</h3>
