@@ -17,9 +17,7 @@ nabla_development.db
 sqlite.db
 
 # Filer som genereres lokalt
-dependencies/twitter-bootstrap/bootstrap
-dependencies/twitter-bootstrap/docs/assets
-dependencies/twitter-bootstrap/docs/build
+nablaweb/whoosh_index
 
 # Media-mapper (opplastede brukerbilder o.l.)
 media/
