@@ -133,14 +133,6 @@
             </ul>
             <!-- end navigasjonslenker -->
 
-            <!-- søkefelt -->
-            <!--
-            <form class="navbar-search pull-left" action="">
-                <input type="text" class="search-query span2" placeholder="Søk">
-            </form>
-            -->
-            <!-- end søkefelt -->
-                
             {% if user.is_authenticated %}
 
             <!-- bruker-dropdown -->
@@ -176,7 +168,7 @@
                     <tr>
                         <td><input type="text" placeholder="Bruker" name="username" /></td>
                         <td><input type="password"  placeholder="Passord" name="password" /></td>
-                        <td><input class="submit btn btn-info" type="submit" value="Login" /></td>
+                        <td><button class="submit btn btn-info" type="submit">Login</button></td>
                     </tr>
                 </table>
             </form>

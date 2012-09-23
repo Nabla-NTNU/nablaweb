@@ -23,9 +23,10 @@
     h3 { margin-bottom: 5px; }
 
 
-    .navbar-form { width: 156px; padding-right: 10px; }
+    /* 172px: magisk nummer, finnes ved tipping */
+    .navbar-form { width: 175px; padding-right: 10px; }
     .navbar-form td { width: 55px; }
-    .navbar input { width: 50px; }
+    .navbar input { width: 51px; }
 
 
 /* Utility classes */
