@@ -122,10 +122,11 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" >
+                        {# Liste over komiteer #}
                         {% for com in coms %}
                         <li><a href="{{ com.get_absolute_url }}">{{ com.com.name }}</a></li>
                         {% empty %}
-                        <li><a>ALL GLORY TO THE HYPNOTOAD</a></li>
+                        <li><a>Ingen komiteer eksisterer</a></li>
                         {% endfor %}
                     </ul>
                 </li>
