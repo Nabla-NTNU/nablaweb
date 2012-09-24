@@ -241,42 +241,20 @@
         white-space: nowrap;
     }
 
-/* Søkefelt på toppen */
+/* for logo + søkefelt i headeren */
 
-.page-header {
-    overflow: hidden;    /* clear floats */     
-    padding: 0px;
-    border-bottom: 0px;
-    margin-bottom: 5px;
-    margin-top: 0px;
-}
+    .page-header {
+        overflow: hidden;    /* clear floats */     
+        padding: 0px;
+        border-bottom: 0px;
+        margin-bottom: 5px;
+        margin-top: 0px;
+    }
 
-.page-header div {
-    float: right;        /* float search content right */          
-}
 
-.input-prepend input {
-    float: left;
-}
 
-.input-prepend {
-    margin-bottom: 0px;
-}
+    form#searchtop {
+        margin-bottom: 0px;
+        margin-top: 19px; /* Logohøyde minus høyden på formen */
+    }
 
-header .span4 .control-group {
-    margin-bottom: 0px;
-}
-
-form#searchtop {
-    margin-bottom: 0px;
-    margin-top: 19px; /* Logohøyde minus høyden på formen */
-}
-
-header .span4 {
-    margin-top: 16px;
-}
-
-.input-prepend form {
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-}
