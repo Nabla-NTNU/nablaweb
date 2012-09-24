@@ -70,11 +70,6 @@
         width: 100%;
     }
 
-    .input-append button.add-on {
-        height: inherit !important;
-    }
-
-
 /* MathJAX customisation */
 
     .MathJax_Display {
@@ -258,3 +253,6 @@
         margin-top: 19px; /* Logohøyde minus høyden på formen */
     }
 
+/* Endringer i Bootstrap-farger */
+.navbar-inner {border: 1px solid #a0a0a0;}/* Navbar border */
+.navbar .nav > li > a { color: #555;}/* Navbar link color */
