@@ -5,7 +5,7 @@
 
     /* Div that holds all parts of page except footer */
     #whitebox {
-        background-color: #FFFFFF; 
+        background-color: white;
         background-image: url(../img/bgnoise.png);
         border-bottom: 1px solid black;
         padding-bottom: 40px;
@@ -242,7 +242,7 @@
         overflow: hidden;    /* clear floats */     
         padding: 0px;
         border-bottom: 0px;
-        margin-bottom: 5px;
+        margin-bottom: 20px;
         margin-top: 0px;
     }
 
@@ -254,5 +254,5 @@
     }
 
 /* Endringer i Bootstrap-farger */
-.navbar-inner {border: 1px solid #a0a0a0;}/* Navbar border */
+.navbar-inner {border: 1px solid #c0c0c0;}/* Navbar border */
 .navbar .nav > li > a { color: #555;}/* Navbar link color */
