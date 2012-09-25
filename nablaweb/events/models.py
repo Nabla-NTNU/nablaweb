@@ -136,6 +136,10 @@ class Event(AbstractEvent):
         else:
             return self.headline[0:18].capitalize() + '...'
     
+    # Sjekker om det er for sent å melde seg av.
+    def deregistration_has_closed(self):
+        return self.deregistration_deadline < datetime.datetime.now()
+
     # Returnerer antall ledige plasser, dvs antall plasser som
     # umiddelbart gir brukeren en garantert plass, og ikke bare
     # ventelisteplass.
@@ -221,7 +225,7 @@ class Event(AbstractEvent):
             
             if self.deregistration_deadline is None:
                 msg = 'not_allowed'
-            elif self.deregistration_deadline < datetime.datetime.now():
+            elif ( self.deregistration_deadline < datetime.datetime.now() ) and reg.is_attending_place():
                 msg = 'dereg_closed'
             else:
                 self.move_user_to_place(user, 1e12)
@@ -350,6 +354,13 @@ class EventRegistration(models.Model):
     # Returnerer True dersom registreringen er en plass på venteliste.
     def is_waiting_place(self):
         return self.number > self.event.places
+
+    # Returnerer hvilken plass man har på ventelisten. None hvis man har plass eller det ikke finnes.
+    def waiting_list_place(self):
+        if (self.event.places is not None) and (self.event.places < self.number):
+            return self.number - self.event.places
+        else:
+            return None
 
     # Returnerer True dersom registreringen er en garantert plass.
     def is_attending_place(self):

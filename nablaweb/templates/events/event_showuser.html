@@ -1,22 +1,25 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block content %}
 
 <h2>Påmeldte arrangementer og prikker ({{ user.username }})</h2>
 
 {% if eventregistration_list %}
-<table class="table">
+<table class="table" data-provides="rowlink">
     <caption></caption>
     <thead>
         <tr>
             <th>Arrangement</th>
+            <th>Starter</th>
+            <th>Avmeldingsfrist</th>
             <th style="text-align:right;">Status</th>
         </tr>
     </thead>
     <tfoot>
         <tr>
             <td colspan="10" class="muted">
-                <i class="icon-ok-sign"></i> Du er påmeldt arrangementet. <i class="icon-minus-sign"></i> Du står på venteliste og vil bli tildelt plass om mulig.
+                <i class="icon-ok-sign"></i> Du er påmeldt arrangementet.<br/><sup>1</sup> Du kan alltid trekke deg fra ventelisten.
             </td>
         </tr> 
     </tfoot>
@@ -24,15 +27,40 @@
     {% for eventregistration in eventregistration_list %}
     {% if eventregistration.is_attending_place %}
         <tr bgcolor="#D0FFD0">
-            <td><a href="{{ eventregistration.event.get_absolute_url }}" style="text-decoration:none;"/>{{ eventregistration.event }}</a></td>
-            <td style="text-align:right;"><i class="icon-ok-sign"></i></td>
-        </tr>
     {% else %}{% if eventregistration.is_waiting_place %}
         <tr bgcolor="#FFD0D0">
-            <td><a href="{{ eventregistration.event.get_absolute_url }}" style="text-decoration:none;"/>{{ eventregistration.event }}</a></td>
-            <td style="text-align:right;"><i class="icon-minus-sign"></i></td>
-        </tr>
     {% endif %}{% endif %}
+    <td>
+        <a href="{{ eventregistration.event.get_absolute_url }}" style="text-decoration:none;">
+            {% if eventregistration.event.short_name %}
+                {{ eventregistration.event.short_name }}
+            {% else %}
+                {{ eventregistration.event.headline|truncatechars:20 }}
+            {% endif %}
+        </a></td>
+            <td>
+                <time datetime="{{ eventregistration.event.event_start|date:"c" }}">
+                    {{ eventregistration.event.event_start.date|naturalday }} kl. {{ eventregistration.event.event_start|date:"H.i" }}
+                </time>
+            </td>
+            <td>
+            {% if eventregistration.event.deregistration_has_closed %}
+                Utløpt{% if eventregistration.is_waiting_place %}<sup>1</sup>{% endif %}
+            {% else %}
+                <time datetime="{{ eventregistration.event.deregistration_deadline|date:"c" }}">
+                    {{ eventregistration.event.deregistration_deadline.date|naturalday }} kl. {{ eventregistration.event.deregistration_deadline|date:"H.i" }}
+                </time>
+            {% endif %}
+            </td>
+            <td style="text-align:right;">
+            {% if eventregistration.is_attending_place %}
+                <i class="icon-ok-sign"></i>
+            {% else %}{% if eventregistration.is_waiting_place %}
+            Ventelisteplass: {{ eventregistration.waiting_list_place }}
+            {% endif %}{% endif %}
+
+            </td>
+        </tr>
     {% endfor %}
     </tbody>
 </table>

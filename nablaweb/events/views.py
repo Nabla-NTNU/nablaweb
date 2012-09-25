@@ -195,7 +195,7 @@ class UserEventView(TemplateView):
         user = self.request.user
         context_data['user'] = user
         if user.is_authenticated():
-            context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start')
+            context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start') 
             context_data['penalty_list'] = user.eventpenalty_set.all()
         return context_data
 
