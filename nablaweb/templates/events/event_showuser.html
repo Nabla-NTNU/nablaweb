@@ -3,10 +3,10 @@
 
 {% block content %}
 
-<h2>Påmeldte arrangementer og prikker ({{ user.username }})</h2>
+<h2>Prikker og påmeldte arrangementer ({{ user.username }})</h2>
 
 {% if eventregistration_list %}
-<table class="table" data-provides="rowlink">
+<table class="table">
     <caption></caption>
     <thead>
         <tr>
@@ -19,7 +19,8 @@
     <tfoot>
         <tr>
             <td colspan="10" class="muted">
-                <i class="icon-ok-sign"></i> Du er påmeldt arrangementet.<br/><sup>1</sup> Du kan alltid trekke deg fra ventelisten.
+                <i class="icon-ok-sign"></i> Du er påmeldt arrangementet.
+                {% if is_on_a_waiting_list %}<br/><sup>1</sup> Du kan alltid trekke deg fra ventelisten.{% endif %}
             </td>
         </tr> 
     </tfoot>
@@ -40,7 +41,7 @@
         </a></td>
             <td>
                 <time datetime="{{ eventregistration.event.event_start|date:"c" }}">
-                    {{ eventregistration.event.event_start.date|naturalday }} kl. {{ eventregistration.event.event_start|date:"H.i" }}
+                    {{ eventregistration.event.event_start.date|naturalday }} kl. {{ eventregistration.event.event_start|date:"H:i" }}
                 </time>
             </td>
             <td>
@@ -48,7 +49,7 @@
                 Utløpt{% if eventregistration.is_waiting_place %}<sup>1</sup>{% endif %}
             {% else %}
                 <time datetime="{{ eventregistration.event.deregistration_deadline|date:"c" }}">
-                    {{ eventregistration.event.deregistration_deadline.date|naturalday }} kl. {{ eventregistration.event.deregistration_deadline|date:"H.i" }}
+                    {{ eventregistration.event.deregistration_deadline.date|naturalday }} kl. {{ eventregistration.event.deregistration_deadline|date:"H:i" }}
                 </time>
             {% endif %}
             </td>
