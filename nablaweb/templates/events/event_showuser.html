@@ -45,7 +45,7 @@
                 </time>
             </td>
             <td>
-            {% if eventregistration.event.deregistration_has_closed %}
+            {% if eventregistration.event.deregistration_closed %}
                 Utløpt{% if eventregistration.is_waiting_place %}<sup>1</sup>{% endif %}
             {% else %}
                 <time datetime="{{ eventregistration.event.deregistration_deadline|date:"c" }}">
