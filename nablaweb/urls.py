@@ -16,7 +16,6 @@ urlpatterns = patterns('',
     (r'^bedpres/', include('nablaweb.bedpres.urls')),
     (r'^arrangement/', include('nablaweb.events.urls')),
     (r'^brukere/', include('accounts.urls')),
-    (r'^avatar/', include('avatar.urls')),
     (r'^stillinger/', include('jobs.urls')),
     (r'^komite/', include('com.urls')),
     (r'^gallery/', include('gallery.urls')),  # Kan ikke endres pga hardkoding i gallery-appen
