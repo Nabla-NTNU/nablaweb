@@ -1,1 +1,79 @@
-{% extends "nabladet/nablad_base.html" %}
+{% extends "base.html" %}
+{% load markup %}
+{% load humanize %}
+{% load comments %}
+{% load mediawiki_links %}
+{% load thumbnail %}
+
+{% block morehead %}
+
+<meta property="og:image" content="{{ nablad.get_picture_url }}" />
+<meta property="og:title" content="{{ nablad.headline|striptags }}" />
+<meta property="og:type"  content="article" />
+<meta property="og:description" content="{% spaceless %}{{ nablad.lead_paragraph|striptags }}{% endspaceless %}" />
+
+{% endblock %}
+
+{% block content %}
+
+{% if nablad.picture %}
+    <img alt="header" width="100%" src="{% thumbnail nablad.picture 770x250 box=nablad.cropping %}">
+{% endif %}
+
+<h2>{{ nablad.headline }}</h2>
+{{ nablad.lead_paragraph|markdown|wikilinks}}
+{{ nablad.body|markdown|wikilinks}}
+
+{# Comments #}
+    {% get_comment_count for nablad as comment_count %}
+
+    {% if comment_count > 0 %}
+        <h3 class="comments-header">Kommentarer</h3>
+    {% endif %}
+
+    {% render_comment_list for nablad %}
+
+    {% if user.is_authenticated %}
+        {% render_comment_form for nablad %}
+    {% else %}
+        <p class="well">Logg inn for å skrive en kommentar</p>
+    {% endif %}
+{# end Comments #}
+
+{% endblock %}
+
+
+{% block sidebar %}
+
+{% include "content/includes/meta.html" with content=nablad %}
+
+<center><a class="btn btn-primary btn-large" href="{{ nablad.file.url }}">
+        Last ned Nabladet {{ nablad.pub_date|date:"F Y" }}
+</a></center>
+
+<br>
+
+<h3>Arkiv</h3>
+<table class="table table-striped">
+{% for n in nablad_list %}
+<tr><td>
+    {% if n == nablad %}
+    {{ n.pub_date|date:"F Y" }}
+    {% else %}
+    <a href="{{ n.get_absolute_url }}"> {{ n.pub_date|date:"F Y" }} </a>
+    {% endif %}
+</td></tr>
+{% endfor %}
+</table>
+
+{% if user.is_staff %}
+<div class="well" style="padding: 8px 0;">
+    <ul class="nav nav-list">
+        <li class="nav-header">Admin</li>
+        <li><a href="{% url admin:nabladet_nablad_change nablad.id %}"><i class="icon-pencil"></i> Endre</a></li>
+        <li><a href="{% url admin:nabladet_nablad_delete nablad.id %}"><i class="icon-trash"></i> Slett</a></li>
+    </ul>
+</div>
+{% endif %}
+
+{% endblock %}

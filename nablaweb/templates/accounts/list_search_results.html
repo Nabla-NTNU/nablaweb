@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load avatar_tags %}
 
 {% block content %}
 
@@ -15,13 +14,14 @@
 
 <table id="user_list" class="table table-condensed table-striped table-bordered" width="100%">
 <thead>
+  <th> </th>
 	<th>Brukernavn</th>
 	<th>Navn</th>
 	<th>Grupper</th>
 </thead>
 {% for user in users %}
 	<tr>
-		<td >
+    <td>
 		{# Brukernavn med lenke til profilen #}
 			<a href="{% url accounts.views.view_member_profile user.username %}">
 				{{ user.username }}

@@ -135,7 +135,6 @@ INSTALLED_APPS = [
     'content',  # Abstrakt: created, updated, created by, updated by. 
     'news',
     'accounts', # Inneholder UserProfile med ekstra informasjon.
-    'avatar',
     'events',
     'jobs',     # Stillingsannonser og firmaer
     'gallery',
