@@ -92,7 +92,10 @@ def edit_profile(request):
         profileForm = ProfileForm(instance=userProfile)
     elif request.method == 'POST':
         userForm = UserForm(request.POST, instance=user)
-        profileForm = ProfileForm(request.POST, instance=userProfile)
+        profileForm = ProfileForm(request.POST, request.FILES, instance=userProfile)
+        from pprint import pprint
+        pprint(request.FILES)
+
         if userForm.is_valid() and profileForm.is_valid():
             userForm.save()
             profileForm.save()
