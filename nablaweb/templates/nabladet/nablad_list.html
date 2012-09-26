@@ -6,21 +6,26 @@
 {% block content %}
 
 <h2>Nabladet</h2>
-<p>Nabladet er vårt kjøre tidsskrift, som blir publisert av redaksjonen flere ganger i semesteret.</p>
+<p>Nabladet er vårt kjære tidsskrift, som blir publisert av <a
+    href="/komite/redaksjonen">redaksjonen</a> flere ganger i semesteret.</p>
 
-
-{% for nablad in nablad_list %}
-    <div class="row">
-        <div class="span8">
-            <!--<h2>{{ nablad.headline }}</h2>-->
-            {{ nablad.lead_paragraph|markdown }}
-            <p><a class="btn" href="{{ nablad.get_absolute_url }">Les mer &raquo;</a></p>
-        </div>
-    </div>
-    <hr>
-
+<table style="table-layout:fixed;"class="table table-striped">
+{% for n in nablad_list %}
+<tr>
+    <td style="width:20%">
+        <a href="{{ n.get_absolute_url }}"> {{ n.pub_date|date:"F Y" }} </a>
+    </td>
+    <td style="width:70%;">
+        {{ n.headline }}
+    <td style="width:10%; align:right;">
+        <a class="btn btn-small" href="{{ n.file.url }}"><i class="icon-download-alt"></i></a>
+    </td>
+</tr>
 {% empty %}
-    <p>Ingen Nablad har blitt lagt til enda.</p>
+    <p>Ingen Nablad er blitt publisert på nettsiden hittil.</p>
 {% endfor %}
+</table>
 
 {% endblock content %}
+
+{% block sidebar %} {% endblock sidebar %}
