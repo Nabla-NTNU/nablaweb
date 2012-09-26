@@ -117,6 +117,16 @@
     /* Red glyph icons */
     .icon-red{background-image:url(../bootstrap/img/glyphicons-halflings-red.png);}
 
+/* Event-liste på forsiden med kommende arrangement */
+.upcoming {
+    padding: 8px 0;
+}
+    .upcoming span {
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        -webkit-opacity: 0.5;
+    }
+
 /* Event-kalender */
 .calendar { 
     width: 100%;
@@ -174,7 +184,6 @@
     .calendar ul li.red { background: url('../img/cal-red.png') no-repeat 0px 2px; }
     
 
-/* Endre profil. TODO: Bytt ut med .center; */
     .centertext { text-align: center; }
 
 /* COMMENTS */

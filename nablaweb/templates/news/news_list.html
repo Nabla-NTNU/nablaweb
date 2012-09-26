@@ -66,7 +66,7 @@ som foregår.</p>
 {% if upcoming_events %}
 
     <h3>Kommende arrangement</h3>
-    <div class="well" style="padding: 8px 0;"><!-- kommende arrangement -->
+    <div class="well upcoming"><!-- kommende arrangement -->
         <ul class="nav nav-list">
 
             {% for event in upcoming_events %}
@@ -75,7 +75,10 @@ som foregår.</p>
                     <time 
                         class="label label-important"
                         datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.M" }}</time> 
-                     {{ event.headline }}
+                        {{ event.headline }} 
+                {% if event.registration_required %}
+                <span title="Ledige plasser / Totalt antall plasser">{{ event.users_attending }}/{{ event.places }}</span>
+                {% endif %}
                 </a>
             </li>
             {% endfor %}
