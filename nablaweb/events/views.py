@@ -11,7 +11,7 @@ from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.decorators import login_required
 from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
-from nablaweb.events.models import Event
+from nablaweb.events.models import Event, EventRegistration
 
 # Administrasjon
 
@@ -196,6 +196,7 @@ class UserEventView(TemplateView):
         context_data['user'] = user
         if user.is_authenticated():
             context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start') 
+            context_data['is_on_a_waiting_list'] = bool( filter(EventRegistration.is_waiting_place , context_data['eventregistration_list']) )
             context_data['penalty_list'] = user.eventpenalty_set.all()
         return context_data
 
