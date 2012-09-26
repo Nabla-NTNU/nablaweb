@@ -1,5 +1,5 @@
 {% load humanize %}
-{% load avatar_tags %}
+{% load thumbnail %}
 {% load markup %}
 {% load mediawiki_links %}
 
@@ -10,7 +10,7 @@
 <div class="row comment" id="c{{ comment.id }}">
 
             <div class="avatar span1">
-                {% avatar comment.user.username 60 %}
+              <img alt="avatar" src="{% thumbnail user.userprofile.avatar 60x60 %}" width = "150" height ="150" >
             </div>
 
             <div class="span7">
