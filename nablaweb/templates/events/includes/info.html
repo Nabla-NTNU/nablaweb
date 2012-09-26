@@ -11,11 +11,11 @@
 </h3>
 {% endif %}
 
-<table class="table table-bordered table-striped content-info">
+<table class="table table-bordered table-striped content-info" style="table-layout: fixed;">
 
     <!-- Fra -->
     <tr>
-        <td>Starter</td>
+        <td style="width:50px;">Starter</td>
         <td>
             <time datetime="{{ event.event_start|date:"c" }}">
                 <b>{{ event.event_start|naturalday }} kl. {{ event.event_start|date:"H:i" }}</b>

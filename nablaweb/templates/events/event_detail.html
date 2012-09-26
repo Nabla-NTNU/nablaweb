@@ -19,9 +19,42 @@
 {{ event.lead_paragraph|markdown|wikilinks}}
 {{ event.body|markdown|wikilinks}}
 </div></div>
+
 <hr>
 
-{% include "events/includes/related_news.html" with event=event %}
+{# Vis påmeldte #}
+{% if user.is_authenticated %}
+    {% if event.eventregistration_set.all %}
+        <h3>Påmeldte</h3>
+    {% endif %}
+    <ul class="thumbnails">
+        {% for registration in event.eventregistration_set.all %}
+        {% with user=registration.user %}
+        <li class="span2"
+            {% if registration.is_waiting_place %} 
+            style="opacity:0.5;-moz-opacity: 0.5;-webkit-opacity:0.5;"
+            {% endif %}>
+            <div class="thumbnail clearfix">
+                <img class="pull-left" style="width:50px; height:50px;" src="{% thumbnail user.userprofile.avatar 50x50 %}" 
+                     alt="">
+
+                <div style="width:80px;text-align:center;" class="pull-right">
+                {% if user.get_full_name %}
+                     {{ user.get_full_name }}
+                {% else %}
+                    {{ user.username }}
+                {% endif %}
+                </div>
+
+            </div>
+        </li>
+        {% endwith %}
+        {% endfor %}
+    </ul>
+
+{% endif %}
+
+<hr>
 
 {% include "content/includes/comments.html" with content=event %}
 

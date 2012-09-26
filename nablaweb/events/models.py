@@ -195,7 +195,9 @@ class Event(AbstractEvent):
     def register_user(self, user):
         if not self.registration_required:
             msg = 'noreg'
-        elif datetime.datetime.now() > self.registration_deadline or datetime.datetime.now() < self.registration_start :
+        elif self.registration_deadline and self.registration_deadline < datetime.datetime.now():
+            msg = 'closed'
+        elif self.registration_start and self.registration_start < datetime.datetime.now():
             msg = 'closed'
         else:
             # TODO: Bruk select_for_update(), når den blir tilgjengelig.
