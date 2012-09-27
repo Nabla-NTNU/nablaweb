@@ -226,7 +226,9 @@ class Event(AbstractEvent):
             reg = regs.get(user=user)
             if self.deregistration_closed is None and reg.is_attending_place():
                 msg = 'not_allowed'
-            elif ( self.deregistration_deadline < datetime.datetime.now() ) and reg.is_attending_place():
+            elif ( self.deregistration_deadline and \
+                   self.deregistration_deadline < datetime.datetime.now() ) and \
+                   reg.is_attending_place():
                 msg = 'dereg_closed'
             else:
                 self.eventregistration_set.get(user=user).delete()
