@@ -21,13 +21,15 @@ class UserForm(forms.ModelForm):
         fields = ('first_name', 'last_name', 'email')
 
 class ProfileForm(forms.ModelForm):
-    birthday = DateField(label="Bursdag", required=False, widget=DateInput(attrs={'placeholder': 'DD.MM.YY', 'class': 'date'}))
+    DATE_FORMATS = ['%d/%m/%Y','%d.%m.%Y','%y-%m-%d','%d/%m/%y','%d.%m.%y','%Y-%m-%d']
+    birthday = DateField(label="Bursdag", required=False, widget=DateInput(attrs={'placeholder': 'DD.MM.YY', 'class': 'date'}, format='%d.%m.%y'),\
+    input_formats=DATE_FORMATS)
     class Meta:
         model = UserProfile
         exclude = ('user','signature','signature_html','show_signatures','time_zone','post_count','autosubscribe','language',)
 
 def is_ntnu_username(username):
-    """Skjekker om brukernavnet finnes i passwd-fila fra en av ntnus studlinuxservere"""
+    """Sjekker om brukernavnet finnes i passwd-fila fra en av ntnus studlinuxservere"""
     try:
         regex = '^%s:' % username
         process = subprocess.Popen(['grep',regex, settings.NTNU_PASSWD], shell=False, stdout=subprocess.PIPE)
