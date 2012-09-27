@@ -8,15 +8,18 @@
         background-color: white;
         background-image: url(../img/bgnoise.png);
         border-bottom: 1px solid black;
-        padding-bottom: 40px;
         padding-top: 20px;
-        padding-right: 20px;
-        padding-left: 20px;
-        margin-right: -20px;
-        margin-left: -20px;
+        padding-bottom: 20px;
     }
 
-
+    @media (max-width: 767px) {
+        #whitebox {
+            margin-left: -20px;
+            margin-right: -20px;
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+    }
 
     header { margin-bottom: 5px; }
     header img { width: 200px; }
