@@ -31,19 +31,17 @@
 {% if is_paginated %}
     <div class="pagination">
         <ul>
-            {% if page_obj.has_previous %}
-                <li><a href="?page={{ page_obj.previous_page_number }}">&larr; Nyere</a></li>
+            {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}">&larr; Eldre</a></li>
             {% endif %}
 
             <li class="disabled">
             <a>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</a>
             </li>
 
-            {% if page_obj.has_next %}
-                <li><a href="?page={{ page_obj.next_page_number }}">Eldre &rarr;</a></li>
+            {% if page_obj.has_previous %}
+                <li><a href="?page={{ page_obj.previous_page_number }}">Nyere &rarr;</a></li>
             {% endif %}
-
-
         </ul>
     </div>
 {% endif %}
