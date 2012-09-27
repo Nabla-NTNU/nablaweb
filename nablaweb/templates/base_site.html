@@ -16,7 +16,7 @@
 
     <!-- Styles -->
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet"><!--Dont modify-->
-    <!--<link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet">-->
+    <link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/default.css" rel="stylesheet"><!-- Modify this instead -->
 
     <!-- HTML5 shim, for IE6-8 support for HTML elements -->
@@ -222,7 +222,7 @@
 
         <!-- reklame -->
         {% block ad %}
-            <div class="box">
+            <div class="box hidden-phone">
                 <img src="http://lorempixel.com/362/200/technics/1/Reklame" class="ad wide" alt="Reklame">
             </div>
 
