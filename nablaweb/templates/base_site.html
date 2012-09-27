@@ -1,4 +1,4 @@
-
+{% load cache %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -123,12 +123,14 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" >
+                        {% cache 3600 com_list_dropdown %}
                         {# Liste over komiteer #}
                         {% for com in coms %}
                         <li><a href="{{ com.get_absolute_url }}">{{ com.com.name }}</a></li>
                         {% empty %}
                         <li><a>Ingen komiteer eksisterer</a></li>
                         {% endfor %}
+                        {% endcache %}
                     </ul>
                 </li>
 
@@ -138,7 +140,7 @@
             {% if user.is_authenticated %}
 
             <!-- bruker-dropdown -->
-
+            {% cache 86400 user-dropdown user.username %}
             <ul class="nav pull-right">
                 <li class="dropdown pull-right">
                     <a href="#bruker"
@@ -159,6 +161,7 @@
                     </ul>
                 </li>
             </ul>
+            {% endcache %}
             <!-- end bruker-dropdown -->
 
             {% else %}
