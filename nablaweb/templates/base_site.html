@@ -79,13 +79,13 @@
 <div class="navbar-inner">
 <div class="container" style="width: auto;">
 
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <!--<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-        </a>
+        </a>-->
 
-        <div class="nav-collapse"><!-- blir gjemt ved små skjermstørrelser -->
+        <!--<div class="nav-collapse">--><!-- blir gjemt ved små skjermstørrelser -->
         
             <!-- navigasjonslenker -->
             <ul class="nav">
@@ -177,7 +177,7 @@
 
             {% endif %}
 
-        </div><!-- end nav-collapse-->
+        <!--</div>--><!-- end nav-collapse-->
         
 </div> <!-- end container -->
 </div> <!-- end navbar-inner -->
@@ -211,7 +211,14 @@
     
 
     <aside class="span4"><!-- sidebar -->
-
+        
+        <h3>Synlige klasser</h3>
+        <code class="visible-phone">.visible-phone<br></code>
+        <code class="visible-tablet">.visible-tablet<br></code>
+        <code class="visible-desktop">.visible-desktop<br></code>
+        <code class="hidden-phone">.hidden-phone<br></code>
+        <code class="hidden-tablet">.hidden-tablet<br></code>
+        <code class="hidden-desktop">.hidden-desktop<br></code>
 
         {% block sidebar %}
             <h3>Jeg er tom</h3>
