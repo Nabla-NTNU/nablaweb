@@ -15,7 +15,7 @@
 
     <!-- Fra -->
     <tr>
-        <td style="width:50px;">Starter</td>
+        <td style="width:60px;">Starter</td>
         <td>
             <time datetime="{{ event.event_start|date:"c" }}">
                 <b>{{ event.event_start|naturalday }} kl. {{ event.event_start|date:"H:i" }}</b>
@@ -50,14 +50,38 @@
     </tr>
     {% endif %}
 
+    <!-- Påmeldingsfrist -->
+    {% if event.registration_deadline %}
+    <tr>
+        <td>Påmeldingsfrist</td>
+        <td>
+            <time datetime="{{ event.registration_deadline|date:"c" }}">
+                {{ event.registration_deadline|naturalday }} kl. {{ event.registration_deadline|date:"H:i" }}
+            </time>
+        </td>
+    </tr>
+    {% endif %}
+
+    <!-- Avmeldingsfrist -->
+    {% if event.deregistration_deadline %}
+    <tr>
+        <td>Avmeldingsfrist</td>
+        <td>
+            <time datetime="{{ event.deregistration_deadline|date:"c" }}">
+                {{ event.deregistration_deadline|naturalday }} kl. {{ event.deregistration_deadline|date:"H:i" }}
+            </time>
+        </td>
+    </tr>
+    {% endif %}
+
     <tr>
         <td style="text-align: center;" colspan="2">
             {% if event.registration_required %}
                 {% if is_registered %}
                     {% if eventregistration.is_waiting_place %}
-                        Du er på venteliste
+                        <b>Du er på venteliste</b>
                     {% else %}
-                        Du er påmeldt
+                        <i class="icon-ok"></i><b>Du er påmeldt</b>
                     {% endif %}
                 {% else %}
                     Påmelding kreves
@@ -74,10 +98,14 @@
         {% if event.registration_required %}
             {% if is_registered %}
                 <a href="{% url events.views.deregister_user event.id %}"
-                   class="btn btn-primary">Meld deg av</a>
+                    class="btn btn-primary">Meld deg av
+                    {% if eventregistration.is_waiting_place %}ventelisten{% endif %}
+                </a>
             {% else %}
                 <a href="{% url events.views.register_user event.id %}"
-                   class="btn btn-primary">Meld deg på</a>
+                    class="btn btn-primary">Meld deg på
+                    {% if event.has_queue and event.is_full %}ventelisten{% endif %} 
+                </a>
             {% endif %}
         {% endif %}
     </td></tr>
@@ -87,7 +115,9 @@
 
 {% if event.registration_required %}
 <h3>{{ event.users_attending }} påmeldt av {{ event.places }} plasser</h3>
-<div class="progress{% if event.percent_full > 90 %} danger{% endif %}">
+<div class="progress
+    {% if 80 <= event.percent_full and event.percent_full < 100 %}progress-warning{% endif %}
+    {% if event.percent_full == 100 %}progress-danger{%endif %}">
     <div class="bar" style="width: {{ event.percent_full }}%;"></div>
 </div>
 
