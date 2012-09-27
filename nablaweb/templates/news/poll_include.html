@@ -1,36 +1,40 @@
-{% load humanize %}
+{% load humanize %}{# widthratio #}
 
 {% if poll %}
+<br>
+<div class="poll well hidden-phone">
 
-{% if user in poll.users_voted.all %}
+    <h4>{{ poll.question }}</h4>
 
-<h3>{{ poll.question }}</h3>
+    {% if user in poll.users_voted.all %}
+        {# Has voted, display results #}
+        {% for choice in poll.choice_set.all %}
+            <div class="choice">{{ choice.choice }}</div>
+            <div class="progress">
+                <div class="bar" style="width:{% widthratio choice.votes poll.get_total_votes 100 %}%">
+                    <span class="percent{% if choice.votes == 0 %} zero{% endif %}">
+                        {% widthratio choice.votes poll.get_total_votes 100%}%
+                    </span>
+                </div>
+            </div>
+        {% endfor %}
 
-<ul class="bargraph">
-{% for choice in poll.choice_set.all %}
-    <li><span style="width: {% widthratio choice.votes poll.get_total_votes 190 %}px">{{ choice.choice }} &ndash; {{ choice.votes|add:"0" }} stemmer</span></li>
-{% endfor %}
-<li>Totalt {{ poll.get_total_votes }} stemmer.</li>
-</ul>
-
-{% else %}
-
-<h3>{{ poll.question }}</h3>
-
-<form action="/poll/{{ poll.id }}/vote/" method="post">{% csrf_token %}
-<fieldset>
-<div style="margin-left: 20px; margin-top: 13px;">
-{% for choice in poll.choice_set.all %}
-    <label for="choice{{ forloop.counter }}" style="display: inline;">
-    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" style="display: inline-block; margin-right: 5px; margin-bottom: 10px;"/>{{ choice.choice }}</label><br/>
-{% endfor %}
+    {% else %}
+        {# Has not voted, display form #}
+        <form action="{% url poll.views.vote poll.id %}?next={% url news_list %}" method="post">
+            {% csrf_token %}
+            {% for choice in poll.choice_set.all %}
+                <label class="radio">
+                    <input type="radio" name="choice" value="{{ choice.id }}">
+                    <div class="choice">{{ choice.choice }}</div>
+                </label>
+            {% endfor %}
+            {% if user.is_authenticated %}
+                <button type="submit" class="btn">Stem</button>
+            {% else %}
+            <div class="center" style="color:#999;">Logg inn for å stemme</div>
+            {% endif %}
+        </form>
+    {% endif %}
 </div>
-<div class="form-actions">
-<input type="submit" value="Vote" />
-</div>
-</fieldset>
-</form>
-
-{% endif %}
-
-{% endif %}
+{% endif %}{# poll #}

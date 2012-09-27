@@ -1,4 +1,3 @@
-{% load avatar_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,11 +12,13 @@
                    fysikk og matematikk-masterprogrammet på NTNU.">
     <meta name="author" content="Nabla">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- for mobile browsere + bootstrap -->
 
     <!-- Styles -->
-    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet"><!-- Generated with LESS -->
-    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" rel="stylesheet"><!-- Generated with LESS -->
-    <link href="{{ STATIC_URL }}css/default.css" rel="stylesheet"><!-- Site specific, except for variables -->
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet"><!--Dont modify-->
+    <link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/default.css" rel="stylesheet"><!-- Modify this instead -->
 
     <!-- HTML5 shim, for IE6-8 support for HTML elements -->
     <!--[if lt IE 9]>
@@ -60,24 +61,18 @@
 
 <header>
     <div class="page-header">
-    <a href="/"><img src="{{ STATIC_URL }}img/nabla_logo_black.png" alt="Nabla"></a>
-    <div class="span4">
-        <div class="control-group">
-            <div class="controls">
-                <div class="input-prepend">
-                    <form class="input-append" method="get" action="/search/" id="search">
-                        <span class="headersearch">
-                        <input placeholder="Søk" name="q" id="searchtop"/>
-                        <button class="btn add-on" type="submit">
-                            <i class="icon-search"></i>
-                        </button>
-                        </span>
-                    </form>
-                </div>
+        <a class="pull-left" href="/">
+            <img src="{{ STATIC_URL }}img/nabla_logo_black.png" alt="Nabla">
+        </a>
+
+        <form id="searchtop" class="pull-right form-search" method="get" action="/search/">
+            <div class="input-append">
+                <input name="q" placeholder="Søk..." type="text" class="span2 search-query">
+                <button type="submit" class="btn">
+                    <i class="icon-search"></i> 
+                </button>
             </div>
-        </div>
-    </div>
-    </div>
+        </form>
 </header>
 
 
@@ -85,13 +80,13 @@
 <div class="navbar-inner">
 <div class="container" style="width: auto;">
 
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <!--<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-        </a>
+        </a>-->
 
-        <div class="nav-collapse"><!-- blir gjemt ved små skjermstørrelser -->
+        <!--<div class="nav-collapse">--><!-- blir gjemt ved små skjermstørrelser -->
         
             <!-- navigasjonslenker -->
             <ul class="nav">
@@ -128,10 +123,11 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" >
+                        {# Liste over komiteer #}
                         {% for com in coms %}
                         <li><a href="{{ com.get_absolute_url }}">{{ com.com.name }}</a></li>
                         {% empty %}
-                        <li><a>ALL GLORY TO THE HYPNOTOAD</a></li>
+                        <li><a>Ingen komiteer eksisterer</a></li>
                         {% endfor %}
                     </ul>
                 </li>
@@ -139,14 +135,6 @@
             </ul>
             <!-- end navigasjonslenker -->
 
-            <!-- søkefelt -->
-            <!--
-            <form class="navbar-search pull-left" action="">
-                <input type="text" class="search-query span2" placeholder="Søk">
-            </form>
-            -->
-            <!-- end søkefelt -->
-                
             {% if user.is_authenticated %}
 
             <!-- bruker-dropdown -->
@@ -156,7 +144,7 @@
                     <a href="#bruker"
                         class="dropdown-toggle no-ajaxy"
                         data-toggle="dropdown">
-                        <span class="icon-user"></span> {{ user.username }}
+                        <span class="icon-user"></span>{% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
@@ -182,7 +170,7 @@
                     <tr>
                         <td><input type="text" placeholder="Bruker" name="username" /></td>
                         <td><input type="password"  placeholder="Passord" name="password" /></td>
-                        <td><input class="submit btn btn-info" type="submit" value="Login" /></td>
+                        <td><button class="submit btn btn-info" type="submit">Login</button></td>
                     </tr>
                 </table>
             </form>
@@ -190,7 +178,7 @@
 
             {% endif %}
 
-        </div><!-- end nav-collapse-->
+        <!--</div>--><!-- end nav-collapse-->
         
 </div> <!-- end container -->
 </div> <!-- end navbar-inner -->
@@ -224,7 +212,14 @@
     
 
     <aside class="span4"><!-- sidebar -->
-
+        
+        <h3>Synlige klasser</h3>
+        <code class="visible-phone">.visible-phone<br></code>
+        <code class="visible-tablet">.visible-tablet<br></code>
+        <code class="visible-desktop">.visible-desktop<br></code>
+        <code class="hidden-phone">.hidden-phone<br></code>
+        <code class="hidden-tablet">.hidden-tablet<br></code>
+        <code class="hidden-desktop">.hidden-desktop<br></code>
 
         {% block sidebar %}
             <h3>Jeg er tom</h3>
@@ -235,7 +230,7 @@
 
         <!-- reklame -->
         {% block ad %}
-            <div class="box">
+            <div class="box hidden-phone">
                 <img src="http://lorempixel.com/362/200/technics/1/Reklame" class="ad wide" alt="Reklame">
             </div>
 
@@ -359,7 +354,7 @@
 
 
 <!-- Bootstrap. Det er mulig å velge kun komponenter som skal brukes -->
-<script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap.js"></script>
 
 <!-- History.js -->
 {# Skaper krøll med Django Toolbar #} 

@@ -11,7 +11,7 @@ from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.decorators import login_required
 from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
-from nablaweb.events.models import Event
+from nablaweb.events.models import Event, EventRegistration
 
 # Administrasjon
 
@@ -171,11 +171,17 @@ class EventDetailView(NewsDetailView):
     def get_context_data(self, **kwargs):
         context = super(EventDetailView, self).get_context_data(**kwargs)
         object_name = self.object.content_type.model
-        # Fnner ut om innlogget bruker er påmeldt arrangementet
-        if self.request.user.is_anonymous():
+        event = self.object
+        user = self.request.user
+
+        if user.is_anonymous():
             context['is_registered'] = False
         else:
-            context['is_registered'] = context[object_name].is_registered(self.request.user)
+            # Innlogget, så sjekk om de er påmeldt
+            context['is_registered'] = event.is_registered(user)
+            if context['is_registered']:
+                # Henter eventregistration for denne brukeren hvis han/hun er påmeldt
+                context['eventregistration'] = event.eventregistration_set.get(user=user)
         return context
 
 
@@ -189,7 +195,8 @@ class UserEventView(TemplateView):
         user = self.request.user
         context_data['user'] = user
         if user.is_authenticated():
-            context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start')
+            context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start') 
+            context_data['is_on_a_waiting_list'] = bool( filter(EventRegistration.is_waiting_place , context_data['eventregistration_list']) )
             context_data['penalty_list'] = user.eventpenalty_set.all()
         return context_data
 
@@ -221,7 +228,7 @@ def deregister_user(request, event_id):
     token = event.deregister_user(request.user)
     message = messages[token]
     django_messages.add_message(request, django_messages.INFO, message)
-    return HttpResponseRedirect(reverse('event_detail', kwargs={'pk': event_id}))
+    return HttpResponseRedirect(event.get_absolute_url())
 
 
 # Eksporter

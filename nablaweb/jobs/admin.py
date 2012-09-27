@@ -15,6 +15,25 @@ from jobs.models import Advert, Company, RelevantForChoices, TagChoices, YearCho
 
 class AdvertAdmin(admin.ModelAdmin):
     # relevant_for_form = RelevantForAdminForm
+    fields = (  "picture",
+                "cropping",
+                "company",
+                "headline",
+                "slug",
+                "lead_paragraph",
+                "body",
+                "contact_info",
+                "deadline_date",
+                "show_removal_date",
+                "removal_date",
+                "relevant_for_group",
+                "relevant_for_year",
+                "info_file",
+                "antall_stillinger")
+    
+    prepopulated_fields = {"slug": ("headline",)}
+                
+                
     pass
     
 class CompanyAdmin(admin.ModelAdmin):

@@ -17,3 +17,21 @@
 </dl>
 <p><small>Sist endret {{ com.last_changed_date }}</small></p>
 {% endblock content %}
+
+
+{% block sidebar %}
+
+<h3>Nablas komiteer</h3>
+<table class="table table-striped">
+{% for c in compages %}
+<tr><td>
+    {% if c == com %}
+    {{ c.com.name }}
+    {% else %}
+    <a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a>
+    {% endif %}
+</td></tr>
+{% endfor %}
+</table>
+
+{% endblock sidebar %}

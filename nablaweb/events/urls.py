@@ -4,6 +4,8 @@ from django.conf.urls.defaults import *
 from nablaweb.events.views import EventDetailView, EventListView, UserEventView
 from nablaweb.events.feeds import RecentEvents
 
+from django.contrib.auth.decorators import login_required
+
 urlpatterns = patterns('nablaweb.events.views',
 
     # Administrasjon
@@ -23,14 +25,15 @@ urlpatterns = patterns('nablaweb.events.views',
         EventListView.as_view(),
         name='event_list'),
 
+    # Bruker
+    url(r'^mine$', login_required(UserEventView.as_view()), name="view_user_events"),
+    (r'^(?P<event_id>\d{1,8})/registrering$', 'register_user'),
+    (r'^(?P<event_id>\d{1,8})/avregistrering$', 'deregister_user'),
+
     url(r'^(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$',
         EventDetailView.as_view(context_object_name="event"),
         name='event_detail'),
 
-    # Bruker
-    url(r'^mine$', UserEventView.as_view(), name="view_user_events"),
-    (r'^(?P<event_id>\d{1,8})/registrering$', 'register_user'),
-    (r'^(?P<event_id>\d{1,8})/avregistrering$', 'deregister_user'),
 
     # Eksporter
     (r'^(?P<event_id>\d{1,8})/eksporter$', 'ical_event'),

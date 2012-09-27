@@ -1,12 +1,21 @@
 {% load humanize %}
 
 <!-- event-info -->
-<h3>Informasjon</h3>
-<table class="table table-bordered table-striped content-info">
+<h3 class="pull-left">Informasjon </h3>
+
+{% if event.facebook_url %}
+<h3 class="pull-right">
+    <a target="_blank" href="{{ event.facebook_url }}" class="btn btn-mini">
+        <span class="icon-custom icon-facebook"></span> Vis på Facebook
+    </a>
+</h3>
+{% endif %}
+
+<table class="table table-bordered table-striped content-info" style="table-layout: fixed;">
 
     <!-- Fra -->
     <tr>
-        <td>Starter</td>
+        <td style="width:60px;">Starter</td>
         <td>
             <time datetime="{{ event.event_start|date:"c" }}">
                 <b>{{ event.event_start|naturalday }} kl. {{ event.event_start|date:"H:i" }}</b>
@@ -41,11 +50,39 @@
     </tr>
     {% endif %}
 
+    <!-- Påmeldingsfrist -->
+    {% if event.registration_deadline %}
+    <tr>
+        <td>Påmeldingsfrist</td>
+        <td>
+            <time datetime="{{ event.registration_deadline|date:"c" }}">
+                {{ event.registration_deadline|naturalday }} kl. {{ event.registration_deadline|date:"H:i" }}
+            </time>
+        </td>
+    </tr>
+    {% endif %}
+
+    <!-- Avmeldingsfrist -->
+    {% if event.deregistration_deadline %}
+    <tr>
+        <td>Avmeldingsfrist</td>
+        <td>
+            <time datetime="{{ event.deregistration_deadline|date:"c" }}">
+                {{ event.deregistration_deadline|naturalday }} kl. {{ event.deregistration_deadline|date:"H:i" }}
+            </time>
+        </td>
+    </tr>
+    {% endif %}
+
     <tr>
         <td style="text-align: center;" colspan="2">
             {% if event.registration_required %}
                 {% if is_registered %}
-                    Du er påmeldt
+                    {% if eventregistration.is_waiting_place %}
+                        <b>Du er på venteliste</b>
+                    {% else %}
+                        <i class="icon-ok"></i> <b>Du er påmeldt</b>
+                    {% endif %}
                 {% else %}
                     Påmelding kreves
                 {% endif %}
@@ -58,19 +95,29 @@
     </tr>
 
     <tr><td colspan="2" style="text-align: center;">
-        {% if event.registration_required and not is_registered %}
-        <a href="{% url nablaweb.events.views.register_user event.id %}" class="btn btn-primary">Meld deg på</a>
-        {% endif %}
-        {% if event.facebook_url %}
-        <a href="{{ event.facebook_url }}" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
+        {% if event.registration_required %}
+            {% if is_registered %}
+                <a href="{% url events.views.deregister_user event.id %}"
+                    class="btn btn-primary">Meld deg av
+                    {% if eventregistration.is_waiting_place %}ventelisten{% endif %}
+                </a>
+            {% else %}
+                <a href="{% url events.views.register_user event.id %}"
+                    class="btn btn-primary">Meld deg på
+                    {% if event.has_queue and event.is_full %}ventelisten{% endif %} 
+                </a>
+            {% endif %}
         {% endif %}
     </td></tr>
 
 </table>
 
+
 {% if event.registration_required %}
 <h3>{{ event.users_attending }} påmeldt av {{ event.places }} plasser</h3>
-<div class="progress{% if event.percent_full > 90 %} danger{% endif %}">
+<div class="progress
+    {% if 80 <= event.percent_full and event.percent_full < 100 %}progress-warning{% endif %}
+    {% if event.percent_full == 100 %}progress-danger{%endif %}">
     <div class="bar" style="width: {{ event.percent_full }}%;"></div>
 </div>
 

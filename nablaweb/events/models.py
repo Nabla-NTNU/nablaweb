@@ -136,11 +136,18 @@ class Event(AbstractEvent):
         else:
             return self.headline[0:18].capitalize() + '...'
     
+    # Sjekker om det er for sent å melde seg av.
+    def deregistration_closed(self):
+        if self.deregistration_deadline:
+            return self.deregistration_deadline < datetime.datetime.now()
+        else:
+            return True
+
     # Returnerer antall ledige plasser, dvs antall plasser som
     # umiddelbart gir brukeren en garantert plass, og ikke bare
     # ventelisteplass.
     def free_places(self):
-        try: return max(self.places - self.eventregistration_set.count(), 0)
+        try: return max(self.places - self.eventregistration_set.filter(attending = True).count(), 0)
         # Dersom arrangementet ikke krever påmelding er self.places None.
         except TypeError: return 0
 
@@ -150,19 +157,20 @@ class Event(AbstractEvent):
 
     # Returnerer antall brukere som er påmeldt.
     def users_attending(self):
-        try: return min(self.eventregistration_set.count(), self.places)
-        # Dersom arrangementet ikke krever påmelding er self.places None.
-        except TypeError: return 0
+        return self.eventregistration_set.filter(attending = True).count()
 
     # Returnerer antall brukere som står på venteliste.
     def users_waiting(self):
-        try: return max(self.eventregistration_set.count() - self.places, 0)
-        # Dersom arrangementet ikke krever påmelding er self.places None.
-        except TypeError: return 0
+        return self.eventregistration_set.filter(attending = False).count()
     
     # Returnerer hvor mange prosent av plassene som er tatt
     def percent_full(self):
-        return self.users_attending() * 100 / self.places
+        if self.places == None:
+            return 0
+        elif  self.places != 0:
+            return min(self.users_attending() * 100 / self.places, 100)
+        else:
+            return 100
 
     # Returnerer antall brukere som er registrerte, og som dermed
     # enten er påmeldte eller står på venteliste.
@@ -185,29 +193,30 @@ class Event(AbstractEvent):
     # Forsøker å melde brukeren på arrangementet.  Returnerer en
     # tekststreng som indikerer hvor vellykket operasjonen var.
     def register_user(self, user):
-        if self.registration_deadline is None:
+        if not self.registration_required:
             msg = 'noreg'
-        elif datetime.datetime.now() > self.registration_deadline:
+        elif self.registration_deadline and self.registration_deadline < datetime.datetime.now():
+            msg = 'closed'
+        elif self.registration_start and self.registration_start < datetime.datetime.now():
             msg = 'closed'
         else:
             # TODO: Bruk select_for_update(), når den blir tilgjengelig.
             # https://docs.djangoproject.com/en/dev/ref/models/querysets/#select-for-update
             regs = self.eventregistration_set # .select_for_update()
-            places = self.places
             try:
                 reg = regs.get(user=user)
                 msg = 'reg_exists'
             except EventRegistration.DoesNotExist:
-                number = regs.count() + 1
-                if number > places and not self.has_waiting_list():
-                    msg = 'full'
-                else:
-                    reg = regs.create(event=self, user=user, number=number)
-                    if reg.number <= places:
-                        msg = 'attend'
-                    else:
+                if self.is_full():
+                    if self.has_waiting_list():
+                        reg = regs.create(event=self, user=user, number=self.users_waiting()+1, attending=False)
                         msg = 'queue'
-        return msg
+                    else:#No waiting list
+                        msg = 'full'
+                else:
+                    reg = regs.create(event=self, user=user, attending=True)
+                    msg = 'attend'
+            return msg
 
     # Melder brukeren av arrangementet. I praksis sørger metoden bare
     # for at brukeren ikke er påmeldt lengre, uavhengig av status før.
@@ -215,65 +224,28 @@ class Event(AbstractEvent):
         regs = self.eventregistration_set
         try:
             reg = regs.get(user=user)
-            
-            if self.deregistration_deadline is None:
+            if self.deregistration_closed is None and reg.is_attending_place():
                 msg = 'not_allowed'
-            elif self.deregistration_deadline < datetime.datetime.now():
+            elif ( self.deregistration_deadline and \
+                   self.deregistration_deadline < datetime.datetime.now() ) and \
+                   reg.is_attending_place():
                 msg = 'dereg_closed'
             else:
-                self.move_user_to_place(user, 1e12)
                 self.eventregistration_set.get(user=user).delete()
+                self.update_lists()
                 msg = 'dereg'
-
         # Brukeren er ikke påmeldt
         except EventRegistration.DoesNotExist:
             msg = 'not_reg'
-
         return msg
 
-    # Flytter brukeren til den oppgitte plassen, eller først/sist
-    # dersom plassnummeret er for lavt/høyt. Returnerer det nye
-    # plassnummeret, eller None dersom brukeren ikke er påmeldt.
-    def move_user_to_place(self, user, place):
-        # TODO: Bruk select_for_update(), når den blir tilgjengelig.
-        # https://docs.djangoproject.com/en/dev/ref/models/querysets/#select-for-update
-        reg_set = self.eventregistration_set # .select_for_update()
-
-        # Antall registreringer.
-        regs = reg_set.count()
-
-        # Dersom "ønsket" plass er ikke-positiv, endre til 1.
-        new = max(1, place)
-
-        # Dersom "ønsket" plass er høyere enn antall påmeldte, endre til siste plass.
-        new = min(regs, new)
-
-        # Forsøk å hente ut registreringen til brukeren som skal flyttes.
-        try: u_reg = reg_set.get(user=user)
-        # Returner dersom brukeren ikke er påmeldt.
-        except EventRegistration.DoesNotExist: return None
-
-        # Hent ut nåværende kønummer.
-        current = u_reg.number
-
-        # Brukeren er allerede på riktig plass.
-        if current == new: return new
-
-        # Brukeren skal oppover på ventelisten, dvs. lavere kønummer.
-        elif new < current:
-            # Flytt brukere mellom ny og gammel plass nedover.
-            reg_set.filter(number__range=(new, current-1)).update(number=models.F('number')+1)
-
-        # Brukeren skal nedover på ventelisten, dvs. høyere kønummer.
-        else:
-            # Flytt brukere mellom ny og gammel plass oppover.
-            reg_set.filter(number__range=(current+1, new)).update(number=models.F('number')-1)
-
-        # Lagre det nye kønummeret.
-        u_reg.number = new
-        u_reg.save()
-
-        return new
+    def update_lists(self):
+        waiting_list = list( self.eventregistration_set.filter(attending = False).order_by('number').reverse() )
+        for n in xrange( min(self.free_places(), len(waiting_list)) ):
+            waiting_list.pop().set_attending()
+        for eventregistration in waiting_list:
+            eventregistration.number -= waiting_list[-1].number-1
+            eventregistration.save()
 
     # Sletter overflødige registreringer.
     def _prune_queue(self):
@@ -281,10 +253,9 @@ class Event(AbstractEvent):
         if not self.registration_required:
             self.eventregistration_set.all().delete()
 
-        # Dersom arrangementet ikke har venteliste lengre,
-        # eller antall plasser reduseres.
+        # Dersom arrangementet ikke har venteliste lengre.
         elif not self.has_waiting_list():
-            self.eventregistration_set.filter(number__gt=self.places).delete()
+            self.eventregistration_set.filter(attending = False).delete()
 
     # Tester at feltene har verdier som lovet i kommentarene ovenfor.
     def test_event_fields(self):
@@ -338,19 +309,35 @@ class EventRegistration(models.Model):
     # Datoen brukeren ble registrert.
     date = models.DateTimeField(auto_now_add=True, null=True)
 
-    # Kønummer som tilsvarer plass i køen.
-    number = models.PositiveIntegerField(blank=False, null=True)
+    # Kønummer som tilsvarer plass på ventelisten.
+    number = models.PositiveIntegerField(blank=True, null=True)
+
+    # Om man har fått plass på eventet.
+    attending = models.BooleanField(blank=False, null=False)
 
     def __unicode__(self):
-        return u'EventRegistration: %s, %d: %s' % (self.event, self.number, self.user)
+        return u'EventRegistration: %s, %s: %s' % (self.event, self.attending, self.user)
 
     # Returnerer True dersom registreringen er en plass på venteliste.
     def is_waiting_place(self):
-        return self.number > self.event.places
+        return not self.attending
+
+    # Returnerer hvilken plass man har på ventelisten. None hvis man har plass eller det ikke finnes.
+    def waiting_list_place(self):
+        if not self.attending:
+            return self.number
+        else:
+            return None
+
+    def set_attending(self):
+        if not self.attending:
+            self.attending = True
+            self.save()
+            #OG SEND EN MAIL.
 
     # Returnerer True dersom registreringen er en garantert plass.
     def is_attending_place(self):
-        return self.number <= self.event.places
+        return self.attending
     is_attending_place.boolean = True
     is_attending_place.short_description = "har plass"
 

@@ -1,4 +1,5 @@
 {% load humanize %}
+{% load l10n %}
 
 <h3>Meta</h3>
 <table class="table table-condensed content-info">
@@ -6,7 +7,7 @@
 
     <!-- Publisert -->
     <tr>
-        <td>Publisert</td>
+        <td style="width:35%;">Publisert</td>
         <td>
             <time datetime="{{ content.created_date|date:"c" }}">
                 {{ content.created_date|naturalday }} kl. {{ content.created_date|date:"H:i" }}
@@ -33,7 +34,7 @@
         <td>Sist endret</td>
         <td>
             <time datetime="{{ content.last_changed_date|date:"c" }}">
-                {{ content.last_changed_date|naturalday }} kl. {{ content.last_changed_date|date:"H:i" }}
+                {{ content.last_changed_date|naturalday|localize }} kl. {{ content.last_changed_date|date:"H:i" }}
             </time>
         </td>
     </tr>

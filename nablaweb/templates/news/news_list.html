@@ -31,19 +31,17 @@
 {% if is_paginated %}
     <div class="pagination">
         <ul>
-            {% if page_obj.has_previous %}
-                <li><a href="?page={{ page_obj.previous_page_number }}">&larr; Nyere</a></li>
+            {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}">&larr; Eldre</a></li>
             {% endif %}
 
             <li class="disabled">
             <a>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</a>
             </li>
 
-            {% if page_obj.has_next %}
-                <li><a href="?page={{ page_obj.next_page_number }}">Eldre &rarr;</a></li>
+            {% if page_obj.has_previous %}
+                <li><a href="?page={{ page_obj.previous_page_number }}">Nyere &rarr;</a></li>
             {% endif %}
-
-
         </ul>
     </div>
 {% endif %}
@@ -55,12 +53,18 @@
 
 <h3>Om Nabla</h3>
 
-<p>Nabla er linjeforeningen for sivilingeniørprogrammet <b>Fysikk og matematikk</b> på NTNU. Du kan lese mer om studiet på <a href="http://www.ntnu.no/studier/mtfyma">NTNU sine nettsider</a>. På denne nettsiden finner du informasjon om studiet, linjeforeningen, og hva som foregår.</p>
+<p>Nabla er linjeforeningen for sivilingeniørprogrammet <b>Fysikk og
+    matematikk</b> på NTNU. Du kan lese mer om studiet på 
+<a href="http://www.ntnu.no/studier/mtfyma">NTNU sine nettsider</a>. 
+På denne nettsiden finner du informasjon om studiet, linjeforeningen, og hva
+som foregår.</p>
+
+<p>Dette er en <b>beta</b>-versjon av nettsiden, og er kun tilgjengelig for utviklerne. Du ser kanskje etter <a href="http://nabla.no/">Nabla.no</a>?</p>
 
 {% if upcoming_events %}
 
     <h3>Kommende arrangement</h3>
-    <div class="well" style="padding: 8px 0;"><!-- kommende arrangement -->
+    <div class="well upcoming"><!-- kommende arrangement -->
         <ul class="nav nav-list">
 
             {% for event in upcoming_events %}
@@ -69,7 +73,10 @@
                     <time 
                         class="label label-important"
                         datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.M" }}</time> 
-                     {{ event.headline }}
+                        {{ event.headline }} 
+                {% if event.registration_required %}
+                <span title="Ledige plasser / Totalt antall plasser">{{ event.users_attending }}/{{ event.places }}</span>
+                {% endif %}
                 </a>
             </li>
             {% endfor %}

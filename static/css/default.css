@@ -5,14 +5,21 @@
 
     /* Div that holds all parts of page except footer */
     #whitebox {
-        background-color: #FFFFFF; 
+        background-color: white;
         background-image: url(../img/bgnoise.png);
         border-bottom: 1px solid black;
-        padding-bottom: 40px;
         padding-top: 20px;
+        padding-bottom: 20px;
     }
 
-
+    @media (max-width: 767px) {
+        #whitebox {
+            margin-left: -20px;
+            margin-right: -20px;
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+    }
 
     header { margin-bottom: 5px; }
     header img { width: 200px; }
@@ -23,9 +30,10 @@
     h3 { margin-bottom: 5px; }
 
 
-    .navbar-form { width: 156px; padding-right: 10px; }
+    /* 172px: magisk nummer, finnes ved tipping */
+    .navbar-form { width: 175px; padding-right: 10px; }
     .navbar-form td { width: 55px; }
-    .navbar input { width: 50px; }
+    .navbar input { width: 51px; }
 
 
 /* Utility classes */
@@ -68,11 +76,6 @@
     .wide {
         width: 100%;
     }
-
-    .input-append button.add-on {
-        height: inherit !important;
-    }
-
 
 /* MathJAX customisation */
 
@@ -120,6 +123,16 @@
     
     /* Red glyph icons */
     .icon-red{background-image:url(../bootstrap/img/glyphicons-halflings-red.png);}
+
+/* Event-liste på forsiden med kommende arrangement */
+.upcoming {
+    padding: 8px 0;
+}
+    .upcoming span {
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        -webkit-opacity: 0.5;
+    }
 
 /* Event-kalender */
 .calendar { 
@@ -178,7 +191,6 @@
     .calendar ul li.red { background: url('../img/cal-red.png') no-repeat 0px 2px; }
     
 
-/* Endre profil. TODO: Bytt ut med .center; */
     .centertext { text-align: center; }
 
 /* COMMENTS */
@@ -212,69 +224,44 @@
         width: 75%;
     }
 
-/* bargrafer fra http://djangosnippets.org/snippets/44/ */
 
-    ul.bargraph {
-        margin: 0;
-        padding: 0;
-        width: 190px;
-        background-color: #fff;
-    }
-      
-    ul.bargraph li {
-        font-size: 11px;
-        line-height: 20px;
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
-        border-bottom: 1px solid #ebeff2;
-        background-color: #fff;
-    }
- 
-    ul.bargraph li span {
-        background-color: #a9d2f2;
-        display: block;
-        color: #125a95;
-        font-weight: bold;
-        padding: 0 0 0 5px;
-        white-space: nowrap;
+/* for logo + søkefelt i headeren */
+
+    .page-header {
+        overflow: hidden;    /* clear floats */     
+        padding: 0px;
+        border-bottom: 0px;
+        margin-bottom: 20px;
+        margin-top: 0px;
     }
 
-/* Søkefelt på toppen */
+    form#searchtop {
+        margin-bottom: 0px;
+        margin-top: 19px; /* Logohøyde minus høyden på formen */
+    }
 
-.page-header {
-    overflow: hidden;    /* clear floats */     
-    padding: 0px;
-    border-bottom: 0px;
-    margin-bottom: 5px;
-    margin-top: 0px;
-}
+/* Endringer i Bootstrap-farger */
+.navbar-inner {border: 1px solid #c0c0c0;}/* Navbar border */
+.navbar .nav > li > a { color: #555;}/* Navbar link color */
 
-.page-header div {
-    float: right;        /* float search content right */          
-}
+/* News */
 
-.input-prepend input {
-    float: left;
-}
+    /* Poll */
+    .poll .choice {
+        margin-bottom: 5px;
+    }
 
-.input-prepend {
-    margin-bottom: 0px;
-}
+    .poll .progress {
+        background-image: -webkit-linear-gradient(top, #ececec, white);
+        background-image: -o-linear-gradient(top, #ececec, white);
+        background-image: -moz-linear-gradient(linear, 0 0, 0 100%, from(#ececec), to(white));
+        background-image: linear-gradient(to bottom, #ececec, white);
+        box-shadow: inset 0 1px 0 rgba(0,0,0,0.2);
+    }
 
-header .span4 .control-group {
-    margin-bottom: 0px;
-}
+    .bar .percent.zero {
+        color: #999;
+        padding-left: 5px;
+    }
 
-input#searchtop {
-    margin-bottom: 0px;
-}
-
-header .span4 {
-    margin-top: 16px;
-}
-
-.input-prepend form {
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-}
+    .poll form { margin-bottom: 0; }

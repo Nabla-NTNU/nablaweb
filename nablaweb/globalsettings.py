@@ -135,7 +135,6 @@ INSTALLED_APPS = [
     'content',  # Abstrakt: created, updated, created by, updated by. 
     'news',
     'accounts', # Inneholder UserProfile med ekstra informasjon.
-    'avatar',
     'events',
     'jobs',     # Stillingsannonser og firmaer
     'gallery',
@@ -246,10 +245,11 @@ def use_debug_toolbar(ip):
 
 # Django-image-cropping
 ###################################################
-from easy_thumbnails import defaults
+from easy_thumbnails.conf import Settings as easy_thumb_Settings
+easy_thumb_settings = easy_thumb_Settings
 THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
-) + defaults.PROCESSORS
+) + easy_thumb_settings.THUMBNAIL_PROCESSORS
 
 # Innstillinger for pybbm
 
