@@ -83,24 +83,32 @@
                 <li><a href="{% url event_list %}">Arrangement</a></li>
                 <li><a href="{% url jobs_list %}">Karriere</a></li>
                 <li><a href="/wiki">Wiki</a></li>
-                <li><a href="/forum">Forum</a></li>
 
                 <li class="dropdown">
                     <a href="#komiteer"
                         class="dropdown-toggle no-ajaxy"
                         data-toggle="dropdown">
-                        Annet nyttig
+                        Om Nabla
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" >
-                        <li><a href="{% url haystack_search %}">Søk</a></li>
-                        <li><a href="{% url quote_list %}">Gullkorn</a></li>
-                        <li><a href="{% url irc %}">#nabla på IRC</a></li>
+			<li><a href="{% url quote_list %}">Gullkorn</a></li>
+			<li><a href="{% url nablad_list %}">Nabladet</a></li>
+                    </ul>
+                </li>
+
+		<li class="dropdown">
+                    <a href="#komiteer"
+                        class="dropdown-toggle no-ajaxy"
+                        data-toggle="dropdown">
+                        Sosialt
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" >
+                        <li><a href="/forum">Forum</a></li>
+                        <li><a href="{% url irc %}">Chat</a></li>
                         <li><a href="{% url gallery.views.index %}">Galleri</a></li>
-                        <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
-                        <li><a href="{% url feedback.views.feedback_form %}">Gi tilbakemelding</a></li>
-                        <li><a href="{% url nablad_list %}">Nabladet</a></li>
-                        <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
+                        <li><a href="{% url accounts.views.list %}">Medlemsliste</a></li>
                     </ul>
                 </li>
                 
@@ -122,6 +130,9 @@
                         {% endcache %}
                     </ul>
                 </li>
+
+		{% if not user.is_authenticated %}<li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>{% endif %}
+
 
             </ul>
             {# end navigasjonslenker #}
@@ -292,7 +303,7 @@
         {# om nabla #}
         <div class="span4">
             <h2>Funnet en feil?</h2>
-            <p>Den nye Nabla-nettsiden er fremdeles i sin barndom. Har du funnet en feil, eller noe som burde forbedres? <a href="https://bitbucket.org/andreros/nablaweb/issues/new">Rapporter det her!</a></p>
+            <p>Den nye Nabla-nettsiden er fremdeles i sin barndom. Har du funnet en feil, eller noe som burde forbedres? <br><a href="{% url feedback.views.feedback_form %}">Gi tilbakemelding!</a>
 
             <p>For andre henvendelser til webkom, send en mail: <a class="email"
               href="mailto:webkom(at)nabla.ntnu.no">webkom&nabla;nabla.ntnu.no</a></p>
