@@ -13,14 +13,19 @@
     <meta name="author" content="Nabla">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- for mobile browsere + bootstrap -->
 
-    <!-- Styles -->
-    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet"><!--Dont modify-->
-    <link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/default.css" rel="stylesheet"><!-- Modify this instead -->
+    {# Bootstrap + responsive + icons from external CDN #}
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">
 
-    <!-- HTML5 shim, for IE6-8 support for HTML elements -->
+    {# Uncomment if CDN fails #}
+    {#<link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">#}
+    {#<link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet">#}
+
+
+    {# Our custom CSS #}
+    <link href="{{ STATIC_URL }}css/default.css" rel="stylesheet">
+
+    {# HTML5 shim, for IE6-8 support for HTML elements #}
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -31,33 +36,16 @@
     <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
 
-    <!-- Obligatory jQuery -->
-    <!-- Loaded at the top for easier use -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     {% block more_head %}
     {% endblock %}
-<script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-30407973-1']);
-  _gaq.push(['_setDomainName', 'nabla.no']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
 </head>
 
 <body>
 
-<!-- Denne boksen gir hele siden hvit bakgrunn, for å imitere sticky footer -->
+{# Siden består av en svart bakgrunn, og en hvit div som inneholder alt utenom footer #}
 <div id="whitebox" class="box-shadow">
-<div class="container"><!-- main container -->
-
+<div class="container">{# main container #}
 
 <header>
     <div class="page-header">
@@ -75,43 +63,52 @@
         </form>
 </header>
 
-
 <nav class="navbar">
 <div class="navbar-inner">
 <div class="container" style="width: auto;">
 
-        <!--<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        {% comment %}
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-        </a>-->
+        </a>
+        {% endcomment %}
 
-        <!--<div class="nav-collapse">--><!-- blir gjemt ved små skjermstørrelser -->
+        {#<!--<div class="nav-collapse">-->{# blir gjemt ved små skjermstørrelser #}
         
-            <!-- navigasjonslenker -->
+            {# navigasjonslenker #}
             <ul class="nav">
                 <li><a href="/?">Hjem</a></li>
                 <li><a href="{% url event_list %}">Arrangement</a></li>
                 <li><a href="{% url jobs_list %}">Karriere</a></li>
                 <li><a href="/wiki">Wiki</a></li>
-                <li><a href="/forum">Forum</a></li>
 
                 <li class="dropdown">
                     <a href="#komiteer"
                         class="dropdown-toggle no-ajaxy"
                         data-toggle="dropdown">
-                        Annet nyttig
+                        Om Nabla
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" >
-                        <li><a href="{% url haystack_search %}">Søk</a></li>
-                        <li><a href="{% url quote_list %}">Gullkorn</a></li>
-                        <li><a href="{% url irc %}">#nabla på IRC</a></li>
+			<li><a href="{% url quote_list %}">Gullkorn</a></li>
+			<li><a href="{% url nablad_list %}">Nabladet</a></li>
+                    </ul>
+                </li>
+
+		<li class="dropdown">
+                    <a href="#komiteer"
+                        class="dropdown-toggle no-ajaxy"
+                        data-toggle="dropdown">
+                        Sosialt
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" >
+                        <li><a href="/forum">Forum</a></li>
+                        <li><a href="{% url irc %}">Chat</a></li>
                         <li><a href="{% url gallery.views.index %}">Galleri</a></li>
-                        <li><a href="{% url accounts.views.list %}">Brukerliste</a></li>
-                        <li><a href="{% url feedback.views.feedback_form %}">Gi tilbakemelding</a></li>
-                        <li><a href="{% url nablad_list %}">Nabladet</a></li>
-                        <li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>
+                        <li><a href="{% url accounts.views.list %}">Medlemsliste</a></li>
                     </ul>
                 </li>
                 
@@ -134,12 +131,15 @@
                     </ul>
                 </li>
 
+		{% if not user.is_authenticated %}<li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>{% endif %}
+
+
             </ul>
-            <!-- end navigasjonslenker -->
+            {# end navigasjonslenker #}
 
             {% if user.is_authenticated %}
 
-            <!-- bruker-dropdown -->
+            {# bruker-dropdown #}
             {% cache 86400 user-dropdown user.username %}
             <ul class="nav pull-right">
                 <li class="dropdown pull-right">
@@ -162,11 +162,11 @@
                 </li>
             </ul>
             {% endcache %}
-            <!-- end bruker-dropdown -->
+            {# end bruker-dropdown #}
 
             {% else %}
 
-            <!-- loginboks -->
+            {# loginboks #}
             <form class="navbar-form pull-right" action="/login/" method="post">
                 {% csrf_token %}
                 <table>
@@ -177,15 +177,15 @@
                     </tr>
                 </table>
             </form>
-            <!-- end loginboks -->
+            {# end loginboks #}
 
             {% endif %}
 
-        <!--</div>--><!-- end nav-collapse-->
+            {#<!--</div>--><!-- end nav-collapse-->#}
         
-</div> <!-- end container -->
-</div> <!-- end navbar-inner -->
-</nav> <!-- end navbar -->
+</div> {# end container #}
+</div> {# end navbar-inner #}
+</nav> {# end navbar #}
 
 
 
@@ -203,7 +203,7 @@
 
 <div class="row"><!-- main row -->
 
-    <!-- content -->
+    {# content #}
     <div class="span8">
         {% block content %} 
         {% endblock content %}
@@ -211,10 +211,10 @@
         {% block breadcrumb %}
         {% endblock breadcrumb %}
     </div> 
-    <!-- end content container -->
+    {# end content container #}
     
 
-    <aside class="span4"><!-- sidebar -->
+    <aside class="span4">{# sidebar #}
         
         <h3>Synlige klasser</h3>
         <code class="visible-phone">.visible-phone<br></code>
@@ -264,17 +264,17 @@
         {% endblock %}
 
 
-    </aside><!-- end sidebar -->
+    </aside>{# end sidebar #}
     
 
 
-</div><!-- end main row -->
+</div>{# end main row #}
 
 {% endblock main %} 
 
 
-</div><!-- end main container  -->
-</div><!-- end whitebox -->
+</div>{# end main container  #}
+</div>{# end whitebox #}
 
 
 <footer>
@@ -282,7 +282,7 @@
     <div class="container">
     <div class="row">
     
-        <!-- kontakt -->
+        {# kontakt #}
         <div class="span4 kontakt">
             <h2>Kontakt</h2>
 
@@ -298,22 +298,24 @@
                 Norway
             </address>
         </div>
-        <!-- end kontakt -->
+        {# end kontakt #}
         
-        <!-- om nabla -->
+        {# om nabla #}
         <div class="span4">
             <h2>Funnet en feil?</h2>
-            <p>Den nye Nabla-nettsiden er fremdeles i sin barndom. Har du funnet en feil, eller noe som burde forbedres? <a href="https://bitbucket.org/andreros/nablaweb/issues/new">Rapporter det her!</a></p>
+            <p>Den nye Nabla-nettsiden er fremdeles i sin barndom. Har du funnet en feil, eller noe som burde forbedres? <br><a href="{% url feedback.views.feedback_form %}">Gi tilbakemelding!</a>
 
             <p>For andre henvendelser til webkom, send en mail: <a class="email"
               href="mailto:webkom(at)nabla.ntnu.no">webkom&nabla;nabla.ntnu.no</a></p>
             
         </div>
-        <!-- end om nabla -->
+        {# end om nabla #}
 
-        <!-- twitterbox -->
+        {# twitterbox #}
         <div class="span4" id="twitterbox">
-            <!-- Standard Twitter-widget -->
+
+            {% comment %}
+            {# Standard Twitter-widget #}
             <script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
             <script>
             new TWTR.Widget({
@@ -341,53 +343,73 @@
                 }
             }).render().setUser('nabla_ntnu').start();
             </script>
+            {% endcomment %}
+
         </div>
-        <!-- end twitterbox -->
+        {# end twitterbox #}
 
         
-    </div><!-- end row -->
-    </div><!-- end container -->
+    </div>{# end row #}
+</div>{# end container #}
 </footer>
 
+{# Obligatory jQuery #}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
+{# Google Analytics #}
+<script type="text/javascript">
 
-<!-- Scripts are loaded at the bottom to improve page loading speed.
-     TODO: Make a build script that combines and compresses them -->
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30407973-1']);
+  _gaq.push(['_setDomainName', 'nabla.no']);
+  _gaq.push(['_trackPageview']);
 
-
-
-<!-- Bootstrap. Det er mulig å velge kun komponenter som skal brukes -->
-<script src="{{ STATIC_URL }}js/bootstrap.js"></script>
-
-<!-- History.js -->
-{# Skaper krøll med Django Toolbar #} 
-<!--<script src="{{ STATIC_URL }}js/jquery.history.js"></script>-->
-
-
-<script type="text/x-mathjax-config">
-// Differences from standard config:
-//  - $tex$ is allowed.
-//  - LaTeX inside <code> tags now works.
-MathJax.Hub.Config({
-    tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-        inlineMath: [ ['$','$'], ["\\(","\\)"] ]
-    }
-});
-
-// Hooks the event which is triggered when a Latex equation is rendered, and
-// adds the class .equation to the parent <code> element. This is because
-// Markdown creates code elements around equations.
-MathJax.Hub.Register.MessageHook("New Math", function( message ) {
-    var script = MathJax.Hub.getJaxFor( message[1]).SourceElement();
-    $(script).parent("code").addClass("jax");
-})
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
 
 </script>
 
+{# Bootstrap JS from external CDN #}
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/js/bootstrap.min.js"></script>
+{#<script src="{{ STATIC_URL }}js/bootstrap.js"></script>#}
+
+{% block more_js %}
+{% endblock %}
+
+{# History.js #}
+{# Skaper krøll med Django Toolbar #} 
+{#<script src="{{ STATIC_URL }}js/jquery.history.js"></script>#}
+
+{% comment %}
+{# Midlertidig skrudd av for å debugge hastigheten på sidelasting #}
+{# MathJax for LaTeX rendering #}
+<script type="text/x-mathjax-config">
+    // Differences from standard config:
+    //  - $tex$ is allowed.
+    //  - LaTeX inside <code> tags now works.
+    MathJax.Hub.Config({
+        tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ]
+        }
+    });
+
+    // Hooks the event which is triggered when a Latex equation is rendered, and
+    // adds the class .equation to the parent <code> element. This is because
+    // Markdown creates code elements around equations.
+    MathJax.Hub.Register.MessageHook("New Math", function( message ) {
+        var script = MathJax.Hub.getJaxFor( message[1]).SourceElement();
+        $(script).parent("code").addClass("jax");
+    })
+</script>
+
 <script type="text/javascript" 
-        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-        </script>
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+{% endcomment %}
 
 </body>
 </html>
