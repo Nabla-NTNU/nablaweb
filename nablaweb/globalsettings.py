@@ -172,7 +172,7 @@ INSTALLED_APPS = [
     # South migrations 
     # Når det gjøres endringer i modeller må etterfulges av kommandoen
     # ./manage.py migrate --auto
-    'south',
+#    'south',
 
     # Djangoting
     'django.contrib.auth',

@@ -77,6 +77,8 @@ class Content(models.Model):
 
     # Slugs
     slug = models.SlugField(null=True, blank=True, help_text="Denne teksten vises i adressen til siden, og trengs vanligvis ikke å endres")
+    
+    allow_comments = models.BooleanField(blank=True, verbose_name="Tillat kommentarer", help_text="Hvorvidt kommentering er tillatt", default=True)
 
     class Meta:
         abstract = True
