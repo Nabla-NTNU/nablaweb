@@ -1,7 +1,2 @@
-# Disse er ikke testet. Kjør hver enkelt install manuelt om du er usikker.
-
-sudo aptitude install python-pip memcached npm
-
-sudo pip install Django==1.4 Markdown django-math-captcha django-image-cropping django-model-utils pybbm-tbw pytils pure_pagination south
-
-sudo npm install uglify-js less
+Les her for en liste over avhengigheter:
+https://bitbucket.org/andreros/nablaweb/wiki/Installasjon

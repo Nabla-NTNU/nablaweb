@@ -29,7 +29,7 @@ MANAGERS = ADMINS
 # Må endres lokalt hvis du ikke bruker sqlite3
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.sqlite3', # 'mysql' eller 'sqlite3'
         'NAME': os.path.join(PROJECT_ROOT, '..', 'sqlite.db'), # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
@@ -41,6 +41,8 @@ DATABASES = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        #'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        #'LOCATION': '127.0.0.1:11211'
     }
 }
 
@@ -119,7 +121,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'pybb.middleware.PybbMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # Sett denne i personlige settings, ettersom den gjør alt mye tregere
+    # Bruk use_debug_toolbar(din_ip) for å skru på denne
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
 ]
@@ -135,37 +137,38 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = [
-    ################
-    # Interne ting #
-    ################
+    ##########################
+    # Internt utviklede apps #
+    ##########################
     'content',  # Abstrakt: created, updated, created by, updated by. 
-    'news',
+    'news',     # Nyheter. Arver content.
     'accounts', # Inneholder UserProfile med ekstra informasjon.
-    'events',
+    'events',   # Arrangement. Arver nyheter.
     'jobs',     # Stillingsannonser og firmaer
-    'gallery',
-    'bedpres',  # Utvider events med BPC-tilkobling.
-    # 'homepage', # Viser news og events sammen. Ikke i bruk.
+    'gallery',  # Bildegalleri
+    'bedpres',  # Utvider events med BPC-tilkobling. Arver events.
     'com',      # Viser sider for komiteene.
     'quotes',   # Tilfeldig sitat.
-    # 'feedback', # Feedback om siden til webkom. Bruk heller issue-tracker.
-    'nabladet', # Liste over nablad.
-    'poll',
+    'nabladet', # Liste over nablad. Arver news.
+    'poll',     # Spørreundersøkelser
+    # 'feedback', # Hva gjør egentlig denne? Virker ikke som den trengs for at
+                  # tilbakemeldings-formen skal fungere.
+    # 'homepage', # Viser news og events sammen. Ikke i bruk.
 
-    #################
-    # Eksterne ting #
-    #################
+    ###########################
+    # Eksternt utviklede apps #
+    ###########################
 
-    # Debug toolbar viser SQL som er kjørt under sidelastingen,
-    # templatevariabler, og litt til. For å skru den på, fjern kommentaren
-    # og legg IP til PC-en du laster siden med til i INTERNAL_IPS.
+    # Debug toolbar viser informasjon om sidelastingen For å skru den på, bruk
+    # funksjonen use_debug_toolbar(din_ip) i settings.py
     #'debug_toolbar',
 
     # Sessionprofile gjør det mulig å logge direkte inn på blant annet Wikien,
     # phpBB, og annet, hvis man er logget på Nablaweb
     'sessionprofile',
 
-    # Django-image-cropping (pip install) gjør det mulig for brukere å croppe opplastede bilder
+    # Django-image-cropping (pip install) gjør det mulig for staff å croppe
+    # opplastede bilder
     'easy_thumbnails', # thumbnail-taggen i templates
     'image_cropping', # Admindelen
 
@@ -227,6 +230,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 AUTH_PROFILE_MODULE= 'accounts.UserProfile'
 LOGIN_URL = '/login/'
 
+
 # Math captcha
 ##################################################
 MATH_CAPTCHA_QUESTION = ''
@@ -239,15 +243,31 @@ MATH_CAPTCHA_OPERATORS = '+-*/%'
 DEBUG_TOOLBAR_CONFIG = {
     "INTERCEPT_REDIRECTS": False,
 }
-# Legg til IP-en din her for å vise debug-toolbar.
+# IP-er som har tilgang til debug toolbar. Bruk funksjonen under for å legge til din
 INTERNAL_IPS = ['127.0.0.1', ]
 
-#Funksjon for å starte debug toolbar
-
-def use_debug_toolbar(ip):
+# Informasjon som debug toolbar viser
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+    # Trenger installasjon, se linken:
+    # https://github.com/jbalogh/django-debug-cache-panel
+    'cache_panel.CachePanel' 
+)
+# Funksjon for å starte debug toolbar
+# Tar inn IP-adresser som skal ha tilgang til å vise debug toolbar
+def use_debug_toolbar(*ip_addresses):
+    for ip in ip_addresses:
+        INTERNAL_IPS.append(ip)
     INSTALLED_APPS.append('debug_toolbar')
-    INTERNAL_IPS.append(ip)
     MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+
 
 # Django-image-cropping
 ###################################################
@@ -257,8 +277,9 @@ THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
 ) + easy_thumb_settings.THUMBNAIL_PROCESSORS
 
-# Innstillinger for pybbm
 
+# PyBBm
+##################################################
 PYBB_DEFAULT_TITLE = 'Forum'
 PYBB_DEFAULT_AUTOSUBSCRIBE = False
 PYBB_FREEZE_FIRST_POST = False
@@ -268,7 +289,9 @@ PYBB_DEFAULT_TIME_ZONE = 1
 PYBB_MARKUP = 'markdown'
 PYBB_ENABLE_SELF_CSS = True
 
-import os
+
+# Haystack search
+##################################################
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
