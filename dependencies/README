@@ -9,9 +9,6 @@ sudo cp *.py /usr/local/lib/python2.7/dist-packages/markdown/extensions
 sudo cp *.py /usr/lib/pymodules/python2.7/markdown/extensions
 # avhengig av hvilken mappe som eksisterer
 
-# Twitter bootstrap #
-kjør make fra hovedmappen, eller twitter-bootstrap-mappen.
-
 # Django-image-cropping trenger noen static-filer. Om du bruker staticfiles-
 # appen er dette unødvendig.
 cd ../static
