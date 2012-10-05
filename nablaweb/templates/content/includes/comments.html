@@ -1,5 +1,6 @@
 {% load comments %}
 
+{% if content.allow_comments %}
 {# Comments #}
     {% get_comment_count for content as comment_count %}
 
@@ -15,3 +16,4 @@
         <p class="well">Logg inn for å skrive en kommentar</p>
     {% endif %}
 {# end Comments #}
+{% endif %}

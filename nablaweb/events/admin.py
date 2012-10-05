@@ -29,6 +29,7 @@ class EventAdmin(NewsAdmin):
               "deregistration_deadline",
               "places",
               "has_queue",
+              "allow_comments",
               "facebook_url")
     form = EventForm
     list_display = ['__unicode__', 'registration_required']

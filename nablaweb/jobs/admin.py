@@ -29,7 +29,8 @@ class AdvertAdmin(admin.ModelAdmin):
                 "relevant_for_group",
                 "relevant_for_year",
                 "info_file",
-                "antall_stillinger")
+                "antall_stillinger",
+                "allow_comments")
     
     prepopulated_fields = {"slug": ("headline",)}
                 
