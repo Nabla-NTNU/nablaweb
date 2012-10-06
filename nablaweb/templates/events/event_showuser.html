@@ -48,9 +48,13 @@
             {% if eventregistration.event.deregistration_closed %}
                 Utløpt{% if eventregistration.is_waiting_place %}<sup>1</sup>{% endif %}
             {% else %}
-                <time datetime="{{ eventregistration.event.deregistration_deadline|date:"c" }}">
-                    {{ eventregistration.event.deregistration_deadline.date|naturalday }} kl. {{ eventregistration.event.deregistration_deadline|date:"H:i" }}
-                </time>
+                {% if eventregistration.event.deregistration_deadline %}
+                    <time datetime="{{ eventregistration.event.deregistration_deadline|date:"c" }}">
+                        {{ eventregistration.event.deregistration_deadline.date|naturalday }} kl. {{ eventregistration.event.deregistration_deadline|date:"H:i" }}
+                    </time>
+                {% else %}
+                  Ingen
+                {% endif %}
             {% endif %}
             </td>
             <td style="text-align:right;">

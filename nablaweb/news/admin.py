@@ -12,7 +12,8 @@ class NewsAdmin(ContentAdmin):
               "headline",
               "slug",
               "lead_paragraph",
-              "body")
+              "body",
+              "allow_comments")
     prepopulated_fields = {"slug": ("headline",)}
 
     def queryset(self, request):

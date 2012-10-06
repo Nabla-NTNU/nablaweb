@@ -141,7 +141,7 @@ class Event(AbstractEvent):
         if self.deregistration_deadline:
             return self.deregistration_deadline < datetime.datetime.now()
         else:
-            return True
+            return False
 
     # Returnerer antall ledige plasser, dvs antall plasser som
     # umiddelbart gir brukeren en garantert plass, og ikke bare
