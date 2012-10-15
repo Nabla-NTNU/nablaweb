@@ -138,10 +138,8 @@ class Event(AbstractEvent):
     
     # Sjekker om det er for sent å melde seg av.
     def deregistration_closed(self):
-        if self.deregistration_deadline:
-            return self.deregistration_deadline < datetime.datetime.now()
-        else:
-            return False
+        return self.deregistration_deadline and (self.deregistration_deadline < datetime.datetime.now())
+
 
     # Returnerer antall ledige plasser, dvs antall plasser som
     # umiddelbart gir brukeren en garantert plass, og ikke bare
@@ -197,7 +195,7 @@ class Event(AbstractEvent):
             msg = 'noreg'
         elif self.registration_deadline and self.registration_deadline < datetime.datetime.now():
             msg = 'closed'
-        elif self.registration_start and self.registration_start < datetime.datetime.now():
+        elif self.registration_start and self.registration_start > datetime.datetime.now():
             msg = 'closed'
         else:
             # TODO: Bruk select_for_update(), når den blir tilgjengelig.
@@ -216,7 +214,7 @@ class Event(AbstractEvent):
                 else:
                     reg = regs.create(event=self, user=user, attending=True)
                     msg = 'attend'
-            return msg
+        return msg
 
     # Melder brukeren av arrangementet. I praksis sørger metoden bare
     # for at brukeren ikke er påmeldt lengre, uavhengig av status før.
@@ -226,9 +224,7 @@ class Event(AbstractEvent):
             reg = regs.get(user=user)
             if self.deregistration_closed is None and reg.is_attending_place():
                 msg = 'not_allowed'
-            elif ( self.deregistration_deadline and \
-                   self.deregistration_deadline < datetime.datetime.now() ) and \
-                   reg.is_attending_place():
+            elif  self.deregistration_closed() and reg.is_attending_place():
                 msg = 'dereg_closed'
             else:
                 self.eventregistration_set.get(user=user).delete()
