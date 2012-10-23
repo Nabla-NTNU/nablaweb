@@ -10,7 +10,10 @@ import bpc_core
 
 
 class BedPres(AbstractEvent):
-    bpcid = models.CharField(verbose_name="BPC-id", max_length=16, unique=True, blank=True)
+    bpcid = models.CharField(verbose_name="BPC-id", max_length=16, unique=True, blank=True, help_text = "Dette er id'en som blir brukt internt hos BPC. Ikke endre den hvis du ikke vet du gjør.")
+    _bpc_info = []
+    _bpc_waiting_list = []
+    _bpc_attending_list = []
 
     class Meta:
         verbose_name = "bedriftspresentasjon"
@@ -32,19 +35,50 @@ class BedPres(AbstractEvent):
         return "Du ble påmeldt"
 
     def deregister_user(self, user):
-        raise NotImplementedError
-        response = bpc_core.rem_attending(
-            event=self.bpc_id,
-            username=user.username,
-            )
+        try:
+            response = bpc_core.rem_attending(event=self.bpcid, username=user.username)
+            return "Du ble meldt av"
+        except bpc_core.BPCResponseException as exception:
+            return exception.message 
 
     def is_registered(self, user):
-        try:
-            response = bpc_core.get_attending(event = self.bpcid)
-            usernames = [u['username'] for u in response['users']]
-            return user.username in usernames
-        except bpc_core.BPCResponseException:
-            return False 
+        return user.username in self.bpc_attending_list
 
-    def move_user_to_place(self, user, place):
-        raise NotImplementedError
+    def is_waiting(self,user):
+        return user.username in self.bpc_waiting_list
+
+    def free_places(self):
+        return int(self.bpc_info['seats_available'])
+
+    def is_full(self):
+        return free_places() == 0
+
+
+    # Laster ned informasjon om bedpressen fra BPC og lagrer det midlertidig i
+    # BedPres-objektet. Kan brukes som en vanlig variabel.
+    @property
+    def bpc_info(self):
+        if not self._bpc_info:
+            try: 
+                self._bpc_info = bpc_core.get_events(event=self.bpcid)['event'][0]
+            except bpc_core.BPCResponseError:
+                pass
+        return self._bpc_info
+
+    
+    @property
+    def bpc_attending_list(self):
+        if not self._bpc_attending_list:
+            try: 
+                self._bpc_attending_list = [x['username'] for x in bpc_core.get_attending(event=self.bpcid)['users']]
+            except bpc_core.BPCResponseError:
+                pass
+        return self._bpc_attending_list
+    @property
+    def bpc_waiting_list(self):
+        if not self._bpc_waiting_list:
+            try: 
+                self._bpc_waiting_list =[x['username'] for x in bpc_core.get_waiting(event=self.bpcid)['users']]
+            except bpc_core.BPCResponseError:
+                return []
+        return self._bpc_waiting_list

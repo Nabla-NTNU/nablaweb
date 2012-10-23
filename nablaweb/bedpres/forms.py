@@ -37,7 +37,8 @@ class BPCForm(forms.Form):
         bpc_events = bpc_core.get_events()['event']
         bpc_ids = [event['id'] for event in bpc_events]
         local_events = BedPres.objects.filter(bpcid__in=bpc_ids)
-        local_ids = [event.id for event in local_events]
+        local_ids = [event.bpcid for event in local_events]
+        print local_ids
         available_events = filter(lambda e: e['id'] not in local_ids, bpc_events)
 
         choices = [(event['id'], event['title']) for event in available_events]
