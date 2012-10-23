@@ -12,6 +12,8 @@ from django.views.generic import TemplateView, ListView
 from django.contrib.auth.decorators import login_required
 from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
 from nablaweb.events.models import Event, EventRegistration
+from nablaweb.bedpres.models import BedPres
+from itertools import chain
 
 # Administrasjon
 
@@ -82,7 +84,7 @@ class EventDeleteView(NewsDeleteView):
 class EventListView(ListView):
     model = Event
     context_object_name = "event_list"
-    queryset = Event.objects.all()
+    queryset = Event.objects.all() 
 
     # TODO: For performance reasons, only fetch the needed events.
     # That is, from Monday in the first week, to Sunday in the last week.
@@ -141,9 +143,10 @@ class EventListView(ListView):
                 if day.weekday() == 0:
                     calendar['weeks'][week]['weeknumber'] = day.isocalendar()[1]
 
-                # Get the events which start at the current day,
+                # Get the events and bedpresses which start at the current day,
                 # or between two dates if an end date exists
-                events = [event for event in context['event_list']
+                all_events = chain(context['event_list'], BedPres.objects.all())
+                events = [event for event in all_events
                         if (event.event_end and event.event_start.date() <= day
                         and day <= event.event_end.date()) or event.event_start.date() == day]
 

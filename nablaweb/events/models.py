@@ -100,9 +100,13 @@ class AbstractEvent(News):
     def move_user_to_place(self, user, place):
         raise NotImplementedError
         
+    # Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke.
     def get_short_name(self):
-        raise NotImplementedError
-
+        if self.short_name:
+            return self.short_name
+        else:
+            return self.headline[0:18].capitalize() + '...'
+    
 class Event(AbstractEvent):
 
     class Meta:
@@ -128,13 +132,6 @@ class Event(AbstractEvent):
         
         if (self.facebook_url == "http://"):
             self.facebook_url = ""
-    
-    # Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke.
-    def get_short_name(self):
-        if self.short_name:
-            return self.short_name
-        else:
-            return self.headline[0:18].capitalize() + '...'
     
     # Sjekker om det er for sent å melde seg av.
     def deregistration_closed(self):

@@ -45,7 +45,11 @@
         <td style="text-align: center;" colspan="2">
             {% if event.registration_required %}
                 {% if is_registered %}
-                    Du er påmeldt
+                    {% if is_attending %}
+                       Du er påmeldt
+                    {% else %}
+                       Du står på venteliste
+                    {% endif %}
                 {% else %}
                     Påmelding kreves
                 {% endif %}
@@ -59,7 +63,9 @@
 
     <tr><td colspan="2" style="text-align: center;">
         {% if not is_registered %}
-        <a href="{% url nablaweb.bedpres.views.register_user_view event.id %}" class="btn btn-primary">Meld deg på</a>
+            <a href="{% url nablaweb.bedpres.views.register_user event.id %}" class="btn btn-primary">Meld deg på</a>
+        {% else %}
+            <a href="{% url nablaweb.bedpres.views.deregister_user event.id %}" class="btn btn-primary">Meld deg av</a>
         {% endif %}
         <a href="#notimplemented" class="btn"><span class="icon-custom icon-facebook"></span> Vis på Facebook</a>
     </td></tr>
