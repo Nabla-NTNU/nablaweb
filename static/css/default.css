@@ -1,6 +1,7 @@
 /* MAIN */
     body { 
         background-color: #000; /* Background-color of footer */
+        word-break: break-word;
     }
 
     /* Div that holds all parts of page except footer */
