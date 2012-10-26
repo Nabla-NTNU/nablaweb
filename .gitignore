@@ -5,6 +5,10 @@
 *.swp
 *.swo
 
+# Symlinks som er forskjellige fra system til system
+static/admin/
+static/admin
+
 # Personlige settings
 nablaweb/settings.py
 nablaweb/wsgi.py
