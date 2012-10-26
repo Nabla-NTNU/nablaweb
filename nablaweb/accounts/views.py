@@ -181,4 +181,3 @@ def user_register(request):
     return render(request,"accounts/user_registration.html",
                                {'form':form}
                                )
-

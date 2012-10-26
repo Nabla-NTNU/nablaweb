@@ -29,11 +29,29 @@
     h2 { margin-bottom: 5px; }
     h3 { margin-bottom: 5px; }
 
+    .registrations {
+        margin-top: -5px;
+    }
+
+    .registrations span {
+        margin-left: 3px;
+    }
+
+    .registrations .waiting-place {
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        -webkit-opacity: 0.5;
+    }
+
 
     /* 172px: magisk nummer, finnes ved tipping */
     .navbar-form { width: 175px; padding-right: 10px; }
     .navbar-form td { width: 55px; }
     .navbar input { width: 51px; }
+
+    .news_item {
+        word-break: break-word;
+    }
 
 
 /* Utility classes */
