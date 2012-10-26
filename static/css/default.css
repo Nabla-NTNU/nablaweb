@@ -1,7 +1,6 @@
 /* MAIN */
     body { 
         background-color: #000; /* Background-color of footer */
-        word-break: break-word;
     }
 
     /* Div that holds all parts of page except footer */
@@ -35,6 +34,10 @@
     .navbar-form { width: 175px; padding-right: 10px; }
     .navbar-form td { width: 55px; }
     .navbar input { width: 51px; }
+
+    .news_item {
+        word-break: break-word;
+    }
 
 
 /* Utility classes */
