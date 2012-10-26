@@ -258,7 +258,7 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.logger.LoggingPanel',
     # Trenger installasjon, se linken:
     # https://github.com/jbalogh/django-debug-cache-panel
-    'cache_panel.CachePanel' 
+    'cache_panel.panel.CacheDebugPanel' 
 )
 # Funksjon for å starte debug toolbar
 # Tar inn IP-adresser som skal ha tilgang til å vise debug toolbar
@@ -266,6 +266,7 @@ def use_debug_toolbar(*ip_addresses):
     for ip in ip_addresses:
         INTERNAL_IPS.append(ip)
     INSTALLED_APPS.append('debug_toolbar')
+    INSTALLED_APPS.append('cache_panel')
     MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 
