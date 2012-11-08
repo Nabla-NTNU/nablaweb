@@ -9,22 +9,8 @@
 
 {% block content %}
 
-<div class="row"><div class="span8">
-
-    {% if bedpres.picture %}
-        <img alt="" width="100%" src="{% thumbnail bedpres.picture 770x250 box=bedpres.cropping %}">
-    {% endif %}
-
-<h2>{{ bedpres.headline }}</h2>
-{{ bedpres.lead_paragraph|markdown|wikilinks}}
-{{ bedpres.body|markdown|wikilinks}}
-</div></div>
-<hr>
-
-{% include "events/includes/related_news.html" with event=bedpres %}
-
+{% include "news/includes/text_content.html" with news=bedpres%}
 {% include "content/includes/comments.html" with content=bedpres %}
-
 {% endblock %}
 
 

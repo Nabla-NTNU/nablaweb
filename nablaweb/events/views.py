@@ -182,6 +182,7 @@ class EventDetailView(NewsDetailView):
         else:
             # Innlogget, så sjekk om de er påmeldt
             context['is_registered'] = event.is_registered(user)
+            context['is_attending'] = event.is_attending(user)
             if context['is_registered']:
                 # Henter eventregistration for denne brukeren hvis han/hun er påmeldt
                 context['eventregistration'] = event.eventregistration_set.get(user=user)

@@ -2,7 +2,7 @@
 
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from news.models import News
 import datetime
 from urlparse import urlparse
@@ -87,6 +87,10 @@ class AbstractEvent(News):
 
     def is_registered(self, user):
         raise NotImplemented
+    def is_attending(self, user):
+        raise NotImplemented
+    def is_waiting(self, user):
+        raise NotImplemented
 
     def has_waiting_list(self):
         raise NotImplemented
@@ -99,6 +103,15 @@ class AbstractEvent(News):
 
     def move_user_to_place(self, user, place):
         raise NotImplementedError
+
+    def get_users_registered(self):
+        raise NotImplemented
+
+    def get_users_attending(self):
+        raise NotImplemented
+
+    def get_users_waiting(self):
+        raise NotImplemented
         
     # Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke.
     def get_short_name(self):
@@ -175,16 +188,23 @@ class Event(AbstractEvent):
 
     # Returnerer True dersom brukeren er registrert, False ellers.
     def is_registered(self, user):
-        try:
-            self.eventregistration_set.get(user=user)
-            return True
-        except EventRegistration.DoesNotExist:
-            return False
+        return self.eventregistration_set.filter(user=user).exists()
+    def is_attending(self, user):
+        return self.eventregistration_set.filter(user=user,attending=True).exists()
+    def is_waiting(self,user):
+        return self.eventregistration_set.filter(user=user,attending=False).exists()
 
     # Returnerer True dersom arrangementet har venteliste, False ellers.
     def has_waiting_list(self):
         return bool(self.has_queue)
 
+    def get_users_registered(self):
+        return [e.user for e in self.eventregistration_set.all()]
+    def get_users_attending(self):
+        return [e.user for e in self.eventregistration_set.filter(attending=True)]
+    def get_users_waiting(self):
+        return [e.user for e in self.eventregistration_set.filter(attending=False)]
+        
     # Forsøker å melde brukeren på arrangementet.  Returnerer en
     # tekststreng som indikerer hvor vellykket operasjonen var.
     def register_user(self, user):

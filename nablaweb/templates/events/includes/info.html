@@ -38,6 +38,8 @@
     <!-- Sted -->
     <tr><td>Sted</td><td>{{ event.location }}</td></tr>
 
+
+{% if event.registration_required %}
     <!-- Registrering åpner -->
     {% if event.registration_start %}
     <tr>
@@ -77,14 +79,14 @@
     <tr>
         <td style="text-align: center;" colspan="2">
             {% if event.registration_required %}
-                {% if is_registered %}
-                    {% if eventregistration.is_waiting_place %}
-                        <b>Du er på venteliste</b>
-                    {% else %}
-                        <i class="icon-ok"></i> <b>Du er påmeldt</b>
-                    {% endif %}
+                {% if is_attending %}
+                    <i class="icon-ok"></i> <b>Du er påmeldt</b>
                 {% else %}
-                    Påmelding kreves
+                    {% if is_registered %}
+                        Du står på venteliste
+                    {% else %}
+                        Påmelding kreves
+                    {% endif %}
                 {% endif %}
             {% else %}
                 Påmelding unødvendig
@@ -94,8 +96,13 @@
 
     </tr>
 
-    <tr><td colspan="2" style="text-align: center;">
+
+
+
+{% block registration_button %}
+{# Her kommer den delen av som forandres i info.html for Bedpresser. #}
         {% if event.registration_required %}
+	    <tr><td colspan="2" style="text-align: center;">
             {% if is_registered %}
                 <a href="{% url events.views.deregister_user event.id %}"
                     class="btn btn-primary">Meld deg av
@@ -107,9 +114,10 @@
                     {% if event.has_queue and event.is_full %}ventelisten{% endif %} 
                 </a>
             {% endif %}
+        </td></tr>
         {% endif %}
-    </td></tr>
-
+{% endblock %}
+{% endif %}
 </table>
 
 

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
+from itertools import chain
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -26,6 +28,10 @@ class BedPres(AbstractEvent):
     def register_user(self, user):
         # TODO feilhåndtering bør ikke skje her, men jeg fikk ikke til å ta i
         # mot BPCResponseException i register_user view - hiasen
+        card_no = user.get_profile().ntnu_card_number
+        if not card_no or not card_no.isdigit():
+            return "Du ble ikke påmeldt fordi du ikke har registrert gyldig kortnummer."
+
         try:
             response = bpc_core.add_attending(
                 fullname=user.get_full_name(),
@@ -45,6 +51,15 @@ class BedPres(AbstractEvent):
         except bpc_core.BPCResponseException as exception:
             return exception.message 
 
+    def get_users_registered(self):
+        return chain(self.get_users_attending(),self.get_users_waiting())
+
+    def get_users_attending(self):
+        return User.objects.filter(username__in=self.bpc_attending_list)
+
+    def get_users_waiting(self):
+        return User.objects.filter(username__in=self.bpc_waiting_list)
+        
     def is_registered(self, user):
         return self.is_attending(user) or self.is_waiting(user)
 
@@ -55,13 +70,13 @@ class BedPres(AbstractEvent):
         return user.username in self.bpc_attending_list
 
     def free_places(self):
-        return int(self.bpc_info['seats_available'])
+        return int(self.bpc_info.get('seats_available',0))
 
     def is_full(self):
         return free_places() == 0
 
     def users_attending(self):
-        return len(self.bpc_attending_list)
+        return int(self.bpc_info.get('this_attending',0))
 
     def users_waiting(self):
         return User.objects.filter(username__in=self.bpc_waiting_list)
@@ -71,10 +86,10 @@ class BedPres(AbstractEvent):
 
     def percent_full(self):
         if self.places == None:
-            self.places = bpc_info['seats']
+            self.places = self.bpc_info.get('seats',0)
             self.save()
         if self.places !=0:
-            return (self.free_places()*100.)/self.places
+            return ((self.places - self.free_places())*100)/self.places
         else:
             return 100
 
@@ -84,7 +99,13 @@ class BedPres(AbstractEvent):
     @property
     def bpc_info(self):
         if not self._bpc_info:
-            self._bpc_info = bpc_core.get_events(event=self.bpcid)['event'][0]
+            try:
+                self._bpc_info = bpc_core.get_events(event=self.bpcid)['event'][0]
+                for x in ['time','deadline','registration_start']:
+                    self._bpc_info[x] = bpc_core.bpc_time_to_datetime(self._bpc_info[x])
+                self._bpc_info['seats'] = int(self._bpc_info['seats'])
+            except bpc_core.BPCResponseException:
+                return {}
         return self._bpc_info
 
     @property
@@ -104,3 +125,21 @@ class BedPres(AbstractEvent):
             except bpc_core.BPCResponseException:
                 return []
         return self._bpc_waiting_list
+
+    def update_info_from_bpc(self):
+        bpc_info = self.bpc_info
+        self.headline = bpc_info['title']
+        self.slug = bpc_info['title'].strip().replace(' ','-')
+#       picture = bpc_info['logo']
+        self.body = bpc_info['description']
+        self.organizer = 'Bedkom'
+        self.location = bpc_info['place']
+        self.event_start = bpc_info['time']
+        self.registration_required = True
+        self.registration_start = bpc_info['registration_start']
+        self.registration_deadline = bpc_info['deadline']
+        self.places = bpc_info['seats']
+        self.has_queue = bool(bpc_info['waitlist_enabled'])
+
+        self.save()
+ 

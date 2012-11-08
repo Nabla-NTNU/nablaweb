@@ -6,13 +6,13 @@
 
 <div class="span{% if narrow %}4{% else %}8{% endif %} news_item {{ news.content_type.model }}">
     {% if news.picture %}
-
+        <a href="{{ news.get_absolute_url }}">
         {% if narrow %}
             <img alt="" width="100%" src="{% thumbnail news.picture 370x123 box=news.cropping %}">
         {% else %}
             <img alt="" width="100%" src="{% thumbnail news.picture 770x250 box=news.cropping %}">
         {% endif %}
-
+        </a>
     {% endif %}
 
     <h2>{{ news.headline }}</h2>

@@ -9,18 +9,8 @@
 
 {% block content %}
 
-<div class="row"><div class="span8">
+{% include "news/includes/text_content.html" with news=event%}
 
-    {% if event.picture %}
-        <img alt="" width="100%" src="{% thumbnail event.picture 770x250 box=event.cropping %}">
-    {% endif %}
-
-<h2>{{ event.headline }}</h2>
-{{ event.lead_paragraph|markdown|wikilinks}}
-{{ event.body|markdown|wikilinks}}
-</div></div>
-
-<hr>
 
 {# Vis påmeldte #}
 {% if user.is_authenticated %}

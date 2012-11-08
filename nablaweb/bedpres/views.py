@@ -58,34 +58,15 @@ class BPCFormView(FormView):
 from django.http import HttpResponse
 @login_required
 def register_user(request, bedpres_id):
-    messages = {
-        'noreg': 'Ingen registrering.',
-        'closed': 'Påmeldingen har stengt.',
-        'full': 'Arrangementet er fullt.',
-        'attend': 'Du er påmeldt.',
-        'queue': 'Du står på venteliste.',
-        'reg_exists': 'Du er allerede påmeldt.',
-        }
     event = get_object_or_404(BedPres, pk=bedpres_id)
     message  = event.register_user(request.user)
-       
-#    message = messages[token]
     django_messages.add_message(request, django_messages.INFO, message)
     return HttpResponseRedirect(event.get_absolute_url())
 
 @login_required
 def deregister_user(request, bedpres_id):
-    print bedpres_id
-    HttpResponse('Avmelding')
-    messages = {
-        'not_reg': 'Du verken var eller er påmeldt.',
-        'dereg_closed': 'Fristen for å melde seg av er gått ut.',
-        'not_allowed': 'Ta kontakt med ArrKom for å melde deg av.',
-        'dereg': 'Du er meldt av arrangementet.',
-        }
     event = get_object_or_404(BedPres, pk=bedpres_id)
     bpc_message = event.deregister_user(request.user)
-#    message = messages[token]
     django_messages.add_message(request, django_messages.INFO, bpc_message)
     return HttpResponseRedirect(event.get_absolute_url())
 
