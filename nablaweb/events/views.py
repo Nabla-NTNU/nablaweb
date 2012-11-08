@@ -207,15 +207,23 @@ class UserEventView(TemplateView):
 @login_required
 def register_user(request, event_id):
     messages = {
-        'noreg': 'Ingen registrering.',
-        'closed': 'Påmeldingen har stengt.',
-        'full': 'Arrangementet er fullt.',
-        'attend': 'Du er påmeldt.',
-        'queue': 'Du står på venteliste.',
+        'noreg'     : 'Ingen registrering.',
+        'unopened'  : 'Påmeldingen har ikke åpnet.',
+        'closed'    : 'Påmeldingen har stengt.',
+        'full'      : 'Arrangementet er fullt.',
+        'attend'    : 'Du er påmeldt.',
+        'queue'     : 'Du står på venteliste.',
         'reg_exists': 'Du er allerede påmeldt.',
         }
     event = get_object_or_404(Event, pk=event_id)
-    token = event.register_user(request.user)
+    
+    if event.registration_start and event.registration_start > datetime.datetime.now():
+        token = 'unopened'
+    elif event.registration_deadline and event.registration_deadline < datetime.datetime.now():
+        token = 'closed'
+    else:
+        token = event.register_user(request.user)
+
     message = messages[token]
     django_messages.add_message(request, django_messages.INFO, message)
     return HttpResponseRedirect(event.get_absolute_url())
@@ -229,7 +237,14 @@ def deregister_user(request, event_id):
         'dereg': 'Du er meldt av arrangementet.',
         }
     event = get_object_or_404(Event, pk=event_id)
-    token = event.deregister_user(request.user)
+    
+    if event.deregistration_closed is None:
+        token = 'not_allowed'
+    elif  event.deregistration_closed():
+        token = 'dereg_closed'
+    else:
+        token = event.deregister_user(request.user)
+
     message = messages[token]
     django_messages.add_message(request, django_messages.INFO, message)
     return HttpResponseRedirect(event.get_absolute_url())

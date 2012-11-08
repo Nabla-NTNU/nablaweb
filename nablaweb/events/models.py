@@ -210,10 +210,6 @@ class Event(AbstractEvent):
     def register_user(self, user):
         if not self.registration_required:
             msg = 'noreg'
-        elif self.registration_deadline and self.registration_deadline < datetime.datetime.now():
-            msg = 'closed'
-        elif self.registration_start and self.registration_start > datetime.datetime.now():
-            msg = 'closed'
         else:
             # TODO: Bruk select_for_update(), når den blir tilgjengelig.
             # https://docs.djangoproject.com/en/dev/ref/models/querysets/#select-for-update
@@ -229,7 +225,7 @@ class Event(AbstractEvent):
                     else:#No waiting list
                         msg = 'full'
                 else:
-                    reg = regs.create(event=self, user=user, attending=True)
+                    reg = regs.create(event=self, user=user, number=self.users_attending()+1, attending=True)
                     msg = 'attend'
         return msg
 
@@ -239,20 +235,28 @@ class Event(AbstractEvent):
         regs = self.eventregistration_set
         try:
             reg = regs.get(user=user)
-            if self.deregistration_closed is None and reg.is_attending_place():
-                msg = 'not_allowed'
-            elif  self.deregistration_closed() and reg.is_attending_place():
-                msg = 'dereg_closed'
-            else:
-                self.eventregistration_set.get(user=user).delete()
-                self.update_lists()
-                msg = 'dereg'
+            self.eventregistration_set.get(user=user).delete()
+            self.update_lists()
+            msg = 'dereg'
         # Brukeren er ikke påmeldt
         except EventRegistration.DoesNotExist:
             msg = 'not_reg'
         return msg
 
     def update_lists(self):
+        n = 0
+        for attendee in self.eventregistration_set.filter(attending = True).order_by('number'):
+            n += 1
+            if attendee.number != n:
+                attendee.number = n
+                attendee.save()
+        n = 0
+        for waiting  in self.eventregistration_set.filter(attending = False).order_by('number'):
+            n += 1
+            if waiting.number != n:
+                waiting.number = n
+                waiting.save()
+        
         waiting_list = list( self.eventregistration_set.filter(attending = False).order_by('number').reverse() )
         for n in xrange( min(self.free_places(), len(waiting_list)) ):
             waiting_list.pop().set_attending()
@@ -322,7 +326,7 @@ class EventRegistration(models.Model):
     # Datoen brukeren ble registrert.
     date = models.DateTimeField(auto_now_add=True, null=True)
 
-    # Kønummer som tilsvarer plass på ventelisten.
+    # Kønummer som tilsvarer plass på ventelisten/påmeldingsrekkefølge.
     number = models.PositiveIntegerField(blank=True, null=True)
 
     # Om man har fått plass på eventet.
@@ -345,6 +349,7 @@ class EventRegistration(models.Model):
     def set_attending(self):
         if not self.attending:
             self.attending = True
+            self.number = self.event.users_attending() + 1
             self.save()
             #OG SEND EN MAIL.
 
