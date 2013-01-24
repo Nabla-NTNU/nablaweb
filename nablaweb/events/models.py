@@ -8,6 +8,10 @@ import datetime
 from urlparse import urlparse
 
 class AbstractEvent(News):
+    """
+    Abstrakt modell som definerer det som er felles
+    for Event og BedPres.
+    """
     short_name = models.CharField("kort navn", max_length=20, blank=True, null=True, help_text="Brukes på steder hvor det ikke er plass til å skrive hele overskriften, for eksempel kalenderen.")
 
     # Indikerer hvem som står bak arrangementet.
@@ -61,8 +65,15 @@ class AbstractEvent(News):
     # Dette feltet er valgfritt.
     facebook_url = models.CharField(verbose_name="facebook-url", blank=True, max_length=100, help_text="URL-en til det tilsvarende arrangementet på Facebook")
 
+    # Hvilke grupper som får melde seg på
+    open_for = models.ManyToManyField(Group, verbose_name = "Åpen for", blank = True, null = True, help_text = "Hvilke grupper som får lov til å melde seg på arrangementet. Hvis ingen grupper er valgt er det åpent for alle.")
+
     class Meta:
         abstract = True
+
+    def allowed_to_attend(self,user):
+        "Indikerer om en bruker har lov til å melde seg på arrangementet"
+        return (not self.open_for.exists()) or self.open_for.filter(user=user).exists()
 
     def __unicode__(self):
         return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
@@ -113,14 +124,18 @@ class AbstractEvent(News):
     def get_users_waiting(self):
         raise NotImplemented
         
-    # Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke.
     def get_short_name(self):
+        " Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke."
         if self.short_name:
             return self.short_name
         else:
             return self.headline[0:18].capitalize() + '...'
     
 class Event(AbstractEvent):
+    """
+    Arrangementer både med og uten påmelding.
+    Dukker opp som nyheter på forsiden.
+    """
 
     class Meta:
         verbose_name = "arrangement"
@@ -204,10 +219,13 @@ class Event(AbstractEvent):
         return [e.user for e in self.eventregistration_set.filter(attending=True)]
     def get_users_waiting(self):
         return [e.user for e in self.eventregistration_set.filter(attending=False)]
+
         
-    # Forsøker å melde brukeren på arrangementet.  Returnerer en
-    # tekststreng som indikerer hvor vellykket operasjonen var.
     def register_user(self, user):
+        """
+        Forsøker å melde brukeren på arrangementet.  Returnerer en
+        tekststreng som indikerer hvor vellykket operasjonen var.
+        """
         if not self.registration_required:
             msg = 'noreg'
         else:
@@ -229,9 +247,11 @@ class Event(AbstractEvent):
                     msg = 'attend'
         return msg
 
-    # Melder brukeren av arrangementet. I praksis sørger metoden bare
-    # for at brukeren ikke er påmeldt lengre, uavhengig av status før.
     def deregister_user(self, user):
+        """
+        Melder brukeren av arrangementet. I praksis sørger metoden bare
+        for at brukeren ikke er påmeldt lengre, uavhengig av status før.
+        """
         regs = self.eventregistration_set
         try:
             reg = regs.get(user=user)
@@ -335,26 +355,28 @@ class EventRegistration(models.Model):
     def __unicode__(self):
         return u'EventRegistration: %s, %s: %s' % (self.event, self.attending, self.user)
 
-    # Returnerer True dersom registreringen er en plass på venteliste.
     def is_waiting_place(self):
+        "Returnerer True dersom registreringen er en plass på venteliste."
         return not self.attending
 
-    # Returnerer hvilken plass man har på ventelisten. None hvis man har plass eller det ikke finnes.
     def waiting_list_place(self):
+        "Returnerer hvilken plass man har på ventelisten. None hvis man har plass eller det ikke finnes."
         if not self.attending:
             return self.number
         else:
             return None
 
     def set_attending(self):
+        "Flytter noen fra ventelisten til påmeldte"
         if not self.attending:
             self.attending = True
             self.number = self.event.users_attending() + 1
             self.save()
+            #TODO
             #OG SEND EN MAIL.
 
-    # Returnerer True dersom registreringen er en garantert plass.
     def is_attending_place(self):
+        "Returnerer True dersom registreringen er en garantert plass."
         return self.attending
     is_attending_place.boolean = True
     is_attending_place.short_description = "har plass"

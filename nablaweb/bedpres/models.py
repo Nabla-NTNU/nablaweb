@@ -12,6 +12,10 @@ import bpc_core
 
 
 class BedPres(AbstractEvent):
+    """
+    Modell som lagrer informasjon om en bedpress fra BPC.
+    """
+
     # Id'en til bedpressen internt hos BPC
     bpcid = models.CharField(verbose_name="BPC-id", max_length=16, unique=True, blank=True, help_text = "Dette er id'en som blir brukt internt hos BPC. Ikke endre den hvis du ikke vet du gjør.")
 
@@ -38,7 +42,7 @@ class BedPres(AbstractEvent):
                 username=user.username,
                 card_no=sha1(user.get_profile().ntnu_card_number).hexdigest(),
                 event=self.bpcid,
-                year='1', # FIXME
+                year=str(user.get_profile().get_class_number()), # FIXME
                 )
         except bpc_core.BPCResponseException as exception:
             return exception.message # TODO Bruke noen andre feilmeldinger. Er litt kryptiske for brukere
@@ -93,11 +97,12 @@ class BedPres(AbstractEvent):
         else:
             return 100
 
-
-    # Laster ned informasjon om bedpressen fra BPC og lagrer det midlertidig i
-    # BedPres-objektet. Brukes som en vanlig variabel, ikke funksjon.
     @property
     def bpc_info(self):
+        """
+        Laster ned informasjon om bedpressen fra BPC og lagrer det midlertidig i
+        BedPres-objektet. Brukes som en vanlig variabel, ikke funksjon.
+        """
         if not self._bpc_info:
             try:
                 self._bpc_info = bpc_core.get_events(event=self.bpcid)['event'][0]
@@ -127,10 +132,28 @@ class BedPres(AbstractEvent):
         return self._bpc_waiting_list
 
     def update_info_from_bpc(self):
+        """
+        Oppdaterer informasjon fra BPC
+        """
         bpc_info = self.bpc_info
         self.headline = bpc_info['title']
         self.slug = bpc_info['title'].strip().replace(' ','-')
 #       picture = bpc_info['logo']
+
+        from django.core.files import File
+        import urllib
+        import os
+
+        #if not self.picture:
+        result = urllib.urlretrieve(self.bpc_info['logo']) # image_url is a URL to an image
+        filename,file_ext = os.path.splittext(self.bpc_info['logo'])
+
+        self.picture.save(
+            os.path.basename("news_pictures/bpc_"+self.bpcid+file_ext ),
+            File(open(result[0]))
+            )
+        self.save()
+            
         self.body = bpc_info['description']
         self.organizer = 'Bedkom'
         self.location = bpc_info['place']

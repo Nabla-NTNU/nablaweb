@@ -214,6 +214,7 @@ def register_user(request, event_id):
         'attend'    : 'Du er påmeldt.',
         'queue'     : 'Du står på venteliste.',
         'reg_exists': 'Du er allerede påmeldt.',
+        'not_allowed' : 'Du har ikke lov til å melde deg på dette arrangementet.',
         }
     event = get_object_or_404(Event, pk=event_id)
     
@@ -221,6 +222,8 @@ def register_user(request, event_id):
         token = 'unopened'
     elif event.registration_deadline and event.registration_deadline < datetime.datetime.now():
         token = 'closed'
+    elif not event.allowed_to_attend(request.user):
+        token = 'not_allowed'
     else:
         token = event.register_user(request.user)
 
