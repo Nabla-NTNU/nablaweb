@@ -8,7 +8,7 @@ from news.admin import NewsAdmin
 
 class EventRegistrationInline(admin.TabularInline):
     model = EventRegistration
-    fields = ('user', 'number')
+    fields = ('user', 'number', 'attending' )
 
 
 class EventAdmin(NewsAdmin):
