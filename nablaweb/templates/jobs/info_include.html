@@ -34,7 +34,7 @@
     
     {% if job.deadline_date %}
     <tr>
-        <td>Søkefrist</td>
+        <td>Søknadsfrist</td>
         <td>
             <time datetime="{{ job.deadline_date|date:"c" }}">
                 <strong>{{ job.deadline_date|naturalday }} kl. {{ job.deadline_date|date:"H:i" }}</strong>

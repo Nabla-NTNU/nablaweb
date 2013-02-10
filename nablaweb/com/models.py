@@ -46,6 +46,7 @@ class ComMembership(models.Model):
     com = models.ForeignKey('auth.Group', verbose_name="Komité")
     story = models.TextField(verbose_name="Beskrivelse", help_text="Ansvarsområde eller lignende")
     joined_date = models.DateField(verbose_name="Ble med", help_text="Dato personen ble med i komiteen")
+    is_active = models.BooleanField(blank=False, null=False, verbose_name="Aktiv?", default=True)
 
     def save(self, *args, **kwargs):
         self.com.user_set.add(self.user)
@@ -59,5 +60,5 @@ class ComMembership(models.Model):
         return force_unicode(self.user.username)
         
     class Meta:
-        verbose_name = "komitemedlemskap"
-        verbose_name_plural = "komitemedlemskap"
+        verbose_name = "komitemedlem"
+        verbose_name_plural = "komitemedlemmer"
