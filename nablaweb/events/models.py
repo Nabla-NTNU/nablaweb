@@ -341,16 +341,16 @@ class EventRegistration(models.Model):
     event = models.ForeignKey(Event, blank=False, null=True)
 
     # Brukeren som er registrert.
-    user = models.ForeignKey(User, blank=False, null=True)
+    user = models.ForeignKey(User, blank=False, null=True,verbose_name='bruker')
 
     # Datoen brukeren ble registrert.
     date = models.DateTimeField(auto_now_add=True, null=True)
 
     # Kønummer som tilsvarer plass på ventelisten/påmeldingsrekkefølge.
-    number = models.PositiveIntegerField(blank=True, null=True)
+    number = models.PositiveIntegerField(blank=True, null=True, verbose_name='kønummer', help_text='Kønummer for ventelisten. Tallene har ingen funksjon dersom man ikke har venteliste på arrangementet.')
 
     # Om man har fått plass på eventet.
-    attending = models.BooleanField(blank=False, null=False)
+    attending = models.BooleanField(blank=False, null=False, verbose_name='har plass', help_text="Hvis denne er satt til sann har man en plass på arrangementet ellers er det en ventelisteplass.")
 
     def __unicode__(self):
         return u'EventRegistration: %s, %s: %s' % (self.event, self.attending, self.user)
