@@ -14,35 +14,11 @@
 
 {% block content %}
 {% if jobs_list %}
-    {% for job in jobs_list %}
+    {% for row in jobs_rows %}
         <div class="row">
-            <div class="span8">
-                <table class="table jobslist_table">
-                <tbody>
-                    {% if job.deadline_date %}
-                    <tr>
-                        <td class="jobslist_td_title">Søknadsfrist</td>
-                        <td class="jobslist_td_content">{{ job.deadline_date|date:"d. F Y, H:i" }}</td>
-                    </tr>
-                    {% endif %}
-                    <tr>
-                        <td class="jobslist_td_title">Lagt inn</td>
-                        <td>{{ job.created_date|date:"d. F Y, H:i" }}</td>
-                    </tr>
-                    {% if job.relevant_for_group or job.relevant_for_year %}
-                    <tr>
-                        <td class="jobslist_td_title">Relevant for</td>
-                        <td>{% if job.relevant_for_group %}{{ job.relevant_for_group.all|commas_no }}{% endif %}. 
-                        {% if job.relevant_for_year %}Årskull {{ job.relevant_for_year.all|commas_no }}.{% endif %}</td>
-                    </tr>
-                    {% endif %}
-                </tbody>
-                </table>
-                <h2>{{ job.headline }} hos <a href="{{job.company.get_absolute_url }}">{{ job.company.name }}</a></h2>
-                {{ job.lead_paragraph|markdown }}
-                {{ job.body|markdown }}
-                <p><a class="btn" href="{{ job.get_absolute_url }}">Les mer &raquo;</a></p>
-            </div>
+	    {% for job in row %}
+	        {% include "jobs/jobs_summary_include.html" %}
+	    {% endfor %}
         </div>
         <hr>
     {% endfor %}

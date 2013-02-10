@@ -12,8 +12,18 @@ class GenericJobsList(ListView):
     model = Advert
     context_object_name = 'jobs_list'
     template_name = 'jobs/jobs_list.html'
-    paginate_by = 10
+    paginate_by = 8
+	
+    def get_context_data(self, **kwargs):
+        context = super(GenericJobsList, self).get_context_data(**kwargs)
 
+        jobs_list = context['jobs_list']
+
+        if jobs_list:
+            # Deler f.eks. opp [1, 2, 3, 4, 5] til [[1, 2], [3, 4], [5]]
+            context['jobs_rows'] = listutil.row_split(jobs_list[0:], 2)
+
+        return context
 
 class EverythingList(GenericJobsList):
     @staticmethod

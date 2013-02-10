@@ -61,8 +61,8 @@ class Company(Content):
 class Advert(News):
     company = models.ForeignKey('Company', verbose_name="Bedrift", help_text="Hvilken bedrift stillingen er hos")
 
-    relevant_for_group = models.ManyToManyField(RelevantForChoices, blank=False, verbose_name="Studieretning", help_text="Hvilke studieretninger stillingsannonsen er relevant for")
-    relevant_for_year = models.ManyToManyField(YearChoices, blank=False, null=True, verbose_name="Årskull", help_text="Hvilke årskull stillingsannonsen er relevant for")
+    relevant_for_group = models.ManyToManyField(RelevantForChoices, blank=True, verbose_name="Studieretning", help_text="Hvilke studieretninger stillingsannonsen er relevant for")
+    relevant_for_year = models.ManyToManyField(YearChoices, blank=True, null=True, verbose_name="Årskull", help_text="Hvilke årskull stillingsannonsen er relevant for")
     tags = models.ManyToManyField(TagChoices, blank=True, verbose_name="Tags", help_text="F.eks. sommerjobb, bergen, kirkenes, olje, konsultering...")
 
     deadline_date = models.DateTimeField(verbose_name="Frist", blank=True, null=True, help_text="Søknadsfrist")  # Naar frist for soeking er, med klokkeslett
