@@ -1,0 +1,9 @@
+{% load mediawiki_links %}
+{% load markup %}
+{% load classname %}
+
+<div class="span4 news_item advert">
+	<h2>{{ job.headline }} (<a href="{{job.company.get_absolute_url }}">{{ job.company.name }}</a>)</h2>
+	{{ job.lead_paragraph|markdown }}
+        <p><a class="btn" href="{{ job.get_absolute_url }}">Les mer &raquo;</a></p>
+</div>
