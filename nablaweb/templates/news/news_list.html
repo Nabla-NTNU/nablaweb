@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load cache %}
 
 {% block title %}Nyheter{% endblock %}
 
@@ -8,7 +7,6 @@
 {% endblock %}
 
 {% block content %}
-{% cache 300 news_list %}
 <div class="row">
 {% include "news/news_summary_include.html" with news=featured_news %}
 </div>
@@ -46,7 +44,6 @@
         </ul>
     </div>
 {% endif %}
-{% endcache %}
 {% endblock content %}
 
 
@@ -62,7 +59,6 @@ som foregår.</p>
 
 <p>Dette er en <b>beta</b>-versjon av nettsiden, og er kun tilgjengelig for utviklerne. Du ser kanskje etter <a href="http://nabla.no/">Nabla.no</a>?</p>
 
-{% cache 300 upcoming_events %}
 {% if upcoming_events %}
 
     <h3>Kommende arrangement</h3>
@@ -87,7 +83,6 @@ som foregår.</p>
     </div><!-- end kommende arrangement -->
 
 {% endif %}
-{% endcache %}
 
 {% endblock sidebar %}
 

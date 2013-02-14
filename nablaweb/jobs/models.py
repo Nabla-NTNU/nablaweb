@@ -46,7 +46,7 @@ class TagChoices(models.Model):
 
 
 class Company(Content):
-    website = models.CharField(max_length=200, blank=True, verbose_name="Nettside")
+    website = models.URLField(max_length=200, blank=True, verbose_name="Nettside")
     name = models.CharField(verbose_name="navn", max_length=200, blank=False)
     description = models.TextField(verbose_name="beskrivelse", blank=True)
 
@@ -61,19 +61,16 @@ class Company(Content):
 class Advert(News):
     company = models.ForeignKey('Company', verbose_name="Bedrift", help_text="Hvilken bedrift stillingen er hos")
 
-    relevant_for_group = models.ManyToManyField(RelevantForChoices, blank=False, verbose_name="Studieretning", help_text="Hvilke studieretninger stillingsannonsen er relevant for")
-    relevant_for_year = models.ManyToManyField(YearChoices, blank=False, null=True, verbose_name="Årskull", help_text="Hvilke årskull stillingsannonsen er relevant for")
+    relevant_for_group = models.ManyToManyField(RelevantForChoices, blank=False, verbose_name="Studieretning", help_text="Hvilke studieretninger stillingsannonsen er relevant for.")
+    relevant_for_year = models.ManyToManyField(YearChoices, blank=False, null=True, verbose_name="Årskull", help_text="Hvilke årskull stillingsannonsen er relevant for.")
     tags = models.ManyToManyField(TagChoices, blank=True, verbose_name="Tags", help_text="F.eks. sommerjobb, bergen, kirkenes, olje, konsultering...")
 
     deadline_date = models.DateTimeField(verbose_name="Frist", blank=True, null=True, help_text="Søknadsfrist")  # Naar frist for soeking er, med klokkeslett
 
-    show_removal_date = models.BooleanField(default=False, help_text="Om fjerningsdato skal vises", verbose_name="Vis fjerningsdato?")  # Hvorvidt removal_date skal vises i stillingsannonsen
     removal_date = models.DateTimeField(verbose_name="Forsvinner", null=True, blank=True, help_text="Når annonsen fjernes, f.eks. samtidig som deadline")  # Naar annonsen skal fjernes, for eksempel samtidig som deadline_date
 
     info_file = models.FileField(upload_to="stillinger", blank=True, verbose_name="Informasjonsfil", help_text="Informasjon om stillingen")
-    antall_stillinger = models.IntegerField(verbose_name="Antall stillinger", blank=True, null=True, help_text="Antall stillinger som tilbys")
-
-    contact_info = models.TextField(blank=True, verbose_name="Kontaktinfo", help_text="Kontaktinformasjon for søkere")
+    info_website = models.URLField(blank=True, max_length=150, verbose_name="Infoside", help_text="Nettside der man kan søke på stillingen eller få mer informasjon")
 
     class Meta:
         verbose_name = "stillingsannonse"

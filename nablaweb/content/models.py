@@ -72,7 +72,7 @@ class Content(models.Model):
     last_changed_by = models.ForeignKey(User, verbose_name="Endret av", related_name="%(class)s_edited", editable=False, blank=True, null=True)
 
     # Bildeopplasting med resizing og cropping
-    picture = ImageCropField(upload_to="news_pictures", null=True, blank=True, help_text="Bilder som er større enn 770x250 px ser best ut. Du kan beskjære bildet etter opplasting.")
+    picture = ImageCropField(upload_to="news_pictures", null=True, blank=True, verbose_name="Bilde", help_text="Bilder som er større enn 770x250 px ser best ut. Du kan beskjære bildet etter opplasting.")
     cropping = ImageRatioField('picture', '770x250', allow_fullsize=True, verbose_name="Beskjæring")
 
     # Slugs
