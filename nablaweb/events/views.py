@@ -6,14 +6,16 @@ from django.contrib import messages as django_messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, render
 from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.decorators import login_required
+from django.utils.safestring import mark_safe
 from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
 from nablaweb.events.models import Event, EventRegistration
 from nablaweb.bedpres.models import BedPres
 from itertools import chain
+from events.event_calendar import EventCalendar
 
 # Administrasjon
 
@@ -80,6 +82,23 @@ class EventDeleteView(NewsDeleteView):
 
 
 # Offentlig
+
+def calendar(request, year=None, month=None):
+    """Renders a calendar with events from the chosen month
+
+    Args:
+        request (HttpRequest) : Django request object
+    """
+    if not year:
+        year = datetime.date.today().year
+    if not month:
+        month = datetime.date.today().month
+
+    events = Event.objects.order_by('event_start').filter(
+        event_start__year=year, event_start__month=month
+    )
+    cal = EventCalendar(events).formatmonth(year, month)
+    return render(request, 'events/event_list.html', {'calendar': mark_safe(cal)})
 
 class EventListView(ListView):
     model = Event

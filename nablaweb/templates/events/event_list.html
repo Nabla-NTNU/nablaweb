@@ -14,6 +14,9 @@
 
 <h2>Kalender {{ calendar.first.year }}</h2>
 
+{{ calendar }}
+
+{% comment %}
 <table class="calendar">
 
     <caption> 
@@ -72,6 +75,7 @@
     </tbody>
 
 </table>
+
 
 </div> <!-- end span12 -->
 </div><!-- row -->
@@ -134,5 +138,7 @@
 
     {% endif %}
 </div>
+
+{% endcomment %}
 
 {% endblock main %}
