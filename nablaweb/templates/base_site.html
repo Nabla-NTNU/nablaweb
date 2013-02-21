@@ -36,6 +36,9 @@
     <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
 
+    {# Obligatory jQuery #}
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+
     {% block more_head %}
     {% endblock %}
 
@@ -353,8 +356,6 @@
 </div>{# end container #}
 </footer>
 
-{# Obligatory jQuery #}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
 {# Google Analytics #}
 <script type="text/javascript">
@@ -383,8 +384,6 @@
 {# Skaper krøll med Django Toolbar #} 
 {#<script src="{{ STATIC_URL }}js/jquery.history.js"></script>#}
 
-{% comment %}
-{# Midlertidig skrudd av for å debugge hastigheten på sidelasting #}
 {# MathJax for LaTeX rendering #}
 <script type="text/x-mathjax-config">
     // Differences from standard config:
@@ -407,9 +406,9 @@
 </script>
 
 <script type="text/javascript" 
+  async
   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-{% endcomment %}
 
 </body>
 </html>
