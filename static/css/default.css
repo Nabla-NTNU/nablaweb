@@ -96,6 +96,8 @@
     }
 
 /* Calendar */
+
+@media (min-width: 600px) {
     .month {
         display: table;
         border-collapse: separate;
@@ -124,6 +126,7 @@
         text-align: center;
         font-weight: bold;
         height: 20px;
+        border: none;
     }
 
     .cell {
@@ -131,8 +134,38 @@
 
     }
 
-/* Mobile calendar */
+    .today {
+        background-color: #f7f7ff;
+    }
 
+    .noday {
+        visibility: hidden;
+    }
+}
+
+/* Mobile calendar */
+@media (max-width: 600px) {
+    .month { display: block; }
+    .daynames { display: none; }
+    .week { list-style: none; margin: 0;}
+    .noday { display: none; }
+    .cell { display: none; }
+    .filled { display: block; margin-bottom: 15px;}
+    .cell .date {
+        font-size: 20px;
+        text-align: center;
+    }
+    .cell ul { list-style: none; padding: 5px; margin: 0;}
+    .cell ul li a {
+        display: block;
+        line-height: 60px;
+        background-color: #f3f3f3;
+        padding-left: 15px;
+    }
+    .cell ul li a:hover {
+        background-color: #f0f0f8;
+    }
+}
 
 /* MathJAX customisation */
 
