@@ -40,7 +40,10 @@ class EventCalendar(HTMLCalendar):
                     '<div class="date"><span class="day">%s </span><span class="num">%d.</span></div> %s' % 
                     (day_full[weekday], day, ''.join(body)))
 
-            return self.day_cell(cssclass, day)
+            return self.day_cell(cssclass, 
+                '<div class="date"><span class="day">%s </span><span class="num">%d.</span></div>' % 
+                (day_full[weekday], day))
+
         return self.day_cell('noday', '&nbsp;')
 
     def formatweek(self, theweek):
@@ -54,6 +57,9 @@ class EventCalendar(HTMLCalendar):
         """Returns a whole month"""
         self.year, self.month = year, month
         return super(EventCalendar, self).formatmonth(year, month)
+
+    def formatweekday(self, i):
+        return '<li class="dayname">%s</li>' % day_full[i];
 
     def formatweekheader(self):
          """

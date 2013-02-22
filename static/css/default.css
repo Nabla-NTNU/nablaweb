@@ -105,13 +105,9 @@
         border-spacing: 3px;
     }
 
-    .daynames {
-        display: table-header-group;
-    }
+    .daynames { display: table-header-group; }
 
-    .week {
-        display: table-row;
-    }
+    .week { display: table-row; }
 
     .dayname, .cell {
         display: table-cell;
@@ -121,26 +117,16 @@
         border-radius: 3px;
         padding: 3px;
     }
-
     .dayname {
         text-align: center;
         font-weight: bold;
         height: 20px;
         border: none;
     }
-
-    .cell {
-        background-color: #f9f9f9;
-
-    }
-
-    .today {
-        background-color: #f7f7ff;
-    }
-
-    .noday {
-        visibility: hidden;
-    }
+    .cell { background-color: #f9f9f9; }
+    .cell .date .day { display: none; }
+    .today { background-color: #f7f7ff; }
+    .noday { visibility: hidden; }
 }
 
 /* Mobile calendar */
