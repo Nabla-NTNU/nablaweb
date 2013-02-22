@@ -95,6 +95,64 @@
         width: 100%;
     }
 
+/* Calendar */
+
+@media (min-width: 600px) {
+    .month {
+        display: table;
+        border-collapse: separate;
+        width: 100%;
+        border-spacing: 3px;
+    }
+
+    .daynames { display: table-header-group; }
+
+    .week { display: table-row; }
+
+    .dayname, .cell {
+        display: table-cell;
+        width: 15%;
+        height: 70px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        padding: 3px;
+    }
+    .dayname {
+        text-align: center;
+        font-weight: bold;
+        height: 20px;
+        border: none;
+    }
+    .cell { background-color: #f9f9f9; }
+    .cell .date .day { display: none; }
+    .today { background-color: #f7f7ff; }
+    .noday { visibility: hidden; }
+}
+
+/* Mobile calendar */
+@media (max-width: 600px) {
+    .month { display: block; }
+    .daynames { display: none; }
+    .week { list-style: none; margin: 0;}
+    .noday { display: none; }
+    .cell { display: none; }
+    .filled { display: block; margin-bottom: 15px;}
+    .cell .date {
+        font-size: 20px;
+        text-align: center;
+    }
+    .cell ul { list-style: none; padding: 5px; margin: 0;}
+    .cell ul li a {
+        display: block;
+        line-height: 60px;
+        background-color: #f3f3f3;
+        padding-left: 15px;
+    }
+    .cell ul li a:hover {
+        background-color: #f0f0f8;
+    }
+}
+
 /* MathJAX customisation */
 
     .MathJax_Display {
@@ -152,64 +210,6 @@
         -webkit-opacity: 0.5;
     }
 
-/* Event-kalender */
-.calendar { 
-    width: 100%;
-    margin-top:20px;
-    margin-bottom: 40px;
-    border-spacing: 3px;
-    border-collapse: separate;
-}
-    .calendar caption {
-        padding: 30px;
-    }
-    .calendar * { margin: 0; padding: 0;}
-    table td, table th { width: 113px; } /* All table cells */
-
-    /* First column */
-    .calendar th:first-child, .calendar td:first-child {
-        width: 40px;
-    }
-    .calendar td:first-child { /* First column, except first row: Week digits */
-        font-size: 1.2em;
-        font-weight: bold;
-        text-align: center;
-        vertical-align: middle;
-        width: 30px;
-    }
-    .calendar td.cell {
-        background-color: #f8f8f8;
-
-        border-radius: 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-
-        border: 1px solid #ddd;
-        height: 100%;
-        margin: 2px;
-        padding: 5px;
-        padding-left: 6px;
-        vertical-align: top;
-    } 
-    .calendar .current.cell {
-
-        background-color:#DDEEFF;
-        border-color:#3399FF;
-    }
-    .calendar .differentmonth.cell {
-        -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=4)";
-        filter: alpha(opacity=4);
-        opacity: 0.4;
-    }
-
-    .calendar ul { list-style: none; min-height: 50px;}
-    .calendar ul li { padding-left: 5px; font-size: 0.85em; }
-    .calendar ul li.blue { background: url('../img/cal-blue.png') no-repeat 0px 2px; }
-    .calendar ul li.green { background: url('../img/cal-green.png') no-repeat 0px 2px; }
-    .calendar ul li.red { background: url('../img/cal-red.png') no-repeat 0px 2px; }
-    
-
-    .centertext { text-align: center; }
 
 /* COMMENTS */
     .comments-header {

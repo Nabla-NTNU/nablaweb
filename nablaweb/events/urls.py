@@ -19,11 +19,11 @@ urlpatterns = patterns('nablaweb.events.views',
  
     # Offentlig
     url(r'^$',
-        EventListView.as_view(),
+        'calendar',
         name='event_list'),
 
     url(r'^(\d{4})/(\d{1,2})/$',
-        EventListView.as_view(),
+        'calendar',
         name='event_list'),
 
     # Bruker
