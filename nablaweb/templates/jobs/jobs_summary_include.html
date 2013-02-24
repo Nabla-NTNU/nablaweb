@@ -3,8 +3,12 @@
 {% load classname %}
 {% load humanize %}
 {% load jobs_filters %}
+{% load thumbnail %}
 
 <div class="span4 news_item advert">
+        {% if job.company.picture %}<a href="{{ job.get_absolute_url }}">
+        <img alt="" width="100%" src="{% thumbnail job.company.picture 370x123 box=job.company.cropping %}"></a>
+        {% endif %}
 	<h3>{{ job.headline }}</h3>
         {{ job.lead_paragraph|markdown }}
         <p><small>Stillingsannonsen er relevant for årskull {{ job.relevant_for_year.all|commas_no}} ved
