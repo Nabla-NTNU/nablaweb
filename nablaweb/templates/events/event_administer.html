@@ -27,17 +27,23 @@
   {% with regs=registrations %}
 
   {% if regs %}
-  <table border="1">
+  <table class="table">
+    <thead>
     <tr>
-      <td>Plass</td>
-      <td>Navn</td>
-      <td align="center">X</td>
+      <th>Plass</th>
+      <th>Navn</th>
+      <th>Klasse</th>
+      <th align="center">X</th>
     </tr>
+    </thead>
+    
+    <tbody>
     {% for registration in regs %}
     {% if registration.is_attending_place %}
-    <tr bgcolor="#00FF00">
+    <tr bgcolor="#D0FFD0">
       <td>{{ registration.number }}</td>
-      <td>{{ registration.user }}</td>
+      <td>{{ registration.user.get_full_name }}</td>
+      <td>{{ registration.user.get_profile.get_class_number }}</td>
       <td><input type="checkbox" name="user" value="{{ registration.user }}" /></td>
     </tr>
     {% endif %}
@@ -45,13 +51,15 @@
 
     {% for registration in regs %}
     {% if registration.is_waiting_place %}
-    <tr bgcolor="#FFFF00">
+    <tr bgcolor="#FFD0D0">
       <td>{{ registration.number }}</td>
-      <td>{{ registration.user }}</td>
+      <td>{{ registration.user.get_full_name }}</td>
+      <td>{{ registration.user.get_profile.get_class_number }}</td>
       <td><input type="checkbox" name="user" value="{{ registration.user }}" /></td>
     </tr>
     {% endif %}
     {% endfor %}
+    </tbody>
   </table>
   {% else %}
     Det er ingen påmeldte brukere.

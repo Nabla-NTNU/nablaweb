@@ -16,6 +16,7 @@ from nablaweb.events.models import Event, EventRegistration
 from nablaweb.bedpres.models import BedPres
 from itertools import chain
 from events.event_calendar import EventCalendar
+from django.contrib.auth.decorators import permission_required
 
 # Administrasjon
 
@@ -39,7 +40,7 @@ def _admin_del(request, instance):
 _admin_del.short = 'del'
 _admin_del.info = 'Fjern'
 
-
+@permission_required('events.administer', raise_exception=True)
 def administer(request, pk,
                actions=(_admin_add, _admin_del),
                view='event_admin'):
