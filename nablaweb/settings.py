@@ -14,7 +14,7 @@
 
 import os
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 # Gjør det enkelt å bruke relative paths
@@ -58,8 +58,6 @@ TIME_ZONE = 'Europe/Oslo'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'nb'
-
-DATE_FORMAT = 'j. F Y' 
 
 SITE_ID = 1
 

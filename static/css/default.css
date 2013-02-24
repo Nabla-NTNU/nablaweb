@@ -292,3 +292,10 @@
   text-shadow: 0 1px 0 #ffffff;
 }
 
+.advert {
+    height: 100%;
+}
+
+.advert_footer {
+    bottom: 0px;
+}
