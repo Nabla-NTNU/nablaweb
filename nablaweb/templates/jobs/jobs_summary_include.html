@@ -12,7 +12,7 @@
 	<h3>{{ job.headline }}</h3>
         {{ job.lead_paragraph|markdown }}
         <p><small>Stillingsannonsen er relevant for årskull {{ job.relevant_for_year.all|commas_no}} ved
-        {{ job.relevant_for_group.all|commas_no }}. {% if job.deadline_date %}Søknadsfristen er {{ job.deadline_date|naturalday}} kl.
+        {{ job.relevant_for_group.all|commas_no }}. {% if job.deadline_date %}Søknadsfristen er {{ job.deadline_date|naturalday }} kl.
         {{ job.deadline_date|date:"H:i" }}.{% endif %}</small></p>
         <p><a class="btn" href="{{ job.get_absolute_url }}">Les mer &raquo;</a></p>
 </div>

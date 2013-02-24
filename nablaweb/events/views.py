@@ -40,7 +40,7 @@ def _admin_del(request, instance):
 _admin_del.short = 'del'
 _admin_del.info = 'Fjern'
 
-@permission_required('events.administer')
+@permission_required('events.administer', raise_exception=True)
 def administer(request, pk,
                actions=(_admin_add, _admin_del),
                view='event_admin'):

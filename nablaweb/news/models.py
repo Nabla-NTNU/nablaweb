@@ -25,6 +25,8 @@ class News(Content):
             return self.advert
         elif hasattr(self, 'bedpres'):
             return self.bedpres
+        else:
+            return self
 
     def __unicode__(self):
         return self.headline
