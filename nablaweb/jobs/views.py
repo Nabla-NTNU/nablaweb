@@ -4,7 +4,7 @@
 
 from django.views.generic import ListView, DetailView
 from nablaweb.news.views import *
-from nablaweb.jobs.models import Advert, Company
+from nablaweb.jobs.models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
 from django.shortcuts import get_object_or_404
 
 
@@ -18,6 +18,25 @@ class GenericJobsList(ListView):
         context = super(GenericJobsList, self).get_context_data(**kwargs)
 
         jobs_list = context['jobs_list']
+
+        years = YearChoices.objects.all()
+        choices = RelevantForChoices.objects.all()
+        tags = TagChoices.objects.all() 
+
+        if years:
+            context['years'] = years
+        else:
+            context['years'] = None
+
+        if choices:
+            context['choices'] = choices
+        else:
+            context['choices'] = None
+
+        if tags:
+            context['tags'] = tags
+        else:
+            context['tags'] = None
 
         if jobs_list:
             # Deler f.eks. opp [1, 2, 3, 4, 5] til [[1, 2], [3, 4], [5]]
@@ -36,10 +55,9 @@ class EverythingList(GenericJobsList):
 
 activej = EverythingList.active_jobs
 
-
 class CompanyList(GenericJobsList):
     def get_queryset(self):
-        company = get_object_or_404(Company, pk=self.kwargs['pk'])
+        company = get_object_or_404(Company, name__iexact=self.kwargs['slug'])
         return Advert.objects.filter(company=company)
 
 
@@ -47,6 +65,9 @@ class YearList(GenericJobsList):  # Stillingsannonser som er lagt inn dette åre
     def get_queryset(self):
         return Advert.objects.filter(created_date__year=self.kwargs['year'])
 
+class TagList(GenericJobsList):
+    def get_queryset(self):
+        return Advert.objects.filter(tags__tag__iexact=self.kwargs['tag']).distinct()
 
 class MonthList(GenericJobsList):  # Stillingsannonser som er lagt inn denne måneden
     def get_queryset(self):
