@@ -42,7 +42,7 @@
             <td class="cell_groups"> 
             {# Grupper brukeren er med i #}
                 {% for group in user.groups.all %}
-                <img alt="{{ group.name }}" src="{{ STATIC_URL }}img/komite-ikon/{{ group.name|lower }}.png" />
+                <img alt="{{ group.name }}" title="{{ group.name }}" src="{{ STATIC_URL }}img/komite-ikon/{{ group.name|lower }}.png" />
                 {% endfor %}
             </td>
 

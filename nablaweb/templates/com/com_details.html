@@ -7,27 +7,43 @@
 {% block content %}
 <h2>{{ com.com.name }}</h2>
 <p>{{ com.description|markdown|wikilinks}}</p>
-<dl>{% for person in members %}
-    <dt><strong>{% if person.user.user.first_name %}{{ person.user.user.first_name }} {{ person.user.user.last_name }}{% else %}{{person.user.user.username}}{% endif %}</strong>
-    <dt><strong><a href="{% url profile_link person.user.username %}">{% firstof person.user.get_full_name person.user.username %}</a></strong> (ble med {{ person.joined_date|date:"d. F Y" }})</dt>
+
+<br>
+
+{# List of memberships #}
+{% for membership in members %}
+
 <div class="row">
+    {# Avatar #}
     <div class="span2"> 
-<div class="span2 thumbnail">
-              {% if person.userprofile.avatar %}
-              <img alt="avatar" src="{% thumbnail person.userprofile.avatar 150x150 %}" width = "150" height ="150" >
+        <div class="thumbnail">
+
+              {% if membership.user.userprofile.avatar %}
+              <img alt="avatar" src="{% thumbnail membership.user.userprofile.avatar 150x150 %}" width="150" height="150" >
               {% else %}
-              <img alt="avatar" src="{{ STATIC_URL }}img/default_avatar.png" width = "150" height ="150" >
+              <img alt="avatar" src="{{ STATIC_URL }}img/default_avatar.png" width="150" height="150" >
               {%endif %}
+
+              <p class="center">
+                  <b>Medlem siden</b>:
+                  <span class="label label-info">{{ membership.joined_date|date:"d. F Y" }}</span>
+              </p>
         </div>
     </div>
-    <div class="span5 offset1">
-    <dt>{{ person.story|markdown|wikilinks }}</dt>
+    
+    {# Navn og story #}
+    <div class="span6">
+        <h3>{{ membership.user.get_full_name }}</h3>
+        {{ membership.story|markdown|wikilinks }}
     </div>
 </div>
-    {% empty %}
-    <dt>Ingen medlemmer.</dt>
-    {% endfor %}
-</dl>
+<br>
+
+{% empty %}
+
+<p>Denne komiteen har ingen medlemmer. Det var rart.</p>
+
+{% endfor %}
 
 {% endblock content %}
 

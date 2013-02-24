@@ -70,10 +70,13 @@ class Advert(News):
 
     deadline_date = models.DateTimeField(verbose_name="Frist", blank=True, null=True, help_text="Søknadsfrist")  # Naar frist for soeking er, med klokkeslett
 
-    removal_date = models.DateTimeField(verbose_name="Forsvinner", null=True, blank=True, help_text="Når annonsen fjernes, f.eks. samtidig som deadline")  # Naar annonsen skal fjernes, for eksempel samtidig som deadline_date
+    removal_date = models.DateTimeField(verbose_name="Forsvinner", blank=False, help_text="Når annonsen fjernes fra listen, f.eks. samtidig som søknadsfristen")  # Naar annonsen skal fjernes, for eksempel samtidig som deadline_date
 
     info_file = models.FileField(upload_to="stillinger", blank=True, verbose_name="Informasjonsfil", help_text="Informasjon om stillingen")
     info_website = models.URLField(blank=True, max_length=150, verbose_name="Infoside", help_text="Nettside der man kan søke på stillingen eller få mer informasjon")
+
+    def correct_picture(self): return self.company.picture
+    def correct_cropping(self): return self.company.cropping
 
     class Meta:
         verbose_name = "stillingsannonse"
