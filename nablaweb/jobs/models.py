@@ -19,6 +19,9 @@ class YearChoices(models.Model):
             ("can_see_static_models", "Can see static models"),
         )
 
+    def long_name(self):
+        return u'%s. klasse' % (str(self.year))
+
     def __unicode__(self):
         return u'%s' % (str(self.year))
 
