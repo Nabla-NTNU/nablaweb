@@ -9,49 +9,31 @@
 
 {% block content %}
 
-<div class="row"><div class="span8">
+{% include "news/includes/text_content.html" with news=event%}
 
-    {% if event.picture %}
-        <img alt="" width="100%" src="{% thumbnail event.picture 770x250 box=event.cropping %}">
-    {% endif %}
-
-<h2>{{ event.headline }}</h2>
-{{ event.lead_paragraph|markdown|wikilinks}}
-{{ event.body|markdown|wikilinks}}
-</div></div>
-
-<hr>
 
 {# Vis påmeldte #}
 {% if user.is_authenticated %}
     {% if event.eventregistration_set.all %}
         <h3>Påmeldte</h3>
     {% endif %}
-    <ul class="thumbnails">
+    <div class="registrations">
         {% for registration in event.eventregistration_set.all %}
         {% with user=registration.user %}
-        <li class="span2"
+        <span class="label
             {% if registration.is_waiting_place %} 
-            style="opacity:0.5;-moz-opacity: 0.5;-webkit-opacity:0.5;"
-            {% endif %}>
-            <div class="thumbnail clearfix">
-                <img class="pull-left" style="width:50px; height:50px;" src="{% thumbnail user.userprofile.avatar 50x50 %}" 
-                     alt="">
+            waiting-place
+            {% endif %}">
 
-                <div style="width:80px;text-align:center;" class="pull-right">
-                {% if user.get_full_name %}
-                     {{ user.get_full_name }}
-                {% else %}
-                    {{ user.username }}
-                {% endif %}
-                </div>
-
-            </div>
-        </li>
+            {% if user.get_full_name %}
+                 {{ user.get_full_name }}
+            {% else %}
+                {{ user.username }}
+            {% endif %}
+        </span>
         {% endwith %}
         {% endfor %}
-    </ul>
-
+    </div>
 {% endif %}
 
 {% include "content/includes/comments.html" with content=event %}

@@ -10,7 +10,12 @@
 <div class="row comment" id="c{{ comment.id }}">
 
             <div class="avatar span1">
-              <img alt="avatar" src="{% thumbnail user.userprofile.avatar 60x60 %}" width = "150" height ="150" >
+              {% if user.userprofile.avatar %}
+              <img alt="avatar" src="{% thumbnail user.userprofile.avatar 150x150 %}" width = "150" height ="150" >
+              {% else %}
+              <img alt="avatar" src="{{ STATIC_URL }}img/default_avatar.png" width = "150" height ="150" >
+              {%endif %}
+
             </div>
 
             <div class="span7">

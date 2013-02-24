@@ -36,6 +36,9 @@
     <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
 
+    {# Obligatory jQuery #}
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+
     {% block more_head %}
     {% endblock %}
 
@@ -105,9 +108,9 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" >
-                        <li><a href="/forum">Forum</a></li>
+                        {# <li><a href="/forum">Forum</a></li> #}
                         <li><a href="{% url irc %}">Chat</a></li>
-                        <li><a href="{% url gallery.views.index %}">Galleri</a></li>
+                        {# <li><a href="{% url gallery.views.index %}">Galleri</a></li> #}
                         <li><a href="{% url accounts.views.list %}">Medlemsliste</a></li>
                     </ul>
                 </li>
@@ -292,8 +295,8 @@
 
             <address>
                 Nabla <br>
-                NT-fakultetet <br>
-                Realfagbygget, NTNU <br>
+                Kjemiblokk 2 <br>
+                Sem Sælands vei 10, NTNU <br>
                 N-7491 Trondheim <br>
                 Norway
             </address>
@@ -353,8 +356,6 @@
 </div>{# end container #}
 </footer>
 
-{# Obligatory jQuery #}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
 {# Google Analytics #}
 <script type="text/javascript">
@@ -383,8 +384,6 @@
 {# Skaper krøll med Django Toolbar #} 
 {#<script src="{{ STATIC_URL }}js/jquery.history.js"></script>#}
 
-{% comment %}
-{# Midlertidig skrudd av for å debugge hastigheten på sidelasting #}
 {# MathJax for LaTeX rendering #}
 <script type="text/x-mathjax-config">
     // Differences from standard config:
@@ -407,9 +406,9 @@
 </script>
 
 <script type="text/javascript" 
+  async
   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-{% endcomment %}
 
 </body>
 </html>

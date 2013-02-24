@@ -4,7 +4,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from accounts.models import GroupProfile, UserProfile
+from accounts.models import  UserProfile,NablaGroup,FysmatClass, GroupLeader
 
 
 
@@ -36,13 +36,21 @@ class GroupAdminForm(forms.ModelForm):
             self.save_m2m = new_save_m2m
         return group
 
+class NablaGroupAdminForm(GroupAdminForm):
+    class Meta:
+        model = NablaGroup
 
-class GroupProfileInline(admin.StackedInline):
-    model = GroupProfile
+
+#class GroupProfileInline(admin.StackedInline):
+ #   model = GroupProfile
+  #  fk_name = 'group'
 
 class ExtendedGroupAdmin(GroupAdmin):
     form = GroupAdminForm
-    inlines = GroupAdmin.inlines + [GroupProfileInline]
+#    inlines = GroupAdmin.inlines + [GroupProfileInline]
+
+class ExtendedNablaGroupAdmin(GroupAdmin):
+    form = NablaGroupAdminForm
 
 try:
     admin.site.unregister(Group)
@@ -50,6 +58,10 @@ except:
     pass
 
 admin.site.register(Group, ExtendedGroupAdmin)
+admin.site.register(NablaGroup,ExtendedNablaGroupAdmin)
+admin.site.register(FysmatClass)
+admin.site.register(GroupLeader)
+
 
 class UserProfileInlineForm(forms.ModelForm):
     class Meta:

@@ -134,7 +134,7 @@ def search(request):
         query = form.cleaned_data['searchstring']
 
         users = User.objects.filter(Q(username__istartswith=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
-        return render(request, "accounts/list_search_results.html", {'users': users})
+        return render(request, "accounts/list.html", {'users': users, 'searchquery': query})
     else:
         return HttpResponsePermanentRedirect("/brukere/view")
 
@@ -181,4 +181,3 @@ def user_register(request):
     return render(request,"accounts/user_registration.html",
                                {'form':form}
                                )
-

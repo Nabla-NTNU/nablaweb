@@ -181,6 +181,8 @@ def rem_attending(**request): return _make_request(**request)
 def get_attending(**request): return _make_request(**request)
 def get_waiting(**request): return _make_request(**request)
 
+def bpc_time_to_datetime(bpc_time):
+    return datetime.strptime(bpc_time,BPC_TIME_FORMAT)
 
 if __name__ == '__main__':
     print get_events()

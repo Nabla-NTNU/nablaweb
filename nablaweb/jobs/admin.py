@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.forms import ModelForm
 from django.forms import MultipleChoiceField
 from jobs.models import Advert, Company, RelevantForChoices, TagChoices, YearChoices
+from jobs.forms import AdvertForm, CompanyForm
 
 #class RelevantForAdminForm(ModelForm):
 #    RELEVANT_FOR_CHOICES = ((u'B', u'Biofysikk'), (u'T', u'Teknisk fysikk'), (u'I', u'Industriell matematikk'))
@@ -15,37 +16,37 @@ from jobs.models import Advert, Company, RelevantForChoices, TagChoices, YearCho
 
 class AdvertAdmin(admin.ModelAdmin):
     # relevant_for_form = RelevantForAdminForm
-    fields = (  "picture",
-                "cropping",
+    fields = (  #"info_website",
+#                "cropping",
                 "company",
                 "headline",
                 "slug",
                 "lead_paragraph",
                 "body",
-                "contact_info",
+                "info_website",
+#                "contact_info",
                 "deadline_date",
-                "show_removal_date",
+#                "show_removal_date",
                 "removal_date",
                 "relevant_for_group",
                 "relevant_for_year",
-                "info_file",
-                "antall_stillinger",
-                "allow_comments")
+#                "info_file",
+#                "antall_stillinger",
+                "allow_comments",
+		"tags")
     
     prepopulated_fields = {"slug": ("headline",)}
-                
-                
-    pass
+    form = AdvertForm
     
 class CompanyAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
-    fields = ("picture",
+    fields = ("name",
+          "picture",
           "cropping",
-          "name",
           "slug",
           "website",
           "description",)
-    pass
+    form = CompanyForm
         
 class RelevantForChoicesAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):

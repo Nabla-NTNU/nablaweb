@@ -5,7 +5,7 @@ from nablaweb.events.views import EventDetailView, EventListView, UserEventView
 from nablaweb.events.feeds import RecentEvents
 
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.cache import cache_page
+#from django.views.decorators.cache import cache_page
 
 urlpatterns = patterns('nablaweb.events.views',
 
@@ -19,11 +19,11 @@ urlpatterns = patterns('nablaweb.events.views',
  
     # Offentlig
     url(r'^$',
-        cache_page(60 * 15)(EventListView.as_view()),
+        'calendar',
         name='event_list'),
 
     url(r'^(\d{4})/(\d{1,2})/$',
-        cache_page(60 * 60)(EventListView.as_view()),
+        'calendar',
         name='event_list'),
 
     # Bruker

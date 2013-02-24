@@ -4,7 +4,7 @@
 from django.conf.urls.defaults import *
 from nablaweb.bedpres.models import BedPres
 from nablaweb.bedpres.forms import BedPresForm
-from nablaweb.bedpres.views import BedPresDetailView, BedPresListView, BedPresDeleteView, UserBedPresView, BPCFormView, register_user_view
+from nablaweb.bedpres.views import BedPresDetailView, BedPresListView, BedPresDeleteView, UserBedPresView, BPCFormView
 
 
 urlpatterns = patterns('nablaweb.bedpres.views',
@@ -21,13 +21,14 @@ urlpatterns = patterns('nablaweb.bedpres.views',
     url(r'^$',
         BedPresListView.as_view( context_object_name = "bedpres_list" ),
         name='bedpres_list'),
-    url(r'^(?P<pk>\d{1,8})/(?P<slug>[-\w]*)$',
+    url(r'^(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$',
         BedPresDetailView.as_view( context_object_name = "bedpres" ),
         name='bedpres_detail'),
 
     # Bruker
     (r'^mine$', UserBedPresView.as_view()),
-    (r'^(?P<bedpres_id>\d{1,8})/registrering/$', register_user_view),
+    (r'^(?P<bedpres_id>\d{1,8})/avregistrering/$', 'deregister_user'),
+    (r'^(?P<bedpres_id>\d{1,8})/registrering/$', 'register_user'),
 
     # Eksporter
     (r'^(?P<bedpres_id>\d{1,8})/eksporter$', 'ical_event'),

@@ -14,34 +14,12 @@
 
 {% endblock %}
 
+{% block title %}{{ news.headline }}{% endblock %}
+
 {% block content %}
 
-{% if news.picture %}
-    <img alt="header" width="100%" src="{% thumbnail news.picture 770x250 box=news.cropping %}">
-{% endif %}
-
-<h2>{{ news.headline }}</h2>
-{{ news.lead_paragraph|markdown|wikilinks}}
-{{ news.body|markdown|wikilinks}}
-
-{% if news.allow_comments %}
-{# Comments #}
-    {% get_comment_count for news as comment_count %}
-
-    {% if comment_count > 0 %}
-        <h3 class="comments-header">Kommentarer</h3>
-    {% endif %}
-
-    {% render_comment_list for news %}
-
-    {% if user.is_authenticated %}
-        {% render_comment_form for news %}
-    {% else %}
-        <p class="well">Logg inn for å skrive en kommentar</p>
-    {% endif %}
-{# end Comments #}
-{% endif %}
-
+{% include "news/includes/text_content.html" %}
+{% include "content/includes/comments.html" with content=news %}
 {% endblock %}
 
 

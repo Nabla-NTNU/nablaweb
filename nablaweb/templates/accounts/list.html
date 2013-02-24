@@ -5,44 +5,53 @@
 <h2>Komponenter og nullvektorer</h2>
 <br />
 
-<form class="input-append" method="post" action="/brukere/search/" id="user-search">{% csrf_token %}
-	<input placeholder="Søk i listen" name="searchstring" id="searchstring">
-	<button class="btn add-on" type="submit">
-		<i class="icon-search"></i>
-	</button>
+{# TODO: Fjern hardkoding av action #}
+<form class="input-append" method="post" action="/brukere/search/" id="user-search">
+    {% csrf_token %}
+    <input class="span5" placeholder="Søk i listen" name="searchstring" id="searchstring" type="text">
+    <button class="btn">
+        <i class="icon-search"></i>
+    </button>
 </form>
 
-<table id="user_list" class="table table-condensed table-striped table-bordered" width="100%">
-<thead>
-	<th>Brukernavn</th>
-	<th>Navn</th>
-	<th>Grupper</th>
-</thead>
-{% for user in users %}
-	<tr>
-		<td >
-		{# Brukernavn med lenke til profilen #}
-			<a href="{% url accounts.views.view_member_profile user.username %}">
-				{{ user.username }}
-			</a>
-		</td>
+{% if searchquery %}
+<p>Du søkte etter <b>{{ searchquery }}</b>. <a href="{% url accounts.views.list %}">Vis alle brukere</a>
+{% endif %}
 
-		<td class="cell_name">
-			{{ user.first_name }}
-			{{ user.last_name }}
-		</td>
+{% if users %}
+    <table id="user_list" class="table table-condensed table-striped table-bordered" width="100%">
+        <tr>
+            <th>Brukernavn</th>
+            <th>Navn</th>
+            <th>Grupper</th>
+        </tr>
+    {% for user in users %}
+        <tr>
+            <td >
+            {# Brukernavn med lenke til profilen #}
+                <a href="{% url accounts.views.view_member_profile user.username %}">
+                    {{ user.username }}
+                </a>
+            </td>
 
-		<td class="cell_groups"> 
-		{# Grupper brukeren er med i #}
-        {# TODO: Bruk img istedenfor #}
-			{% for group in user.groups.all %}
-            <img alt="{{ group.name }}" src="{{ STATIC_URL }}img/komite-ikon/{{ group.name|lower }}.png" />
-			{% endfor %}
-		</td>
+            <td class="cell_name">
+                {{ user.first_name }}
+                {{ user.last_name }}
+            </td>
 
-	</tr>
-{% endfor %}
-</table>
+            <td class="cell_groups"> 
+            {# Grupper brukeren er med i #}
+                {% for group in user.groups.all %}
+                <img alt="{{ group.name }}" title="{{ group.name }}" src="{{ STATIC_URL }}img/komite-ikon/{{ group.name|lower }}.png" />
+                {% endfor %}
+            </td>
+
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>Vi fant ingen brukere som matchet søket ditt :(</p>
+{% endif %}
 
 {% comment %}
 <div class="pagination">

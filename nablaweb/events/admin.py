@@ -8,7 +8,7 @@ from news.admin import NewsAdmin
 
 class EventRegistrationInline(admin.TabularInline):
     model = EventRegistration
-    fields = ('user', 'number')
+    fields = ('user', 'number', 'attending' )
 
 
 class EventAdmin(NewsAdmin):
@@ -30,6 +30,7 @@ class EventAdmin(NewsAdmin):
               "places",
               "has_queue",
               "allow_comments",
+              "open_for",
               "facebook_url")
     form = EventForm
     list_display = ['__unicode__', 'registration_required']

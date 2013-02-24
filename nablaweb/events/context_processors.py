@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 
 from events.models import Event
+from bedpres.models import BedPres
 from datetime import date, datetime
+from itertools import chain
 import calendar
 
 def upcoming_events(request):
     """Legger globalt til en template-variabel upcoming_events"""
-
-    # TODO: Denne må filtreres slik at den ikke viser eldre events
-    upcoming_events = Event.objects.all().filter(event_start__gte=datetime.now()).order_by('event_start')[:6]
-
-    return {'upcoming_events': upcoming_events}
+    now = datetime.now()
+    upcoming_events = Event.objects.filter(event_start__gte=now).order_by('event_start')[:6]
+    upcoming_bedpresses = BedPres.objects.filter(event_start__gte=now).order_by('event_start')[:6]
+    upcoming = sorted(chain(upcoming_events,upcoming_bedpresses),cmp=lambda e1,e2: 1 if e1.event_start>e2.event_start else  -1)[:6]
+    return {'upcoming_events': upcoming}
 
 class Day(object):
     def __init__(self, arr, day):

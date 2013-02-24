@@ -2,12 +2,16 @@
 
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from news.models import News
 import datetime
 from urlparse import urlparse
 
 class AbstractEvent(News):
+    """
+    Abstrakt modell som definerer det som er felles
+    for Event og BedPres.
+    """
     short_name = models.CharField("kort navn", max_length=20, blank=True, null=True, help_text="Brukes på steder hvor det ikke er plass til å skrive hele overskriften, for eksempel kalenderen.")
 
     # Indikerer hvem som står bak arrangementet.
@@ -61,8 +65,15 @@ class AbstractEvent(News):
     # Dette feltet er valgfritt.
     facebook_url = models.CharField(verbose_name="facebook-url", blank=True, max_length=100, help_text="URL-en til det tilsvarende arrangementet på Facebook")
 
+    # Hvilke grupper som får melde seg på
+    open_for = models.ManyToManyField(Group, verbose_name = "Åpen for", blank = True, null = True, help_text = "Hvilke grupper som får lov til å melde seg på arrangementet. Hvis ingen grupper er valgt er det åpent for alle.")
+
     class Meta:
         abstract = True
+
+    def allowed_to_attend(self,user):
+        "Indikerer om en bruker har lov til å melde seg på arrangementet"
+        return (not self.open_for.exists()) or self.open_for.filter(user=user).exists()
 
     def __unicode__(self):
         return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
@@ -87,6 +98,10 @@ class AbstractEvent(News):
 
     def is_registered(self, user):
         raise NotImplemented
+    def is_attending(self, user):
+        raise NotImplemented
+    def is_waiting(self, user):
+        raise NotImplemented
 
     def has_waiting_list(self):
         raise NotImplemented
@@ -99,15 +114,35 @@ class AbstractEvent(News):
 
     def move_user_to_place(self, user, place):
         raise NotImplementedError
+
+    def get_users_registered(self):
+        raise NotImplemented
+
+    def get_users_attending(self):
+        raise NotImplemented
+
+    def get_users_waiting(self):
+        raise NotImplemented
         
     def get_short_name(self):
-        raise NotImplementedError
-
+        " Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke."
+        if self.short_name:
+            return self.short_name
+        else:
+            return self.headline[0:18].capitalize() + '...'
+    
 class Event(AbstractEvent):
+    """
+    Arrangementer både med og uten påmelding.
+    Dukker opp som nyheter på forsiden.
+    """
 
     class Meta:
         verbose_name = "arrangement"
         verbose_name_plural = "arrangement"
+        permissions=(
+                ("administer","Can administer events"),
+        )
 
     # Overlagre for å automatisk vedlikeholde ventelisten.
     def save(self, *args, **kwargs):
@@ -128,13 +163,6 @@ class Event(AbstractEvent):
         
         if (self.facebook_url == "http://"):
             self.facebook_url = ""
-    
-    # Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke.
-    def get_short_name(self):
-        if self.short_name:
-            return self.short_name
-        else:
-            return self.headline[0:18].capitalize() + '...'
     
     # Sjekker om det er for sent å melde seg av.
     def deregistration_closed(self):
@@ -178,25 +206,31 @@ class Event(AbstractEvent):
 
     # Returnerer True dersom brukeren er registrert, False ellers.
     def is_registered(self, user):
-        try:
-            self.eventregistration_set.get(user=user)
-            return True
-        except EventRegistration.DoesNotExist:
-            return False
+        return self.eventregistration_set.filter(user=user).exists()
+    def is_attending(self, user):
+        return self.eventregistration_set.filter(user=user,attending=True).exists()
+    def is_waiting(self,user):
+        return self.eventregistration_set.filter(user=user,attending=False).exists()
 
     # Returnerer True dersom arrangementet har venteliste, False ellers.
     def has_waiting_list(self):
         return bool(self.has_queue)
 
-    # Forsøker å melde brukeren på arrangementet.  Returnerer en
-    # tekststreng som indikerer hvor vellykket operasjonen var.
+    def get_users_registered(self):
+        return [e.user for e in self.eventregistration_set.all()]
+    def get_users_attending(self):
+        return [e.user for e in self.eventregistration_set.filter(attending=True)]
+    def get_users_waiting(self):
+        return [e.user for e in self.eventregistration_set.filter(attending=False)]
+
+        
     def register_user(self, user):
+        """
+        Forsøker å melde brukeren på arrangementet.  Returnerer en
+        tekststreng som indikerer hvor vellykket operasjonen var.
+        """
         if not self.registration_required:
             msg = 'noreg'
-        elif self.registration_deadline and self.registration_deadline < datetime.datetime.now():
-            msg = 'closed'
-        elif self.registration_start and self.registration_start > datetime.datetime.now():
-            msg = 'closed'
         else:
             # TODO: Bruk select_for_update(), når den blir tilgjengelig.
             # https://docs.djangoproject.com/en/dev/ref/models/querysets/#select-for-update
@@ -212,30 +246,40 @@ class Event(AbstractEvent):
                     else:#No waiting list
                         msg = 'full'
                 else:
-                    reg = regs.create(event=self, user=user, attending=True)
+                    reg = regs.create(event=self, user=user, number=self.users_attending()+1, attending=True)
                     msg = 'attend'
         return msg
 
-    # Melder brukeren av arrangementet. I praksis sørger metoden bare
-    # for at brukeren ikke er påmeldt lengre, uavhengig av status før.
     def deregister_user(self, user):
+        """
+        Melder brukeren av arrangementet. I praksis sørger metoden bare
+        for at brukeren ikke er påmeldt lengre, uavhengig av status før.
+        """
         regs = self.eventregistration_set
         try:
             reg = regs.get(user=user)
-            if self.deregistration_closed is None and reg.is_attending_place():
-                msg = 'not_allowed'
-            elif  self.deregistration_closed() and reg.is_attending_place():
-                msg = 'dereg_closed'
-            else:
-                self.eventregistration_set.get(user=user).delete()
-                self.update_lists()
-                msg = 'dereg'
+            self.eventregistration_set.get(user=user).delete()
+            self.update_lists()
+            msg = 'dereg'
         # Brukeren er ikke påmeldt
         except EventRegistration.DoesNotExist:
             msg = 'not_reg'
         return msg
 
     def update_lists(self):
+        n = 0
+        for attendee in self.eventregistration_set.filter(attending = True).order_by('number'):
+            n += 1
+            if attendee.number != n:
+                attendee.number = n
+                attendee.save()
+        n = 0
+        for waiting  in self.eventregistration_set.filter(attending = False).order_by('number'):
+            n += 1
+            if waiting.number != n:
+                waiting.number = n
+                waiting.save()
+        
         waiting_list = list( self.eventregistration_set.filter(attending = False).order_by('number').reverse() )
         for n in xrange( min(self.free_places(), len(waiting_list)) ):
             waiting_list.pop().set_attending()
@@ -300,39 +344,42 @@ class EventRegistration(models.Model):
     event = models.ForeignKey(Event, blank=False, null=True)
 
     # Brukeren som er registrert.
-    user = models.ForeignKey(User, blank=False, null=True)
+    user = models.ForeignKey(User, blank=False, null=True,verbose_name='bruker')
 
     # Datoen brukeren ble registrert.
     date = models.DateTimeField(auto_now_add=True, null=True)
 
-    # Kønummer som tilsvarer plass på ventelisten.
-    number = models.PositiveIntegerField(blank=True, null=True)
+    # Kønummer som tilsvarer plass på ventelisten/påmeldingsrekkefølge.
+    number = models.PositiveIntegerField(blank=True, null=True, verbose_name='kønummer', help_text='Kønummer for ventelisten. Tallene har ingen funksjon dersom man ikke har venteliste på arrangementet.')
 
     # Om man har fått plass på eventet.
-    attending = models.BooleanField(blank=False, null=False)
+    attending = models.BooleanField(blank=False, null=False, verbose_name='har plass', help_text="Hvis denne er satt til sann har man en plass på arrangementet ellers er det en ventelisteplass.")
 
     def __unicode__(self):
         return u'EventRegistration: %s, %s: %s' % (self.event, self.attending, self.user)
 
-    # Returnerer True dersom registreringen er en plass på venteliste.
     def is_waiting_place(self):
+        "Returnerer True dersom registreringen er en plass på venteliste."
         return not self.attending
 
-    # Returnerer hvilken plass man har på ventelisten. None hvis man har plass eller det ikke finnes.
     def waiting_list_place(self):
+        "Returnerer hvilken plass man har på ventelisten. None hvis man har plass eller det ikke finnes."
         if not self.attending:
             return self.number
         else:
             return None
 
     def set_attending(self):
+        "Flytter noen fra ventelisten til påmeldte"
         if not self.attending:
             self.attending = True
+            self.number = self.event.users_attending() + 1
             self.save()
+            #TODO
             #OG SEND EN MAIL.
 
-    # Returnerer True dersom registreringen er en garantert plass.
     def is_attending_place(self):
+        "Returnerer True dersom registreringen er en garantert plass."
         return self.attending
     is_attending_place.boolean = True
     is_attending_place.short_description = "har plass"
