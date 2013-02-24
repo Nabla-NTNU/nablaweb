@@ -145,14 +145,14 @@ class BedPres(AbstractEvent):
         import os
 
         #if not self.picture:
-        result = urllib.urlretrieve(self.bpc_info['logo']) # image_url is a URL to an image
-        filename,file_ext = os.path.splittext(self.bpc_info['logo'])
+       # result = urllib.urlretrieve(self.bpc_info['logo']) # image_url is a URL to an image
+       # filename,file_ext = os.path.splittext(self.bpc_info['logo'])
 
-        self.picture.save(
-            os.path.basename("news_pictures/bpc_"+self.bpcid+file_ext ),
-            File(open(result[0]))
-            )
-        self.save()
+        #self.picture.save(
+         #   os.path.basename("news_pictures/bpc_"+self.bpcid+file_ext ),
+          #  File(open(result[0]))
+           # )
+        #self.save()
             
         self.body = bpc_info['description']
         self.organizer = 'Bedkom'
