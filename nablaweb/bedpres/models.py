@@ -6,6 +6,7 @@ from itertools import chain
 from django.db import models
 from django.contrib.auth.models import User
 from events.models import AbstractEvent
+from jobs.models import Company
 from hashlib import sha1
 from news.models import News
 import bpc_core
@@ -18,6 +19,7 @@ class BedPres(AbstractEvent):
 
     # Id'en til bedpressen internt hos BPC
     bpcid = models.CharField(verbose_name="BPC-id", max_length=16, unique=True, blank=True, help_text = "Dette er id'en som blir brukt internt hos BPC. Ikke endre den hvis du ikke vet du gjør.")
+    company = models.ForeignKey(Company, verbose_name="Bedrift", blank=False, help_text="Hvilken bedrift som står bak bedriftspresentasjonen")
 
     # Informajon fra BPC som blir lastet ned av metodene
     # bpc_info,bpc_waiting_list og bpc_attending_list ved behov.
@@ -96,6 +98,9 @@ class BedPres(AbstractEvent):
             return ((self.places - self.free_places())*100)/self.places
         else:
             return 100
+
+    def correct_picture(self): return self.company.picture
+    def correct_cropping(self): return self.company.cropping
 
     @property
     def bpc_info(self):
