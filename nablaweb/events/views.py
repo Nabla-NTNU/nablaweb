@@ -6,14 +6,16 @@ from django.contrib import messages as django_messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, render
 from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.decorators import login_required
+from django.utils.safestring import mark_safe
 from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
 from nablaweb.events.models import Event, EventRegistration
 from nablaweb.bedpres.models import BedPres
 from itertools import chain
+from events.event_calendar import EventCalendar
 
 # Administrasjon
 
@@ -81,90 +83,40 @@ class EventDeleteView(NewsDeleteView):
 
 # Offentlig
 
+def calendar(request, year=None, month=None):
+    """
+    Renders a calendar with events from the chosen month
+    """
+    if year:
+        year = int(year)
+    else:
+        year = datetime.date.today().year
+
+    if month:
+        month = int(month)
+    else:
+        month = datetime.date.today().month
+
+    events = Event.objects.select_related('content_type').order_by('event_start').filter(
+        event_start__year=year, event_start__month=month
+    )
+    cal = EventCalendar(events).formatmonth(year, month)
+
+    # prev is some day in the previous month
+    # this is some day in this month
+    # next is some day in the next month
+    return render(request, 'events/event_list.html', {
+        'calendar': mark_safe(cal),
+        'prev': datetime.date(year, month, 1) - datetime.timedelta(27),
+        'this': datetime.date(year, month, 1),
+        'next': datetime.date(year, month, 1) + datetime.timedelta(32),
+    })
+
+
 class EventListView(ListView):
     model = Event
     context_object_name = "event_list"
     queryset = Event.objects.all() 
-
-    # TODO: For performance reasons, only fetch the needed events.
-    # That is, from Monday in the first week, to Sunday in the last week.
-
-    def get_context_data(self, **kwargs):
-        # Get the context from the superclass
-        context = super(EventListView, self).get_context_data(**kwargs)
-        
-        # Penalties
-        user = self.request.user
-        if user.is_authenticated():
-            context['penalty_list'] = user.eventpenalty_set.all()
-
-        # Functions to be used
-        from datetime import date, timedelta
-        from calendar import monthrange
-
-        today = date.today()
-
-        # Set parameters from url. (/year/month)
-        try:
-            year = int(self.args[0])
-        except IndexError:
-            year = today.year
-
-        try:
-            month = int(self.args[1])
-        except IndexError:
-            month = today.month
-        
-        monthdays = monthrange(year, month)
-        weeknodelta = date(year, month, monthdays[1]).isocalendar()[1] - date(year, month, 1).isocalendar()[1]
-        
-        # Weeks to be displayed
-        if (weeknodelta == 5):
-            weeks = 6
-        else:
-            weeks = 5
-
-        # Get the monday at the start of the calendar
-        first = date(year, month, 1)
-        first_monday = first - timedelta(days=first.weekday())
-        #  last_sunday = first + timedelta(weeks=weeks, days=6)
-
-        # Object to add to context
-        calendar = {'first': first, 'weeks': []}
-
-        for week in range(0, weeks):
-            # Add an empty week, with weeknumber
-            calendar['weeks'].append({'days': []})
-            for daynumber in range(0, 7):
-                # Get the day
-                day = first_monday + timedelta(days=week * 7 + daynumber)
-
-                # If monday, get the weeknumber and add to current week
-                if day.weekday() == 0:
-                    calendar['weeks'][week]['weeknumber'] = day.isocalendar()[1]
-
-                # Get the events and bedpresses which start at the current day,
-                # or between two dates if an end date exists
-                all_events = chain(context['event_list'], BedPres.objects.all())
-                events = [event for event in all_events
-                        if (event.event_end and event.event_start.date() <= day
-                        and day <= event.event_end.date()) or event.event_start.date() == day]
-
-                # Add it to the week
-                calendar['weeks'][week]['days'].append({
-                    'date': day.day,
-                    'events': events,
-                    'differentmonth': (day.month != month),
-                    'current': (day == today),
-                })
-
-        # Add next and previous
-        calendar['prev'] = first_monday - timedelta(days=1)
-        calendar['next'] = first + timedelta(days=31)
-
-        # Add it to the request context
-        context['calendar'] = calendar
-        return context
 
 
 class EventDetailView(NewsDetailView):

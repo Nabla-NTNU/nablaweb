@@ -12,66 +12,27 @@
 <div class="row">
 <div class="span12">
 
-<h2>Kalender {{ calendar.first.year }}</h2>
+<h2>Kalender {{ this.year }}</h2>
+<div class="pagination pagination-centered">
+    <ul>
+        <li>
+            <a href="{% url event_list prev.year prev.month %}">&laquo;</a>
+        </li>
+        <li class="inactive"><a>{{ this|date:"F"|capfirst }}</a></li>
+        <li>
+            <a href="{% url event_list next.year next.month %}">&raquo;</a>
+        </li>
+    </ul>
+</div>
 
-<table class="calendar">
 
-    <caption> 
+{{ calendar }}
 
-        <div class="pagination pagination-centered">
-            <ul>
-                <li>
-                    <a href="{% url event_list calendar.prev.year calendar.prev.month %}">&laquo;</a>
-                </li>
-                <li class="inactive"><a>{{ calendar.first|date:"F"|capfirst }}</a></li>
-                <li>
-                    <a href="{% url event_list calendar.next.year calendar.next.month %}">&raquo;</a>
-                </li>
-            </ul>
-        </div>
 
-    </caption>
 
-    <thead>
-        <tr>
-            <th class="uke">Uke</th>
-            <th>Man</th>
-            <th>Tir</th>
-            <th>Ons</th>
-            <th>Tor</th>
-            <th>Fre</th>
-            <th>Lør</th>
-            <th>Søn</th>
-        </tr>
-    </thead>
 
-    <tbody>
-        {% for week in calendar.weeks %}
-        <tr>
-            <td>{{ week.weeknumber }}</td>
-            {% for day in week.days %}
-            <td class="cell
-                    {% if day.differentmonth %} differentmonth {% endif %}
-                    {% if day.current %} current {% endif %}
-                ">
 
-                
-                <ul class="events">
-                    <li class="date"><b>{{ day.date }}.</b></li>
-                    {% for event in day.events %}
-                        <li>
-                            <b class="icon-cog"></b>
-                            <a href="{{ event.get_absolute_url }}">{{ event.get_short_name }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </tbody>
 
-</table>
 
 </div> <!-- end span12 -->
 </div><!-- row -->
@@ -134,5 +95,6 @@
 
     {% endif %}
 </div>
+
 
 {% endblock main %}
