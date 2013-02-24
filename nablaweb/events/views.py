@@ -138,7 +138,8 @@ class UserEventView(TemplateView):
         context_data['user'] = user
         if user.is_authenticated():
             context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start') 
-            context_data['is_on_a_waiting_list'] = bool( filter(EventRegistration.is_waiting_place , context_data['eventregistration_list']) )
+            context_data['is_on_a_waiting_list']  = bool( filter(EventRegistration.is_waiting_place   , context_data['eventregistration_list']) )
+            context_data['is_attending_an_event'] = bool( filter(EventRegistration.is_attending_place , context_data['eventregistration_list']) )
             context_data['penalty_list'] = user.eventpenalty_set.all()
         return context_data
 
