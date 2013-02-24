@@ -23,7 +23,7 @@ class BedPresAdmin(ContentAdmin):
               "deregistration_deadline",
               "places",
               "has_queue")
-    form = BedPresForm
+    #form = BedPresForm
 
 
 admin.site.register(BedPres, BedPresAdmin)

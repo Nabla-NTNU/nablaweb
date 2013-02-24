@@ -10,6 +10,25 @@
 {% block content %}
 
 {% include "news/includes/text_content.html" with news=bedpres%}
+
+{# Vis påmeldte #}
+{% if user.is_authenticated %}
+    {% if bedpres.get_users_attending %}
+        <h3>Påmeldte</h3>
+    {% endif %}
+    <div class="registrations">
+        {% for user in bedpres.get_users_attending %}
+        <span class="label">
+            {% if user.get_full_name %}
+                 {{ user.get_full_name }}
+            {% else %}
+                {{ user.username }}
+            {% endif %}
+        </span>
+        {% endfor %}
+    </div>
+{% endif %}
+
 {% include "content/includes/comments.html" with content=bedpres %}
 {% endblock %}
 

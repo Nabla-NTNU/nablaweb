@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     (r'^brukere/', include('accounts.urls')),
     (r'^stillinger/', include('jobs.urls')),
     (r'^komite/', include('com.urls')),
-    (r'^gallery/', include('gallery.urls')),  # Kan ikke endres pga hardkoding i gallery-appen
+#    (r'^gallery/', include('gallery.urls')),  # Kan ikke endres pga hardkoding i gallery-appen
     (r'^sitater/', include('quotes.urls')),
     (r'^feedback/', include('feedback.urls')),
     (r'^nabladet/', include('nabladet.urls')),
