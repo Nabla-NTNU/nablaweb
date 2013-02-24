@@ -19,7 +19,7 @@
     <tfoot>
         <tr>
             <td colspan="10" class="muted">
-                <i class="icon-ok-sign"></i> Du er påmeldt arrangementet.
+                {% if is_attending_an_event %}<i class="icon-ok-sign"></i> Du er påmeldt arrangementet.{% endif %}
                 {% if is_on_a_waiting_list %}<br/><sup>1</sup> Du kan alltid trekke deg fra ventelisten.{% endif %}
             </td>
         </tr> 
@@ -52,6 +52,7 @@
                     <time datetime="{{ eventregistration.event.deregistration_deadline|date:"c" }}">
                         {{ eventregistration.event.deregistration_deadline.date|naturalday }} kl. {{ eventregistration.event.deregistration_deadline|date:"H:i" }}
                     </time>
+                    {%if eventregistration.is_waiting_place %}<sup>1</sup>{% endif %}
                 {% else %}
                   Ingen
                 {% endif %}

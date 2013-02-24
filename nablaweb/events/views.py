@@ -19,20 +19,6 @@ from events.event_calendar import EventCalendar
 
 # Administrasjon
 
-def _admin_mov(request, instance):
-    user_list = request.POST.getlist('user')
-    text = request.POST.get('text')
-    try:
-        place = int(text)
-        for user in user_list:
-            user = User.objects.get(username=user)
-            if instance.is_registered(user):
-                instance.move_user_to_place(user, place)
-    except (ValueError, User.DoesNotExist): pass
-_admin_mov.short = 'mov'
-_admin_mov.info = 'Flytt til'
-
-
 def _admin_add(request, instance):
     text = request.POST.get('text')
     try:
@@ -55,7 +41,7 @@ _admin_del.info = 'Fjern'
 
 
 def administer(request, pk,
-               actions=(_admin_add, _admin_mov, _admin_del),
+               actions=(_admin_add, _admin_del),
                view='event_admin'):
     event = get_object_or_404(Event, pk=pk)
 
@@ -152,7 +138,8 @@ class UserEventView(TemplateView):
         context_data['user'] = user
         if user.is_authenticated():
             context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start') 
-            context_data['is_on_a_waiting_list'] = bool( filter(EventRegistration.is_waiting_place , context_data['eventregistration_list']) )
+            context_data['is_on_a_waiting_list']  = bool( filter(EventRegistration.is_waiting_place   , context_data['eventregistration_list']) )
+            context_data['is_attending_an_event'] = bool( filter(EventRegistration.is_attending_place , context_data['eventregistration_list']) )
             context_data['penalty_list'] = user.eventpenalty_set.all()
         return context_data
 
