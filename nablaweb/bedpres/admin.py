@@ -9,6 +9,7 @@ class BedPresAdmin(ContentAdmin):
               "cropping",
               "bpcid",
               "headline",
+              "company",
               "slug",
               "short_name",
               "lead_paragraph",
