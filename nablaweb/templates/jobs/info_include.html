@@ -5,10 +5,18 @@
 <table class="table table-bordered table-striped content-info">
 
     <!-- Fra -->
+    {% if job.info_website %}
+    <tr>
+        <td colspan=2 style="text-align: center;">
+            <strong><a href="{{ job.info_website }}">Søk/mer informasjon</a></strong>
+        </td>
+    </tr>
+    {% endif %}
+
     <tr>
         <td style="width:35%;">Bedrift</td>
         <td>
-            <strong>{{ job.company.name }}</strong>
+            {{ job.company.name }}
         </td>
     </tr>
 

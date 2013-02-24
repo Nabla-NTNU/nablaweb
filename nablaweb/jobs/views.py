@@ -6,7 +6,7 @@ from django.views.generic import ListView, DetailView
 from nablaweb.news.views import *
 from nablaweb.jobs.models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
 from django.shortcuts import get_object_or_404
-
+from datetime import datetime
 
 class GenericJobsList(ListView):
     model = Advert
@@ -17,7 +17,13 @@ class GenericJobsList(ListView):
     def get_context_data(self, **kwargs):
         context = super(GenericJobsList, self).get_context_data(**kwargs)
 
-        jobs_list = context['jobs_list']
+        #jobs_list = context['jobs_list']
+        jobs = Advert.objects.all().order_by('-created_date', 'headline').exclude(removal_date__lte=datetime.now())
+
+        if jobs:
+            context['jobs_list'] = jobs
+        else:
+            context['jobs_list'] = None
 
         years = YearChoices.objects.all()
         choices = RelevantForChoices.objects.all()
@@ -38,9 +44,9 @@ class GenericJobsList(ListView):
         else:
             context['tags'] = None
 
-        if jobs_list:
+        if jobs:
             # Deler f.eks. opp [1, 2, 3, 4, 5] til [[1, 2], [3, 4], [5]]
-            context['jobs_rows'] = listutil.row_split(jobs_list[0:], 2)
+            context['jobs_rows'] = listutil.row_split(jobs[0:], 2)
 
         return context
 
