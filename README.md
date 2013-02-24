@@ -17,7 +17,7 @@ Vi bruker South, noe som fører til at du må gjøre dette:
 
     rm sqlite.db
     cd nablaweb
-    ./manage.py syncdb -all
+    ./manage.py syncdb --all
 
 # Fungerer ikke css-en? #
 Vi bruker Twitter-Bootstrap, som må kompileres fra LESS til CSS. Skriv i /nablaweb:
