@@ -280,12 +280,13 @@ class Event(AbstractEvent):
                 waiting.number = n
                 waiting.save()
         
-        waiting_list = list( self.eventregistration_set.filter(attending = False).order_by('number').reverse() )
-        for n in xrange( min(self.free_places(), len(waiting_list)) ):
-            waiting_list.pop().set_attending()
-        for eventregistration in waiting_list:
-            eventregistration.number -= waiting_list[-1].number-1
-            eventregistration.save()
+        if self.registration_deadline and self.registration_deadline > datetime.datetime.now() and datetime.datetime.now() + datetime.timedelta(1) < self.event_start :
+            waiting_list = list( self.eventregistration_set.filter(attending = False).order_by('number').reverse() )
+            for n in xrange( min(self.free_places(), len(waiting_list)) ):
+                waiting_list.pop().set_attending()
+            for eventregistration in waiting_list:
+                eventregistration.number -= waiting_list[-1].number-1
+                eventregistration.save()
 
     # Sletter overflødige registreringer.
     def _prune_queue(self):
