@@ -10,7 +10,7 @@ static/admin/
 static/admin
 
 # Personlige settings
-nablaweb/settings.py
+nablaweb/local_settings.py
 nablaweb/wsgi.py
 
 # Wiki
