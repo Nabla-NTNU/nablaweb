@@ -44,7 +44,7 @@ class ComPage(models.Model):
 class ComMembership(models.Model):
     user = models.ForeignKey('auth.User')
     com = models.ForeignKey('auth.Group', verbose_name="Komité")
-    story = models.TextField(verbose_name="Beskrivelse", help_text="Ansvarsområde eller lignende")
+    story = models.TextField(blank=True, verbose_name="Beskrivelse", help_text="Ansvarsområde eller lignende")
     joined_date = models.DateField(verbose_name="Ble med", help_text="Dato personen ble med i komiteen")
     is_active = models.BooleanField(blank=False, null=False, verbose_name="Aktiv?", default=True)
 

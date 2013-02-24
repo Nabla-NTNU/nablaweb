@@ -33,7 +33,7 @@
     
     {# Navn og story #}
     <div class="span6">
-        <h3>{{ membership.user.get_full_name }}</h3>
+        <h3>{% if membership.user.get_full_name %}{{ membership.user.get_full_name }}{% else %}Bruker uten navn{% endif %}</h3>
         {{ membership.story|markdown|wikilinks }}
     </div>
 </div>
