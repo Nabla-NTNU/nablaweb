@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load mediawiki_links %}
 {% load markup %}
-
+{% load thumbnail %}
 {% block title %}{{ com.com.name }}{% endblock %}
 
 {% block content %}
@@ -10,12 +10,25 @@
 <dl>{% for person in members %}
     <dt><strong>{% if person.user.user.first_name %}{{ person.user.user.first_name }} {{ person.user.user.last_name }}{% else %}{{person.user.user.username}}{% endif %}</strong>
     <dt><strong><a href="{% url profile_link person.user.username %}">{% firstof person.user.get_full_name person.user.username %}</a></strong> (ble med {{ person.joined_date|date:"d. F Y" }})</dt>
-    <dd>{{ person.story|markdown|wikilinks }}</dt>
+<div class="row">
+    <div class="span2"> 
+<div class="span2 thumbnail">
+              {% if person.userprofile.avatar %}
+              <img alt="avatar" src="{% thumbnail person.userprofile.avatar 150x150 %}" width = "150" height ="150" >
+              {% else %}
+              <img alt="avatar" src="{{ STATIC_URL }}img/default_avatar.png" width = "150" height ="150" >
+              {%endif %}
+        </div>
+    </div>
+    <div class="span5 offset1">
+    <dt>{{ person.story|markdown|wikilinks }}</dt>
+    </div>
+</div>
     {% empty %}
     <dt>Ingen medlemmer.</dt>
     {% endfor %}
 </dl>
-<p><small>Sist endret {{ com.last_changed_date }}</small></p>
+
 {% endblock content %}
 
 

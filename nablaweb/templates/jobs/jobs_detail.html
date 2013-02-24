@@ -11,8 +11,8 @@
 
 <div class="row"><div class="span8">
 
-    {% if event.picture %}
-        <img alt="" width="100%" src="{% thumbnail event.picture 770x250 box=event.cropping %}">
+    {% if job.company.picture %}
+        <img alt="" width="100%" src="{% thumbnail job.company.picture 770x250 box=job.company.cropping %}">
     {% endif %}        
 
 <h2>{{ job.headline }}</h2>
