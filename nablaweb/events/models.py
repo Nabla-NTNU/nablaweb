@@ -140,6 +140,9 @@ class Event(AbstractEvent):
     class Meta:
         verbose_name = "arrangement"
         verbose_name_plural = "arrangement"
+        permissions=(
+                ("administer","Can administer events"),
+        )
 
     # Overlagre for å automatisk vedlikeholde ventelisten.
     def save(self, *args, **kwargs):
