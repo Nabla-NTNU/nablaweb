@@ -1,33 +1,43 @@
 {% extends 'base.html' %}
+{% load highlight %}
 
 {% block content %}
-    <h2>Søk</h2>
 
-    <form method="get" action=".">
-        <table>
-            {{ form.as_table }}
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input type="submit" value="Search">
-                </td>
-            </tr>
-        </table>
+    <form method="get" action="." class="form-search">
+        <div style="margin-top: 15px; margin-bottom: 20px;"><div class="input-append"><input type="text" name="q" id="id_q" class="search-query" style="width:
+                25em;" placeholder="{% if not query %}Søk...{% else %}{% endif %}" {% if query %}value="{{ query }}"{% endif %}/>&nbsp;
+                <button type="submit" class="btn" value="Søk"><i class="icon-search"></i></button></div></div>
 
-        {% if query %}
-            <h3>Resultater</h3>
+        <h2>Søkeresultater</h2>
 
+        {% if query %}<table>
             {% for result in page.object_list %}
-                <p>
+                <tr>
+                <td style="width:75%; padding-top: 10px; padding-bottom: 0px;">
                     {% if result.content_type == "news.news" %}
-                    <a href="{{ result.object.get_absolute_url }}">{{ result.object.headline }}</a>
+                    <h3><a href="{{ result.object.get_absolute_url }}">{{ result.object.headline }}</a></h3>
                     {% elif result.content_type == "com.compage" %}
-                    <a href="{% url show_com_page result.object.get_canonical_name %}">{{ result.object.com.name }}</a>
+                    <h3><a href="{% url show_com_page result.object.get_canonical_name %}">{{ result.object.com.name }}</a></h3>
                     {% endif %}
-                </p>
+                </td>
+                <td></td>
+                <td style="width:25%;">
+                    {% if result.content_type == "news.news" %}{{ result.object.created_date }}{% elif result.content_type == "com.compage" %}
+                    {{ result.object.last_changed_date }}{% endif %}
+                </td>
+                </tr>
+                <tr>
+                <td colspan="3" style="padding-right: 3em; padding-bottom: 20px;">
+                    {% if result.content_type == "news.news" %}
+                    <p>{{ result.object.lead_paragraph|truncatewords_html:58 }}</p>
+                    {% elif result.content_type == "com.compage" %}
+                    <p>{{ result.object.description|truncatewords_html:58 }}</p>
+                    {% endif %}
+                </td>
+                </tr>
             {% empty %}
-                <p>Ingen treff.</p>
-            {% endfor %}
+                <p style="padding-top: 10px;">Ingen treff på "{{ query }}".</p>
+            {% endfor %}</table>
 
             {% if page.has_previous or page.has_next %}
                 <div>
@@ -37,7 +47,7 @@
                 </div>
             {% endif %}
         {% else %}
-            Skriv inn noe i feltet over for å søke.
+             <p style="padding-top: 10px;">Skriv inn noe i feltet over for å søke.</p>
         {% endif %}
     </form>
 {% endblock %}

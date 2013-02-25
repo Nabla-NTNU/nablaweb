@@ -65,7 +65,7 @@ class FysmatClass(NablaGroup):
         verbose_name = "Kull"
         verbose_name_plural = "Kull"
 
-    starting_year = models.CharField("År startet", max_length = '4', unique = True)
+    starting_year = models.CharField("År startet", max_length = 4, unique = True)
 
     def get_class_number(self):
         now = date.today()
