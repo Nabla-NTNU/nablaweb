@@ -8,34 +8,46 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'ComPage'
-        db.create_table('com_compage', (
+        # Adding model 'Poll'
+        db.create_table('poll_poll', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('com', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.Group'])),
-            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('slug', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
-            ('last_changed_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True)),
-            ('last_changed_by', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='compage_edited', null=True, to=orm['auth.User'])),
+            ('question', self.gf('django.db.models.fields.CharField')(max_length=1000)),
+            ('creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('publication_date', self.gf('django.db.models.fields.DateTimeField')()),
+            ('added_by', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('edit_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('is_current', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.send_create_signal('com', ['ComPage'])
+        db.send_create_signal('poll', ['Poll'])
 
-        # Adding model 'ComMembership'
-        db.create_table('com_commembership', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('com', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.Group'])),
-            ('story', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('joined_date', self.gf('django.db.models.fields.DateField')()),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+        # Adding M2M table for field users_voted on 'Poll'
+        db.create_table('poll_poll_users_voted', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('poll', models.ForeignKey(orm['poll.poll'], null=False)),
+            ('user', models.ForeignKey(orm['auth.user'], null=False))
         ))
-        db.send_create_signal('com', ['ComMembership'])
+        db.create_unique('poll_poll_users_voted', ['poll_id', 'user_id'])
+
+        # Adding model 'Choice'
+        db.create_table('poll_choice', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('poll', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['poll.Poll'])),
+            ('choice', self.gf('django.db.models.fields.CharField')(max_length=80)),
+            ('votes', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('added_by', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal('poll', ['Choice'])
 
     def backwards(self, orm):
-        # Deleting model 'ComPage'
-        db.delete_table('com_compage')
+        # Deleting model 'Poll'
+        db.delete_table('poll_poll')
 
-        # Deleting model 'ComMembership'
-        db.delete_table('com_commembership')
+        # Removing M2M table for field users_voted on 'Poll'
+        db.delete_table('poll_poll_users_voted')
+
+        # Deleting model 'Choice'
+        db.delete_table('poll_choice')
 
     models = {
         'auth.group': {
@@ -67,31 +79,33 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        'com.commembership': {
-            'Meta': {'object_name': 'ComMembership'},
-            'com': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.Group']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'joined_date': ('django.db.models.fields.DateField', [], {}),
-            'story': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
-        },
-        'com.compage': {
-            'Meta': {'object_name': 'ComPage'},
-            'com': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.Group']"}),
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_changed_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'compage_edited'", 'null': 'True', 'to': "orm['auth.User']"}),
-            'last_changed_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
-        },
         'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        'poll.choice': {
+            'Meta': {'object_name': 'Choice'},
+            'added_by': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'choice': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
+            'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'poll': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['poll.Poll']"}),
+            'votes': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+        },
+        'poll.poll': {
+            'Meta': {'object_name': 'Poll'},
+            'added_by': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'edit_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_current': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'publication_date': ('django.db.models.fields.DateTimeField', [], {}),
+            'question': ('django.db.models.fields.CharField', [], {'max_length': '1000'}),
+            'users_voted': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.User']", 'symmetrical': 'False'})
         }
     }
 
-    complete_apps = ['com']
+    complete_apps = ['poll']

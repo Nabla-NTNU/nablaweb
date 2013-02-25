@@ -8,34 +8,17 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'ComPage'
-        db.create_table('com_compage', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('com', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.Group'])),
-            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('slug', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
-            ('last_changed_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True)),
-            ('last_changed_by', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='compage_edited', null=True, to=orm['auth.User'])),
+        # Adding model 'Nablad'
+        db.create_table('nabladet_nablad', (
+            ('news_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['news.News'], unique=True, primary_key=True)),
+            ('pub_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
+            ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
         ))
-        db.send_create_signal('com', ['ComPage'])
-
-        # Adding model 'ComMembership'
-        db.create_table('com_commembership', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('com', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.Group'])),
-            ('story', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('joined_date', self.gf('django.db.models.fields.DateField')()),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-        ))
-        db.send_create_signal('com', ['ComMembership'])
+        db.send_create_signal('nabladet', ['Nablad'])
 
     def backwards(self, orm):
-        # Deleting model 'ComPage'
-        db.delete_table('com_compage')
-
-        # Deleting model 'ComMembership'
-        db.delete_table('com_commembership')
+        # Deleting model 'Nablad'
+        db.delete_table('nabladet_nablad')
 
     models = {
         'auth.group': {
@@ -67,31 +50,35 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        'com.commembership': {
-            'Meta': {'object_name': 'ComMembership'},
-            'com': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.Group']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'joined_date': ('django.db.models.fields.DateField', [], {}),
-            'story': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
-        },
-        'com.compage': {
-            'Meta': {'object_name': 'ComPage'},
-            'com': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.Group']"}),
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_changed_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'compage_edited'", 'null': 'True', 'to': "orm['auth.User']"}),
-            'last_changed_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
-        },
         'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        'nabladet.nablad': {
+            'Meta': {'object_name': 'Nablad', '_ormbases': ['news.News']},
+            'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
+            'news_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['news.News']", 'unique': 'True', 'primary_key': 'True'}),
+            'pub_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'})
+        },
+        'news.news': {
+            'Meta': {'object_name': 'News'},
+            'allow_comments': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'body': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']", 'null': 'True'}),
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'news_created'", 'null': 'True', 'to': "orm['auth.User']"}),
+            'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'null': 'True', 'blank': 'True'}),
+            'cropping': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'headline': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'last_changed_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'news_edited'", 'null': 'True', 'to': "orm['auth.User']"}),
+            'last_changed_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
+            'lead_paragraph': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
         }
     }
 
-    complete_apps = ['com']
+    complete_apps = ['nabladet']
