@@ -46,7 +46,6 @@ class ComMembership(models.Model):
     com = models.ForeignKey('auth.Group', verbose_name="Komité")
     story = models.TextField(blank=True, verbose_name="Beskrivelse", help_text="Ansvarsområde eller lignende")
     joined_date = models.DateField(blank=True, null=True, verbose_name="Ble med", help_text="Dato personen ble med i komiteen")
-    left_date = models.DateField(blank=True, null=True, verbose_name="Sluttet", help_text="Dato personen sluttet i komiteen")
     is_active = models.BooleanField(blank=False, null=False, verbose_name="Aktiv?", default=True)
 
     def save(self, *args, **kwargs):
