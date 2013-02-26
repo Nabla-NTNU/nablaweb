@@ -263,9 +263,9 @@
         <div class="span4 kontakt">
             <h2>Kontakt</h2>
 
-            <p>Du kan nå oss på <a class="email" href="mailto:nabla(at)nabla.ntnu.no">nabla&nabla;nabla.ntnu.no</a></p>
+            <p>Du kan nå oss på <a class="email" href="mailto:nabla@nabla.ntnu.no">nabla@nabla.ntnu.no</a></p>
 
-            <p>Bedrift? Kontakt oss på <a class="email" href="mailto:bedkom(at)nabla.ntnu.no">bedkom&nabla;nabla.ntnu.no</a></p>
+            <p>Bedrift? Kontakt Bedriftskontakten Nabla på <a class="email" href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no</a></p>
 
             <address>
                 Nabla <br>
@@ -279,19 +279,29 @@
         
         {# om nabla #}
         <div class="span4">
-            <h2>Funnet en feil?</h2>
-            <p>Den nye Nabla-nettsiden er fremdeles i sin barndom. Har du funnet en feil, eller noe som burde forbedres? <br><a href="{% url feedback.views.feedback_form %}">Gi tilbakemelding!</a>
+            <h2>Tilbakemelding</h2>
+            <p>Den nye Nabla-nettsiden er fremdeles i sin barndom. Har du
+            funnet en feil, eller noe som burde forbedres? <br>
+                <a href="{% url feedback.views.feedback_form %}">Gi tilbakemelding!</a>
+            </p>
 
-            <p>For andre henvendelser til webkom, send en mail: <a class="email"
-              href="mailto:webkom(at)nabla.ntnu.no">webkom&nabla;nabla.ntnu.no</a></p>
+            <p>For andre henvendelser til webkom, send oss en epost: 
+                <a class="email" href="mailto:webkom@nabla.ntnu.no">webkom@nabla.ntnu.no</a>
+            </p>
             
         </div>
         {# end om nabla #}
 
+        {# nablalogo #}
+        <div class="span4 center" id="nablafooter">
+            <br><br>
+            <img src="{{ STATIC_URL }}img/nabla-white.svg">
+        </div>
+
+        {% comment %}
         {# twitterbox #}
         <div class="span4" id="twitterbox">
-
-            {% comment %}
+            
             {# Standard Twitter-widget #}
             <script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
             <script>
@@ -320,11 +330,10 @@
                 }
             }).render().setUser('nabla_ntnu').start();
             </script>
-            {% endcomment %}
 
         </div>
         {# end twitterbox #}
-
+        {% endcomment %}
         
     </div>{# end row #}
 </div>{# end container #}
