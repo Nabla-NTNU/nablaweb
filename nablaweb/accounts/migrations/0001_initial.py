@@ -11,14 +11,6 @@ class Migration(SchemaMigration):
         # Adding model 'UserProfile'
         db.create_table('accounts_userprofile', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('signature', self.gf('django.db.models.fields.TextField')(max_length=0, blank=True)),
-            ('signature_html', self.gf('django.db.models.fields.TextField')(max_length=30, blank=True)),
-            ('time_zone', self.gf('django.db.models.fields.FloatField')(default=1.0)),
-            ('language', self.gf('django.db.models.fields.CharField')(default='Norwegian Bokmal', max_length=10, blank=True)),
-            ('show_signatures', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('post_count', self.gf('django.db.models.fields.IntegerField')(default=0, blank=True)),
-            ('avatar', self.gf('sorl.thumbnail.fields.ImageField')(max_length=100, null=True, blank=True)),
-            ('autosubscribe', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
             ('telephone', self.gf('django.db.models.fields.CharField')(max_length=15, blank=True)),
             ('cell_phone', self.gf('django.db.models.fields.CharField')(max_length=15, blank=True)),
@@ -28,6 +20,7 @@ class Migration(SchemaMigration):
             ('web_page', self.gf('django.db.models.fields.CharField')(max_length=80, blank=True)),
             ('wants_email', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('about', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('avatar', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
             ('ntnu_card_number', self.gf('django.db.models.fields.CharField')(max_length=10, blank=True)),
         ))
         db.send_create_signal('accounts', ['UserProfile'])
@@ -50,7 +43,7 @@ class Migration(SchemaMigration):
         # Adding model 'FysmatClass'
         db.create_table('accounts_fysmatclass', (
             ('nablagroup_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['accounts.NablaGroup'], unique=True, primary_key=True)),
-            ('starting_year', self.gf('django.db.models.fields.CharField')(unique=True, max_length='4')),
+            ('starting_year', self.gf('django.db.models.fields.CharField')(unique=True, max_length=4)),
         ))
         db.send_create_signal('accounts', ['FysmatClass'])
 
@@ -71,7 +64,7 @@ class Migration(SchemaMigration):
         'accounts.fysmatclass': {
             'Meta': {'object_name': 'FysmatClass', '_ormbases': ['accounts.NablaGroup']},
             'nablagroup_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.NablaGroup']", 'unique': 'True', 'primary_key': 'True'}),
-            'starting_year': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': "'4'"})
+            'starting_year': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '4'})
         },
         'accounts.groupleader': {
             'Meta': {'object_name': 'GroupLeader', '_ormbases': ['accounts.NablaGroup']},
@@ -88,20 +81,13 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'UserProfile'},
             'about': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'address': ('django.db.models.fields.CharField', [], {'max_length': '40', 'blank': 'True'}),
-            'autosubscribe': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'avatar': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'avatar': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'birthday': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'cell_phone': ('django.db.models.fields.CharField', [], {'max_length': '15', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'language': ('django.db.models.fields.CharField', [], {'default': "'Norwegian Bokmal'", 'max_length': '10', 'blank': 'True'}),
             'mail_number': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'}),
             'ntnu_card_number': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'}),
-            'post_count': ('django.db.models.fields.IntegerField', [], {'default': '0', 'blank': 'True'}),
-            'show_signatures': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'signature': ('django.db.models.fields.TextField', [], {'max_length': '0', 'blank': 'True'}),
-            'signature_html': ('django.db.models.fields.TextField', [], {'max_length': '30', 'blank': 'True'}),
             'telephone': ('django.db.models.fields.CharField', [], {'max_length': '15', 'blank': 'True'}),
-            'time_zone': ('django.db.models.fields.FloatField', [], {'default': '1.0'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'}),
             'wants_email': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'web_page': ('django.db.models.fields.CharField', [], {'max_length': '80', 'blank': 'True'})

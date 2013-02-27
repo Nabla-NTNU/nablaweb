@@ -40,7 +40,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
      
-    (r'^forum/', include('pybb.urls', namespace='pybb')),
+    #(r'^forum/', include('pybb.urls', namespace='pybb')),
     (r'^irc/', include('irc.urls')),
     url(r'^feed/$', RecentNews()),
     (r'^search/', include('search.urls')),
