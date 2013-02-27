@@ -153,6 +153,22 @@
     }
 }
 
+/* REKLAME */
+    .ad.box {
+        border-radius: 5px;
+        border-width: 2px;
+        font-size: 90%;
+        padding-bottom: 20px;
+        background-color: #ffffff;
+    }
+    .ad.box p {
+        padding: 5px;
+    }
+    .ad.box img {
+        text-align: center;
+    }
+    
+
 /* MathJAX customisation */
 
     .MathJax_Display {

@@ -8,21 +8,22 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'ComMembership.left_date'
-        db.add_column('com_commembership', 'left_date',
-                      self.gf('django.db.models.fields.DateField')(null=True, blank=True),
-                      keep_default=False)
+        # Adding model 'Quote'
+        db.create_table('quotes_quote', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('info', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
+            ('quote', self.gf('django.db.models.fields.CharField')(max_length=200, blank=True)),
+            ('author', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
+            ('created_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, null=True, blank=True)),
+            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
+            ('approved', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('quotes', ['Quote'])
 
-
-        # Changing field 'ComMembership.joined_date'
-        db.alter_column('com_commembership', 'joined_date', self.gf('django.db.models.fields.DateField')(null=True))
     def backwards(self, orm):
-        # Deleting field 'ComMembership.left_date'
-        db.delete_column('com_commembership', 'left_date')
+        # Deleting model 'Quote'
+        db.delete_table('quotes_quote')
 
-
-        # Changing field 'ComMembership.joined_date'
-        db.alter_column('com_commembership', 'joined_date', self.gf('django.db.models.fields.DateField')(default=''))
     models = {
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -53,32 +54,23 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        'com.commembership': {
-            'Meta': {'object_name': 'ComMembership'},
-            'com': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.Group']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'joined_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
-            'left_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
-            'story': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
-        },
-        'com.compage': {
-            'Meta': {'object_name': 'ComPage'},
-            'com': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.Group']"}),
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_changed_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'compage_edited'", 'null': 'True', 'to': "orm['auth.User']"}),
-            'last_changed_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
-        },
         'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        'quotes.quote': {
+            'Meta': {'ordering': "['-created_date']", 'object_name': 'Quote'},
+            'approved': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'author': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'info': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
+            'quote': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'})
         }
     }
 
-    complete_apps = ['com']
+    complete_apps = ['quotes']

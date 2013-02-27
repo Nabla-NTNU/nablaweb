@@ -121,7 +121,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'pybb.middleware.PybbMiddleware',
+    #'pybb.middleware.PybbMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Bruk use_debug_toolbar(din_ip) for å skru på denne
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -196,9 +196,9 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     
     # Alt som er nodvendig for pybbm
-    'pybb',
-    'pytils',
-    'pure_pagination',
+    #'pybb',
+    #'pytils',
+    #'pure_pagination',
     
     # Haystack. Krever 2.0.0 beta samt Whoosh!
     'haystack',
@@ -215,12 +215,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'events.context_processors.upcoming_events',     
     'jobs.views.activej',
     'quotes.context_processors.random_quote',
-    'pybb.context_processors.processor',
+    #'pybb.context_processors.processor',
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
-
-    #'events.context_processors.current_month_calendar', 
-    # fjernet fordi den bruker en sql request per dag i mnd
 )
 
 ###########################
