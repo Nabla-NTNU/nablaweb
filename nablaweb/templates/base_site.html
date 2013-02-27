@@ -102,6 +102,7 @@
                     </ul>
                 </li>
 
+        {% comment %}
 		<li class="dropdown">
                     <a href="#komiteer"
                         class="dropdown-toggle no-ajaxy"
@@ -111,11 +112,11 @@
                     </a>
                     <ul class="dropdown-menu" >
                         {# <li><a href="/forum">Forum</a></li> #}
-                        <li><a href="{% url irc %}">Chat</a></li>
+                        {#<li><a href="{% url irc %}">Chat</a></li>#}
                         {# <li><a href="{% url gallery.views.index %}">Galleri</a></li> #}
-                        <li><a href="{% url accounts.views.list %}">Medlemsliste</a></li>
                     </ul>
                 </li>
+        {% endcomment %}
                 
                 <li class="dropdown">
                     <a href="#komiteer"
@@ -145,7 +146,6 @@
             {% if user.is_authenticated %}
 
             {# bruker-dropdown #}
-            {% cache 86400 user-dropdown user.username %}
             <ul class="nav pull-right">
                 <li class="dropdown pull-right">
                     <a href="#bruker"
@@ -159,14 +159,14 @@
                         <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
                         <li><a href="{% url view_user_events %}">Påmeldte arrangementer</a></li>
                         <li><a class="no-ajaxy" href="/logout">Logg ut</a></li>
-                        {% if user.is_staff %}
                         <li class="divider"></li>
+                        <li><a href="{% url accounts.views.list %}">Medlemsliste</a></li>
+                        {% if user.is_staff %}
                         <li><a class="no-ajaxy" href="/admin">Admin</a></li>
                         {% endif %}
                     </ul>
                 </li>
             </ul>
-            {% endcache %}
             {# end bruker-dropdown #}
 
             {% else %}
