@@ -19,6 +19,7 @@ class EventAdmin(NewsAdmin):
               "short_name",
               "lead_paragraph",
               "body",
+              "priority",
               "organizer",
               "location",
               "event_start",

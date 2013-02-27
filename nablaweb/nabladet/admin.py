@@ -10,6 +10,7 @@ class NabladAdmin(ContentAdmin):
               "slug",
               "lead_paragraph",
               "body",
+              "priority",
               "pub_date",
               "file")
     prepopulated_fields = {"slug": ("headline",)}

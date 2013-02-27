@@ -26,7 +26,7 @@ class News(Content):
         (10, '10 - Er på forsida hele tiden')
         )
     priority = models.IntegerField(verbose_name="Prioritering", choices = PRIORITY_NUMBERS, default=5,
-                                blank=False, null= False, help_text="Hvordan nyhetssidene prioriteres.") 
+                                blank=False, null= False, help_text="Prioritering av saken på forsiden. Dette fungerer for øyeblikket ikke. Bortsett fra at prioritering=0 fjerner saken fra forsiden.") 
 
 
 
