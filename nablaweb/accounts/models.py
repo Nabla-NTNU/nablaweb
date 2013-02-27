@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User, Group
-from pybb.models import PybbProfile
+#from pybb.models import PybbProfile
 from datetime import date
 
-class UserProfile(PybbProfile):
+class UserProfile(models.Model):
     """ Ekstrainformasjon for brukere. """
     user = models.OneToOneField(User)
     telephone = models.CharField("Telefon", max_length = 15, blank=True)
@@ -15,6 +15,7 @@ class UserProfile(PybbProfile):
     web_page = models.CharField("Hjemmeside", max_length = 80, blank = True)
     wants_email = models.BooleanField("Motta kullmail", default = True)
     about = models.TextField("Biografi",blank = True)
+    avatar = models.ImageField('Avatar', blank=True, null=True, upload_to='avatars')
     ntnu_card_number = models.CharField("NTNU kortnr",max_length = 10, blank = True, help_text ="Dette er det 7-10 siffer lange nummeret på baksiden av NTNU-adgangskortet ditt. Det brukes blant annet for å komme inn på bedpresser.")
 
     def get_class_number(self):
