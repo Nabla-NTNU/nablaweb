@@ -18,7 +18,7 @@ class ShowPage(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super(ShowPage, self).get_context_data(**kwargs)
-        c = self.get_object()
-        context['members'] = ComMembership.objects.filter(com = c)
+        com = self.get_object().com
+        context['members'] = ComMembership.objects.filter(com = com)
         context['compages'] = ComPage.objects.all()
         return context

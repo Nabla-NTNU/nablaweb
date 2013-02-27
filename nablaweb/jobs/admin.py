@@ -23,6 +23,7 @@ class AdvertAdmin(admin.ModelAdmin):
                 "slug",
                 "lead_paragraph",
                 "body",
+                "priority",
                 "info_website",
 #                "contact_info",
                 "deadline_date",

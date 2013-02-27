@@ -13,6 +13,7 @@ class NewsAdmin(ContentAdmin):
               "slug",
               "lead_paragraph",
               "body",
+              "priority",
               "allow_comments")
     prepopulated_fields = {"slug": ("headline",)}
 
