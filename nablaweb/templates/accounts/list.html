@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load cache %}
 
 {% block content %}
 
@@ -14,6 +15,7 @@
     </button>
 </form>
 
+{% cache 900 userlist %}
 {% if searchquery %}
 <p>Du søkte etter <b>{{ searchquery }}</b>. <a href="{% url accounts.views.list %}">Vis alle brukere</a>
 {% endif %}
@@ -52,6 +54,7 @@
 {% else %}
     <p>Vi fant ingen brukere som matchet søket ditt :(</p>
 {% endif %}
+{% endcache %}
 
 {% comment %}
 <div class="pagination">
