@@ -95,6 +95,10 @@
         width: 100%;
     }
 
+    .clear {
+        clear: both;
+    }
+
 /* Calendar */
 
 @media (min-width: 600px) {
@@ -152,6 +156,41 @@
         background-color: #f0f0f8;
     }
 }
+
+/* Komitesider */
+    .com-member {
+        display: block;
+        margin-bottom: 15px;
+        background-color: #efefef;
+        margin-left:50px;
+        min-height: 50px;
+        color: black;
+    }
+
+    .com-member:hover {
+        background-color: #f6f6f6;
+        text-decoration: none;
+    }
+
+    .com-member .name {
+        font-weight: bold;
+    }
+
+    .com-member:hover .name {
+        text-decoration: underline;
+    }
+
+    .com-member .avatar {
+        position: relative;
+        left: -50px;
+        height: 50px;
+        width: 50px;
+    }
+
+    .com-member .info {
+        margin-top: -50px;
+        padding: 5px;
+    }
 
 /* REKLAME */
     .ad.box {
