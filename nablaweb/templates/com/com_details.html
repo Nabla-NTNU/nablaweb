@@ -51,16 +51,14 @@
 {% block sidebar %}
 
 <h3>Nablas komiteer</h3>
-<table class="table table-striped">
+<ul class="nav nav-pills nav-stacked">
 {% for c in compages %}
-<tr><td>
     {% if c == com %}
-    {{ c.com.name }}
+    <li class="active"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
     {% else %}
-    <a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a>
+    <li><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
     {% endif %}
-</td></tr>
 {% endfor %}
-</table>
+</ul>
 
 {% endblock sidebar %}

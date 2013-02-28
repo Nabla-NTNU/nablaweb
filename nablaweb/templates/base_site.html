@@ -1,4 +1,5 @@
 {% load cache %}
+{% load flatpages %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -95,6 +96,14 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" >
+
+            {# Hent alle sider som starter på /om/ #}
+            {% get_flatpages '/om/' as about_pages %}
+            {% for page in about_pages %}
+                <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+            {% endfor %}
+
+            {# Faste lenker om Nabla #}
 			<li><a href="{% url quote_list %}">Gullkorn</a></li>
 			<li><a href="{% url nablad_list %}">Nabladet</a></li>
                     </ul>
