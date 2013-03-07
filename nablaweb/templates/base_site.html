@@ -1,4 +1,5 @@
 {% load cache %}
+{% load flatpages %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +13,6 @@
                    fysikk og matematikk-masterprogrammet på NTNU.">
     <meta name="author" content="Nabla">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex, nofollow">
 
     {# Bootstrap + responsive + icons from external CDN #}
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
@@ -95,7 +95,14 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" >
-			<li><a href="{% url quote_list %}">Gullkorn</a></li>
+
+            {# Hent alle sider som starter på /om/ #}
+            {% get_flatpages '/om/' as about_pages %}
+            {% for page in about_pages %}
+                <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+            {% endfor %}
+
+            {# Faste lenker om Nabla #}
 			<li><a href="{% url nablad_list %}">Nabladet</a></li>
                     </ul>
                 </li>
