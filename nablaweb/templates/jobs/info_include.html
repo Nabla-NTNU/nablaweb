@@ -5,12 +5,17 @@
 <table class="table table-bordered table-striped content-info">
 
     <!-- Fra -->
-    {% if job.info_website %}
+    {% if job.info_website or job.info_file %}
     <tr>
-        <td colspan=2 style="text-align: center;">
-            <strong><a href="{{ job.info_website }}">Søk/mer informasjon</a></strong>
+        <td colspan=2>
+            Søk/mer informasjon
         </td>
     </tr>
+    <tr>
+        <td colspan="2">
+            <ul style="margin-bottom:0;">
+                {% if job.info_website %}<li><a href="{{ job.info_website }}">Nettside</a></li>{% endif %}
+                {% if job.info_file %}<li><a href="{{MEDIA_URL}}{{ job.info_file.url }}">Vedlagt dokument</a></li>{% endif %}
     {% endif %}
 
     <tr>
