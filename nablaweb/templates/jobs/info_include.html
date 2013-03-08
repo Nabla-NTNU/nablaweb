@@ -16,6 +16,9 @@
             <ul style="margin-bottom:0;">
                 {% if job.info_website %}<li><a href="{{ job.info_website }}">Nettside</a></li>{% endif %}
                 {% if job.info_file %}<li><a href="{{MEDIA_URL}}{{ job.info_file.url }}">Vedlagt dokument</a></li>{% endif %}
+            </ul>
+        </td>
+    </tr>
     {% endif %}
 
     <tr>
