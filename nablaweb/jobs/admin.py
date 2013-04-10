@@ -23,6 +23,7 @@ class AdvertAdmin(admin.ModelAdmin):
                 "slug",
                 "lead_paragraph",
                 "body",
+                "priority",
                 "info_website",
 #                "contact_info",
                 "deadline_date",
@@ -30,7 +31,7 @@ class AdvertAdmin(admin.ModelAdmin):
                 "removal_date",
                 "relevant_for_group",
                 "relevant_for_year",
-#                "info_file",
+                "info_file",
 #                "antall_stillinger",
                 "allow_comments",
 		"tags")

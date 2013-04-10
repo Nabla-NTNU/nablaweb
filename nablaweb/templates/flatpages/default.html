@@ -2,6 +2,7 @@
 {% load mediawiki_links %}
 {% load bbcode %}
 {% load markup %}
+{% load flatpages %}
 
 {% block title %}
     {{ block.super }} - {{ flatpage.title }}
@@ -10,4 +11,25 @@
 {% block content %}
     <h2>{{ flatpage.title }}</h2>
     {{ flatpage.content|markdown|wikilinks}}
+{% endblock %}
+
+{% block sidebar %}
+    {% get_flatpages primary_dir_slashes as about_pages %}
+    <ul class="nav nav-pills nav-stacked">
+
+    {% for page in about_pages %}
+        {% if page.url == flatpage.url %}
+            <li class="active"><a href="{{ page.url }}">{{ page.title }}</a></li>
+        {% else %}
+            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+    {# Noen ekstra eksterne lenker. Lite pent, og vi burde lage en permanent #}
+    {# løsning for det. #}
+    {% if primary_dir == "bedriftskontakten" %}
+    <li><a href="{% url jobs_list %}">Stillingsannonser</a></li>
+    {% endif %}
+
+    </ul>
 {% endblock %}

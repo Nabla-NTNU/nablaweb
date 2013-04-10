@@ -113,7 +113,7 @@ def edit_profile(request):
 @login_required
 def list(request):
     """Lister opp brukere med pagination."""
-    users = User.objects.all()
+    users = User.objects.all().prefetch_related('groups')
 
     return render(request, "accounts/list.html", {'users': users})
 

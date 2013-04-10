@@ -1,4 +1,5 @@
 {% load cache %}
+{% load flatpages %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +13,6 @@
                    fysikk og matematikk-masterprogrammet på NTNU.">
     <meta name="author" content="Nabla">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex, nofollow">
 
     {# Bootstrap + responsive + icons from external CDN #}
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
@@ -85,7 +85,7 @@
                 <li><a href="/?">Hjem</a></li>
                 <li><a href="{% url event_list %}">Arrangement</a></li>
                 <li><a href="{% url jobs_list %}">Karriere</a></li>
-                <li><a href="/wiki">Wiki</a></li>
+                <li><a href="http://wiki.nabla.no/">Wiki</a></li>
 
                 <li class="dropdown">
                     <a href="#komiteer"
@@ -95,11 +95,19 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" >
-			<li><a href="{% url quote_list %}">Gullkorn</a></li>
+
+            {# Hent alle sider som starter på /om/ #}
+            {% get_flatpages '/om/' as about_pages %}
+            {% for page in about_pages %}
+                <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+            {% endfor %}
+
+            {# Faste lenker om Nabla #}
 			<li><a href="{% url nablad_list %}">Nabladet</a></li>
                     </ul>
                 </li>
 
+        {% comment %}
 		<li class="dropdown">
                     <a href="#komiteer"
                         class="dropdown-toggle no-ajaxy"
@@ -109,11 +117,11 @@
                     </a>
                     <ul class="dropdown-menu" >
                         {# <li><a href="/forum">Forum</a></li> #}
-                        <li><a href="{% url irc %}">Chat</a></li>
+                        {#<li><a href="{% url irc %}">Chat</a></li>#}
                         {# <li><a href="{% url gallery.views.index %}">Galleri</a></li> #}
-                        <li><a href="{% url accounts.views.list %}">Medlemsliste</a></li>
                     </ul>
                 </li>
+        {% endcomment %}
                 
                 <li class="dropdown">
                     <a href="#komiteer"
@@ -143,7 +151,6 @@
             {% if user.is_authenticated %}
 
             {# bruker-dropdown #}
-            {% cache 86400 user-dropdown user.username %}
             <ul class="nav pull-right">
                 <li class="dropdown pull-right">
                     <a href="#bruker"
@@ -157,14 +164,14 @@
                         <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
                         <li><a href="{% url view_user_events %}">Påmeldte arrangementer</a></li>
                         <li><a class="no-ajaxy" href="/logout">Logg ut</a></li>
-                        {% if user.is_staff %}
                         <li class="divider"></li>
+                        <li><a href="{% url accounts.views.list %}">Medlemsliste</a></li>
+                        {% if user.is_staff %}
                         <li><a class="no-ajaxy" href="/admin">Admin</a></li>
                         {% endif %}
                     </ul>
                 </li>
             </ul>
-            {% endcache %}
             {# end bruker-dropdown #}
 
             {% else %}

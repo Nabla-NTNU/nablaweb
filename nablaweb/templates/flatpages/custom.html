@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load mediawiki_links %}
+{% load bbcode %}
+{% load markup %}
+{% load flatpages %}
+
+{% block title %}
+    {{ flatpage.title }}
+{% endblock %}
+
+{% block main %}
+    {{ flatpage.content|markdown|wikilinks}}
+{% endblock %}

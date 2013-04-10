@@ -218,6 +218,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     #'pybb.context_processors.processor',
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
+    'context_processors.primary_dir',
 )
 
 ###########################

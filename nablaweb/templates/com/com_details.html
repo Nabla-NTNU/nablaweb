@@ -6,43 +6,37 @@
 
 {% block content %}
 <h2>{{ com.com.name }}</h2>
+{% if com.com.nablagroup.mail_list %}<p><b>{{ com.com.nablagroup.mail_list }}</b></p>{% endif %}
 <p>{{ com.description|markdown|wikilinks}}</p>
 
-<br>
 
 {# List of memberships #}
 {% for membership in members %}
 
-<div class="row">
-    {# Avatar #}
-    <div class="span2"> 
-        <div class="thumbnail">
-
-              {% if membership.user.userprofile.avatar %}
-              <img alt="avatar" src="{% thumbnail membership.user.userprofile.avatar 150x150 %}" width="150" height="150" >
-              {% else %}
-              <img alt="avatar" src="{{ STATIC_URL }}img/default_avatar.png" width="150" height="150" >
-              {%endif %}
-
-              <p class="center">
-                  <b>Medlem siden</b>:
-                  <span class="label label-info">{{ membership.joined_date|date:"d. F Y" }}</span>
-              </p>
+<a class="com-member clearfix" href="{% url profile_link membership.user.username %}">
+        <div class="avatar">
+            {% if membership.user.userprofile.avatar %}
+            <img alt="avatar" src="{% thumbnail membership.user.userprofile.avatar 50x50 %}" width="50" height="50">
+            {% else %}
+            <img alt="avatar" src="{{ STATIC_URL }}img/default_avatar.png" width="50" height="50">
+            {% endif %}
         </div>
-    </div>
-    
-    {# Navn og story #}
-    <div class="span6">
-      <h3><a href="{% url profile_link membership.user.username %}" >{% if membership.user.get_full_name %}{{ membership.user.get_full_name }}{% else %}Medlem uten navn{% endif %}</a> </h3>
-        {{ membership.story|markdown|wikilinks }}
-    </div>
-</div>
-<br>
+
+        <div class="info">
+            {# Data for medlemskap #}
+            {#<span>{{ membership.joined_date|date:"d. F Y" }}</span>#}
+
+            <span class="name">{{ membership.user.get_full_name }}</span>
+        
+            {# Beskrivelse av stillingen #}
+            {% if membership.story %}
+                <span class="story"> &ndash; {{ membership.story }}</span>
+            {% endif %}
+        </div>
+</a>
 
 {% empty %}
-
-<p>Denne komiteen har ingen medlemmer. Det var rart.</p>
-
+    <p>Denne komiteen har ingen medlemmer. Det var rart.</p>
 {% endfor %}
 
 {% endblock content %}
@@ -51,16 +45,14 @@
 {% block sidebar %}
 
 <h3>Nablas komiteer</h3>
-<table class="table table-striped">
+<ul class="nav nav-pills nav-stacked">
 {% for c in compages %}
-<tr><td>
     {% if c == com %}
-    {{ c.com.name }}
+    <li class="active"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
     {% else %}
-    <a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a>
+    <li><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
     {% endif %}
-</td></tr>
 {% endfor %}
-</table>
+</ul>
 
 {% endblock sidebar %}
