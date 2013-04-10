@@ -71,9 +71,19 @@ class EventCalendar(HTMLCalendar):
 
     def group_by_day(self, events):
         field = lambda event: event.event_start.day
-        return dict(
+        day_dict = dict(
                 [(day, list(items)) for day, items in groupby(events, field)]
         )
+        # Kodesnutt for å fikse slik at arrangementer som varer i flere dager
+        # dukker opp på alle de aktuelle dagene i kalenderen. 
+        multiple_day_events = [e for e in events if (e.event_end and e.event_end.date>e.event_start.date)]
+        for e in multiple_day_events:
+            days = (e.event_end-e.event_start).days
+            for i in xrange(1,days):
+                day_dict.setdefault(e.event_start.day+i,[]).append(e) 
+                # kan finne på å inkludere datoer som 32,33,34 osv.
+                # men  det ser ut til å fungere fint likevel.
+        return day_dict
 
     def day_cell(self, cssclass, body):
         return '<li class="cell %s">%s</li>' % (cssclass, body)
