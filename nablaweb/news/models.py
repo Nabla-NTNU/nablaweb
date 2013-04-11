@@ -10,7 +10,7 @@ class News(Content):
     # Tekstinnhold
     headline = models.CharField(verbose_name="tittel", max_length=100, blank=False)
     lead_paragraph = models.TextField(verbose_name="ingress", blank=True, help_text="Vises på forsiden og i artikkelen")
-    body = models.TextField(verbose_name="brødtekst", blank=True, help_text="Vises kun i artikkelen")
+    body = models.TextField(verbose_name="brødtekst", blank=True, help_text="Vises kun i artikkelen. Man kan her bruke <a href=\"http://en.wikipedia.org/wiki/Markdown\" target=\"_blank\">markdown</a> for å formatere teksten.")
 
     PRIORITY_NUMBERS = ( 
         (0 , '0 - Dukker ikke opp'),
