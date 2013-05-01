@@ -219,6 +219,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
     'context_processors.primary_dir',
+    'context_processors.xkcd',
 )
 
 ###########################

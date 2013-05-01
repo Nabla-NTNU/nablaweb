@@ -240,7 +240,17 @@
                         <img src="{{ STATIC_URL }}img/kjeldsberg_logo.jpg">
                     </a>
                 </div>
-            </div>
+           </div>
+
+             <div class="ad box hidden-phone">
+                <div class="center">
+                  <h3>Nyeste xkcd: {{xkcd_safe_title}} </h3>
+                    <a href="http://xkcd.com/">
+                       <img src="{{xkcd_img}}" title="{{xkcd_alt}}" >
+                   </a>                
+                 </div>
+           </div>
+
         {% endblock ad %}
 
 
