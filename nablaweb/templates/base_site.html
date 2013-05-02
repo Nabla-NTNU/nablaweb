@@ -64,6 +64,7 @@
                 </button>
             </div>
         </form>
+    </div>
 </header>
 
 <nav class="navbar">
@@ -237,7 +238,7 @@
                 <p>Kaffetørste Nablakomponenter blir sponset med kaffe av</p>
                 <div class="center">
                     <a href="http://www.kjeldsberg.no/">
-                        <img src="{{ STATIC_URL }}img/kjeldsberg_logo.jpg">
+                        <img src="{{ STATIC_URL }}img/kjeldsberg_logo.jpg" alt="kjeldsberg">
                     </a>
                 </div>
            </div>
@@ -246,7 +247,7 @@
                 <div class="center">
                   <h3>Nyeste xkcd: {{xkcd_safe_title}} </h3>
                     <a href="http://xkcd.com/">
-                       <img src="{{xkcd_img}}" title="{{xkcd_alt}}" >
+                       <img src="{{xkcd_img}}" title="{{xkcd_alt}}" alt="einstein">
                    </a>                
                  </div>
            </div>
@@ -310,7 +311,7 @@
         {# nablalogo #}
         <div class="span4 center" id="nablafooter">
             <br><br>
-            <img src="{{ STATIC_URL }}img/nabla-white.svg">
+            <img src="{{ STATIC_URL }}img/nabla-white.svg" alt="nabla logo">
         </div>
 
         {% comment %}
