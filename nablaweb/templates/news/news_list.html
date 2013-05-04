@@ -7,9 +7,15 @@
 {% endblock %}
 
 {% block content %}
+
 <div class="row">
-{% include "news/news_summary_include.html" with news=featured_news %}
+{% if featured_news %}
+    {% include "news/news_summary_include.html" with news=featured_news %}
+{% else %}
+    Her er det dessverre ingen nyheter. Så trist.
+{% endif %}
 </div>
+
 
 <hr>
 
@@ -93,4 +99,12 @@ som foregår.</p>
 
 {% block below_ad %}
 {% include "news/poll_include.html" %}
+    <div class="ad box hidden-phone">
+        <div class="center">
+            <h3>Nyeste xkcd: {{xkcd_safe_title}} </h3>
+            <a href="http://xkcd.com/">
+                <img src="{{xkcd_img}}" title="{{xkcd_alt}}" alt="einstein">
+            </a>                
+        </div>
+    </div>
 {% endblock below_ad %}
