@@ -3,7 +3,7 @@
 # Denne filen inneholder diverse som kan være forskjellig på hver maskin
 
 # Markdown extensions #
-cd ../markdown_extensions
+cd markdown_extensions
 sudo cp *.py /usr/local/lib/python2.7/dist-packages/markdown/extensions
 # ELLER
 sudo cp *.py /usr/lib/pymodules/python2.7/markdown/extensions
