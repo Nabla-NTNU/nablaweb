@@ -1,0 +1,13 @@
+Django==1.5
+Markdown
+django-math-captcha
+django-image-cropping
+pybbm-tbw
+south
+git+https://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
+sorl-thumbnail
+whoosh
+mysql-python
+python-memcached
+django-debug-toolbar
+django-cache-panel

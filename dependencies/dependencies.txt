@@ -1,2 +1,0 @@
-Les her for en liste over avhengigheter:
-https://bitbucket.org/andreros/nablaweb/wiki/Installasjon
