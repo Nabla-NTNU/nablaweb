@@ -84,8 +84,8 @@
             {# navigasjonslenker #}
             <ul class="nav">
                 <li><a href="/?">Hjem</a></li>
-                <li><a href="{% url event_list %}">Arrangement</a></li>
-                <li><a href="{% url jobs_list %}">Karriere</a></li>
+                <li><a href="{% url "event_list" %}">Arrangement</a></li>
+                <li><a href="{% url "jobs_list" %}">Karriere</a></li>
                 <li><a href="http://wiki.nabla.no/">Wiki</a></li>
 
                 <li class="dropdown">
@@ -104,7 +104,7 @@
             {% endfor %}
 
             {# Faste lenker om Nabla #}
-			<li><a href="{% url nablad_list %}">Nabladet</a></li>
+			<li><a href="{% url "nablad_list" %}">Nabladet</a></li>
                     </ul>
                 </li>
 
@@ -118,8 +118,8 @@
                     </a>
                     <ul class="dropdown-menu" >
                         {# <li><a href="/forum">Forum</a></li> #}
-                        {#<li><a href="{% url irc %}">Chat</a></li>#}
-                        {# <li><a href="{% url gallery.views.index %}">Galleri</a></li> #}
+                        {#<li><a href="{% url "irc" %}">Chat</a></li>#}
+                        {# <li><a href="{% url "gallery.views.index" %}">Galleri</a></li> #}
                     </ul>
                 </li>
         {% endcomment %}
@@ -143,7 +143,7 @@
                     </ul>
                 </li>
 
-		{% if not user.is_authenticated %}<li><a href="{% url accounts.views.user_register %}">Registrer deg</a></li>{% endif %}
+		{% if not user.is_authenticated %}<li><a href="{% url "accounts.views.user_register" %}">Registrer deg</a></li>{% endif %}
 
 
             </ul>
@@ -161,12 +161,12 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url accounts.views.view_member_profile user.username %}">Vis profil</a></li>
-                        <li><a href="{% url accounts.views.edit_profile %}">Endre profil</a></li>
-                        <li><a href="{% url view_user_events %}">Påmeldte arrangementer</a></li>
+                        <li><a href="{% url "accounts.views.view_member_profile" user.username %}">Vis profil</a></li>
+                        <li><a href="{% url "accounts.views.edit_profile" %}">Endre profil</a></li>
+                        <li><a href="{% url "view_user_events" %}">Påmeldte arrangementer</a></li>
                         <li><a class="no-ajaxy" href="/logout">Logg ut</a></li>
                         <li class="divider"></li>
-                        <li><a href="{% url accounts.views.list %}">Medlemsliste</a></li>
+                        <li><a href="{% url "accounts.views.list" %}">Medlemsliste</a></li>
                         {% if user.is_staff %}
                         <li><a class="no-ajaxy" href="/admin">Admin</a></li>
                         {% endif %}

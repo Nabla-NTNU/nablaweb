@@ -5,8 +5,7 @@ from django.conf.urls.defaults import *
 from nablaweb.bedpres.models import BedPres
 from nablaweb.bedpres.forms import BedPresForm
 from nablaweb.bedpres.views import BedPresDetailView, BedPresListView, BedPresDeleteView, UserBedPresView, BPCFormView
-from django.views.generic.simple import redirect_to
-
+from django.views.generic import RedirectView
 
 urlpatterns = patterns('nablaweb.bedpres.views',
 
@@ -22,7 +21,7 @@ urlpatterns = patterns('nablaweb.bedpres.views',
     #url(r'^$',
     #    BedPresListView.as_view( context_object_name = "bedpres_list" ),
     #    name='bedpres_list'),
-    (r'^$', redirect_to, {'url': '/arrangement/'}),
+    url(r'^$', RedirectView.as_view(url='/arrangement/')),
     url(r'^(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$',
         BedPresDetailView.as_view( context_object_name = "bedpres" ),
         name='bedpres_detail'),

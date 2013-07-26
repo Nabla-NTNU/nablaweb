@@ -7,7 +7,7 @@
 
 <img src="{{ picture.getThumbnailUrl }}" width = 200 border=1 />
 <p>Er du sikker på at du vil slette bildet?</p>
-<form action="{% url gallery.views.delete_picture album.id picture.album_picnr %}" method="post">
+<form action="{% url "gallery.views.delete_picture" album.id picture.album_picnr %}" method="post">
     {% csrf_token %}
     <select name='confirmation'>
         <option value=Nei>Nei</option>

@@ -8,11 +8,11 @@
 
 <ul class="breadcrumb">
     <li>
-        <a href="{% url gallery.views.index %}">Galleri</a>
+        <a href="{% url "gallery.views.index" %}">Galleri</a>
         <span class="divider">\</span>
     </li>
     <li>
-        <a href="{% url gallery.views.album album.id %}">{{ album.title }}</a>
+        <a href="{% url "gallery.views.album" album.id %}">{{ album.title }}</a>
         <span class="divider">\</span>
     </li>
     <li class="active">
@@ -20,7 +20,7 @@
     </li>
 </ul>
 
-<a href="{% url gallery.views.picture_large album.id next_picture.album_picnr %}">
+<a href="{% url "gallery.views.picture_large" album.id next_picture.album_picnr %}">
     <img src="{{ picture.getPictureUrl }}" width=500></img>
 </a>
 
@@ -28,9 +28,9 @@
     Bilde {% for i in album.picture_set.all %}{% ifequal i.id picture.id %}{{ forloop.counter }}{% endifequal %}{% endfor %} av {{ album.picture_set.all|length }}, lastet opp {{ picture.date_published }} av {{ picture.owner }}. Bildet er sett {{ picture.number_of_hits }} ganger.
 </p>
 <p>
-    <a href="{% url gallery.views.picture_large album.id previous_picture.album_picnr %}">Forrige bilde</a> | 
-    <a href="{% url gallery.views.album album.id %}">Tilbake til albumet</a> | 
-    <a href="{% url gallery.views.picture_large album.id next_picture.album_picnr %}">Neste bilde</a>
+    <a href="{% url "gallery.views.picture_large" album.id previous_picture.album_picnr %}">Forrige bilde</a> | 
+    <a href="{% url "gallery.views.album" album.id %}">Tilbake til albumet</a> | 
+    <a href="{% url "gallery.views.picture_large" album.id next_picture.album_picnr %}">Neste bilde</a>
 </p>
 {% if picture.description %}
     <p>
@@ -41,9 +41,9 @@
 {% endif %}
 <!-- Brukerrettiheter -->
 <p>
-    <a href="{% url gallery.views.edit_picture album.id picture.album_picnr %}">Endre beskrivelse</a>
+    <a href="{% url "gallery.views.edit_picture" album.id picture.album_picnr %}">Endre beskrivelse</a>
 </p>
 <p>
-    <a href="{% url gallery.views.delete_picture album.id picture.album_picnr %}">Slett bildet</a>
+    <a href="{% url "gallery.views.delete_picture" album.id picture.album_picnr %}">Slett bildet</a>
 </p>
 {% endblock %}

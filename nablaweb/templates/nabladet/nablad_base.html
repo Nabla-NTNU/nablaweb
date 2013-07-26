@@ -1,7 +1,7 @@
 {% extends "content/content_base.html" %}
 
 {% block readmore %}
-    <a href="{% url nablad_detail nablad.id %}">Les mer</a>
+    <a href="{% url "nablad_detail" nablad.id %}">Les mer</a>
 {% endblock %}
 
 {% block content_type %}

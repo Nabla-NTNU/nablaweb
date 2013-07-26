@@ -17,7 +17,7 @@
                     {% if result.content_type == "news.news" %}
                     <h3><a href="{{ result.object.get_absolute_url }}">{{ result.object.headline }}</a></h3>
                     {% elif result.content_type == "com.compage" %}
-                    <h3><a href="{% url show_com_page result.object.get_canonical_name %}">{{ result.object.com.name }}</a></h3>
+                    <h3><a href="{% url "show_com_page" result.object.get_canonical_name %}">{{ result.object.com.name }}</a></h3>
                     {% endif %}
                 </td>
                 <td></td>

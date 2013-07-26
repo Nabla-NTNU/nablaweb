@@ -189,7 +189,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.admin',
     # Flatpages gjør at vi enkelt kan legge til sider som kun inneholder tekst,
-    # på hvilken url vi vil. Teksten lagres i databasen.
+    # på hvilken url "vi" vil. Teksten lagres i databasen.
     'django.contrib.flatpages',
     # Humanize legger til nyttige template-tags, som konverterer maskintid til
     # menneskelig leselig tid, f.eks. "i går".

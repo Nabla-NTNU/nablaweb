@@ -16,11 +16,11 @@
 <div class="pagination pagination-centered">
     <ul>
         <li>
-            <a href="{% url event_list prev.year prev.month %}">&laquo;</a>
+            <a href="{% url "event_list" prev.year prev.month %}">&laquo;</a>
         </li>
         <li class="inactive"><a>{{ this|date:"F"|capfirst }}</a></li>
         <li>
-            <a href="{% url event_list next.year next.month %}">&raquo;</a>
+            <a href="{% url "event_list" next.year next.month %}">&raquo;</a>
         </li>
     </ul>
 </div>

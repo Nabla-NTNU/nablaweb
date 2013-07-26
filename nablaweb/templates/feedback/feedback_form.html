@@ -7,7 +7,7 @@
 
 <p>Kom med tilbakemelding på siden her.</p>
 
-<form action="{% url feedback.views.feedback_form %}" method="post">{% csrf_token %}
+<form action="{% url "feedback.views.feedback_form" %}" method="post">{% csrf_token %}
     {{form.as_p}}
     <p><input type="submit" value="Send inn" /></p>
 </form>

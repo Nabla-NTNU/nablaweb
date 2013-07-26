@@ -24,7 +24,7 @@
     <span class="tid">Postet {{ content.created_date|naturalday }}</span>
     <a class="person"
         {% if content.created_by %}
-        href="{% url accounts.views.view_member_profile content.created_by.username %}"
+        href="{% url "accounts.views.view_member_profile" content.created_by.username %}"
         {% endif %}>
         {{ content.created_by.get_full_name }}
     </a>
