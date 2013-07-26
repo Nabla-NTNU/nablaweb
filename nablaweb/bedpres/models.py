@@ -99,8 +99,17 @@ class BedPres(AbstractEvent):
         else:
             return 100
 
-    def correct_picture(self): return self.company.picture
-    def correct_cropping(self): return self.company.cropping
+    def correct_picture(self):
+        if self.picture:
+            return self.picture
+        else:
+            return self.company.picture
+
+    def correct_cropping(self):
+        if self.picture:
+            return self.cropping
+        else:
+            return self.company.cropping
 
     @property
     def bpc_info(self):

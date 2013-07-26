@@ -8,9 +8,9 @@
     {% if news.as_child_class.correct_picture %}
         <a href="{{ news.get_absolute_url }}">
         {% if narrow %}
-            <img alt="" width="100%" src="{% thumbnail news.as_child_class.correct_picture 370x123 box=news.as_child_class.correct_cropping %}">
+            <img alt="" class="news-picture" src="{% thumbnail news.as_child_class.correct_picture 370x123 box=news.as_child_class.correct_cropping %}">
         {% else %}
-            <img alt="" width="100%" src="{% thumbnail news.as_child_class.correct_picture 770x250 box=news.as_child_class.correct_cropping %}">
+            <img alt="" class="news-picture" src="{% thumbnail news.as_child_class.correct_picture 770x250 box=news.as_child_class.correct_cropping %}">
         {% endif %}
         </a>
     {% endif %}
