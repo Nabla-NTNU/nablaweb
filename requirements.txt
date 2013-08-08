@@ -6,7 +6,7 @@ pybbm-tbw
 south
 git+https://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
 sorl-thumbnail
-whoosh<2.5
+whoosh>2.5
 PIL
 mysql-python
 python-memcached
