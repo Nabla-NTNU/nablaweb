@@ -4,9 +4,9 @@
 
 from django.conf.urls.defaults import *
 from com.views import *
-from django.views.generic.simple import redirect_to
+from django.views.generic import RedirectView
 
 urlpatterns = patterns('',
-    (r'^$', redirect_to, {'url': '/'}),
+    (r'^$', RedirectView.as_view(url='/')),
     url(r'^(?P<slug>\D{1,85})/$', ShowPage.as_view(), name='show_com_page'),
 )

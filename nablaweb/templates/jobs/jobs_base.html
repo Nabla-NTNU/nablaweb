@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block readmore %}
-    <a href="{% url jobs_detail content.company content.id %}">Les mer</a>
+    <a href="{% url "jobs_detail" content.company content.id %}">Les mer</a>
 {% endblock %}
 
 {# over ingress #}

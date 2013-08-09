@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.views.generic import RedirectView
 from nablaweb.news.feeds import RecentNews
 
 from django.contrib import admin
@@ -31,7 +32,7 @@ urlpatterns = patterns('',
     (r'^media/(?P<path>.*)$',  'django.views.static.serve', {'document_root': MEDIA_ROOT}),
 
     # Redirecte til favicon
-    (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': STATIC_URL + 'img/favicon.ico'}),
+    (r'^favicon\.ico$', RedirectView.as_view(url=STATIC_URL + 'img/favicon.ico')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
     # to INSTALLED_APPS to enable admin documentation:

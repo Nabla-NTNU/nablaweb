@@ -18,7 +18,7 @@ class BedPres(AbstractEvent):
     """
 
     # Id'en til bedpressen internt hos BPC
-    bpcid = models.CharField(verbose_name="BPC-id", max_length=16, unique=True, blank=True, help_text = "Dette er id'en som blir brukt internt hos BPC. Ikke endre den hvis du ikke vet du gjør.")
+    bpcid = models.CharField(verbose_name="BPC-id", max_length=16, unique=True, blank=False, help_text = "Dette er id'en som blir brukt internt hos BPC. Ikke endre den hvis du ikke vet du gjør.")
     company = models.ForeignKey(Company, verbose_name="Bedrift", blank=False, help_text="Hvilken bedrift som står bak bedriftspresentasjonen")
 
     # Informajon fra BPC som blir lastet ned av metodene
@@ -99,8 +99,17 @@ class BedPres(AbstractEvent):
         else:
             return 100
 
-    def correct_picture(self): return self.company.picture
-    def correct_cropping(self): return self.company.cropping
+    def correct_picture(self):
+        if self.picture:
+            return self.picture
+        else:
+            return self.company.picture
+
+    def correct_cropping(self):
+        if self.picture:
+            return self.cropping
+        else:
+            return self.company.cropping
 
     @property
     def bpc_info(self):

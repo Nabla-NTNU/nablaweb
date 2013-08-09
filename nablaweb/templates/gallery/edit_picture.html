@@ -7,10 +7,10 @@
 
 <img src="{{ picture.getThumbnailUrl }}" width=180></img>
 
-<form action="{% url gallery.views.edit_picture album.id picture.album_picnr %}" method="post" enctype="multipart/form-data">
+<form action="{% url "gallery.views.edit_picture" album.id picture.album_picnr %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <p><input type="submit" value="Send" /></p>
 </form>
-<a href="{% url gallery.views.picture_large album.id picture.album_picnr %}">Avbryt</a>
+<a href="{% url "gallery.views.picture_large" album.id picture.album_picnr %}">Avbryt</a>
 {% endblock %}

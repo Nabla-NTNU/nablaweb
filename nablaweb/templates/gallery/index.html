@@ -10,7 +10,7 @@
     <tr>
     {% for album in album_list %}
         <td width="150px">
-            <a href="{% url gallery.views.album album.id %}">
+            <a href="{% url "gallery.views.album" album.id %}">
             <img src="{% if album.picture_set.all.0.thumbnail %}{{ album.picture_set.all.0.getThumbnailUrl }}{% else %}No Image{% endif %}", width="100px"></img>
 	        </a>
 	        </br>
@@ -27,7 +27,7 @@
     <p>Det har ikke blitt lagt ut noen bilder enda</p>
 {% endif %}
 <p>
-    <a href="{% url gallery.views.add_album %}">
+    <a href="{% url "gallery.views.add_album" %}">
         Lag nytt album
     </a>
 </p>

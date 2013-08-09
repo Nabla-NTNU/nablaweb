@@ -3,8 +3,8 @@
 {% load thumbnail %}
 <div class="row"><div class="span8">
 
-{% if news.picture %}
-    <img alt="header" width="100%" src="{% thumbnail news.picture 770x250 box=news.cropping %}">
+{% if news.as_child_class.correct_picture %}
+    <img alt="header" class="news-picture" src="{% thumbnail news.as_child_class.correct_picture 770x250 box=news.as_child_class.correct_cropping %}">
 {% endif %}
 
 <h2>{{ news.headline }}</h2>

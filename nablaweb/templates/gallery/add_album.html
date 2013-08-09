@@ -3,7 +3,7 @@
 
 {% block content %}
 <h2>Lag et nytt album</h2>
-<form action="{% url gallery.views.add_album %}" method="post">{% csrf_token %}
+<form action="{% url "gallery.views.add_album" %}" method="post">{% csrf_token %}
     {{form.as_p}}
     <p><input type="submit" value="Lagre" /></p>
 </form>

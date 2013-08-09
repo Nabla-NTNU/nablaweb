@@ -22,7 +22,7 @@ except ImportError:
 
 
 def annotate_link(domain):
-    """This function is called by the url tag. Override to disable or change behaviour.
+    """This function is called by the url "tag." Override to disable or change behaviour.
 
     domain -- Domain parsed from url
 
@@ -246,10 +246,10 @@ class LinkTag(TagBase):
             return u""
 
         if self.params:
-            url = self.params.strip()
+            url "=" self.params.strip()
         else:
-            url = self.get_contents_text(parser).strip()
-            url = _unescape(url)
+            url "=" self.get_contents_text(parser).strip()
+            url "=" _unescape(url)
 
         self.domain = ""
 
@@ -257,7 +257,7 @@ class LinkTag(TagBase):
             return ""
 
         if ':' not in url:
-            url = 'http://' + url
+            url "=" 'http://' + url
 
         scheme, uri = url.split(':', 1)
 
@@ -826,7 +826,7 @@ class PostMarkup(object):
 
     def tagify_urls(self, postmarkup ):
 
-        """ Surrounds urls with url bbcode tags. """
+        """ Surrounds urls with url "bbcode" tags. """
 
         def repl(match):
             return u'[url]%s[/url]' % match.group(0)
@@ -965,7 +965,7 @@ class PostMarkup(object):
         encoding -- Encoding of string, defaults to "ascii" if the string is not
         already unicode.
         exclude_tags -- A collection of tag names to ignore.
-        auto_urls -- If True, then urls will be wrapped with url bbcode tags.
+        auto_urls -- If True, then urls will be wrapped with url "bbcode" tags.
         paragraphs -- If True then line breaks will be replaced with paragraph
         tags, rather than break tags.
         clean -- If True, html will be run through the cleanup_html method.
@@ -1197,7 +1197,7 @@ def render_bbcode(bbcode,
         encoding -- Encoding of string, defaults to "ascii" if the string is not
         already unicode.
         exclude_tags -- A collection of tag names to ignore.
-        auto_urls -- If True, then urls will be wrapped with url bbcode tags.
+        auto_urls -- If True, then urls will be wrapped with url "bbcode" tags.
         paragraphs -- If True then line breaks will be replaces with paragraph
         tags, rather than break tags.
         clean -- If True, html will be run through a cleanup_html method.

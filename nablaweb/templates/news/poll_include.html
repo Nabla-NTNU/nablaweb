@@ -24,7 +24,7 @@
     {% else %}
         {% cache 1800 poll_form %}
         {# Has not voted, display form #}
-        <form action="{% url poll.views.vote poll.id %}?next={% url news_list %}" method="post">
+        <form action="{% url "poll.views.vote" poll.id %}?next={% url "news_list" %}" method="post">
             {% csrf_token %}
             {% for choice in poll.choice_set.all %}
                 <label class="radio">

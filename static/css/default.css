@@ -53,6 +53,10 @@
         word-break: break-word;
     }
 
+    .news-picture {
+        width: 100%;
+    }
+
 
 /* Utility classes */
 
