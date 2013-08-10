@@ -247,10 +247,10 @@ class LinkTag(TagBase):
             return u""
 
         if self.params:
-            url "=" self.params.strip()
+            url = self.params.strip()
         else:
-            url "=" self.get_contents_text(parser).strip()
-            url "=" _unescape(url)
+            url = self.get_contents_text(parser).strip()
+            url = _unescape(url)
 
         self.domain = ""
 
@@ -258,7 +258,7 @@ class LinkTag(TagBase):
             return ""
 
         if ':' not in url:
-            url "=" 'http://' + url
+            url = 'http://' + url
 
         scheme, uri = url.split(':', 1)
 
