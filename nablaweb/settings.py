@@ -20,6 +20,8 @@ TEMPLATE_DEBUG = DEBUG
 # Gjør det enkelt å bruke relative paths
 PROJECT_ROOT = os.path.dirname(__file__)
 
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "nabla.no"]
+
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
