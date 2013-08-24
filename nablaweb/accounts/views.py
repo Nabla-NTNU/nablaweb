@@ -65,10 +65,11 @@ def view_member_profile(request, username=None):
         member = request.user
         
     penalty_list = member.eventpenalty_set.all()
-    
+   
+    see_penalty = request.user.has_perm('bedpress.change_BedPres') or request.user == member
     return render(
         request, "accounts/view_member_profile.html",
-        {'member': member, 'penalty_list': penalty_list})
+        {'member': member, 'penalty_list': penalty_list, 'see_penalty': see_penalty})
     # Render er identisk med render_to_response, men tar request som første
     # argument istedenfor RequestContext(request) som tredje argument.
     # Importeres fra django.shortcuts
