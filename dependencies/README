@@ -13,3 +13,7 @@ sudo cp *.py /usr/lib/pymodules/python2.7/markdown/extensions
 # appen er dette unødvendig.
 cd ../static
 ln -s /usr/local/lib/python2.7/dist-packages/image_cropping/static/image_cropping image_cropping
+
+# Om du ikke bruker nginx, må du også legge til admin-static filene
+# cd ../static
+ln -s /usr/local/lib/python2.7/dist-packages/django/contrib/admin/static/admin admin
