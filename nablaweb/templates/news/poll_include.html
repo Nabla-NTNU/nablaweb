@@ -6,7 +6,6 @@
 <div class="poll well hidden-phone">
 
     <h4>{{ poll.question }}</h4>
-    {% cache 1800 poll_has_voted %}
     {% if user in poll.users_voted.all %}
         {# Has voted, display results #}
         {% cache 900 poll_results %}
@@ -22,7 +21,6 @@
         {% endfor %}
         {% endcache %}{# Poll results #}
     {% else %}
-        {% cache 1800 poll_form %}
         {# Has not voted, display form #}
         <form action="{% url "poll.views.vote" poll.id %}?next={% url "news_list" %}" method="post">
             {% csrf_token %}
@@ -38,8 +36,6 @@
             <div class="center" style="color:#999;">Logg inn for å stemme</div>
             {% endif %}
         </form>
-        {% endcache %}{# poll_form #}
     {% endif %}
-    {% endcache %} {# poll_has_voted #}
 </div>
 {% endif %}{# poll #}
