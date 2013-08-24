@@ -8,7 +8,7 @@
     <h4>{{ poll.question }}</h4>
     {% if user in poll.users_voted.all %}
         {# Has voted, display results #}
-        {% cache 900 poll_results %}
+        {% cache 900 poll_results user.username %}
         {% for choice in poll.choice_set.all %}
             <div class="choice">{{ choice.choice }}</div>
             <div class="progress">
