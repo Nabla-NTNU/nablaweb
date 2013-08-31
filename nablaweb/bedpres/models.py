@@ -48,7 +48,6 @@ class BedPres(AbstractEvent):
                 )
         except bpc_core.BPCResponseException as exception:
             return exception.message # TODO Bruke noen andre feilmeldinger. Er litt kryptiske for brukere
-        print response
         if response['add_attending'][0]['waiting']:
             return "Du står nå på venteliste"
         else:
