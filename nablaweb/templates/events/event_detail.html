@@ -46,9 +46,10 @@
 
 {% block sidebar %}
 
-{% include "content/includes/meta.html" with content=event %}
 
 {% include "events/includes/info.html" with event=event %}
+
+{% include "content/includes/meta.html" with content=event %}
 
 {% if user.is_staff %}
 <div class="well" style="padding: 8px 0;">

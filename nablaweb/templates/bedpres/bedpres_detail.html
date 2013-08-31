@@ -38,10 +38,10 @@
 
 {% block sidebar %}
 
-{% include "content/includes/meta.html" with content=bedpres %}
 
 {% include "bedpres/includes/info.html" with event=bedpres %}
 
+{% include "content/includes/meta.html" with content=bedpres %}
 
 {% if user.is_staff %}
 <div class="well" style="padding: 8px 0;">
