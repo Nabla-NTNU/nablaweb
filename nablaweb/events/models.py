@@ -6,6 +6,7 @@ from django.contrib.auth.models import User,Group
 from news.models import News
 import datetime
 from urlparse import urlparse
+from django.core.mail import send_mail
 
 class AbstractEvent(News):
     """
@@ -376,8 +377,18 @@ class EventRegistration(models.Model):
             self.attending = True
             self.number = self.event.users_attending() + 1
             self.save()
-            #TODO
-            #OG SEND EN MAIL.
+            if self.user.email:
+                subject = u'Påmeldt %s' % self.event.headline
+                message = u'''Hei %s
+                Du har nå fått plass på arrangementet "%s". Plassen er tildelt fordi du stod på venteliste.'''                        %(self.user.get_full_name(), self.event.headline)
+                if self.event.deregistration_deadline and self.event.deregistration_deadline < datetime.datetime.now():
+                    message += u''' Fristen for å melde seg av arrangementet har gått ut. Husk at du kan få prikk dersom du ikke møter opp. Dersom du allikevel ikke kan komme, kan du prøve å ta kontakt med %s så fort som mulig.'''%(self.event.organizer)
+                elif self.event.deregistration_deadline:
+                    message += u''' Hvis du allikevel ikke kan komme, må du melde deg av før avmeldingsfristen. Husk at du kan få prikk dersom du ikke møter opp.'''
+                else:
+                    message += u''' Hvis du ikke kan komme, må du huske å melde deg av så fort som mulig. Husk at du kan få prikk dersom du ikke møter opp.'''
+
+                self.user.email_user(subject, message)
 
     def is_attending_place(self):
         "Returnerer True dersom registreringen er en garantert plass."

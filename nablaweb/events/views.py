@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
+import datetime
 from django.contrib import messages as django_messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -10,15 +11,12 @@ from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.decorators import login_required
 from django.utils.safestring import mark_safe
-from django.contrib.auth.decorators import permission_required
-
-import datetime
-from itertools import chain
-
 from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
 from nablaweb.events.models import Event, EventRegistration
 from nablaweb.bedpres.models import BedPres
+from itertools import chain
 from events.event_calendar import EventCalendar
+from django.contrib.auth.decorators import permission_required
 
 # Administrasjon
 
@@ -86,20 +84,14 @@ def calendar(request, year=None, month=None):
     else:
         month = datetime.date.today().month
 
-    # Get this months events and bedpreser separately
-    events = Event.objects.select_related("content_type").filter(
-            event_start__year=year, event_start__month=month)
-    bedpress = BedPres.objects.select_related("content_type").filter(
-            event_start__year=year, event_start__month=month)
+    events = Event.objects.select_related('content_type').order_by('event_start').filter(
+        event_start__year=year, event_start__month=month
+    )
+    cal = EventCalendar(events).formatmonth(year, month)
 
-    # Combine them to a single calendar
-    cal = EventCalendar(chain(events, bedpress)).formatmonth(year, month)
-
-    # Get some random dates in the current, next, and previous month.
-    # These dates are used load the calendar for that month.
-    # * prev is some day in the previous month
-    # * this is some day in this month
-    # * next is some day in the next month
+    # prev is some day in the previous month
+    # this is some day in this month
+    # next is some day in the next month
     return render(request, 'events/event_list.html', {
         'calendar': mark_safe(cal),
         'prev': datetime.date(year, month, 1) - datetime.timedelta(27),

@@ -307,3 +307,8 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+
+# Sending email
+##################################################
+DEFAULT_FROM_EMAIL='noreply@nabla.no'
