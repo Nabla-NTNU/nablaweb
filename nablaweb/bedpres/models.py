@@ -48,7 +48,11 @@ class BedPres(AbstractEvent):
                 )
         except bpc_core.BPCResponseException as exception:
             return exception.message # TODO Bruke noen andre feilmeldinger. Er litt kryptiske for brukere
-        return "Du ble påmeldt"
+        print response
+        if response['add_attending'][0]['waiting']:
+            return "Du står nå på venteliste"
+        else:
+            return "Du ble påmeldt"
 
     def deregister_user(self, user):
         try:
