@@ -28,9 +28,13 @@ class BPCResponseException(BPCException):
 # Datoformatet brukt av BPC. ISO8601!
 BPC_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
-# URL til BPC-serveren.
+# Gamle URL'er til BPC-serveren.
 #BPC_URL = 'https://bpc.timini.no/bpc/remote/'
-BPC_URL = 'https://bpc.timini.no/bpc_testing/remote/' # Testserver
+#BPC_URL = 'https://bpc.timini.no/bpc_testing/remote/' # Testserver
+
+# Nye URL'er til BPC-serveren.
+#BPC_URL = 'https://www.bedriftspresentasjon.no/remote/'
+BPC_URL = 'http://testing.bedriftspresentasjon.no/remote/' #Testserver
 
 # Informasjon som må sendes med hver forespørsel.
 SETTINGS = {
