@@ -83,6 +83,8 @@ BPC_ERRORS = {
     '105': 'Feil eller ikke noe brukernavn gitt',
     '106': 'Feil eller ikke noe fullstendig navn gitt',
     '107': 'Feil eller ikke noe kortnummer gitt',
+    '108': 'Feil versjon av integrasjonskoden',
+    '109': 'Handshake støtter ikke denne operasjonen',
 
     # Feil - Alvorlige feil som ikke bør skje med en korrekt oppsatt
     # klient, men ikke så alvorlige at skriptet avbrytes. En fatal
@@ -91,6 +93,7 @@ BPC_ERRORS = {
     '201': 'Feil i validering av en parameter',
     '202': 'Du har ikke tilgang til å gjøre dette',
     '203': 'PHP-feil i scriptet på serveren',
+    '204': 'Manglende JSONP-callbackparameter, kan ikke returnere data',
 
     # Tilbakemeldinger - Dette er vanlige tilbakemeldinger som kan
     # komme og som bør tas høyde for ved bruk av funksjonene gitt i
@@ -104,6 +107,7 @@ BPC_ERRORS = {
     '407': 'Brukeren var ikke påmeldt som medlem av denne linjeforeningen, og kan dermed ikke meldes av',
     '408': 'Påmelding har ikke startet ennå',
     '409': 'Påmeldingsfristen har passert',
+    '410': 'Studenten går i et for høyt årstrinn for dette arrangementet.',
     }
 
 

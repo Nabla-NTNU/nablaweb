@@ -68,7 +68,7 @@ class BedPres(AbstractEvent):
 
     def get_users_waiting(self):
         return User.objects.filter(username__in=self.bpc_waiting_list)
-        
+
     def is_registered(self, user):
         return self.is_attending(user) or self.is_waiting(user)
 
@@ -82,14 +82,14 @@ class BedPres(AbstractEvent):
         return int(self.bpc_info.get('seats_available',0))
 
     def is_full(self):
-        return free_places() == 0
+        return self.free_places() == 0
 
     def users_attending(self):
         return int(self.bpc_info.get('this_attending',0))
 
     def users_waiting(self):
         return User.objects.filter(username__in=self.bpc_waiting_list)
-    
+
     def users_registered(self):
         return list(self.users_attending())+list(self.users_waiting())
 
@@ -170,7 +170,7 @@ class BedPres(AbstractEvent):
           #  File(open(result[0]))
            # )
         #self.save()
-            
+
         self.body = bpc_info['description']
         self.organizer = 'Bedkom'
         self.location = bpc_info['place']

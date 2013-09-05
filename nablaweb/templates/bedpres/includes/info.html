@@ -5,7 +5,7 @@
 {% block registration_button %}
     <tr><td colspan="2" style="text-align: center;">
         {% if not is_registered %}
-            <a href="{% url "nablaweb.bedpres.views.register_user" event.id %}" class="btn btn-primary">Meld deg på</a>
+            <a href="{% url "nablaweb.bedpres.views.register_user" event.id %}" class="btn btn-primary">Meld deg på {% if event.is_full %}venteliste{%endif%}</a>
         {% else %}
             <a href="{% url "nablaweb.bedpres.views.deregister_user" event.id %}" class="btn btn-primary">Meld deg av</a>
         {% endif %}
