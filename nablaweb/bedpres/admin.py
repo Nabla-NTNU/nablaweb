@@ -9,8 +9,8 @@ class BedPresAdmin(ContentAdmin):
               "cropping",
               "bpcid",
               "headline",
-              "company",
               "slug",
+              "company",
               "short_name",
               "lead_paragraph",
               "body",
@@ -25,6 +25,7 @@ class BedPresAdmin(ContentAdmin):
               "deregistration_deadline",
               "places",
               "has_queue")
+    prepopulated_fields = {"slug": ("headline",)}
     #form = BedPresForm
 
 
