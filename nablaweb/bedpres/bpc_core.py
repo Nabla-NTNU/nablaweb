@@ -6,7 +6,7 @@ import json # BPC returnerer json
 from urllib import urlencode
 from urllib2 import urlopen, Request, URLError
 from datetime import datetime
-
+import settings
 
 # Samleunntak.
 class BPCException(Exception):
@@ -28,6 +28,8 @@ class BPCResponseException(BPCException):
 # Datoformatet brukt av BPC. ISO8601!
 BPC_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
+BPC_URL = settings.BPC_URL
+
 # Gamle URL'er til BPC-serveren.
 #BPC_URL = 'https://bpc.timini.no/bpc/remote/'
 #BPC_URL = 'https://bpc.timini.no/bpc_testing/remote/' # Testserver
@@ -40,12 +42,11 @@ BPC_URL = 'http://testing.bedriftspresentasjon.no/remote/' #Testserver
 SETTINGS = {
     'forening': '3',
     'key': 'a88fb706bc435dba835b89ddb2ba4debacc3afe4',
-#    'key': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
     'method': 'json',
     'debug': 'false',
     'timing': 'false',
     'version': '1.5',
-    }
+}
 
 # Informasjon om typer forespørsler.
 # Brukes for å validere forespørsler før de sendes.

@@ -228,6 +228,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 # App-spesifikke settings #
 ###########################
 
+# bedpres
+##################################################
+#BPC_URL = 'https://www.bedriftspresentasjon.no/remote/'
+BPC_URL = 'http://testing.bedriftspresentasjon.no/remote/' #Testserver
+
 # Contrib.auth
 ##################################################
 AUTH_PROFILE_MODULE= 'accounts.UserProfile'
@@ -312,3 +317,6 @@ except ImportError:
 # Sending email
 ##################################################
 DEFAULT_FROM_EMAIL='noreply@nabla.no'
+
+
+
