@@ -36,7 +36,7 @@ BPC_URL = settings.BPC_URL
 
 # Nye URL'er til BPC-serveren.
 #BPC_URL = 'https://www.bedriftspresentasjon.no/remote/'
-BPC_URL = 'http://testing.bedriftspresentasjon.no/remote/' #Testserver
+#BPC_URL = 'http://testing.bedriftspresentasjon.no/remote/' #Testserver
 
 # Informasjon som må sendes med hver forespørsel.
 SETTINGS = {
