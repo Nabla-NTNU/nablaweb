@@ -18,5 +18,9 @@ class NabladDetailView(NewsDetailView):
 
 class NabladListView(ListView):
     model = Nablad
-    context_object_name = 'nablad_list'
-    queryset = Nablad.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(NabladListView, self).get_context_data(**kwargs)
+        nablad_list = Nablad.objects.all()
+        context['nablad_list'] = Nablad.objects.order_by('-pub_date')
+        return context
