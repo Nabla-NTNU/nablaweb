@@ -154,6 +154,7 @@ INSTALLED_APPS = [
     'com',      # Viser sider for komiteene.
     'quotes',   # Tilfeldig sitat.
     'nabladet', # Liste over nablad. Arver news.
+    'meeting_records', # Møtereferater fra styremøter og SKE
     'poll',     # Spørreundersøkelser
     # 'feedback', # Hva gjør egentlig denne? Virker ikke som den trengs for at
                   # tilbakemeldings-formen skal fungere.
