@@ -19,7 +19,7 @@
 {% block content %}
 
 {% if meeting_record.picture %}
-    <img alt="header" width="100%" src="{% thumbnail meeting_record.picture 770x250 box=meeting_record.cropping %}">
+    <img alt="header" width="100%" src="{% thumbnail meeting_record.picture 770x250 box=meeting_record.cropping quality=95 %}">
 {% endif %}
 
 <h2>{{ meeting_record.headline }}</h2>

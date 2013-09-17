@@ -19,7 +19,7 @@
 {% block content %}
 
 {% if nablad.picture %}
-    <img alt="header" width="100%" src="{% thumbnail nablad.picture 770x250 box=nablad.cropping %}">
+    <img alt="header" width="100%" src="{% thumbnail nablad.picture 770x250 box=nablad.cropping quality=95 %}">
 {% endif %}
 
 <h2>{{ nablad.headline }}</h2>

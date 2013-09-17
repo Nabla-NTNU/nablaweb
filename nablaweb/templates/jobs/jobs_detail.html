@@ -12,7 +12,7 @@
 <div class="row"><div class="span8">
 
     {% if job.company.picture %}
-        <img alt="" width="100%" src="{% thumbnail job.company.picture 770x250 box=job.company.cropping %}">
+        <img alt="" width="100%" src="{% thumbnail job.company.picture 770x250 box=job.company.cropping quality=95 %}">
     {% endif %}        
 
 <h2>{{ job.headline }}</h2>

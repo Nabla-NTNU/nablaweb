@@ -5,7 +5,7 @@
 
 <div class="span8 {{ content|classname }}">
     {% if content.picture %}
-        <img alt="" width="100%" src="{% thumbnail content.picture 770x250 box=content.cropping %}">
+        <img alt="" width="100%" src="{% thumbnail content.picture 770x250 box=content.cropping quality=95 %}">
     {% endif %}
 
     <h2>{{ content.headline }}</h2>
