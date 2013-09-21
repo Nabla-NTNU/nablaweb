@@ -208,7 +208,7 @@ def ical_event(request, event_id):
     template = loader.get_template('events/event_icalendar.ics')
     context = Context({'event_list': (event,),})
     response = HttpResponse(template.render(context), mimetype='text/calendar')
-    response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.title.replace(' ', '_')
+    response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.slug
     return response
 
 

@@ -4,13 +4,12 @@ PRODID:-//Nabla//NONSGML Nablaweb//EN{% for event in event_list %}
 BEGIN:VEVENT
 UID:nablaarr{{ event.id }}
 CALSCALE:GREGORIAN
-DTSTAMP:
-DTSTART:
+DTSTART:{{ event.event_start|date:"Ymd\THis\Z" }}
 LOCATION:{{ event.location }}
 ORGANIZER:Nabla
 CATEGORIES:NABLA
-SUMMARY:{{ event.title }}
-DESCRIPTION:{{ event.summary }}
-URL:http://www.nabla.no/event/{{ event.id }}/
+SUMMARY:{{ event.headline }}
+DESCRIPTION:{{ event.lead_paragraph }}
+URL:http://nabla.no{{ event.get_absolute_url }}
 END:VEVENT{% endfor %}
 END:VCALENDAR
