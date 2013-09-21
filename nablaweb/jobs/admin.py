@@ -5,6 +5,7 @@
 from django.contrib import admin
 from django.forms import ModelForm
 from django.forms import MultipleChoiceField
+from content.admin import ContentAdmin
 from jobs.models import Advert, Company, RelevantForChoices, TagChoices, YearChoices
 from jobs.forms import AdvertForm, CompanyForm
 
@@ -39,7 +40,7 @@ class AdvertAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("headline",)}
     form = AdvertForm
     
-class CompanyAdmin(admin.ModelAdmin):
+class CompanyAdmin(ContentAdmin):
     prepopulated_fields = {"slug": ("name",)}
     fields = ("name",
           "picture",
