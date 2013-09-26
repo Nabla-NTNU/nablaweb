@@ -200,17 +200,22 @@ def deregister_user(request, event_id):
     django_messages.add_message(request, django_messages.INFO, message)
     return HttpResponseRedirect(event.get_absolute_url())
 
-
-# Eksporter
-
 def ical_event(request, event_id):
-    event = get_object_or_404(Event, pk=event_id)
+    """Returns a given event or bedpres as an iCal .ics file"""
+
+    # Try Event first, then BedPres. 404 if none of them are found.
+    try:
+        event = Event.objects.get(pk=event_id)
+    except:
+        event = get_object_or_404(BedPres, pk=event_id)
+
+    # Use the same template for both Event and BedPres.
     template = loader.get_template('events/event_icalendar.ics')
     context = Context({'event_list': (event,),})
     response = HttpResponse(template.render(context), mimetype='text/calendar')
     response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.slug
     return response
 
-
+# TODO: What is this function supposed to do?
 def ical_user(request):
     return HttpResponse("Not implemented.")

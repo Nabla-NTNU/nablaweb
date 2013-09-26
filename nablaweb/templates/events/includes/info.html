@@ -121,8 +121,6 @@
 {% endif %}
 </table>
 
-<div><a href="{{ event|google_calendarize }}">Legg til Google Calendar</a></div>
-<div><a href="{% url "ical_event" event.pk %}">Last ned .ics-fil</a></div>
 
 
 {% if event.registration_required %}
@@ -132,6 +130,16 @@
     {% if event.percent_full == 100 %}progress-danger{%endif %}">
     <div class="bar" style="width: {{ event.percent_full }}%;"></div>
 </div>
-
-
 {% endif %}
+
+<div class="center">
+<a class="btn btn-mini" href="{{ event|google_calendarize }}">
+    <span class="icon icon-calendar"></span>
+    Google Calendar
+</a>
+
+<a class="btn btn-mini" href="{% url "ical_event" event.pk %}">
+    <span class="icon icon-calendar"></span>
+    iCalendar
+</a>
+</div>
