@@ -149,10 +149,8 @@ INSTALLED_APPS = [
     'accounts', # Inneholder UserProfile med ekstra informasjon.
     'events',   # Arrangement. Arver nyheter.
     'jobs',     # Stillingsannonser og firmaer
-    'gallery',  # Bildegalleri
     'bedpres',  # Utvider events med BPC-tilkobling. Arver events.
     'com',      # Viser sider for komiteene.
-    'quotes',   # Tilfeldig sitat.
     'nabladet', # Liste over nablad. Arver news.
     'meeting_records', # Møtereferater fra styremøter og SKE
     'poll',     # Spørreundersøkelser
@@ -217,7 +215,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'events.context_processors.upcoming_events',     
     'jobs.views.activej',
-    'quotes.context_processors.random_quote',
     #'pybb.context_processors.processor',
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
