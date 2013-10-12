@@ -1,16 +1,24 @@
 BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Nabla//NONSGML Nablaweb//EN{% for event in event_list %}
-BEGIN:VEVENT
-UID:nablaarr{{ event.id }}
+METHOD:PUBLISH
 CALSCALE:GREGORIAN
-DTSTAMP:
-DTSTART:
+PRODID:-//Nabla//NONSGML nabla.no//NO
+VERSION:2.0
+LAST-MODIFIED:{% now "Ymd\THis\Z" %}
+X-WR-TIMEZONE:Europe/Oslo
+{% for event in event_list %}
+BEGIN:VEVENT
+UID:event{{ event.id }}@nabla.no
+DTSTART:{{ event.event_start|date:"Ymd\THis\Z" }}
+{% if event.event_end %}
+DTEND:{{ event.event_end|date:"Ymd\THis\Z" }}
+{% endif %}
 LOCATION:{{ event.location }}
-ORGANIZER:Nabla
-CATEGORIES:NABLA
-SUMMARY:{{ event.title }}
-DESCRIPTION:{{ event.summary }}
-URL:http://www.nabla.no/event/{{ event.id }}/
-END:VEVENT{% endfor %}
+ORGANIZER:http://nabla.no
+CATEGORIES:Nabla
+SUMMARY:{{ event.headline }}
+DESCRIPTION:{{ event.lead_paragraph }}
+URL:http://nabla.no{{ event.get_absolute_url }}
+END:VEVENT
+{% endfor %}
+
 END:VCALENDAR

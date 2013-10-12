@@ -40,7 +40,7 @@ urlpatterns = patterns('nablaweb.events.views',
         name='event_registrations'),
 
     # Eksporter
-    (r'^(?P<event_id>\d{1,8})/eksporter$', 'ical_event'),
+    url(r'^(?P<event_id>\d{1,8}).ics$', 'ical_event', name="ical_event"),
     
     # RSS-feed
     url(r'^feed/$', RecentEvents()),

@@ -1,4 +1,5 @@
 {% load humanize %}
+{% load event_extras %}
 
 <!-- event-info -->
 <h3 class="pull-left">Informasjon </h3>
@@ -121,6 +122,7 @@
 </table>
 
 
+
 {% if event.registration_required %}
 <h3>{{ event.users_attending }} påmeldt av {{ event.places }} plasser</h3>
 <div class="progress
@@ -128,6 +130,16 @@
     {% if event.percent_full == 100 %}progress-danger{%endif %}">
     <div class="bar" style="width: {{ event.percent_full }}%;"></div>
 </div>
-
-
 {% endif %}
+
+<div class="center">
+<a class="btn btn-mini" href="{{ event|google_calendarize }}">
+    <span class="icon icon-calendar"></span>
+    Google Calendar
+</a>
+
+<a class="btn btn-mini" href="{% url "ical_event" event.pk %}">
+    <span class="icon icon-calendar"></span>
+    iCalendar
+</a>
+</div>

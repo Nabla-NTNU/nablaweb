@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load markup %}
 {% block title %}Nyheter{% endblock %}
 
 {% block more_head %}
@@ -55,20 +55,8 @@
 
 {% block sidebar %}
 
-<h3>Om Nabla</h3>
+{{ sidebarinfo.content|markdown }}
 
-<p>Nabla er linjeforeningen for sivilingeniørprogrammet <b>Fysikk og
-    matematikk</b> på NTNU. Du kan lese mer om studiet på 
-<a href="http://www.ntnu.no/studier/mtfyma">NTNU sine nettsider</a>. 
-På denne nettsiden finner du informasjon om studiet, linjeforeningen, og hva
-som foregår.</p>
-
-{# Diverse knapper som skal være lette å se for ikke-komponenter #}
-<div class="center">
-    <p><a class="btn btn-large btn-info" href="/bedriftskontakten/">Bedriftskontakten</a></p>
-    <p><a class="btn btn-large btn-info" href="/nystudent/">For nye studenter</a></p>
-</div>
-<br>
 
 {% if upcoming_events %}
 

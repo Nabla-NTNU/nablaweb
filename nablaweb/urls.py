@@ -24,7 +24,7 @@ urlpatterns = patterns('',
     (r'^sitater/', include('quotes.urls')),
     (r'^feedback/', include('feedback.urls')),
     (r'^nabladet/', include('nabladet.urls')),
-    (r'^referater/', include('meeting_records.urls')),
+    #(r'^referater/', include('meeting_records.urls')),
     (r'^kommentarer/', include('django.contrib.comments.urls')),
     (r'^poll/', include('poll.urls')),
 

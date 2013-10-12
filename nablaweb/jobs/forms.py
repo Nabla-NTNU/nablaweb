@@ -11,6 +11,5 @@ class AdvertForm(ModelForm):
 
 class CompanyForm(ModelForm):
     name = forms.CharField(help_text="Navnet på bedriften")
-    picture = forms.FileField(help_text="Bilder som er større enn 770x250 px ser best ut. Du kan beskjære bildet etter opplasting.", label="Logo", required=False)
     class Meta:
         model = Company
