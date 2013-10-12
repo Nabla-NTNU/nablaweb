@@ -20,6 +20,12 @@ class NewsListView(ListView):
         """
         context = super(NewsListView, self).get_context_data(**kwargs)
 
+	from django.contrib.flatpages.models import FlatPage
+	try:
+		context['sidebarinfo'] = FlatPage.objects.get(url="/forsideinfo/")
+	except:
+		pass
+
         news_list = context['news_list']
 
         if news_list:
