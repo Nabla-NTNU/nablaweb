@@ -1,0 +1,50 @@
+{% load humanize %}
+{% load comments %}
+{% load mediawiki_links %}
+
+{% block title %}{{ event.headline }}{% endblock %}
+
+{% block content %}
+
+
+
+
+
+{# Vis påmeldte #}
+{% if user.is_authenticated %}
+    {% if event.eventregistration_set.all %}
+        <h3>Påmeldte</h3>
+    {% endif %}
+    <table border="1" width="100%" style="border-collapse:collapse">
+	<tr>
+	<th>Navn</th>
+	<th>Klasse</th>
+	<th>Påmeldingstidspunkt</th>
+	</tr>
+        {% for registration in eventregistrations.all %}
+        {% with user=registration.user %}
+            <tr
+            {% if registration.is_waiting_place %} 
+		style="font-style:italic;color:grey"
+            {% endif %}>
+                <td>
+	        {% if user.get_full_name %}
+                     {{ user.get_full_name }}
+                {% else %}
+                    {{ user.username }}
+                {% endif %}
+	        </td>
+		<td>
+		{{user.userprofile.get_class_number }}
+		</td>
+		<td>
+		{{registration.date|date:"d.m.y" }}
+		</td>
+	    </tr>
+        {% endwith %}
+        {% endfor %}
+    </table>
+{% endif %}
+
+
+{% endblock %}

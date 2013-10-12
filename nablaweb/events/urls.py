@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls.defaults import *
-from nablaweb.events.views import EventDetailView, EventListView, UserEventView
+from nablaweb.events.views import EventDetailView, EventListView, UserEventView, EventRegistrationsView
 from nablaweb.events.feeds import RecentEvents
 
 from django.contrib.auth.decorators import login_required
@@ -35,6 +35,9 @@ urlpatterns = patterns('nablaweb.events.views',
         EventDetailView.as_view(context_object_name="event"),
         name='event_detail'),
 
+    url(r'^reg/(?P<pk>\d{1,8})$',
+        EventRegistrationsView.as_view(context_object_name="event"),
+        name='event_registrations'),
 
     # Eksporter
     (r'^(?P<event_id>\d{1,8})/eksporter$', 'ical_event'),

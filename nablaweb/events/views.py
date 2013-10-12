@@ -113,6 +113,18 @@ class EventListView(ListView):
     context_object_name = "event_list"
     queryset = Event.objects.all() 
 
+class EventRegistrationsView(NewsDetailView):
+    model = Event
+    context_object_name = "event"
+    template_name = "events/event_registrations.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(EventRegistrationsView, self).get_context_data(**kwargs)
+	event = self.object
+	context['eventregistrations'] = event.eventregistration_set.order_by('-attending','user__last_name')
+	object_name = self.object.content_type.model
+	return context
+
 
 class EventDetailView(NewsDetailView):
     model = Event
