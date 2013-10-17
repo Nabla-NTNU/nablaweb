@@ -19,6 +19,7 @@
 	<tr>
 	<th>Navn</th>
 	<th>Klasse</th>
+    <th>Epost</th>
 	<th>Påmeldingstidspunkt</th>
 	</tr>
         {% for registration in eventregistrations.all %}
@@ -34,6 +35,9 @@
                     {{ user.username }}
                 {% endif %}
 	        </td>
+        <td>
+            {{ user.email }}
+        </td>
 		<td>
 		{{user.userprofile.get_class_number }}
 		</td>
