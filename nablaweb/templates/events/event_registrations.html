@@ -17,7 +17,8 @@
     {% endif %}
     <table border="1" width="100%" style="border-collapse:collapse">
 	<tr>
-	<th>Navn</th>
+    <th>Etternavn</th>
+    <th>Fornavn</th>
 	<th>Epost</th>
     <th>Klasse</th>
 	<th>Påmeldingstidspunkt</th>
@@ -29,12 +30,19 @@
 		style="font-style:italic;color:grey"
             {% endif %}>
                 <td>
-	        {% if user.get_full_name %}
-                     {{ user.get_full_name }}
+	        {% if user.last_name %}
+                     {{ user.last_name }}
                 {% else %}
                     {{ user.username }}
                 {% endif %}
-	        </td>
+            </td>
+            <td>
+                {% if user.first_name %}
+                     {{ user.first_name }}
+
+                    {% endif %}
+            </td>
+
         <td>
             {{ user.email }}
         </td>
