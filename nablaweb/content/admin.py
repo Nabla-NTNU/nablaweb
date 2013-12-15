@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
+from image_cropping import ImageCroppingMixin
 
 
-class ContentAdmin(admin.ModelAdmin):
+class ContentAdmin(ImageCroppingMixin, admin.ModelAdmin):
 
 
     def save_model(self, request, obj, form, change):
