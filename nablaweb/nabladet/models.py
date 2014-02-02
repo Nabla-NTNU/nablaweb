@@ -10,6 +10,7 @@ class Nablad(News):
     class Meta:
         verbose_name = 'nablad'
         verbose_name_plural = 'nablad'
+        ordering = ("-pub_date",)
 
     def __unicode__(self):
         return self.headline
