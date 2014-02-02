@@ -7,7 +7,7 @@ south
 git+https://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
 sorl-thumbnail
 whoosh>2.5
-PIL
+Pillow
 mysql-python
 python-memcached
 django-debug-toolbar
