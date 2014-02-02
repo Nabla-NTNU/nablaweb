@@ -43,6 +43,7 @@ class TagChoices(models.Model):
     class Meta:
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
+        ordering = ("tag",)
 
     def __unicode__(self):
         return u'%s' % (self.tag)
