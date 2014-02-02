@@ -56,6 +56,7 @@ class Company(Content):
     class Meta:
         verbose_name = "bedrift"
         verbose_name_plural = "bedrifter"
+        ordering = ("name",)
 
     def __unicode__(self):
         return self.name
