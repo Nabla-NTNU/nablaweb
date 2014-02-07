@@ -105,21 +105,38 @@
         {% if event.registration_required %}
 	    <tr><td colspan="2" style="text-align: center;">
             {% if is_registered %}
-                <a href="{% url "events.views.deregister_user" event.id %}"
+                <a href="#" 
+                    id="meld-av"
                     class="btn btn-primary">Meld deg av
                     {% if eventregistration.is_waiting_place %}ventelisten{% endif %}
                 </a>
+                <br>
+                <a href="{% url "events.views.deregister_user" event.id %}"
+                    id="meld-av-confirm"
+                    class="btn btn-primary btn-warning">Er du sikker?
+                </a>
+
+                <script>
+    $("#meld-av-confirm").hide();
+    $("#meld-av").on("click", function(event) {
+        event.preventDefault();
+        $("#meld-av-confirm").slideDown();
+    });
+                </script>
             {% else %}
                 <a href="{% url "events.views.register_user" event.id %}"
                     class="btn btn-primary">Meld deg på
                     {% if event.has_queue and event.is_full %}ventelisten{% endif %} 
                 </a>
+
             {% endif %}
         </td></tr>
         {% endif %}
 {% endblock %}
 {% endif %}
 </table>
+
+
 
 
 
