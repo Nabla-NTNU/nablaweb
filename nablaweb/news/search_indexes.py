@@ -1,8 +1,8 @@
 from haystack import indexes
-from content.models import Content
+from news.models import News
 import datetime
 
-class ContentIndex(indexes.SearchIndex, indexes.Indexable):
+class NewsIndex(indexes.SearchIndex, indexes.Indexable):
     headline = indexes.CharField(model_attr='headline')
     lead_paragraph = indexes.CharField(model_attr='lead_paragraph')
     body = indexes.CharField(model_attr='body')
@@ -10,7 +10,7 @@ class ContentIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     
     def get_model(self):
-        return Content
+        return News
     
     def index_queryset(self, using=None):
         return self.get_model().objects.filter(created_date__lte=datetime.datetime.now())
