@@ -4,7 +4,7 @@
 from django.contrib import messages as django_messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404, render
 from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView, ListView
@@ -93,7 +93,10 @@ def calendar(request, year=None, month=None):
             event_start__year=year, event_start__month=month)
 
     # Combine them to a single calendar
-    cal = EventCalendar(chain(events, bedpress)).formatmonth(year, month)
+    try:
+        cal = EventCalendar(chain(events, bedpress)).formatmonth(year, month)
+    except ValueError:
+        raise Http404
 
     # Get some random dates in the current, next, and previous month.
     # These dates are used load the calendar for that month.
