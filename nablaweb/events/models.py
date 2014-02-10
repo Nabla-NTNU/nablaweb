@@ -76,6 +76,16 @@ class AbstractEvent(News):
         "Indikerer om en bruker har lov til å melde seg på arrangementet"
         return (not self.open_for.exists()) or self.open_for.filter(user=user).exists()
 
+    def registration_open(self):
+        try:
+            now = datetime.datetime.now()
+            return self.registration_required and (now < self.registration_deadline) and (now > self.registration_start)
+        except:
+            return False
+
+    def deregistration_closed(self):
+        return self.deregistration_deadline and (self.deregistration_deadline < datetime.datetime.now())
+
     def __unicode__(self):
         return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
 
@@ -165,9 +175,6 @@ class Event(AbstractEvent):
         if (self.facebook_url == "http://"):
             self.facebook_url = ""
     
-    # Sjekker om det er for sent å melde seg av.
-    def deregistration_closed(self):
-        return self.deregistration_deadline and (self.deregistration_deadline < datetime.datetime.now())
 
 
     # Returnerer antall ledige plasser, dvs antall plasser som

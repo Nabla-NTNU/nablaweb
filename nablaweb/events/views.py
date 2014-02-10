@@ -168,6 +168,19 @@ class UserEventView(TemplateView):
         return context_data
 
 @login_required
+def registration(request, event_id):
+    if request.method == 'POST':
+        assert (event_id == request.POST['eventid'])
+        if request.POST['registration_type'] == 'registration':
+            return register_user(request, event_id)
+        elif request.POST['registration_type'] == 'deregistration':
+            return deregister_user(request, event_id)
+    event = get_object_or_404(Event, pk=event_id)
+    return HttpResponseRedirect(event.get_absolute_url())
+
+
+
+@login_required
 def register_user(request, event_id):
     messages = {
         'noreg'     : 'Ingen registrering.',

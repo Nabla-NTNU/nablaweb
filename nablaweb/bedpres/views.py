@@ -8,7 +8,7 @@ from nablaweb.bedpres.models import BedPres
 from django.views.generic import FormView, ListView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import  get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.contrib import messages as django_messages
 import bpc_core
@@ -55,7 +55,17 @@ class BPCFormView(FormView):
 
 
 # Offentlig
-from django.http import HttpResponse
+@login_required
+def registration(request, bedpres_id):
+    if request.method == 'POST':
+        assert (bedpres_id == request.POST['eventid'])
+        if request.POST['registration_type'] == 'registration':
+            return register_user(request, bedpres_id)
+        elif request.POST['registration_type'] == 'deregistration':
+            return deregister_user(request, bedpres_id)
+    event = get_object_or_404(BedPres, pk=bedpres_id)
+    return HttpResponseRedirect(event.get_absolute_url())
+
 @login_required
 def register_user(request, bedpres_id):
     event = get_object_or_404(BedPres, pk=bedpres_id)

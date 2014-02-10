@@ -93,46 +93,49 @@
                 Påmelding unødvendig
             {% endif %}
         </td>
-
-
     </tr>
 
-
-
-
-{% block registration_button %}
-{# Her kommer den delen av som forandres i info.html for Bedpresser. #}
-        {% if event.registration_required %}
-	    <tr><td colspan="2" style="text-align: center;">
-            {% if is_registered %}
-                <a href="#" 
-                    id="meld-av"
-                    class="btn btn-primary">Meld deg av
-                    {% if eventregistration.is_waiting_place %}ventelisten{% endif %}
-                </a>
-                <br>
-                <a href="{% url "events.views.deregister_user" event.id %}"
-                    id="meld-av-confirm"
-                    class="btn btn-primary btn-warning">Er du sikker?
-                </a>
-
-                <script>
+    <!-- På/Avmeldingsknapp -->
+    <form name="registration" action="{{event.id}}/registration" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="eventid" value="{{event.id}}">
+    <tr><td colspan="2" style="text-align: center;">
+        {% if is_registered %}
+            {% if event.deregistration_closed %}
+                Avmeldingsfristen er ute.
+            {% else %}
+            <input type="hidden" name="registration_type" value="deregistration">
+            <a href="#" 
+                id="meld-av"
+                class="btn btn-primary">Meld deg av
+                {% if is_registered and not is_attending %}ventelisten{% endif %}
+            </a>
+            <br>
+            <input type="submit"
+                id="meld-av-confirm"
+                class="btn btn-primary btn-warning"
+                value="Er du sikker?"
+                >
+            <script>
     $("#meld-av-confirm").hide();
     $("#meld-av").on("click", function(event) {
         event.preventDefault();
         $("#meld-av-confirm").slideDown();
     });
-                </script>
-            {% else %}
-                <a href="{% url "events.views.register_user" event.id %}"
-                    class="btn btn-primary">Meld deg på
-                    {% if event.has_queue and event.is_full %}ventelisten{% endif %} 
-                </a>
-
+            </script>
             {% endif %}
-        </td></tr>
+        {% else %}
+            {% if event.registration_open %}
+            <input type="hidden" name="registration_type" value="registration">
+            <input type="submit"
+                class="btn btn-primary"
+                value="Meld deg på {% if event.has_queue and event.is_full %}ventelisten{% endif %}">
+            {% else %}
+            Påmeldingen er stengt.
+            {% endif %}
         {% endif %}
-{% endblock %}
+    </td></tr>
+    </form>
 {% endif %}
 </table>
 
