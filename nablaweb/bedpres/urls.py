@@ -28,8 +28,8 @@ urlpatterns = patterns('nablaweb.bedpres.views',
 
     # Bruker
     (r'^mine$', UserBedPresView.as_view()),
-    (r'^(?P<bedpres_id>\d{1,8})/avregistrering/$', 'deregister_user'),
-    (r'^(?P<bedpres_id>\d{1,8})/registrering/$', 'register_user'),
+    (r'^registration', 'registration'),
+    (r'^(?P<bedpres_id>\d{1,8})/registration', 'registration'),
 
     # Eksporter
     (r'^(?P<bedpres_id>\d{1,8})/eksporter$', 'ical_event'),

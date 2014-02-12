@@ -4,7 +4,7 @@
 from django.contrib import messages as django_messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404, render
 from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView, ListView
@@ -93,7 +93,10 @@ def calendar(request, year=None, month=None):
             event_start__year=year, event_start__month=month)
 
     # Combine them to a single calendar
-    cal = EventCalendar(chain(events, bedpress)).formatmonth(year, month)
+    try:
+        cal = EventCalendar(chain(events, bedpress)).formatmonth(year, month)
+    except ValueError:
+        raise Http404
 
     # Get some random dates in the current, next, and previous month.
     # These dates are used load the calendar for that month.
@@ -163,6 +166,19 @@ class UserEventView(TemplateView):
             context_data['is_attending_an_event'] = bool( filter(EventRegistration.is_attending_place , context_data['eventregistration_list']) )
             context_data['penalty_list'] = user.eventpenalty_set.all()
         return context_data
+
+@login_required
+def registration(request, event_id):
+    if request.method == 'POST':
+        assert (event_id == request.POST['eventid'])
+        if request.POST['registration_type'] == 'registration':
+            return register_user(request, event_id)
+        elif request.POST['registration_type'] == 'deregistration':
+            return deregister_user(request, event_id)
+    event = get_object_or_404(Event, pk=event_id)
+    return HttpResponseRedirect(event.get_absolute_url())
+
+
 
 @login_required
 def register_user(request, event_id):
