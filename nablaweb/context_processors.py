@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.cache import cache
 import urllib
 import json
 
@@ -19,17 +20,20 @@ def primary_dir(request):
 
 
 def xkcd(request):
-    """Gets info about the newest xkcd-comic.
+    """Gets info about the newest xkcd-comic."""
 
-    """
-    uopen = urllib.urlopen('http://xkcd.com/info.0.json')
-    json_string = uopen.read()
-    d = json.loads(json_string)
+    xkcd_data = cache.get("xkcd_data")
+    if not xkcd_data:
+        uopen = urllib.urlopen('http://xkcd.com/info.0.json')
+        json_string = uopen.read()
+        xkcd_data = json.loads(json_string)
+        cache.set('xkcd_data', xkcd_data, 36000)
+
     # Stoler på at xkcd ikke har noe tull(javascript ol.)  her, men burde egentlig sikres på
     # en eller annen måte.
     context = {}
     keys = ['safe_title','alt','img','title']
     for key in keys:
-        context['xkcd_'+key] = d[key]
+        context['xkcd_'+key] = xkcd_data[key]
     return context
 
