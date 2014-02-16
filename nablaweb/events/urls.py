@@ -10,13 +10,10 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = patterns('nablaweb.events.views',
 
     # Administrasjon
-#    (r'^opprett/$', EventFormPreview(form=EventForm)),
-#    (r'^(?P<pk>\d{1,8})/endre$', EventFormPreview(form=EventForm)),
-#    (r'^(?P<pk>\d{1,8})/slette$', EventDeleteView.as_view()),
     url(r'^(?P<pk>\d{1,8})/admin$',
         'administer',
         name='event_admin'),
- 
+
     # Offentlig
     url(r'^$',
         'calendar',
@@ -39,7 +36,7 @@ urlpatterns = patterns('nablaweb.events.views',
 
     # Eksporter
     url(r'^(?P<event_id>\d{1,8}).ics$', 'ical_event', name="ical_event"),
-    
+
     # RSS-feed
     url(r'^feed/$', RecentEvents()),
 )

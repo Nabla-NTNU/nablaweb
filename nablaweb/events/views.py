@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import permission_required
 import datetime
 from itertools import chain
 
-from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
+from nablaweb.news.views import NewsListView, NewsDetailView
 from nablaweb.events.models import Event, EventRegistration
 from nablaweb.bedpres.models import BedPres
 from events.event_calendar import EventCalendar
@@ -64,10 +64,6 @@ def administer(request, pk,
                                'registrations': registrations,
                                'actions': [(a.short, a.info) for a in actions]},
                               context_instance=RequestContext(request))
-
-
-class EventDeleteView(NewsDeleteView):
-    model = Event
 
 
 # Offentlig

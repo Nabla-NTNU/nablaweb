@@ -4,7 +4,7 @@
 from django.conf.urls.defaults import *
 from nablaweb.bedpres.models import BedPres
 from nablaweb.bedpres.forms import BedPresForm
-from nablaweb.bedpres.views import BedPresDetailView, BedPresListView, BedPresDeleteView, UserBedPresView, BPCFormView
+from nablaweb.bedpres.views import BedPresDetailView, BedPresListView, UserBedPresView, BPCFormView
 from django.views.generic import RedirectView
 
 urlpatterns = patterns('nablaweb.bedpres.views',
@@ -12,7 +12,6 @@ urlpatterns = patterns('nablaweb.bedpres.views',
     # Administrasjon
     (r'^opprett/$', BPCFormView.as_view()),
 #    (r'^(?P<pk>\d{1,8})/endre$', BedPresFormPreview(form=BedPresForm)),
-#    (r'^(?P<pk>\d{1,8})/slette$', BedPresDeleteView.as_view()),
     url(r'^(?P<pk>\d{1,8})/admin$',
         'administer',
         name='bedpres_admin'),
