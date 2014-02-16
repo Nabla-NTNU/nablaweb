@@ -154,8 +154,6 @@ INSTALLED_APPS = [
     'nabladet', # Liste over nablad. Arver news.
     'meeting_records', # Møtereferater fra styremøter og SKE
     'poll',     # Spørreundersøkelser
-    # 'feedback', # Hva gjør egentlig denne? Virker ikke som den trengs for at
-                  # tilbakemeldings-formen skal fungere.
     # 'homepage', # Viser news og events sammen. Ikke i bruk.
 
     ###########################

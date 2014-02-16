@@ -22,7 +22,6 @@ urlpatterns = patterns('',
     (r'^komite/', include('com.urls')),
 #    (r'^gallery/', include('gallery.urls')),  # Kan ikke endres pga hardkoding i gallery-appen
     (r'^sitater/', include('quotes.urls')),
-    (r'^feedback/', include('feedback.urls')),
     (r'^nabladet/', include('nabladet.urls')),
     #(r'^referater/', include('meeting_records.urls')),
     (r'^kommentarer/', include('django.contrib.comments.urls')),
