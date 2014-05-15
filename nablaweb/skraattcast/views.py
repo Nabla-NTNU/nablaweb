@@ -1,5 +1,6 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 
 def index(request):
-    return HttpResponse("Dette er en test.")
+    return render(request, 'skraattcast/index.html', {})
 
