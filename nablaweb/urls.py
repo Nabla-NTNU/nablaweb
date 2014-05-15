@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     #(r'^referater/', include('meeting_records.urls')),
     (r'^kommentarer/', include('django.contrib.comments.urls')),
     (r'^poll/', include('poll.urls')),
+    (r'^skraattcast/', include('skraattcast.urls')),
 
     # For å dele filer under utviklingen.
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': GLOBAL_MEDIA_DIRS[0]}),
