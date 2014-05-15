@@ -4,5 +4,10 @@
 
 {% block content %}
     <h2>Skraattcast<h2>
+
+    {% for cast in casts %}
+        <h3>{{ cast.title }} ({{ cast.date }})</h3>
+        <p>{{ cast.description }}</p>
+    {% endfor %}
 {% endblock %}
 
