@@ -6,7 +6,7 @@
     <h2>Skraattcast<h2>
 
     {% for cast in casts %}
-        <h3>{{ cast.title }} ({{ cast.date }})</h3>
+        <h3><a href='{% url "skraattcast_play" cast.id %}'>{{ cast.title }} ({{ cast.date }})</a></h3>
         <p>{{ cast.description }}</p>
     {% endfor %}
 {% endblock %}

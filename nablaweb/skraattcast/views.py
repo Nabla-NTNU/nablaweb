@@ -11,3 +11,11 @@ def index(request):
     ]
     return render(request, 'skraattcast/index.html', {"casts": casts})
 
+def play(request, skraattcast_id):
+    casts = {
+        '3': {'htmlid': 'yl17123028', 'url': 'http://yourlisten.com/Skraattcast/skrttcast-sending-2-020514', 'scripturl': 'http://yourlisten.com/embed.js?17123028', 'title': 'Sending 2'},
+        '2': {'htmlid': 'yl17106586', 'url': 'http://yourlisten.com/Skraattcast/skrttcast-sending-1-110414', 'scripturl': 'http://yourlisten.com/embed.js?17106586', 'title': 'Sending 1'},
+        '1': {'htmlid': 'yl17106567', 'url': 'http://yourlisten.com/Skraattcast/skrttcast-prvesending-destillert-080414', 'scripturl': 'http://yourlisten.com/embed.js?17106567', 'title': 'Prøvesending destillert'}
+        }
+    return render(request, 'skraattcast/play.html', {"cast": casts[skraattcast_id]})
+

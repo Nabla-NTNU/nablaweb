@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Skraattcast: {{ cast.title }}{% endblock %}
+
+{% block content %}
+    <a rel='nofollow' href='{{ cast.url }}' id='{{ cast.htmlid }}'>{{ cast.title }}</a>
+    <script src='{{ cast.scripturl }}' type='text/javascript' async></script>
+{% endblock %}
+
