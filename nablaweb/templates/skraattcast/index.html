@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Skraattcast{% endblock %}
+{% block title %}Skråttcast{% endblock %}
 
 {% block content %}
-    <h2>Skraattcast<h2>
+    <h2>Skråttcast<h2>
 
     {% for cast in casts %}
         <h3><a href='{% url "skraattcast_play" cast.id %}'>{{ cast.title }} ({{ cast.date }})</a></h3>
