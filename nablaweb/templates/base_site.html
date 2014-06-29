@@ -53,7 +53,9 @@
 <header>
     <div class="page-header">
         <a class="pull-left" href="/">
+            {% block header_logo %}
             <img src="{{ STATIC_URL }}img/nabla_logo_black.png" alt="Nabla">
+            {% endblock header_logo %}
         </a>
 
         <form id="searchtop" class="pull-right form-search" method="get" action="/search/">
@@ -64,12 +66,20 @@
                 </button>
             </div>
         </form>
+        {% block partner_logo %}
+        <a class="pull-right" href="/hovedsamarbeidspartner/cmr/">
+            <img src="{{ STATIC_URL }}img/CMR_logo.png" alt="CMR" style="height: 50px; width: auto; ">
+        </a>
+        {% endblock %}
+
+
     </div>
 </header>
 
 <nav class="navbar">
 <div class="navbar-inner">
 <div class="container" style="width: auto;">
+{% block navbar_container %}
 
         {% comment %}
         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -105,6 +115,7 @@
 
             {# Faste lenker om Nabla #}
 			<li><a href="{% url "nablad_list" %}">Nabladet</a></li>
+            <li><a href="{% url "skraattcast_index" %}">Skraattcast</a></li>
                     </ul>
                 </li>
 
@@ -196,6 +207,7 @@
 
             {#<!--</div>--><!-- end nav-collapse-->#}
         
+{% endblock navbar_container %}
 </div> {# end container #}
 </div> {# end navbar-inner #}
 </nav> {# end navbar #}
@@ -273,7 +285,7 @@
                 Nabla <br>
                 Kjemiblokk 2 <br>
                 Sem Sælands vei 10, NTNU <br>
-                N-7491 Trondheim <br>
+                7034 Trondheim <br>
                 Norway
             </address>
         </div>
