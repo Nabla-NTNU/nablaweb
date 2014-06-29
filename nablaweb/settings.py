@@ -316,5 +316,6 @@ except ImportError:
 ##################################################
 DEFAULT_FROM_EMAIL='noreply@nabla.no'
 
-
-
+SOUTH_MIGRATION_MODULES = {
+        'easy_thumbnails': 'easy_thumbnails.south_migrations',
+    }
