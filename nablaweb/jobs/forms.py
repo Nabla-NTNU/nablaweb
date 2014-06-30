@@ -2,7 +2,7 @@
 
 from django import forms
 from django.forms import ModelForm
-from nablaweb.jobs.models import Advert, Company
+from jobs.models import Advert, Company
 
 class AdvertForm(ModelForm):
     headline = forms.CharField(help_text="Tittelen på stillingsannonsen. Bør inneholde bedriftens navn")

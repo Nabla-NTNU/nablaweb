@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls.defaults import *
-from nablaweb.events.views import EventDetailView, EventListView, UserEventView, EventRegistrationsView
-from nablaweb.events.feeds import RecentEvents
+from events.views import EventDetailView, EventListView, UserEventView, EventRegistrationsView
+from events.feeds import RecentEvents
 
 from django.contrib.auth.decorators import login_required
 #from django.views.decorators.cache import cache_page
 
-urlpatterns = patterns('nablaweb.events.views',
+urlpatterns = patterns('events.views',
 
     # Administrasjon
     url(r'^(?P<pk>\d{1,8})/admin$',

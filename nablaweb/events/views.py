@@ -15,9 +15,9 @@ from django.contrib.auth.decorators import permission_required
 import datetime
 from itertools import chain
 
-from nablaweb.news.views import NewsListView, NewsDetailView
-from nablaweb.events.models import Event, EventRegistration
-from nablaweb.bedpres.models import BedPres
+from news.views import NewsListView, NewsDetailView
+from events.models import Event, EventRegistration
+from bedpres.models import BedPres
 from events.event_calendar import EventCalendar
 
 # Administrasjon

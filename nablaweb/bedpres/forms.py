@@ -2,8 +2,8 @@
 
 
 from django import forms
-from nablaweb.bedpres.models import BedPres
-from nablaweb.events.forms import EventForm
+from bedpres.models import BedPres
+from events.forms import EventForm
 import bpc_core
 
 

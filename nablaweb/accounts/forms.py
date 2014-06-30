@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from accounts.models import UserProfile
 
 import subprocess
-import settings
+from django.conf import settings
 
 class SearchForm(forms.Form):
     searchstring = forms.CharField(max_length=50)

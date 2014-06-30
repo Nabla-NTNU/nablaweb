@@ -3,8 +3,8 @@
 # Views for stillingsannonser-appen
 
 from django.views.generic import ListView, DetailView
-from nablaweb.news.views import *
-from nablaweb.jobs.models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
+from news.views import *
+from jobs.models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 

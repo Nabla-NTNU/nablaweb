@@ -14,11 +14,11 @@
 
 import os
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # Gjør det enkelt å bruke relative paths
-PROJECT_ROOT = os.path.dirname(__file__)
+PROJECT_ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "nabla.no"]
 
@@ -154,6 +154,7 @@ INSTALLED_APPS = [
     'nabladet', # Liste over nablad. Arver news.
     'meeting_records', # Møtereferater fra styremøter og SKE
     'poll',     # Spørreundersøkelser
+    'skraattcast',
 
     ###########################
     # Eksternt utviklede apps #
@@ -215,8 +216,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     #'pybb.context_processors.processor',
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
-    'context_processors.primary_dir',
-    'context_processors.xkcd',
+    'nablaweb.context_processors.primary_dir',
+    'nablaweb.context_processors.xkcd',
 )
 
 ###########################
