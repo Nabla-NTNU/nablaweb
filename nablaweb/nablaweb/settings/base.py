@@ -149,6 +149,7 @@ INSTALLED_APPS = [
     'meeting_records', # Møtereferater fra styremøter og SKE
     'poll',     # Spørreundersøkelser
     'skraattcast',
+    'search',
 
     ###########################
     # Eksternt utviklede apps #
@@ -251,7 +252,7 @@ PYBB_ENABLE_SELF_CSS = True
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+        'PATH': os.path.join(PROJECT_ROOT, 'whoosh_index'),
     },
 }
 
