@@ -12,3 +12,5 @@ mysql-python
 python-memcached
 django-debug-toolbar
 django-cache-panel
+
+git+https://github.com/DataDog/markdown-urlize#egg=markdown_urlize
