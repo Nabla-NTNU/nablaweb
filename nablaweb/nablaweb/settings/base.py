@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
-# Django settings for nablaweb project.
-
-# Mulige innstillinger for nablaweb
-# Ting som (kanskje) må gjøres for å få det oppe og kjøre:
-#  - Sette templatesmappe
-#  - Database
-#  - Media folder
-#  - Media url
-
+# Django instillinger som er felles for alle instanser av nablaweb
+# Ikke bruk denne til å kjøre django med
+# Bruk heller devel.py eller production.py
 
 # Django settings
 #########################################
@@ -224,54 +218,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 # App-spesifikke settings #
 ###########################
 
-# bedpres
-##################################################
-#BPC_URL = 'https://www.bedriftspresentasjon.no/remote/'
-BPC_URL = 'http://testing.bedriftspresentasjon.no/remote/' #Testserver
 
 # Contrib.auth
 ##################################################
 AUTH_PROFILE_MODULE= 'accounts.UserProfile'
 LOGIN_URL = '/login/'
-
-
-# Math captcha
-##################################################
-MATH_CAPTCHA_QUESTION = ''
-MATH_CAPTCHA_NUMBERS = range(0,40)
-MATH_CAPTCHA_OPERATORS = '+-*/%'
-
-
-# Debug toolbar
-###################################################
-DEBUG_TOOLBAR_CONFIG = {
-    "INTERCEPT_REDIRECTS": False,
-}
-# IP-er som har tilgang til debug toolbar. Bruk funksjonen under for å legge til din
-INTERNAL_IPS = ['127.0.0.1', ]
-
-# Informasjon som debug toolbar viser
-DEBUG_TOOLBAR_PANELS = (
-    'debug_toolbar.panels.version.VersionDebugPanel',
-    'debug_toolbar.panels.timer.TimerDebugPanel',
-    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-    'debug_toolbar.panels.headers.HeaderDebugPanel',
-    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-    'debug_toolbar.panels.sql.SQLDebugPanel',
-    'debug_toolbar.panels.signals.SignalDebugPanel',
-    'debug_toolbar.panels.logger.LoggingPanel',
-    # Trenger installasjon, se linken:
-    # https://github.com/jbalogh/django-debug-cache-panel
-    'cache_panel.panel.CacheDebugPanel' 
-)
-# Funksjon for å starte debug toolbar
-# Tar inn IP-adresser som skal ha tilgang til å vise debug toolbar
-def use_debug_toolbar(*ip_addresses):
-    for ip in ip_addresses:
-        INTERNAL_IPS.append(ip)
-    INSTALLED_APPS.append('debug_toolbar')
-    INSTALLED_APPS.append('cache_panel')
-    MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 
 # Django-image-cropping
@@ -303,12 +254,6 @@ HAYSTACK_CONNECTIONS = {
         'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
     },
 }
-
-try:
-    from local_settings import *
-except ImportError:
-    pass
-
 
 # Sending email
 ##################################################
