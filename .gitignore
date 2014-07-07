@@ -11,6 +11,7 @@ static/admin
 
 # Personlige settings
 nablaweb/local_settings.py
+nablaweb/nablaweb/settings/local.py
 nablaweb/wsgi.py
 
 # Wiki
@@ -26,4 +27,7 @@ nablaweb/whoosh_index
 
 # Media-mapper (opplastede brukerbilder o.l.)
 media/
+
+# Egen mappe for variabelt innhold (media, log, database etc.
+var/
 

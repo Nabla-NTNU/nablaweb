@@ -13,6 +13,7 @@ TEMPLATE_DEBUG = DEBUG
 
 # Gjør det enkelt å bruke relative paths
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
+VARIABLE_CONTENT = os.path.join(PROJECT_ROOT, '..', 'var')
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "nabla.no"]
 
@@ -26,7 +27,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # 'mysql' eller 'sqlite3'
-        'NAME': os.path.join(PROJECT_ROOT, '..', 'sqlite.db'), # Or path to database file if using sqlite3.
+        'NAME': os.path.join(VARIABLE_CONTENT, 'sqlite.db'), # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -72,7 +73,7 @@ FIXTURE_DIRS = (os.path.join(PROJECT_ROOT, 'nablaweb', 'fixtures'),)
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, '..', 'media')
+MEDIA_ROOT = os.path.join(VARIABLE_CONTENT, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -252,7 +253,7 @@ PYBB_ENABLE_SELF_CSS = True
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(PROJECT_ROOT, 'whoosh_index'),
+        'PATH': os.path.join(VARIABLE_CONTENT, 'whoosh_index'),
     },
 }
 
