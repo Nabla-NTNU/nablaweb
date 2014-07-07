@@ -6,7 +6,7 @@ import json # BPC returnerer json
 from urllib import urlencode
 from urllib2 import urlopen, Request, URLError
 from datetime import datetime
-import settings
+from django.conf import settings
 
 # Samleunntak.
 class BPCException(Exception):

@@ -1,23 +1,44 @@
+# -*- coding: utf-8 -*-
 """
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
-
-Replace these with more appropriate tests for your application.
+Tester for News-appen til Nablaweb
 """
 
 from django.test import TestCase
+from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+from news.models import News
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
 
->>> 1 + 1 == 2
-True
-"""}
+class NewsDetailViewTest(TestCase):
 
+    def setUp(self):
+        # Lager en ny nyhet som brukes i testing
+        self.news = News()
+        self.news.headline = 'Overskrifta er kul'
+        self.user = User.objects.create(
+                first_name=u'Oystein',
+                last_name=u'Hiasen',
+                username='hiasen_test')
+        self.lead_paragraph = "Dette er en veldig spennende nyhet som du bare må lese!"
+        self.body = "Haha, jeg lurte deg. Det er ikke så spennende alikevel."
+        self.news.created_by = self.user
+        self.news.save()
+
+        # Prøver å laste inn siden til nyheten og tar vare på resultatet
+        self.response = self.client.get(
+            self.news.get_absolute_url()
+        )
+
+
+    def test_headline_is_on_page(self):
+        self.assertIn(self.news.headline.encode(), self.response.content)
+
+    def test_lead_paragraph_is_on_page(self):
+        self.assertIn(self.news.lead_paragraph.encode(), self.response.content)
+
+    def test_body_is_on_page(self):
+        self.assertIn(self.news.body.encode(), self.response.content)
+
+    def test_publisher_is_on_page(self):
+        self.assertIn(self.user.get_full_name().encode(), self.response.content)

@@ -2,12 +2,12 @@
 
 
 from django.conf.urls.defaults import *
-from nablaweb.events.models import Event
-from nablaweb.events.forms import EventForm
-from nablaweb.events.views import EventDetailView, EventListView, EventDeleteView, UserEventView
+from events.models import Event
+from events.forms import EventForm
+from events.views import EventDetailView, EventListView, UserEventView
 
 
-urlpatterns = patterns('nablaweb.twitter.views',
+urlpatterns = patterns('twitter.views',
 
     #url(r'^tweet$', 'tweet')
  

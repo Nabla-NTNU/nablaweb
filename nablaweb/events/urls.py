@@ -1,22 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls.defaults import *
-from nablaweb.events.views import EventDetailView, EventListView, UserEventView, EventRegistrationsView
-from nablaweb.events.feeds import RecentEvents
+from events.views import EventDetailView, EventListView, UserEventView, EventRegistrationsView
+from events.feeds import RecentEvents
 
 from django.contrib.auth.decorators import login_required
 #from django.views.decorators.cache import cache_page
 
-urlpatterns = patterns('nablaweb.events.views',
+urlpatterns = patterns('events.views',
 
     # Administrasjon
-#    (r'^opprett/$', EventFormPreview(form=EventForm)),
-#    (r'^(?P<pk>\d{1,8})/endre$', EventFormPreview(form=EventForm)),
-#    (r'^(?P<pk>\d{1,8})/slette$', EventDeleteView.as_view()),
     url(r'^(?P<pk>\d{1,8})/admin$',
         'administer',
         name='event_admin'),
- 
+
     # Offentlig
     url(r'^$',
         'calendar',
@@ -39,7 +36,7 @@ urlpatterns = patterns('nablaweb.events.views',
 
     # Eksporter
     url(r'^(?P<event_id>\d{1,8}).ics$', 'ical_event', name="ical_event"),
-    
+
     # RSS-feed
     url(r'^feed/$', RecentEvents()),
 )

@@ -12,7 +12,7 @@ urlpatterns = patterns('django.contrib.auth.views',
     (r'password/reset/complete/$', 'password_reset_complete'),
 )
 
-urlpatterns += patterns('nablaweb.accounts.views',
+urlpatterns += patterns('accounts.views',
     (r'edit/$', 'edit_profile'),
     (r'view/$', 'list'),
     (r'^$', RedirectView.as_view(url='view/')),
