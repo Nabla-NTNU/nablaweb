@@ -28,7 +28,7 @@ urlpatterns = patterns('',
     (r'^skraattcast/', include('skraattcast.urls')),
 
     # For å dele filer under utviklingen.
-    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.GLOBAL_MEDIA_DIRS[0]}),
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
     (r'^media/(?P<path>.*)$',  'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
     # Redirecte til favicon
@@ -38,7 +38,6 @@ urlpatterns = patterns('',
     # to INSTALLED_APPS to enable admin documentation:
     #(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
 
     #(r'^forum/', include('pybb.urls', namespace='pybb')),

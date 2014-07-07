@@ -23,33 +23,20 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-# Må endres lokalt hvis du ikke bruker sqlite3
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # 'mysql' eller 'sqlite3'
         'NAME': os.path.join(VARIABLE_CONTENT, 'sqlite.db'), # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
 
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-        #'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        #'LOCATION': '127.0.0.1:11211'
     }
 }
 
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# On Unix systems, a value of None will cause Django to use the same
-# timezone as the operating system.
-# If running in a Windows environment this must be set to the same as your
-# system time zone.
 TIME_ZONE = 'Europe/Oslo'
 
 # Language code for this installation. All choices can be found here:
@@ -60,10 +47,6 @@ DATE_FORMAT = 'j. F Y'
 
 SITE_ID = 1
 
-# If you set this to False, Django will make some optimizations so as not
-# to load the internationalization machinery.
-
-
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale
 USE_L10N = True
@@ -72,31 +55,21 @@ USE_L10N = True
 FIXTURE_DIRS = (os.path.join(PROJECT_ROOT, 'nablaweb', 'fixtures'),)
 
 # Absolute path to the directory that holds media.
-# Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = os.path.join(VARIABLE_CONTENT, 'media')
-
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash if there is a path component (optional in other cases).
-# Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
 # f.eks. http://nabla.no/static/
 STATIC_URL = '/static/'
 
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
+# Mappe hvor alle statiske filer blir lagt etter at man kjører
+# manage.py collectstatic
+STATIC_ROOT = os.path.join(VARIABLE_CONTENT, 'static_collected')
+
+STATICFILES_DIRS = (
+        os.path.join(PROJECT_ROOT, '..', 'static'),
+)
+
 ADMIN_MEDIA_PREFIX = '/static/admin/'
-
-# True: Serve files at DEV_MEDIA_URL
-# False: Don't serve files (Do it yourself)
-# Noen som vet om denne variabelen brukes noe sted?
-MEDIA_DEV_MODE = DEBUG
-
-# Full path to static folder
-# Variabelen heter media fordi mediagenerator ikke er helt up to date
-# Mediagenerator er ikke lenger i bruk, men variabelen brukes i urls.py
-GLOBAL_MEDIA_DIRS = (os.path.join(PROJECT_ROOT, '..', 'static'),)
 
 ##############################################################################
 
@@ -111,28 +84,19 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = [
-    # Fjernet: Ikke i bruk
-    # 'mediagenerator.middleware.MediaMiddleware',
     'django.middleware.common.CommonMiddleware',
     'sessionprofile.middleware.SessionProfileMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    #'pybb.middleware.PybbMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # Bruk use_debug_toolbar(din_ip) for å skru på denne
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
 ]
 
 ROOT_URLCONF = 'nablaweb.urls'
 
-# Endres lokalt
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-	os.path.join(PROJECT_ROOT, 'templates'),
+    os.path.join(PROJECT_ROOT, 'templates'),
 )
 
 INSTALLED_APPS = [
@@ -155,10 +119,6 @@ INSTALLED_APPS = [
     ###########################
     # Eksternt utviklede apps #
     ###########################
-
-    # Debug toolbar viser informasjon om sidelastingen For å skru den på, bruk
-    # funksjonen use_debug_toolbar(din_ip) i settings.py
-    #'debug_toolbar',
 
     # Sessionprofile gjør det mulig å logge direkte inn på blant annet Wikien,
     # phpBB, og annet, hvis man er logget på Nablaweb
@@ -189,17 +149,11 @@ INSTALLED_APPS = [
     # Humanize legger til nyttige template-tags, som konverterer maskintid til
     # menneskelig leselig tid, f.eks. "i går".
     'django.contrib.humanize',
-    
-    # Alt som er nodvendig for pybbm
-    #'pybb',
-    #'pytils',
-    #'pure_pagination',
-    
+    'django.contrib.staticfiles',
+
     # Haystack. Krever 2.0.0 beta samt Whoosh!
     'haystack',
 ]
-
-
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
@@ -209,7 +163,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'events.context_processors.upcoming_events',     
     'jobs.views.activej',
-    #'pybb.context_processors.processor',
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
     'nablaweb.context_processors.primary_dir',
@@ -234,19 +187,6 @@ easy_thumb_settings = easy_thumb_Settings
 THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
 ) + easy_thumb_settings.THUMBNAIL_PROCESSORS
-
-
-# PyBBm
-##################################################
-PYBB_DEFAULT_TITLE = 'Forum'
-PYBB_DEFAULT_AUTOSUBSCRIBE = False
-PYBB_FREEZE_FIRST_POST = False
-PYBB_SIGNATURE_MAX_LINES = 0
-PYBB_SIGNATURE_MAX_LENGTH = 0
-PYBB_DEFAULT_TIME_ZONE = 1
-PYBB_MARKUP = 'markdown'
-PYBB_ENABLE_SELF_CSS = True
-
 
 # Haystack search
 ##################################################
