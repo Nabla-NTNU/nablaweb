@@ -6,7 +6,6 @@ from django.views.generic import DetailView, ListView
 from news.models import News
 from content.templatetags import listutil
 
-
 class NewsListView(ListView):
     model = News
     context_object_name = 'news_list'
@@ -20,11 +19,11 @@ class NewsListView(ListView):
         """
         context = super(NewsListView, self).get_context_data(**kwargs)
 
-	from django.contrib.flatpages.models import FlatPage
-	try:
-		context['sidebarinfo'] = FlatPage.objects.get(url="/forsideinfo/")
-	except:
-		pass
+        from django.contrib.flatpages.models import FlatPage
+        try:
+            context['sidebarinfo'] = FlatPage.objects.get(url="/forsideinfo/")
+        except:
+            pass
 
         news_list = context['news_list']
 
