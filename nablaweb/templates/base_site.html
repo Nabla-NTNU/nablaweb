@@ -1,5 +1,7 @@
 {% load cache %}
 {% load flatpages %}
+{% load sekizai_tags %}
+{% include "_bootstrap_include.html" %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,21 +16,11 @@
     <meta name="author" content="Nabla">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {# Bootstrap + responsive + icons from external CDN #}
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
-
-    {# Uncomment if CDN fails #}
-    {#<link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">#}
-    {#<link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet">#}
-
-
     {# Our custom CSS #}
-    <link href="{{ STATIC_URL }}css/default.css" rel="stylesheet">
-
-    {# HTML5 shim, for IE6-8 support for HTML elements #}
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    {% addtoblock "css" %}
+        <link href="{{ STATIC_URL }}css/default.css" rel="stylesheet">
+    {% endaddtoblock %}
+    {% render_block "css" %}
 
     <!-- Fav and touch icons, for screen and mobile -->
     <link rel="shortcut icon" href="{{STATIC_URL }}img/favicon.ico">
@@ -36,8 +28,7 @@
     <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
 
-    {# Obligatory jQuery #}
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    {% render_block "js-head" %}
 
     {% block more_head %}
     {% endblock %}
@@ -72,7 +63,6 @@
         </a>
         {% endblock %}
 
-
     </div>
 </header>
 
@@ -90,7 +80,7 @@
         {% endcomment %}
 
         {#<!--<div class="nav-collapse">-->{# blir gjemt ved små skjermstørrelser #}
-        
+
             {# navigasjonslenker #}
             <ul class="nav">
                 <li><a href="/">Hjem</a></li>
@@ -118,23 +108,6 @@
             <li><a href="{% url "skraattcast_index" %}">Skraattcast</a></li>
                     </ul>
                 </li>
-
-        {% comment %}
-		<li class="dropdown">
-                    <a href="#komiteer"
-                        class="dropdown-toggle no-ajaxy"
-                        data-toggle="dropdown">
-                        Sosialt
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu" >
-                        {# <li><a href="/forum">Forum</a></li> #}
-                        {#<li><a href="{% url "irc" %}">Chat</a></li>#}
-                        {# <li><a href="{% url "gallery.views.index" %}">Galleri</a></li> #}
-                    </ul>
-                </li>
-        {% endcomment %}
-                
                 <li class="dropdown">
                     <a href="#komiteer"
                         class="dropdown-toggle no-ajaxy"
@@ -206,12 +179,11 @@
             {% endif %}
 
             {#<!--</div>--><!-- end nav-collapse-->#}
-        
+
 {% endblock navbar_container %}
 </div> {# end container #}
 </div> {# end navbar-inner #}
 </nav> {# end navbar #}
-
 
 
 {% if messages %}
@@ -232,12 +204,11 @@
     <div class="span8">
         {% block content %} 
         {% endblock content %}
-        
+
         {% block breadcrumb %}
         {% endblock breadcrumb %}
     </div> 
     {# end content container #}
-    
 
     <aside class="span4">{# sidebar #}
 
@@ -245,34 +216,25 @@
             <!--sidebar er tom-->
         {% endblock sidebar %}
 
-
         <!-- reklame -->
         {% block ad %}
         {% endblock ad %}
 
-
         {% block below_ad %}
         {% endblock %}
 
-
     </aside>{# end sidebar #}
-    
-
-
 </div>{# end main row #}
 
 {% endblock main %} 
-
-
 </div>{# end main container  #}
 </div>{# end whitebox #}
-
 
 <footer>
 
     <div class="container">
     <div class="row">
-    
+
         {# kontakt #}
         <div class="span4 kontakt">
             <h2>Kontakt</h2>
@@ -290,7 +252,7 @@
             </address>
         </div>
         {# end kontakt #}
-        
+
         {# om nabla #}
         <div class="span4">
             <h2>Tilbakemelding</h2>
@@ -300,7 +262,6 @@
                 <a class="email" href="mailto:webkom@nabla.ntnu.no">webkom@nabla.ntnu.no</a>
             </p>
 
-            
         </div>
         {# end om nabla #}
 
@@ -310,100 +271,65 @@
             <img src="{{ STATIC_URL }}img/nabla-white.svg" alt="nabla logo">
         </div>
 
-        {% comment %}
-        {# twitterbox #}
-        <div class="span4" id="twitterbox">
-            
-            {# Standard Twitter-widget #}
-            <script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
-            <script>
-            new TWTR.Widget({
-                version: 2,
-                type: 'profile',
-                rpp: 3,
-                interval: 30000,
-                width: 'auto',
-                height: 300,
-                theme: {
-                    shell: {
-                        background: '#222',
-                        color: '#ffffff'
-                    },
-                    tweets: {
-                        background: '#111',
-                        color: '#abd2eb'
-                    }
-                },
-                features: {
-                    scrollbar: false,
-                    loop: false,
-                    live: false,
-                    behavior: 'all'
-                }
-            }).render().setUser('nabla_ntnu').start();
-            </script>
-
-        </div>
-        {# end twitterbox #}
-        {% endcomment %}
-        
     </div>{# end row #}
 </div>{# end container #}
 </footer>
-
-
-{# Google Analytics #}
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-30407973-1']);
-  _gaq.push(['_setDomainName', 'nabla.no']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-
-{# Bootstrap JS from external CDN #}
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
-{#<script src="{{ STATIC_URL }}js/bootstrap.js"></script>#}
-
-{% block more_js %}
-{% endblock %}
-
-{# History.js #}
-{# Skaper krøll med Django Toolbar #} 
-{#<script src="{{ STATIC_URL }}js/jquery.history.js"></script>#}
-
-{# MathJax for LaTeX rendering #}
-<script type="text/x-mathjax-config">
-    // Differences from standard config:
-    //  - $tex$ is allowed.
-    //  - LaTeX inside <code> tags now works.
-    MathJax.Hub.Config({
-        tex2jax: {
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-            inlineMath: [ ['$','$'], ["\\(","\\)"] ]
-        }
-    });
-
-    // Hooks the event which is triggered when a Latex equation is rendered, and
-    // adds the class .equation to the parent <code> element. This is because
-    // Markdown creates code elements around equations.
-    MathJax.Hub.Register.MessageHook("New Math", function( message ) {
-        var script = MathJax.Hub.getJaxFor( message[1]).SourceElement();
-        $(script).parent("code").addClass("jax");
-    })
-</script>
-
-<script type="text/javascript" 
-  async
-  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
+{% render_block "js" %}
 </body>
 </html>
+
+{# HTML5 shim, for IE6-8 support for HTML elements #}
+{% addtoblock "js-head" %}
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+{% endaddtoblock %}
+
+{# Obligatory jQuery #}
+{% addtoblock "js-head" %}
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+{% endaddtoblock %}
+
+{# Google Analytics #}
+{% addtoblock "js" %}
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-30407973-1']);
+    _gaq.push(['_setDomainName', 'nabla.no']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+{% endaddtoblock %}
+
+{# MathJax for LaTeX rendering #}
+{% addtoblock "js" %}
+    <script type="text/x-mathjax-config">
+        // Differences from standard config:
+        //  - $tex$ is allowed.
+        //  - LaTeX inside <code> tags now works.
+        MathJax.Hub.Config({
+            tex2jax: {
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ]
+            }
+        });
+
+        // Hooks the event which is triggered when a Latex equation is rendered, and
+        // adds the class .equation to the parent <code> element. This is because
+        // Markdown creates code elements around equations.
+        MathJax.Hub.Register.MessageHook("New Math", function( message ) {
+            var script = MathJax.Hub.getJaxFor( message[1]).SourceElement();
+            $(script).parent("code").addClass("jax");
+        })
+    </script>
+
+    <script type="text/javascript" 
+    async
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+{% endaddtoblock %}

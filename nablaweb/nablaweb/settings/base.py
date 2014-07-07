@@ -134,6 +134,9 @@ INSTALLED_APPS = [
     # ./manage.py migrate --auto
     'south',
 
+    # http://django-sekizai.readthedocs.org/en/latest/#
+    'sekizai',
+
     # Djangoting
     'django.contrib.auth',
     'django.contrib.comments',
@@ -160,6 +163,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
+
+    'sekizai.context_processors.sekizai',
 
     'events.context_processors.upcoming_events',     
     'jobs.views.activej',

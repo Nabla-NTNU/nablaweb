@@ -12,3 +12,4 @@ django-debug-toolbar
 django-cache-panel
 easy-thumbnails
 git+https://github.com/DataDog/markdown-urlize#egg=markdown_urlize
+django-sekizai
