@@ -44,10 +44,11 @@
     }
 
 
-    /* 172px: magisk nummer, finnes ved tipping */
-    .navbar-form { width: 175px; padding-right: 10px; }
-    .navbar-form td { width: 55px; }
-    .navbar input { width: 51px; }
+    #navbar-loginbox input {
+        width: 57px;
+        padding: 2px;
+        font-size: 0.9em;
+    }
 
     .news_item {
         word-break: break-word;
@@ -343,13 +344,13 @@
 
     .poll form { margin-bottom: 0; }
 
-.navbar .nav > li > a {
+/*.navbar .nav > li > a {
   float: none;
   padding: 10px 14px 10px;
   color: #777777;
   text-decoration: none;
   text-shadow: 0 1px 0 #ffffff;
-}
+}*/
 
 .advert {
     height: 100%;
