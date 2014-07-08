@@ -9,7 +9,7 @@
 {% block content %}
 {% for quote in quote_list %}
     <div class="row">
-        <div class="span8">
+        <div class="col-md-8">
             {{ quote.quote|markdown|wikilinks}}
             <p><em>-- {{ quote.author }}</em></p>
         </div>

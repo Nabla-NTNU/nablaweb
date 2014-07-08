@@ -34,18 +34,22 @@
 
 {# .... **Now the pagination section** .... #}
 {% if is_paginated %}
-    <div class="pagination">
+    <div class="pager">
         <ul>
             {% if page_obj.has_next %}
-                <li><a href="?page={{ page_obj.next_page_number }}">&larr; Eldre</a></li>
+                <li>
+                    <a href="?page={{ page_obj.next_page_number }}">&larr; Eldre</a>
+                </li>
             {% endif %}
 
             <li class="disabled">
-            <a>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</a>
+                <a>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</a>
             </li>
 
             {% if page_obj.has_previous %}
-                <li><a href="?page={{ page_obj.previous_page_number }}">Nyere &rarr;</a></li>
+                <li>
+                    <a href="?page={{ page_obj.previous_page_number }}">Nyere &rarr;</a>
+                </li>
             {% endif %}
         </ul>
     </div>
@@ -62,18 +66,19 @@
 
     <h3>Kommende arrangement</h3>
     <div class="well upcoming"><!-- kommende arrangement -->
-        <ul class="nav nav-list">
+        <ul class="nav">
 
             {% for event in upcoming_events %}
             <li>
                 <a href="{{ event.get_absolute_url }}">
                     <time 
-                        class="label label-important"
-                        datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.M" }}</time> 
-                        {{ event.headline }} 
-                {% if event.registration_required %}
-                <span title="Ledige plasser / Totalt antall plasser">{{ event.users_attending }}/{{ event.places }}</span>
-                {% endif %}
+                        class="label label-default"
+                        datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.M" }}
+                    </time>
+                    {{ event.headline }} 
+                    {% if event.registration_required %}
+                        <span title="Ledige plasser / Totalt antall plasser">{{ event.users_attending }}/{{ event.places }}</span>
+                    {% endif %}
                 </a>
             </li>
             {% endfor %}

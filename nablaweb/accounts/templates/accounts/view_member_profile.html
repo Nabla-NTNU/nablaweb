@@ -9,7 +9,7 @@
 
 {% block content %}
 <div class="row">
-    <div class="span2">
+    <div class="col-md-2">
         <div class="thumbnail">
               {% if member.userprofile.avatar %}
               <img alt="avatar" src="{% thumbnail member.userprofile.avatar 150x150 %}" width = "150" height ="150" >
@@ -18,7 +18,7 @@
               {%endif %}
         </div>
     </div>
-    <div class="span6">
+    <div class="col-md-6">
         <h2>
         {% if member.get_full_name %}
             {{ member.get_full_name }}
@@ -44,7 +44,7 @@
                 <td><a href="http://folk.ntnu.no/{{ member.username }}">http://folk.ntnu.no/{{ member.username }}</a></td>
                 {% endif %}
             </tr>
-            
+
             {% if member.get_profile.birthday %}
             <tr>
                 <td>Bursdag </td>
@@ -55,7 +55,7 @@
             <tr>
                 <td>Medlem av </td>
                 <td>
-                    <ul class="unstyled">
+                    <ul class="list-unstyled">
                         {% for group in member.groups.all %}
                             <li><span class="icon"></span> {{ group.name }}</li>
                         {% empty %}
@@ -64,7 +64,7 @@
                     </ul>
                 </td>
             </tr>
-            
+
             {% if member.get_profile.about %}
             <tr>
                 <td>Biografi</td>
@@ -73,7 +73,7 @@
                 </td>
             </tr>
             {% endif %}
-            
+
             {% if see_penalty %}
             <tr>
                 <td>Prikker</td>
@@ -82,7 +82,7 @@
                     {{ penalty_list|length }} prikk{{penalty_list|length|pluralize:"er" }}.
                     <ul>
                     {% for penalty in penalty_list %}
-                    <li>{{ penalty.get_display_name }}</li>
+                        <li>{{ penalty.get_display_name }}</li>
                     {% endfor %}
                     </ul>
                 </td>
@@ -93,10 +93,9 @@
                 {% endif %}
             </tr>
             {% endif %}
-            
-        </table>
-    </div><!--span6-->
 
+        </table>
+    </div><!--col-md-6-->
 </div>
 
 {% endblock %}

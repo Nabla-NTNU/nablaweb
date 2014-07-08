@@ -10,16 +10,17 @@
 
 <table style="table-layout:fixed;"class="table table-striped">
 {% for m in meeting_record_list %}
-<tr>
-    <td style="width:20%">
-        <a href="{{ m.get_absolute_url }}"> {{ m.pub_date|date:"F Y" }} </a>
-    </td>
-    <td style="width:70%;">
-        {{ m.headline }}
-    <td style="width:10%; align:right;">
-        <a class="btn btn-small" href="{{ m.file.url }}"><i class="icon-download-alt"></i></a>
-    </td>
-</tr>
+    <tr>
+        <td style="width:20%">
+            <a href="{{ m.get_absolute_url }}"> {{ m.pub_date|date:"F Y" }} </a>
+        </td>
+        <td style="width:70%;">
+            {{ m.headline }}
+        </td>
+        <td style="width:10%; align:right;">
+            <a class="btn btn-sm" href="{{ m.file.url }}"><i class="icon-download-alt"></i></a>
+        </td>
+    </tr>
 {% empty %}
     <p>Ingen møtereferater er blitt publisert på nettsiden hittil.</p>
 {% endfor %}

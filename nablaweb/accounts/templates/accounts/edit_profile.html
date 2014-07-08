@@ -4,7 +4,7 @@
 
 {% block content %} 
 <div class="row">
-    <div class="span2 centertext">
+    <div class="col-md-2 centertext">
         <div class="thumbnail">
             {% if user.userprofile.avatar %}
                 <img alt="avatar" src="{% thumbnail user.userprofile.avatar 150x150 %}" width = "150" height ="150" >
@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="span6">
+    <div class="col-md-6">
         <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
 
             <table>

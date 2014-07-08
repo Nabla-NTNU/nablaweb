@@ -15,6 +15,7 @@
         {% endcomment %}
         <input type="hidden" name="next" 
                value="{% if request.POST.next %}{{ request.POST.next }}{% else %}{{ request.get_full_path }}{% endif %}">
+
         {% for field in form %}
            
             {% if field.is_hidden %}
@@ -27,21 +28,16 @@
                 {% if field.name != "name" and field.name != "email" and field.name != "url" %}
 
                     {# Vis feltet hvis det er godkjent #}
-                    <div class="control-group {% if field.errors %}error {% endif %}"
+                    <div class="form-group {% if field.errors %}error {% endif %}"
                          {% if field.name == 'honeypot' %}style="display:none;"{% endif %}>
                         <label class="control-label" for="id_{{ field.name }}">{{ field.label }}</label>
-                        <div class="controls"
-                             >
 
-                            {{ field }}
-                            {{ field.size }}
+                        {{ field }}
+                        {{ field.size }}
 
-                                <div class="help-block">
-                                    {{ field.help_text }}
-                                    {{ field.errors }}
-                                </div>
-                           
-                            
+                        <div class="help-block">
+                            {{ field.help_text }}
+                            {{ field.errors }}
                         </div>
                     </div>
                 {% endif %}
@@ -66,23 +62,23 @@
     <div class="comment-help">
 
 
-        <div class="row-fluid">
-            <div class="span7"><pre class="tex2jax_ignore">Heisann, [Lenketekst](http://google.com), 
+        <div class="row">
+            <div class="col-md-7"><pre class="tex2jax_ignore">Heisann, [Lenketekst](http://google.com), 
 **bold**, _kursiv_. 
 Og litt `kode`.
             </pre></div>
-            <div class="span5">
+            <div class="col-md-5">
                 <p>Heisann, <a href="http://google.com">Lenketekst.com</a>, <strong>bold</strong>, <em>kursiv</em>. Og litt <code>kode</code>.</p>
             </div>
         </div>
 
-        <div class="row-fluid">
-            <div class="span7"><pre class="tex2jax_ignore">Jeg kan skrive store ligninger:
+        <div class="row">
+            <div class="col-md-7"><pre class="tex2jax_ignore">Jeg kan skrive store ligninger:
 
 `$$ \int_0^\infty \frac1{x^2}\, dx = y. $$`
 Og små ligninger `$ \int\,som\ dette$`.
             </pre></div>
-            <div class="span5">
+            <div class="col-md-5">
                 <p>Jeg kan skrive store ligninger:</p>
 
                 <p><code>$$ \int_0^\infty \frac1{x^2}\, dx = y. $$</code></p>
@@ -91,8 +87,8 @@ Og små ligninger `$ \int\,som\ dette$`.
             </div>
         </div>
 
-        <div class="row-fluid">
-            <div class="span7"><pre class="tex2jax_ignore">Liste:
+        <div class="row">
+            <div class="col-md-7"><pre class="tex2jax_ignore">Liste:
 
 * Ein
 * To
@@ -106,7 +102,7 @@ Numerert liste:
     * Fem
 3. Tre
             </pre></div>
-            <div class="span5">
+            <div class="col-md-5">
                 <p>Liste:</p>
 
                 <ul>
@@ -132,10 +128,10 @@ Numerert liste:
             </div>
         </div>
 
-        <div class="row-fluid">
-            <div class="span7"><pre class="tex2jax_ignore">&gt; Slik som dette siterer jeg noen. Du trenger kun en &gt; i starten av hver paragraf. 
+        <div class="row">
+            <div class="col-md-7"><pre class="tex2jax_ignore">&gt; Slik som dette siterer jeg noen. Du trenger kun en &gt; i starten av hver paragraf. 
             </pre></div>
-            <div class="span5">
+            <div class="col-md-5">
 
                 <blockquote>
                   <p>Slik som dette siterer jeg noen. Du trenger kun en &gt; i starten av hver paragraf.</p>

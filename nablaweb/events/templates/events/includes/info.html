@@ -6,7 +6,7 @@
 
 {% if event.facebook_url %}
 <h3 class="pull-right">
-    <a target="_blank" href="{{ event.facebook_url }}" class="btn btn-mini">
+    <a target="_blank" href="{{ event.facebook_url }}" class="btn btn-sm">
         <span class="icon-custom icon-facebook"></span> Vis på Facebook
     </a>
 </h3>
@@ -153,12 +153,12 @@
 {% endif %}
 
 <div class="center">
-<a class="btn btn-mini" href="{{ event|google_calendarize }}">
+<a class="btn btn-sm" href="{{ event|google_calendarize }}">
     <span class="icon icon-calendar"></span>
     Google Calendar
 </a>
 
-<a class="btn btn-mini" href="{% url "ical_event" event.pk %}">
+<a class="btn btn-sm" href="{% url "ical_event" event.pk %}">
     <span class="icon icon-calendar"></span>
     iCalendar
 </a>

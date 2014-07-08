@@ -3,7 +3,7 @@
 
 {% if poll %}
 <br>
-<div class="poll well hidden-phone">
+<div class="poll well hiddent-xs">
 
     <h4>{{ poll.question }}</h4>
     {% if user in poll.users_voted.all %}
@@ -12,7 +12,7 @@
         {% for choice in poll.choice_set.all %}
             <div class="choice">{{ choice.choice }}</div>
             <div class="progress">
-                <div class="bar" style="width:{% widthratio choice.votes poll.get_total_votes 100 %}%">
+                <div class="progress-bar" style="width:{% widthratio choice.votes poll.get_total_votes 100 %}%">
                     <span class="percent{% if choice.votes == 0 %} zero{% endif %}">
                         {% widthratio choice.votes poll.get_total_votes 100%}%
                     </span>

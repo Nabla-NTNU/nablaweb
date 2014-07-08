@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load sekizai_tags %}
+
 
 {% block title %}Arrangement{% endblock %}
 
@@ -8,66 +10,64 @@
 
 {% block main %}
 
+{% addtoblock "css" %}
+    <link href="{{ STATIC_URL }}events/calendar.css" rel="stylesheet">
+{% endaddtoblock %}
+
 <!-- calendar row -->
 <div class="row">
-<div class="span12">
+<div class="col-md-12">
 
 <h2>Kalender {{ this.year }}</h2>
-<div class="pagination pagination-centered">
-    <ul>
-        <li>
-            <a href="{% url "event_list" prev.year prev.month %}">&laquo;</a>
-        </li>
-        <li class="inactive"><a>{{ this|date:"F"|capfirst }}</a></li>
-        <li>
-            <a href="{% url "event_list" next.year next.month %}">&raquo;</a>
-        </li>
-    </ul>
-</div>
+<ul class="pager">
+    <li>
+        <a href="{% url "event_list" prev.year prev.month %}">&laquo;</a>
+    </li>
+    <li class="inactive">
+        <a>{{ this|date:"F"|capfirst }}</a>
+    </li>
+    <li>
+        <a href="{% url "event_list" next.year next.month %}">&raquo;</a>
+    </li>
+</ul>
 
 
 {{ calendar }}
 
 
-
-
-
-
-
-</div> <!-- end span12 -->
+</div> <!-- end col-md-12 -->
 </div><!-- row -->
 
 <div class="row">
 
     {% if user.is_authenticated %}
 
-        <div class="span4">
+        <div class="col-md-4">
             <h2>Påmeldinger</h2>
             <table class="table table-bordered table-striped">
 
             {% for reg in user.eventregistration_set.all %}
-            <tr>
-                <td><a href="{{ reg.event.get_absolute_url }}">{{ reg.event.headline }}</a></td>
-                <td>
-                    {% if reg.is_waiting_place %}
-                        På venteliste
-                    {% endif %}
+                <tr>
+                    <td>
+                        <a href="{{ reg.event.get_absolute_url }}">{{ reg.event.headline }}</a>
+                    </td>
+                    <td>
+                        {% if reg.is_waiting_place %}
+                            På venteliste
+                        {% endif %}
 
-                    {% if reg.is_attending_place %}
-                        <span class="icon check"></span> Har plass
-                    {% endif %}
-                </td>
-                </td>
-            </tr>
+                        {% if reg.is_attending_place %}
+                            <span class="glyphicon glyphicon-check"></span> Har plass
+                        {% endif %}
+                    </td>
+                </tr>
             {% empty %}
                 <tr><td>Du er ikke meldt på noe</td></tr>
             {% endfor %}
-
             </table>
-
         </div>
 
-        <div class="span4">
+        <div class="col-md-4">
             <h2>Prikker</h2>
             <p>Om du har plass, men ikke møter opp på et arrangement, kan du bli
             straffet i form av prikker. Jo flere prikker, jo lengre må du vente for
@@ -80,7 +80,7 @@
             {% endif %}
         </div>
 
-        <div class="span4">
+        <div class="col-md-4">
             <h2>Venteliste</h2> 
             <p>Melder du deg på et fullbooket arrangement, blir du satt på venteliste.
             Blir det ledige plasser, går de til dem som har ventet lengst.</p>
@@ -89,7 +89,7 @@
 
     {% else %}
 
-        <div class="span12">
+        <div class="col-md-12">
             <p>Logg på for å se hvilke arrangement du er påmeldt.</p>
         </div>
 

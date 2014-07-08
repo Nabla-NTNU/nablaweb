@@ -1,2 +1,314 @@
-{% extends ajax|yesno:"ajax.html,base_site.html" %}
+{% load cache %}
+{% load flatpages %}
+{% load sekizai_tags %}
+{% include "_bootstrap_include.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="utf-8">
+    <title>
+        Nabla: {% block title %}linjeforeningen for Fysikk og matematikk ved NTNU{% endblock title %}
+    </title>
+    <meta name="description" 
+          content="Hjemmesiden til linjeforeningen Nabla, for studentene på 
+                   fysikk og matematikk-masterprogrammet på NTNU.">
+    <meta name="author" content="Nabla">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {# Our custom CSS #}
+    {% addtoblock "css" %}
+        <link href="{{ STATIC_URL }}css/default.css" rel="stylesheet">
+    {% endaddtoblock %}
+    <!-- css-block -->
+    {% render_block "css" %}
+
+    <!-- Fav and touch icons, for screen and mobile -->
+    <link rel="shortcut icon" href="{{STATIC_URL }}img/favicon.ico">
+    <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
+
+    {% render_block "js-head" %}
+
+    {% block more_head %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+{# Siden består av en svart bakgrunn, og en hvit div som inneholder alt utenom footer #}
+<div id="whitebox" class="box-shadow">
+<div class="container">{# main container #}
+
+<header>
+    <div class="page-header">
+        <a class="pull-left" href="/">
+            {% block header_logo %}
+                <img src="{{ STATIC_URL }}img/nabla_logo_black.png" alt="Nabla">
+            {% endblock header_logo %}
+        </a>
+
+        <form id="searchtop" class="pull-right" method="get" action="/search/">
+            <div class="input-group" style="width:150px">
+                <input name="q" placeholder="Søk..." type="text" class="form-control">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+            </div>
+        </form>
+        {% block partner_logo %}
+        <a class="pull-right" href="/hovedsamarbeidspartner/cmr/">
+            <img src="{{ STATIC_URL }}img/CMR_logo.png" alt="CMR" style="height: 50px; width: auto; ">
+        </a>
+        {% endblock %}
+
+    </div>
+</header>
+
+<nav class="navbar navbar-default">
+<div class="container" style="width: auto;">
+{% block navbar_container %}
+    {# navigasjonslenker #}
+    <ul class="nav navbar-nav">
+        <li><a href="/">Hjem</a></li>
+        <li><a href="{% url "event_list" %}">Arrangement</a></li>
+        <li><a href="{% url "jobs_list" %}">Karriere</a></li>
+        <li><a href="http://wiki.nabla.no/">Wiki</a></li>
+
+        <li class="dropdown">
+            <a href="#om"
+                class="dropdown-toggle"
+                data-toggle="dropdown">
+                    Om Nabla
+                    <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" >
+
+            {# Hent alle sider som starter på /om/ #}
+            {% get_flatpages '/om/' as about_pages %}
+            {% for page in about_pages %}
+                <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+            {% endfor %}
+
+            {# Faste lenker om Nabla #}
+			    <li><a href="{% url "nablad_list" %}">Nabladet</a></li>
+                <li><a href="{% url "skraattcast_index" %}">Skraattcast</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#komiteer"
+                class="dropdown-toggle"
+                data-toggle="dropdown">
+                    Komiteer
+                    <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" >
+                {% cache 3600 com_list_dropdown %}
+                {# Liste over komiteer #}
+                {% for com in coms %}
+                    <li><a href="{{ com.get_absolute_url }}">{{ com.com.name }}</a></li>
+                {% empty %}
+                    <li><a>Ingen komiteer eksisterer</a></li>
+                {% endfor %}
+                {% endcache %}
+            </ul>
+        </li>
+        <li><a href="http://bokskap.nabla.no">Bokskap</a></li>
+		{% if not user.is_authenticated %}
+            <li><a href="{% url "accounts.views.user_register" %}">Registrer deg</a></li>
+        {% endif %}
+    </ul>
+    {# end navigasjonslenker #}
+
+    {% if user.is_authenticated %}
+        {# bruker-dropdown #}
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown navbar-right">
+                <a href="#bruker"
+                    class="dropdown-toggle"
+                    data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-user"></span>
+                        {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}
+                        <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url "accounts.views.view_member_profile" user.username %}">Vis profil</a></li>
+                    <li><a href="{% url "accounts.views.edit_profile" %}">Endre profil</a></li>
+                    <li><a href="{% url "password_change" %}">Endre passord</a></li>
+                    <li><a href="{% url "view_user_events" %}">Påmeldte arrangementer</a></li>
+                    <li><a href="/logout">Logg ut</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{% url "accounts.views.list" %}">Medlemsliste</a></li>
+                    {% if user.is_staff %}
+                        <li><a href="/admin">Admin</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+        </ul>
+        {# end bruker-dropdown #}
+    {% else %}
+        {# loginboks #}
+        <!--        <a class="nav navbar-right btn btn-default"
+        href="/login">Logg inn</a>-->
+        <form id="navbar-loginbox" class="navbar-form navbar-right " action="/login/" method="post">
+            {% csrf_token %}
+            <input class="form-control" type="text" placeholder="Bruker" name="username" />
+            <input class="form-control" type="password"  placeholder="Passord" name="password" />
+            <button class="submit btn btn-default" type="submit">Login</button>
+        </form>
+
+        {# end loginboks #}
+    {% endif %}
+{% endblock navbar_container %}
+
+</div> {# end container #}
+</nav> {# end navbar #}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{% if message.tags %}{{ message.tags}}{% endif %}">
+            {#<a class="close" data-dismiss="alert">×</a>#}
+            <b>Info:</b> {{ message }} 
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+{% block main %}
+
+<div class="row"><!-- main row -->
+
+    {# content #}
+    <div class="col-md-8">
+        {% block content %} 
+        {% endblock content %}
+    </div> 
+    {# end content container #}
+
+    <aside class="col-md-4">{# sidebar #}
+
+        {% block sidebar %}
+            <!--sidebar er tom-->
+        {% endblock sidebar %}
+
+        <!-- reklame -->
+        {% block ad %}
+        {% endblock ad %}
+
+        {% block below_ad %}
+        {% endblock %}
+
+    </aside>{# end sidebar #}
+</div>{# end main row #}
+
+{% endblock main %} 
+</div>{# end main container  #}
+</div>{# end whitebox #}
+
+<footer>
+
+    <div class="container">
+    <div class="row">
+
+        {# kontakt #}
+        <div class="col-md-4 kontakt">
+            <h2>Kontakt</h2>
+
+            <p>Du kan nå oss på <a class="email" href="mailto:nabla@nabla.ntnu.no">nabla@nabla.ntnu.no</a></p>
+
+            <p>Bedrift? Kontakt Bedriftskontakten Nabla på <a class="email" href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no</a></p>
+
+            <address>
+                Nabla <br>
+                Kjemiblokk 2 <br>
+                Sem Sælands vei 10, NTNU <br>
+                7034 Trondheim <br>
+                Norway
+            </address>
+        </div>
+        {# end kontakt #}
+
+        {# om nabla #}
+        <div class="col-md-4">
+            <h2>Tilbakemelding</h2>
+            <p>Har du
+            funnet en feil, får du ikke logget på, eller er det noe som burde
+            forbedres? Kontakt webkom:<br>
+                <a class="email" href="mailto:webkom@nabla.ntnu.no">webkom@nabla.ntnu.no</a>
+            </p>
+
+        </div>
+        {# end om nabla #}
+
+        {# nablalogo #}
+        <div class="col-md-4 center" id="nablafooter">
+            <br><br>
+            <img src="{{ STATIC_URL }}img/nabla-white.svg" alt="nabla logo">
+        </div>
+
+    </div>{# end row #}
+</div>{# end container #}
+</footer>
+{% render_block "js" %}
+</body>
+</html>
+
+{# HTML5 shim, for IE6-8 support for HTML elements #}
+{% addtoblock "js-head" %}
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+{% endaddtoblock %}
+
+{# Obligatory jQuery #}
+{% addtoblock "js-head" %}
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+{% endaddtoblock %}
+
+{# Google Analytics #}
+{% addtoblock "js" %}
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-30407973-1']);
+    _gaq.push(['_setDomainName', 'nabla.no']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+{% endaddtoblock %}
+
+{# MathJax for LaTeX rendering #}
+{% addtoblock "js" %}
+    <script type="text/x-mathjax-config">
+        // Differences from standard config:
+        //  - $tex$ is allowed.
+        //  - LaTeX inside <code> tags now works.
+        MathJax.Hub.Config({
+            tex2jax: {
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ]
+            }
+        });
+
+        // Hooks the event which is triggered when a Latex equation is rendered, and
+        // adds the class .equation to the parent <code> element. This is because
+        // Markdown creates code elements around equations.
+        MathJax.Hub.Register.MessageHook("New Math", function( message ) {
+            var script = MathJax.Hub.getJaxFor( message[1]).SourceElement();
+            $(script).parent("code").addClass("jax");
+        })
+    </script>
+
+    <script type="text/javascript" 
+    async
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+{% endaddtoblock %}

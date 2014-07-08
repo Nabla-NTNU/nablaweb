@@ -10,7 +10,7 @@
 {# TODO: Fjern hardkoding av action #}
 <form class="input-append" method="post" action="/brukere/search/" id="user-search">
     {% csrf_token %}
-    <input class="span5" placeholder="Søk i listen" name="searchstring" id="searchstring" type="text">
+    <input class="col-md-5" placeholder="Søk i listen" name="searchstring" id="searchstring" type="text">
     <button class="btn">
         <i class="icon-search"></i>
     </button>
@@ -19,7 +19,7 @@
 
 {% cache 900 userlist %}
 {% if searchquery %}
-<p>Du søkte etter <b>{{ searchquery }}</b>. <a href="{% url "accounts.views.list" %}">Vis alle brukere</a>
+    <p>Du søkte etter <b>{{ searchquery }}</b>. <a href="{% url "accounts.views.list" %}">Vis alle brukere</a>
 {% endif %}
 
 {% if users %}
