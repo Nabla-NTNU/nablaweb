@@ -1,9 +1,13 @@
-{% load humanize %}{# widthratio #}
+{% load humanize %}
 {% load cache %}
+{% load sekizai_tags %}
 
 {% if poll %}
+    {% addtoblock "css" %}
+        <link href="{{ STATIC_URL }}poll/poll_sidebar.css" rel="stylesheet">
+    {% endaddtoblock %}
 <br>
-<div class="poll well hiddent-xs">
+<div class="poll well hidden-xs">
 
     <h4>{{ poll.question }}</h4>
     {% if user in poll.users_voted.all %}
@@ -38,4 +42,4 @@
         </form>
     {% endif %}
 </div>
-{% endif %}{# poll #}
+{% endif %}

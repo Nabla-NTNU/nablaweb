@@ -24,10 +24,13 @@ def xkcd(request):
 
     xkcd_data = cache.get("xkcd_data")
     if not xkcd_data:
-        uopen = urllib.urlopen('http://xkcd.com/info.0.json')
-        json_string = uopen.read()
-        xkcd_data = json.loads(json_string)
-        cache.set('xkcd_data', xkcd_data, 36000)
+        try:
+            uopen = urllib.urlopen('http://xkcd.com/info.0.json')
+            json_string = uopen.read()
+            xkcd_data = json.loads(json_string)
+            cache.set('xkcd_data', xkcd_data, 36000)
+        except:
+            return {}
 
     # Stoler på at xkcd ikke har noe tull(javascript ol.)  her, men burde egentlig sikres på
     # en eller annen måte.

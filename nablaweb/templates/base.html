@@ -43,30 +43,29 @@
 <div class="container">{# main container #}
 
 <header>
-    <div class="page-header">
-        <a class="pull-left" href="/">
-            {% block header_logo %}
-                <img src="{{ STATIC_URL }}img/nabla_logo_black.png" alt="Nabla">
-            {% endblock header_logo %}
-        </a>
+    <a class="pull-left" href="/">
+        {% block header_logo %}
+            <img src="{{ STATIC_URL }}img/nabla_logo_black.png" alt="Nabla">
+        {% endblock header_logo %}
+    </a>
 
-        <form id="searchtop" class="pull-right" method="get" action="/search/">
-            <div class="input-group" style="width:150px">
-                <input name="q" placeholder="Søk..." type="text" class="form-control">
-                <span class="input-group-btn">
-                    <button type="submit" class="btn btn-default">
-                        <span class="glyphicon glyphicon-search"></span>
-                    </button>
-                </span>
-            </div>
-        </form>
-        {% block partner_logo %}
+    <form id="searchtop" class="pull-right" method="get" action="/search/">
+        <div class="input-group" style="width:150px">
+            <input name="q" placeholder="Søk..." type="text" class="form-control">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-default">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
+        </div>
+    </form>
+
+    {% block partner_logo %}
         <a class="pull-right" href="/hovedsamarbeidspartner/cmr/">
             <img src="{{ STATIC_URL }}img/CMR_logo.png" alt="CMR" style="height: 50px; width: auto; ">
         </a>
-        {% endblock %}
+    {% endblock %}
 
-    </div>
 </header>
 
 <nav class="navbar navbar-default">
