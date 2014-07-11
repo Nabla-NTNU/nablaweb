@@ -79,11 +79,9 @@
         <li><a href="http://wiki.nabla.no/">Wiki</a></li>
 
         <li class="dropdown">
-            <a href="#om"
-                class="dropdown-toggle"
-                data-toggle="dropdown">
-                    Om Nabla
-                    <span class="caret"></span>
+            <a href="#om" class="dropdown-toggle" data-toggle="dropdown">
+                Om Nabla
+                <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" >
 
@@ -99,11 +97,9 @@
             </ul>
         </li>
         <li class="dropdown">
-            <a href="#komiteer"
-                class="dropdown-toggle"
-                data-toggle="dropdown">
-                    Komiteer
-                    <span class="caret"></span>
+            <a href="#komiteer" class="dropdown-toggle" data-toggle="dropdown">
+                Komiteer
+                <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" >
                 {% cache 3600 com_list_dropdown %}
@@ -117,22 +113,17 @@
             </ul>
         </li>
         <li><a href="http://bokskap.nabla.no">Bokskap</a></li>
-		{% if not user.is_authenticated %}
-            <li><a href="{% url "accounts.views.user_register" %}">Registrer deg</a></li>
-        {% endif %}
     </ul>
     {# end navigasjonslenker #}
 
-    {% if user.is_authenticated %}
-        {# bruker-dropdown #}
-        <ul class="nav navbar-nav navbar-right">
+    <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+            {# bruker-dropdown #}
             <li class="dropdown navbar-right">
-                <a href="#bruker"
-                    class="dropdown-toggle"
-                    data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-user"></span>
-                        {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}
-                        <span class="caret"></span>
+                <a href="#bruker" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-user"></span>
+                    {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}
+                    <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url "accounts.views.view_member_profile" user.username %}">Vis profil</a></li>
@@ -147,21 +138,23 @@
                     {% endif %}
                 </ul>
             </li>
-        </ul>
-        {# end bruker-dropdown #}
-    {% else %}
-        {# loginboks #}
-        <!--        <a class="nav navbar-right btn btn-default"
-        href="/login">Logg inn</a>-->
-        <form id="navbar-loginbox" class="navbar-form navbar-right " action="/login/" method="post">
-            {% csrf_token %}
-            <input class="form-control" type="text" placeholder="Bruker" name="username" />
-            <input class="form-control" type="password"  placeholder="Passord" name="password" />
-            <button class="submit btn btn-default" type="submit">Login</button>
-        </form>
-
-        {# end loginboks #}
-    {% endif %}
+            {# end bruker-dropdown #}
+        {% else %}
+            <li><a href="{% url "accounts.views.user_register" %}">Registrer deg</a></li>
+            <li class="dropdown">
+                <a href="#login" class="dropdown-toggle" data-toggle="dropdown">
+                    Logg inn
+                    <span class="caret"></span>
+                </a>
+                <form class="dropdown-menu" action="/login/" method="post">
+                    {% csrf_token %}
+                    <input class="form-control" type="text" placeholder="Brukernavn" name="username" />
+                    <input class="form-control" type="password"  placeholder="Passord" name="password" />
+                    <button class="submit btn btn-default btn-block" type="submit">Logg inn</button>
+                </form>
+            </li>
+        {% endif %}
+    </ul>
 {% endblock navbar_container %}
 
 </div> {# end container #}
