@@ -2,9 +2,15 @@
 {% load mediawiki_links %}
 {% load markup %}
 {% load thumbnail %}
+{% load sekizai_tags %}
+
 {% block title %}{{ com.com.name }}{% endblock %}
 
 {% block content %}
+    {% addtoblock "css" %}
+        <link href="{{ STATIC_URL }}com/com.css" rel="stylesheet">
+    {% endaddtoblock %}
+
 <h2>{{ com.com.name }}</h2>
 {% if com.com.nablagroup.mail_list %}<p><b>{{ com.com.nablagroup.mail_list }}</b></p>{% endif %}
 <p>{{ com.description|markdown|wikilinks}}</p>

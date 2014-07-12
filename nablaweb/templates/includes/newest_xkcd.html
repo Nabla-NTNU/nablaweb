@@ -1,0 +1,10 @@
+{% if xkcd_img %}
+    <div class="ad box hidden-xs">
+        <div class="center">
+            <h3>Nyeste xkcd: {{ xkcd_safe_title }}</h3>
+            <a href="http://xkcd.com/">
+                <img class="img-responsive" src="{{ xkcd_img }}" title="{{ xkcd_alt }}" alt="einstein">
+            </a>                
+        </div>
+    </div>
+{% endif %}
