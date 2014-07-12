@@ -1,32 +1,25 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load bootstrap3 %}
+
 {% block title %}Endre bruker {% endblock %}
 
 {% block content %} 
 <div class="row">
-    <div class="col-md-2 centertext">
-        <div class="thumbnail">
+    <div class="col-md-3">
+        <img class="thumbnail" alt="avatar" width = "150" height ="150" 
             {% if user.userprofile.avatar %}
-                <img alt="avatar" src="{% thumbnail user.userprofile.avatar 150x150 %}" width = "150" height ="150" >
+                src="{% thumbnail user.userprofile.avatar 150x150 %}"
             {% else %}
-                <img alt="avatar" src="{{ STATIC_URL }}img/default_avatar.png" width = "150" height ="150" >
-            {%endif %}
-        </div>
+                src="{{ STATIC_URL }}img/default_avatar.png"
+            {%endif %}>
     </div>
 
-    <div class="col-md-6">
-        <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-
-            <table>
-                {{ userForm.as_table }}
-                {{ profileForm.as_table }}
-            </table>
-
-            <button type="submit" class="btn primary">Lagre endringer</button>
-
-        </form>
-    </div>
-
+    <form class="col-md-9" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+        {% bootstrap_form userForm %}
+        {% bootstrap_form profileForm %}
+        <button type="submit" class="btn btn-lg btn-primary">Lagre endringer</button>
+    </form>
 </div>
 {% endblock %}
 
