@@ -137,6 +137,8 @@ INSTALLED_APPS = [
     # http://django-sekizai.readthedocs.org/en/latest/#
     'sekizai',
 
+    'bootstrap3',
+
     # Djangoting
     'django.contrib.auth',
     'django.contrib.comments',

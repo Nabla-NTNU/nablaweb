@@ -1,6 +1,7 @@
 {% load cache %}
 {% load flatpages %}
 {% load sekizai_tags %}
+{% load bootstrap3 %}
 {% include "_bootstrap_include.html" %}
 <!DOCTYPE html>
 <html lang="en">
@@ -160,14 +161,7 @@
 </div> {# end container #}
 </nav> {# end navbar #}
 
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{% if message.tags %}{{ message.tags}}{% endif %}">
-            {#<a class="close" data-dismiss="alert">×</a>#}
-            <b>Info:</b> {{ message }} 
-        </div>
-    {% endfor %}
-{% endif %}
+{% bootstrap_messages %}
 
 
 {% block main %}

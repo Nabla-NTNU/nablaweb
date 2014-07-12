@@ -1,18 +1,14 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 
 {% block title %}Logg inn{% endblock %}
 
-
 {% block content %}
-
 <form method="post" action="/login/?next={{ next }}" />
-    <p><table>
     {% csrf_token %}
-    {{ login_form.as_table }}
-    </table>
-    <input type="submit" value="Logg inn"/></p>
-    
+    {% bootstrap_form login_form %}
+    <button class="btn btn-lg btn-primary" type="submit">Logg inn</button>
     <p><a href="{% url "password_reset" %}">Har du glemt passordet ditt?</a></p>
-    
-    </form>
+</form>
 {% endblock %}
+
