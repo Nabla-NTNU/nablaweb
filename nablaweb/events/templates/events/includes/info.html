@@ -153,13 +153,13 @@
 {% endif %}
 
 <div class="center">
-<a class="btn btn-sm" href="{{ event|google_calendarize }}">
-    <span class="icon icon-calendar"></span>
+<a class="btn btn-default btn-xs" href="{{ event|google_calendarize }}">
+    <span class="glyphicon glyphicon-calendar"></span>
     Google Calendar
 </a>
 
-<a class="btn btn-sm" href="{% url "ical_event" event.pk %}">
-    <span class="icon icon-calendar"></span>
+<a class="btn btn-default btn-xs" href="{% url "ical_event" event.pk %}">
+    <span class="glyphicon glyphicon-calendar"></span>
     iCalendar
 </a>
 </div>
