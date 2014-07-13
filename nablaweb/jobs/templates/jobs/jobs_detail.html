@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 {% load markup %}
-{% load humanize %}
-{% load comments %}
 {% load mediawiki_links %}
 {% load thumbnail %}
 
@@ -23,18 +21,7 @@
 
 
 {% block sidebar %}
-
     {% include "content/includes/meta.html" with content=job %}
     {% include "jobs/info_include.html" with job=job %}
-
-    {% if user.is_staff %}
-    <div class="well" style="padding: 8px 0;">
-        <ul class="nav nav-list">
-            <li class="nav-header">Admin</li>
-            <li><a href="{% url "admin:jobs_advert_change" job.id %}"><i class="icon-pencil"></i> Endre</a></li>
-            <li><a href="{% url "admin:jobs_advert_delete" job.id %}"><i class="icon-trash"></i> Slett</a></li>
-        </ul>
-    </div>
-    {% endif %}
-
+    {% include "jobs/sidebar_admin_include.html" %}
 {% endblock %}

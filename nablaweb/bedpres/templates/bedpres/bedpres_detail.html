@@ -1,11 +1,8 @@
 {% extends "base.html" %}
-{% load markup %}
-{% load humanize %}
-{% load comments %}
-{% load mediawiki_links %}
-{% load thumbnail %}
+
 
 {% block title %}{{ bedpres.headline }}{% endblock %}
+
 
 {% block content %}
 
@@ -33,24 +30,10 @@
 {% endblock %}
 
 
-
-
-
 {% block sidebar %}
 
-
 {% include "events/includes/info.html" with event=bedpres %}
-
 {% include "content/includes/meta.html" with content=bedpres %}
-
-{% if user.is_staff %}
-<div class="well" style="padding: 8px 0;">
-    <ul class="nav nav-list">
-        <li class="nav-header">Admin</li>
-        <li><a href="{% url "admin:bedpres_bedpres_change" bedpres.id %}"><i class="icon-pencil"></i> Endre</a></li>
-        <li><a href="{% url "admin:bedpres_bedpres_delete" bedpres.id %}"><i class="icon-trash"></i> Slett</a></li>
-    </ul>
-</div>
-{%endif%}
+{% include "bedpres/includes/sidebar-admin.html" %}
 
 {% endblock %}

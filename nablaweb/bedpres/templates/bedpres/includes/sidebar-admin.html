@@ -1,0 +1,6 @@
+{% extends "content/includes/sidebar-admin.html" %}
+
+{% block sidebar-admin %}
+<li><a href="{% url "admin:bedpres_bedpres_change" bedpres.id %}"><span class="glyphicon glyphicon-pencil"></span> Endre</a></li>
+<li><a href="{% url "admin:bedpres_bedpres_delete" bedpres.id %}"><span class="glyphicon glyphicon-trash"></span> Slett</a></li>
+{% endblock %}

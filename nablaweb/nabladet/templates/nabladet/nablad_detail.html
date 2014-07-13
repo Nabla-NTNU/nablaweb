@@ -1,9 +1,4 @@
 {% extends "base.html" %}
-{% load markup %}
-{% load humanize %}
-{% load comments %}
-{% load mediawiki_links %}
-{% load thumbnail %}
 
 {% block morehead %}
 
@@ -17,31 +12,8 @@
 {% block title %}{{ nablad.headline }}{% endblock %}
 
 {% block content %}
-
-{% if nablad.picture %}
-    <img alt="header" width="100%" src="{% thumbnail nablad.picture 770x250 box=nablad.cropping quality=95 %}">
-{% endif %}
-
-<h2>{{ nablad.headline }}</h2>
-{{ nablad.lead_paragraph|markdown|wikilinks}}
-{{ nablad.body|markdown|wikilinks}}
-
-{# Comments #}
-    {% get_comment_count for nablad as comment_count %}
-
-    {% if comment_count > 0 %}
-        <h3 class="comments-header">Kommentarer</h3>
-    {% endif %}
-
-    {% render_comment_list for nablad %}
-
-    {% if user.is_authenticated %}
-        {% render_comment_form for nablad %}
-    {% else %}
-        <p class="well">Logg inn for å skrive en kommentar</p>
-    {% endif %}
-{# end Comments #}
-
+    {% include "news/includes/text_content.html" with news=nablad %}
+    {% include "content/includes/comments.html" with content=nablad %}
 {% endblock %}
 
 
@@ -49,9 +21,9 @@
 
 {% include "content/includes/meta.html" with content=nablad %}
 
-<center><a class="btn btn-primary btn-large" href="{{ nablad.file.url }}">
+<a class="btn btn-primary btn-lg btn-block" href="{{ nablad.file.url }}">
         Last ned Nabladet {{ nablad.pub_date|date:"F Y" }}
-</a></center>
+</a>
 
 <br>
 
@@ -68,14 +40,5 @@
 {% endfor %}
 </table>
 
-{% if user.is_staff %}
-<div class="well" style="padding: 8px 0;">
-    <ul class="nav nav-list">
-        <li class="nav-header">Admin</li>
-        <li><a href="{% url "admin:nabladet_nablad_change" nablad.id %}"><i class="icon-pencil"></i> Endre</a></li>
-        <li><a href="{% url "admin:nabladet_nablad_delete" nablad.id %}"><i class="icon-trash"></i> Slett</a></li>
-    </ul>
-</div>
-{% endif %}
-
+{% include "nabladet/sidebar_admin_include.html" %}
 {% endblock %}

@@ -1,9 +1,4 @@
 {% extends "base.html" %}
-{% load markup %}
-{% load humanize %}
-{% load comments %}
-{% load mediawiki_links %}
-{% load thumbnail %}
 
 {% block title %}{{ event.headline }}{% endblock %}
 
@@ -41,27 +36,10 @@
 {% endblock %}
 
 
-
-
-
 {% block sidebar %}
 
-
 {% include "events/includes/info.html" with event=event %}
-
 {% include "content/includes/meta.html" with content=event %}
+{% include "events/includes/sidebar-admin.html" %}
 
-{% if user.is_staff %}
-<div class="well" style="padding: 8px 0;">
-    <ul class="nav nav-list">
-        <li class="nav-header">Admin</li>
-    {% if event.registration_required %}
-        <li><a href="{% url "event_admin" event.id %}"><i class="icon-user"></i> Administrer påmeldinger</a></li>
-        <li><a href="{% url "event_registrations" event.id %}"><i class="icon-list"></i> Påmeldingsliste</a></li>
-    {% endif %}
-        <li><a href="{% url "admin:events_event_change" event.id %}"><i class="icon-pencil"></i> Endre arrangement</a></li>
-        <li><a href="{% url "admin:events_event_delete" event.id %}"><i class="icon-trash"></i> Slett arrangement</a></li>
-    </ul>
-</div>
-{%endif%}
 {% endblock %}
