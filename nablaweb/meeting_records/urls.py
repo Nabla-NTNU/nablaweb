@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from meeting_records.views import MeetingRecordListView, MeetingRecordDetailView
 
 urlpatterns = patterns('meeting_records.views',

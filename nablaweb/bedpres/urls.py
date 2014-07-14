@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from bedpres.models import BedPres
 from bedpres.forms import BedPresForm
 from bedpres.views import BedPresDetailView, BedPresListView, UserBedPresView, BPCFormView

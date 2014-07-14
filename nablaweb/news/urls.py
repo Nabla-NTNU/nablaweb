@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-
-
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from news.views import NewsDetailView, NewsListView
-from news.feeds import RecentNews
 
 urlpatterns = patterns('news.views',
 
