@@ -2,7 +2,6 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-import datetime
 
 class Poll(models.Model):
     question = models.CharField('Spørsmål', max_length=1000)
@@ -29,6 +28,9 @@ class Poll(models.Model):
         for i in self.choice_set.all():
             sum += i.votes
         return sum
+
+    def user_has_voted(self, user):
+        return user in self.users_voted.all()
         
     class Meta:
         verbose_name = "avstemning"
@@ -47,3 +49,12 @@ class Choice(models.Model):
     class Meta:
         verbose_name = "valg"
         verbose_name_plural = "valg"
+
+    def vote(self, user):
+        if not self.poll.user_has_voted(user):
+            self.votes += 1
+            self.save()
+            self.poll.users_voted.add(user)
+            return True
+        else:
+            return False
