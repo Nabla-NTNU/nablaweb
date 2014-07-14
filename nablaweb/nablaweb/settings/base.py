@@ -138,6 +138,7 @@ INSTALLED_APPS = [
     'sekizai',
 
     'bootstrap3',
+    'markdown_deux',
 
     # Djangoting
     'django.contrib.auth',
@@ -145,7 +146,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'django.contrib.markup',
     'django.contrib.messages',
     'django.contrib.admin',
     # Flatpages gjør at vi enkelt kan legge til sider som kun inneholder tekst,

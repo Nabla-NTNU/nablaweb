@@ -15,3 +15,4 @@ git+https://github.com/DataDog/markdown-urlize#egg=markdown_urlize
 django-sekizai
 pytz
 django-bootstrap3
+django-markdown-deux
