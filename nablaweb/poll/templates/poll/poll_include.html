@@ -18,9 +18,9 @@
         {% for choice in poll.choice_set.all %}
             <div class="choice">{{ choice.choice }}</div>
             <div class="progress">
-                <div class="progress-bar" style="width:{% widthratio choice.votes poll.get_total_votes 100 %}%">
+                <div class="progress-bar" style="width:{% widthratio choice.votes poll_total_votes 100 %}%">
                     <span class="percent{% if choice.votes == 0 %} zero{% endif %}">
-                        {% widthratio choice.votes poll.get_total_votes 100%}%
+                        {% widthratio choice.votes poll_total_votes 100%}%
                     </span>
                 </div>
             </div>
