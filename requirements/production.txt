@@ -1,0 +1,4 @@
+-r base.txt
+
+mysql-python
+python-memcached

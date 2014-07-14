@@ -1,8 +1,0 @@
-Put these in 
-    /usr/local/lib/python2.7/dist-packages/markdown/extensions
-        or
-    /usr/lib/pymodules/python2.7/markdown/extensions
-according to your OS.
-
-Newest version:
-https://github.com/r0wb0t/markdown-urlize 
