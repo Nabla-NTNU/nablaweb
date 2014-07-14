@@ -5,28 +5,8 @@
 *.swp
 *.swo
 
-# Symlinks som er forskjellige fra system til system
-static/admin/
-static/admin
-
 # Personlige settings
-nablaweb/local_settings.py
 nablaweb/nablaweb/settings/local.py
-nablaweb/wsgi.py
-
-# Wiki
-nablaweb/w
-
-# Databaser
-nablaweb/nabla_development.db
-nabla_development.db
-sqlite.db
-
-# Filer som genereres lokalt
-nablaweb/whoosh_index
-
-# Media-mapper (opplastede brukerbilder o.l.)
-media/
 
 # Egen mappe for variabelt innhold (media, log, database etc.
 var/
