@@ -17,35 +17,6 @@ import datetime
 
 ## Login/logout
 
-@require_http_methods(['POST', 'GET'])
-def login_user(request):
-    redirect_to = request.REQUEST.get('next', request.META.get('HTTP_REFERER', '/'))
-    if request.user.is_authenticated():
-        return redirect(redirect_to)
-
-    if request.method == 'GET':
-        login_form = LoginForm()
-    elif request.method == 'POST':
-
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        #Hvis bruker ble autentisert log inn og
-        if user is not None and user.is_active:
-            login(request, user)
-            messages.add_message(request, messages.INFO, 'Du ble logget inn')
-            UserProfile.objects.get_or_create(user=user)
-            return redirect(redirect_to)
-        else:
-            login_form = LoginForm({'username': username})
-            messages.add_message(request, messages.ERROR, 'Feil brukernavn/passord!')
-
-    return render(request, 'accounts/login.html',
-                                {'login_form': login_form,
-                                  'next': redirect_to}
-                                )
-
-
 def logout_user(request):
     messages.add_message(request, messages.INFO, 'Logget ut')
     logout(request)

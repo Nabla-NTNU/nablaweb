@@ -11,7 +11,7 @@ from django.conf import settings
 
 urlpatterns = patterns('',
     (r'^$', include('news.urls')),
-    url(r'^login/$', 'accounts.views.login_user', name='auth_login'),
+    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name' : 'accounts/login.html' }, name='auth_login'),
     url(r'^logout/$', 'accounts.views.logout_user', name='auth_logout'),
     url(r'^passord/reset/$', 'django.contrib.auth.views.password_reset', name='password_reset'),
     (r'^nyheter/', include('news.urls')),

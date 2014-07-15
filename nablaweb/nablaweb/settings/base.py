@@ -185,6 +185,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 ##################################################
 AUTH_PROFILE_MODULE= 'accounts.UserProfile'
 LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
 
 
 # Django-image-cropping
