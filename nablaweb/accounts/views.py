@@ -2,26 +2,15 @@
 
 from django.shortcuts import redirect, get_object_or_404, render
 from django.template import loader, Context
-from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User, UserManager
-from accounts.forms import LoginForm, UserForm, ProfileForm, RegistrationForm, SearchForm
+from accounts.forms import UserForm, ProfileForm, RegistrationForm, SearchForm
 from accounts.models import UserProfile
 from django.contrib import messages
-from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse, HttpResponsePermanentRedirect
 
 from django.contrib.auth.decorators import login_required
 
 import datetime
-
-
-## Login/logout
-
-def logout_user(request):
-    messages.add_message(request, messages.INFO, 'Logget ut')
-    logout(request)
-    return redirect(request.META.get('HTTP_REFERER', '/'))
-
 
 ## Brukerprofil
 @login_required

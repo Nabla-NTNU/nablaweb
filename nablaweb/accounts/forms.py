@@ -11,10 +11,6 @@ from django.conf import settings
 class SearchForm(forms.Form):
     searchstring = forms.CharField(max_length=50)
 
-class LoginForm(forms.Form):
-    username = forms.CharField(label="Brukernavn")
-    password = forms.CharField(widget=forms.PasswordInput, label="Passord", required=False)
-
 class UserForm(forms.ModelForm):
     class Meta:
         model = User

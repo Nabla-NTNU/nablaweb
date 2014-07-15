@@ -131,7 +131,7 @@
                     <li><a href="{% url "accounts.views.edit_profile" %}">Endre profil</a></li>
                     <li><a href="{% url "password_change" %}">Endre passord</a></li>
                     <li><a href="{% url "view_user_events" %}">Påmeldte arrangementer</a></li>
-                    <li><a href="/logout">Logg ut</a></li>
+                    <li><a href="{% url "auth_logout" %}">Logg ut</a></li>
                     <li class="divider"></li>
                     <li><a href="{% url "accounts.views.list" %}">Medlemsliste</a></li>
                     {% if user.is_staff %}
