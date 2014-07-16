@@ -20,5 +20,5 @@ class ShowPage(DetailView):
         context = super(ShowPage, self).get_context_data(**kwargs)
         com = self.get_object().com
         context['members'] = ComMembership.objects.filter(com = com)
-        context['compages'] = ComPage.objects.all()
+        context['compages'] = ComPage.objects.all().order_by('com__name')
         return context
