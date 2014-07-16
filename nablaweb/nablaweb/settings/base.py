@@ -183,7 +183,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 # Contrib.auth
 ##################################################
-AUTH_PROFILE_MODULE= 'accounts.UserProfile'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 

@@ -9,16 +9,15 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-2">
-        <div class="thumbnail">
-              {% if member.userprofile.avatar %}
-              <img alt="avatar" src="{% thumbnail member.userprofile.avatar 150x150 %}" width = "150" height ="150" >
-              {% else %}
-              <img alt="avatar" src="{{ STATIC_URL }}img/default_avatar.png" width = "150" height ="150" >
-              {%endif %}
-        </div>
+    <div class="col-md-3">
+        <img class="thumbnail" alt="avatar" width="150" height="150"
+            {% if member.userprofile.avatar %}
+                src="{% thumbnail member.userprofile.avatar 150x150 %}"
+            {% else %}
+                src="{{ STATIC_URL }}img/default_avatar.png"
+            {%endif %}>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-9">
         <h2>
         {% if member.get_full_name %}
             {{ member.get_full_name }}
@@ -38,17 +37,17 @@
 
             <tr>
                 <td>Hjemmeside </td>
-                {% if member.get_profile.web_page %}
-                <td><a href="{{member.get_profile.web_page}}" target="_blank" >{{member.get_profile.web_page}}</a></td>
+                {% if member.userprofile.web_page %}
+                <td><a href="{{ member.userprofile.web_page }}" target="_blank" >{{ member.userprofile.web_page }}</a></td>
                 {% else %}
                 <td><a href="http://folk.ntnu.no/{{ member.username }}">http://folk.ntnu.no/{{ member.username }}</a></td>
                 {% endif %}
             </tr>
 
-            {% if member.get_profile.birthday %}
+            {% if member.userprofile.birthday %}
             <tr>
                 <td>Bursdag </td>
-                <td>{{member.get_profile.birthday}}</td>
+                <td>{{member.userprofile.birthday}}</td>
             </tr>
             {% endif %}
 
@@ -65,11 +64,11 @@
                 </td>
             </tr>
 
-            {% if member.get_profile.about %}
+            {% if member.userprofile.about %}
             <tr>
                 <td>Biografi</td>
                 <td>
-                    {{ member.get_profile.about|striptags|markdown:"safe,urlize"|wikilinks }}
+                    {{ member.userprofile.about|striptags|markdown:"safe,urlize"|wikilinks }}
                 </td>
             </tr>
             {% endif %}
@@ -95,7 +94,7 @@
             {% endif %}
 
         </table>
-    </div><!--col-md-6-->
+    </div>
 </div>
 
 {% endblock %}
