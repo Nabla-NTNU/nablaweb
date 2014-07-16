@@ -59,7 +59,7 @@
 
 {% block sidebar %}
 
-    {{ sidebarinfo.content|markdown }}
+    {{ sidebarinfo.content|safe }}
 
     {% include "events/includes/upcoming_events.html" %}
 
