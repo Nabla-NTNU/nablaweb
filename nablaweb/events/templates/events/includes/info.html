@@ -4,10 +4,13 @@
 <!-- event-info -->
 <h3 class="pull-left">Informasjon </h3>
 
+
 {% if event.facebook_url %}
+{% include "includes/fontawesome_links.html" %}
 <h3 class="pull-right">
-    <a target="_blank" href="{{ event.facebook_url }}" class="btn btn-sm">
-        <span class="icon-custom icon-facebook"></span> Vis på Facebook
+    <a target="_blank" href="{{ event.facebook_url }}" class="btn btn-default btn-sm">
+        <span class="fa fa-facebook-square"></span>
+        Vis på Facebook
     </a>
 </h3>
 {% endif %}
@@ -81,7 +84,8 @@
         <td style="text-align: center;" colspan="2">
             {% if event.registration_required %}
                 {% if is_attending %}
-                    <i class="icon-ok"></i> <b>Du er påmeldt</b>
+                    <span class="glyphicon glyphicon-ok"></span>
+                    <strong>Du er påmeldt</strong>
                 {% else %}
                     {% if is_registered %}
                         Du står på venteliste
@@ -145,10 +149,15 @@
 
 {% if event.registration_required %}
 <h3>{{ event.users_attending }} påmeldt av {{ event.places }} plasser</h3>
-<div class="progress
-    {% if 80 <= event.percent_full and event.percent_full < 100 %}progress-warning{% endif %}
-    {% if event.percent_full == 100 %}progress-danger{%endif %}">
-    <div class="bar" style="width: {{ event.percent_full }}%;"></div>
+<div class="progress">
+    <div class="progress-bar
+    {% if 80 <= event.percent_full and event.percent_full < 100 %}
+        progress-bar-warning
+    {% elif event.percent_full == 100 %}
+        progress-bar-danger
+    {%endif %}"
+    style="width: {{ event.percent_full }}%;">
+    </div>
 </div>
 {% endif %}
 

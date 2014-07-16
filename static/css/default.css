@@ -154,14 +154,6 @@
             color: white;
         }
 
-/* Custom icons */
-    /* Custom added icons */
-    .icon-custom{background-image:url(../img/facebook-icon.png);}
-    .icon-facebook{background-position:0px 0px;}
-    
-    /* Red glyph icons */
-    .icon-red{background-image:url(../bootstrap/img/glyphicons-halflings-red.png);}
-
 /* COMMENTS */
     .comments-header {
         margin-top: 30px;

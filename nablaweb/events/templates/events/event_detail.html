@@ -15,7 +15,7 @@
     <div class="registrations">
         {% for registration in event.eventregistration_set.all %}
         {% with user=registration.user %}
-        <span class="label
+        <span class="label label-default
             {% if registration.is_waiting_place %} 
             waiting-place
             {% endif %}">
