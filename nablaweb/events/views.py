@@ -8,9 +8,9 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404, render
 from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView, ListView
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.safestring import mark_safe
-from django.contrib.auth.decorators import permission_required
+from django.utils.decorators import method_decorator
 
 import datetime
 from itertools import chain
@@ -117,12 +117,16 @@ class EventRegistrationsView(NewsDetailView):
     context_object_name = "event"
     template_name = "events/event_registrations.html"
 
+    @method_decorator(permission_required('events.add_event'))
+    def dispatch(self, *args, **kwargs):
+        return super(EventRegistrationsView, self).dispatch(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(EventRegistrationsView, self).get_context_data(**kwargs)
-	event = self.object
-	context['eventregistrations'] = event.eventregistration_set.order_by('-attending','user__last_name')
-	object_name = self.object.content_type.model
-	return context
+        event = self.object
+        context['eventregistrations'] = event.eventregistration_set.order_by('-attending','user__last_name')
+        object_name = self.object.content_type.model
+        return context
 
 
 class EventDetailView(NewsDetailView):
