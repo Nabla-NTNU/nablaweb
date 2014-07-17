@@ -12,4 +12,4 @@ nablaweb/nablaweb/settings/local.py
 var/
 
 # Virtualenv
-virtualenv/
+venv/
