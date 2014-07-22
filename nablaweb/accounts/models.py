@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, AbstractUser
 from datetime import date
+
+class NablaUser(AbstractUser):
+    pass
 
 
 class UserProfile(models.Model):
@@ -25,7 +28,6 @@ class UserProfile(models.Model):
             return FysmatClass.objects.filter(user = self.user).order_by('starting_year')[0].get_class_number()
         except:
             return 0
-     
 
     def __unicode__(self):
         return "< %s profile >" % self.user.username
@@ -38,7 +40,6 @@ class NablaGroup(Group):
     description = models.TextField(verbose_name = "Beskrivelse",blank = True)
     mail_list = models.EmailField(verbose_name = "Epostliste",blank = True)
 
-      
 
     GROUP_TYPES = (
         ('komite', 'Komité'),

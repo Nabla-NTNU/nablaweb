@@ -185,7 +185,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 ##################################################
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
-AUTH_USER_MODEL = 'auth.User'
+AUTH_USER_MODEL = 'accounts.NablaUser'
 
 
 # Django-image-cropping
