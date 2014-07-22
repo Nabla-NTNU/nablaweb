@@ -21,8 +21,8 @@
 
 <a class="com-member clearfix" href="{% url "member_profile" membership.user.username %}">
         <div class="avatar">
-            {% if membership.user.userprofile.avatar %}
-            <img alt="avatar" src="{% thumbnail membership.user.userprofile.avatar 50x50 %}" width="50" height="50">
+            {% if membership.user.avatar %}
+            <img alt="avatar" src="{% thumbnail membership.user.avatar 50x50 %}" width="50" height="50">
             {% else %}
             <img alt="avatar" src="{{ STATIC_URL }}img/default_avatar.png" width="50" height="50">
             {% endif %}
@@ -33,7 +33,7 @@
             {#<span>{{ membership.joined_date|date:"d. F Y" }}</span>#}
 
             <span class="name">{{ membership.user.get_full_name }}</span>
-        
+
             {# Beskrivelse av stillingen #}
             {% if membership.story %}
                 <span class="story"> &ndash; {{ membership.story }}</span>

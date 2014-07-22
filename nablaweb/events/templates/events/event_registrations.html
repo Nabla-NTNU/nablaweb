@@ -4,11 +4,8 @@
 
 {% block title %}{{ event.headline }}{% endblock %}
 
+
 {% block content %}
-
-
-
-
 
 {# Vis påmeldte #}
 {% if user.is_authenticated %}
@@ -16,42 +13,40 @@
         <h3>Påmeldte</h3>
     {% endif %}
     <table border="1" width="100%" style="border-collapse:collapse">
-	<tr>
-    <th>Etternavn</th>
-    <th>Fornavn</th>
-	<th>Epost</th>
-    <th>Klasse</th>
-	<th>Påmeldingstidspunkt</th>
-	</tr>
+        <tr>
+            <th>Etternavn</th>
+            <th>Fornavn</th>
+            <th>Epost</th>
+            <th>Klasse</th>
+            <th>Påmeldingstidspunkt</th>
+        </tr>
         {% for registration in eventregistrations.all %}
         {% with user=registration.user %}
-            <tr
-            {% if registration.is_waiting_place %} 
-		style="font-style:italic;color:grey"
-            {% endif %}>
-                <td>
-	        {% if user.last_name %}
-                     {{ user.last_name }}
+        <tr
+        {% if registration.is_waiting_place %} 
+            style="font-style:italic;color:grey"
+        {% endif %}>
+            <td>
+                {% if user.last_name %}
+                    {{ user.last_name }}
                 {% else %}
                     {{ user.username }}
                 {% endif %}
             </td>
             <td>
                 {% if user.first_name %}
-                     {{ user.first_name }}
-
-                    {% endif %}
+                    {{ user.first_name }}
+                {% endif %}
             </td>
-
-        <td>
-            {{ user.email }}
-        </td>
-		<td>
-		{{user.userprofile.get_class_number }}
-		</td>
-		<td>
-		{{registration.date|date:"d.m.y" }}
-		</td>
+            <td>
+                {{ user.email }}
+            </td>
+            <td>
+                {{ user.get_class_number }}
+            </td>
+            <td>
+                {{registration.date|date:"d.m.y" }}
+            </td>
 	    </tr>
         {% endwith %}
         {% endfor %}

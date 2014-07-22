@@ -13,20 +13,20 @@ class Migration(DataMigration):
         # and orm['appname.ModelName'] for models in other applications.
         for u in orm['accounts.NablaUser'].objects.all():
             try:
-                print("migrating {}".format(u))
                 p = orm['accounts.UserProfile'].objects.get(user=u)
-                u.telephone = p.telephone
-                u.cell_phone = p.cell_phone
-                u.birthday = p.birthday
-                u.address = p.address
-                u.mail_number = p.mail_number
-                u.web_page = p.web_page
-                u.wants_email = p.wants_email
-                u.avatar = p.avatar
-                u.ntnu_card_number = p.ntnu_card_number
-                u.save()
             except:
-                pass
+                continue
+            u.telephone = p.telephone
+            u.cell_phone = p.cell_phone
+            u.birthday = p.birthday
+            u.address = p.address
+            u.mail_number = p.mail_number
+            u.web_page = p.web_page
+            u.wants_email = p.wants_email
+            u.avatar = p.avatar
+            u.about = p.about
+            u.ntnu_card_number = p.ntnu_card_number
+            u.save()
 
     def backwards(self, orm):
         "Write your backwards methods here."
@@ -40,6 +40,7 @@ class Migration(DataMigration):
             p.web_page = u.web_page
             p.wants_email = u.wants_email
             p.avatar = u.avatar
+            p.about = u.about
             p.ntnu_card_number = u.ntnu_card_number
             p.save()
 

@@ -11,8 +11,8 @@
 <div class="row">
     <div class="col-md-3">
         <img class="thumbnail" alt="avatar" width="150" height="150"
-            {% if member.userprofile.avatar %}
-                src="{% thumbnail member.userprofile.avatar 150x150 %}"
+            {% if member.avatar %}
+                src="{% thumbnail member.avatar 150x150 %}"
             {% else %}
                 src="{{ STATIC_URL }}img/default_avatar.png"
             {%endif %}>
@@ -37,17 +37,17 @@
 
             <tr>
                 <td>Hjemmeside </td>
-                {% if member.userprofile.web_page %}
-                <td><a href="{{ member.userprofile.web_page }}" target="_blank" >{{ member.userprofile.web_page }}</a></td>
+                {% if member.web_page %}
+                <td><a href="{{ member.web_page }}" target="_blank" >{{ member.web_page }}</a></td>
                 {% else %}
                 <td><a href="http://folk.ntnu.no/{{ member.username }}">http://folk.ntnu.no/{{ member.username }}</a></td>
                 {% endif %}
             </tr>
 
-            {% if member.userprofile.birthday %}
+            {% if member.birthday %}
             <tr>
                 <td>Bursdag </td>
-                <td>{{member.userprofile.birthday}}</td>
+                <td>{{member.birthday}}</td>
             </tr>
             {% endif %}
 
@@ -64,11 +64,11 @@
                 </td>
             </tr>
 
-            {% if member.userprofile.about %}
+            {% if member.about %}
             <tr>
                 <td>Biografi</td>
                 <td>
-                    {{ member.userprofile.about|striptags|markdown:"safe,urlize"|wikilinks }}
+                    {{ member.about|striptags|markdown:"safe,urlize"|wikilinks }}
                 </td>
             </tr>
             {% endif %}

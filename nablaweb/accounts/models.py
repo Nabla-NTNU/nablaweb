@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group, AbstractUser
 from datetime import date
 
+
 class NablaUser(AbstractUser):
     telephone = models.CharField("Telefon", max_length = 15, blank=True)
     cell_phone = models.CharField("Mobil", max_length = 15, blank=True)
@@ -15,6 +16,13 @@ class NablaUser(AbstractUser):
     about = models.TextField("Biografi",blank = True)
     avatar = models.ImageField('Avatar', blank=True, null=True, upload_to='avatars')
     ntnu_card_number = models.CharField("NTNU kortnr",max_length = 10, blank = True, help_text ="Dette er det 7-10 siffer lange nummeret <b>nede til venstre</b> på baksiden av NTNU-adgangskortet ditt. Det brukes blant annet for å komme inn på bedpresser.")
+
+    def get_class_number(self):
+        """ Henter hvilken klasse på fysmat (1-5) brukeren går i. Returnerer 0 hvis brukeren ikke går på fysmat."""
+        try:
+            return FysmatClass.objects.filter(user = self).order_by('starting_year')[0].get_class_number()
+        except:
+            return 0
 
 
 class UserProfile(models.Model):
