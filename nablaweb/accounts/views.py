@@ -4,53 +4,38 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.http import HttpResponse, HttpResponsePermanentRedirect
 from django.views.generic import DetailView
 from django.template import loader, Context
+from django.utils.decorators import method_decorator
 from django.contrib import messages
+from django.contrib.messages.api import MessageFailure
 from django.contrib.auth.models import User, UserManager
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth.decorators import login_required
 
-from accounts.forms import UserForm, ProfileForm, RegistrationForm, SearchForm
-from accounts.models import UserProfile
+from .forms import UserForm, ProfileForm, RegistrationForm, SearchForm
+from .models import UserProfile
 
 import datetime
 
-## Login/logout meldinger
-def login_message(sender, request, user, **kwargs):
-    messages.add_message(request, messages.INFO, u'Velkommen inn <strong>{}</strong>'.format(user.username))
-user_logged_in.connect(login_message)
-
-def logout_message(sender, request, user, **kwargs):
-    messages.add_message(request, messages.INFO, u'<strong>{}</strong> ble logget ut'.format(user.username))
-user_logged_out.connect(logout_message)
-
-
 ## Brukerprofil
-@login_required
-def view_member_profile(request, username=None):
-
-    """Viser profilen til en oppgitt bruker. Om brukernavn ikke er oppgitt
-    vises profilen til brukeren selv."""
-
-    if username:
-        member = get_object_or_404(User, username=username)
-    else:
-        member = request.user
-
-    penalty_list = member.eventpenalty_set.all()
-
-    see_penalty = request.user.has_perm('bedpress.change_BedPres') or request.user == member
-    return render(
-        request, "accounts/view_member_profile.html",
-        {'member': member, 'penalty_list': penalty_list, 'see_penalty': see_penalty})
-    # Render er identisk med render_to_response, men tar request som første
-    # argument istedenfor RequestContext(request) som tredje argument.
-    # Importeres fra django.shortcuts
-
-
-
 class UserDetailView(DetailView):
-    model = User
-    template_name = "test.html"
+    """Viser brukerens profil."""
+    context_object_name = 'member'
+    template_name = "accounts/view_member_profile.html"
+
+    def get_object(self, queryset=None):
+        member = User.objects.get(username=self.kwargs['username'])
+        return member
+
+    def get_context_data(self, **kwargs):
+        context = super(UserDetailView, self).get_context_data(**kwargs)
+        member = self.object
+        context['see_penalty'] = self.request.user.has_perm('bedpress.change_BedPres') or self.request.user == member
+        context['penalty_list'] = member.eventpenalty_set.all()
+        return context
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UserDetailView, self).dispatch(*args, **kwargs)
 
 
 @login_required
@@ -153,3 +138,19 @@ def user_register(request):
     return render(request,"accounts/user_registration.html",
                                {'form':form}
                                )
+
+
+## Login/logout meldinger
+def login_message(sender, request, user, **kwargs):
+    try:
+        messages.add_message(request, messages.INFO, u'Velkommen inn <strong>{}</strong>'.format(user.username))
+    except MessageFailure:
+        pass
+user_logged_in.connect(login_message)
+
+def logout_message(sender, request, user, **kwargs):
+    try:
+        messages.add_message(request, messages.INFO, u'<strong>{}</strong> ble logget ut'.format(user.username))
+    except MessageFailure:
+        pass
+user_logged_out.connect(logout_message)

@@ -33,7 +33,7 @@
         <tr>
             <td >
             {# Brukernavn med lenke til profilen #}
-                <a href="{% url "accounts.views.view_member_profile" user.username %}">
+                <a href="{% url "member_profile" user.username %}">
                     {{ user.username }}
                 </a>
             </td>

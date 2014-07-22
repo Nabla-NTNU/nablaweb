@@ -23,7 +23,7 @@
             <div class="col-xs-10 text">
                 <div class="info">
                     <span class="author">
-                        <a href="{% url "accounts.views.view_member_profile" user.username %}">
+                        <a href="{% url "member_profile" user.username %}">
                             {{ user.get_full_name }} 
                         </a>
                     </span>

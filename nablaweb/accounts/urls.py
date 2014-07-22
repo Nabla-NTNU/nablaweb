@@ -3,6 +3,8 @@
 from django.conf.urls import *
 from django.views.generic import RedirectView
 
+from .views import UserDetailView
+
 urlpatterns = patterns('django.contrib.auth.views', 
     url(r'password/change/$', 'password_change', name='password_change'),
     url(r'password/change/done$', 'password_change_done', name='password_change_done'),
@@ -13,11 +15,10 @@ urlpatterns = patterns('django.contrib.auth.views',
 )
 
 urlpatterns += patterns('accounts.views',
-    (r'edit/$', 'edit_profile'),
-    (r'view/$', 'list'),
-    (r'^$', RedirectView.as_view(url='view/')),
-    url(r'view/(?P<username>\w+)/$', 'view_member_profile', name='profile_link'),
+    url(r'^$', RedirectView.as_view(url='view/')),
+    url(r'edit/$', 'edit_profile'),
+    url(r'view/$', 'list'),
+    url(r'view/(?P<username>\w+)/$', UserDetailView.as_view(), name='member_profile'),
     url(r'register/$', 'user_register', name='registration_register'),
     url(r'search/$', 'search', name='user_search'),
-#    (r'test/', DetailView.as_view(model=User, id=1)),
 )

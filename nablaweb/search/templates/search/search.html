@@ -19,7 +19,7 @@
                     {% elif result.content_type == "com.compage" %}
                     <h3><a href="{% url "show_com_page" result.object.get_canonical_name %}">{{ result.object.com.name }}</a></h3>
                     {% elif result.content_type == "accounts.userprofile" %}
-                    <h3><a href="{% url "profile_link" result.object.user %}">{{ result.object.user }}</a> ({{ result.object.user.get_full_name }})</h3>
+                    <h3><a href="{% url "member_profile" result.object.user %}">{{ result.object.user }}</a> ({{ result.object.user.get_full_name }})</h3>
                     {% endif %}
                 </td>
                 <td></td>

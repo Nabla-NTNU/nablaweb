@@ -19,7 +19,7 @@
 {# List of memberships #}
 {% for membership in members %}
 
-<a class="com-member clearfix" href="{% url "profile_link" membership.user.username %}">
+<a class="com-member clearfix" href="{% url "member_profile" membership.user.username %}">
         <div class="avatar">
             {% if membership.user.userprofile.avatar %}
             <img alt="avatar" src="{% thumbnail membership.user.userprofile.avatar 50x50 %}" width="50" height="50">
