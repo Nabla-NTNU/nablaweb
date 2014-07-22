@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 class Poll(models.Model):
     question = models.CharField('Spørsmål', max_length=1000)
@@ -10,7 +10,7 @@ class Poll(models.Model):
     added_by = models.CharField('Lagt til av', max_length=100)
     edit_date = models.DateTimeField('Sist endret', auto_now=True)
     is_current = models.BooleanField('Nåværende avstemning?')
-    users_voted = models.ManyToManyField(User, verbose_name='Brukere som har stemt', editable=False)
+    users_voted = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Brukere som har stemt', editable=False)
     users_voted.help_text = '' # For å fjerne infomeldingen om hvordan man velger brukere (noe som ikke er mulig) i admin
     
     def __unicode__(self):

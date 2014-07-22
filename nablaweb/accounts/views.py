@@ -7,7 +7,8 @@ from django.template import loader, Context
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.messages.api import MessageFailure
-from django.contrib.auth.models import User, UserManager
+from django.contrib.auth import get_user_model; User = get_user_model()
+from django.contrib.auth.models import UserManager
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth.decorators import login_required
 

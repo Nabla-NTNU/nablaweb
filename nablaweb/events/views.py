@@ -2,7 +2,6 @@
 
 
 from django.contrib import messages as django_messages
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404, render
@@ -16,12 +15,12 @@ import datetime
 from itertools import chain
 
 from news.views import NewsListView, NewsDetailView
-from events.models import Event, EventRegistration
 from bedpres.models import BedPres
+from events.models import Event, EventRegistration
 from events.event_calendar import EventCalendar
 
-# Administrasjon
 
+# Administrasjon
 def _admin_add(request, instance):
     text = request.POST.get('text')
     try:
@@ -41,6 +40,7 @@ def _admin_del(request, instance):
         except User.DoesNotExist: pass
 _admin_del.short = 'del'
 _admin_del.info = 'Fjern'
+
 
 @permission_required('events.administer', raise_exception=True)
 def administer(request, pk,

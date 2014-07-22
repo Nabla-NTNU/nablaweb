@@ -22,7 +22,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model; User = get_user_model()
 from django.contrib.sessions.models import Session
 
 from sessionprofile.models import SessionProfile

@@ -2,10 +2,13 @@ from django.contrib import admin
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 
-from django.contrib.auth.models import Group, User
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group 
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from accounts.models import  UserProfile,NablaGroup,FysmatClass, GroupLeader
 
+from .models import  UserProfile,NablaGroup,FysmatClass, GroupLeader
+
+User = get_user_model()
 
 
 class GroupAdminForm(forms.ModelForm):

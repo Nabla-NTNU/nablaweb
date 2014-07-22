@@ -1,12 +1,11 @@
+from django.conf import settings
 from django import forms
-from django.contrib.auth.models import User
 from django.forms import DateField, DateInput, BooleanField
-from accounts.models import UserProfile
-from django.contrib.auth.models import User
-from accounts.models import UserProfile
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 import subprocess
-from django.conf import settings
+from accounts.models import UserProfile
 
 class SearchForm(forms.Form):
     searchstring = forms.CharField(max_length=50)

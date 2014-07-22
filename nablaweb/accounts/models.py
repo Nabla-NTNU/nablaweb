@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.contrib.auth.models import User, Group
-#from pybb.models import PybbProfile
+from django.conf import settings
+from django.contrib.auth.models import Group
 from datetime import date
+
 
 class UserProfile(models.Model):
     """ Ekstrainformasjon for brukere. """
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
     telephone = models.CharField("Telefon", max_length = 15, blank=True)
     cell_phone = models.CharField("Mobil", max_length = 15, blank=True)
     birthday = models.DateField("Bursdag", blank =True, null=True)

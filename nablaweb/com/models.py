@@ -3,10 +3,13 @@
 # Modeller for com-appen
 
 from django.db import models
-from news.models import News
+from django.conf import settings
 from django.contrib.auth.models import Group, User
 from django.template.defaultfilters import slugify
 from django.utils.encoding import force_unicode
+
+from news.models import News
+
 
 class ComPage(models.Model):
     # Gruppemedlemmene hentes fra gruppen med samme navn som Committee-klassen sin name gjort om til lowercase og space gjort om til underscore
@@ -17,7 +20,7 @@ class ComPage(models.Model):
     slug = models.CharField(verbose_name="Slug til URL-er", max_length=50, blank=False, unique=True, editable=False)
     
     last_changed_date = models.DateTimeField(verbose_name="Sist redigert", auto_now=True, null=True)
-    last_changed_by = models.ForeignKey(User, verbose_name="Sist endret av", related_name="%(class)s_edited", editable=False, blank=True, null=True)
+    last_changed_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Sist endret av", related_name="%(class)s_edited", editable=False, blank=True, null=True)
 
     def __unicode__(self):
         return force_unicode(self.com.name)
@@ -42,7 +45,7 @@ class ComPage(models.Model):
     # Egne gruppenyheter?
 
 class ComMembership(models.Model):
-    user = models.ForeignKey('auth.User')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     com = models.ForeignKey('auth.Group', verbose_name="Komité")
     story = models.TextField(blank=True, verbose_name="Beskrivelse", help_text="Ansvarsområde eller lignende")
     joined_date = models.DateField(blank=True, null=True, verbose_name="Ble med", help_text="Dato personen ble med i komiteen")

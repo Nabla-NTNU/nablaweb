@@ -23,8 +23,7 @@
 
 
 from django.db import models
-
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.sessions.models import Session
 
 
@@ -45,4 +44,4 @@ class SessionProfile(models.Model):
 
     session = models.ForeignKey(Session, unique=True)
 
-    user = models.ForeignKey(User, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)

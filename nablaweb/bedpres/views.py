@@ -2,18 +2,20 @@
 
 
 # Ical event til administer er kun lagt til for å fjerne en error som dukket opp hos meg. (Missing view)
-from events.views import EventListView, EventDetailView, UserEventView, ical_event,  administer
-from bedpres.forms import BPCForm
-from bedpres.models import BedPres
+
 from django.views.generic import FormView, ListView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import  get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.contrib import messages as django_messages
+
+from news.views import NewsListView, NewsDetailView
+from events.views import EventListView, EventDetailView, UserEventView, ical_event,  administer
+from bedpres.forms import BPCForm
+from bedpres.models import BedPres
 import bpc_core
 from bpc_core import BPCResponseException
-from news.views import NewsListView, NewsDetailView
 
 
 # Administrasjon
