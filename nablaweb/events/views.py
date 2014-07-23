@@ -9,10 +9,10 @@ from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.safestring import mark_safe
-from django.utils.decorators import method_decorator
 
 import datetime
 from itertools import chain
+from braces.views import PermissionRequiredMixin
 
 from news.views import NewsListView, NewsDetailView
 from bedpres.models import BedPres
@@ -112,14 +112,11 @@ class EventListView(ListView):
     context_object_name = "event_list"
     queryset = Event.objects.all() 
 
-class EventRegistrationsView(NewsDetailView):
+class EventRegistrationsView(PermissionRequiredMixin, NewsDetailView):
     model = Event
     context_object_name = "event"
     template_name = "events/event_registrations.html"
-
-    @method_decorator(permission_required('events.add_event'))
-    def dispatch(self, *args, **kwargs):
-        return super(EventRegistrationsView, self).dispatch(*args, **kwargs)
+    permission_required = 'events.add_event'
 
     def get_context_data(self, **kwargs):
         context = super(EventRegistrationsView, self).get_context_data(**kwargs)
