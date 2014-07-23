@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from django import forms
-from django.forms import DateField, DateInput, BooleanField
+from django.forms import DateField, DateInput
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
 import subprocess
 
@@ -51,13 +53,13 @@ class RegistrationForm(forms.Form):
         username = self.cleaned_data.get('username')
         
         try:
-            user = User.objects.get(username=username)
+            user = NablaUser.objects.get(username=username)
             if user.is_active:
                 raise forms.ValidationError(("Dette brukernavnet er allerede i bruk."))
             else:
                 return self.cleaned_data
 
-        except User.DoesNotExist:
+        except NablaUser.DoesNotExist:
             raise forms.ValidationError(("Brukernavn ikke registrert i nabladatabase"))
             if is_ntnu_username(username):
                 return self.cleaned_data
@@ -65,3 +67,20 @@ class RegistrationForm(forms.Form):
                 raise forms.ValidationError(("Ikke et NTNU-brukernavn."))
 
 
+
+# Forms for admin
+class NablaUserChangeForm(UserChangeForm):
+    class Meta:
+        model = NablaUser
+        fields = '__all__'
+
+class NablaUserCreationForm(UserCreationForm):
+    class Meta:
+        model = NablaUser
+        fields = ('username',)
+
+    # Denne metoden fra UserCreationForm kræsjer i django 1.6.
+    # I django 1.7 er den fjernet
+    # TODO: sjekk om den kan fjernes herfra i django 1.7 
+    def clean_username(self):
+        return self.cleaned_data["username"]
