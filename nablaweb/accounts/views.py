@@ -2,10 +2,8 @@
 
 from django.shortcuts import redirect, get_object_or_404, render
 from django.http import HttpResponse, HttpResponsePermanentRedirect
-from django.views.generic import DetailView
-from django.views.generic.edit import UpdateView
+from django.views.generic import DetailView, ListView, UpdateView
 from django.template import loader, Context
-from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.messages.api import MessageFailure
 from django.contrib.auth import get_user_model; User = get_user_model()
@@ -13,20 +11,22 @@ from django.contrib.auth.models import UserManager
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth.decorators import login_required
 
+from braces.views import LoginRequiredMixin
+
 from .forms import UserForm, RegistrationForm, SearchForm
 from .models import NablaUser
 
 import datetime
 
+
 ## Brukerprofil
-class UserDetailView(DetailView):
+class UserDetailView(LoginRequiredMixin, DetailView):
     """Viser brukerens profil."""
     context_object_name = 'member'
     template_name = "accounts/view_member_profile.html"
 
     def get_object(self, queryset=None):
-        member = NablaUser.objects.get(username=self.kwargs['username'])
-        return member
+        return NablaUser.objects.get(username=self.kwargs['username'])
 
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data(**kwargs)
@@ -35,12 +35,8 @@ class UserDetailView(DetailView):
         context['penalty_list'] = member.eventpenalty_set.all()
         return context
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(UserDetailView, self).dispatch(*args, **kwargs)
 
-
-class UpdateProfile(UpdateView):
+class UpdateProfile(LoginRequiredMixin, UpdateView):
     form_class = UserForm
     template_name = 'accounts/edit_profile.html'
 
@@ -55,17 +51,11 @@ class UpdateProfile(UpdateView):
         messages.add_message(self.request, messages.ERROR, 'Du har skrevet inn noe feil.')
         return super(UpdateProfile, self).form_invalid(form)
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(UpdateView, self).dispatch(*args, **kwargs)
 
-
-@login_required
-def list(request):
-    """Lister opp brukere med pagination."""
-    users = NablaUser.objects.all().prefetch_related('groups')
-
-    return render(request, "accounts/list.html", {'users': users})
+class UserList(LoginRequiredMixin, ListView):
+    queryset = NablaUser.objects.filter(is_active=True).prefetch_related('groups').order_by('username')
+    context_object_name = 'users'
+    template_name = 'accounts/list.html'
 
 
 @login_required

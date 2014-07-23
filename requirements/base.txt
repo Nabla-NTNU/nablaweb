@@ -16,6 +16,9 @@ django-sekizai
 django-bootstrap3
 django-markdown-deux
 
+# Ekstra Class-based-view mixins
+django-braces
+
 # Tidligere brukt markdown bibliotek
 #Markdown
 #git+https://github.com/DataDog/markdown-urlize#egg=markdown_urlize

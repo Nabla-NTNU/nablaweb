@@ -133,7 +133,7 @@
                     <li><a href="{% url "view_user_events" %}">Påmeldte arrangementer</a></li>
                     <li><a href="{% url "auth_logout" %}">Logg ut</a></li>
                     <li class="divider"></li>
-                    <li><a href="{% url "accounts.views.list" %}">Medlemsliste</a></li>
+                    <li><a href="{% url "user_list" %}">Medlemsliste</a></li>
                     {% if user.is_staff %}
                         <li><a href="/admin">Admin</a></li>
                     {% endif %}

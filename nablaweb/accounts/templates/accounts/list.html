@@ -19,7 +19,7 @@
 
 {% cache 900 userlist %}
 {% if searchquery %}
-    <p>Du søkte etter <b>{{ searchquery }}</b>. <a href="{% url "accounts.views.list" %}">Vis alle brukere</a>
+    <p>Du søkte etter <b>{{ searchquery }}</b>. <a href="{% url "user_list" %}">Vis alle brukere</a>
 {% endif %}
 
 {% if users %}
