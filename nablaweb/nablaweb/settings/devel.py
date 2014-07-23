@@ -2,6 +2,9 @@
 from .base import *
 import os
 
+DEBUG = True
+TEMPLATE_DEBUG = True
+
 
 DATABASES = {
     'default': {
@@ -47,3 +50,9 @@ def use_debug_toolbar(*ip_addresses):
 # bedpres
 ##################################################
 BPC_URL = 'http://testing.bedriftspresentasjon.no/remote/' #Testserver
+
+
+# easy_thumbnail debugging
+# Gjør at man får en feilmelding dersom thumbnail-taggen ikke klarer å lage ny
+# thumbnail
+THUMBNAIL_DEBUG = True 
