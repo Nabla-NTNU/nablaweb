@@ -2,7 +2,7 @@
 
 from django.shortcuts import redirect, get_object_or_404, render
 from django.http import HttpResponse, HttpResponsePermanentRedirect
-from django.views.generic import DetailView, ListView, UpdateView
+from django.views.generic import DetailView, ListView, UpdateView, FormView
 from django.template import loader, Context
 from django.contrib import messages
 from django.contrib.messages.api import MessageFailure
@@ -15,8 +15,6 @@ from braces.views import LoginRequiredMixin
 
 from .forms import UserForm, RegistrationForm, SearchForm
 from .models import NablaUser
-
-import datetime
 
 
 ## Brukerprofil
@@ -87,40 +85,30 @@ def get_name(ntnu_username):
     return (first_name,last_name)
 
 
-def user_register(request):
-    
-    if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username'] 
-            studmail = username+"@stud.ntnu.no"
-            (user, created_user) = NablaUser.objects.get_or_create(username=username)
+class RegistrationView(FormView):
+    form_class = RegistrationForm
+    template_name = 'accounts/user_registration.html'
+    sucess_url = '/'
 
-            # At en aktivbruker kommer seg hit skal ikke skje. Dette skal skjekkes i forms
-            if user.is_active and user.date_joined.date == datetime.date.today():
-                raise Exception
-            
+    def form_valid(self, form):
+        username = form.cleaned_data['username'] 
+        studmail = username+"@stud.ntnu.no"
+        (user, created_user) = NablaUser.objects.get_or_create(username=username)
 
-            if not(user.email):
-                user.email = studmail
-            user_manager = UserManager()
-            password = user_manager.make_random_password()
-            user.set_password(password)
-            user.is_active = True
-            user.save() 
-            t = loader.get_template('accounts/registration_email.txt')
-            email_text = t.render(Context(locals()))
-            user.email_user('Bruker på nabla.no',email_text)
+        if not(user.email):
+            user.email = studmail
 
-            messages.add_message(request, messages.INFO, 'Registreringsepost sendt til %s' % user.email)
+        user_manager = UserManager()
+        password = user_manager.make_random_password()
+        user.set_password(password)
+        user.is_active = True
+        user.save() 
+        t = loader.get_template('accounts/registration_email.txt')
+        email_text = t.render(Context(locals()))
+        user.email_user('Bruker på nabla.no', email_text)
 
-            return redirect('/')
-    else:
-        form = RegistrationForm()
-    
-    return render(request,"accounts/user_registration.html",
-                               {'form':form}
-                               )
+        messages.add_message(self.request, messages.INFO, 'Registreringsepost sendt til %s' % user.email)
+        return super(RegistrationView, self).form_valid(form)
 
 
 ## Login/logout meldinger

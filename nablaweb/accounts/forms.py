@@ -48,14 +48,14 @@ def is_ntnu_username(username):
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(label="NTNU-brukernavn", required=True)
-    
+
     def clean(self):
         username = self.cleaned_data.get('username')
-        
+
         try:
             user = NablaUser.objects.get(username=username)
             if user.is_active:
-                raise forms.ValidationError(("Dette brukernavnet er allerede i bruk."))
+                raise forms.ValidationError(("Denne brukeren er allerede aktivert. Hvis du ikke husker passordet ditt kan bruke"))
             else:
                 return self.cleaned_data
 
@@ -65,7 +65,6 @@ class RegistrationForm(forms.Form):
                 return self.cleaned_data
             else:
                 raise forms.ValidationError(("Ikke et NTNU-brukernavn."))
-
 
 
 # Forms for admin

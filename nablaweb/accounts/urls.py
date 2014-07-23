@@ -3,15 +3,15 @@
 from django.conf.urls import *
 from django.views.generic import RedirectView
 
-from .views import UserDetailView, UpdateProfile, UserList
+from .views import UserDetailView, UpdateProfile, UserList, RegistrationView
 
 urlpatterns = patterns('django.contrib.auth.views', 
     url(r'password/change/$', 'password_change', name='password_change'),
     url(r'password/change/done$', 'password_change_done', name='password_change_done'),
-    (r'password/reset/$', 'password_reset'),
-    (r'password/reset/done/$', 'password_reset_done'),
-    (r'password/reset/confirm/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'password_reset_confirm'),
-    (r'password/reset/complete/$', 'password_reset_complete'),
+    url(r'password/reset/$', 'password_reset', name='password_reset'),
+    url(r'password/reset/done/$', 'password_reset_done', name='password_reset_done'),
+    url(r'password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', 'password_reset_confirm', name='password_reset_confirm'),
+    url(r'password/reset/complete/$', 'password_reset_complete', name='password_reset_complete'),
 )
 
 urlpatterns += patterns('accounts.views',
@@ -19,6 +19,6 @@ urlpatterns += patterns('accounts.views',
     url(r'edit/$', UpdateProfile.as_view(), name='edit_profile'),
     url(r'view/$', UserList.as_view(), name='user_list'),
     url(r'view/(?P<username>\w+)/$', UserDetailView.as_view(), name='member_profile'),
-    url(r'register/$', 'user_register', name='registration_register'),
+    url(r'register/$', RegistrationView.as_view(), name='user_registration'),
     url(r'search/$', 'search', name='user_search'),
 )
