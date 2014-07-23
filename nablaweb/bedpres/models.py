@@ -4,12 +4,14 @@ from datetime import datetime
 from itertools import chain
 
 from django.db import models
-from django.contrib.auth.models import User
 from events.models import AbstractEvent
 from jobs.models import Company
 from hashlib import sha1
 from news.models import News
 import bpc_core
+
+from accounts.models import NablaUser
+User = NablaUser
 
 
 class BedPres(AbstractEvent):
