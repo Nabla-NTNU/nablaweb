@@ -10,6 +10,9 @@ DATABASES = {
     }
 }
 
+# All epost blir sendt til terminalen, istedet for ut til brukerne.
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # Debug toolbar
 ###################################################
 DEBUG_TOOLBAR_CONFIG = {
