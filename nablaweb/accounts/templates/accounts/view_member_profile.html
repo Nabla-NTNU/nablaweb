@@ -24,6 +24,12 @@
         {% else %}
             {{ member.username }}
         {% endif %}
+
+        {% if user == member %}
+            <a href="{% url "edit_profile" %}">
+                <span class="glyphicon glyphicon-edit"></span>
+            </a>
+        {% endif %}
         </h2>
         <br />
         <table class="table table-striped table-bordered">

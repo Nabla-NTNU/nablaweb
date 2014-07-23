@@ -1,27 +1,36 @@
 from django.conf import settings
 from django import forms
 from django.forms import DateField, DateInput, BooleanField
-from django.contrib.auth import get_user_model
-User = get_user_model()
 
 import subprocess
-from accounts.models import UserProfile
+
+from .models import NablaUser
 
 class SearchForm(forms.Form):
     searchstring = forms.CharField(max_length=50)
 
+
 class UserForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'email')
+        model = NablaUser
+        fields = ('first_name',
+              'last_name',
+              'email',
+              'ntnu_card_number',
+              'avatar',
+              'telephone',
+              'cell_phone',
+              'address',
+              'mail_number',
+              'wants_email',
+              'web_page',
+              'birthday',
+              'about')
 
-class ProfileForm(forms.ModelForm):
     DATE_FORMATS = ['%d/%m/%Y','%d.%m.%Y','%y-%m-%d','%d/%m/%y','%d.%m.%y','%Y-%m-%d']
     birthday = DateField(label="Bursdag", required=False, widget=DateInput(attrs={'placeholder': 'DD.MM.YY', 'class': 'date'}, format='%d.%m.%y'),\
     input_formats=DATE_FORMATS)
-    class Meta:
-        model = UserProfile
-        exclude = ('user','signature','signature_html','show_signatures','time_zone','post_count','autosubscribe','language',)
+
 
 def is_ntnu_username(username):
     """Sjekker om brukernavnet finnes i passwd-fila fra en av ntnus studlinuxservere"""

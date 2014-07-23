@@ -16,8 +16,7 @@
     </div>
 
     <form class="col-md-9" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-        {% bootstrap_form userForm %}
-        {% bootstrap_form profileForm %}
+        {% bootstrap_form form %}
         <button type="submit" class="btn btn-lg btn-primary">Lagre endringer</button>
     </form>
 </div>

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group, AbstractUser
 from datetime import date
 
@@ -23,6 +24,9 @@ class NablaUser(AbstractUser):
             return FysmatClass.objects.filter(user = self).order_by('starting_year')[0].get_class_number()
         except:
             return 0
+
+    def get_absolute_url(self):
+        return reverse("member_profile", kwargs={"username": self.username})
 
 
 class UserProfile(models.Model):

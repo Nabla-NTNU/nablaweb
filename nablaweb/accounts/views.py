@@ -3,6 +3,7 @@
 from django.shortcuts import redirect, get_object_or_404, render
 from django.http import HttpResponse, HttpResponsePermanentRedirect
 from django.views.generic import DetailView
+from django.views.generic.edit import UpdateView
 from django.template import loader, Context
 from django.utils.decorators import method_decorator
 from django.contrib import messages
@@ -12,8 +13,8 @@ from django.contrib.auth.models import UserManager
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth.decorators import login_required
 
-from .forms import UserForm, ProfileForm, RegistrationForm, SearchForm
-from .models import UserProfile
+from .forms import UserForm, RegistrationForm, SearchForm
+from .models import NablaUser
 
 import datetime
 
@@ -24,7 +25,7 @@ class UserDetailView(DetailView):
     template_name = "accounts/view_member_profile.html"
 
     def get_object(self, queryset=None):
-        member = User.objects.get(username=self.kwargs['username'])
+        member = NablaUser.objects.get(username=self.kwargs['username'])
         return member
 
     def get_context_data(self, **kwargs):
@@ -39,39 +40,30 @@ class UserDetailView(DetailView):
         return super(UserDetailView, self).dispatch(*args, **kwargs)
 
 
-@login_required
-def edit_profile(request):
-    user = request.user
+class UpdateProfile(UpdateView):
+    form_class = UserForm
+    template_name = 'accounts/edit_profile.html'
 
-    userProfile = UserProfile.objects.get_or_create(user=user)[0]
+    def get_object(self, queryset=None):
+        return self.request.user
 
-    if request.method == 'GET':
-        userForm = UserForm(instance=user)
-        profileForm = ProfileForm(instance=userProfile)
-    elif request.method == 'POST':
-        userForm = UserForm(request.POST, instance=user)
-        profileForm = ProfileForm(request.POST, request.FILES, instance=userProfile)
-        from pprint import pprint
-        pprint(request.FILES)
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.INFO, 'Profil oppdatert.')
+        return super(UpdateProfile, self).form_valid(form)
 
-        if userForm.is_valid() and profileForm.is_valid():
-            userForm.save()
-            profileForm.save()
-            messages.add_message(request, messages.INFO, 'Profil oppdatert.')
-        else:
-            messages.add_message(request, messages.ERROR, 'Du har skrevet inn noe feil.')
+    def form_invalid(self, form):
+        messages.add_message(self.request, messages.ERROR, 'Du har skrevet inn noe feil.')
+        return super(UpdateProfile, self).form_invalid(form)
 
-    return render(request,
-        "accounts/edit_profile.html",
-        {'userForm': userForm,
-          'profileForm': profileForm},
-        )
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UpdateView, self).dispatch(*args, **kwargs)
 
 
 @login_required
 def list(request):
     """Lister opp brukere med pagination."""
-    users = User.objects.all().prefetch_related('groups')
+    users = NablaUser.objects.all().prefetch_related('groups')
 
     return render(request, "accounts/list.html", {'users': users})
 
@@ -91,7 +83,7 @@ def search(request):
     if form.is_valid():
         query = form.cleaned_data['searchstring']
 
-        users = User.objects.filter(Q(username__istartswith=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
+        users = NablaUser.objects.filter(Q(username__istartswith=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
         return render(request, "accounts/list.html", {'users': users, 'searchquery': query})
     else:
         return HttpResponsePermanentRedirect("/brukere/view")
@@ -112,7 +104,7 @@ def user_register(request):
         if form.is_valid():
             username = form.cleaned_data['username'] 
             studmail = username+"@stud.ntnu.no"
-            (user, created_user) = User.objects.get_or_create(username=username)
+            (user, created_user) = NablaUser.objects.get_or_create(username=username)
 
             # At en aktivbruker kommer seg hit skal ikke skje. Dette skal skjekkes i forms
             if user.is_active and user.date_joined.date == datetime.date.today():
