@@ -188,13 +188,14 @@ LOGIN_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'accounts.NablaUser'
 
 
-# Django-image-cropping
+# easy-thumbnails/Django-image-cropping
 ###################################################
 from easy_thumbnails.conf import Settings as easy_thumb_Settings
 easy_thumb_settings = easy_thumb_Settings
 THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
 ) + easy_thumb_settings.THUMBNAIL_PROCESSORS
+THUMBNAIL_BASEDIR = 'thumbnails'
 
 # Haystack search
 ##################################################
@@ -209,6 +210,9 @@ HAYSTACK_CONNECTIONS = {
 ##################################################
 DEFAULT_FROM_EMAIL='noreply@nabla.no'
 
+
+# South
+#############################################
 SOUTH_MIGRATION_MODULES = {
         'easy_thumbnails': 'easy_thumbnails.south_migrations',
     }
