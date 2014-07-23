@@ -18,8 +18,8 @@
                     <h3><a href="{{ result.object.get_absolute_url }}">{{ result.object.headline }}</a></h3>
                     {% elif result.content_type == "com.compage" %}
                     <h3><a href="{% url "show_com_page" result.object.get_canonical_name %}">{{ result.object.com.name }}</a></h3>
-                    {% elif result.content_type == "accounts.userprofile" %}
-                    <h3><a href="{% url "member_profile" result.object.user %}">{{ result.object.user }}</a> ({{ result.object.user.get_full_name }})</h3>
+                    {% elif result.content_type == "accounts.nablauser" %}
+                    <h3><a href="{% url "member_profile" result.object %}">{{ result.object }}</a> ({{ result.object.get_full_name }})</h3>
                     {% endif %}
                 </td>
                 <td></td>
@@ -34,7 +34,7 @@
                     <p>{{ result.object.lead_paragraph|truncatewords_html:58 }}</p>
                     {% elif result.content_type == "com.compage" %}
                     <p>{{ result.object.description|truncatewords_html:58 }}</p>
-                    {% elif result.content_type == "accounts.userprofile" %}
+                    {% elif result.content_type == "accounts.nablauser" %}
                     <p>{% if result.object.about %}{{ result.object.about|truncatewords_html:58 }}{% else %}Denne brukeren har dessverre ikke skrevet noe om seg selv.{% endif %}</p>
                     {% endif %}
                 </td>

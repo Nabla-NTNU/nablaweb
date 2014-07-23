@@ -43,7 +43,7 @@
     <tr bgcolor="#D0FFD0">
       <td>{{ registration.number }}</td>
       <td>{{ registration.user.get_full_name }}</td>
-      <td>{{ registration.user.userprofile.get_class_number }}</td>
+      <td>{{ registration.user.get_class_number }}</td>
       <td><input type="checkbox" name="user" value="{{ registration.user }}" /></td>
     </tr>
     {% endif %}
@@ -54,7 +54,7 @@
     <tr bgcolor="#FFD0D0">
       <td>{{ registration.number }}</td>
       <td>{{ registration.user.get_full_name }}</td>
-      <td>{{ registration.user.userprofile.get_class_number }}</td>
+      <td>{{ registration.user.get_class_number }}</td>
       <td><input type="checkbox" name="user" value="{{ registration.user }}" /></td>
     </tr>
     {% endif %}

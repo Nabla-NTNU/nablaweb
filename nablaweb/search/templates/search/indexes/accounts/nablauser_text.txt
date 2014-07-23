@@ -1,0 +1,4 @@
+{{ object.username }}
+{{ object.get_full_name }}
+{{ object.about }}
+{{ object.cell_phone }}
