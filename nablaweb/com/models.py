@@ -53,6 +53,8 @@ class ComMembership(models.Model):
 
     def save(self, *args, **kwargs):
         self.com.user_set.add(self.user)
+        self.user.is_staff = True
+        self.user.save()
         super(ComMembership, self).save(*args, **kwargs)
     
     def delete(self, *args, **kwargs):
