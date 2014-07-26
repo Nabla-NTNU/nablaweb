@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
 from calendar import HTMLCalendar
 from datetime import date
-from itertools import groupby
 
 from django.utils.html import conditional_escape as esc
 
 day_full = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', u'Lørdag', u'Søndag']
 day_abbr = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', u'Lør', u'Søn']
+
+
+def day_range(start, end):
+    if not end:
+        return [start.day] 
+    num_days = (end-start).days + 1 
+    return [start.day+i for i in xrange(num_days)]
+
 
 class EventCalendar(HTMLCalendar):
     """
@@ -68,26 +75,15 @@ class EventCalendar(HTMLCalendar):
          s = ''.join(self.formatweekday(i) for i in self.iterweekdays())
          return '<ul class="daynames">%s</ul>' % s
 
-
     def group_by_day(self, events):
-        field = lambda event: event.event_start.day
-        day_dict = dict(
-                [(day, list(items)) for day, items in groupby(events, field)]
-        )
-        # Kodesnutt for å fikse slik at arrangementer som varer i flere dager
-        # dukker opp på alle de aktuelle dagene i kalenderen. 
-        multiple_day_events = [e for e in events if (e.event_end and e.event_end.date>e.event_start.date)]
-        for e in multiple_day_events:
-            days = (e.event_end-e.event_start).days
-            for i in xrange(1,days):
-                day_dict.setdefault(e.event_start.day+i,[]).append(e) 
-                # kan finne på å inkludere datoer som 32,33,34 osv.
-                # men  det ser ut til å fungere fint likevel.
+        day_dict = {}
+        for e in events:
+            for day in day_range(e.event_start, e.event_end):
+                day_dict.setdefault(day, []).append(e)
         return day_dict
 
     def day_cell(self, cssclass, body):
         return '<li class="cell %s">%s</li>' % (cssclass, body)
-
 
     def formatmonth(self, theyear, themonth, withyear=True):
         """
@@ -107,5 +103,3 @@ class EventCalendar(HTMLCalendar):
         a('</div>')
         a('\n')
         return ''.join(v)
-
-
