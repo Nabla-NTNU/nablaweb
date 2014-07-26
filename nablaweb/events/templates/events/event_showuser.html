@@ -27,9 +27,9 @@
     <tbody>
     {% for eventregistration in eventregistration_list %}
     {% if eventregistration.is_attending_place %}
-        <tr bgcolor="#D0FFD0">
+        <tr class="success">
     {% else %}{% if eventregistration.is_waiting_place %}
-        <tr bgcolor="#FFD0D0">
+        <tr class="warning">
     {% endif %}{% endif %}
     <td>
         <a href="{{ eventregistration.event.get_absolute_url }}" style="text-decoration:none;">
