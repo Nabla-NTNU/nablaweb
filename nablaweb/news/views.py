@@ -2,10 +2,9 @@
 
 
 from django.core.urlresolvers import reverse
-from django.views.generic import DetailView, ListView, DeleteView
+from django.views.generic import DetailView, ListView
 from news.models import News
 from content.templatetags import listutil
-
 
 class NewsListView(ListView):
     model = News
@@ -20,11 +19,11 @@ class NewsListView(ListView):
         """
         context = super(NewsListView, self).get_context_data(**kwargs)
 
-	from django.contrib.flatpages.models import FlatPage
-	try:
-		context['sidebarinfo'] = FlatPage.objects.get(url="/forsideinfo/")
-	except:
-		pass
+        from django.contrib.flatpages.models import FlatPage
+        try:
+            context['sidebarinfo'] = FlatPage.objects.get(url="/forsideinfo/")
+        except:
+            pass
 
         news_list = context['news_list']
 
@@ -40,11 +39,3 @@ class NewsListView(ListView):
 class NewsDetailView(DetailView):
     model = News
     context_object_name = 'news'
-
-
-class NewsDeleteView(DeleteView):
-    model = News
-    context_object_name = 'news'
-
-    def get_success_url(self):
-        return reverse("%s_list" % self.model._meta.object_name.lower())

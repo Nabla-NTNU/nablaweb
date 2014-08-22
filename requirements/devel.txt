@@ -1,0 +1,4 @@
+-r base.txt
+
+django-debug-toolbar
+django-cache-panel

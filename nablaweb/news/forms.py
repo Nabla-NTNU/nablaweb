@@ -2,7 +2,7 @@
 
 
 from django.forms import ModelForm, CharField, SplitDateTimeWidget, DateInput, TimeInput
-from nablaweb.news.models import News
+from news.models import News
 
 
 class NewsCharField(CharField):

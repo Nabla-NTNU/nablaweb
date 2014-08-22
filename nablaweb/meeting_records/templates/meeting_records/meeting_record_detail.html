@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% load humanize %}
+{% load comments %}
+{% load mediawiki_links %}
+{% load thumbnail %}
+
+{% block morehead %}
+
+<meta property="og:image" content="{{ meeting_record.get_picture_url }}" />
+<meta property="og:title" content="{{ meeting_record.headline|striptags }}" />
+<meta property="og:type"  content="article" />
+<meta property="og:description" content="{% spaceless %}{{ meeting_record.lead_paragraph|striptags }}{% endspaceless %}" />
+
+{% endblock %}
+
+{% block title %}{{ meeting_record.headline }}{% endblock %}
+
+{% block content %}
+
+{% if meeting_record.picture %}
+    <img alt="header" width="100%" src="{% thumbnail meeting_record.picture 770x250 box=meeting_record.cropping quality=95 %}">
+{% endif %}
+
+<h2>{{ meeting_record.headline }}</h2>
+{{ meeting_record.lead_paragraph|markdown|wikilinks}}
+{{ meeting_record.body|markdown|wikilinks}}
+
+{# Comments #}
+    {% get_comment_count for meeting_record as comment_count %}
+
+    {% if comment_count > 0 %}
+        <h3 class="comments-header">Kommentarer</h3>
+    {% endif %}
+
+    {% render_comment_list for meeting_record %}
+
+    {% if user.is_authenticated %}
+        {% render_comment_form for meeting_record %}
+    {% else %}
+        <p class="well">Logg inn for å skrive en kommentar</p>
+    {% endif %}
+{# end Comments #}
+
+{% endblock %}
+
+
+{% block sidebar %}
+
+{% include "content/includes/meta.html" with content=meeting_record %}
+
+<center><a class="btn btn-primary btn-large" href="{{ meeting_record.file.url }}">
+        Last ned referat {{ meeting_record.pub_date|date:"F Y" }}
+</a></center>
+
+<br>
+
+<h3>Arkiv</h3>
+<table class="table table-striped">
+{% for m in meeting_record_list %}
+<tr><td>
+    {% if m == meeting_record %}
+    {{ m.pub_date|date:"F Y" }}
+    {% else %}
+    <a href="{{ m.get_absolute_url }}"> {{ m.pub_date|date:"F Y" }} </a>
+    {% endif %}
+</td></tr>
+{% endfor %}
+</table>
+
+{% endblock %}

@@ -1,122 +1,59 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import redirect, get_object_or_404, render
-from django.template import loader, Context
-from django.contrib.auth import logout, login, authenticate
-from django.contrib.auth.models import User, UserManager
-from accounts.forms import LoginForm, UserForm, ProfileForm, RegistrationForm, SearchForm
-from accounts.models import UserProfile
-from django.contrib import messages
-from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse, HttpResponsePermanentRedirect
-
+from django.views.generic import DetailView, ListView, UpdateView, FormView
+from django.template import loader, Context
+from django.contrib import messages
+from django.contrib.messages.api import MessageFailure
+from django.contrib.auth import get_user_model; User = get_user_model()
+from django.contrib.auth.models import UserManager
+from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth.decorators import login_required
 
-import datetime
+from braces.views import LoginRequiredMixin
 
-
-## Login/logout
-
-@require_http_methods(['POST', 'GET'])
-def login_user(request):
-    redirect_to = request.REQUEST.get('next', request.META.get('HTTP_REFERER', '/'))
-    if request.user.is_authenticated():
-        return redirect(redirect_to)
-
-    if request.method == 'GET':
-        login_form = LoginForm()
-    elif request.method == 'POST':
-
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        #Hvis bruker ble autentisert log inn og
-        if user is not None and user.is_active:
-            login(request, user)
-            messages.add_message(request, messages.INFO, 'Du ble logget inn')
-            UserProfile.objects.get_or_create(user=user)
-            return redirect(redirect_to)
-        else:
-            login_form = LoginForm({'username': username})
-            messages.add_message(request, messages.ERROR, 'Feil brukernavn/passord!')
-
-    return render(request, 'accounts/login.html',
-                                {'login_form': login_form,
-                                  'next': redirect_to}
-                                )
-
-
-def logout_user(request):
-    messages.add_message(request, messages.INFO, 'Logget ut')
-    logout(request)
-    return redirect(request.META.get('HTTP_REFERER', '/'))
+from .forms import UserForm, RegistrationForm, SearchForm
+from .models import NablaUser
 
 
 ## Brukerprofil
-@login_required
-def view_member_profile(request, username=None):
+class UserDetailView(LoginRequiredMixin, DetailView):
+    """Viser brukerens profil."""
+    context_object_name = 'member'
+    template_name = "accounts/view_member_profile.html"
 
-    """Viser profilen til en oppgitt bruker. Om brukernavn ikke er oppgitt
-    vises profilen til brukeren selv."""
+    def get_object(self, queryset=None):
+        return NablaUser.objects.get(username=self.kwargs['username'])
 
-    if username:
-        member = get_object_or_404(User, username=username)
-    else:
-        member = request.user
-        
-    penalty_list = member.eventpenalty_set.all()
-   
-    see_penalty = request.user.has_perm('bedpress.change_BedPres') or request.user == member
-    return render(
-        request, "accounts/view_member_profile.html",
-        {'member': member, 'penalty_list': penalty_list, 'see_penalty': see_penalty})
-    # Render er identisk med render_to_response, men tar request som første
-    # argument istedenfor RequestContext(request) som tredje argument.
-    # Importeres fra django.shortcuts
-
-from django.views.generic import DetailView
+    def get_context_data(self, **kwargs):
+        context = super(UserDetailView, self).get_context_data(**kwargs)
+        member = self.object
+        context['see_penalty'] = self.request.user.has_perm('bedpress.change_BedPres') or self.request.user == member
+        context['penalty_list'] = member.eventpenalty_set.all()
+        return context
 
 
-class UserDetailView(DetailView):
-    model = User
-    template_name = "test.html"
+class UpdateProfile(LoginRequiredMixin, UpdateView):
+    form_class = UserForm
+    template_name = 'accounts/edit_profile.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.INFO, 'Profil oppdatert.')
+        return super(UpdateProfile, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.add_message(self.request, messages.ERROR, 'Du har skrevet inn noe feil.')
+        return super(UpdateProfile, self).form_invalid(form)
 
 
-@login_required
-def edit_profile(request):
-    user = request.user
-
-    userProfile = UserProfile.objects.get_or_create(user=user)[0]
-
-    if request.method == 'GET':
-        userForm = UserForm(instance=user)
-        profileForm = ProfileForm(instance=userProfile)
-    elif request.method == 'POST':
-        userForm = UserForm(request.POST, instance=user)
-        profileForm = ProfileForm(request.POST, request.FILES, instance=userProfile)
-        from pprint import pprint
-        pprint(request.FILES)
-
-        if userForm.is_valid() and profileForm.is_valid():
-            userForm.save()
-            profileForm.save()
-            messages.add_message(request, messages.INFO, 'Profil oppdatert.')
-        else:
-            messages.add_message(request, messages.ERROR, 'Du har skrevet inn noe feil.')
-
-    return render(request,
-        "accounts/edit_profile.html",
-        {'userForm': userForm,
-          'profileForm': profileForm},
-        )
-
-
-@login_required
-def list(request):
-    """Lister opp brukere med pagination."""
-    users = User.objects.all().prefetch_related('groups')
-
-    return render(request, "accounts/list.html", {'users': users})
+class UserList(LoginRequiredMixin, ListView):
+    queryset = NablaUser.objects.filter(is_active=True).prefetch_related('groups').order_by('username')
+    context_object_name = 'users'
+    template_name = 'accounts/list.html'
 
 
 @login_required
@@ -134,7 +71,7 @@ def search(request):
     if form.is_valid():
         query = form.cleaned_data['searchstring']
 
-        users = User.objects.filter(Q(username__istartswith=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
+        users = NablaUser.objects.filter(Q(username__istartswith=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
         return render(request, "accounts/list.html", {'users': users, 'searchquery': query})
     else:
         return HttpResponsePermanentRedirect("/brukere/view")
@@ -148,37 +85,43 @@ def get_name(ntnu_username):
     return (first_name,last_name)
 
 
-def user_register(request):
-    
-    if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username'] 
-            studmail = username+"@stud.ntnu.no"
-            (user, created_user) = User.objects.get_or_create(username=username)
+class RegistrationView(FormView):
+    form_class = RegistrationForm
+    template_name = 'accounts/user_registration.html'
+    sucess_url = '/'
 
-            # At en aktivbruker kommer seg hit skal ikke skje. Dette skal skjekkes i forms
-            if user.is_active and user.date_joined.date == datetime.date.today():
-                raise Exception
-            
+    def form_valid(self, form):
+        username = form.cleaned_data['username'] 
+        studmail = username+"@stud.ntnu.no"
+        (user, created_user) = NablaUser.objects.get_or_create(username=username)
 
-            if not(user.email):
-                user.email = studmail
-            user_manager = UserManager()
-            password = user_manager.make_random_password()
-            user.set_password(password)
-            user.is_active = True
-            user.save() 
-            t = loader.get_template('accounts/registration_email.txt')
-            email_text = t.render(Context(locals()))
-            user.email_user('Bruker på nabla.no',email_text)
+        if not(user.email):
+            user.email = studmail
 
-            messages.add_message(request, messages.INFO, 'Registreringsepost sendt til %s' % user.email)
+        user_manager = UserManager()
+        password = user_manager.make_random_password()
+        user.set_password(password)
+        user.is_active = True
+        user.save() 
+        t = loader.get_template('accounts/registration_email.txt')
+        email_text = t.render(Context(locals()))
+        user.email_user('Bruker på nabla.no', email_text)
 
-            return redirect('/')
-    else:
-        form = RegistrationForm()
-    
-    return render(request,"accounts/user_registration.html",
-                               {'form':form}
-                               )
+        messages.add_message(self.request, messages.INFO, 'Registreringsepost sendt til %s' % user.email)
+        return super(RegistrationView, self).form_valid(form)
+
+
+## Login/logout meldinger
+def login_message(sender, request, user, **kwargs):
+    try:
+        messages.add_message(request, messages.INFO, u'Velkommen inn <strong>{}</strong>'.format(user.username))
+    except MessageFailure:
+        pass
+user_logged_in.connect(login_message)
+
+def logout_message(sender, request, user, **kwargs):
+    try:
+        messages.add_message(request, messages.INFO, u'<strong>{}</strong> ble logget ut'.format(user.username))
+    except MessageFailure:
+        pass
+user_logged_out.connect(logout_message)

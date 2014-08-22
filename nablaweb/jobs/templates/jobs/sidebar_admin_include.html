@@ -1,0 +1,6 @@
+{% extends "content/includes/sidebar-admin.html" %}
+
+{% block sidebar-admin %}
+<li><a href="{% url "admin:jobs_advert_change" job.id %}"><span class="glyphicon glyphicon-pencil"></span> Endre</a></li>
+<li><a href="{% url "admin:jobs_advert_delete" job.id %}"><span class="glyphicon glyphicon-trash"></span> Slett</a></li>
+{% endblock %}

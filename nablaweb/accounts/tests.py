@@ -1,23 +1,35 @@
 """
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
-
-Replace these with more appropriate tests for your application.
+Tester for accounts-appen
 """
 
-from django.test import TestCase
+from django.test import TestCase, Client
+from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+from .views import UserDetailView
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
 
->>> 1 + 1 == 2
-True
-"""}
+class TestUserDetail(TestCase):
+
+    def setUp(self):
+        self.user1 = User.objects.create_user(username="user1")
+        self.user2_password = "hallo"
+        self.user2 = User.objects.create_user(username="user2", password=self.user2_password)
+
+    def test_logged_in_user_can_view_profile(self):
+        self.client.login(username=self.user2.username, password=self.user2_password)
+        response = self.client.get(reverse("member_profile", kwargs={"username": self.user1.username}))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.user2.username, response.content)
+
+    def test_anonymous_user_cannot_view_profile(self):
+        url = reverse("member_profile", kwargs={"username": self.user1.username}) 
+        response = self.client.get(url)
+        self.assertRedirects(response, "/login/?next={}".format(url))
+
+
+
+
+
+
 

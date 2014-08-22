@@ -2,26 +2,25 @@
 
 
 from django.contrib import messages as django_messages
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404, render
 from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView, ListView
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.safestring import mark_safe
-from django.contrib.auth.decorators import permission_required
 
 import datetime
 from itertools import chain
+from braces.views import PermissionRequiredMixin
 
-from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
-from nablaweb.events.models import Event, EventRegistration
-from nablaweb.bedpres.models import BedPres
+from news.views import NewsListView, NewsDetailView
+from bedpres.models import BedPres
+from events.models import Event, EventRegistration
 from events.event_calendar import EventCalendar
 
-# Administrasjon
 
+# Administrasjon
 def _admin_add(request, instance):
     text = request.POST.get('text')
     try:
@@ -41,6 +40,7 @@ def _admin_del(request, instance):
         except User.DoesNotExist: pass
 _admin_del.short = 'del'
 _admin_del.info = 'Fjern'
+
 
 @permission_required('events.administer', raise_exception=True)
 def administer(request, pk,
@@ -64,10 +64,6 @@ def administer(request, pk,
                                'registrations': registrations,
                                'actions': [(a.short, a.info) for a in actions]},
                               context_instance=RequestContext(request))
-
-
-class EventDeleteView(NewsDeleteView):
-    model = Event
 
 
 # Offentlig
@@ -116,17 +112,18 @@ class EventListView(ListView):
     context_object_name = "event_list"
     queryset = Event.objects.all() 
 
-class EventRegistrationsView(NewsDetailView):
+class EventRegistrationsView(PermissionRequiredMixin, NewsDetailView):
     model = Event
     context_object_name = "event"
     template_name = "events/event_registrations.html"
+    permission_required = 'events.add_event'
 
     def get_context_data(self, **kwargs):
         context = super(EventRegistrationsView, self).get_context_data(**kwargs)
-	event = self.object
-	context['eventregistrations'] = event.eventregistration_set.order_by('-attending','user__last_name')
-	object_name = self.object.content_type.model
-	return context
+        event = self.object
+        context['eventregistrations'] = event.eventregistration_set.order_by('-attending','user__last_name')
+        object_name = self.object.content_type.model
+        return context
 
 
 class EventDetailView(NewsDetailView):

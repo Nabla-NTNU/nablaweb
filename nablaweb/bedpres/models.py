@@ -4,12 +4,14 @@ from datetime import datetime
 from itertools import chain
 
 from django.db import models
-from django.contrib.auth.models import User
 from events.models import AbstractEvent
 from jobs.models import Company
 from hashlib import sha1
 from news.models import News
 import bpc_core
+
+from accounts.models import NablaUser
+User = NablaUser
 
 
 class BedPres(AbstractEvent):
@@ -34,7 +36,7 @@ class BedPres(AbstractEvent):
     def register_user(self, user):
         # TODO feilhåndtering bør ikke skje her, men jeg fikk ikke til å ta i
         # mot BPCResponseException i register_user view - hiasen
-        card_no = user.get_profile().ntnu_card_number
+        card_no = user.ntnu_card_number
         if not card_no or not card_no.isdigit():
             return "Du ble ikke påmeldt fordi du ikke har registrert gyldig kortnummer."
 
@@ -42,9 +44,9 @@ class BedPres(AbstractEvent):
             response = bpc_core.add_attending(
                 fullname=user.get_full_name(),
                 username=user.username,
-                card_no=sha1(user.get_profile().ntnu_card_number).hexdigest(),
+                card_no=sha1(user.ntnu_card_number).hexdigest(),
                 event=self.bpcid,
-                year=str(user.get_profile().get_class_number()), # FIXME
+                year=str(user.get_class_number()), # FIXME
                 )
         except bpc_core.BPCResponseException as exception:
             return exception.message # TODO Bruke noen andre feilmeldinger. Er litt kryptiske for brukere

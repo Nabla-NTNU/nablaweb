@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}Brukerregistrering{% endblock %}
+
+{% block content %}
+
+<p>Her kan du registrere deg med ditt NTNU-brukernavn. Hvis brukernavnet er godkjent vil du motta en epost med passord.</p>
+
+<form method="post" action="" >
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button class="btn btn-lg btn-primary" type="submit">Send</button>
+</form>
+
+{% endblock %}

@@ -2,25 +2,23 @@
 
 
 # Ical event til administer er kun lagt til for å fjerne en error som dukket opp hos meg. (Missing view)
-from nablaweb.events.views import EventListView, EventDetailView, EventDeleteView, UserEventView, ical_event,  administer
-from nablaweb.bedpres.forms import BPCForm
-from nablaweb.bedpres.models import BedPres
+
 from django.views.generic import FormView, ListView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import  get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.contrib import messages as django_messages
+
+from news.views import NewsListView, NewsDetailView
+from events.views import EventListView, EventDetailView, UserEventView, ical_event,  administer
+from bedpres.forms import BPCForm
+from bedpres.models import BedPres
 import bpc_core
 from bpc_core import BPCResponseException
-from nablaweb.news.views import NewsListView, NewsDetailView, NewsDeleteView
 
 
 # Administrasjon
-
-class BedPresDeleteView(EventDeleteView):
-    model = BedPres
-
 
 class BPCFormView(FormView):
     template_name = 'bedpres/bedpres_bpc_menu.html'

@@ -1,11 +1,16 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 
-from django.contrib.auth.models import Group, User
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group 
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from accounts.models import  UserProfile,NablaGroup,FysmatClass, GroupLeader
 
+from .models import NablaUser, NablaGroup, FysmatClass, GroupLeader
+from .forms import NablaUserChangeForm, NablaUserCreationForm
+
+User = get_user_model()
 
 
 class GroupAdminForm(forms.ModelForm):
@@ -36,18 +41,15 @@ class GroupAdminForm(forms.ModelForm):
             self.save_m2m = new_save_m2m
         return group
 
+
 class NablaGroupAdminForm(GroupAdminForm):
     class Meta:
         model = NablaGroup
 
 
-#class GroupProfileInline(admin.StackedInline):
- #   model = GroupProfile
-  #  fk_name = 'group'
-
 class ExtendedGroupAdmin(GroupAdmin):
     form = GroupAdminForm
-#    inlines = GroupAdmin.inlines + [GroupProfileInline]
+
 
 class ExtendedNablaGroupAdmin(GroupAdmin):
     form = NablaGroupAdminForm
@@ -63,21 +65,18 @@ admin.site.register(FysmatClass)
 admin.site.register(GroupLeader)
 
 
-class UserProfileInlineForm(forms.ModelForm):
-    class Meta:
-        model = UserProfile
-        exclude = ('signature', 'signature_html','show_signatures','time_zone','autosubscribe','language','post_count',)
+class NablaUserAdmin(UserAdmin):
+    form = NablaUserChangeForm
+    add_form = NablaUserCreationForm
 
-class UserProfileInline(admin.StackedInline):
-    form = UserProfileInlineForm
-    model = UserProfile
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (('Personlig informasjon'), {'fields': ('first_name', 'last_name', 'email', 'ntnu_card_number')}),
+        (('Rettigheter'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+                                       'groups', 'user_permissions')}),
+        (('Important dates'), {'fields': ('last_login', 'date_joined')}),
+        ('Adresse og telefon', {'fields': ('address', 'mail_number', 'telephone', 'cell_phone', )}),
+        ('Diverse', {'fields': ('birthday', 'web_page', 'about', 'wants_email')}),
+    )
 
-class ExtendedUserAdmin(UserAdmin):
-    inlines = UserAdmin.inlines + [UserProfileInline]
-
-try:
-    admin.site.unregister(User)
-except:
-    pass
-
-admin.site.register(User, ExtendedUserAdmin)
+admin.site.register(NablaUser, NablaUserAdmin)

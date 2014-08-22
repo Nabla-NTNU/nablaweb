@@ -2,13 +2,14 @@
 
 
 from django.db import models
-from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
 from django.db.models.base import ModelBase
 from django.db.models.query import QuerySet
-from image_cropping.fields import ImageRatioField, ImageCropField
+from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from django.contrib.comments.models import Comment
+
+from image_cropping.fields import ImageRatioField, ImageCropField
 
 class PolymorphicMetaclass(ModelBase):
     """
@@ -67,9 +68,9 @@ class Content(models.Model):
 
     # Metadata
     created_date = models.DateTimeField(verbose_name="Publiseringsdato", auto_now_add=True, null=True)
-    created_by = models.ForeignKey(User, verbose_name="Opprettet av", related_name="%(class)s_created", editable=False, blank=True, null=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Opprettet av", related_name="%(class)s_created", editable=False, blank=True, null=True)
     last_changed_date = models.DateTimeField(verbose_name="Redigeringsdato", auto_now=True, null=True)
-    last_changed_by = models.ForeignKey(User, verbose_name="Endret av", related_name="%(class)s_edited", editable=False, blank=True, null=True)
+    last_changed_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Endret av", related_name="%(class)s_edited", editable=False, blank=True, null=True)
 
     # Bildeopplasting med resizing og cropping
     picture = models.ImageField(upload_to="news_pictures", null=True, blank=True, verbose_name="Bilde", help_text="Bilder som er større enn 770x300 px ser best ut. Du kan beskjære bildet etter opplasting.")

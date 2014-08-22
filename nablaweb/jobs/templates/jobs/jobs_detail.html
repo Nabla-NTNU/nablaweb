@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% load mediawiki_links %}
+{% load thumbnail %}
+
+{% block title %}{{ job.headline }}{% endblock %}
+
+{% block content %}
+
+    {% if job.company.picture %}
+        <img alt="" width="100%" src="{% thumbnail job.company.picture 770x250 box=job.company.cropping quality=95 %}">
+    {% endif %}        
+
+    <h2>{{ job.headline }}</h2>
+    {{ job.lead_paragraph|markdown|wikilinks}}
+    {{ job.body|markdown|wikilinks}}
+    <hr>
+
+    {% include "content/includes/comments.html" with content=job %}
+{% endblock %}
+
+
+{% block sidebar %}
+    {% include "content/includes/meta.html" with content=job %}
+    {% include "jobs/info_include.html" with job=job %}
+    {% include "jobs/sidebar_admin_include.html" %}
+{% endblock %}

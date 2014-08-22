@@ -2,7 +2,7 @@
 
 # URL-er for stillingsannonser-appen
 
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from jobs.views import *
 from jobs.feeds import RecentJobs
 

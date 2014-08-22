@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% load humanize %}
+{% load jobs_filters %}
+
+{% block title %}Stillingsannonser{% endblock %}
+
+{% block more_head %}
+<link rel="alternate" type="application/rss+xml" href="/stillinger/feed/" title="RSS feed">
+{% endblock %}
+
+{% block sidebar %}
+{% include "jobs/sidebar_include.html" %}
+{% endblock %}
+
+{% block content %}
+{% if jobs_list %}
+    {% for row in jobs_rows %}
+        <div class="row">
+	    {% for job in row %}
+	        {% include "jobs/jobs_summary_include.html" %}
+            {% endfor %}
+        </div>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>Vi har for øyeblikket ingen stillingsannonser</p>
+{% endif %}
+{% endblock content %}

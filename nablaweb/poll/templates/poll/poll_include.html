@@ -1,0 +1,49 @@
+{% load humanize %}
+{% load cache %}
+{% load sekizai_tags %}
+
+{% if poll %}
+
+{% addtoblock "css" %}
+    <link href="{{ STATIC_URL }}poll/poll_sidebar.css" rel="stylesheet">
+{% endaddtoblock %}
+
+<br>
+<div class="poll well hidden-xs">
+    <h4>{{ poll.question }}</h4>
+
+    {% if poll_has_voted %}
+        {# Has voted, display results #}
+        {% cache 900 poll_results user.username %}
+        {% for choice in poll.choice_set.all %}
+            <div class="choice">{{ choice.choice }}</div>
+            <div class="progress">
+                <div class="progress-bar" style="width:{% widthratio choice.votes poll_total_votes 100 %}%">
+                    <span class="percent{% if choice.votes == 0 %} zero{% endif %}">
+                        {% widthratio choice.votes poll_total_votes 100%}%
+                    </span>
+                </div>
+            </div>
+        {% endfor %}
+        {% endcache %}{# Poll results #}
+    {% else %}
+        {# Has not voted, display form #}
+        <form action="{% url "poll.views.vote" poll.id %}?next={% url "news_list" %}" method="post">
+            {% csrf_token %}
+            {% for choice in poll.choice_set.all %}
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="choice" value="{{ choice.id }}">
+                        <div class="choice">{{ choice.choice }}</div>
+                    </label>
+                </div>
+            {% endfor %}
+            {% if user.is_authenticated %}
+                <button class="btn btn-default btn-block" type="submit">Stem</button>
+            {% else %}
+                <div class="center" style="color:#999;">Logg inn for å stemme</div>
+            {% endif %}
+        </form>
+    {% endif %}
+</div>
+{% endif %}

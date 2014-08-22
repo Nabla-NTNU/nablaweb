@@ -18,7 +18,7 @@ class ContentAdmin(ImageCroppingMixin, admin.ModelAdmin):
         if len(content_list) > 1:
             self.message_user(request, "Du kan bare twitre en ting om gangen")
         else:
-            from nablaweb.twitter import utils
+            from twitter import utils
 
             content = content_list[0]
             msg = "(Test, ignorer dette) http://nabla.no" +  \

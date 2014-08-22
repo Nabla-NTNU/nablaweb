@@ -3,9 +3,9 @@
 
 from django.forms import SplitDateTimeField, BooleanField 
 from django.contrib.admin.widgets import AdminSplitDateTime
-from nablaweb.events.models import Event
-from nablaweb.news.forms import NewsForm, CustomSplitDateTimeWidget
-from nablaweb.news.forms import NewsCharField as EventCharField
+from events.models import Event
+from news.forms import NewsForm, CustomSplitDateTimeWidget
+from news.forms import NewsCharField as EventCharField
 import datetime
 
 

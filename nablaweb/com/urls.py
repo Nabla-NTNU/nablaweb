@@ -2,7 +2,7 @@
 
 # URL-er for com-appen
 
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from com.views import *
 from django.views.generic import RedirectView
 

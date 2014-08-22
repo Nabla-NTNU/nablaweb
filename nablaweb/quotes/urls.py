@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.views.generic.edit import CreateView
 from quotes.models import Quote
 from quotes.views import *

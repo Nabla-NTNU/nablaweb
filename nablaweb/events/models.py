@@ -2,11 +2,13 @@
 
 
 from django.db import models
-from django.contrib.auth.models import User,Group
-from news.models import News
-import datetime
-from urlparse import urlparse
+from django.contrib.auth.models import Group
 from django.core.mail import send_mail
+from django.conf import settings
+
+from urlparse import urlparse
+import datetime
+from news.models import News
 
 class AbstractEvent(News):
     """
@@ -353,7 +355,7 @@ class EventRegistration(models.Model):
     event = models.ForeignKey(Event, blank=False, null=True)
 
     # Brukeren som er registrert.
-    user = models.ForeignKey(User, blank=False, null=True,verbose_name='bruker')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False, null=True,verbose_name='bruker')
 
     # Datoen brukeren ble registrert.
     date = models.DateTimeField(auto_now_add=True, null=True)
@@ -413,7 +415,7 @@ class EventPenalty(models.Model):
     event = models.ForeignKey(Event)
 
     # Brukeren straffen gjelder.
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     def __unicode__(self):
         return u'EventPenalty: %s, %s' % (self.event, self.user)

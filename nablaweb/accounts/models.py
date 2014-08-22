@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.contrib.auth.models import User, Group
-#from pybb.models import PybbProfile
+from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.contrib.auth.models import Group, AbstractUser
 from datetime import date
 
-class UserProfile(models.Model):
-    """ Ekstrainformasjon for brukere. """
-    user = models.OneToOneField(User)
+
+class NablaUser(AbstractUser):
     telephone = models.CharField("Telefon", max_length = 15, blank=True)
     cell_phone = models.CharField("Mobil", max_length = 15, blank=True)
     birthday = models.DateField("Bursdag", blank =True, null=True)
@@ -21,13 +21,12 @@ class UserProfile(models.Model):
     def get_class_number(self):
         """ Henter hvilken klasse på fysmat (1-5) brukeren går i. Returnerer 0 hvis brukeren ikke går på fysmat."""
         try:
-            return FysmatClass.objects.filter(user = self.user).order_by('starting_year')[0].get_class_number()
+            return FysmatClass.objects.filter(user = self).order_by('starting_year')[0].get_class_number()
         except:
             return 0
-     
 
-    def __unicode__(self):
-        return "< %s profile >" % self.user.username
+    def get_absolute_url(self):
+        return reverse("member_profile", kwargs={"username": self.username})
 
 
 class NablaGroup(Group):
@@ -37,7 +36,6 @@ class NablaGroup(Group):
     description = models.TextField(verbose_name = "Beskrivelse",blank = True)
     mail_list = models.EmailField(verbose_name = "Epostliste",blank = True)
 
-      
 
     GROUP_TYPES = (
         ('komite', 'Komité'),

@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load mediawiki_links %}
 {% load thumbnail %}
+{% load markdown_deux_tags %}
 
 {% block title %}{% trans "Preview your comment" %}{% endblock %}
 
@@ -12,33 +13,27 @@
     {% else %}
 
         <div class="row comment" id="c{{ comment.id }}">
+            <img class="col-xs-2 thumbnail img-responsive" alt="avatar" width="150" height="150" src=
+                {% if comment.user.avatar %}
+                    "{% thumbnail user.avatar 150x150 %}"
+                {% else %}
+                    "{{ STATIC_URL }}img/default_avatar.png"
+                {%endif %}>
 
-            <div class="avatar span1">
-                <img alt="avatar" src="{% thumbnail user.userprofile.avatar 150x150 %}" width = "150" height ="150" >
-            </div>
-
-            <div class="span7">
-                
-                <div class="text">
-                    <div class="info">
-                        <span class="author">
-                            <a href="{% url "accounts.views.view_member_profile" user.username %}">
-                                {{ user.get_full_name }} 
-                            </a>
-                        </span>
-                        <span class="date">i dag</span>
-                    </div>
-                    {% load markup %}
-                    {# Urlize er en extension som gjør linker klikkbare. Failer silently #}
-                    {{ form.data.comment|markdown:"safe,urlize"|wikilinks }}
-
+            <div class="col-xs-10 text">
+                <div class="info">
+                    <span class="author">
+                        <a href="{% url "member_profile" user.username %}">
+                            {{ user.get_full_name }} 
+                        </a>
+                    </span>
+                    <span class="date">i dag</span>
                 </div>
 
+                {# Urlize er en extension som gjør linker klikkbare. Failer silently #}
+                {{ form.data.comment|markdown:"safe,urlize"|wikilinks }}
             </div>
-
         </div>
-
-
     {% endif %}
 
     {% include "comments/form.html" %}

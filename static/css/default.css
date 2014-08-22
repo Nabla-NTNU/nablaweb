@@ -21,10 +21,15 @@
         }
     }
 
-    header { margin-bottom: 5px; }
+    header {
+        margin-bottom: 5px;
+        overflow: hidden;    /* clear floats */
+    }
     header img { width: 200px; }
     aside h3 { margin-top: 15px; }
     aside h3:first-child { margin-top: 0; }
+
+    form.dropdown-menu { padding: 5px; }
 
     h2 { margin-bottom: 5px; }
     h3 { margin-bottom: 5px; }
@@ -42,12 +47,6 @@
         -moz-opacity: 0.5;
         -webkit-opacity: 0.5;
     }
-
-
-    /* 172px: magisk nummer, finnes ved tipping */
-    .navbar-form { width: 175px; padding-right: 10px; }
-    .navbar-form td { width: 55px; }
-    .navbar input { width: 51px; }
 
     .news_item {
         word-break: break-word;
@@ -103,99 +102,6 @@
         clear: both;
     }
 
-/* Calendar */
-
-@media (min-width: 600px) {
-    .month {
-        display: table;
-        border-collapse: separate;
-        width: 100%;
-        border-spacing: 3px;
-    }
-
-    .daynames { display: table-header-group; }
-
-    .week { display: table-row; }
-
-    .dayname, .cell {
-        display: table-cell;
-        width: 15%;
-        height: 70px;
-        border: 1px solid #ddd;
-        border-radius: 3px;
-        padding: 3px;
-    }
-    .dayname {
-        text-align: center;
-        font-weight: bold;
-        height: 20px;
-        border: none;
-    }
-    .cell { background-color: #f9f9f9; }
-    .cell .date .day { display: none; }
-    .today { background-color: #f7f7ff; }
-    .noday { visibility: hidden; }
-}
-
-/* Mobile calendar */
-@media (max-width: 600px) {
-    .month { display: block; }
-    .daynames { display: none; }
-    .week { list-style: none; margin: 0;}
-    .noday { display: none; }
-    .cell { display: none; }
-    .filled { display: block; margin-bottom: 15px;}
-    .cell .date {
-        font-size: 20px;
-        text-align: center;
-    }
-    .cell ul { list-style: none; padding: 5px; margin: 0;}
-    .cell ul li a {
-        display: block;
-        line-height: 60px;
-        background-color: #f3f3f3;
-        padding-left: 15px;
-    }
-    .cell ul li a:hover {
-        background-color: #f0f0f8;
-    }
-}
-
-/* Komitesider */
-    .com-member {
-        display: block;
-        margin-bottom: 15px;
-        background-color: #efefef;
-        margin-left:50px;
-        min-height: 50px;
-        color: black;
-    }
-
-    .com-member:hover {
-        background-color: #f6f6f6;
-        text-decoration: none;
-    }
-
-    .com-member .name {
-        font-weight: bold;
-    }
-
-    .com-member:hover .name {
-        text-decoration: underline;
-    }
-
-    .com-member .avatar {
-        position: relative;
-        left: -50px;
-        height: 50px;
-        width: 50px;
-    }
-
-    .com-member .info {
-        margin-top: -50px;
-        padding: 5px;
-    }
-
 /* REKLAME */
     .ad.box {
         border-radius: 5px;
@@ -229,9 +135,6 @@
         color: #ccc; 
         padding-bottom: 30px;
         padding-top: 30px; 
-
-        
-
     }
         
     /* h2 is black, so make it white */
@@ -251,25 +154,6 @@
             color: white;
         }
 
-/* Custom icons */
-    /* Custom added icons */
-    .icon-custom{background-image:url(../img/facebook-icon.png);}
-    .icon-facebook{background-position:0px 0px;}
-    
-    /* Red glyph icons */
-    .icon-red{background-image:url(../bootstrap/img/glyphicons-halflings-red.png);}
-
-/* Event-liste på forsiden med kommende arrangement */
-.upcoming {
-    padding: 8px 0;
-}
-    .upcoming span {
-        opacity: 0.5;
-        -moz-opacity: 0.5;
-        -webkit-opacity: 0.5;
-    }
-
-
 /* COMMENTS */
     .comments-header {
         margin-top: 30px;
@@ -285,36 +169,11 @@
     .comment .author { font-weight: bold; } 
     .comment .date { color: #999; }
 
-/* Tabell i jobs_list.html */
-
-    .jobslist_table {
-        width: 28em;
-        float: right;
-        margin-top: 15px;
-    }
-
-    .jobslist_td_title {
-        width: 25%;
-    }
-
-    .jobslist_td_content {
-        width: 75%;
-    }
-
-
 /* for logo + søkefelt i headeren */
-
-    .page-header {
-        overflow: hidden;    /* clear floats */     
-        padding: 0px;
-        border-bottom: 0px;
-        margin-bottom: 20px;
-        margin-top: 0px;
-    }
 
     form#searchtop {
         margin-bottom: 0px;
-        margin-top: 19px; /* Logohøyde minus høyden på formen */
+        margin-top: 15px; /* Logohøyde minus høyden på formen */
     }
 
 /* Endringer i Bootstrap-farger */
@@ -322,34 +181,6 @@
 .navbar .nav > li > a { color: #555;}/* Navbar link color */
 
 /* News */
-
-    /* Poll */
-    .poll .choice {
-        margin-bottom: 5px;
-    }
-
-    .poll .progress {
-        background-image: -webkit-linear-gradient(top, #ececec, white);
-        background-image: -o-linear-gradient(top, #ececec, white);
-        background-image: -moz-linear-gradient(linear, 0 0, 0 100%, from(#ececec), to(white));
-        background-image: linear-gradient(to bottom, #ececec, white);
-        box-shadow: inset 0 1px 0 rgba(0,0,0,0.2);
-    }
-
-    .bar .percent.zero {
-        color: #999;
-        padding-left: 5px;
-    }
-
-    .poll form { margin-bottom: 0; }
-
-.navbar .nav > li > a {
-  float: none;
-  padding: 10px 14px 10px;
-  color: #777777;
-  text-decoration: none;
-  text-shadow: 0 1px 0 #ffffff;
-}
 
 .advert {
     height: 100%;
