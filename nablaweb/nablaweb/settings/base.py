@@ -173,7 +173,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
     'nablaweb.context_processors.primary_dir',
-    'nablaweb.context_processors.xkcd',
 )
 
 ###########################
