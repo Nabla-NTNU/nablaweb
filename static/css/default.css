@@ -26,12 +26,6 @@
         overflow: hidden;    /* clear floats */
     }
 
-    #samarbeidspartner-logo {
-        height: 50px;
-        width: auto;
-        margin-right: 30px;
-    }
-
     header img { width: 200px; }
     aside h3 { margin-top: 15px; }
     aside h3:first-child { margin-top: 0; }
