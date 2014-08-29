@@ -51,7 +51,7 @@
     </a>
 
     <form id="searchtop" class="pull-right" method="get" action="/search/">
-        <div class="input-group" style="width:150px">
+        <div class="input-group">
             <input name="q" placeholder="Søk..." type="text" class="form-control">
             <span class="input-group-btn">
                 <button type="submit" class="btn btn-default">
@@ -63,7 +63,7 @@
 
     {% block partner_logo %}
         <a class="pull-right" href="/hovedsamarbeidspartner/cmr/">
-            <img src="{{ STATIC_URL }}img/CMR_logo.png" alt="CMR" style="height: 50px; width: auto; ">
+            <img src="{{ STATIC_URL }}img/CMR_logo.png" alt="CMR" id="samarbeidspartner-logo">
         </a>
     {% endblock %}
 
@@ -152,7 +152,7 @@
                     <input type='hidden' name='next' value='{{ request.path }}' />
                     <input class="form-control" type="text" placeholder="Brukernavn" name="username" />
                     <input class="form-control" type="password"  placeholder="Passord" name="password" />
-                    <button class="submit btn btn-default btn-block" type="submit">Logg inn</button>
+                    <button class="submit btn btn-primary btn-block" type="submit">Logg inn</button>
                 </form>
             </li>
         {% endif %}
