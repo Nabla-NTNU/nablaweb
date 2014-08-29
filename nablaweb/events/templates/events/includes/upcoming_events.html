@@ -12,9 +12,9 @@
             {% for event in upcoming_events %}
                 <li>
                     <a href="{{ event.get_absolute_url }}">
-                        <time class="label label-default"
+                        <time class="label label-info"
                               datetime="{{ event.event_start|date:"c" }}">
-                            {{ event.event_start|date:"j.M" }}
+                            {{ event.event_start|date:"j.m" }}
                         </time>
                         {{ event.headline }} 
                         {% if event.registration_required %}
