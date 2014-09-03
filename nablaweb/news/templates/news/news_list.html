@@ -42,8 +42,8 @@
                 </li>
             {% endif %}
 
-            <li class="disabled">
-                <a>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</a>
+            <li class="disabled pager-counter">
+                Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
             </li>
 
             {% if page_obj.has_previous %}

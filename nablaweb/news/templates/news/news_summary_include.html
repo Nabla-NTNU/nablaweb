@@ -15,9 +15,9 @@
     {% endif %}
 
     {% if narrow %}<h3>{% else %}<h2>{% endif %}
-        {{ news.headline }}
+            <a href="{{ news.get_absolute_url }}">{{ news.headline }}</a>
     {% if narrow %}</h3>{% else %}</h2>{% endif %}
     {{ news.lead_paragraph|markdown|wikilinks}}
 
-    <p><a class="btn btn-default" href="{{ news.get_absolute_url }}">Les mer &raquo;</a></p>
+    <p><a class="btn btn-default btn-read-more" href="{{ news.get_absolute_url }}">Les mer &raquo;</a></p>
 </div>
