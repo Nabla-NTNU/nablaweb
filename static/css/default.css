@@ -250,11 +250,11 @@
 }
 
 .btn-read-more {
-    background-image: none;
+    background-image: linear-gradient(to bottom,#fff 0,#f8f8f8 100%);
 }
 
 .btn-read-more:hover {
-    background-color: #eee;
+    background-image: linear-gradient(to bottom,#f2f2f2 0,#eaeaea 100%);
 }
 
 li.pager-counter a, li.pager-counter a:hover, li.pager-counter a:focus {
