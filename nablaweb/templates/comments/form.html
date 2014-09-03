@@ -1,7 +1,7 @@
 {% load comments i18n %}
 
 
-<form action="{% comment_form_target %}" method="post" class="add-comment well">
+<form action="{% comment_form_target %}" method="post" class="add-comment well row">
     {% csrf_token %}
     <fieldset>
 
@@ -47,20 +47,22 @@
 
         <div class="form-actions">
             <button type="submit" name="post" class="btn btn-primary">Lagre</button>
-            <button type="submit" name="preview" class="btn">Forhåndsvis</button>
+            <button type="submit" name="preview" class="btn btn-default">Forhåndsvis</button>
         </div>
 
     </fieldset>
 
-    <p>
-        Kommentarene bruker Markdown og MathJax. HTML blir fjernet. [[Ord]] i doble hakeparenteser lenker til wikien.
-        <button style="display:none;" class="btn comment-help">Vis hjelp</button>
-        <button style="display:none;" class="btn comment-help">Gjem hjelp</button>
-    </p>
+    <div id="comment-help-buttons">
+        <div class="col-md-8">
+            <p>Kommentarene bruker Markdown og MathJax. HTML blir fjernet. [[Ord]] i doble hakeparenteser lenker til wikien.</p>
+        </div>
+        <div class="col-md-4">
+            <button style="display:none;" class="btn btn-default comment-help-btn">Vis hjelp</button>
+            <button style="display:none;" class="btn btn-default comment-help-btn">Gjem hjelp</button>
+        </div>
+    </div>
 
-    <div class="comment-help">
-
-
+    <div id="comment-help-text">
         <div class="row">
             <div class="col-md-7"><pre class="tex2jax_ignore">Heisann, [Lenketekst](http://google.com), 
 **bold**, _kursiv_. 
@@ -142,11 +144,11 @@ Numerert liste:
     </div>
 
     <script>
-        var commentHelp   = $("div.comment-help").hide();
-        var commentHelpButtons = $("button.comment-help").show();
+        var commentHelp   = $("div#comment-help-text").hide();
+        var commentHelpButtons = $("button.comment-help-btn").show();
         commentHelpButtons.last().hide();
 
-        $("button.comment-help").on("click", function( e ) {
+        $("button.comment-help-btn").on("click", function( e ) {
             commentHelpButtons.toggle();
             commentHelp.slideToggle();
             e.preventDefault();
