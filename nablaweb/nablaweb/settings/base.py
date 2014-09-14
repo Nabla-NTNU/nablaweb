@@ -170,6 +170,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'nablaweb.context_processors.primary_dir',
 )
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 ###########################
 # App-spesifikke settings #
 ###########################
