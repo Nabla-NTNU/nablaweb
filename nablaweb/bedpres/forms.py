@@ -10,6 +10,7 @@ import bpc_core
 class BedPresForm(EventForm):
     class Meta(EventForm.Meta):
         model = BedPres
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super(BedPresForm, self).__init__(*args, **kwargs)
