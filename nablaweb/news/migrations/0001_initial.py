@@ -1,88 +1,41 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+from django.conf import settings
+import image_cropping.fields
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'News'
-        db.create_table('news_news', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, null=True, blank=True)),
-            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='news_created', null=True, to=orm['auth.User'])),
-            ('last_changed_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True)),
-            ('last_changed_by', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='news_edited', null=True, to=orm['auth.User'])),
-            ('picture', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
-            ('cropping', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50, null=True, blank=True)),
-            ('allow_comments', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'], null=True)),
-            ('headline', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('lead_paragraph', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('body', self.gf('django.db.models.fields.TextField')(blank=True)),
-        ))
-        db.send_create_signal('news', ['News'])
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('contenttypes', '0001_initial'),
+    ]
 
-    def backwards(self, orm):
-        # Deleting model 'News'
-        db.delete_table('news_news')
-
-    models = {
-        'auth.group': {
-            'Meta': {'object_name': 'Group'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
-        },
-        'auth.permission': {
-            'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
-            'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        'auth.user': {
-            'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
-        },
-        'contenttypes.contenttype': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
-            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        'news.news': {
-            'Meta': {'object_name': 'News'},
-            'allow_comments': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'body': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']", 'null': 'True'}),
-            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'news_created'", 'null': 'True', 'to': "orm['auth.User']"}),
-            'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'null': 'True', 'blank': 'True'}),
-            'cropping': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'headline': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_changed_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'news_edited'", 'null': 'True', 'to': "orm['auth.User']"}),
-            'last_changed_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
-            'lead_paragraph': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
-        }
-    }
-
-    complete_apps = ['news']
+    operations = [
+        migrations.CreateModel(
+            name='News',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('created_date', models.DateTimeField(auto_now_add=True, verbose_name=b'Publiseringsdato', null=True)),
+                ('last_changed_date', models.DateTimeField(auto_now=True, verbose_name=b'Redigeringsdato', null=True)),
+                ('picture', models.ImageField(help_text=b'Bilder som er st\xc3\xb8rre enn 770x300 px ser best ut. Du kan beskj\xc3\xa6re bildet etter opplasting.', upload_to=b'news_pictures', null=True, verbose_name=b'Bilde', blank=True)),
+                (b'cropping', image_cropping.fields.ImageRatioField(b'picture', '770x300', hide_image_field=False, size_warning=False, allow_fullsize=False, free_crop=False, adapt_rotation=False, help_text=None, verbose_name=b'Beskj\xc3\xa6ring')),
+                ('slug', models.SlugField(help_text=b'Denne teksten vises i adressen til siden, og trengs vanligvis ikke \xc3\xa5 endres', null=True, blank=True)),
+                ('allow_comments', models.BooleanField(default=True, help_text=b'Hvorvidt kommentering er tillatt', verbose_name=b'Tillat kommentarer')),
+                ('headline', models.CharField(max_length=100, verbose_name=b'tittel')),
+                ('lead_paragraph', models.TextField(help_text=b'Vises p\xc3\xa5 forsiden og i artikkelen', verbose_name=b'ingress', blank=True)),
+                ('body', models.TextField(help_text=b'Vises kun i artikkelen. Man kan her bruke <a href="http://en.wikipedia.org/wiki/Markdown" target="_blank">markdown</a> for \xc3\xa5 formatere teksten.', verbose_name=b'br\xc3\xb8dtekst', blank=True)),
+                ('priority', models.IntegerField(default=5, help_text=b'Prioritering av saken p\xc3\xa5 forsiden. Dette fungerer for \xc3\xb8yeblikket ikke. Bortsett fra at prioritering=0 fjerner saken fra forsiden.', verbose_name=b'Prioritering', choices=[(0, b'0 - Dukker ikke opp'), (1, b'1'), (2, b'2'), (3, b'3'), (4, b'4'), (5, b'5'), (6, b'6'), (7, b'7'), (8, b'8'), (9, b'9'), (10, b'10 - Er p\xc3\xa5 forsida hele tiden')])),
+                ('content_type', models.ForeignKey(editable=False, to='contenttypes.ContentType', null=True)),
+                ('created_by', models.ForeignKey(related_name=b'news_created', blank=True, editable=False, to=settings.AUTH_USER_MODEL, null=True, verbose_name=b'Opprettet av')),
+                ('last_changed_by', models.ForeignKey(related_name=b'news_edited', blank=True, editable=False, to=settings.AUTH_USER_MODEL, null=True, verbose_name=b'Endret av')),
+            ],
+            options={
+                'verbose_name': 'nyhet',
+                'verbose_name_plural': 'nyheter',
+            },
+            bases=(models.Model,),
+        ),
+    ]

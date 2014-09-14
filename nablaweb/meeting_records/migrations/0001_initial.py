@@ -12,16 +12,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Nablad',
+            name='MeetingRecord',
             fields=[
                 ('news_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='news.News')),
                 ('pub_date', models.DateField(help_text=b'Publikasjonsdato', null=True, verbose_name=b'publisert')),
                 ('file', models.FileField(help_text=b'Filnavn', upload_to=b'nabladet', verbose_name=b'PDF-fil')),
             ],
             options={
-                'ordering': ('-pub_date',),
-                'verbose_name': 'nablad',
-                'verbose_name_plural': 'nablad',
+                'verbose_name': 'M\xf8tereferat',
+                'verbose_name_plural': 'M\xf8tereferater',
             },
             bases=('news.news',),
         ),
