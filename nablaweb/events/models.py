@@ -34,7 +34,7 @@ class AbstractEvent(News):
 
     # Om arrangementet krever påmelding.
     # Dette feltet er påkrevd.
-    registration_required = models.BooleanField(verbose_name="påmelding", null=False, blank=False)
+    registration_required = models.BooleanField(verbose_name="påmelding", default=False, null=False, blank=False)
 
     # Frist for å melde seg på arrangementet.
     # Dette feltet er satt hvis registration_required er sann.
@@ -63,7 +63,7 @@ class AbstractEvent(News):
     # Dette feltet er valgfritt.
     # Dette feltet er bare satt hvis registration_required er sann.
     has_queue = models.NullBooleanField(verbose_name="har venteliste", null=True, blank=True, help_text="Om ventelisten er på, vil det være mulig å melde seg på selv om arrangementet er fullt. De som er i ventelisten vil automatisk bli påmeldt etter hvert som plasser blir ledige.")
-    
+
     # URL til Facebook-siden til arrangementet
     # Dette feltet er valgfritt.
     facebook_url = models.CharField(verbose_name="facebook-url", blank=True, max_length=100, help_text="URL-en til det tilsvarende arrangementet på Facebook")
@@ -289,7 +289,7 @@ class Event(AbstractEvent):
             if waiting.number != n:
                 waiting.number = n
                 waiting.save()
-        
+
         if self.registration_deadline and self.registration_deadline > datetime.datetime.now() and datetime.datetime.now() + datetime.timedelta(1) < self.event_start :
             waiting_list = list( self.eventregistration_set.filter(attending = False).order_by('number').reverse() )
             for n in xrange( min(self.free_places(), len(waiting_list)) ):
@@ -364,7 +364,7 @@ class EventRegistration(models.Model):
     number = models.PositiveIntegerField(blank=True, null=True, verbose_name='kønummer', help_text='Kønummer for ventelisten. Tallene har ingen funksjon dersom man ikke har venteliste på arrangementet.')
 
     # Om man har fått plass på eventet.
-    attending = models.BooleanField(blank=False, null=False, verbose_name='har plass', help_text="Hvis denne er satt til sann har man en plass på arrangementet ellers er det en ventelisteplass.")
+    attending = models.BooleanField(blank=False, null=False, default=True, verbose_name='har plass', help_text="Hvis denne er satt til sann har man en plass på arrangementet ellers er det en ventelisteplass.")
 
     def __unicode__(self):
         return u'EventRegistration: %s, %s: %s' % (self.event, self.attending, self.user)
