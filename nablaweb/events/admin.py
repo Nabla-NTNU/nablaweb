@@ -42,7 +42,7 @@ class EventAdmin(NewsAdmin):
     inlines = [EventRegistrationInline]
     actions_on_top = True
 
-    def queryset(self, request):
+    def get_queryset(self, request):
         """
         Henter objekter med content_type=Event
 
@@ -52,7 +52,7 @@ class EventAdmin(NewsAdmin):
         this_type = ContentType.objects.get_for_model(Event)
         # NewsAdmin henter kun News, så superklassen til NewsAdmin må
         # overskrives istedenfor superklassen til EventAdmin
-        qs = super(NewsAdmin, self).queryset(request)
+        qs = super(NewsAdmin, self).get_queryset(request)
         return qs.filter(content_type=this_type)
 
 

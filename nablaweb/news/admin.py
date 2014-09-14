@@ -17,9 +17,9 @@ class NewsAdmin(ContentAdmin):
               "allow_comments")
     prepopulated_fields = {"slug": ("headline",)}
 
-    def queryset(self, request):
+    def get_queryset(self, request):
         this_type = ContentType.objects.get_for_model(News)
-        qs = super(NewsAdmin, self).queryset(request)
+        qs = super(NewsAdmin, self).get_queryset(request)
         return qs.filter(content_type=this_type)
 
 
