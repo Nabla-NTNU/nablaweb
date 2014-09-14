@@ -49,11 +49,6 @@ class NablaGroup(Group):
     group_type = models.CharField(max_length = 10,blank = True, choices = GROUP_TYPES)
 
 
-class Committee(NablaGroup):
-    class Meta:
-        abstract = True
-    objects = NablaGroup.objects.filter(group_type = 'komite')
-
 class GroupLeader(NablaGroup):
       """ Gruppe for en person, for eksempel komiteledere og lignende """
       leads = models.OneToOneField(NablaGroup, related_name = "leader")
