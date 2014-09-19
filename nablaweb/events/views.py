@@ -94,6 +94,11 @@ def calendar(request, year=None, month=None):
     except ValueError:
         raise Http404
 
+    if request.user.is_authenticated():
+        future_attending_events = request.user.eventregistration_set.filter(event__event_start__gte=datetime.date.today())
+    else:
+        future_attending_events = []
+
     # Get some random dates in the current, next, and previous month.
     # These dates are used load the calendar for that month.
     # * prev is some day in the previous month
@@ -104,6 +109,7 @@ def calendar(request, year=None, month=None):
         'prev': datetime.date(year, month, 1) - datetime.timedelta(27),
         'this': datetime.date(year, month, 1),
         'next': datetime.date(year, month, 1) + datetime.timedelta(32),
+        'future_attending_events': future_attending_events,
     })
 
 
