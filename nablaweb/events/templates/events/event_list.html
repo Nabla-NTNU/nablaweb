@@ -46,7 +46,7 @@
             <h2>Påmeldinger</h2>
             <table class="table table-bordered table-striped">
 
-            {% for reg in user.eventregistration_set.all %}
+            {% for reg in future_attending_events %}
                 <tr>
                     <td>
                         <a href="{{ reg.event.get_absolute_url }}">{{ reg.event.headline }}</a>
