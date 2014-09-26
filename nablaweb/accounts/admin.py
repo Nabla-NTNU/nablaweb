@@ -19,7 +19,8 @@ class GroupAdminForm(forms.ModelForm):
                                            required=False)
     class Meta:
         model = Group
-        
+        fields = '__all__'
+
     def __init__(self, *args, **kwargs):
         instance = kwargs.get('instance', None)
         if instance is not None:
@@ -27,10 +28,10 @@ class GroupAdminForm(forms.ModelForm):
             initial['users'] = instance.user_set.all()
             kwargs['initial'] = initial
         super(forms.ModelForm, self).__init__(*args, **kwargs)
-        
+
     def save(self, commit=True):
         group = super(forms.ModelForm, self).save(commit=commit)
-        
+
         if commit:
             group.user_set = self.cleaned_data['users']
         else:
@@ -45,6 +46,7 @@ class GroupAdminForm(forms.ModelForm):
 class NablaGroupAdminForm(GroupAdminForm):
     class Meta:
         model = NablaGroup
+        fields = '__all__'
 
 
 class ExtendedGroupAdmin(GroupAdmin):

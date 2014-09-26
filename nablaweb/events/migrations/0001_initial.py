@@ -1,156 +1,69 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+from django.conf import settings
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Event'
-        db.create_table('events_event', (
-            ('news_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['news.News'], unique=True, primary_key=True)),
-            ('short_name', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
-            ('organizer', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
-            ('location', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('event_start', self.gf('django.db.models.fields.DateTimeField')(null=True)),
-            ('event_end', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('registration_required', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('registration_deadline', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('registration_start', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('deregistration_deadline', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('places', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('has_queue', self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True)),
-            ('facebook_url', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
-        ))
-        db.send_create_signal('events', ['Event'])
+    dependencies = [
+        ('auth', '0001_initial'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('news', '0001_initial'),
+    ]
 
-        # Adding M2M table for field open_for on 'Event'
-        db.create_table('events_event_open_for', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('event', models.ForeignKey(orm['events.event'], null=False)),
-            ('group', models.ForeignKey(orm['auth.group'], null=False))
-        ))
-        db.create_unique('events_event_open_for', ['event_id', 'group_id'])
-
-        # Adding model 'EventRegistration'
-        db.create_table('events_eventregistration', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('event', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['events.Event'], null=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True)),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, null=True, blank=True)),
-            ('number', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('attending', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal('events', ['EventRegistration'])
-
-        # Adding model 'EventPenalty'
-        db.create_table('events_eventpenalty', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('event', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['events.Event'])),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-        ))
-        db.send_create_signal('events', ['EventPenalty'])
-
-    def backwards(self, orm):
-        # Deleting model 'Event'
-        db.delete_table('events_event')
-
-        # Removing M2M table for field open_for on 'Event'
-        db.delete_table('events_event_open_for')
-
-        # Deleting model 'EventRegistration'
-        db.delete_table('events_eventregistration')
-
-        # Deleting model 'EventPenalty'
-        db.delete_table('events_eventpenalty')
-
-    models = {
-        'auth.group': {
-            'Meta': {'object_name': 'Group'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
-        },
-        'auth.permission': {
-            'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
-            'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        'auth.user': {
-            'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
-        },
-        'contenttypes.contenttype': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
-            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        'events.event': {
-            'Meta': {'object_name': 'Event'},
-            'deregistration_deadline': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'event_end': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'event_start': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
-            'facebook_url': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
-            'has_queue': ('django.db.models.fields.NullBooleanField', [], {'null': 'True', 'blank': 'True'}),
-            'location': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'news_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['news.News']", 'unique': 'True', 'primary_key': 'True'}),
-            'open_for': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.Group']", 'null': 'True', 'blank': 'True'}),
-            'organizer': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
-            'places': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'registration_deadline': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'registration_required': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'registration_start': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'short_name': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'})
-        },
-        'events.eventpenalty': {
-            'Meta': {'object_name': 'EventPenalty'},
-            'event': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['events.Event']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
-        },
-        'events.eventregistration': {
-            'Meta': {'object_name': 'EventRegistration'},
-            'attending': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'null': 'True', 'blank': 'True'}),
-            'event': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['events.Event']", 'null': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'number': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'})
-        },
-        'news.news': {
-            'Meta': {'object_name': 'News'},
-            'allow_comments': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'body': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']", 'null': 'True'}),
-            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'news_created'", 'null': 'True', 'to': "orm['auth.User']"}),
-            'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'null': 'True', 'blank': 'True'}),
-            'cropping': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'headline': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_changed_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'news_edited'", 'null': 'True', 'to': "orm['auth.User']"}),
-            'last_changed_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
-            'lead_paragraph': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
-        }
-    }
-
-    complete_apps = ['events']
+    operations = [
+        migrations.CreateModel(
+            name='Event',
+            fields=[
+                ('news_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='news.News')),
+                ('short_name', models.CharField(help_text=b'Brukes p\xc3\xa5 steder hvor det ikke er plass til \xc3\xa5 skrive hele overskriften, for eksempel kalenderen.', max_length=20, null=True, verbose_name=b'kort navn', blank=True)),
+                ('organizer', models.CharField(help_text=b'Den som st\xc3\xa5r bak arrangementet', max_length=100, verbose_name=b'organisert av', blank=True)),
+                ('location', models.CharField(max_length=100, verbose_name='sted')),
+                ('event_start', models.DateTimeField(null=True, verbose_name=b'start')),
+                ('event_end', models.DateTimeField(null=True, verbose_name=b'slutt', blank=True)),
+                ('registration_required', models.BooleanField(default=False, verbose_name=b'p\xc3\xa5melding')),
+                ('registration_deadline', models.DateTimeField(null=True, verbose_name=b'p\xc3\xa5meldingsfrist', blank=True)),
+                ('registration_start', models.DateTimeField(null=True, verbose_name=b'p\xc3\xa5melding \xc3\xa5pner', blank=True)),
+                ('deregistration_deadline', models.DateTimeField(null=True, verbose_name=b'avmelding stenger', blank=True)),
+                ('places', models.PositiveIntegerField(null=True, verbose_name=b'antall plasser', blank=True)),
+                ('has_queue', models.NullBooleanField(help_text=b'Om ventelisten er p\xc3\xa5, vil det v\xc3\xa6re mulig \xc3\xa5 melde seg p\xc3\xa5 selv om arrangementet er fullt. De som er i ventelisten vil automatisk bli p\xc3\xa5meldt etter hvert som plasser blir ledige.', verbose_name=b'har venteliste')),
+                ('facebook_url', models.CharField(help_text=b'URL-en til det tilsvarende arrangementet p\xc3\xa5 Facebook', max_length=100, verbose_name=b'facebook-url', blank=True)),
+                ('open_for', models.ManyToManyField(help_text=b'Hvilke grupper som f\xc3\xa5r lov til \xc3\xa5 melde seg p\xc3\xa5 arrangementet. Hvis ingen grupper er valgt er det \xc3\xa5pent for alle.', to='auth.Group', null=True, verbose_name=b'\xc3\x85pen for', blank=True)),
+            ],
+            options={
+                'verbose_name': 'arrangement',
+                'verbose_name_plural': 'arrangement',
+                'permissions': (('administer', 'Can administer events'),),
+            },
+            bases=('news.news',),
+        ),
+        migrations.CreateModel(
+            name='EventPenalty',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('event', models.ForeignKey(to='events.Event')),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='EventRegistration',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('date', models.DateTimeField(auto_now_add=True, null=True)),
+                ('number', models.PositiveIntegerField(help_text=b'K\xc3\xb8nummer for ventelisten. Tallene har ingen funksjon dersom man ikke har venteliste p\xc3\xa5 arrangementet.', null=True, verbose_name=b'k\xc3\xb8nummer', blank=True)),
+                ('attending', models.BooleanField(default=True, help_text=b'Hvis denne er satt til sann har man en plass p\xc3\xa5 arrangementet ellers er det en ventelisteplass.', verbose_name=b'har plass')),
+                ('event', models.ForeignKey(to='events.Event', null=True)),
+                ('user', models.ForeignKey(verbose_name=b'bruker', to=settings.AUTH_USER_MODEL, null=True)),
+            ],
+            options={
+                'verbose_name': 'p\xe5melding',
+                'verbose_name_plural': 'p\xe5meldte',
+            },
+            bases=(models.Model,),
+        ),
+    ]

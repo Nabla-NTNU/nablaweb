@@ -129,11 +129,6 @@ INSTALLED_APPS = [
     'easy_thumbnails', # thumbnail-taggen i templates
     'image_cropping', # Admindelen
 
-    # South migrations 
-    # Når det gjøres endringer i modeller må etterfulges av kommandoen
-    # ./manage.py migrate --auto
-    'south',
-
     # http://django-sekizai.readthedocs.org/en/latest/#
     'sekizai',
 
@@ -175,6 +170,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'nablaweb.context_processors.primary_dir',
 )
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 ###########################
 # App-spesifikke settings #
 ###########################
@@ -209,9 +206,3 @@ HAYSTACK_CONNECTIONS = {
 ##################################################
 DEFAULT_FROM_EMAIL='noreply@nabla.no'
 
-
-# South
-#############################################
-SOUTH_MIGRATION_MODULES = {
-        'easy_thumbnails': 'easy_thumbnails.south_migrations',
-    }

@@ -44,7 +44,7 @@ class DowncastMetaclass(PolymorphicMetaclass):
 
 
 class DowncastManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return DowncastQuerySet(self.model)
 
 
