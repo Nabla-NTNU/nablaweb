@@ -116,6 +116,18 @@ class BedPres(AbstractEvent):
         else:
             return self.company.cropping
 
+    def open_for_classes(self):
+        bpc_info = self.bpc_info
+        min_year = bpc_info['min_year']
+        max_year = bpc_info['max_year']
+        if max_year=='99':
+            max_year = ''
+        if min_year == max_year:
+            return min_year
+        else:
+            return min_year + '-' + max_year
+
+
     @property
     def bpc_info(self):
         """
