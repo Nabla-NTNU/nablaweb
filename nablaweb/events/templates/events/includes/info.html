@@ -58,6 +58,8 @@
 
     <!-- Påmeldingsfrist -->
     {% if event.registration_deadline %}
+    {% block open_for %}
+    {% endblock %}
     <tr>
         <td>Påmeldingsfrist</td>
         <td>
