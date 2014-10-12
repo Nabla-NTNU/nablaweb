@@ -14,17 +14,17 @@
 
     {% if poll_has_voted %}
         {# Has voted, display results #}
-        {% cache 900 poll_results user.username %}
-        {% for choice in poll.choice_set.all %}
-            <div class="choice">{{ choice.choice }}</div>
-            <div class="progress">
-                <div class="progress-bar" style="width:{% widthratio choice.votes poll_total_votes 100 %}%">
-                    <span class="percent{% if choice.votes == 0 %} zero{% endif %}">
-                        {% widthratio choice.votes poll_total_votes 100%}%
-                    </span>
+        {% cache 900 poll_results poll.id poll_total_votes %}
+            {% for choice in poll.choice_set.all %}
+                <div class="choice">{{ choice.choice }}</div>
+                <div class="progress">
+                    <div class="progress-bar" style="width:{% widthratio choice.votes poll_total_votes 100 %}%">
+                        <span class="percent{% if choice.votes == 0 %} zero{% endif %}">
+                            {% widthratio choice.votes poll_total_votes 100%}%
+                        </span>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
         {% endcache %}{# Poll results #}
     {% else %}
         {# Has not voted, display form #}
