@@ -33,8 +33,7 @@ class AbstractEvent(News):
     places = models.PositiveIntegerField(verbose_name="antall plasser", null=True, blank=True)
 
     has_queue = models.NullBooleanField(verbose_name="har venteliste", null=True, blank=True,
-            help_text="""Om ventelisten er på, vil det være mulig å melde seg på selv om arrangementet er fullt.
-            De som er i ventelisten vil automatisk bli påmeldt etter hvert som plasser blir ledige.""")
+            help_text="""Om ventelisten er på, vil det være mulig å melde seg på selv om arrangementet er fullt. De som er i ventelisten vil automatisk bli påmeldt etter hvert som plasser blir ledige.""")
 
     open_for = models.ManyToManyField(Group, verbose_name = "Åpen for", blank = True, null = True,
             help_text = "Hvilke grupper som får lov til å melde seg på arrangementet. Hvis ingen grupper er valgt er det åpent for alle.")
@@ -42,7 +41,7 @@ class AbstractEvent(News):
     class Meta:
         abstract = True
 
-    def allowed_to_attend(self,user):
+    def allowed_to_attend(self, user):
         "Indikerer om en bruker har lov til å melde seg på arrangementet"
         return (not self.open_for.exists()) or self.open_for.filter(user=user).exists()
 
@@ -292,17 +291,3 @@ class EventRegistration(models.Model):
     class Meta:
         verbose_name = 'påmelding'
         verbose_name_plural = 'påmeldte'
-
-
-class EventPenalty(models.Model):
-    # Hvilket arrangement straffen gjelder.
-    event = models.ForeignKey(Event)
-
-    # Brukeren straffen gjelder.
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-
-    def __unicode__(self):
-        return u'EventPenalty: %s, %s' % (self.event, self.user)
-
-    def get_display_name(self):
-        return u'%s' % (self.event)

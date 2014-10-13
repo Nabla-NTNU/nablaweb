@@ -167,8 +167,8 @@ class UserEventView(TemplateView):
             context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start') 
             context_data['is_on_a_waiting_list']  = bool( filter(EventRegistration.is_waiting_place   , context_data['eventregistration_list']) )
             context_data['is_attending_an_event'] = bool( filter(EventRegistration.is_attending_place , context_data['eventregistration_list']) )
-            context_data['penalty_list'] = user.eventpenalty_set.all()
         return context_data
+
 
 @login_required
 def registration(request, event_id):
@@ -180,7 +180,6 @@ def registration(request, event_id):
             return deregister_user(request, event_id)
     event = get_object_or_404(Event, pk=event_id)
     return HttpResponseRedirect(event.get_absolute_url())
-
 
 
 @login_required
@@ -196,7 +195,7 @@ def register_user(request, event_id):
         'not_allowed' : 'Du har ikke lov til å melde deg på dette arrangementet.',
         }
     event = get_object_or_404(Event, pk=event_id)
-    
+
     if event.registration_start and event.registration_start > datetime.datetime.now():
         token = 'unopened'
     elif event.registration_deadline and event.registration_deadline < datetime.datetime.now():
@@ -219,7 +218,7 @@ def deregister_user(request, event_id):
         'dereg': 'Du er meldt av arrangementet.',
         }
     event = get_object_or_404(Event, pk=event_id)
-    
+
     if event.deregistration_closed is None:
         token = 'not_allowed'
     elif  event.deregistration_closed():
@@ -230,6 +229,7 @@ def deregister_user(request, event_id):
     message = messages[token]
     django_messages.add_message(request, django_messages.INFO, message)
     return HttpResponseRedirect(event.get_absolute_url())
+
 
 def ical_event(request, event_id):
     """Returns a given event or bedpres as an iCal .ics file"""
@@ -246,7 +246,3 @@ def ical_event(request, event_id):
     response = HttpResponse(template.render(context), mimetype='text/calendar')
     response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.slug
     return response
-
-# TODO: What is this function supposed to do?
-def ical_user(request):
-    return HttpResponse("Not implemented.")
