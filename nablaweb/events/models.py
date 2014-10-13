@@ -10,6 +10,11 @@ import datetime
 from news.models import News
 
 
+class RegistrationException(Exception):
+    def __init__(self, token):
+        self.token = token
+
+
 class AbstractEvent(News):
     """
     Abstrakt modell som definerer det som er felles
@@ -56,7 +61,9 @@ class AbstractEvent(News):
     def registration_open(self):
         try:
             now = datetime.datetime.now()
-            return self.registration_required and (now < self.registration_deadline) and (now > self.registration_start)
+            return self.registration_required \
+                and (self.registration_start is None or (now > self.registration_start)) \
+                and now < self.registration_deadline
         except:
             return False
 
@@ -174,48 +181,53 @@ class Event(AbstractEvent):
     def get_users_waiting(self):
         return [e.user for e in self.waiting_registrations]
 
-    def register_user(self, user):
-        """
-        Forsøker å melde brukeren på arrangementet.  Returnerer en
-        tekststreng som indikerer hvor vellykket operasjonen var.
+    def register_user(self, user, ignore_restrictions=False):
+        """Forsøker å melde brukeren på arrangementet.
+
+        Kaster RegistrationException hvis det misslykkes.
         """
         if not self.registration_required:
-            msg = 'noreg'
+            raise RegistrationException("noreg")
+        elif ignore_restrictions:
+            pass
+        elif not self.registration_open():
+            raise RegistrationException("unopened")
+        elif not self.allowed_to_attend(user):
+            raise RegistrationException("not_allowed")
+
+        # TODO: Bruk select_for_update(), når den blir tilgjengelig.
+        # https://docs.djangoproject.com/en/dev/ref/models/querysets/#select-for-update
+        regs = self.eventregistration_set # .select_for_update()
+        try:
+            reg = regs.get(user=user)
+        except EventRegistration.DoesNotExist:
+            pass
         else:
-            # TODO: Bruk select_for_update(), når den blir tilgjengelig.
-            # https://docs.djangoproject.com/en/dev/ref/models/querysets/#select-for-update
-            regs = self.eventregistration_set # .select_for_update()
-            try:
-                reg = regs.get(user=user)
-                msg = 'reg_exists'
-            except EventRegistration.DoesNotExist:
-                if self.is_full():
-                    if self.has_waiting_list():
-                        reg = regs.create(event=self, user=user, number=self.users_waiting()+1, attending=False)
-                        msg = 'queue'
-                    else:#No waiting list
-                        msg = 'full'
-                else:
-                    reg = regs.create(event=self, user=user, number=self.users_attending()+1, attending=True)
-                    msg = 'attend'
-        return msg
+            return reg
+
+        if not self.is_full():
+            reg = regs.create(event=self, user=user, number=self.users_attending()+1, attending=True)
+        elif self.has_waiting_list():
+            reg = regs.create(event=self, user=user, number=self.users_waiting()+1, attending=False)
+        else:
+            raise RegistrationException("full")
+        return reg
 
     def deregister_user(self, user):
-        """
-        Melder brukeren av arrangementet. I praksis sørger metoden bare
-        for at brukeren ikke er påmeldt lengre, uavhengig av status før.
+        """Melder brukeren av arrangementet.
+
+        I praksis sørger metoden bare for at brukeren ikke er påmeldt lengre, uavhengig av status før.
         """
         regs = self.eventregistration_set
+        if self.deregistration_closed():
+            raise RegistrationException("dereg_closed")
         try:
             reg = regs.get(user=user)
             self.eventregistration_set.get(user=user).delete()
-            self.update_lists()
-            msg = 'dereg'
-        # Brukeren er ikke påmeldt
         except EventRegistration.DoesNotExist:
-            msg = 'not_reg'
-        self.update_lists()
-        return msg
+            raise RegistrationException("not_reg")
+        else:
+            self.update_lists()
 
     def update_lists(self):
         self._fix_list_numbering()
@@ -235,7 +247,7 @@ class Event(AbstractEvent):
     def _move_waiting_to_attending(self):
         if self.registration_open() and not self.has_started():
             while(min(self.free_places(), self.waiting_registrations.count()) > 0):
-                reg = self.waiting_registrations.reversed().first()
+                reg = self.registrations_manager.first_on_waiting_list()
                 reg.set_attending()
             self._fix_list_numbering()
 
@@ -263,7 +275,6 @@ class EventRegistration(models.Model):
 
     attending = models.BooleanField(blank=False, null=False, default=True, verbose_name='har plass',
             help_text="Hvis denne er satt til sann har man en plass på arrangementet ellers er det en ventelisteplass.")
-
 
     def __unicode__(self):
         return u'EventRegistration: %s, %s: %s' % (self.event, self.attending, self.user)

@@ -25,7 +25,7 @@ def _admin_add(request, instance):
     text = request.POST.get('text')
     try:
         user = User.objects.get(username=text)
-        instance.register_user(user)
+        instance.register_user(user, ignore_restrictions=True)
     except User.DoesNotExist: pass
 _admin_add.short = 'add'
 _admin_add.info = 'Legg til'
@@ -195,15 +195,15 @@ def register_user(request, event_id):
         'not_allowed' : 'Du har ikke lov til å melde deg på dette arrangementet.',
         }
     event = get_object_or_404(Event, pk=event_id)
-
-    if event.registration_start and event.registration_start > datetime.datetime.now():
-        token = 'unopened'
-    elif event.registration_deadline and event.registration_deadline < datetime.datetime.now():
-        token = 'closed'
-    elif not event.allowed_to_attend(request.user):
-        token = 'not_allowed'
+    try:
+        reg = event.register_user(request.user)
+    except RegistrationException as e:
+        token = e.token
     else:
-        token = event.register_user(request.user)
+        if reg.is_attending_place():
+            token = "attend"
+        else:
+            token = "queue"
 
     message = messages[token]
     django_messages.add_message(request, django_messages.INFO, message)
@@ -219,12 +219,12 @@ def deregister_user(request, event_id):
         }
     event = get_object_or_404(Event, pk=event_id)
 
-    if event.deregistration_closed is None:
-        token = 'not_allowed'
-    elif  event.deregistration_closed():
-        token = 'dereg_closed'
+    try:
+        event.deregister_user(request.user)
+    except RegistrationException as e:
+        token = e.token
     else:
-        token = event.deregister_user(request.user)
+        token = "dereg"
 
     message = messages[token]
     django_messages.add_message(request, django_messages.INFO, message)

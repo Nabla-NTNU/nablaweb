@@ -7,7 +7,7 @@ from django.test import TestCase
 from django.core import mail
 from django.contrib.auth import get_user_model; User = get_user_model()
 
-from events.models import Event
+from events.models import Event, EventRegistration, RegistrationException
 
 
 class GeneralEventTest(TestCase):
@@ -38,6 +38,31 @@ class RegistrationTest(GeneralEventTest):
 
         self.event.deregister_user(self.user)
         self.assertFalse(self.event.is_registered(self.user))
+
+    def test_raises_exception_on_registration_required_false(self):
+        self.event.registration_required = False
+        self.event.save()
+        self.assertRaises(RegistrationException, self.event.register_user, self.user)
+
+    def test_registration_closed(self):
+        self.event.registration_deadline = datetime.datetime(1940, 1, 1)
+        self.event.save()
+        self.assertRaises(RegistrationException, self.event.register_user, self.user)
+
+    def test_event_full(self):
+        u = User.objects.create(username="anotheruser")
+        u.save()
+        self.event.places = 1
+        self.event.has_queue = False
+        self.event.save()
+        self.event.register_user(u)
+        self.assertRaises(RegistrationException, self.event.register_user, self.user)
+
+    def test_deregistration_closed(self):
+        self.event.deregistration_deadline = datetime.datetime(1940, 1, 1)
+        self.event.save()
+        self.event.register_user(self.user)
+        self.assertRaises(RegistrationException, self.event.deregister_user, self.user)
 
 
 class WaitingListTest(GeneralEventTest):
