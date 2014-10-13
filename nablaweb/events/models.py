@@ -2,8 +2,8 @@
 
 from django.db import models
 from django.contrib.auth.models import Group
-from django.core.mail import send_mail
 from django.conf import settings
+from django.template import loader, Context
 
 from urlparse import urlparse
 import datetime
@@ -241,11 +241,8 @@ class Event(AbstractEvent):
 
     def _prune_queue(self):
         """Sletter overflødige registreringer."""
-        # Dersom registrering ikke trengs lengre.
         if not self.registration_required:
             self.eventregistration_set.all().delete()
-
-        # Dersom arrangementet ikke har venteliste lengre.
         elif not self.has_waiting_list():
             self.waiting_registrations.delete()
 
@@ -295,15 +292,8 @@ class EventRegistration(models.Model):
             self.save()
             if self.user.email:
                 subject = u'Påmeldt %s' % self.event.headline
-                message = u'''Hei {name}
-                Du har nå fått plass på arrangementet "{eventheadline}". Plassen er tildelt fordi du stod på venteliste.'''.format(name=self.user.get_full_name(), eventheadline=self.event.headline)
-                if self.event.deregistration_deadline and self.event.deregistration_deadline < datetime.datetime.now():
-                    message += u''' Fristen for å melde seg av arrangementet har gått ut. Husk at du kan få prikk dersom du ikke møter opp. Dersom du allikevel ikke kan komme, kan du prøve å ta kontakt med %s så fort som mulig.'''%(self.event.organizer)
-                elif self.event.deregistration_deadline:
-                    message += u''' Hvis du allikevel ikke kan komme, må du melde deg av før avmeldingsfristen.'''
-                else:
-                    message += u''' Hvis du ikke kan komme, må du huske å melde deg av så fort som mulig.'''
-
+                template = loader.get_template("events/moved_to_attending_email.txt")
+                message = template.render(Context({'event': self, 'name': self.user.get_full_name()}))
                 self.user.email_user(subject, message)
 
     def is_attending_place(self):
@@ -338,6 +328,6 @@ class RelatedEventRegistrationManager(models.Manager):
         return self.attending().order_by('number')
 
     def first_on_waiting_list(self):
+        """Hente førstemann på ventelista."""
         return self.waiting_ordered()[0]
-
 

@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 import unittest
 import datetime
 import random
 
 from django.test import TestCase
+from django.core import mail
 from django.contrib.auth import get_user_model; User = get_user_model()
 
 from events.models import Event
@@ -45,7 +47,7 @@ class WaitingListTest(GeneralEventTest):
         # Lag og registrer noen brukere
         self.event.register_user(self.user)
         for i in xrange(1, 20):
-            u = User.objects.create(username='user%d'%i, password='user%d'%i)
+            u = User.objects.create(username='user%d'%i, password='user%d'%i, email='user%d@localhost'%i)
             self.event.register_user(u)
 
     def test_ordering(self):
@@ -63,3 +65,18 @@ class WaitingListTest(GeneralEventTest):
             user = reg.user
             self.event.deregister_user(user)
             self.test_ordering()
+
+    def test_set_attending(self):
+        # Finner førstemann på ventelista
+        waiting_reg = self.event.registrations_manager.first_on_waiting_list()
+        u = waiting_reg.user
+
+        self.assertFalse(self.event.is_attending(u))
+        waiting_reg.set_attending()
+
+        # Skjekk om det ble sendt epost
+        self.assertTrue(self.event.is_attending(u))
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to[0], u.email)
+
+
