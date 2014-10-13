@@ -45,6 +45,14 @@ class AbstractEvent(News):
         "Indikerer om en bruker har lov til å melde seg på arrangementet"
         return (not self.open_for.exists()) or self.open_for.filter(user=user).exists()
 
+    def has_started(self):
+        now = datetime.datetime.now()
+        return self.event_start < now
+
+    def has_finished(self):
+        now = datetime.datetime.now()
+        return self.event_end < now
+
     def registration_open(self):
         try:
             now = datetime.datetime.now()
@@ -75,7 +83,7 @@ class Event(AbstractEvent):
         verbose_name = "arrangement"
         verbose_name_plural = "arrangement"
         permissions=(
-                ("administer","Can administer events"),
+                ("administer", "Can administer events"),
         )
 
     def save(self, *args, **kwargs):
@@ -98,6 +106,18 @@ class Event(AbstractEvent):
         if (self.facebook_url == "http://"):
             self.facebook_url = ""
 
+    @property
+    def registrations_manager(self):
+        return EventRegistration.get_manager_for(self)
+
+    @property
+    def waiting_registrations(self):
+        return self.registrations_manager.waiting_ordered()
+
+    @property
+    def attending_registrations(self):
+        return self.registrations_manager.attending_ordered()
+
     def free_places(self):
         """Returnerer antall ledige plasser.
 
@@ -106,7 +126,7 @@ class Event(AbstractEvent):
         Returnerer 0 hvis self.places er None.
         """
         try:
-            return max(self.places - self.eventregistration_set.filter(attending = True).count(), 0)
+            return max(self.places - self.users_attending(), 0)
         except TypeError:
             return 0
 
@@ -115,11 +135,11 @@ class Event(AbstractEvent):
 
     def users_attending(self):
         """Returnerer antall brukere som er påmeldt."""
-        return self.eventregistration_set.filter(attending = True).count()
+        return self.attending_registrations.count()
 
     def users_waiting(self):
         """Returnerer antall brukere som står på venteliste."""
-        return self.eventregistration_set.filter(attending = False).count()
+        return self.waiting_registrations.count()
 
     def percent_full(self):
         """Returnerer hvor mange prosent av plassene som er tatt."""
@@ -139,9 +159,9 @@ class Event(AbstractEvent):
     def is_registered(self, user):
         return self.eventregistration_set.filter(user=user).exists()
     def is_attending(self, user):
-        return self.eventregistration_set.filter(user=user,attending=True).exists()
+        return self.attending_registrations.filter(user=user).exists()
     def is_waiting(self, user):
-        return self.eventregistration_set.filter(user=user,attending=False).exists()
+        return self.waiting_registrations.filter(user=user).exists()
 
     def has_waiting_list(self):
         """Returnerer True dersom arrangementet har venteliste, False ellers."""
@@ -150,9 +170,9 @@ class Event(AbstractEvent):
     def get_users_registered(self):
         return [e.user for e in self.eventregistration_set.all()]
     def get_users_attending(self):
-        return [e.user for e in self.eventregistration_set.filter(attending=True)]
+        return [e.user for e in self.attending_registrations]
     def get_users_waiting(self):
-        return [e.user for e in self.eventregistration_set.filter(attending=False)]
+        return [e.user for e in self.waiting_registrations]
 
     def register_user(self, user):
         """
@@ -202,24 +222,22 @@ class Event(AbstractEvent):
         self._move_waiting_to_attending()
 
     def _fix_list_numbering(self):
-        attending_regs = self.eventregistration_set.filter(attending=True).order_by("number")
+        attending_regs = self.attending_registrations
         for n, reg in enumerate(attending_regs, start=1):
             reg.number = n
             reg.save()
 
-        waiting_regs = self.eventregistration_set.filter(attending=False).order_by("number")
+        waiting_regs = self.waiting_registrations
         for n, reg in enumerate(waiting_regs, start=1):
             reg.number = n
             reg.save()
 
     def _move_waiting_to_attending(self):
-        if self.registration_deadline and self.registration_deadline > datetime.datetime.now() and datetime.datetime.now() + datetime.timedelta(1) < self.event_start :
-            waiting_list = list( self.eventregistration_set.filter(attending=False).order_by('number').reverse() )
-            for n in xrange( min(self.free_places(), len(waiting_list)) ):
-                waiting_list.pop().set_attending()
-            for eventregistration in waiting_list:
-                eventregistration.number -= waiting_list[-1].number-1
-                eventregistration.save()
+        if self.registration_open() and not self.has_started():
+            while(min(self.free_places(), self.waiting_registrations.count()) > 0):
+                reg = self.waiting_registrations.reversed().first()
+                reg.set_attending()
+            self._fix_list_numbering()
 
     def _prune_queue(self):
         """Sletter overflødige registreringer."""
@@ -229,7 +247,7 @@ class Event(AbstractEvent):
 
         # Dersom arrangementet ikke har venteliste lengre.
         elif not self.has_waiting_list():
-            self.eventregistration_set.filter(attending = False).delete()
+            self.waiting_registrations.delete()
 
 
 class EventRegistration(models.Model):
@@ -249,8 +267,14 @@ class EventRegistration(models.Model):
     attending = models.BooleanField(blank=False, null=False, default=True, verbose_name='har plass',
             help_text="Hvis denne er satt til sann har man en plass på arrangementet ellers er det en ventelisteplass.")
 
+
     def __unicode__(self):
         return u'EventRegistration: %s, %s: %s' % (self.event, self.attending, self.user)
+
+    @classmethod
+    def get_manager_for(cls, event):
+        """Henter en manager for en gitt event."""
+        return RelatedEventRegistrationManager(event)
 
     def is_waiting_place(self):
         "Returnerer True dersom registreringen er en plass på venteliste."
@@ -271,14 +295,14 @@ class EventRegistration(models.Model):
             self.save()
             if self.user.email:
                 subject = u'Påmeldt %s' % self.event.headline
-                message = u'''Hei %s
-                Du har nå fått plass på arrangementet "%s". Plassen er tildelt fordi du stod på venteliste.'''                        %(self.user.get_full_name(), self.event.headline)
+                message = u'''Hei {name}
+                Du har nå fått plass på arrangementet "{eventheadline}". Plassen er tildelt fordi du stod på venteliste.'''.format(name=self.user.get_full_name(), eventheadline=self.event.headline)
                 if self.event.deregistration_deadline and self.event.deregistration_deadline < datetime.datetime.now():
                     message += u''' Fristen for å melde seg av arrangementet har gått ut. Husk at du kan få prikk dersom du ikke møter opp. Dersom du allikevel ikke kan komme, kan du prøve å ta kontakt med %s så fort som mulig.'''%(self.event.organizer)
                 elif self.event.deregistration_deadline:
-                    message += u''' Hvis du allikevel ikke kan komme, må du melde deg av før avmeldingsfristen. Husk at du kan få prikk dersom du ikke møter opp.'''
+                    message += u''' Hvis du allikevel ikke kan komme, må du melde deg av før avmeldingsfristen.'''
                 else:
-                    message += u''' Hvis du ikke kan komme, må du huske å melde deg av så fort som mulig. Husk at du kan få prikk dersom du ikke møter opp.'''
+                    message += u''' Hvis du ikke kan komme, må du huske å melde deg av så fort som mulig.'''
 
                 self.user.email_user(subject, message)
 
@@ -291,3 +315,29 @@ class EventRegistration(models.Model):
     class Meta:
         verbose_name = 'påmelding'
         verbose_name_plural = 'påmeldte'
+
+
+class RelatedEventRegistrationManager(models.Manager):
+
+    def __init__(self, event):
+        self.event = event
+
+    def get_queryset(self):
+        return EventRegistration.objects.filter(event=self.event)
+
+    def waiting(self):
+        return self.get_queryset().filter(attending=False)
+
+    def waiting_ordered(self):
+        return self.waiting().order_by('number')
+
+    def attending(self):
+        return self.get_queryset().filter(attending=True)
+
+    def attending_ordered(self):
+        return self.attending().order_by('number')
+
+    def first_on_waiting_list(self):
+        return self.waiting_ordered()[0]
+
+
