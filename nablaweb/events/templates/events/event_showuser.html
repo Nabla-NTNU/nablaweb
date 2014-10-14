@@ -26,11 +26,11 @@
     </tfoot>
     <tbody>
     {% for eventregistration in eventregistration_list %}
-    {% if eventregistration.is_attending_place %}
+    {% if eventregistration.attending %}
         <tr class="success">
-    {% else %}{% if eventregistration.is_waiting_place %}
+    {% else %}
         <tr class="warning">
-    {% endif %}{% endif %}
+    {% endif %}
     <td>
         <a href="{{ eventregistration.event.get_absolute_url }}" style="text-decoration:none;">
             {% if eventregistration.event.short_name %}
@@ -46,24 +46,24 @@
             </td>
             <td>
             {% if eventregistration.event.deregistration_closed %}
-                Utløpt{% if eventregistration.is_waiting_place %}<sup>1</sup>{% endif %}
+                Utløpt{% if eventregistration.waiting %}<sup>1</sup>{% endif %}
             {% else %}
                 {% if eventregistration.event.deregistration_deadline %}
                     <time datetime="{{ eventregistration.event.deregistration_deadline|date:"c" }}">
                         {{ eventregistration.event.deregistration_deadline.date|naturalday }} kl. {{ eventregistration.event.deregistration_deadline|date:"H:i" }}
                     </time>
-                    {%if eventregistration.is_waiting_place %}<sup>1</sup>{% endif %}
+                    {%if eventregistration.waiting %}<sup>1</sup>{% endif %}
                 {% else %}
                   Ingen
                 {% endif %}
             {% endif %}
             </td>
             <td style="text-align:right;">
-            {% if eventregistration.is_attending_place %}
-                <i class="icon-ok-sign"></i>
-            {% else %}{% if eventregistration.is_waiting_place %}
-            Ventelisteplass: {{ eventregistration.waiting_list_place }}
-            {% endif %}{% endif %}
+            {% if eventregistration.attending %}
+                <span class="glyphicon glyphicon-ok-sign"></span>
+            {% else %}
+                Ventelisteplass: {{ eventregistration.waiting_list_place }}
+            {% endif %}
 
             </td>
         </tr>

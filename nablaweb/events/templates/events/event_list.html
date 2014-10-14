@@ -52,11 +52,11 @@
                         <a href="{{ reg.event.get_absolute_url }}">{{ reg.event.headline }}</a>
                     </td>
                     <td>
-                        {% if reg.is_waiting_place %}
+                        {% if reg.waiting %}
                             På venteliste
                         {% endif %}
 
-                        {% if reg.is_attending_place %}
+                        {% if reg.attending %}
                             <span class="glyphicon glyphicon-check"></span> Har plass
                         {% endif %}
                     </td>

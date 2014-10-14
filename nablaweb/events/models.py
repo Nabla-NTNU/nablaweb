@@ -280,8 +280,9 @@ class EventRegistration(models.Model):
         """Henter en manager for en gitt event."""
         return RelatedEventRegistrationManager(event)
 
-    def is_waiting_place(self):
-        "Returnerer True dersom registreringen er en plass på venteliste."
+    @property
+    def waiting(self):
+        """Indikerer om det er en ventelisteplass."""
         return not self.attending
 
     def waiting_list_place(self):
@@ -302,12 +303,6 @@ class EventRegistration(models.Model):
                 template = loader.get_template("events/moved_to_attending_email.txt")
                 message = template.render(Context({'event': self, 'name': self.user.get_full_name()}))
                 self.user.email_user(subject, message)
-
-    def is_attending_place(self):
-        "Returnerer True dersom registreringen er en garantert plass."
-        return self.attending
-    is_attending_place.boolean = True
-    is_attending_place.short_description = "har plass"
 
     class Meta:
         verbose_name = 'påmelding'

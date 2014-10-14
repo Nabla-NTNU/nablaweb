@@ -154,9 +154,10 @@ class UserEventView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         context_data['user'] = user
         if user.is_authenticated():
-            context_data['eventregistration_list'] = user.eventregistration_set.all().order_by('event__event_start') 
-            context_data['is_on_a_waiting_list']  = bool( filter(EventRegistration.is_waiting_place   , context_data['eventregistration_list']) )
-            context_data['is_attending_an_event'] = bool( filter(EventRegistration.is_attending_place , context_data['eventregistration_list']) )
+            regs = user.eventregistration_set.all().order_by('event__event_start')
+            context_data['eventregistration_list'] = regs
+            context_data['is_on_a_waiting_list']  = regs.filter(attending=False).exists()
+            context_data['is_attending_an_event'] = regs.filter(attending=True).exists()
         return context_data
 
 
@@ -203,7 +204,7 @@ class RegisterUserView(LoginRequiredMixin, DetailView):
         except RegistrationException as e:
             return self.error_messages[e.token]
         else:
-            if reg.is_attending_place():
+            if reg.attending:
                 return "Du er påmeldt"
             else:
                 return "Du står nå på venteliste."
