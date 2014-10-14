@@ -8,6 +8,7 @@ from django.contrib import messages as django_messages
 
 import bpc_core
 from bpc_core import BPCResponseException
+from events.views import RegisterUserView as EventRegisterUserView
 
 from .forms import BPCForm
 from .models import BedPres
@@ -46,31 +47,14 @@ class BPCFormView(FormView):
         return super(BPCFormView, self).form_valid(form)
 
 
-# Offentlig
-@login_required
-def registration(request, bedpres_id):
-    if request.method == 'POST':
-        assert (bedpres_id == request.POST['eventid'])
-        if request.POST['registration_type'] == 'registration':
-            return register_user(request, bedpres_id)
-        elif request.POST['registration_type'] == 'deregistration':
-            return deregister_user(request, bedpres_id)
-    event = get_object_or_404(BedPres, pk=bedpres_id)
-    return HttpResponseRedirect(event.get_absolute_url())
+class RegisterUserView(EventRegisterUserView):
+    model = BedPres
 
-@login_required
-def register_user(request, bedpres_id):
-    event = get_object_or_404(BedPres, pk=bedpres_id)
-    message  = event.register_user(request.user)
-    django_messages.add_message(request, django_messages.INFO, message)
-    return HttpResponseRedirect(event.get_absolute_url())
+    def register_user(self, bedpres, user):
+        return bedpres.register_user(user)
 
-@login_required
-def deregister_user(request, bedpres_id):
-    event = get_object_or_404(BedPres, pk=bedpres_id)
-    bpc_message = event.deregister_user(request.user)
-    django_messages.add_message(request, django_messages.INFO, bpc_message)
-    return HttpResponseRedirect(event.get_absolute_url())
+    def deregister_user(self, bedpres, user):
+        return bedpres.deregister_user(user)
 
 
 class BedPresDetailView(DetailView):

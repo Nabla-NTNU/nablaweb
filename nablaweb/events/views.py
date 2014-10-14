@@ -73,15 +73,9 @@ def calendar(request, year=None, month=None):
     """
     Renders a calendar with events from the chosen month
     """
-    if year:
-        year = int(year)
-    else:
-        year = datetime.date.today().year
-
-    if month:
-        month = int(month)
-    else:
-        month = datetime.date.today().month
+    today = datetime.date.today()
+    year = int(year) if year else today.year
+    month = int(month) if month else today.month
 
     # Get this months events and bedpreser separately
     events = Event.objects.select_related("content_type").filter(
@@ -96,7 +90,7 @@ def calendar(request, year=None, month=None):
         raise Http404
 
     if request.user.is_authenticated():
-        future_attending_events = request.user.eventregistration_set.filter(event__event_start__gte=datetime.date.today())
+        future_attending_events = request.user.eventregistration_set.filter(event__event_start__gte=today)
     else:
         future_attending_events = []
 
@@ -166,7 +160,7 @@ class UserEventView(LoginRequiredMixin, TemplateView):
         return context_data
 
 
-class UserRegistrationView(LoginRequiredMixin, DetailView):
+class RegisterUserView(LoginRequiredMixin, DetailView):
     """View for at en bruker skal kunne melde seg av og på."""
 
     model = Event

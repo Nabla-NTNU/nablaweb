@@ -23,7 +23,7 @@ urlpatterns = patterns('events.views',
 
     # Bruker
     url(r'^mine$', UserEventView.as_view(), name="view_user_events"),
-    url(r'^(?P<pk>\d{1,8})/registration$', UserRegistrationView.as_view(), name='registration'),
+    url(r'^(?P<pk>\d{1,8})/registration$', RegisterUserView.as_view(), name='registration'),
     url(r'^(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$',
         EventDetailView.as_view(context_object_name="event"),
         name='event_detail'),
