@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import *
-from events.views import EventDetailView, EventListView, UserEventView, EventRegistrationsView
-from events.feeds import RecentEvents
 
-from django.contrib.auth.decorators import login_required
-#from django.views.decorators.cache import cache_page
+from .views import *
+from .feeds import RecentEvents
 
 urlpatterns = patterns('events.views',
 
     # Administrasjon
-    url(r'^(?P<pk>\d{1,8})/admin$',
-        'administer',
+    url(r'^(?P<pk>\d{1,8})/admin2$',
+        AdministerRegistrationsView.as_view(),
         name='event_admin'),
 
     # Offentlig
@@ -24,18 +22,18 @@ urlpatterns = patterns('events.views',
         name='event_list'),
 
     # Bruker
-    url(r'^mine$', login_required(UserEventView.as_view()), name="view_user_events"),
-    (r'^(?P<event_id>\d{1,8})/registration', 'registration'),
+    url(r'^mine$', UserEventView.as_view(), name="view_user_events"),
+    url(r'^(?P<pk>\d{1,8})/registration$', UserRegistrationView.as_view(), name='registration'),
     url(r'^(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$',
         EventDetailView.as_view(context_object_name="event"),
         name='event_detail'),
 
     url(r'^reg/(?P<pk>\d{1,8})$',
-        EventRegistrationsView.as_view(context_object_name="event"),
+        EventRegistrationsView.as_view(),
         name='event_registrations'),
 
     # Eksporter
-    url(r'^(?P<event_id>\d{1,8}).ics$', 'ical_event', name="ical_event"),
+    url(r'^(?P<event_id>\d{1,8}).ics$', ical_event, name="ical_event"),
 
     # RSS-feed
     url(r'^feed/$', RecentEvents()),

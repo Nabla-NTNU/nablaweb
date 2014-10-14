@@ -1,22 +1,16 @@
 # -*- coding: utf-8 -*-
 
-
-# Ical event til administer er kun lagt til for å fjerne en error som dukket opp hos meg. (Missing view)
-
-from django.views.generic import FormView, ListView
+from django.views.generic import FormView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import  get_object_or_404
-from django.http import HttpResponseRedirect, Http404
-from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.contrib import messages as django_messages
 
-from news.views import NewsListView, NewsDetailView
-from events.views import EventListView, EventDetailView, UserEventView, ical_event,  administer
-from bedpres.forms import BPCForm
-from bedpres.models import BedPres
 import bpc_core
 from bpc_core import BPCResponseException
 
+from .forms import BPCForm
+from .models import BedPres
 
 # Administrasjon
 
@@ -79,17 +73,12 @@ def deregister_user(request, bedpres_id):
     return HttpResponseRedirect(event.get_absolute_url())
 
 
-class BedPresListView(EventListView):
-    model = BedPres
-    context_object_name = "bedpres_list"
-
-
-class BedPresDetailView(NewsDetailView):
+class BedPresDetailView(DetailView):
     model = BedPres
     context_object_name = "bedpres"
 
     def get_context_data(self, **kwargs):
-        context = super(NewsDetailView, self).get_context_data(**kwargs)
+        context = super(BedPresDetailView, self).get_context_data(**kwargs)
         object_name = self.object.content_type.model
         event = self.object
         user = self.request.user
@@ -103,9 +92,3 @@ class BedPresDetailView(NewsDetailView):
             context['is_attending'] = event.is_attending(user)
         return context
 
-
-
-# Bruker
-
-class UserBedPresView(UserEventView):
-    template_name = 'events/event_showuser.html'

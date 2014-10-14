@@ -6,64 +6,65 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404, render
 from django.template import Context, RequestContext, loader
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth import get_user_model; User = get_user_model()
 from django.utils.safestring import mark_safe
 
 import datetime
 from itertools import chain
-from braces.views import PermissionRequiredMixin
+from braces.views import PermissionRequiredMixin, LoginRequiredMixin
 
-from news.views import NewsListView, NewsDetailView
 from bedpres.models import BedPres
-from events.models import Event, EventRegistration
-from events.event_calendar import EventCalendar
+from .models import Event, EventRegistration
+from .event_calendar import EventCalendar
 
 
-# Administrasjon
-def _admin_add(request, instance):
-    text = request.POST.get('text')
-    try:
-        user = User.objects.get(username=text)
-        instance.register_user(user, ignore_restrictions=True)
-    except User.DoesNotExist: pass
-_admin_add.short = 'add'
-_admin_add.info = 'Legg til'
+class AdministerRegistrationsView(PermissionRequiredMixin, DetailView):
+    """Viser påmeldingslisten til et Event med mulighet for å melde folk på og av."""
+    model = Event
+    template_name = "events/event_administer.html"
+    permission_required = 'events.administer'
 
+    def __init__(self, **kwargs):
+        super(AdministerRegistrationsView, self).__init__(**kwargs)
+        self.actions = (self.register_user, self.deregister_users)
 
-def _admin_del(request, instance):
-    user_list = request.POST.getlist('user')
-    for user in user_list:
-        try:
-            user = User.objects.get(username=user)
-            instance.deregister_user(user)
-        except User.DoesNotExist: pass
-_admin_del.short = 'del'
-_admin_del.info = 'Fjern'
+    def get_context_data(self, **kwargs):
+        context = super(AdministerRegistrationsView, self).get_context_data(**kwargs)
+        context['actions'] = [(a.short, a.info) for a in self.actions]
+        return context
 
-
-@permission_required('events.administer', raise_exception=True)
-def administer(request, pk,
-               actions=(_admin_add, _admin_del),
-               view='event_admin'):
-    event = get_object_or_404(Event, pk=pk)
-
-    if request.method == 'POST':
-        action_name = request.POST.get('action')
-        for action in actions:
+    def post(self, *args, **kwargs):
+        self.event = self.get_object()
+        action_name = self.request.POST.get('action')
+        for action in self.actions:
             if action.short == action_name:
-                action(request, event)
+                action()
                 break
+        return HttpResponseRedirect(reverse('event_admin', kwargs={'pk': self.event.pk}))
 
-        # Unngå at handlingen utføres på nytt dersom brukeren laster siden om igjen
-        return HttpResponseRedirect(reverse(view, kwargs={'pk': pk}))
+    def register_user(self):
+        """Melder på brukeren nevnt i POST['text'] på arrangementet."""
+        username = self.request.POST.get('text')
+        try:
+            user = User.objects.get(username=username)
+            self.event.register_user(user, ignore_restrictions=True)
+        except User.DoesNotExist: pass
+    register_user.short = 'add'
+    register_user.info = 'Legg til'
 
-    registrations = event.eventregistration_set.all().order_by('number')
-    return render_to_response('events/event_administer.html',
-                              {'event': event,
-                               'registrations': registrations,
-                               'actions': [(a.short, a.info) for a in actions]},
-                              context_instance=RequestContext(request))
+    def deregister_users(self):
+        """Melder av brukerne nevnt i POST['user']."""
+        user_list = self.request.POST.getlist('user')
+        for username in user_list:
+            try:
+                user = User.objects.get(username=username)
+                self.event.deregister_user(user)
+            except User.DoesNotExist: pass
+    deregister_users.short = 'del'
+    deregister_users.info = 'Fjern'
+
 
 
 # Offentlig
@@ -113,12 +114,7 @@ def calendar(request, year=None, month=None):
     })
 
 
-class EventListView(ListView):
-    model = Event
-    context_object_name = "event_list"
-    queryset = Event.objects.all() 
-
-class EventRegistrationsView(PermissionRequiredMixin, NewsDetailView):
+class EventRegistrationsView(PermissionRequiredMixin, DetailView):
     model = Event
     context_object_name = "event"
     template_name = "events/event_registrations.html"
@@ -132,7 +128,7 @@ class EventRegistrationsView(PermissionRequiredMixin, NewsDetailView):
         return context
 
 
-class EventDetailView(NewsDetailView):
+class EventDetailView(DetailView):
     model = Event
     context_object_name = "event"
 
@@ -156,7 +152,7 @@ class EventDetailView(NewsDetailView):
 
 # Bruker
 
-class UserEventView(TemplateView):
+class UserEventView(LoginRequiredMixin, TemplateView):
     template_name = 'events/event_showuser.html'
 
     def get_context_data(self, **kwargs):
@@ -170,65 +166,65 @@ class UserEventView(TemplateView):
         return context_data
 
 
-@login_required
-def registration(request, event_id):
-    if request.method == 'POST':
-        assert (event_id == request.POST['eventid'])
-        if request.POST['registration_type'] == 'registration':
-            return register_user(request, event_id)
-        elif request.POST['registration_type'] == 'deregistration':
-            return deregister_user(request, event_id)
-    event = get_object_or_404(Event, pk=event_id)
-    return HttpResponseRedirect(event.get_absolute_url())
+class UserRegistrationView(LoginRequiredMixin, DetailView):
+    """View for at en bruker skal kunne melde seg av og på."""
 
-
-@login_required
-def register_user(request, event_id):
-    messages = {
+    model = Event
+    error_messages = {
+        # Registration messages
         'noreg'     : 'Ingen registrering.',
         'unopened'  : 'Påmeldingen har ikke åpnet.',
         'closed'    : 'Påmeldingen har stengt.',
         'full'      : 'Arrangementet er fullt.',
-        'attend'    : 'Du er påmeldt.',
-        'queue'     : 'Du står på venteliste.',
         'reg_exists': 'Du er allerede påmeldt.',
         'not_allowed' : 'Du har ikke lov til å melde deg på dette arrangementet.',
-        }
-    event = get_object_or_404(Event, pk=event_id)
-    try:
-        reg = event.register_user(request.user)
-    except RegistrationException as e:
-        token = e.token
-    else:
-        if reg.is_attending_place():
-            token = "attend"
-        else:
-            token = "queue"
-
-    message = messages[token]
-    django_messages.add_message(request, django_messages.INFO, message)
-    return HttpResponseRedirect(event.get_absolute_url())
-
-@login_required
-def deregister_user(request, event_id):
-    messages = {
+        # Deregistration messages 
         'not_reg': 'Du verken var eller er påmeldt.',
         'dereg_closed': 'Fristen for å melde seg av er gått ut.',
         'not_allowed': 'Ta kontakt med ArrKom for å melde deg av.',
-        'dereg': 'Du er meldt av arrangementet.',
         }
-    event = get_object_or_404(Event, pk=event_id)
 
-    try:
-        event.deregister_user(request.user)
-    except RegistrationException as e:
-        token = e.token
-    else:
-        token = "dereg"
+    def post(self, *args, **kwargs):
+        reg_type = self.request.POST['registration_type']
+        event = self.get_object()
+        user = self.request.user
 
-    message = messages[token]
-    django_messages.add_message(request, django_messages.INFO, message)
-    return HttpResponseRedirect(event.get_absolute_url())
+        if reg_type == "registration":
+            message = self.register_user(event, user)
+        elif reg_type == "deregistration":
+            message = self.deregister_user(event, user)
+        else:
+            message = "Her skjedde det noe galt."
+
+        django_messages.add_message(self.request, django_messages.INFO, message)
+        return HttpResponseRedirect(event.get_absolute_url())
+
+    def register_user(self, event, user):
+        """Prøver å melde en bruker på arrangementet.
+
+        Returnerer en melding som ment for brukeren.
+        """
+        try:
+            reg = event.register_user(user)
+        except RegistrationException as e:
+            return self.error_messages[e.token]
+        else:
+            if reg.is_attending_place():
+                return "Du er påmeldt"
+            else:
+                return "Du står nå på venteliste."
+
+    def deregister_user(self, event, user):
+        """Prøver å melde en bruker av arrangementet.
+
+        Returnerer en melding som ment for brukeren.
+        """
+        try:
+            event.deregister_user(user)
+        except RegistrationException as e:
+            return self.error_messages[e.token]
+        else:
+            return "Du er meldt av arrangementet."
 
 
 def ical_event(request, event_id):
@@ -243,6 +239,6 @@ def ical_event(request, event_id):
     # Use the same template for both Event and BedPres.
     template = loader.get_template('events/event_icalendar.ics')
     context = Context({'event_list': (event,),})
-    response = HttpResponse(template.render(context), mimetype='text/calendar')
+    response = HttpResponse(template.render(context), content_type='text/calendar')
     response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.slug
     return response

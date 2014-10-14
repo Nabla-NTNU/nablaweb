@@ -170,10 +170,6 @@ class Event(AbstractEvent):
     def is_waiting(self, user):
         return self.waiting_registrations.filter(user=user).exists()
 
-    def has_waiting_list(self):
-        """Returnerer True dersom arrangementet har venteliste, False ellers."""
-        return bool(self.has_queue)
-
     def get_users_registered(self):
         return [e.user for e in self.eventregistration_set.all()]
     def get_users_attending(self):
@@ -207,7 +203,7 @@ class Event(AbstractEvent):
 
         if not self.is_full():
             reg = regs.create(event=self, user=user, number=self.users_attending()+1, attending=True)
-        elif self.has_waiting_list():
+        elif self.has_queue:
             reg = regs.create(event=self, user=user, number=self.users_waiting()+1, attending=False)
         else:
             raise RegistrationException("full")
@@ -255,7 +251,7 @@ class Event(AbstractEvent):
         """Sletter overflødige registreringer."""
         if not self.registration_required:
             self.eventregistration_set.all().delete()
-        elif not self.has_waiting_list():
+        elif not self.has_queue:
             self.waiting_registrations.delete()
 
 
