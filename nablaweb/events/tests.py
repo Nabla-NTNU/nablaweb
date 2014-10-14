@@ -85,7 +85,7 @@ class WaitingListTest(GeneralEventTest):
             self.assertEqual(reg.number, i)
 
     def test_deregister_user(self):
-        while self.event.users_registered() != 0:
+        while self.event.eventregistration_set.all():
             reg = random.choice(self.event.eventregistration_set.all())
             user = reg.user
             self.event.deregister_user(user)

@@ -157,12 +157,6 @@ class Event(AbstractEvent):
         else:
             return 100
 
-    def users_registered(self):
-        """Returnerer totalt antall brukere som er registrerte.
-
-        Dvs. både påmeldte og de som står på venteliste."""
-        return self.eventregistration_set.count()
-
     def is_registered(self, user):
         return self.eventregistration_set.filter(user=user).exists()
     def is_attending(self, user):
@@ -170,11 +164,9 @@ class Event(AbstractEvent):
     def is_waiting(self, user):
         return self.waiting_registrations.filter(user=user).exists()
 
-    def get_users_registered(self):
-        return [e.user for e in self.eventregistration_set.all()]
-    def get_users_attending(self):
+    def get_attendance_list(self):
         return [e.user for e in self.attending_registrations]
-    def get_users_waiting(self):
+    def get_waiting_list(self):
         return [e.user for e in self.waiting_registrations]
 
     def register_user(self, user, ignore_restrictions=False):
