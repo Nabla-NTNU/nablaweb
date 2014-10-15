@@ -4,7 +4,7 @@
 from django.contrib import messages as django_messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response, get_object_or_404, render
+from django.shortcuts import get_object_or_404, render
 from django.template import Context, RequestContext, loader
 from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.decorators import login_required, permission_required
@@ -109,6 +109,7 @@ def calendar(request, year=None, month=None):
 
 
 class EventRegistrationsView(PermissionRequiredMixin, DetailView):
+    """Viser en liste over alle brukere påmeldt til arrangementet."""
     model = Event
     context_object_name = "event"
     template_name = "events/event_registrations.html"
@@ -123,26 +124,21 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
 
 
 class EventDetailView(DetailView):
+    """Viser arrangementet."""
     model = Event
     context_object_name = "event"
 
     def get_context_data(self, **kwargs):
         context = super(EventDetailView, self).get_context_data(**kwargs)
-        object_name = self.object.content_type.model
         event = self.object
         user = self.request.user
 
-        if user.is_anonymous():
-            context['is_registered'] = False
-        else:
+        if user.is_authenticated():
             # Innlogget, så sjekk om de er påmeldt
             context['is_registered'] = event.is_registered(user)
             context['is_attending'] = event.is_attending(user)
-            if context['is_registered']:
-                # Henter eventregistration for denne brukeren hvis han/hun er påmeldt
-                context['eventregistration'] = event.eventregistration_set.get(user=user)
+            context['is_waiting'] = event.is_waiting(user)
         return context
-
 
 # Bruker
 

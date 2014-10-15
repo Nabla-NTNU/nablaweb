@@ -19,7 +19,7 @@ urlpatterns = patterns('bedpres.views',
         name='bedpres_detail'),
 
     # Bruker
-    url(r'^(?P<pk>\d{1,8})/registration$', RegisterUserView.as_view(), name='bedpres_registration'),
+    url(r'^(?P<pk>\d{1,8})/registration$', BedPresRegisterUserView.as_view(), name='bedpres_registration'),
 
     # Eksporter
     (r'^(?P<bedpres_id>\d{1,8})/eksporter$', ical_event),
