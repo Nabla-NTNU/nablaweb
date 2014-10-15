@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group, AbstractUser
-from datetime import date
 
+from datetime import date
+from hashlib import sha1
 
 class NablaUser(AbstractUser):
     telephone = models.CharField("Telefon", max_length = 15, blank=True)
@@ -17,6 +17,10 @@ class NablaUser(AbstractUser):
     about = models.TextField("Biografi",blank = True)
     avatar = models.ImageField('Avatar', blank=True, null=True, upload_to='avatars')
     ntnu_card_number = models.CharField("NTNU kortnr",max_length = 10, blank = True, help_text ="Dette er det 7-10 siffer lange nummeret <b>nede til venstre</b> på baksiden av NTNU-adgangskortet ditt. Det brukes blant annet for å komme inn på bedpresser.")
+
+    def get_hashed_ntnu_card_number(self):
+        """Returnerer sha1-hashen av ntnu kortnummeret som BPC-trenger."""
+        return sha1(self.ntnu_card_number).hexdigest()
 
     def get_class_number(self):
         """ Henter hvilken klasse på fysmat (1-5) brukeren går i. Returnerer 0 hvis brukeren ikke går på fysmat."""

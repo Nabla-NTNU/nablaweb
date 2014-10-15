@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
-from itertools import chain
-
 from django.db import models
 from events.models import AbstractEvent
 from jobs.models import Company
-from hashlib import sha1
-from news.models import News
 import bpc_core
 
 from accounts.models import NablaUser
 User = NablaUser
 
+def get_bpc_user_dictionary(user):
+    """Henter brukerinformasjonen BPC krever fra et User objekt."""
+    return {"fullname": user.get_full_name(),
+            "username": user.username,
+            "card_no": user.get_hashed_ntnu_card_number(),
+            "year": str(user.get_class_number())}
 
 class BedPres(AbstractEvent):
     """
@@ -33,6 +34,7 @@ class BedPres(AbstractEvent):
         verbose_name = "bedriftspresentasjon"
         verbose_name_plural = "bedriftspresentasjoner"
 
+
     def register_user(self, user):
         # TODO feilhåndtering bør ikke skje her, men jeg fikk ikke til å ta i
         # mot BPCResponseException i register_user view - hiasen
@@ -40,14 +42,9 @@ class BedPres(AbstractEvent):
         if not card_no or not card_no.isdigit():
             return "Du ble ikke påmeldt fordi du ikke har registrert gyldig kortnummer."
 
+        user_dict = get_bpc_user_dictionary(user)
         try:
-            response = bpc_core.add_attending(
-                fullname=user.get_full_name(),
-                username=user.username,
-                card_no=sha1(user.ntnu_card_number).hexdigest(),
-                event=self.bpcid,
-                year=str(user.get_class_number()), # FIXME
-                )
+            response = bpc_core.add_attending(event=self.bpcid, **user_dict)
         except bpc_core.BPCResponseException as exception:
             return exception.message # TODO Bruke noen andre feilmeldinger. Er litt kryptiske for brukere
         if response['add_attending'][0] == '1':
