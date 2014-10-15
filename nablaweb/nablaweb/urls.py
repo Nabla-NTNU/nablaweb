@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     (r'^kommentarer/', include('django.contrib.comments.urls')),
     (r'^poll/', include('poll.urls')),
     (r'^skraattcast/', include('skraattcast.urls')),
+    (r'^podcast/', include('podcast.urls')),
 
     # For å dele filer under utviklingen.
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
