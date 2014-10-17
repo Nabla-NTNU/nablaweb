@@ -5,8 +5,8 @@ from django.core.urlresolvers import reverse
 from django.models import Podcast
 
 class LatestEntriesFeed(Feed):
-    title: ''
-    link: ''
+    title =  ''
+    link = ''
     description = ''
 
     def item(self):
