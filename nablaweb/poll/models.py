@@ -24,10 +24,7 @@ class Poll(models.Model):
         super(Poll, self).save(*args, **kwargs)
 
     def get_total_votes(self):
-        sum = 0
-        for i in self.choice_set.all():
-            sum += i.votes
-        return sum
+        return sum([x.votes for x in self.choice_set.all()])
 
     def user_has_voted(self, user):
         return user in self.users_voted.all()
@@ -55,6 +52,7 @@ class Choice(models.Model):
             self.votes += 1
             self.save()
             self.poll.users_voted.add(user)
+
             return True
         else:
             return False

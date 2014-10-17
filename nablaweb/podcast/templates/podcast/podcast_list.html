@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block morehead %}
+{% endblock %}
+
+{% block content %}
+<body>
+    <h2>Skråttcast</h2>
+    <p>Den snakkesalige <a href="/komite/redaksjonen">redaksjon</a> presenterer Skråttcast.</p>
+{% if latest_podcast_list %}
+    <ul style="padding-left:0; display:inline;">
+        {% for podcast in latest_podcast_list %}
+            <h3><a href="/podcast/{{ podcast.id }}">{{ podcast.title }}</a></h3>
+            <p>{{ podcast.pub_date }}</p>
+            <p>{{ podcast.description }}</p>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Ingen skråkast tilgjengelig.</p>
+{% endif %}
+</body>
+{% endblock %}

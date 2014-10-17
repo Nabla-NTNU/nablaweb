@@ -1,0 +1,113 @@
+.bunn {
+    margin-bottom: 50px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.jp-player,.jp-audio {
+    width: 600px;
+    margin: 50px auto;
+    margin-left: 0px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    left: 100px;
+}
+
+.jp-gui {  
+    position: relative;
+    background: #ffffff;  
+    border-radius: 1px;
+    overflow: hidden;  
+    margin-top: 5px;
+    margin-bottom: 28px;
+}
+
+.jp-controls {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-family: "FontAwesome";
+}
+
+.jp-controls li {
+    display: inline;
+}
+
+.jp-controls a {
+    color: #000;
+}
+
+.jp-play,.jp-pause {
+    width: 35px;
+    height: 35px;
+    display: inline-block;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 80px 80px 80px 80px;
+}
+
+.jp-controls .jp-play:hover,.jp-controls .jp-pause:hover {
+    background-color: #dbdbdb;
+}
+
+.jp-mute,.jp-unmute {
+    position: absolute;
+    right: 60px;
+    top: 0;
+    width: 20px;
+    height: 40px;
+    display: inline-block;
+    line-height: 38px;
+}
+
+.jp-mute {
+    text-align: left;
+}
+
+.jp-time-holder {
+    color: #000;
+    font-size: 12px;
+    line-height: 8px;
+    position: absolute;
+    right: 110px;
+    top: 14px;
+}
+
+.jp-progress {
+    background-color: #dbdbdb;
+    border-radius: 1px 1px 1px 1px;
+    overflow: hidden;
+    position: absolute;
+    right: 150px;
+    left: 40px;
+    top: 15px;
+    width: 400px;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.2) inset;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,0.2) inset;
+}
+
+.jp-play-bar {
+    height: 6px;
+    background-color: #000;
+    border-radius: 2px 2px 2px 2px;
+}
+
+.jp-volume-bar {
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    width: 50px;
+    height: 6px;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1) inset;
+    background-color: #dbdbdb;
+    overflow: hidden;
+}
+
+.jp-volume-bar-value {
+    background-color: #000;
+    height: 6px;
+    border-radius: 2px 2px 2px 2px;
+}
