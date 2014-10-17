@@ -1,14 +1,11 @@
 {% extends "base.html" %}
-{% load staticfiles %}
 {% block morehead %}
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
 {% endblock %}
 
 {% block content %}
 <body>
-    <h2>Skråttcast</h2>
-    <p>Her kan det stå det <a href="/komite/redaksjonen">redaksjonen</a> måtte ønske. Men enn så lenge bestemmer jeg:</p>
-    <p>Det var en gang en elefant som ikke kunne snu. Men bare løp til samme kant, en elefantgigant som rant fra Kongo til Peru. Den veltet tusen palmetrær i landet Makabul. En veltet palmeskog så svær at alle folk i landet der fikk gratis ved til jul. Den løp igjennom fjorten land, aldeles uten stopp. Og kom den til en badestrand så løp den også under vann, først ned - og siden opp.</p>
+    <h2>Skråttcast - og det ble lyd</h2>
+    <p>Her kan det stå det <a href="/komite/redaksjonen">redaksjonen</a> måtte ønske.</p>
 {% if latest_podcast_list %}
     <ul style="padding-left:0; display:inline;">
         {% for podcast in latest_podcast_list %}
@@ -18,7 +15,7 @@
         {% endfor %}
     </ul>
 {% else %}
-    <p>Ingen episoder tilgjengelig.</p>
+    <p>Ingen skråkast tilgjengelig.</p>
 {% endif %}
 </body>
 {% endblock %}

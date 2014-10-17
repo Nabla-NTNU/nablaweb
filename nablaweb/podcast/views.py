@@ -6,7 +6,7 @@ from django.template import RequestContext, loader
 from podcast.models import Podcast
 
 def index(request):
-    latest_podcast_list = Podcast.objects.order_by('-pub_date')[:5]
+    latest_podcast_list = Podcast.objects.order_by('-pub_date')[:8]
     template = loader.get_template('podcast/podcast_list.html')
     context = RequestContext(request, {
         'latest_podcast_list': latest_podcast_list,

@@ -21,6 +21,6 @@ class Podcast(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = 'podcast'
-        verbose_name_plural = 'podcasts'
+        verbose_name = 'Skråttcast'
+        verbose_name_plural = 'Skråttcast'
 #        ordering = ('-pub_date')
