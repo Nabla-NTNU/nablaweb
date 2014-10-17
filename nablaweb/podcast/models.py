@@ -1,15 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.db.models.base import ModelBase
-from django.db.models.query import QuerySet
-from django.utils import timezone
-from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.sites.models import Site
-from django.contrib.comments.models import Comment
-import datetime
-import os.path
 
 class Podcast(models.Model):
     title = models.CharField(verbose_name='tittel', max_length=200, blank=False)

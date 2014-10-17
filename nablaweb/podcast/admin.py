@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from content.admin import ContentAdmin
 from podcast.models import Podcast
 
 class PodcastAdmin(admin.ModelAdmin):
