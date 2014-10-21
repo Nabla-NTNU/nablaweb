@@ -6,13 +6,11 @@ Inneholder tester for den abstrakte Content-modellen.
 """
 
 from django.test import TestCase
-from django.contrib.comments.models import Comment
 from django.contrib.sites.models import Site
-
-from content.models import Content
-
+from django_comments.models import Comment
 from datetime import datetime
 
+from .models import Content
 
 # Content er en abstrakt klasse.
 # Lager derfor en indentisk underklasse av Content for å teste den.
