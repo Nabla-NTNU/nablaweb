@@ -34,7 +34,7 @@ Det skal nå ha dukket opp en mappe som heter nablaweb i den mappen du står i.
 
 ## Sett opp virtualenv ##
 
-Nå må du sette opp python-miljøet ditt og installere alle python-pakkene som trenges til nablaweb.
+Nå må du sette opp Python-miljøet ditt og installere alle python-pakkene som trenges til nablaweb.
 Begynn med å lage et nytt virtuelt python miljø ved å kjøre kommandoen:
 
 ```
