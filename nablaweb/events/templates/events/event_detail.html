@@ -16,8 +16,8 @@
         {% for registration in event.eventregistration_set.all %}
         {% with user=registration.user %}
         <span class="label label-default
-            {% if registration.is_waiting_place %} 
-            waiting-place
+            {% if registration.waiting %} 
+                waiting-place
             {% endif %}" style="display: inline-block;">
 
             {% if user.get_full_name %}

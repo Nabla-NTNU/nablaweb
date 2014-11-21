@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from events.forms import EventForm
-from events.models import Event, EventRegistration, EventPenalty
+from events.models import Event, EventRegistration
 from news.admin import NewsAdmin
 
 
@@ -58,4 +58,3 @@ class EventAdmin(NewsAdmin):
 
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventRegistration)
-admin.site.register(EventPenalty)

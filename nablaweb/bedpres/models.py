@@ -62,13 +62,10 @@ class BedPres(AbstractEvent):
         except bpc_core.BPCResponseException as exception:
             return exception.message 
 
-    def get_users_registered(self):
-        return chain(self.get_users_attending(),self.get_users_waiting())
-
-    def get_users_attending(self):
+    def get_attendance_list(self):
         return User.objects.filter(username__in=self.bpc_attending_list)
 
-    def get_users_waiting(self):
+    def get_waiting_list(self):
         return User.objects.filter(username__in=self.bpc_waiting_list)
 
     def is_registered(self, user):
@@ -90,10 +87,7 @@ class BedPres(AbstractEvent):
         return int(self.bpc_info.get('this_attending',0))
 
     def users_waiting(self):
-        return User.objects.filter(username__in=self.bpc_waiting_list)
-
-    def users_registered(self):
-        return list(self.users_attending())+list(self.users_waiting())
+        return len(self.bpc_waiting_list)
 
     def percent_full(self):
         if self.places == None:

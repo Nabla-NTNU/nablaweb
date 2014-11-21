@@ -29,8 +29,6 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data(**kwargs)
         member = self.object
-        context['see_penalty'] = self.request.user.has_perm('bedpress.change_BedPres') or self.request.user == member
-        context['penalty_list'] = member.eventpenalty_set.all()
         return context
 
 
