@@ -101,7 +101,7 @@ class Content(models.Model):
     def get_picture_url(self):
         return 'http://%s%s%s' % (Site.objects.get_current().domain, settings.MEDIA_URL, self.picture().name)
 
-    def delete(self):
+    def delete(self, *args, **kwargs):
         """
         Override default method, so related comments are also deleted
         """

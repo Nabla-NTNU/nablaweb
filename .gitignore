@@ -13,3 +13,5 @@ var/
 
 # Virtualenv
 venv/
+
+.idea
