@@ -23,10 +23,6 @@ class Event(AbstractEvent):
         super(Event, self).save(*args, **kwargs)
         self._prune_queue()
 
-    def delete(self, *args, **kwargs):
-        self.eventregistration_set.all().delete()
-        super(Event, self).delete(*args, **kwargs)
-
     @property
     def registrations_manager(self):
         return EventRegistration.get_manager_for(self)
