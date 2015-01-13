@@ -4,8 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.template import loader, Context
 
-from .managers import RelatedEventRegistrationManager
-from .event import Event
+from .managers import RelatedEventRegistrationManager, EventRegistrationManager
 
 
 class EventRegistration(models.Model):
@@ -16,7 +15,7 @@ class EventRegistration(models.Model):
     """
 
     event = models.ForeignKey(
-        Event,
+        'Event',
         blank=False,
         null=True)
     user = models.ForeignKey(
@@ -45,23 +44,13 @@ class EventRegistration(models.Model):
         verbose_name_plural = 'påmeldte'
         unique_together = (("event", "user"), ("number", "attending"))
 
+    objects = EventRegistrationManager()
+
     def __unicode__(self):
         return u'%s, %s is %s, place: %s' % (self.event,
                                              self.user,
                                              "Attending" if self.attending else "Waiting",
                                              self.number)
-
-    @classmethod
-    def create_attending_registration(cls, event, user):
-        attending = True
-        number = event.users_attending()+1
-        return cls.objects.create(event=event, user=user, attending=attending, number=number)
-
-    @classmethod
-    def create_waiting_registration(cls, event, user):
-        attending = False
-        number = event.users_waiting()+1
-        return cls.objects.create(event=event, user=user, attending=attending, number=number)
 
     @classmethod
     def get_manager_for(cls, event):

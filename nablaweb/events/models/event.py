@@ -4,6 +4,7 @@ import logging
 
 from ..exceptions import *
 from .abstract_event import AbstractEvent
+from .eventregistration import EventRegistration
 
 
 class Event(AbstractEvent):
@@ -28,7 +29,6 @@ class Event(AbstractEvent):
 
     @property
     def registrations_manager(self):
-        from .eventregistration import EventRegistration
         return EventRegistration.get_manager_for(self)
 
     @property
@@ -109,18 +109,16 @@ class Event(AbstractEvent):
     def add_to_attending_or_waiting_list(self, user):
         if self.eventregistration_set.filter(user=user).exists():
             raise RegistrationAlreadyExists(event=self, user=user)
-        from .eventregistration import EventRegistration
 
         if not self.is_full():
-            return EventRegistration.create_attending_registration(event=self, user=user)
+            return EventRegistration.objects.create_attending_registration(event=self, user=user)
         elif self.has_queue:
-            return EventRegistration.create_waiting_registration(event=self, user=user)
+            return EventRegistration.objects.create_waiting_registration(event=self, user=user)
         else:
             raise EventFullException(event=self, user=user)
 
     def deregister_user(self, user):
         """Melder brukeren av arrangementet."""
-        from .eventregistration import EventRegistration
         regs = self.eventregistration_set
         if self.deregistration_closed():
             raise DeregistrationClosed(event=self, user=user)
@@ -134,26 +132,8 @@ class Event(AbstractEvent):
             self.update_lists()
 
     def update_lists(self):
-        self._fix_list_numbering()
-        self._move_waiting_to_attending()
-
-    def _fix_list_numbering(self):
-        attending_regs = self.attending_registrations
-        for n, reg in enumerate(attending_regs, start=1):
-            reg.number = n
-            reg.save()
-
-        waiting_regs = self.waiting_registrations
-        for n, reg in enumerate(waiting_regs, start=1):
-            reg.number = n
-            reg.save()
-
-    def _move_waiting_to_attending(self):
-        if self.registration_open() and not self.has_started():
-            while self.free_places() and self.waiting_registrations.count():
-                reg = self.registrations_manager.first_on_waiting_list()
-                reg.set_attending_and_send_email()
-            self._fix_list_numbering()
+        EventRegistration.objects.fix_list_numbering(event=self)
+        EventRegistration.objects.move_waiting_to_attending(event=self)
 
     def _prune_queue(self):
         """Sletter overflødige registreringer."""
