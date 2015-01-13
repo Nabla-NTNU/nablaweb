@@ -13,7 +13,7 @@ from news.models import News
 from .exceptions import *
 
 
-class AbstractEvent(News):
+class EventInfoMixin(models.Model):
     """
     Abstrakt modell som definerer det som er felles
     for Event og BedPres.
@@ -46,6 +46,35 @@ class AbstractEvent(News):
         blank=True,
         max_length=100,
         help_text="URL-en til det tilsvarende arrangementet på Facebook")
+
+    class Meta:
+        abstract = True
+
+    def has_started(self):
+        return self.event_start < datetime.now()
+
+    def has_finished(self):
+        return self.event_end and self.event_end < datetime.now()
+
+    def clean(self):
+        self.clean_facebook_url()
+        super(EventInfoMixin, self).clean()
+
+    def clean_facebook_url(self):
+        """Verifiserer formen på facebook-urlen, og endrer den hvis den er feil."""
+        parsed = urlparse(self.facebook_url)
+        noscheme = parsed.netloc + parsed.path
+        self.facebook_url = 'http' + '://' + noscheme.replace("http://", "").replace("https://", "")
+
+        if self.facebook_url == "http://":
+            self.facebook_url = ""
+
+
+class RegistrationInfoMixin(models.Model):
+    """Abstract model containing info about the registration.
+
+    If registration_required
+    """
 
     # Medlemsvariabler som har med påmelding å gjøre. De fleste er kun relevant
     # hvis registration_required er satt til True.
@@ -93,12 +122,6 @@ class AbstractEvent(News):
         """Indikerer om en bruker har lov til å melde seg på arrangementet"""
         return (not self.open_for.exists()) or self.open_for.filter(user=user).exists()
 
-    def has_started(self):
-        return self.event_start < datetime.now()
-
-    def has_finished(self):
-        return self.event_end and self.event_end < datetime.now()
-
     def registration_has_started(self):
         return self.registration_required and self.registration_start < datetime.now()
 
@@ -108,11 +131,15 @@ class AbstractEvent(News):
     def deregistration_closed(self):
         return self.deregistration_deadline and (self.deregistration_deadline < datetime.now())
 
+
+class AbstractEvent(RegistrationInfoMixin, EventInfoMixin, News):
+
+    class Meta:
+        abstract = True
+
     def __str__(self):
         return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
-
-    def __unicode__(self):
-        return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
+    __unicode__ = __str__
 
     def get_short_name(self):
         """Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke."""
@@ -142,18 +169,6 @@ class Event(AbstractEvent):
     def delete(self, *args, **kwargs):
         self.eventregistration_set.all().delete()
         super(Event, self).delete(*args, **kwargs)
-
-    def clean(self):
-        self.clean_facebook_url()
-
-    def clean_facebook_url(self):
-        """Verifiserer formen på facebook-urlen, og endrer den hvis den er feil."""
-        parsed = urlparse(self.facebook_url)
-        noscheme = parsed.netloc + parsed.path
-        self.facebook_url = 'http' + '://' + noscheme.replace("http://", "").replace("https://", "")
-
-        if self.facebook_url == "http://":
-            self.facebook_url = ""
 
     @property
     def registrations_manager(self):
