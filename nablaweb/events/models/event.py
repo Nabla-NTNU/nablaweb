@@ -124,12 +124,6 @@ class Event(AbstractEvent):
         except EventRegistration.DoesNotExist:
             logger = logging.getLogger(__name__)
             logger.info('Attempt to deregister user from non-existent event.')
-        else:
-            self.update_lists()
-
-    def update_lists(self):
-        EventRegistration.objects.fix_list_numbering(event=self)
-        EventRegistration.objects.move_waiting_to_attending(event=self)
 
     def _prune_queue(self):
         """Sletter overflødige registreringer."""

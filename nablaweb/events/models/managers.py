@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
+
 class EventRegistrationManager(models.Manager):
 
     def create_attending_registration(self, event, user):
@@ -12,6 +13,10 @@ class EventRegistrationManager(models.Manager):
         attending = False
         number = event.users_waiting()+1
         return self.create(event=event, user=user, attending=attending, number=number)
+
+    def update_lists(self, event):
+        self.fix_list_numbering(event=event)
+        self.move_waiting_to_attending(event=event)
 
     def fix_list_numbering(self, event):
         attending_regs = self.filter(event=event, attending=True)

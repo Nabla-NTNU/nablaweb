@@ -52,6 +52,10 @@ class EventRegistration(models.Model):
                                              "Attending" if self.attending else "Waiting",
                                              self.number)
 
+    def delete(self, *args, **kwargs):
+        super(EventRegistration, self).delete(*args, **kwargs)
+        EventRegistration.objects.update_lists(self.event)
+
     @classmethod
     def get_manager_for(cls, event):
         """Henter en manager for en gitt event."""
