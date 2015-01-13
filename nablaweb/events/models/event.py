@@ -2,7 +2,7 @@
 
 import logging
 
-from ..exceptions import *
+from ..exceptions import RegistrationAlreadyExists, EventFullException, DeregistrationClosed
 from .abstract_event import AbstractEvent
 from .eventregistration import EventRegistration
 
@@ -91,16 +91,8 @@ class Event(AbstractEvent):
 
     def register_user(self, user):
         """Forsøker å melde brukeren på arrangementet."""
-        self._raise_exceptions_if_not_allowed_to_register(user)
+        self._assert_user_allowed_to_register(user)
         return self.add_to_attending_or_waiting_list(user)
-
-    def _raise_exceptions_if_not_allowed_to_register(self, user):
-        if not self.registration_required:
-            raise RegistrationNotRequiredException(event=self, user=user)
-        elif not self.registration_open():
-            raise RegistrationNotOpen(event=self, user=user)
-        elif not self.allowed_to_attend(user):
-            raise RegistrationNotAllowed(event=self, user=user)
 
     def add_to_attending_or_waiting_list(self, user):
         if self.eventregistration_set.filter(user=user).exists():

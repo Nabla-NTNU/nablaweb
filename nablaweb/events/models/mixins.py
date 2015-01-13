@@ -6,6 +6,8 @@ from django.contrib.auth.models import Group
 from datetime import datetime
 from six.moves.urllib.parse import urlparse
 
+from ..exceptions import RegistrationNotRequiredException, RegistrationNotAllowed, RegistrationNotOpen
+
 
 class EventInfoMixin(models.Model):
     """Abstract model defining info about an event, excluding registration info"""
@@ -118,3 +120,11 @@ class RegistrationInfoMixin(models.Model):
 
     def deregistration_closed(self):
         return self.deregistration_deadline and (self.deregistration_deadline < datetime.now())
+
+    def _assert_user_allowed_to_register(self, user):
+        if not self.registration_required:
+            raise RegistrationNotRequiredException(event=self, user=user)
+        elif not self.registration_open():
+            raise RegistrationNotOpen(event=self, user=user)
+        elif not self.allowed_to_attend(user):
+            raise RegistrationNotAllowed(event=self, user=user)
