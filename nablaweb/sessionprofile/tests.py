@@ -22,14 +22,17 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 
-from django.core import mail
 from django.test import TestCase
+import unittest
 
-from django.contrib.auth import get_user_model; User = get_user_model()
+from django.contrib.auth import get_user_model
 
 from sessionprofile.models import SessionProfile
 
+User = get_user_model()
 
+
+@unittest.skip
 class TestSessionProfileMaintained(TestCase):
 
     def setUp(self):
