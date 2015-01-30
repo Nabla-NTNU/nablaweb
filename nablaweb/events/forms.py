@@ -3,11 +3,9 @@
 
 from django.forms import SplitDateTimeField, BooleanField 
 from django.contrib.admin.widgets import AdminSplitDateTime
-from events.models import Event
-from news.forms import NewsForm, CustomSplitDateTimeWidget
+from .models import Event
+from news.forms import NewsForm
 from news.forms import NewsCharField as EventCharField
-import datetime
-
 
 # Hvilke datoformat som aksepteres fra brukeren.
 DATE_FORMATS = ['%Y-%m-%d',

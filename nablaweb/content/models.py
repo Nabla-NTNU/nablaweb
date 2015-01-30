@@ -7,8 +7,8 @@ from django.db.models.query import QuerySet
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
-from django.contrib.comments.models import Comment
 
+from django_comments.models import Comment
 from image_cropping.fields import ImageRatioField, ImageCropField
 
 class PolymorphicMetaclass(ModelBase):
@@ -101,7 +101,7 @@ class Content(models.Model):
     def get_picture_url(self):
         return 'http://%s%s%s' % (Site.objects.get_current().domain, settings.MEDIA_URL, self.picture().name)
 
-    def delete(self):
+    def delete(self, *args, **kwargs):
         """
         Override default method, so related comments are also deleted
         """

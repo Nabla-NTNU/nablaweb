@@ -5,9 +5,8 @@ from django.contrib import messages as django_messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
-from django.template import Context, RequestContext, loader
-from django.views.generic import TemplateView, ListView, DetailView
-from django.contrib.auth.decorators import login_required, permission_required
+from django.template import Context, loader
+from django.views.generic import TemplateView, DetailView
 from django.contrib.auth import get_user_model; User = get_user_model()
 from django.utils.safestring import mark_safe
 
@@ -16,7 +15,8 @@ from itertools import chain
 from braces.views import PermissionRequiredMixin, LoginRequiredMixin
 
 from bedpres.models import BedPres
-from .models import Event, EventRegistration
+from .models import Event
+from .exceptions import *
 from .event_calendar import EventCalendar
 
 
@@ -49,8 +49,9 @@ class AdministerRegistrationsView(PermissionRequiredMixin, DetailView):
         username = self.request.POST.get('text')
         try:
             user = User.objects.get(username=username)
-            self.event.register_user(user, ignore_restrictions=True)
-        except User.DoesNotExist: pass
+            self.event.add_to_attending_or_waiting_list(user)
+        except (User.DoesNotExist, UserRegistrationException):
+            pass
     register_user.short = 'add'
     register_user.info = 'Legg til'
 
@@ -61,10 +62,10 @@ class AdministerRegistrationsView(PermissionRequiredMixin, DetailView):
             try:
                 user = User.objects.get(username=username)
                 self.event.deregister_user(user)
-            except User.DoesNotExist: pass
+            except (User.DoesNotExist, UserRegistrationException):
+                pass
     deregister_users.short = 'del'
     deregister_users.info = 'Fjern'
-
 
 
 # Offentlig
@@ -79,9 +80,11 @@ def calendar(request, year=None, month=None):
 
     # Get this months events and bedpreser separately
     events = Event.objects.select_related("content_type").filter(
-            event_start__year=year, event_start__month=month)
+        event_start__year=year,
+        event_start__month=month)
     bedpress = BedPres.objects.select_related("content_type").filter(
-            event_start__year=year, event_start__month=month)
+        event_start__year=year,
+        event_start__month=month)
 
     # Combine them to a single calendar
     try:
@@ -89,10 +92,9 @@ def calendar(request, year=None, month=None):
     except ValueError:
         raise Http404
 
-    if request.user.is_authenticated():
-        future_attending_events = request.user.eventregistration_set.filter(event__event_start__gte=today)
-    else:
-        future_attending_events = []
+    user = request.user
+    future_attending_events = user.eventregistration_set.filter(event__event_start__gte=today) \
+                              if user.is_authenticated() else []
 
     # Get some random dates in the current, next, and previous month.
     # These dates are used load the calendar for that month.
@@ -119,7 +121,6 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
         context = super(EventRegistrationsView, self).get_context_data(**kwargs)
         event = self.object
         context['eventregistrations'] = event.eventregistration_set.order_by('-attending','user__last_name')
-        object_name = self.object.content_type.model
         return context
 
 
@@ -161,19 +162,6 @@ class RegisterUserView(LoginRequiredMixin, DetailView):
     """View for at en bruker skal kunne melde seg av og på."""
 
     model = Event
-    error_messages = {
-        # Registration messages
-        'noreg'     : 'Ingen registrering.',
-        'unopened'  : 'Påmeldingen har ikke åpnet.',
-        'closed'    : 'Påmeldingen har stengt.',
-        'full'      : 'Arrangementet er fullt.',
-        'reg_exists': 'Du er allerede påmeldt.',
-        'not_allowed' : 'Du har ikke lov til å melde deg på dette arrangementet.',
-        # Deregistration messages 
-        'not_reg': 'Du verken var eller er påmeldt.',
-        'dereg_closed': 'Fristen for å melde seg av er gått ut.',
-        'not_allowed': 'Ta kontakt med ArrKom for å melde deg av.',
-        }
 
     def post(self, *args, **kwargs):
         reg_type = self.request.POST['registration_type']
@@ -197,13 +185,17 @@ class RegisterUserView(LoginRequiredMixin, DetailView):
         """
         try:
             reg = event.register_user(user)
-        except RegistrationException as e:
-            return self.error_messages[e.token]
-        else:
-            if reg.attending:
-                return "Du er påmeldt"
-            else:
-                return "Du står nå på venteliste."
+        except EventFullException:
+            return "Arrangementet er fullt"
+        except RegistrationNotAllowed:
+            return 'Du har ikke lov til å melde deg på dette arrangementet.'
+        except RegistrationNotOpen:
+            return 'Påmeldingen er ikke åpen.'
+        except RegistrationAlreadyExists:
+            return "Du er allerede påmeldt."
+        except RegistrationNotRequiredException:
+            return "Arrangementet har ikke påmelding."
+        return "Du er påmeldt" if reg.attending else "Du står nå på venteliste."
 
     def deregister_user(self, event, user):
         """Prøver å melde en bruker av arrangementet.
@@ -212,8 +204,8 @@ class RegisterUserView(LoginRequiredMixin, DetailView):
         """
         try:
             event.deregister_user(user)
-        except RegistrationException as e:
-            return self.error_messages[e.token]
+        except DeregistrationClosed:
+            return "Avmeldingsfristen er ute."
         else:
             return "Du er meldt av arrangementet."
 

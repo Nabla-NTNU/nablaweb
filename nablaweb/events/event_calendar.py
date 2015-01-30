@@ -12,7 +12,7 @@ def day_range(start, end):
     if not end:
         return [start.day] 
     num_days = (end-start).days + 1 
-    return [start.day+i for i in xrange(num_days)]
+    return [start.day+i for i in range(num_days)]
 
 
 class EventCalendar(HTMLCalendar):

@@ -135,10 +135,10 @@ INSTALLED_APPS = [
 
     'bootstrap3',
     'markdown_deux',
+    'django_comments',
 
     # Djangoting
     'django.contrib.auth',
-    'django.contrib.comments',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
