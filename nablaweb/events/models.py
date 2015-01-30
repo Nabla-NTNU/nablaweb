@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from django.db import models
 from django.contrib.auth.models import Group
 from django.conf import settings
@@ -238,7 +240,8 @@ class Event(AbstractEvent):
             reg = regs.get(user=user)
             reg.delete()
         except EventRegistration.DoesNotExist:
-            pass
+            logger = logging.getLogger(__name__)
+            logger.info('Attempt to deregister user from non-existent event.')
         else:
             self.update_lists()
 
