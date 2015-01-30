@@ -7,7 +7,7 @@
 <div class="col-md-6 news_item advert">
     {% if job.company.picture %}
         <a href="{{ job.get_absolute_url }}">
-            <img alt="" width="100%" src="{% thumbnail job.company.picture 370x123 box=job.company.cropping quality=95 %}">
+            <img class="news-picture" alt="" width="100%" src="{% thumbnail job.company.picture 370x123 box=job.company.cropping quality=95 %}">
         </a>
     {% endif %}
 	<h3>{{ job.headline }}</h3>
@@ -17,5 +17,5 @@
     {{ job.relevant_for_group.all|commas_no }}. {% if job.deadline_date %}Søknadsfristen er {{ job.deadline_date|naturalday }} kl.
     {{ job.deadline_date|date:"H:i" }}.{% endif %}
     </small></p>
-    <p><a class="btn" href="{{ job.get_absolute_url }}">Les mer &raquo;</a></p>
+    <p><a class="btn btn-default btn-read-more" href="{{ job.get_absolute_url }}">Les mer &raquo;</a></p>
 </div>
