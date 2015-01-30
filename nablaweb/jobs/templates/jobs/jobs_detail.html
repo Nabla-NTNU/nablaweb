@@ -21,7 +21,7 @@
 
 
 {% block sidebar %}
-    {% include "content/includes/meta.html" with content=job %}
     {% include "jobs/info_include.html" with job=job %}
+    {% include "content/includes/meta.html" with content=job %}
     {% include "jobs/sidebar_admin_include.html" %}
 {% endblock %}
