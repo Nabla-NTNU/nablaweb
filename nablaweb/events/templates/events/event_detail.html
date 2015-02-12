@@ -6,7 +6,6 @@
 
 {% include "news/includes/text_content.html" with news=event%}
 
-
 {# Vis påmeldte #}
 {% if user.is_authenticated %}
     {% if event.eventregistration_set.all %}
