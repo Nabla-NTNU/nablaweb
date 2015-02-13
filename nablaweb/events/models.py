@@ -113,7 +113,11 @@ class AbstractEvent(News):
 
     def get_short_name(self):
         """Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke."""
-        return self.short_name if self.short_name else (self.headline[0:18].capitalize() + '...')
+        if self.short_name:
+            return self.short_name
+        if len(self.headline) <= 19:
+            return self.headline
+        return self.headline[0:18].capitalize() + '...'
 
 
 class Event(AbstractEvent):

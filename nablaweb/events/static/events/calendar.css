@@ -19,7 +19,8 @@
         height: 70px;
         border: 1px solid #ddd;
         border-radius: 3px;
-        padding: 3px;
+        padding: 5px;
+        padding-bottom: 10px;
     }
     .dayname {
         text-align: center;
