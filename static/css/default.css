@@ -54,6 +54,7 @@
         font-size: 30px;
         font-weight: bold;
         line-height: 37.5px;
+        margin-top: 15px;
     }
 
     #whitebox h2, #whitebox h3 {
@@ -74,10 +75,6 @@
         font-size: 24px;
         font-weight: bold;
         line-height: 28px;
-    }
-
-    .news_item h2, .news_item h3 {
-        margin-top: 0px;
     }
 
     p {
