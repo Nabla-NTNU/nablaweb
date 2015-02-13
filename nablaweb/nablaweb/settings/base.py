@@ -165,7 +165,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'sekizai.context_processors.sekizai',
 
     'events.context_processors.upcoming_events',     
-    'jobs.views.activej',
+    'jobs.views.active_jobs',
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
     'nablaweb.context_processors.primary_dir',

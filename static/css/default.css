@@ -32,7 +32,6 @@
 
     .news-picture {
         width: 100%;
-        margin-bottom: 15px;
     }
 
     form.dropdown-menu {
@@ -55,6 +54,7 @@
         font-size: 30px;
         font-weight: bold;
         line-height: 37.5px;
+        margin-top: 15px;
     }
 
     #whitebox h2, #whitebox h3 {
@@ -75,10 +75,6 @@
         font-size: 24px;
         font-weight: bold;
         line-height: 28px;
-    }
-
-    .news_item h2, .news_item h3 {
-        margin-top: 0px;
     }
 
     p {
@@ -257,6 +253,6 @@
     background-image: linear-gradient(to bottom,#f2f2f2 0,#eaeaea 100%);
 }
 
-li.pager-counter a, li.pager-counter a:hover, li.pager-counter a:focus {
+li.pager-counter {
     cursor: default;
 }

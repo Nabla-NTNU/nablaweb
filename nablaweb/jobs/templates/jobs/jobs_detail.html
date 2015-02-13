@@ -7,16 +7,9 @@
 
 {% block content %}
 
-    {% if job.company.picture %}
-        <img alt="" width="100%" src="{% thumbnail job.company.picture 770x250 box=job.company.cropping quality=95 %}">
-    {% endif %}        
+{% include "news/includes/text_content.html" with news=job%}
+{% include "content/includes/comments.html" with content=job %}
 
-    <h2>{{ job.headline }}</h2>
-    {{ job.lead_paragraph|markdown|wikilinks}}
-    {{ job.body|markdown|wikilinks}}
-    <hr>
-
-    {% include "content/includes/comments.html" with content=job %}
 {% endblock %}
 
 

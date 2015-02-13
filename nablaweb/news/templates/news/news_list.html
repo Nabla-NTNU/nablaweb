@@ -34,25 +34,25 @@
 
 {# .... **Now the pagination section** .... #}
 {% if is_paginated %}
-    <div class="pager">
-        <ul>
-            {% if page_obj.has_next %}
-                <li>
-                    <a href="?page={{ page_obj.next_page_number }}">&larr; Eldre</a>
-                </li>
-            {% endif %}
-
-            <li class="disabled pager-counter">
-                Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
+<nav>
+    <ul class="pager">
+        {% if page_obj.has_next %}
+            <li class="previous">
+                <a href="?page={{ page_obj.next_page_number }}"><span aria-hidden="true">&larr;</span> Eldre</a>
             </li>
+        {% endif %}
 
-            {% if page_obj.has_previous %}
-                <li>
-                    <a href="?page={{ page_obj.previous_page_number }}">Nyere &rarr;</a>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
+        <li class="disabled pager-counter">
+            Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
+        </li>
+
+        {% if page_obj.has_previous %}
+            <li class="next">
+                <a href="?page={{ page_obj.previous_page_number }}">Nyere <span aria-hidden="true">&rarr;</span></a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
 {% endif %}
 {% endblock content %}
 
