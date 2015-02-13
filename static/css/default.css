@@ -253,6 +253,6 @@
     background-image: linear-gradient(to bottom,#f2f2f2 0,#eaeaea 100%);
 }
 
-li.pager-counter a, li.pager-counter a:hover, li.pager-counter a:focus {
+li.pager-counter {
     cursor: default;
 }
