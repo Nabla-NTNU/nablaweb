@@ -1,25 +1,23 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import *
+from django.conf.urls import url, patterns
 from django.views.generic import RedirectView
 
 from events.views import ical_event
 
-from .models import BedPres
-from .views import *
+from .views import BedPresDetailView, BedPresRegisterUserView
 
 urlpatterns = patterns('bedpres.views',
 
-    # Administrasjon
-    (r'^opprett/$', BPCFormView.as_view()),
-
     url(r'^$', RedirectView.as_view(url='/arrangement/')),
     url(r'^(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$',
-        BedPresDetailView.as_view( context_object_name = "bedpres" ),
+        BedPresDetailView.as_view(),
         name='bedpres_detail'),
 
     # Bruker
-    url(r'^(?P<pk>\d{1,8})/registration$', BedPresRegisterUserView.as_view(), name='bedpres_registration'),
+    url(r'^(?P<pk>\d{1,8})/registration$',
+        BedPresRegisterUserView.as_view(),
+        name='bedpres_registration'),
 
     # Eksporter
     (r'^(?P<bedpres_id>\d{1,8})/eksporter$', ical_event),

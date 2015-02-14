@@ -1,7 +1,6 @@
 from django.contrib import admin
 from content.admin import ContentAdmin
-from bedpres.models import BedPres
-from bedpres.forms import BedPresForm
+from .models import BedPres
 
 
 class BedPresAdmin(ContentAdmin):
@@ -26,7 +25,5 @@ class BedPresAdmin(ContentAdmin):
               "places",
               "has_queue")
     prepopulated_fields = {"slug": ("headline",)}
-    #form = BedPresForm
-
 
 admin.site.register(BedPres, BedPresAdmin)

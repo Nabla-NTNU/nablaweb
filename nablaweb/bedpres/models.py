@@ -3,10 +3,9 @@
 from django.db import models
 from events.models import AbstractEvent
 from jobs.models import Company
-import bpc_core
+from accounts.models import NablaUser as User
 
-from accounts.models import NablaUser
-User = NablaUser
+from . import bpc_core
 
 def get_bpc_user_dictionary(user):
     """Henter brukerinformasjonen BPC krever fra et User objekt."""
@@ -20,9 +19,18 @@ class BedPres(AbstractEvent):
     Modell som lagrer informasjon om en bedpress fra BPC.
     """
 
-    # Id'en til bedpressen internt hos BPC
-    bpcid = models.CharField(verbose_name="BPC-id", max_length=16, unique=True, blank=False, help_text = "Dette er id'en som blir brukt internt hos BPC. Ikke endre den hvis du ikke vet du gjør.")
-    company = models.ForeignKey(Company, verbose_name="Bedrift", blank=False, help_text="Hvilken bedrift som står bak bedriftspresentasjonen")
+    bpcid = models.CharField(
+        verbose_name="BPC-id",
+        max_length=16,
+        unique=True,
+        blank=False,
+        help_text=("Dette er id'en som blir brukt internt hos BPC. "
+                   "Ikke endre den hvis du ikke vet du gjør."))
+    company = models.ForeignKey(
+        Company,
+        verbose_name="Bedrift",
+        blank=False,
+        help_text="Hvilken bedrift som står bak bedriftspresentasjonen")
 
     # Informajon fra BPC som blir lastet ned av metodene
     # bpc_info,bpc_waiting_list og bpc_attending_list ved behov.
@@ -96,16 +104,10 @@ class BedPres(AbstractEvent):
             return 100
 
     def correct_picture(self):
-        if self.picture:
-            return self.picture
-        else:
-            return self.company.picture
+        return self.picture if self.picture else self.company.picture
 
     def correct_cropping(self):
-        if self.picture:
-            return self.cropping
-        else:
-            return self.company.cropping
+        return self.cropping if self.picture else self.company.cropping
 
     def open_for_classes(self):
         bpc_info = self.bpc_info
@@ -152,39 +154,3 @@ class BedPres(AbstractEvent):
             except bpc_core.BPCResponseException:
                 return []
         return self._bpc_waiting_list
-
-    def update_info_from_bpc(self):
-        """
-        Oppdaterer informasjon fra BPC
-        """
-        bpc_info = self.bpc_info
-        self.headline = bpc_info['title']
-        self.slug = bpc_info['title'].strip().replace(' ','-')
-#       picture = bpc_info['logo']
-
-        from django.core.files import File
-        import urllib
-        import os
-
-        #if not self.picture:
-       # result = urllib.urlretrieve(self.bpc_info['logo']) # image_url is a URL to an image
-       # filename,file_ext = os.path.splittext(self.bpc_info['logo'])
-
-        #self.picture.save(
-         #   os.path.basename("news_pictures/bpc_"+self.bpcid+file_ext ),
-          #  File(open(result[0]))
-           # )
-        #self.save()
-
-        self.body = bpc_info['description']
-        self.organizer = 'Bedkom'
-        self.location = bpc_info['place']
-        self.event_start = bpc_info['time']
-        self.registration_required = True
-        self.registration_start = bpc_info['registration_start']
-        self.registration_deadline = bpc_info['deadline']
-        self.places = bpc_info['seats']
-        self.has_queue = bool(bpc_info['waitlist_enabled'])
-
-        self.save()
- 
