@@ -2,9 +2,7 @@
 
 from django.views.generic import DetailView, ListView, UpdateView, FormView
 from django.contrib import messages
-from django.contrib.messages.api import MessageFailure
 from django.contrib.auth import get_user_model
-from django.contrib.auth.signals import user_logged_in, user_logged_out
 
 from braces.views import LoginRequiredMixin
 
@@ -65,19 +63,3 @@ class RegistrationView(FormView):
         messages.add_message(self.request,messages.INFO,
                              'Registreringsepost sendt til %s' % user.email)
         return super(RegistrationView, self).form_valid(form)
-
-
-## Login/logout meldinger
-def login_message(sender, request, user, **kwargs):
-    try:
-        messages.add_message(request, messages.INFO, u'Velkommen inn <strong>{}</strong>'.format(user.username))
-    except MessageFailure:
-        pass
-user_logged_in.connect(login_message)
-
-def logout_message(sender, request, user, **kwargs):
-    try:
-        messages.add_message(request, messages.INFO, u'<strong>{}</strong> ble logget ut'.format(user.username))
-    except MessageFailure:
-        pass
-user_logged_out.connect(logout_message)
