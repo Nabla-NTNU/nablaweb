@@ -86,11 +86,6 @@ class NablaGroup(Group):
     group_type = models.CharField(max_length=10, blank=True, choices=GROUP_TYPES)
 
 
-class GroupLeader(NablaGroup):
-    """ Gruppe for en person, for eksempel komiteledere og lignende """
-    leads = models.OneToOneField(NablaGroup, related_name="leader")
-
-
 class FysmatClass(NablaGroup):
     """ Gruppe for kull """
     class Meta:

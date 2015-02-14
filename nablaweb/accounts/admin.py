@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group 
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 
-from .models import NablaUser, NablaGroup, FysmatClass, GroupLeader
+from .models import NablaUser, NablaGroup, FysmatClass
 from .forms import NablaUserChangeForm, NablaUserCreationForm
 
 User = get_user_model()
@@ -66,7 +66,6 @@ except:
 admin.site.register(Group, ExtendedGroupAdmin)
 admin.site.register(NablaGroup,ExtendedNablaGroupAdmin)
 admin.site.register(FysmatClass)
-admin.site.register(GroupLeader)
 
 
 class NablaUserAdmin(UserAdmin):
