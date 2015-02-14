@@ -28,30 +28,46 @@ class EventCalendar(HTMLCalendar):
 
     def formatday(self, day, weekday):
         """Returns the body of a single day formatted as a list"""
-        if day != 0:
-            cssclass = self.cssclasses[weekday]
-            if date.today() == date(self.year, self.month, day):
-                cssclass += ' today'
-            if day in self.events:
-                cssclass += ' filled'
-                body = ['<ul>']
-                for event in self.events[day]:
-                    body.append('<li>')
-                    body.append('<a href="%s">' % event.get_absolute_url())
-                    # TODO: Use event.headline if short_name does not exist
-                    body.append(esc(event.get_short_name()))
-                    body.append('</a></li>')
-                body.append('</ul>')
 
-                return self.day_cell(cssclass, 
-                    '<div class="date"><span class="day">%s </span><span class="num">%d.</span></div> %s' % 
-                    (day_full[weekday], day, ''.join(body)))
+        body_str = self.format_event_list(day)
+        css_classes = self.get_css_day_classes(day, weekday)
+        if body_str:
+            css_classes.append("filled")
 
-            return self.day_cell(cssclass, 
-                '<div class="date"><span class="day">%s </span><span class="num">%d.</span></div>' % 
-                (day_full[weekday], day))
+        day_format_string = u'''
+            <div class="date">
+                <span class="day">{weekday}</span>
+                <span class="num">{day}.</span>
+            </div>{body}\n'''
+        day_string = day_format_string.format(
+            weekday=day_full[weekday],
+            day=day,
+            body=body_str
+        )
+        return self.day_cell(" ".join(css_classes), day_string)
 
-        return self.day_cell('noday', '&nbsp;')
+    def get_css_day_classes(self, day, weekday):
+        css_classes = self.cssclasses[weekday].split(" ")
+        if day == 0:
+            css_classes.append("noday")
+        elif date.today() == date(self.year, self.month, day):
+            css_classes.append('today')
+        return css_classes
+
+    def format_event_list(self, day):
+        events_list = self.events.get(day, [])
+        list_items = [self.format_event_list_item(event)
+                      for event in events_list]
+        if list_items:
+            return u"".join([u'<ul>'] + list_items + [u'</ul>'])
+        else:
+            return u""
+
+    def format_event_list_item(self, event):
+        return u'<li><a href="{url}">{name}</a></li>\n'.format(
+            url=event.get_absolute_url(),
+            name=esc(event.get_short_name())
+        )
 
     def formatweek(self, theweek):
         """
