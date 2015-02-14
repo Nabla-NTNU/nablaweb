@@ -6,7 +6,6 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from accounts.models import NablaUser
 
-
 class TestUserDetail(TestCase):
 
     def setUp(self):
@@ -24,10 +23,3 @@ class TestUserDetail(TestCase):
         url = reverse("member_profile", kwargs={"username": self.user1.username}) 
         response = self.client.get(url)
         self.assertRedirects(response, "/login/?next={}".format(url))
-
-
-
-
-
-
-

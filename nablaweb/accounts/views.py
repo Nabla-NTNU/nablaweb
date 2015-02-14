@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import redirect, get_object_or_404, render
-from django.http import HttpResponse, HttpResponsePermanentRedirect
 from django.views.generic import DetailView, ListView, UpdateView, FormView
 from django.template import loader, Context
 from django.contrib import messages
 from django.contrib.messages.api import MessageFailure
-from django.contrib.auth import get_user_model; User = get_user_model()
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import UserManager
 from django.contrib.auth.signals import user_logged_in, user_logged_out
-from django.contrib.auth.decorators import login_required
 
 from braces.views import LoginRequiredMixin
 
-from .forms import UserForm, RegistrationForm, SearchForm
+from .forms import UserForm, RegistrationForm
 from .models import NablaUser
 
+User = get_user_model()
 
 ## Brukerprofil
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -28,7 +26,6 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data(**kwargs)
-        member = self.object
         return context
 
 
@@ -54,45 +51,24 @@ class UserList(LoginRequiredMixin, ListView):
     template_name = 'accounts/list.html'
 
 
-@login_required
-def search(request):
-    """ Returnerer brukerne med brukernavn, fornavn eller etternavn som
-        begynner på query """
-
-    from django.db.models import Q
-
-    if not (request.method == 'POST'):
-        return HttpResponsePermanentRedirect("/brukere/view")
-    
-    form = SearchForm(request.POST)
-        
-    if form.is_valid():
-        query = form.cleaned_data['searchstring']
-
-        users = NablaUser.objects.filter(Q(username__istartswith=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
-        return render(request, "accounts/list.html", {'users': users, 'searchquery': query})
-    else:
-        return HttpResponsePermanentRedirect("/brukere/view")
-
-def get_name(ntnu_username):
-    regex = '^%s:' % username
-    process = subprocess.Popen(['grep',regex, settings.NTNU_PASSWD], shell=False, stdout=subprocess.PIPE)
-    full_name = process.communicate()[0].split(':')[4].split(" ")
-    last_name = full_name.pop()
-    first_name = " ".join(full_name)
-    return (first_name,last_name)
-
-
 class RegistrationView(FormView):
     form_class = RegistrationForm
     template_name = 'accounts/user_registration.html'
-    sucess_url = '/'
+    success_url = '/'
 
     def form_valid(self, form):
         username = form.cleaned_data['username'] 
-        studmail = username+"@stud.ntnu.no"
-        (user, created_user) = NablaUser.objects.get_or_create(username=username)
+        user, created_user = NablaUser.objects.get_or_create(username=username)
 
+        password = self._activate_user_and_create_password(user)
+        self._send_activation_email(user, password)
+
+        messages.add_message(self.request,messages.INFO,
+                             'Registreringsepost sendt til %s' % user.email)
+        return super(RegistrationView, self).form_valid(form)
+
+    def _activate_user_and_create_password(self, user):
+        studmail = user.username+"@stud.ntnu.no"
         if not(user.email):
             user.email = studmail
 
@@ -100,13 +76,14 @@ class RegistrationView(FormView):
         password = user_manager.make_random_password()
         user.set_password(password)
         user.is_active = True
-        user.save() 
-        t = loader.get_template('accounts/registration_email.txt')
-        email_text = t.render(Context(locals()))
-        user.email_user('Bruker på nabla.no', email_text)
+        user.save()
+        return password
 
-        messages.add_message(self.request, messages.INFO, 'Registreringsepost sendt til %s' % user.email)
-        return super(RegistrationView, self).form_valid(form)
+    def _send_activation_email(self, user, password):
+        t = loader.get_template('accounts/registration_email.txt')
+        email_text = t.render(Context({"username": user.username,
+                                       "password": password}))
+        user.email_user('Bruker på nabla.no', email_text)
 
 
 ## Login/logout meldinger

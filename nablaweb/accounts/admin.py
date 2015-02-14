@@ -14,9 +14,11 @@ User = get_user_model()
 
 
 class GroupAdminForm(forms.ModelForm):
-    users = forms.ModelMultipleChoiceField(queryset=User.objects.filter(is_active=True),
-                                           widget=FilteredSelectMultiple('Users', False),
-                                           required=False)
+    users = forms.ModelMultipleChoiceField(
+        queryset=User.objects.filter(is_active=True),
+        widget=FilteredSelectMultiple('Users', False),
+        required=False)
+
     class Meta:
         model = Group
         fields = '__all__'
@@ -27,7 +29,7 @@ class GroupAdminForm(forms.ModelForm):
             initial = kwargs.get('initial', {})
             initial['users'] = instance.user_set.all()
             kwargs['initial'] = initial
-        super(forms.ModelForm, self).__init__(*args, **kwargs)
+        super(GroupAdminForm, self).__init__(*args, **kwargs)
 
     def save(self, commit=True):
         group = super(forms.ModelForm, self).save(commit=commit)

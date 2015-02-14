@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import *
+from django.conf.urls import url, patterns
 from django.views.generic import RedirectView
 
 from .views import UserDetailView, UpdateProfile, UserList, RegistrationView
@@ -15,10 +15,18 @@ urlpatterns = patterns('django.contrib.auth.views',
 )
 
 urlpatterns += patterns('accounts.views',
-    url(r'^$', RedirectView.as_view(url='view/')),
-    url(r'edit/$', UpdateProfile.as_view(), name='edit_profile'),
-    url(r'view/$', UserList.as_view(), name='user_list'),
-    url(r'view/(?P<username>\w+)/$', UserDetailView.as_view(), name='member_profile'),
-    url(r'register/$', RegistrationView.as_view(), name='user_registration'),
-    url(r'search/$', 'search', name='user_search'),
+    url(r'^$',
+        RedirectView.as_view(url='view/')),
+    url(r'edit/$',
+        UpdateProfile.as_view(),
+        name='edit_profile'),
+    url(r'view/$',
+        UserList.as_view(),
+        name='user_list'),
+    url(r'view/(?P<username>\w+)/$',
+        UserDetailView.as_view(),
+        name='member_profile'),
+    url(r'register/$',
+        RegistrationView.as_view(),
+        name='user_registration'),
 )

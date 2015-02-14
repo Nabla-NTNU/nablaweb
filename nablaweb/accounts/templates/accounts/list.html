@@ -6,21 +6,7 @@
 <h2>Komponenter og nullvektorer</h2>
 <br />
 
-{% comment %}
-{# TODO: Fjern hardkoding av action #}
-<form class="input-append" method="post" action="/brukere/search/" id="user-search">
-    {% csrf_token %}
-    <input class="col-md-5" placeholder="Søk i listen" name="searchstring" id="searchstring" type="text">
-    <button class="btn">
-        <i class="icon-search"></i>
-    </button>
-</form>
-{% endcomment %}
-
 {% cache 900 userlist %}
-{% if searchquery %}
-    <p>Du søkte etter <b>{{ searchquery }}</b>. <a href="{% url "user_list" %}">Vis alle brukere</a>
-{% endif %}
 
 {% if users %}
     <table id="user_list" class="table table-condensed table-striped table-bordered" width="100%">
@@ -57,23 +43,5 @@
     <p>Vi fant ingen brukere som matchet søket ditt :(</p>
 {% endif %}
 {% endcache %}
-
-{% comment %}
-<div class="pagination">
-	<span class="step-links">
-		{% if users.has_previous %}
-			<a href="?side={{ users.previous_page_number }}">forrige</a>
-		{% endif %}
-
-		<span class="current">
-			Side {{ users.number }} av {{ users.paginator.num_pages }}.
-		</span>
-
-		{% if users.has_next %}
-			<a href="?side={{ users.next_page_number }}">neste</a>
-		{% endif %}
-	</span>
-</div>
-{% endcomment %}
 
 {%endblock%}

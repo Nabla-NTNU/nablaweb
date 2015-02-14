@@ -1,6 +1,6 @@
 from haystack import indexes
 from accounts.models import NablaUser
-import datetime
+
 
 class NablaUserIndex(indexes.SearchIndex, indexes.Indexable):
     username = indexes.CharField(model_attr='username')
