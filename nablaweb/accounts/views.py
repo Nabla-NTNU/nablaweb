@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django.views.generic import DetailView, ListView, UpdateView, FormView
-from django.contrib import messages
 from django.contrib.auth import get_user_model
 
-from braces.views import LoginRequiredMixin
+from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin
 
 from .forms import UserForm, RegistrationForm
 from .models import NablaUser
@@ -12,7 +11,8 @@ from .utils import activate_user_and_create_password, send_activation_email
 
 User = get_user_model()
 
-## Brukerprofil
+
+#  Brukerprofil
 class UserDetailView(LoginRequiredMixin, DetailView):
     """Viser brukerens profil."""
     context_object_name = 'member'
@@ -21,25 +21,15 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         return NablaUser.objects.get(username=self.kwargs['username'])
 
-    def get_context_data(self, **kwargs):
-        context = super(UserDetailView, self).get_context_data(**kwargs)
-        return context
 
-
-class UpdateProfile(LoginRequiredMixin, UpdateView):
+class UpdateProfile(LoginRequiredMixin, FormMessagesMixin, UpdateView):
     form_class = UserForm
     template_name = 'accounts/edit_profile.html'
+    form_valid_message = 'Profil oppdatert.'
+    form_invalid_message = 'Du har skrevet inn noe feil.'
 
     def get_object(self, queryset=None):
         return self.request.user
-
-    def form_valid(self, form):
-        messages.add_message(self.request, messages.INFO, 'Profil oppdatert.')
-        return super(UpdateProfile, self).form_valid(form)
-
-    def form_invalid(self, form):
-        messages.add_message(self.request, messages.ERROR, 'Du har skrevet inn noe feil.')
-        return super(UpdateProfile, self).form_invalid(form)
 
 
 class UserList(LoginRequiredMixin, ListView):
@@ -48,7 +38,7 @@ class UserList(LoginRequiredMixin, ListView):
     template_name = 'accounts/list.html'
 
 
-class RegistrationView(FormView):
+class RegistrationView(MessageMixin, FormView):
     form_class = RegistrationForm
     template_name = 'accounts/user_registration.html'
     success_url = '/'
@@ -60,6 +50,5 @@ class RegistrationView(FormView):
         password = activate_user_and_create_password(user)
         send_activation_email(user, password)
 
-        messages.add_message(self.request,messages.INFO,
-                             'Registreringsepost sendt til %s' % user.email)
+        self.messages.info('Registreringsepost sendt til %s' % user.email)
         return super(RegistrationView, self).form_valid(form)
