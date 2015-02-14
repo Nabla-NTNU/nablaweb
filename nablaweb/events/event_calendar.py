@@ -76,11 +76,6 @@ class EventCalendar(HTMLCalendar):
         s = ''.join(self.formatday(d, wd) for (d, wd) in theweek)
         return '<ul class="week">%s</ul>' % s
 
-    def formatmonth(self, year, month):
-        """Returns a whole month"""
-        self.year, self.month = year, month
-        return super(EventCalendar, self).formatmonth(year, month)
-
     def formatweekday(self, i):
         return '<li class="dayname">%s</li>' % day_full[i];
 
@@ -106,16 +101,11 @@ class EventCalendar(HTMLCalendar):
         Return a formatted month as a table.
         """
         self.year, self.month = theyear, themonth
-        v = []
-        a = v.append
-        a('\n')
-        a('<div class="month">')
-        a('\n')
-        a(self.formatweekheader())
-        a('\n')
-        for week in self.monthdays2calendar(theyear, themonth):
-            a(self.formatweek(week))
-            a('\n')
-        a('</div>')
-        a('\n')
-        return ''.join(v)
+
+        start_tag = '<div class="month">'
+        week_header = self.formatweekheader()
+        weeks = [self.formatweek(week)
+                 for week in self.monthdays2calendar(theyear, themonth)]
+        week_string = "\n".join(weeks)
+        end_tag = '</div>'
+        return '\n'.join([start_tag, week_header, week_string, end_tag])
