@@ -77,6 +77,10 @@ def calendar(request, year=None, month=None):
     today = datetime.date.today()
     year = int(year) if year else today.year
     month = int(month) if month else today.month
+    try:
+        first_of_month = datetime.date(year, month, 1)
+    except ValueError:  # Not a valid year and month
+        raise Http404
 
     # Get this months events and bedpreser separately
     events = Event.objects.select_related("content_type").filter(
@@ -87,10 +91,7 @@ def calendar(request, year=None, month=None):
         event_start__month=month)
 
     # Combine them to a single calendar
-    try:
-        cal = EventCalendar(chain(events, bedpress)).formatmonth(year, month)
-    except ValueError:
-        raise Http404
+    cal = EventCalendar(chain(events, bedpress)).formatmonth(year, month)
 
     user = request.user
     future_attending_events = user.eventregistration_set.filter(event__event_start__gte=today) \
@@ -103,9 +104,9 @@ def calendar(request, year=None, month=None):
     # * next is some day in the next month
     return render(request, 'events/event_list.html', {
         'calendar': mark_safe(cal),
-        'prev': datetime.date(year, month, 1) - datetime.timedelta(27),
-        'this': datetime.date(year, month, 1),
-        'next': datetime.date(year, month, 1) + datetime.timedelta(32),
+        'prev': first_of_month - datetime.timedelta(27),
+        'this': first_of_month,
+        'next': first_of_month + datetime.timedelta(32),
         'future_attending_events': future_attending_events,
     })
 
