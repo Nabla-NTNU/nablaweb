@@ -2,19 +2,17 @@
 Tester for accounts-appen
 """
 
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
-
-from .views import UserDetailView
+from accounts.models import NablaUser
 
 
 class TestUserDetail(TestCase):
 
     def setUp(self):
-        self.user1 = User.objects.create_user(username="user1")
+        self.user1 = NablaUser.objects.create_user(username="user1")
         self.user2_password = "hallo"
-        self.user2 = User.objects.create_user(username="user2", password=self.user2_password)
+        self.user2 = NablaUser.objects.create_user(username="user2", password=self.user2_password)
 
     def test_logged_in_user_can_view_profile(self):
         self.client.login(username=self.user2.username, password=self.user2_password)
