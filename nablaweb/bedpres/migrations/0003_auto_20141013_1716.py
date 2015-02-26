@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='bedpres',
             name='deregistration_deadline',
-            field=models.DateTimeField(null=True, verbose_name=b'avmeldingsfrist', blank=True),
+            field=models.DateTimeField(null=True, verbose_name='avmeldingsfrist', blank=True),
         ),
     ]

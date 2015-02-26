@@ -15,8 +15,8 @@ class Migration(migrations.Migration):
             name='Nablad',
             fields=[
                 ('news_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='news.News')),
-                ('pub_date', models.DateField(help_text=b'Publikasjonsdato', null=True, verbose_name=b'publisert')),
-                ('file', models.FileField(help_text=b'Filnavn', upload_to=b'nabladet', verbose_name=b'PDF-fil')),
+                ('pub_date', models.DateField(help_text='Publikasjonsdato', null=True, verbose_name='publisert')),
+                ('file', models.FileField(help_text='Filnavn', upload_to='nabladet', verbose_name='PDF-fil')),
             ],
             options={
                 'ordering': ('-pub_date',),
