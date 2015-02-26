@@ -143,7 +143,7 @@ def _create_valid_request(data):
     def _copy_parameters(parameters, raise_error, error_msg):
         for parameter in parameters:
             try:
-                request[parameter] = data[parameter].encode('utf-8')
+                request[parameter] = data[parameter]
                 _validate_parameter(parameter, data[parameter])
             except KeyError:
                 if raise_error:
@@ -166,20 +166,19 @@ def _make_request(**request):
 
     # TODO: Sjekk hvilke unntak som risikeres fra urlencode og urlopen.
     validated_request = _create_valid_request(request)
-    answer = Request(BPC_URL, urlencode(validated_request))
+    validated_request = {key.encode("utf-8"): value.encode("utf-8") for key, value in validated_request.items()}
+    answer = Request(BPC_URL, urlencode(validated_request).encode())
 
     try:
         fd = urlopen(answer)
         raw_data = fd.read()
     except URLError:
         raise BPCClientException("Could not contact server.")
-    finally:
-        fd.close()
 
-    response = json.loads(raw_data)
+    response = json.loads(raw_data.decode("utf-8"))
 
     if 'error' in response:
-        error_id = response['error'][0].keys()[0]
+        error_id = list(response['error'][0].keys())[0]
         raise BPCResponseException(BPC_ERRORS[error_id], response)
 
     return response
