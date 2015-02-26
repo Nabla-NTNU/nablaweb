@@ -2,14 +2,12 @@ from django import template
 
 register = template.Library()
 
+
 @register.filter
 def commas_no(qset):
-    final_str = ""
-    for i in xrange(0,len(qset)):
-        if (i == len(qset)-1):
-            final_str += qset[i].__unicode__()
-        elif (i == len(qset)-2):
-            final_str += qset[i].__unicode__() + " og "
-        else:
-            final_str += qset[i].__unicode__() + ", "
-    return final_str
+    """Formats a queryset as a list seperated by commas and "og" at the end."""
+    string_list = list(map(str, qset))
+    if len(string_list) < 2:
+        return "".join(string_list)
+    else:
+        return ", ".join(string_list[:-1]) + " og " + string_list[-1]
