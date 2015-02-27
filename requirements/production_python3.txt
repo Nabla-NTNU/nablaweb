@@ -1,0 +1,4 @@
+-r base.txt
+
+PyMySQL
+python3-memcached
