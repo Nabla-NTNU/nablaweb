@@ -314,7 +314,7 @@ class EventRegistration(models.Model):
     class Meta:
         verbose_name = 'påmelding'
         verbose_name_plural = 'påmeldte'
-        unique_together = (("event", "user"), ("number", "attending"))
+        unique_together = (("event", "user"), ("event", "user", "number", "attending"))
 
     def __unicode__(self):
         return u'%s, %s is %s, place: %s' % (self.event,
