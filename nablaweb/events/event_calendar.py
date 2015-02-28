@@ -3,16 +3,7 @@ from calendar import HTMLCalendar
 from datetime import date
 
 from django.utils.html import conditional_escape as esc
-
-day_full = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', u'Lørdag', u'Søndag']
-day_abbr = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', u'Lør', u'Søn']
-
-
-def day_range(start, end):
-    if not end:
-        return [start.day] 
-    num_days = (end-start).days + 1 
-    return [start.day+i for i in xrange(num_days)]
+from .utils import group_events_by_day
 
 
 class EventCalendar(HTMLCalendar):
@@ -21,85 +12,85 @@ class EventCalendar(HTMLCalendar):
 
     .. _HTMLCalendar: http://hg.python.org/cpython/file/2.7/Lib/calendar.py
     """
+    day_full = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag',
+                'Fredag', u'Lørdag', u'Søndag']
 
     def __init__(self, events):
         super(EventCalendar, self).__init__()
-        self.events = self.group_by_day(events)
-
-    def formatday(self, day, weekday):
-        """Returns the body of a single day formatted as a list"""
-        if day != 0:
-            cssclass = self.cssclasses[weekday]
-            if date.today() == date(self.year, self.month, day):
-                cssclass += ' today'
-            if day in self.events:
-                cssclass += ' filled'
-                body = ['<ul>']
-                for event in self.events[day]:
-                    body.append('<li>')
-                    body.append('<a href="%s">' % event.get_absolute_url())
-                    # TODO: Use event.headline if short_name does not exist
-                    body.append(esc(event.get_short_name()))
-                    body.append('</a></li>')
-                body.append('</ul>')
-
-                return self.day_cell(cssclass, 
-                    '<div class="date"><span class="day">%s </span><span class="num">%d.</span></div> %s' % 
-                    (day_full[weekday], day, ''.join(body)))
-
-            return self.day_cell(cssclass, 
-                '<div class="date"><span class="day">%s </span><span class="num">%d.</span></div>' % 
-                (day_full[weekday], day))
-
-        return self.day_cell('noday', '&nbsp;')
-
-    def formatweek(self, theweek):
-        """
-        Return a complete week as a table row.
-        """
-        s = ''.join(self.formatday(d, wd) for (d, wd) in theweek)
-        return '<ul class="week">%s</ul>' % s
-
-    def formatmonth(self, year, month):
-        """Returns a whole month"""
-        self.year, self.month = year, month
-        return super(EventCalendar, self).formatmonth(year, month)
-
-    def formatweekday(self, i):
-        return '<li class="dayname">%s</li>' % day_full[i];
-
-    def formatweekheader(self):
-         """
-         Return a header for a week as a table row.
-         """
-         s = ''.join(self.formatweekday(i) for i in self.iterweekdays())
-         return '<ul class="daynames">%s</ul>' % s
-
-    def group_by_day(self, events):
-        day_dict = {}
-        for e in events:
-            for day in day_range(e.event_start, e.event_end):
-                day_dict.setdefault(day, []).append(e)
-        return day_dict
-
-    def day_cell(self, cssclass, body):
-        return '<li class="cell %s">%s</li>' % (cssclass, body)
+        self.events_grouped_by_day = group_events_by_day(events)
 
     def formatmonth(self, theyear, themonth, withyear=True):
         """
         Return a formatted month as a table.
         """
         self.year, self.month = theyear, themonth
-        v = []
-        a = v.append
-        a('\n')
-        a('<div class="month">')
-        a('\n')
-        a(self.formatweekheader())
-        a('\n')
-        for week in self.monthdays2calendar(theyear, themonth):
-            a(self.formatweek(week))
-            a('\n')
-        a('</div>')
-        a('\n')
-        return ''.join(v)
+
+        start_tag = '<div class="month">'
+        week_header = self.formatweekheader()
+        weeks = [self.formatweek(week)
+                 for week in self.monthdays2calendar(theyear, themonth)]
+        week_string = "\n".join(weeks)
+        end_tag = '</div>'
+        return '\n'.join([start_tag, week_header, week_string, end_tag])
+
+    def formatweekheader(self):
+        """
+        Return a header for a week as a table row.
+        """
+        s = ''.join(self.formatweekday(i) for i in self.iterweekdays())
+        return u'<ul class="daynames">{}</ul>'.format(s)
+
+    def formatweekday(self, i):
+        return u'<li class="dayname">{}</li>'.format(self.day_full[i])
+
+    def formatweek(self, theweek):
+        """
+        Return a complete week as a table row.
+        """
+        s = ''.join(self.formatday(d, wd) for (d, wd) in theweek)
+        return u'<ul class="week">{}</ul>'.format(s)
+
+    def formatday(self, day, weekday):
+        """Returns the body of a single day formatted as a list"""
+
+        html_event_list = self.format_event_list(day)
+        css_classes = self.get_css_day_classes(day, weekday)
+        if html_event_list:
+            css_classes.append("filled")
+
+        day_format_string = u'''
+            <div class="date">
+                <span class="day">{weekday}</span>
+                <span class="num">{day}.</span>
+            </div>{body}\n'''
+        day_string = day_format_string.format(
+            weekday=self.day_full[weekday],
+            day=day,
+            body=html_event_list
+        )
+        return u'<li class="cell {css_classes}">{day_string}</li>'.format(
+            css_classes=" ".join(css_classes),
+            day_string=day_string)
+
+    def get_css_day_classes(self, day, weekday):
+        css_classes = self.cssclasses[weekday].split(" ")
+        if day == 0:
+            css_classes.append("noday")
+        elif date.today() == date(self.year, self.month, day):
+            css_classes.append('today')
+        return css_classes
+
+    def format_event_list(self, day):
+        events_list = self.events_grouped_by_day.get(day, [])
+        list_items = list(map(self.format_event_list_item, events_list))
+        if list_items:
+            return u"".join([u'<ul>'] + list_items + [u'</ul>'])
+        else:
+            return u""
+
+    @staticmethod
+    def format_event_list_item(event):
+        return u'<li><a href="{url}">{name}</a></li>\n'.format(
+            url=event.get_absolute_url(),
+            name=esc(event.get_short_name())
+        )

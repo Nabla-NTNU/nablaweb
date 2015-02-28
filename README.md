@@ -34,7 +34,7 @@ Det skal nå ha dukket opp en mappe som heter nablaweb i den mappen du står i.
 
 ## Sett opp virtualenv ##
 
-Nå må du sette opp python-miljøet ditt og installere alle python-pakkene som trenges til nablaweb.
+Nå må du sette opp Python-miljøet ditt og installere alle python-pakkene som trenges til nablaweb.
 Begynn med å lage et nytt virtuelt python miljø ved å kjøre kommandoen:
 
 ```
@@ -63,7 +63,7 @@ Gå inn i mappen **nablaweb** ( hvis du ikke allerede har gjort det), og skriv
 pip install -r requirements/devel.txt
 
 ```
-Pip vil nå laste ned og installere alle pakkene som er nevnt i filen requirements/devel.txt nn i my_env-mappen din og en masse tekst vil flagre nedover skjermen.
+Pip vil nå laste ned og installere alle pakkene som er nevnt i filen requirements/devel.txt nn i my_env-mappen din og en masse tekst vil flagre nedover skjermen. 
 
 ## Sett opp database ##
 Vanligvis kjører nablasiden på en mysql-database, men for utvikling bruker vi sqlite3.

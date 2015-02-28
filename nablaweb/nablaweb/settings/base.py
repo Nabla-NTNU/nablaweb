@@ -113,7 +113,6 @@ INSTALLED_APPS = [
     'nabladet', # Liste over nablad. Arver news.
     'meeting_records', # Møtereferater fra styremøter og SKE
     'poll',     # Spørreundersøkelser
-    'skraattcast',
     'search',
     'podcast',
 
@@ -135,10 +134,10 @@ INSTALLED_APPS = [
 
     'bootstrap3',
     'markdown_deux',
+    'django_comments',
 
     # Djangoting
     'django.contrib.auth',
-    'django.contrib.comments',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
@@ -165,7 +164,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'sekizai.context_processors.sekizai',
 
     'events.context_processors.upcoming_events',     
-    'jobs.views.activej',
+    'jobs.views.active_jobs',
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
     'nablaweb.context_processors.primary_dir',

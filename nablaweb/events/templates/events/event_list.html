@@ -52,39 +52,28 @@
                         <a href="{{ reg.event.get_absolute_url }}">{{ reg.event.headline }}</a>
                     </td>
                     <td>
-                        {% if reg.is_waiting_place %}
+                        {% if reg.waiting %}
                             På venteliste
                         {% endif %}
 
-                        {% if reg.is_attending_place %}
+                        {% if reg.attending %}
                             <span class="glyphicon glyphicon-check"></span> Har plass
                         {% endif %}
                     </td>
                 </tr>
             {% empty %}
-                <tr><td>Du er ikke meldt på noe</td></tr>
+                <tr><td>Du er ikke meldt på noe.</td></tr>
             {% endfor %}
             </table>
         </div>
 
         <div class="col-md-4">
-            <h2>Prikker</h2>
-            <p>Om du har plass, men ikke møter opp på et arrangement, kan du bli
-            straffet i form av prikker. Jo flere prikker, jo lengre må du vente for
-            å melde deg på et arrangement.</p>
-            {% if penalty_list %}
-            <p>Du har {{ penalty_list|length }} prikk{{ penalty_list|length|pluralize:"er" }}:</p>
-            <ul>{% for penalty in penalty_list %}<li>{{ penalty.get_display_name }}</li>{% endfor %}</ul>
-            {% else %}
-            <p>Du har ingen prikker. Godt jobbet!</p>
-            {% endif %}
         </div>
 
         <div class="col-md-4">
             <h2>Venteliste</h2> 
             <p>Melder du deg på et fullbooket arrangement, blir du satt på venteliste.
             Blir det ledige plasser, går de til dem som har ventet lengst.</p>
-            <p>Husk at du kan få prikker for en plass du har fått via venteliste.
         </div>
 
     {% else %}

@@ -1,6 +1,6 @@
 Django==1.7
-south
 pytz
+django-contrib-comments
 
 # Bildebehandling
 Pillow

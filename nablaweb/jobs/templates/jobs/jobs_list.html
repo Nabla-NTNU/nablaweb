@@ -14,16 +14,38 @@
 {% endblock %}
 
 {% block content %}
-{% if jobs_list %}
-    {% for row in jobs_rows %}
-        <div class="row">
-	    {% for job in row %}
-	        {% include "jobs/jobs_summary_include.html" %}
-            {% endfor %}
-        </div>
-        <hr>
+
+{% for row in jobs_rows %}
+    <div class="row">
+    {% for job in row %}
+        {% include "jobs/jobs_summary_include.html" %}
     {% endfor %}
-{% else %}
-    <p>Vi har for øyeblikket ingen stillingsannonser.</p>
+    </div>
+    <hr>
+{% empty %}
+    <p>Vi har for øyeblikket ingen stillingsannonser som matcher dine kriterier.</p>
+{% endfor %}
+
+{% if is_paginated %}
+<nav>
+    <ul class="pager">
+        {% if page_obj.has_next %}
+            <li class="previous">
+                <a href="?page={{ page_obj.next_page_number }}"><span aria-hidden="true">&larr;</span> Eldre</a>
+            </li>
+        {% endif %}
+
+        <li class="disabled pager-counter">
+            Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
+        </li>
+
+        {% if page_obj.has_previous %}
+            <li class="next">
+                <a href="?page={{ page_obj.previous_page_number }}">Nyere <span aria-hidden="true">&rarr;</span></a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
 {% endif %}
+
 {% endblock content %}

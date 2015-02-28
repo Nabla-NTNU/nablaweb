@@ -23,7 +23,7 @@
         {% for registration in eventregistrations.all %}
         {% with user=registration.user %}
         <tr
-        {% if registration.is_waiting_place %} 
+        {% if registration.waiting %} 
             style="font-style:italic;color:grey"
         {% endif %}>
             <td>

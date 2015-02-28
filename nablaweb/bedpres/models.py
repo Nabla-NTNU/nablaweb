@@ -1,27 +1,36 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
-from itertools import chain
-
 from django.db import models
 from events.models import AbstractEvent
 from jobs.models import Company
-from hashlib import sha1
-from news.models import News
-import bpc_core
+from accounts.models import NablaUser as User
 
-from accounts.models import NablaUser
-User = NablaUser
+from . import bpc_core
 
+def get_bpc_user_dictionary(user):
+    """Henter brukerinformasjonen BPC krever fra et User objekt."""
+    return {"fullname": user.get_full_name(),
+            "username": user.username,
+            "card_no": user.get_hashed_ntnu_card_number(),
+            "year": str(user.get_class_number())}
 
 class BedPres(AbstractEvent):
     """
     Modell som lagrer informasjon om en bedpress fra BPC.
     """
 
-    # Id'en til bedpressen internt hos BPC
-    bpcid = models.CharField(verbose_name="BPC-id", max_length=16, unique=True, blank=False, help_text = "Dette er id'en som blir brukt internt hos BPC. Ikke endre den hvis du ikke vet du gjør.")
-    company = models.ForeignKey(Company, verbose_name="Bedrift", blank=False, help_text="Hvilken bedrift som står bak bedriftspresentasjonen")
+    bpcid = models.CharField(
+        verbose_name="BPC-id",
+        max_length=16,
+        unique=True,
+        blank=False,
+        help_text=("Dette er id'en som blir brukt internt hos BPC. "
+                   "Ikke endre den hvis du ikke vet du gjør."))
+    company = models.ForeignKey(
+        Company,
+        verbose_name="Bedrift",
+        blank=False,
+        help_text="Hvilken bedrift som står bak bedriftspresentasjonen")
 
     # Informajon fra BPC som blir lastet ned av metodene
     # bpc_info,bpc_waiting_list og bpc_attending_list ved behov.
@@ -33,6 +42,7 @@ class BedPres(AbstractEvent):
         verbose_name = "bedriftspresentasjon"
         verbose_name_plural = "bedriftspresentasjoner"
 
+
     def register_user(self, user):
         # TODO feilhåndtering bør ikke skje her, men jeg fikk ikke til å ta i
         # mot BPCResponseException i register_user view - hiasen
@@ -40,14 +50,9 @@ class BedPres(AbstractEvent):
         if not card_no or not card_no.isdigit():
             return "Du ble ikke påmeldt fordi du ikke har registrert gyldig kortnummer."
 
+        user_dict = get_bpc_user_dictionary(user)
         try:
-            response = bpc_core.add_attending(
-                fullname=user.get_full_name(),
-                username=user.username,
-                card_no=sha1(user.ntnu_card_number).hexdigest(),
-                event=self.bpcid,
-                year=str(user.get_class_number()), # FIXME
-                )
+            response = bpc_core.add_attending(event=self.bpcid, **user_dict)
         except bpc_core.BPCResponseException as exception:
             return exception.message # TODO Bruke noen andre feilmeldinger. Er litt kryptiske for brukere
         if response['add_attending'][0] == '1':
@@ -62,13 +67,10 @@ class BedPres(AbstractEvent):
         except bpc_core.BPCResponseException as exception:
             return exception.message 
 
-    def get_users_registered(self):
-        return chain(self.get_users_attending(),self.get_users_waiting())
-
-    def get_users_attending(self):
+    def get_attendance_list(self):
         return User.objects.filter(username__in=self.bpc_attending_list)
 
-    def get_users_waiting(self):
+    def get_waiting_list(self):
         return User.objects.filter(username__in=self.bpc_waiting_list)
 
     def is_registered(self, user):
@@ -90,10 +92,7 @@ class BedPres(AbstractEvent):
         return int(self.bpc_info.get('this_attending',0))
 
     def users_waiting(self):
-        return User.objects.filter(username__in=self.bpc_waiting_list)
-
-    def users_registered(self):
-        return list(self.users_attending())+list(self.users_waiting())
+        return len(self.bpc_waiting_list)
 
     def percent_full(self):
         if self.places == None:
@@ -105,16 +104,10 @@ class BedPres(AbstractEvent):
             return 100
 
     def correct_picture(self):
-        if self.picture:
-            return self.picture
-        else:
-            return self.company.picture
+        return self.picture if self.picture else self.company.picture
 
     def correct_cropping(self):
-        if self.picture:
-            return self.cropping
-        else:
-            return self.company.cropping
+        return self.cropping if self.picture else self.company.cropping
 
     def open_for_classes(self):
         bpc_info = self.bpc_info
@@ -161,39 +154,3 @@ class BedPres(AbstractEvent):
             except bpc_core.BPCResponseException:
                 return []
         return self._bpc_waiting_list
-
-    def update_info_from_bpc(self):
-        """
-        Oppdaterer informasjon fra BPC
-        """
-        bpc_info = self.bpc_info
-        self.headline = bpc_info['title']
-        self.slug = bpc_info['title'].strip().replace(' ','-')
-#       picture = bpc_info['logo']
-
-        from django.core.files import File
-        import urllib
-        import os
-
-        #if not self.picture:
-       # result = urllib.urlretrieve(self.bpc_info['logo']) # image_url is a URL to an image
-       # filename,file_ext = os.path.splittext(self.bpc_info['logo'])
-
-        #self.picture.save(
-         #   os.path.basename("news_pictures/bpc_"+self.bpcid+file_ext ),
-          #  File(open(result[0]))
-           # )
-        #self.save()
-
-        self.body = bpc_info['description']
-        self.organizer = 'Bedkom'
-        self.location = bpc_info['place']
-        self.event_start = bpc_info['time']
-        self.registration_required = True
-        self.registration_start = bpc_info['registration_start']
-        self.registration_deadline = bpc_info['deadline']
-        self.places = bpc_info['seats']
-        self.has_queue = bool(bpc_info['waitlist_enabled'])
-
-        self.save()
- 

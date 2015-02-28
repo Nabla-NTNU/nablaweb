@@ -7,72 +7,66 @@
 
 {% if event.registration_required %}
 <p>
-  Plasser: {{ event.places }}<br />
-  Påmeldte: {{ event.users_attending }}<br />
-  {% if event.has_waiting_list %}
-  Ventende: {{ event.users_waiting }}<br />
-  {% endif %}
+    Plasser: {{ event.places }}<br />
+    Påmeldte: {{ event.users_attending }}<br />
+    {% if event.has_queue %}
+        Ventende: {{ event.users_waiting }}<br />
+    {% endif %}
 </p>
 
 <form action="" method="post" class="form">{% csrf_token %}
-  <div class="form-inline">
-    <select name="action" class="form-control">
-      {% for int_name, ext_name in actions %}
-        <option value="{{ int_name }}">{{ ext_name }}</option>
-      {% endfor %}
-    </select>
-    <input class="form-control" type="text" name="text" size="10" maxlength="10" />
-    <input class="form-control" type="submit" name="commit_changes" value="Utfør" />
-  </div>
-  {% with regs=registrations %}
+    <div class="form-inline">
+        <select name="action" class="form-control">
+            {% for int_name, ext_name in actions %}
+                <option value="{{ int_name }}">{{ ext_name }}</option>
+            {% endfor %}
+        </select>
+        <input class="form-control" type="text" name="text" size="10" maxlength="10" />
+        <input class="form-control" type="submit" name="commit_changes" value="Utfør" />
+    </div>
 
-  {% if regs %}
-  <table class="table">
-    <thead>
-    <tr>
-      <th>Plass</th>
-      <th>Navn</th>
-      <th>Klasse</th>
-      <th align="center">X</th>
-    </tr>
-    </thead>
-    
-    <tbody>
-    {% for registration in regs %}
-    {% if registration.is_attending_place %}
-    <tr class="success">
-      <td>{{ registration.number }}</td>
-      <td>{{ registration.user.get_full_name }}</td>
-      <td>{{ registration.user.get_class_number }}</td>
-      <td><input type="checkbox" name="user" value="{{ registration.user }}" /></td>
-    </tr>
+    {% if event.eventregistration_set %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Plass</th>
+                    <th>Navn</th>
+                    <th>Klasse</th>
+                    <th align="center">X</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% with regs=event.attending_registrations %}
+                {% for reg in regs %}
+                    <tr class="success">
+                        <td>{{ reg.number }}</td>
+                        <td>{{ reg.user.get_full_name }}</td>
+                        <td>{{ reg.user.get_class_number }}</td>
+                        <td><input type="checkbox" name="user" value="{{ reg.user.username }}" /></td>
+                    </tr>
+                {% endfor %}
+                {% endwith %}
+
+                {% with regs=event.waiting_registrations %}
+                {% for reg in regs %}
+                    <tr class="warning">
+                        <td>{{ reg.number }}</td>
+                        <td>{{ reg.user.get_full_name }}</td>
+                        <td>{{ reg.user.get_class_number }}</td>
+                        <td><input type="checkbox" name="user" value="{{ reg.user.username }}" /></td>
+                    </tr>
+                {% endfor %}
+                {% endwith %}
+            </tbody>
+        </table>
+    {% else %}
+        Det er ingen påmeldte brukere.
     {% endif %}
-    {% endfor %}
-
-    {% for registration in regs %}
-    {% if registration.is_waiting_place %}
-    <tr class="warning">
-      <td>{{ registration.number }}</td>
-      <td>{{ registration.user.get_full_name }}</td>
-      <td>{{ registration.user.get_class_number }}</td>
-      <td><input type="checkbox" name="user" value="{{ registration.user }}" /></td>
-    </tr>
-    {% endif %}
-    {% endfor %}
-    </tbody>
-  </table>
-  {% else %}
-    Det er ingen påmeldte brukere.
-  {% endif %}
-
-  {% endwith %}
-
 </form>
 
 {% else %}
-
-<p>Registrering er ikke nødvendig, så det er ikke så mye å gjøre her.</p>
-
+    <p>Registrering er ikke nødvendig, så det er ikke så mye å gjøre her.</p>
 {% endif %}
 
 {% endblock %}

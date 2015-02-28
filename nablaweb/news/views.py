@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-
-from django.core.urlresolvers import reverse
 from django.views.generic import DetailView, ListView
-from news.models import News
+
 from content.templatetags import listutil
+from .models import News
+
 
 class NewsListView(ListView):
     model = News

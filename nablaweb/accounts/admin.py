@@ -7,16 +7,18 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group 
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 
-from .models import NablaUser, NablaGroup, FysmatClass, GroupLeader
+from .models import NablaUser, NablaGroup, FysmatClass
 from .forms import NablaUserChangeForm, NablaUserCreationForm
 
 User = get_user_model()
 
 
 class GroupAdminForm(forms.ModelForm):
-    users = forms.ModelMultipleChoiceField(queryset=User.objects.filter(is_active=True),
-                                           widget=FilteredSelectMultiple('Users', False),
-                                           required=False)
+    users = forms.ModelMultipleChoiceField(
+        queryset=User.objects.filter(is_active=True),
+        widget=FilteredSelectMultiple('Users', False),
+        required=False)
+
     class Meta:
         model = Group
         fields = '__all__'
@@ -27,7 +29,7 @@ class GroupAdminForm(forms.ModelForm):
             initial = kwargs.get('initial', {})
             initial['users'] = instance.user_set.all()
             kwargs['initial'] = initial
-        super(forms.ModelForm, self).__init__(*args, **kwargs)
+        super(GroupAdminForm, self).__init__(*args, **kwargs)
 
     def save(self, commit=True):
         group = super(forms.ModelForm, self).save(commit=commit)
@@ -64,7 +66,6 @@ except:
 admin.site.register(Group, ExtendedGroupAdmin)
 admin.site.register(NablaGroup,ExtendedNablaGroupAdmin)
 admin.site.register(FysmatClass)
-admin.site.register(GroupLeader)
 
 
 class NablaUserAdmin(UserAdmin):
