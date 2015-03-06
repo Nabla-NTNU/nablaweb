@@ -30,8 +30,7 @@
                     <span class="date">i dag</span>
                 </div>
 
-                {# Urlize er en extension som gjør linker klikkbare. Failer silently #}
-                {{ form.data.comment|markdown:"safe,urlize"|wikilinks }}
+                {{ form.data.comment|markdown|wikilinks }}
             </div>
         </div>
     {% endif %}

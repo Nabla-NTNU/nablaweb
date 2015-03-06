@@ -8,5 +8,5 @@
 {% endblock %}
 
 {% block main %}
-    {{ flatpage.content|markdown|wikilinks}}
+    {{ flatpage.content|markdown:"unsafe"|wikilinks}}
 {% endblock %}

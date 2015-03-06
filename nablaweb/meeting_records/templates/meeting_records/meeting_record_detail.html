@@ -23,8 +23,8 @@
 {% endif %}
 
 <h2>{{ meeting_record.headline }}</h2>
-{{ meeting_record.lead_paragraph|markdown|wikilinks}}
-{{ meeting_record.body|markdown|wikilinks}}
+{{ meeting_record.lead_paragraph|markdown:"unsafe"|wikilinks}}
+{{ meeting_record.body|markdown:"unsafe"|wikilinks}}
 
 {# Comments #}
     {% get_comment_count for meeting_record as comment_count %}
