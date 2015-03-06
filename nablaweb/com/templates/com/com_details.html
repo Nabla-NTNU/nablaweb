@@ -13,7 +13,7 @@
 
 <h2>{{ com.com.name }}</h2>
 {% if com.com.nablagroup.mail_list %}<p><b>{{ com.com.nablagroup.mail_list }}</b></p>{% endif %}
-<p>{{ com.description|markdown|wikilinks}}</p>
+<p>{{ com.description|markdown:"unsafe"|wikilinks}}</p>
 
 
 {# List of memberships #}

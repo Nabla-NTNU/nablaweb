@@ -9,7 +9,7 @@
 
 {% block content %}
     <h2>{{ flatpage.title }}</h2>
-    {{ flatpage.content|markdown|wikilinks}}
+    {{ flatpage.content|markdown:"unsafe"|wikilinks}}
 {% endblock %}
 
 {% block sidebar %}
