@@ -29,8 +29,7 @@
                 (<a href="{% url "comments-delete" comment.id %}">fjern</a>)
             {% endif %}
         </div>
-        {# Urlize er en extension som gjør linker klikkbare. Failer silently #}
-        {{ comment.comment|striptags|markdown:"safe,urlize"|wikilinks }}
+        {{ comment.comment|striptags|markdown|wikilinks }}
     </div>
 </div>
 

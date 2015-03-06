@@ -11,7 +11,7 @@
         </a>
     {% endif %}
 	<h3>{{ job.headline }}</h3>
-    {{ job.lead_paragraph|markdown }}
+    {{ job.lead_paragraph|markdown:"unsafe"}}
     <p><small>
         Stillingsannonsen er relevant for årskull {{ job.relevant_for_year.all|commas_no}} ved
     {{ job.relevant_for_group.all|commas_no }}. {% if job.deadline_date %}Søknadsfristen er {{ job.deadline_date|naturalday }} kl.

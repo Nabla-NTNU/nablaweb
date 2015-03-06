@@ -74,7 +74,7 @@
             <tr>
                 <td>Biografi</td>
                 <td>
-                    {{ member.about|striptags|markdown:"safe,urlize"|wikilinks }}
+                    {{ member.about|markdown|wikilinks }}
                 </td>
             </tr>
             {% endif %}

@@ -28,7 +28,7 @@
 {% block content %}
     <div class="box ad">
     <h1>{{ flatpage.title }}</h1>
-    {{ flatpage.content|markdown}}
+    {{ flatpage.content|markdown:"unsafe"}}
     </div>
 {% endblock %}
 

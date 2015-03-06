@@ -206,3 +206,19 @@ HAYSTACK_CONNECTIONS = {
 ##################################################
 DEFAULT_FROM_EMAIL='noreply@nabla.no'
 
+# Markdown deux
+MARKDOWN_DEUX_STYLES = {
+    "default": {
+        "extras": {
+            "code-friendly": None,
+        },
+        "safe_mode": "escape",
+    },
+    "unsafe": {
+        "extras": {
+            "code-friendly": None,
+        },
+        # Allow raw HTML
+        "safe_mode": False,
+    }
+}
