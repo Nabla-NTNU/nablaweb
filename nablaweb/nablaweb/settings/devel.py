@@ -13,6 +13,12 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
+}
+
 # All epost blir sendt til terminalen, istedet for ut til brukerne.
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -38,6 +44,8 @@ DEBUG_TOOLBAR_PANELS = (
     # https://github.com/jbalogh/django-debug-cache-panel
     'cache_panel.panel.CacheDebugPanel' 
 )
+
+
 # Funksjon for å starte debug toolbar
 # Tar inn IP-adresser som skal ha tilgang til å vise debug toolbar
 def use_debug_toolbar(*ip_addresses):
@@ -49,7 +57,7 @@ def use_debug_toolbar(*ip_addresses):
 
 # bedpres
 ##################################################
-BPC_URL = 'http://testing.bedriftspresentasjon.no/remote/' #Testserver
+BPC_URL = 'http://testing.bedriftspresentasjon.no/remote/'  # Testserver
 
 
 # easy_thumbnail debugging
