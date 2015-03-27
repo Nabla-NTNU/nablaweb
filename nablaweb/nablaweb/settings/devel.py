@@ -40,9 +40,7 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.sql.SQLDebugPanel',
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
-    # Trenger installasjon, se linken:
-    # https://github.com/jbalogh/django-debug-cache-panel
-    'cache_panel.panel.CacheDebugPanel' 
+    'cache_panel.panel.CacheDebugPanel'
 )
 
 
@@ -63,4 +61,4 @@ BPC_URL = 'http://testing.bedriftspresentasjon.no/remote/'  # Testserver
 # easy_thumbnail debugging
 # Gjør at man får en feilmelding dersom thumbnail-taggen ikke klarer å lage ny
 # thumbnail
-THUMBNAIL_DEBUG = True 
+THUMBNAIL_DEBUG = True

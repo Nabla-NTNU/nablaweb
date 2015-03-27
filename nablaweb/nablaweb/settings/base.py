@@ -7,6 +7,7 @@
 #########################################
 
 import os
+from easy_thumbnails.conf import Settings as EasyThumbnailSettings
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -69,7 +70,7 @@ INSTALLED_APPS = [
     ##########################
     # Internt utviklede apps #
     ##########################
-    'content',  # Abstrakt: created, updated, created by, updated by. 
+    'content',  # Abstrakt: created, updated, created by, updated by.
     'news',     # Nyheter. Arver content.
     'accounts',  # Inneholder UserProfile med ekstra informasjon.
     'events',   # Arrangement. Arver nyheter.
@@ -125,7 +126,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'sekizai.context_processors.sekizai',
 
-    'events.context_processors.upcoming_events',     
+    'events.context_processors.upcoming_events',
     'jobs.views.active_jobs',
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
@@ -144,11 +145,9 @@ LOGIN_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'accounts.NablaUser'
 
 # easy-thumbnails/Django-image-cropping
-from easy_thumbnails.conf import Settings as easy_thumb_Settings
-easy_thumb_settings = easy_thumb_Settings
 THUMBNAIL_PROCESSORS = (
     'image_cropping.thumbnail_processors.crop_corners',
-) + easy_thumb_settings.THUMBNAIL_PROCESSORS
+) + EasyThumbnailSettings.THUMBNAIL_PROCESSORS
 THUMBNAIL_BASEDIR = 'thumbnails'
 
 # Haystack search
