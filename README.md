@@ -35,6 +35,7 @@ Det skal nå ha dukket opp en mappe som heter nablaweb i den mappen du står i.
 ## Sett opp virtualenv ##
 
 Nå må du sette opp Python-miljøet ditt og installere alle python-pakkene som trenges til nablaweb.
+Til dette bruker vi virtualenv, en python-modul som gjør at du kan ha separate vesjoner av pakker osv.
 Begynn med å lage et nytt virtuelt python miljø ved å kjøre kommandoen:
 
 ```
@@ -42,16 +43,23 @@ Begynn med å lage et nytt virtuelt python miljø ved å kjøre kommandoen:
 virtualenv my_env
 
 ```
-Det skal nå ha blitt laget en ny mappe i mappen du står i som heter my_env.
+Det skal nå ha blitt laget en ny mappe i mappen du står i som heter my_env. Der lagres den nye python-executablen din og alle pakkene du laster ned.
 Gå gjerne inn på http://virtualenv.readthedocs.org/en/latest/ for å lære mer om virtualenv.
 
 ## Aktivere virtualenv ##
-For å aktivere det nye miljøet ditt skriver du
+For å aktivere det nye miljøet ditt skriver du i Linux
 ```
 #!bash
 source my_env/bin/activate
 
 ```
+og i windows
+```
+#!bash
+source my_env/Script/activate
+
+```
+
 Nå skal det stå **(my_env)** i prompten din.
 
 ## Installere nødvendige python-pakker ##
