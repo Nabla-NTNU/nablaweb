@@ -3,6 +3,7 @@
 from django.contrib.syndication.views import Feed
 from news.models import News
 
+
 class RecentNews(Feed):
     title = "Nyheter på Nabla.no"
     link = "/"

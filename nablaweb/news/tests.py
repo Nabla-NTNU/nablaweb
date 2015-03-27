@@ -4,10 +4,11 @@ Tester for News-appen til Nablaweb
 """
 
 from django.test import TestCase
-from django.core.urlresolvers import reverse
-from django.contrib.auth import get_user_model; User = get_user_model()
+from django.contrib.auth import get_user_model
 
 from news.models import News
+
+User = get_user_model()
 
 
 class NewsDetailViewTest(TestCase):
@@ -17,9 +18,9 @@ class NewsDetailViewTest(TestCase):
         self.news = News()
         self.news.headline = 'Overskrifta er kul'
         self.user = User.objects.create(
-                first_name=u'Oystein',
-                last_name=u'Hiasen',
-                username='hiasen_test')
+            first_name=u'Oystein',
+            last_name=u'Hiasen',
+            username='hiasen_test')
         self.lead_paragraph = "Dette er en veldig spennende nyhet som du bare må lese!"
         self.body = "Haha, jeg lurte deg. Det er ikke så spennende alikevel."
         self.news.created_by = self.user
@@ -29,7 +30,6 @@ class NewsDetailViewTest(TestCase):
         self.response = self.client.get(
             self.news.get_absolute_url()
         )
-
 
     def test_headline_is_on_page(self):
         self.assertIn(self.news.headline.encode(), self.response.content)

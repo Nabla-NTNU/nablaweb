@@ -2,6 +2,7 @@ from haystack import indexes
 from news.models import News
 import datetime
 
+
 class NewsIndex(indexes.SearchIndex, indexes.Indexable):
     headline = indexes.CharField(model_attr='headline')
     lead_paragraph = indexes.CharField(model_attr='lead_paragraph')
