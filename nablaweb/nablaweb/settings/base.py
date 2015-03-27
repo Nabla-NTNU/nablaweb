@@ -129,7 +129,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'jobs.views.active_jobs',
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
-    'nablaweb.context_processors.primary_dir',
+    'nablaweb.context_processors.get_primary_dir',
 )
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'

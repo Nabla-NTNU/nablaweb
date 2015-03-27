@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.core.cache import cache
-import urllib
-import json
 
-def primary_dir(request):
+
+def get_primary_dir(request):
     """Adds the primary URL path to context.
 
     For example, if the user is visting http://nabla.no/batman/cakes,
@@ -16,4 +14,4 @@ def primary_dir(request):
     else:
         primary_dir_slashes = '/'
     return {'primary_dir': primary_dir,
-            'primary_dir_slashes': primary_dir_slashes }
+            'primary_dir_slashes': primary_dir_slashes}
