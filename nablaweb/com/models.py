@@ -6,7 +6,6 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import Group, User
 from django.template.defaultfilters import slugify
-from django.utils.encoding import force_unicode
 
 from news.models import News
 
@@ -23,7 +22,7 @@ class ComPage(models.Model):
     last_changed_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Sist endret av", related_name="%(class)s_edited", editable=False, blank=True, null=True)
 
     def __unicode__(self):
-        return force_unicode(self.com.name)
+        return self.com.name
 
     def has_been_edited(self):
         return self.last_changed_by is not None
@@ -62,7 +61,7 @@ class ComMembership(models.Model):
         super(ComMembership, self).delete(*args, **kwargs)
     
     def __unicode__(self):
-        return force_unicode(self.user.username)
+        return self.user.username
         
     class Meta:
         verbose_name = "komitemedlem"

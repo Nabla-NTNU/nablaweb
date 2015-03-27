@@ -14,5 +14,5 @@ def row_split(l, n):
 
     Source: http://stackoverflow.com/questions/312443/
     """
-    for i in xrange(0, len(l), n):
+    for i in range(0, len(l), n):
         yield l[i:i + n]
