@@ -4,13 +4,11 @@ from django.views.generic import ListView, DetailView
 from content.templatetags.listutil import row_split
 from jobs.models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
 from django.shortcuts import get_object_or_404
-from datetime import datetime
 
 
 def active_jobs(request):
     """Used as a template context processor."""
-    active_jobs = Advert.objects.all()
-    return {'active_jobs': active_jobs}
+    return {'active_jobs': Advert.objects.all()}
 
 
 def split_into_rows(jobs):
@@ -23,13 +21,13 @@ class GenericJobsList(ListView):
     context_object_name = 'jobs_list'
     template_name = 'jobs/jobs_list.html'
     paginate_by = 8
-	
+
     def get_context_data(self, **kwargs):
         context = super(GenericJobsList, self).get_context_data(**kwargs)
 
         context['years'] = YearChoices.objects.all()
         context['choices'] = RelevantForChoices.objects.all()
-        context['tags'] = TagChoices.objects.all() 
+        context['tags'] = TagChoices.objects.all()
         context['jobs_rows'] = split_into_rows(self.object_list)
 
         return context
@@ -38,44 +36,46 @@ class GenericJobsList(ListView):
 class EverythingList(GenericJobsList):
     """Alle aktive stillingsannonser."""
     def get_queryset(self):
-        return Advert.objects.all().order_by('-created_date', 'headline').exclude(removal_date__lte=datetime.now())
+        return Advert.objects.active()
 
 
 class CompanyList(GenericJobsList):
     """Stillingsannonser for en spesifikk bedrift."""
     def get_queryset(self):
         company = get_object_or_404(Company, name__iexact=self.kwargs['slug'])
-        return Advert.objects.filter(company=company).order_by('-created_date', 'headline')
+        return super(CompanyList, self).get_queryset().filter(company=company)
 
 
 class YearList(GenericJobsList):
     """Stillingsannonser som er lagt inn dette året."""
     def get_queryset(self):
-        return Advert.objects.filter(created_date__year=self.kwargs['year'])
+        return super(YearList, self).get_queryset().filter(created_date__year=self.kwargs['year'])
 
 
-class MonthList(GenericJobsList):
+class MonthList(YearList):
     """Stillingsannonser som er lagt inn denne måneden."""
     def get_queryset(self):
-        return Advert.objects.filter(created_date__year=self.kwargs['year']).filter(created_date__month=self.kwargs['month'])
+        return super(MonthList, self).get_queryset().filter(created_date__month=self.kwargs['month'])
 
 
 class TagList(GenericJobsList):
     """Stillingsannonser merket med en spesifikk tag."""
     def get_queryset(self):
-        return Advert.objects.filter(tags__tag__iexact=self.kwargs['tag']).order_by('-created_date', 'headline').exclude(removal_date__lte=datetime.now())
+        return super(TagList, self).get_queryset().filter(tags__tag__iexact=self.kwargs['tag'])
 
 
 class RelevantForLinjeList(GenericJobsList):
     """Stillingsannonser merket som relevante for en spesifikk studieretning."""
     def get_queryset(self):
-        return Advert.objects.filter(relevant_for_group__studieretning__iexact=self.kwargs['linje']).order_by('-created_date', 'headline').exclude(removal_date__lte=datetime.now())
+        return super(RelevantForLinjeList, self).get_queryset()\
+            .filter(relevant_for_group__studieretning__iexact=self.kwargs['linje'])
 
 
 class RelevantForYearList(GenericJobsList):
     """Stillingsannonser merket som relevante for et spesifikt årskull."""
     def get_queryset(self):
-        return Advert.objects.filter(relevant_for_year__year__iexact=self.kwargs['year']).order_by('-created_date', 'headline').exclude(removal_date__lte=datetime.now())
+        return super(RelevantForYearList, self).get_queryset()\
+            .filter(relevant_for_year__year__iexact=self.kwargs['year'])
 
 
 class ShowJob(DetailView):

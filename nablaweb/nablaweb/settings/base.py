@@ -7,58 +7,30 @@
 #########################################
 
 import os
+from easy_thumbnails.conf import Settings as EasyThumbnailSettings
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+SITE_ID = 1
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "nabla.no"]
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = 'a()j2kxbwejl0y^jsk1*f#!=6na3pln6@fn!1ef6xra6(r3(%p'
+
+TIME_ZONE = 'Europe/Oslo'
+LANGUAGE_CODE = 'nb'
+USE_L10N = True  # use locale dates, numbers etc.
+DATE_FORMAT = 'j. F Y'
 
 # Gjør det enkelt å bruke relative paths
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
 VARIABLE_CONTENT = os.path.join(PROJECT_ROOT, '..', 'var')
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "nabla.no"]
-
-
-ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
-)
-
-MANAGERS = ADMINS
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # 'mysql' eller 'sqlite3'
-        'NAME': os.path.join(VARIABLE_CONTENT, 'sqlite.db'), # Or path to database file if using sqlite3.
-    }
-}
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
-}
-
-TIME_ZONE = 'Europe/Oslo'
-
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'nb'
-
-DATE_FORMAT = 'j. F Y'
-
-SITE_ID = 1
-
-# If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale
-USE_L10N = True
-
-# Additional paths to search for fixtures
-FIXTURE_DIRS = (os.path.join(PROJECT_ROOT, 'nablaweb', 'fixtures'),)
-
 # Absolute path to the directory that holds media.
 MEDIA_ROOT = os.path.join(VARIABLE_CONTENT, 'media')
 MEDIA_URL = '/media/'
 
-# f.eks. http://nabla.no/static/
 STATIC_URL = '/static/'
 
 # Mappe hvor alle statiske filer blir lagt etter at man kjører
@@ -66,21 +38,16 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(VARIABLE_CONTENT, 'static_collected')
 
 STATICFILES_DIRS = (
-        os.path.join(PROJECT_ROOT, '..', 'static'),
+    os.path.join(PROJECT_ROOT, '..', 'static'),
 )
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 ##############################################################################
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'a()j2kxbwejl0y^jsk1*f#!=6na3pln6@fn!1ef6xra6(r3(%p'
-
-# List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = [
@@ -103,15 +70,15 @@ INSTALLED_APPS = [
     ##########################
     # Internt utviklede apps #
     ##########################
-    'content',  # Abstrakt: created, updated, created by, updated by. 
+    'content',  # Abstrakt: created, updated, created by, updated by.
     'news',     # Nyheter. Arver content.
-    'accounts', # Inneholder UserProfile med ekstra informasjon.
+    'accounts',  # Inneholder UserProfile med ekstra informasjon.
     'events',   # Arrangement. Arver nyheter.
     'jobs',     # Stillingsannonser og firmaer
     'bedpres',  # Utvider events med BPC-tilkobling. Arver events.
     'com',      # Viser sider for komiteene.
-    'nabladet', # Liste over nablad. Arver news.
-    'meeting_records', # Møtereferater fra styremøter og SKE
+    'nabladet',  # Liste over nablad. Arver news.
+    'meeting_records',  # Møtereferater fra styremøter og SKE
     'poll',     # Spørreundersøkelser
     'search',
     'podcast',
@@ -126,8 +93,8 @@ INSTALLED_APPS = [
 
     # Django-image-cropping (pip install) gjør det mulig for staff å croppe
     # opplastede bilder
-    'easy_thumbnails', # thumbnail-taggen i templates
-    'image_cropping', # Admindelen
+    'easy_thumbnails',  # thumbnail-taggen i templates
+    'image_cropping',  # Admindelen
 
     # http://django-sekizai.readthedocs.org/en/latest/#
     'sekizai',
@@ -136,6 +103,9 @@ INSTALLED_APPS = [
     'markdown_deux',
     'django_comments',
 
+    # Haystack er en app for søking. (Krever 2.0.0 beta samt Whoosh!)
+    'haystack',
+
     # Djangoting
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -143,16 +113,9 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
-    # Flatpages gjør at vi enkelt kan legge til sider som kun inneholder tekst,
-    # på hvilken url "vi" vil. Teksten lagres i databasen.
     'django.contrib.flatpages',
-    # Humanize legger til nyttige template-tags, som konverterer maskintid til
-    # menneskelig leselig tid, f.eks. "i går".
     'django.contrib.humanize',
     'django.contrib.staticfiles',
-
-    # Haystack. Krever 2.0.0 beta samt Whoosh!
-    'haystack',
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -163,11 +126,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'sekizai.context_processors.sekizai',
 
-    'events.context_processors.upcoming_events',     
+    'events.context_processors.upcoming_events',
     'jobs.views.active_jobs',
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
-    'nablaweb.context_processors.primary_dir',
+    'nablaweb.context_processors.get_primary_dir',
 )
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
@@ -176,25 +139,18 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 # App-spesifikke settings #
 ###########################
 
-
-# Contrib.auth
-##################################################
+# django.contrib.auth
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'accounts.NablaUser'
 
-
 # easy-thumbnails/Django-image-cropping
-###################################################
-from easy_thumbnails.conf import Settings as easy_thumb_Settings
-easy_thumb_settings = easy_thumb_Settings
 THUMBNAIL_PROCESSORS = (
-        'image_cropping.thumbnail_processors.crop_corners',
-) + easy_thumb_settings.THUMBNAIL_PROCESSORS
+    'image_cropping.thumbnail_processors.crop_corners',
+) + EasyThumbnailSettings.THUMBNAIL_PROCESSORS
 THUMBNAIL_BASEDIR = 'thumbnails'
 
 # Haystack search
-##################################################
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
@@ -203,8 +159,7 @@ HAYSTACK_CONNECTIONS = {
 }
 
 # Sending email
-##################################################
-DEFAULT_FROM_EMAIL='noreply@nabla.no'
+DEFAULT_FROM_EMAIL = 'noreply@nabla.no'
 
 # Markdown deux
 MARKDOWN_DEUX_STYLES = {

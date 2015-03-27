@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# URL-er for com-appen
-
-from django.conf.urls import *
-from com.views import *
+from django.conf.urls import patterns, url
+from com.views import ShowPage
 from django.views.generic import RedirectView
 
 urlpatterns = patterns('',
