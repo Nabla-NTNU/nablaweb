@@ -11,7 +11,7 @@ class UserHasVoted(Exception):
 class PollManager(models.Manager):
     def current_poll(self):
         queryset = super(PollManager, self).get_queryset()
-        return queryset.filter(is_current=True).first()
+        return queryset.get(is_current=True)
 
 
 class Poll(models.Model):
@@ -22,10 +22,8 @@ class Poll(models.Model):
     edit_date = models.DateTimeField('Sist endret', auto_now=True)
     is_current = models.BooleanField('Nåværende avstemning?', default=True)
     users_voted = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                         verbose_name='Brukere som har stemt', editable=False)
-
-    # For å fjerne infomeldingen om hvordan man velger brukere (noe som ikke er mulig) i admin
-    users_voted.help_text = ''
+                                         verbose_name='Brukere som har stemt', editable=False,
+                                         help_text="")
 
     objects = PollManager()
 

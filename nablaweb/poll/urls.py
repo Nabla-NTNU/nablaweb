@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import patterns
+from django.conf.urls import patterns, url
+from .views import vote
 
 urlpatterns = patterns('',
-    (r'^(?P<poll_id>\d+)/vote/$', 'poll.views.vote'),
+    url(r'^(?P<poll_id>\d+)/vote/$',
+        vote,
+        name="poll_vote"),
 )

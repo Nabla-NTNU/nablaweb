@@ -11,5 +11,5 @@ def poll_context(request):
             'poll_has_voted': poll.user_has_voted(request.user),
             'poll_total_votes': poll.get_total_votes()
         }
-    except:
+    except Poll.DoesNotExist:
         return {}
