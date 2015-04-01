@@ -4,6 +4,7 @@ from django.contrib.syndication.views import Feed
 from .models import Event
 
 
+
 class RecentEvents(Feed):
     title = "Arrangement på Nabla.no"
     link = "/arrangement"
