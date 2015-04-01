@@ -8,8 +8,8 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-from .models import Event, EventException
-from .exceptions import RegistrationAlreadyExists
+from events.models import Event
+from events.exceptions import RegistrationAlreadyExists, EventException
 
 
 class GeneralEventTest(TestCase):
