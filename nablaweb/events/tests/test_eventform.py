@@ -8,10 +8,10 @@ from events.forms import EventForm
 class EventFormTestCase(TestCase):
 
     def assertFormValid(self, form):
-        self.assertTrue(form.is_valid())
+        self.assertTrue(form.is_valid(), "Form should be valid but has these errors: {}".format(form.errors))
 
     def assertFormInValid(self, form):
-        self.assertFalse(form.is_valid())
+        self.assertFalse(form.is_valid(), "Form should be invalid but isn't")
 
     def get_smallest_valid_form(self):
         return {
@@ -28,6 +28,7 @@ class EventFormTestCase(TestCase):
             "places": "20",
             "registration_deadline_0": "2015-09-01",
             "registration_deadline_1": "08:00",
+            "has_queue": "0"
         }, self.get_smallest_valid_form())
 
     def test_empty_form(self):
