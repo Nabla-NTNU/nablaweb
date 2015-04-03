@@ -16,8 +16,7 @@ class EventFormTestCase(TestCase):
     def get_smallest_valid_form(self):
         return {
             "headline": "Headline",
-            "event_start_0": "2015-10-01",
-            "event_start_1": "08:00",
+            "event_start": "2015-10-01",
             "priority": "5",
             "location": "Here"
         }
@@ -26,8 +25,7 @@ class EventFormTestCase(TestCase):
         return ChainMap({
             "registration_required": "1",
             "places": "20",
-            "registration_deadline_0": "2015-09-01",
-            "registration_deadline_1": "08:00",
+            "registration_deadline": "2015-09-01",
             "has_queue": "0"
         }, self.get_smallest_valid_form())
 
@@ -39,15 +37,13 @@ class EventFormTestCase(TestCase):
 
     def test_event_end_before_event_start(self):
         form_dict = self.get_smallest_valid_form()
-        form_dict["event_end_0"] = form_dict["event_start_0"]
-        form_dict["event_end_1"] = "07:00"
+        form_dict["event_end"] = "2015-08-01"
         self.assertFormInValid(EventForm(form_dict))
 
     def test_with_registration_without_required_info(self):
         form_dict = self.get_smallest_valid_form()
         form_dict["registration_required"] = "1"
-        form = EventForm(form_dict)
-        self.assertFormInValid(form)
+        self.assertFormInValid(EventForm(form_dict))
 
     def test_registration_with_required_info(self):
         form_dict = self.get_valid_registration_form_dict()
@@ -55,26 +51,28 @@ class EventFormTestCase(TestCase):
 
     def test_registration_deadline_after_event_start_is_invalid(self):
         form_dict = self.get_valid_registration_form_dict()
-        form_dict["registration_deadline_0"] = form_dict["event_start_0"]
-        form_dict["registration_deadline_1"] = "09:00"
+        form_dict["registration_deadline"] = "2015-11-01"
         self.assertFormInValid(EventForm(form_dict))
 
     def test_registration_start_after_event_start_is_invalid(self):
         form_dict = self.get_valid_registration_form_dict()
-        form_dict["registration_start_0"] = form_dict["event_start_0"]
-        form_dict["registration_start_1"] = "09:00"
+        form_dict["registration_start"] = "2015-11-01"
         self.assertFormInValid(EventForm(form_dict))
 
     def test_deregistration_deadline_after_event_start_is_invalid(self):
         form_dict = self.get_valid_registration_form_dict()
-        form_dict["deregistration_deadline_0"] = form_dict["event_start_0"]
-        form_dict["deregistration_deadline_1"] = "09:00"
+        form_dict["deregistration_deadline"] = "2015-11-01"
         self.assertFormInValid(EventForm(form_dict))
 
-    def test_registration_start_after_deregistration_deadline_is_invalid(self):
+    def test_deregistration_deadline_before_registration_start_is_invalid(self):
         form_dict = self.get_valid_registration_form_dict()
-        form_dict["registration_start_0"] = "2015-09-01"
-        form_dict["registration_start_1"] = "07:00"
-        form_dict["deregistration_deadline_0"] = form_dict["registration_start_0"]
-        form_dict["deregistration_deadline_1"] = "06:00"
+        form_dict["registration_start"] = "2015-08-01"
+        form_dict["deregistration_deadline"] = "2015-07-01"
         self.assertFormInValid(EventForm(form_dict))
+
+    def test_ignore_registration_fields(self):
+        form_dict = self.get_smallest_valid_form()
+        # This field will be ignored, even though it contains an error,
+        # because "registration_required" is not True
+        form_dict["registration_start"] = "erroneous datetime"
+        self.assertFormValid(EventForm(form_dict))
