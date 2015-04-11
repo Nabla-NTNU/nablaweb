@@ -15,6 +15,7 @@
     {% if poll_has_voted %}
         {# Has voted, display results #}
         {% cache 900 poll_results poll.id poll_total_votes %}
+            <pre>{{ poll_total_votes }} bruker{% if poll_total_votes > 1 %}e{% endif %} har stemt.</pre>
             {% for choice in poll.choice_set.all %}
                 <div class="choice">{{ choice.choice }}</div>
                 <div class="progress">
