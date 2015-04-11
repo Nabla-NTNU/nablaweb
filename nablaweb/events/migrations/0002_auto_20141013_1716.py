@@ -14,16 +14,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='event',
             name='deregistration_deadline',
-            field=models.DateTimeField(null=True, verbose_name=b'avmeldingsfrist', blank=True),
+            field=models.DateTimeField(null=True, verbose_name='avmeldingsfrist', blank=True),
         ),
         migrations.AlterField(
             model_name='eventregistration',
             name='date',
-            field=models.DateTimeField(auto_now_add=True, verbose_name=b'P\xc3\xa5meldingsdato', null=True),
+            field=models.DateTimeField(auto_now_add=True, verbose_name='Påmeldingsdato', null=True),
         ),
         migrations.AlterField(
             model_name='eventregistration',
             name='number',
-            field=models.PositiveIntegerField(help_text=b'K\xc3\xb8nummer som tilsvarer plass p\xc3\xa5 ventelisten/p\xc3\xa5meldingsrekkef\xc3\xb8lge.', null=True, verbose_name=b'k\xc3\xb8nummer', blank=True),
+            field=models.PositiveIntegerField(help_text='Kønummer som tilsvarer plass på ventelisten/påmeldingsrekkefølge.', null=True, verbose_name='kønummer', blank=True),
         ),
     ]

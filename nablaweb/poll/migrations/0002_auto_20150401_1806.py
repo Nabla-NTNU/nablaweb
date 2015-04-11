@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bedpres', '0002_auto_20140914_1656'),
+        ('poll', '0001_initial'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='bedpres',
-            name='deregistration_deadline',
-            field=models.DateTimeField(null=True, verbose_name='avmeldingsfrist', blank=True),
+            model_name='choice',
+            name='added_by',
+            field=models.CharField(verbose_name='Lagt til av', max_length=100, help_text='Hvem som la til valget i avstemningen'),
         ),
     ]

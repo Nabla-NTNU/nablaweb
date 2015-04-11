@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 from .base import *
 
+
+try:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+except ImportError:
+    pass
+
+
 DEBUG = False
 TEMPLATE_DEBUG = False
 
 DATABASES = {
-'default': {
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'nabla_no',
         'USER': 'nabla_no',

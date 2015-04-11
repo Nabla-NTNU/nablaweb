@@ -13,6 +13,7 @@ class NewsCharField(CharField):
 
 class NewsForm(ModelForm):
     headline = NewsCharField(label="Overskrift")
+
     class Meta:
         model = News
         fields = '__all__'

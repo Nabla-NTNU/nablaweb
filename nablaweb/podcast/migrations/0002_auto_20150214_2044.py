@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='podcast',
-            options={'verbose_name': 'Skr\xe5ttcast', 'verbose_name_plural': 'Skr\xe5ttcast'},
+            options={'verbose_name': 'Skråttcast', 'verbose_name_plural': 'Skråttcast'},
         ),
     ]

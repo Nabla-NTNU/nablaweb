@@ -1,6 +1,6 @@
 from haystack import indexes
 from com.models import ComPage
-import datetime
+
 
 class ComIndex(indexes.SearchIndex, indexes.Indexable):
     name = indexes.CharField(model_attr='com__name')

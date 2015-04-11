@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.conf import settings
 from django.template import loader, Context
 
-from urlparse import urlparse
+from six.moves.urllib.parse import urlparse
 from datetime import datetime
 from news.models import News
 from .exceptions import *
