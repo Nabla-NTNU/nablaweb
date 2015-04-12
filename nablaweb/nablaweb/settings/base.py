@@ -41,6 +41,14 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, '..', 'static'),
 )
 
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    'djangobower.finders.BowerFinder'
+)
+
+BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'bower_components')
+
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 ##############################################################################
@@ -103,6 +111,9 @@ INSTALLED_APPS = [
     'markdown_deux',
     'django_comments',
 
+    # Bower handterer frontend pakker
+    'djangobower',
+
     # Haystack er en app for søking. (Krever 2.0.0 beta samt Whoosh!)
     'haystack',
 
@@ -117,6 +128,12 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'django.contrib.staticfiles',
 ]
+
+BOWER_INSTALLED_APPS = (
+    'jquery',
+    'fullpage.js',
+    'markdown-plus',
+)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',

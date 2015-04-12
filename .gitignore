@@ -14,5 +14,8 @@ var/
 # Virtualenv
 venv/
 
+# Bower-components
+nablaweb/bower_components
+
 .idea
 requirements/build
