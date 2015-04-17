@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('news_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='news.News')),
                 ('pub_date', models.DateField(help_text='Publikasjonsdato', null=True, verbose_name='publisert')),
-                ('file', models.FileField(help_text='Filnavn', upload_to='nabladet', verbose_name='PDF-fil')),
+                ('file', models.FileField(help_text='Filnavn', upload_to='nabladet', null=True, blank=True, verbose_name='PDF-fil')),
             ],
             options={
                 'verbose_name': 'Møtereferat',

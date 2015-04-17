@@ -49,9 +49,9 @@
 
 {% include "content/includes/meta.html" with content=meeting_record %}
 
-<center><a class="btn btn-primary btn-large" href="{{ meeting_record.file.url }}">
+<div><a class="btn btn-primary btn-large" href="{{ meeting_record.file.url }}">
         Last ned referat {{ meeting_record.pub_date|date:"F Y" }}
-</a></center>
+</a></div>
 
 <br>
 

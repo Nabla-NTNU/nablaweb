@@ -89,22 +89,23 @@
             {# Faste lenker om Nabla #}
 			    <li><a href="{% url "nablad_list" %}">Nabladet</a></li>
                 <li><a href="{% url "podcast_list" %}">Skråttcast</a></li>
+                <li><a href="{% url "meeting_record_list" %}">Styremøtereferater</a></li>
             </ul>
         </li>
         <li class="dropdown">
             <a href="#komiteer" class="dropdown-toggle" data-toggle="dropdown">
-                Komiteer
+                Komitéer
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" >
-                {% cache 3600 "com_list_dropdown" %}
+                {# {% cache 3600 "com_list_dropdown" %} #}
                 {# Liste over komiteer #}
                 {% for com in coms %}
                     <li><a href="{{ com.get_absolute_url }}">{{ com.com.name }}</a></li>
                 {% empty %}
                     <li><a>Ingen komiteer eksisterer</a></li>
                 {% endfor %}
-                {% endcache %}
+                {# {% endcache %} #}
             </ul>
         </li>
         <li><a href="http://bokskap.nabla.no">Bokskap</a></li>
