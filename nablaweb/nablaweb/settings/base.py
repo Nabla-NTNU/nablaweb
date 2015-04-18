@@ -47,7 +47,7 @@ STATICFILES_FINDERS = (
     'djangobower.finders.BowerFinder'
 )
 
-BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'bower_components')
+BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, '..', 'static')
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
@@ -131,8 +131,10 @@ INSTALLED_APPS = [
 
 BOWER_INSTALLED_APPS = (
     'jquery',
+    'rangy',
     'fullpage.js',
-    'markdown-plus',
+    'hallo.js',
+    'font-awesome'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
