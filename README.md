@@ -73,6 +73,14 @@ pip install -r requirements/devel.txt
 ```
 Pip vil nå laste ned og installere alle pakkene som er nevnt i filen requirements/devel.txt nn i my_env-mappen din og en masse tekst vil flagre nedover skjermen. 
 
+## Installere bower-pakker ##
+Nablaweb bruker også noen front-end-pakker som fås gjennom bower.
+```
+#!bash
+python manage.py bower_install
+
+```
+
 ## Sett opp database ##
 Vanligvis kjører nablasiden på en mysql-database, men for utvikling bruker vi sqlite3.
 For å lage en database og sette opp alle tabeller og felt må du gå inn i mappen nablaweb inne i mappen nablaweb. Det vil si den mappen som har filen manage.py i seg. Og deretter kjøre 
