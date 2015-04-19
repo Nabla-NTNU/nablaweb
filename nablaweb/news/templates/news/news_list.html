@@ -59,12 +59,13 @@
 
 {% block sidebar %}
 
-    {{ sidebarinfo.content|safe }}
-
     {% include "events/includes/upcoming_events.html" %}
 
+    {{ sidebarinfo.content|safe }}
+
+    {% include "poll/poll_include.html" %}
 {% endblock sidebar %}
 
 {% block below_ad %}
-    {% include "poll/poll_include.html" %}
+
 {% endblock below_ad %}

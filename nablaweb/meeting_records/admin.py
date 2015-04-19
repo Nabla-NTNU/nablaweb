@@ -5,6 +5,7 @@ from functools import wraps
 from django.contrib import admin
 from content.admin import ContentAdmin
 
+
 # Stygg hack for å endre navnet på appen i admin
 def rename_app_list(func):
     m = {'Meeting_Records': 'Referater'}
@@ -25,6 +26,7 @@ def rename_app_list(func):
                 response.context_data['title'] = "%s administration" % m[app_label]
         return response
     return _wrapper
+
 
 class MeetingRecordAdmin(ContentAdmin):
     fields = ("picture",

@@ -1,11 +1,22 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.core.urlresolvers import reverse
 from news.models import News
 
+
 class MeetingRecord(News):
-    pub_date = models.DateField(verbose_name='publisert',  blank=False, null=True, help_text="Publikasjonsdato")
-    file = models.FileField(upload_to='nabladet', verbose_name='PDF-fil', help_text="Filnavn")
+    pub_date = models.DateField(
+        verbose_name='publisert',
+        blank=False,
+        null=True,
+        help_text="Publikasjonsdato")
+    file = models.FileField(
+        upload_to='meeting_records',
+        verbose_name='PDF-fil',
+        null=True,
+        blank=True,
+        help_text="Filnavn")
 
     class Meta:
         verbose_name = 'Møtereferat'
