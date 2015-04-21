@@ -15,7 +15,7 @@ var/
 venv/
 
 # Bower-components
-static/bower_components
+bower_components
 
 .idea
 requirements/build

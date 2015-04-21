@@ -1,5 +1,5 @@
 from django.forms import Textarea
-from django.utils.safestring import mark_safe, mark_for_escaping
+from django.utils.safestring import mark_safe
 
 
 class MarkdownEditor(Textarea):
@@ -32,14 +32,14 @@ class MarkdownEditor(Textarea):
     class Media:
         css = {
             "all": (
-                "bower_components/jquery-ui/themes/base/jquery-ui.css",
-                "bower_components/font-awesome/css/font-awesome.css"
+                "jquery-ui/themes/base/jquery-ui.css",
+                "font-awesome/css/font-awesome.css"
             )
         }
         js = (
-            #"bower_components/jquery/dist/jquery.min.js",
-            "bower_components/jquery/jquery.min.js",
-            "bower_components/rangy/rangy-core.min.js",
-            "bower_components/jquery-ui/ui/minified/jquery-ui.min.js",
-            "bower_components/hallo.js/hallo.js",
+            # "jquery/dist/jquery.min.js",
+            "jquery/jquery.min.js",
+            "rangy/rangy-core.min.js",
+            "jquery-ui/ui/minified/jquery-ui.min.js",
+            "hallo.js/hallo.js",
         )
