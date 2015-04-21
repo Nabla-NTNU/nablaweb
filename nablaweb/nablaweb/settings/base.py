@@ -116,6 +116,16 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'django.contrib.humanize',
     'django.contrib.staticfiles',
+
+    # django-wiki
+    'django_nyt',
+    'mptt',
+    'sorl.thumbnail',
+    'wiki',
+    'wiki.plugins.attachments',
+    'wiki.plugins.notifications',
+    'wiki.plugins.images',
+    'wiki.plugins.macros',
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -131,6 +141,17 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'com.context_processors.com_context',
     'poll.context_processors.poll_context',
     'nablaweb.context_processors.get_primary_dir',
+)
+
+# django-wiki
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
