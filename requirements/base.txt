@@ -1,4 +1,4 @@
-Django==1.7
+Django==1.7.1
 pytz
 django-contrib-comments
 
