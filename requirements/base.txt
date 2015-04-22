@@ -1,4 +1,4 @@
-Django==1.7
+Django==1.7.1
 pytz
 django-contrib-comments
 
@@ -22,6 +22,12 @@ django-markdown-deux
 # Ekstra Class-based-view mixins
 django-braces
 
+# Bower-integrasjon
+django-bower
+
 # Tidligere brukt markdown bibliotek
 #Markdown
 #git+https://github.com/DataDog/markdown-urlize#egg=markdown_urlize
+
+#django-wiki
+git+git://github.com/benjaoming/django-wiki.git

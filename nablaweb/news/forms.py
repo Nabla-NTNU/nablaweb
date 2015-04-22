@@ -2,6 +2,7 @@
 
 
 from django.forms import ModelForm, CharField, SplitDateTimeWidget, DateInput, TimeInput
+import content.widgets as widgets
 from news.models import News
 
 
@@ -13,6 +14,7 @@ class NewsCharField(CharField):
 
 class NewsForm(ModelForm):
     headline = NewsCharField(label="Overskrift")
+    #body = CharField(label="Brødtekst", widget=widgets.MarkdownEditor)
 
     class Meta:
         model = News

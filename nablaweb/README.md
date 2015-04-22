@@ -10,4 +10,6 @@ spesielle mapper:
 templates -- inneholder templates vi har laget, og templates som overskriver
              Django sine.
 
+nablaweb -- inneholder settings og urls. Knutepunktet for prosjektet.
+
 w -- relatert til Wikien (burde strengt tatt ikke være i denne mappen trur jeg)

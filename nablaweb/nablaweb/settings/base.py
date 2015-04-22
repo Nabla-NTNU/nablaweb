@@ -41,6 +41,14 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, '..', 'static'),
 )
 
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    'djangobower.finders.BowerFinder'
+)
+
+BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, '..')
+
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 ##############################################################################
@@ -57,7 +65,11 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    # django-wiki
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'nablaweb.urls'
@@ -103,6 +115,9 @@ INSTALLED_APPS = [
     'markdown_deux',
     'django_comments',
 
+    # Bower handterer frontend pakker
+    'djangobower',
+
     # Haystack er en app for søking. (Krever 2.0.0 beta samt Whoosh!)
     'haystack',
 
@@ -116,7 +131,25 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'django.contrib.humanize',
     'django.contrib.staticfiles',
+
+    # django-wiki
+    'django_nyt',
+    'mptt',
+    'sorl.thumbnail',
+    'wiki',
+    'wiki.plugins.attachments',
+    'wiki.plugins.notifications',
+    'wiki.plugins.images',
+    'wiki.plugins.macros',
 ]
+
+BOWER_INSTALLED_APPS = (
+#    'jquery',
+    'rangy',
+    'fullpage.js',
+    'hallo.js',
+    'font-awesome'
+)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',

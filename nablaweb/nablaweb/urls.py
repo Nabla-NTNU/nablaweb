@@ -5,6 +5,11 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import RedirectView
 from news.feeds import RecentNews
+# nødvendig for django-wiki
+from wiki.urls import get_pattern as get_wiki_pattern
+from django_nyt.urls import get_pattern as get_nyt_pattern
+
+
 
 admin.autodiscover()
 
@@ -40,3 +45,9 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += staticfiles_urlpatterns()
+
+# django-wiki
+urlpatterns += patterns('',
+    (r'^wiki/notifications/', get_nyt_pattern()),
+    (r'^wiki/', get_wiki_pattern())
+)
