@@ -100,7 +100,7 @@ class AbstractEvent(News):
         return self.event_end and self.event_end < datetime.now()
 
     def registration_has_started(self):
-       return self.registration_required and self.registration_start < datetime.now()
+        return self.registration_required and self.registration_start < datetime.now()
 
     def registration_open(self):
         return self.registration_has_started() and datetime.now() < self.registration_deadline
@@ -182,6 +182,13 @@ class Event(AbstractEvent):
     def users_attending(self):
         """Returnerer antall brukere som er påmeldt."""
         return self.attending_registrations.count()
+
+    def users_attending_emails(self):
+        """
+        :return: List of attending users emails.
+        """
+        attending = self.attending_registrations
+        return [att.user.email for att in attending]
 
     def users_waiting(self):
         """Returnerer antall brukere som står på venteliste."""

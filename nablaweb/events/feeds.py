@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.syndication.views import Feed
-from events.models import Event
+from .models import Event
+
 
 class RecentEvents(Feed):
     title = "Arrangement på Nabla.no"

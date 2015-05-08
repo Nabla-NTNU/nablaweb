@@ -4,16 +4,29 @@ from datetime import datetime, timedelta
 
 from django.test import TestCase
 from django.core import mail
-from django.contrib.auth import get_user_model; User = get_user_model()
+from django.contrib.auth import get_user_model
 
-from events.models import Event, EventException
-from events.exceptions import RegistrationAlreadyExists
+User = get_user_model()
+
+from .models import Event, EventException
+from .exceptions import RegistrationAlreadyExists
 
 
 class GeneralEventTest(TestCase):
     def setUp(self):
         # Lag en bruker som kan "lage" arrangementet
-        self.user = User.objects.create(username='oyvinlek', password='oyvinlek')
+        self.user = User.objects.create(
+            username='oyvinlek',
+            password='oyvinlek',
+            email='oyvinlek@example.com')
+        # multiple users
+        self.users = []
+        for i in range(1, 10):
+            user = User.objects.create(
+                username="person%d" % i,
+                password="person%d" % i,
+                email="person%d@example.com" % i)
+            self.users.append(user)
 
         # Opprett et arrangement
         self.event = Event.objects.create(
@@ -33,12 +46,32 @@ class GeneralEventTest(TestCase):
 
 class RegistrationTest(GeneralEventTest):
 
-    def test_register_and_deregister(self):
+    def test_register(self):
         self.event.register_user(self.user)
         self.assertTrue(self.event.is_registered(self.user))
 
+        for user in self.users:
+            self.event.register_user(user)
+            self.assertTrue(self.event.is_registered(user))
+
+    def test_email_list(self):
+
+        for user in self.users:
+            self.event.register_user(user)
+
+        emails = self.event.users_attending_emails()
+        print(self.event.users_attending())
+
+        for user in self.users:
+            self.assertTrue(user.email in emails)
+
+    def test_deregister(self):
         self.event.deregister_user(self.user)
         self.assertFalse(self.event.is_registered(self.user))
+
+        for user in self.users:
+            self.event.deregister_user(user)
+            self.assertFalse(self.event.is_registered(user))
 
     def test_register_if_already_registered(self):
         self.event.register_user(self.user)
@@ -78,7 +111,10 @@ class WaitingListTest(GeneralEventTest):
         # Lag og registrer noen brukere
         self.event.register_user(self.user)
         for i in range(1, 20):
-            u = User.objects.create(username='user%d'%i, password='user%d'%i, email='user%d@localhost'%i)
+            u = User.objects.create(
+                username="user%d" % i,
+                password="user%d" % i,
+                email="user%d@localhost" % i)
             self.event.register_user(u)
 
     def test_attending_ordering(self):
