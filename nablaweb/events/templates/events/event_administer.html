@@ -12,6 +12,8 @@
     {% if event.has_queue %}
         Ventende: {{ event.users_waiting }}<br />
     {% endif %}
+    Epostliste:
+    <textarea>{% for email in event.users_attending_emails %}{{ email }}; {% endfor %}</textarea>
 </p>
 
 <form action="" method="post" class="form">{% csrf_token %}

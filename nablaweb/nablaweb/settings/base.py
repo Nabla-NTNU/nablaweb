@@ -33,6 +33,8 @@ MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
 
+FILEBROWSER_DIRECTORY = ''
+
 # Mappe hvor alle statiske filer blir lagt etter at man kjører
 # manage.py collectstatic
 STATIC_ROOT = os.path.join(VARIABLE_CONTENT, 'static_collected')
@@ -120,6 +122,10 @@ INSTALLED_APPS = [
 
     # Haystack er en app for søking. (Krever 2.0.0 beta samt Whoosh!)
     'haystack',
+
+    # Filebrowser
+    'grappelli',
+    'filebrowser',
 
     # Djangoting
     'django.contrib.auth',
