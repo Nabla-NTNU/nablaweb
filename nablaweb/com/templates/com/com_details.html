@@ -19,27 +19,30 @@
 {# List of memberships #}
 {% for membership in members %}
 
-<a class="com-member clearfix" href="{% url "member_profile" membership.user.username %}">
+<div class="com-member">
         <div class="avatar">
-            {% if membership.user.avatar %}
-            <img alt="avatar" src="{% thumbnail membership.user.avatar 50x50 %}" width="50" height="50">
-            {% else %}
-            <img alt="avatar" src="{{ STATIC_URL }}img/default_avatar.png" width="50" height="50">
-            {% endif %}
+          <img class="thumbnail" alt="avatar"
+              {% if member.avatar %}
+                  src="{% thumbnail member.avatar 150x150 %}"
+              {% else %}
+                  src="{{ STATIC_URL }}img/default_avatar.png"
+              {%endif %}>
         </div>
 
         <div class="info">
-            {# Data for medlemskap #}
-            {#<span>{{ membership.joined_date|date:"d. F Y" }}</span>#}
 
-            <span class="name">{{ membership.user.get_full_name }}</span>
+            <span class="name">
+              <a class=""
+               href="{% url "member_profile" membership.user.username %}"
+               >{{ membership.user.get_full_name }}</a>
+            </span>
 
             {# Beskrivelse av stillingen #}
             {% if membership.story %}
-                <span class="story"> &ndash; {{ membership.story }}</span>
+                <p class="story">{{ membership.story }}</p>
             {% endif %}
         </div>
-</a>
+</div>
 
 {% empty %}
     <p>Denne komiteen har ingen medlemmer. Det var rart.</p>
