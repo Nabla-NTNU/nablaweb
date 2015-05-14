@@ -12,7 +12,7 @@
 {% for m in meeting_record_list %}
     <tr>
         <td style="width:20%">
-            <a href="{{ m.get_absolute_url }}"> {{ m.pub_date|date:"F Y" }} </a>
+            <a href="{{ m.get_absolute_url }}"> {{ m.pub_date|date:"d. F Y" }} </a>
         </td>
         <td style="width:70%;">
             {{ m.headline }}

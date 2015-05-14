@@ -46,13 +46,20 @@ class GeneralEventTest(TestCase):
 
 class RegistrationTest(GeneralEventTest):
 
-    def test_register(self):
+    def test_register_and_deregister(self):
         self.event.register_user(self.user)
         self.assertTrue(self.event.is_registered(self.user))
 
         for user in self.users:
             self.event.register_user(user)
             self.assertTrue(self.event.is_registered(user))
+
+        self.event.deregister_user(self.user)
+        self.assertFalse(self.event.is_registered(self.user))
+
+        for user in self.users:
+            self.event.deregister_user(user)
+            self.assertFalse(self.event.is_registered(user))
 
     def test_email_list(self):
 
@@ -64,14 +71,6 @@ class RegistrationTest(GeneralEventTest):
 
         for user in self.users:
             self.assertTrue(user.email in emails)
-
-    def test_deregister(self):
-        self.event.deregister_user(self.user)
-        self.assertFalse(self.event.is_registered(self.user))
-
-        for user in self.users:
-            self.event.deregister_user(user)
-            self.assertFalse(self.event.is_registered(user))
 
     def test_register_if_already_registered(self):
         self.event.register_user(self.user)
