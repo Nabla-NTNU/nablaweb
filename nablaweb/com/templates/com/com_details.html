@@ -22,8 +22,8 @@
 <div class="com-member">
         <div class="avatar">
           <img class="thumbnail" alt="avatar"
-              {% if member.avatar %}
-                  src="{% thumbnail member.avatar 150x150 %}"
+              {% if membership.user.avatar %}
+                  src="{% thumbnail membership.user.avatar 150x150 %}"
               {% else %}
                   src="{{ STATIC_URL }}img/default_avatar.png"
               {%endif %}>
