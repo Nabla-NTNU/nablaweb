@@ -50,7 +50,7 @@
 {% include "content/includes/meta.html" with content=meeting_record %}
 
 <div><a class="btn btn-primary btn-large" href="{{ meeting_record.file.url }}">
-        Last ned referat {{ meeting_record.pub_date|date:"F Y" }}
+        Last ned referat
 </a></div>
 
 <br>
@@ -60,9 +60,9 @@
 {% for m in meeting_record_list %}
 <tr><td>
     {% if m == meeting_record %}
-    {{ m.pub_date|date:"F Y" }}
+    {{ m.pub_date|date:"d. F Y" }}
     {% else %}
-    <a href="{{ m.get_absolute_url }}"> {{ m.pub_date|date:"F Y" }} </a>
+    <a href="{{ m.get_absolute_url }}"> {{ m.pub_date|date:"d. F Y" }} </a>
     {% endif %}
 </td></tr>
 {% endfor %}
