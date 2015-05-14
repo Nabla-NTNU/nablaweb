@@ -1,11 +1,10 @@
 
 .com-member {
-    display: block;
-    margin-bottom: 15px;
-    background-color: #efefef;
-    margin-left:50px;
-    min-height: 50px;
+    display: inline-table;
+    min-height: 170px;
+    width: 170px;
     color: black;
+    padding: 10px;
 }
 
 .com-member:hover {
@@ -14,7 +13,7 @@
 }
 
 .com-member .name {
-    font-weight: bold;
+    color: black;
 }
 
 .com-member:hover .name {
@@ -23,12 +22,9 @@
 
 .com-member .avatar {
     position: relative;
-    left: -50px;
-    height: 50px;
-    width: 50px;
+    width: 150px;
 }
 
 .com-member .info {
-    margin-top: -50px;
     padding: 5px;
 }
