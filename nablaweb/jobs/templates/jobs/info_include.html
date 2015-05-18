@@ -43,11 +43,15 @@
     <tr>
         <td>Relevant for</td>
         <td>
-            {{ job.relevant_for_group.all|commas_no }} (årskull {{ job.relevant_for_year.all|commas_no }})
+          {% for group_choice in job.relevant_for_group.all %}
+            {{ group_choice.studieretning }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+             (årskull {% for year_choice in job.relevant_for_year.all %}{{ year_choice.year }}{% if not forloop.last %}, {% endif %}{% endfor %})
+
         </td>
     </tr>
     {% endif %}
-    
+
     {% if job.deadline_date %}
     <tr>
         <td>Søknadsfrist</td>
