@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ album.title }}{% endblock %}
+
+{% block more_head %}
+{% endblock %}
+
+{% block content %}
+<div>
+  <img src="{% image.get_absolute_url %}" />
+  <p>
+    {{ image.description }}
+  </p>
+  <nav>
+      <ul class="pager">
+        {% if page_obj.has_previous %}
+            <li class="next">
+                <a href="?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> forrige</a>
+            </li>
+        {% endif %}
+
+          <li class="disabled pager-counter">
+              Bilde {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
+          </li>
+
+          {% if page_obj.has_next %}
+              <li class="previous">
+                  <a href="?page={{ page_obj.next_page_number }}">neste  <span aria-hidden="true">&rarr;</span></a>
+              </li>
+          {% endif %}
+      </ul>
+  </nav>
+</div>
+{% endblock content %}

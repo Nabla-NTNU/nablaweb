@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% block title %}Bilder{% endblock %}
+
+{% block more_head %}
+{% endblock %}
+
+{% block content %}
+
+{% for album in albums %}
+
+    <div class="row">
+    <h2>{{ album.title }}</h2>
+    <a href="{{ album.get_absolute_url }}">her</a>
+    </div>
+
+    <hr>
+
+{% endfor %}
+
+{% endblock content %}

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from image_cropping import ImageCroppingMixin
+from .models import Album, AlbumImage
 
 
 class ChangedByMixin(object):
@@ -15,3 +16,11 @@ class ChangedByMixin(object):
 
 class ContentAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
     pass
+
+
+class AlbumAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Album, AlbumAdmin)
+admin.site.register(AlbumImage)

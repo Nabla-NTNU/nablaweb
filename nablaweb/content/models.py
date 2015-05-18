@@ -5,13 +5,14 @@ from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 
+from filebrowser.fields import FileBrowseField
 from django_comments.models import Comment
 from image_cropping.fields import ImageRatioField
 
 
-class Content(models.Model):
-
+class EditableMedia(models.Model):
     # Metadata
     created_date = models.DateTimeField(
         verbose_name="Publiseringsdato",
@@ -36,6 +37,12 @@ class Content(models.Model):
         blank=True,
         null=True)
 
+    class Meta:
+        abstract = True
+
+
+class Content(EditableMedia):
+
     # Bildeopplasting med resizing og cropping
     picture = models.ImageField(
         upload_to="news_pictures",
@@ -54,7 +61,7 @@ class Content(models.Model):
         null=True,
         blank=True,
         help_text="Denne teksten vises i adressen til siden, og trengs vanligvis ikke å endres")
-    
+
     allow_comments = models.BooleanField(
         blank=True,
         verbose_name="Tillat kommentarer",
@@ -97,3 +104,51 @@ class Content(models.Model):
         if not self.content_type:
             self.content_type = ContentType.objects.get_for_model(self.__class__)
         super(Content, self).save(*args, **kwargs)
+
+
+class AlbumImage(models.Model):
+    file = FileBrowseField(
+        max_length=100,
+        verbose_name="Bildefil"
+    )
+    description = models.TextField(
+        verbose_name="Bildetekst",
+        blank=True,
+        null=True
+    )
+
+
+class Album(EditableMedia):
+    title = models.CharField(
+        max_length=100,
+        verbose_name="Albumtittel",
+        blank=False,
+        null=True
+    )
+    images = models.ManyToManyField(
+        AlbumImage,
+        verbose_name="Bilder",
+    )
+
+    VISIBILLITY_OPTIONS = (
+        ('p', 'public'),
+        ('u', 'users'),
+        ('h', 'hidden')
+    )
+
+    visibillity = models.CharField(
+        max_length=1,
+        verbose_name="Synlighet",
+        choices=VISIBILLITY_OPTIONS,
+        default='h',
+        blank=False
+    )
+
+    class Meta:
+        verbose_name = "Album"
+        verbose_name_plural = "Album"
+
+    @models.permalink
+    def get_absolute_url(self):
+
+        return reverse('album', kwargs={'num': '0'})
