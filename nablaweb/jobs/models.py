@@ -36,8 +36,12 @@ class RelevantForChoices(models.Model):
         verbose_name = 'Mulig valg for "relevant for"'
         verbose_name_plural = 'Mulige valg for "relevant for"'
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % self.studieretning
+
+    # legacy
+    def __unicode__(self):
+        return self.__str__
 
 
 class TagChoices(models.Model):
