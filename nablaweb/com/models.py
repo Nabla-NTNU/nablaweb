@@ -17,7 +17,7 @@ class ComPage(models.Model):
     description = models.TextField(verbose_name="Beskrivelse", help_text="Teksten på komitésiden", blank=True)
     slug = models.CharField(verbose_name="Slug til URL-er", max_length=50,
                             blank=False, unique=True, editable=False)
-    
+
     last_changed_date = models.DateTimeField(verbose_name="Sist redigert", auto_now=True, null=True)
     last_changed_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                         verbose_name="Sist endret av",
@@ -28,22 +28,25 @@ class ComPage(models.Model):
         verbose_name = "komiteside"
         verbose_name_plural = "komitesider"
 
+    def __str__(self):
+        return self.com.name
+
     def __unicode__(self):
         return self.com.name
 
     def has_been_edited(self):
         return self.last_changed_by is not None
-        
+
     def get_canonical_name(self):
         return slugify(self.__unicode__())
-    
+
     def get_absolute_url(self):
         return "/komite/" + self.get_canonical_name()
-        
+
     def save(self, *args, **kwargs):
         self.slug = self.get_canonical_name()
         super(ComPage, self).save(*args, **kwargs)
-    
+
 
 class ComMembership(models.Model):
     """Komitemedlemskap (many to many)"""
@@ -64,10 +67,13 @@ class ComMembership(models.Model):
         self.user.is_staff = True
         self.user.save()
         super(ComMembership, self).save(*args, **kwargs)
-    
+
     def delete(self, *args, **kwargs):
         self.com.user_set.remove(self.user)
         super(ComMembership, self).delete(*args, **kwargs)
-    
+
+    def __str__(self):
+        return self.user.username
+
     def __unicode__(self):
         return self.user.username

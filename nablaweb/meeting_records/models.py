@@ -22,5 +22,8 @@ class MeetingRecord(News):
         verbose_name = 'Møtereferat'
         verbose_name_plural = 'Møtereferater'
 
+    def __str__(self):
+        return self.headline
+
     def __unicode__(self):
         return self.headline

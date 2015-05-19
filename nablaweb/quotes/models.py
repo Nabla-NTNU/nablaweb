@@ -14,5 +14,8 @@ class Quote(models.Model):
         verbose_name = "sitat"
         verbose_name_plural = "sitat"
 
+    def __str__(self):
+        return self.quote
+
     def __unicode__(self):
         return self.quote

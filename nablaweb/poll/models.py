@@ -27,6 +27,9 @@ class Poll(models.Model):
 
     objects = PollManager()
 
+    def __str__(self):
+        return self.question
+
     def __unicode__(self):
         return self.question
 
@@ -55,6 +58,8 @@ class Choice(models.Model):
     creation_date = models.DateTimeField('Lagt til', auto_now_add=True)
     added_by = models.CharField('Lagt til av', max_length=100,
                                 help_text="Hvem som la til valget i avstemningen")
+    def __str__(self):
+        return self.choice
 
     def __unicode__(self):
         return self.choice
