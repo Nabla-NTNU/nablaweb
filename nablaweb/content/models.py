@@ -117,6 +117,12 @@ class AlbumImage(models.Model):
         null=True
     )
 
+    def get_absolute_url(self):
+        return self.file.url
+
+    def __str__(self):
+        return self.file.url;
+
 
 class Album(EditableMedia):
     title = models.CharField(
@@ -148,7 +154,8 @@ class Album(EditableMedia):
         verbose_name = "Album"
         verbose_name_plural = "Album"
 
-    @models.permalink
     def get_absolute_url(self):
+        return reverse('album', kwargs={'pk': self.pk,'num': '0'})
 
-        return reverse('album', kwargs={'num': '0'})
+    def __str__(self):
+        return self.title;

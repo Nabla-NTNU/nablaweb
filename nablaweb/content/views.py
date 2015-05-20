@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView, ListView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Album
 
 
@@ -10,10 +11,24 @@ class AlbumOverview(ListView):
 
 class AlbumView(TemplateView):
 
+    template_name = "content/album.html"
+
     def get_context_data(self, **kwargs):
-        context = []
-        num = kwargs['num']
-        context['album'] = Album.objects.get({'id':  kwargs['pk']})
-        context['image'] = album.images[num]
+        context = super(AlbumView, self).get_context_data(**kwargs)
+        num = int(kwargs['num'])
+        pk = int(kwargs['pk'])
+        album = Album.objects.filter(pk=pk)[0]
+        context['album'] = album
+
+        images = album.images.all()
+        paginator = Paginator(images, 1)
+        try:
+            page_obj = paginator.page(num)
+        except (EmptyPage, PageNotAnInteger):
+            page_obj = paginator.page(1)
+
+        context['page_obj'] = page_obj
+        context['image'] = page_obj.object_list[0]
+
 
         return context
