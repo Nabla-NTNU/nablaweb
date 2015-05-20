@@ -108,6 +108,9 @@ class AbstractEvent(News):
     def deregistration_closed(self):
         return self.deregistration_deadline and (self.deregistration_deadline < datetime.now())
 
+    def __str__(self):
+        return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
+
     def __unicode__(self):
         return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
 
@@ -322,6 +325,12 @@ class EventRegistration(models.Model):
         verbose_name = 'påmelding'
         verbose_name_plural = 'påmeldte'
         unique_together = (("event", "user"), ("event", "user", "number", "attending"))
+
+    def __str__(self):
+        return u'%s, %s is %s, place: %s' % (self.event,
+                                             self.user,
+                                             "Attending" if self.attending else "Waiting",
+                                             self.number)
 
     def __unicode__(self):
         return u'%s, %s is %s, place: %s' % (self.event,

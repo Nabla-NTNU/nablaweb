@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from image_cropping import ImageCroppingMixin
+from filebrowser.widgets import ClearableFileInput, FileInput
+from django.db import models
 
 
 class ChangedByMixin(object):
@@ -14,4 +16,7 @@ class ChangedByMixin(object):
 
 
 class ContentAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
-    pass
+    formfield_overrides = {
+        models.ImageField: {"widget": ClearableFileInput},
+        models.FileField: {"widget": FileInput}
+    }

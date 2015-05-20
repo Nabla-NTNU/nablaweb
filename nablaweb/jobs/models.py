@@ -22,6 +22,9 @@ class YearChoices(models.Model):
     def long_name(self):
         return u'%s. klasse' % str(self.year)
 
+    def __str__(self):
+        return u'%s' % str(self.year)
+
     def __unicode__(self):
         return u'%s' % str(self.year)
 
@@ -36,8 +39,12 @@ class RelevantForChoices(models.Model):
         verbose_name = 'Mulig valg for "relevant for"'
         verbose_name_plural = 'Mulige valg for "relevant for"'
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % self.studieretning
+
+    # legacy
+    def __unicode__(self):
+        return self.__str__
 
 
 class TagChoices(models.Model):
@@ -50,6 +57,9 @@ class TagChoices(models.Model):
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
         ordering = ("tag",)
+
+    def __str__(self):
+        return u'%s' % self.tag
 
     def __unicode__(self):
         return u'%s' % self.tag
@@ -64,6 +74,9 @@ class Company(Content):
         verbose_name = "bedrift"
         verbose_name_plural = "bedrifter"
         ordering = ("name",)
+
+    def __str__(self):
+        return self.name
 
     def __unicode__(self):
         return self.name
@@ -125,6 +138,9 @@ class Advert(News):
         verbose_name_plural = "stillingsannonser"
 
     objects = AdvertManager()
+
+    def __str__(self):
+        return self.headline
 
     def __unicode__(self):
         return self.headline

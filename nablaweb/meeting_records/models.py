@@ -15,12 +15,15 @@ class MeetingRecord(News):
         upload_to='meeting_records',
         verbose_name='PDF-fil',
         null=True,
-        blank=True,
+        blank=False,
         help_text="Filnavn")
 
     class Meta:
         verbose_name = 'Møtereferat'
         verbose_name_plural = 'Møtereferater'
+
+    def __str__(self):
+        return self.headline
 
     def __unicode__(self):
         return self.headline

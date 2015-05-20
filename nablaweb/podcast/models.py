@@ -8,6 +8,9 @@ class Podcast(models.Model):
     pub_date = models.DateTimeField(verbose_name='publisert', blank=False, null=True, help_text='Publikasjonsdato')
     file = models.FileField(upload_to='podcast', blank=False, verbose_name='lydfil', help_text='Filformat: MP3')
 
+    def __str__(self):
+        return self.title
+
     def __unicode__(self):
         return self.title
 

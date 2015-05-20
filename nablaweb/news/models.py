@@ -24,7 +24,7 @@ class News(Content):
             "Man kan her bruke <a href=\"http://en.wikipedia.org/wiki/Markdown\" target=\"_blank\">"
             "markdown</a> for å formatere teksten."))
 
-    PRIORITY_NUMBERS = ( 
+    PRIORITY_NUMBERS = (
         (0, '0 - Dukker ikke opp'),
         (1, '1'),
         (2, '2'),
@@ -66,6 +66,9 @@ class News(Content):
             return self.bedpres
         else:
             return self
+
+    def __str__(self):
+        return self.headline
 
     def __unicode__(self):
         return self.headline
