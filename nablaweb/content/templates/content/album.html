@@ -5,16 +5,17 @@
 {% endblock %}
 
 {% block content %}
-<div>
-  <img src="{% image.get_absolute_url %}" />
+<div class="">
+  <h1>{{ album.title }}</h1>
+  <img src="{{ image.get_absolute_url }}" style="max-width: 100%; max-height: 100%;" />
   <p>
     {{ image.description }}
   </p>
   <nav>
       <ul class="pager">
         {% if page_obj.has_previous %}
-            <li class="next">
-                <a href="?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> forrige</a>
+            <li class="previous">
+                <a href="{{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> forrige</a>
             </li>
         {% endif %}
 
@@ -23,8 +24,8 @@
           </li>
 
           {% if page_obj.has_next %}
-              <li class="previous">
-                  <a href="?page={{ page_obj.next_page_number }}">neste  <span aria-hidden="true">&rarr;</span></a>
+              <li class="next">
+                  <a href="{{ page_obj.next_page_number }}">neste  <span aria-hidden="true">&rarr;</span></a>
               </li>
           {% endif %}
       </ul>
