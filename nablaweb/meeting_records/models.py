@@ -15,7 +15,7 @@ class MeetingRecord(News):
         upload_to='meeting_records',
         verbose_name='PDF-fil',
         null=True,
-        blank=True,
+        blank=False,
         help_text="Filnavn")
 
     class Meta:

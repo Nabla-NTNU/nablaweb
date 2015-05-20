@@ -48,11 +48,11 @@
 {% block sidebar %}
 
 {% include "content/includes/meta.html" with content=meeting_record %}
-
+{% if meeting_record.file %}
 <div><a class="btn btn-primary btn-large" href="{{ meeting_record.file.url }}">
         Last ned referat
 </a></div>
-
+{% endif %}
 <br>
 
 <h3>Arkiv</h3>
