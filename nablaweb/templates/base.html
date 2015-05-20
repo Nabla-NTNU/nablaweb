@@ -11,8 +11,8 @@
     <title>
         Nabla - {% block title %}linjeforeningen for Fysikk og matematikk ved NTNU{% endblock title %}
     </title>
-    <meta name="description" 
-          content="Hjemmesiden til linjeforeningen Nabla, for studentene på 
+    <meta name="description"
+          content="Hjemmesiden til linjeforeningen Nabla, for studentene på
                    fysikk og matematikk-masterprogrammet på NTNU.">
     <meta name="author" content="Nabla">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -140,6 +140,7 @@
                     <li><a href="{% url "user_list" %}">Medlemsliste</a></li>
                     {% if user.is_staff %}
                         <li><a href="/admin">Admin</a></li>
+                        <li><a href="/admin/filebrowser/browse">Filer</a></li>
                     {% endif %}
                 </ul>
             </li>
@@ -175,9 +176,9 @@
 
     {# content #}
     <div class="col-md-8">
-        {% block content %} 
+        {% block content %}
         {% endblock content %}
-    </div> 
+    </div>
     {# end content container #}
 
     <aside class="col-md-4">{# sidebar #}
@@ -196,7 +197,7 @@
     </aside>{# end sidebar #}
 </div>{# end main row #}
 
-{% endblock main %} 
+{% endblock main %}
 </div>{# end main container  #}
 </div>{# end whitebox #}
 
@@ -298,7 +299,7 @@
         })
     </script>
 
-    <script type="text/javascript" 
+    <script type="text/javascript"
     async
     src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
