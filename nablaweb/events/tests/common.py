@@ -9,8 +9,11 @@ from events.models import Event
 class GeneralEventTest(TestCase):
     def setUp(self):
         # Lag en bruker som kan "lage" arrangementet
-        self.user = User.objects.create(username='oyvinlek',
-                                        password='oyvinlek')
+        self.user = User.objects.create(
+            username='oyvinlek',
+            password='oyvinlek',
+            email='oyvinlek@localhost'
+        )
 
         # Opprett et arrangement
         self.event = Event.objects.create(
