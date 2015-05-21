@@ -6,7 +6,7 @@ from podcast.models import Podcast
 class PodcastAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {
-        'fields': ['title', 'description', 'pub_date',  'file']
+        'fields': ['title', 'description', 'file']
         })
     ]
 

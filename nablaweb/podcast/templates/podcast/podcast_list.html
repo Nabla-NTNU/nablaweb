@@ -1,21 +1,39 @@
 {% extends "base.html" %}
+{% load markdown_deux_tags %}
 {% block morehead %}
 {% endblock %}
 
 {% block content %}
-<body>
-    <h2>Skråttcast</h2>
-    <p>Den snakkesalige <a href="/komite/redaksjonen">redaksjon</a> presenterer Skråttcast.</p>
-{% if latest_podcast_list %}
-    <ul style="padding-left:0; display:inline;">
-        {% for podcast in latest_podcast_list %}
+<h2>Skråttcast</h2>
+<p>Om <a href="/komite/skrattcast/">skråtcast</a>.</p>
+{% if podcast_list %}
+    <div style="padding-left:0; display:inline;">
+        {% for podcast in podcast_list %}
             <h3><a href="/podcast/{{ podcast.id }}">{{ podcast.title }}</a></h3>
             <p>{{ podcast.pub_date }}</p>
-            <p>{{ podcast.description }}</p>
+            <p>{{ podcast.description|markdown }}</p>
         {% endfor %}
-    </ul>
+    </div>
+    <nav>
+        <ul class="pager">
+            {% if page_obj.has_next %}
+                <li class="previous">
+                    <a href="?page={{ page_obj.next_page_number }}"><span aria-hidden="true">&larr;</span> Eldre</a>
+                </li>
+            {% endif %}
+
+            <li class="disabled pager-counter">
+                Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
+            </li>
+
+            {% if page_obj.has_previous %}
+                <li class="next">
+                    <a href="?page={{ page_obj.previous_page_number }}">Nyere <span aria-hidden="true">&rarr;</span></a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 {% else %}
     <p>Ingen skråkast tilgjengelig.</p>
 {% endif %}
-</body>
 {% endblock %}
