@@ -157,5 +157,14 @@ class Album(EditableMedia):
     def get_absolute_url(self):
         return reverse('album', kwargs={'pk': self.pk,'num': '0'})
 
+    def is_visible(self, user=None):
+        if self.visibillity != 'p':
+            if self.visibillity != 'h' and user is not None:
+                return user.is_authenticated()
+            else:
+                return False
+        else:
+            return True
+
     def __str__(self):
-        return self.title;
+        return self.title
