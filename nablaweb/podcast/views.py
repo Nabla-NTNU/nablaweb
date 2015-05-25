@@ -10,17 +10,8 @@ from .models import Podcast
 class PodcastIndexView(ListView):
     model = Podcast
     paginate_by = 8
-    query_set = Podcast.objects.order_by('-pub_date')
+    queryset = Podcast.objects.order_by('-pub_date')
     template_name = "podcast/podcast_list.html"
-
-# legacy
-def index(request):
-    latest_podcast_list = Podcast.objects.order_by('-pub_date')[:8]
-    template = loader.get_template('podcast/podcast_list.html')
-    context = RequestContext(request, {
-        'latest_podcast_list': latest_podcast_list,
-    })
-    return HttpResponse(template.render(context))
 
 def detail(request, podcast_id):
     current_podcast = Podcast.objects.get(id=podcast_id)

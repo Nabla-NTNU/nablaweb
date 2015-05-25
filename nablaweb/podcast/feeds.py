@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.models import Podcast
 
 class LatestEntriesFeed(Feed):
-    title =  ''
+    title =  'Skråttcast'
     link = ''
     description = ''
 
@@ -17,4 +17,3 @@ class LatestEntriesFeed(Feed):
         return item.description
     def item_link(self, item):
         return reverse('podcast', args[item.pk])
-

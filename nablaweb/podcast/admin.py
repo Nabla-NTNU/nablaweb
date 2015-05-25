@@ -2,11 +2,13 @@
 
 from django.contrib import admin
 from podcast.models import Podcast
+from image_cropping import ImageCroppingMixin
 
-class PodcastAdmin(admin.ModelAdmin):
+
+class PodcastAdmin(ImageCroppingMixin, admin.ModelAdmin):
     fieldsets = [
         (None, {
-        'fields': ['title', 'description', 'file']
+        'fields': ['image', 'cropping', 'title', 'description', 'file']
         })
     ]
 
