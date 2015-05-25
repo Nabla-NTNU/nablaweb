@@ -1,8 +1,26 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from image_cropping.fields import ImageRatioField
+
 
 class Podcast(models.Model):
+
+    # Bildeopplasting med resizing og cropping
+    image = models.ImageField(
+        upload_to="news_pictures",
+        null=True,
+        blank=True,
+        verbose_name="Bilde",
+        help_text="Bilder som er større enn 300x300 px ser best ut. Du kan beskjære bildet etter opplasting.")
+    cropping = ImageRatioField(
+        'image',
+        '300x300',
+        allow_fullsize=False,
+        verbose_name="Beskjæring",
+        help_text="Bildet vises i full form på detaljsiden."
+    )
+
     title = models.CharField(
         verbose_name='tittel',
         max_length=200,
@@ -45,4 +63,4 @@ class Podcast(models.Model):
     class Meta:
         verbose_name = 'Podcast'
         verbose_name_plural = 'Podcast'
-#        ordering = ('-pub_date')
+        ordering = ["-pub_date"]

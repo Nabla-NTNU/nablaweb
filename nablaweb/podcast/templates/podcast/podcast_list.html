@@ -1,18 +1,31 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
-{% block morehead %}
-{% endblock %}
+{% load sekizai_tags %}
+{% load static %}
+{% load thumbnail %}
 
+{% block title %}Skråttcast{% endblock %}
 {% block content %}
-<h2>Skråttcast</h2>
-<p>Om <a href="/komite/skrattcast/">skråtcast</a>.</p>
+{% addtoblock "css" %}
+<link href="{% static "podcast/list.css" %}" rel="stylesheet" />
+{% endaddtoblock %}
+<h1>Skråttcast</h1>
+<p>Om <a href="/komite/skrattcast/">Skråttcast</a>.</p>
 {% if podcast_list %}
-    <div style="padding-left:0; display:inline;">
+    <div class="list-container">
+      <ul>
         {% for podcast in podcast_list %}
-            <h3><a href="/podcast/{{ podcast.id }}">{{ podcast.title }}</a></h3>
-            <p>{{ podcast.pub_date }}</p>
-            <p>{{ podcast.description|markdown }}</p>
+        <li>
+          {% if podcast.image %}
+          <img src="{% thumbnail podcast.image 300x300 box=podcast.cropping quality=95 %}" alt="{{ podcast.title }}"/>
+          {% endif %}
+          <a href="/podcast/{{ podcast.id }}">
+            <h2>{{ podcast.title }}</h2>
+            <span>{{ podcast.pub_date }}</span>
+          </a>
+        </li>
         {% endfor %}
+      </ul>
     </div>
     <nav>
         <ul class="pager">
@@ -34,6 +47,6 @@
         </ul>
     </nav>
 {% else %}
-    <p>Ingen skråkast tilgjengelig.</p>
+    <p>Ingen podcast tilgjengelig.</p>
 {% endif %}
 {% endblock %}

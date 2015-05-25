@@ -28,8 +28,11 @@
 </script>
 <div class="tittel">
 <ul>
-  <h4>Skråttcast - {{ podcast.title }}</h4>
-    <p>{{ podcast.pub_date }}. Antall visninger: ca. {{ podcast.view_counter }}</p>
+  <h2>Skråttcast - {{ podcast.title }}</h2>
+  {% if podcast.image %}
+  <img src="{{ podcast.image.url }}" alt="{{ podcast.title }}" style="max-width: 100%;"/>
+  {% endif %}
+  <p>{{ podcast.pub_date }}. Antall visninger: ca. {{ podcast.view_counter }}</p>
 </ul>
 </div>
 <ul>
@@ -70,12 +73,4 @@
 <div><a class="btn btn-primary btn-large" href="{{ podcast.file.url }}">
         Last ned
 </a></div>
-<div class="bunn"></div>
-<!--
-<audio controls>
-    <source src="{{ podcast.file.url }}" type="audio/ogg">
-    <source src="{{ podcast.file.url }}" type="audio/mpeg">
-Your browser does not support the audio element.
-</audio>
---!>
 {% endblock %}
