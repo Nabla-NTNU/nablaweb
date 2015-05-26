@@ -44,5 +44,5 @@ urlpatterns = patterns('events.views',
         name="ical_event"),
 
     # RSS-feed
-    url(r'^feed/$', RecentEvents()),
+    url(r'^feed/$', RecentEvents(), name="event_feed"),
 )

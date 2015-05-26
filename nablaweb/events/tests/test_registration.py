@@ -1,47 +1,16 @@
 # -*- coding: utf-8 -*-
-import random
-from datetime import datetime, timedelta
 
-from django.test import TestCase
+import random
+from datetime import datetime
 from django.core import mail
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-from .models import Event, EventException
-from .exceptions import RegistrationAlreadyExists
+from accounts.models import NablaUser as User
+from events.exceptions import RegistrationAlreadyExists, EventException
 
-
-class GeneralEventTest(TestCase):
-    def setUp(self):
-        # Lag en bruker som kan "lage" arrangementet
-        self.user = User.objects.create(
-            username='oyvinlek',
-            password='oyvinlek',
-            email='oyvinlek@example.com')
-        # multiple users
-        self.users = []
-        for i in range(1, 10):
-            user = User.objects.create(
-                username="person%d" % i,
-                password="person%d" % i,
-                email="person%d@example.com" % i)
-            self.users.append(user)
-
-        # Opprett et arrangement
-        self.event = Event.objects.create(
-            created_by=self.user,
-            location="Here",
-            headline="Title",
-            lead_paragraph="Text.",
-            body="More text.",
-            event_start=datetime(2030, 1, 1),
-            registration_deadline=datetime(2029, 1, 1),
-            registration_start=datetime(2000, 1, 1),
-            registration_required=True,
-            places=10,
-            has_queue=True,
-            )
+from .common import GeneralEventTest
 
 
 class RegistrationTest(GeneralEventTest):
@@ -109,11 +78,15 @@ class WaitingListTest(GeneralEventTest):
 
         # Lag og registrer noen brukere
         self.event.register_user(self.user)
-        for i in range(1, 20):
+        for u in self.users:
+            self.event.register_user(u)
+
+        registered = len(self.users) + 1
+        for i in range(registered, 2*self.event.places):
             u = User.objects.create(
-                username="user%d" % i,
-                password="user%d" % i,
-                email="user%d@localhost" % i)
+                    username="user%d" % i,
+                    password="user%d" % i,
+                    email="user%d@localhost" % i)
             self.event.register_user(u)
 
     def test_attending_ordering(self):
@@ -146,50 +119,3 @@ class WaitingListTest(GeneralEventTest):
         self.assertTrue(self.event.is_attending(u))
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to[0], u.email)
-
-
-class TimeTest(GeneralEventTest):
-
-    def _test_time_has_passed(self, field, method):
-        now = datetime.now()
-        an_hour = timedelta(hours=1)
-
-        test_method = getattr(self.event, method)
-
-        setattr(self.event, field, now - an_hour)
-        self.event.save()
-        self.assertTrue(test_method())
-
-        setattr(self.event, field, now + an_hour)
-        self.event.save()
-        self.assertFalse(test_method())
-
-    def test_has_started(self):
-        self._test_time_has_passed("event_start", "has_started")
-
-    def test_has_finished(self):
-        self._test_time_has_passed("event_end", "has_finished")
-
-        self.event.event_end = None
-        self.event.save()
-        self.assertFalse(self.event.has_finished())
-
-    def test_registration_has_started(self):
-        self._test_time_has_passed("registration_start", "registration_has_started")
-
-    def test_registration_open(self):
-        now = datetime.now()
-        an_hour = timedelta(hours=1)
-
-        times = ((-2, -1, False), (-1, 1, True), (1, 2, False))
-
-        for a, b, is_open in times:
-            self.event.registration_start = now + a*an_hour
-            self.event.registration_deadline = now + b*an_hour
-            self.event.save()
-            self.assertEqual(self.event.registration_open(), is_open, msg="{a},{b}".format(**locals()))
-
-    def test_registration_open_when_not_registration_required(self):
-        self.event.regstration_required = False
-        self.event.registration_deadline = datetime.now() - timedelta(hours=1)
-        self.event.registration_open()

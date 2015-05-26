@@ -20,8 +20,22 @@ SECRET_KEY = 'a()j2kxbwejl0y^jsk1*f#!=6na3pln6@fn!1ef6xra6(r3(%p'
 
 TIME_ZONE = 'Europe/Oslo'
 LANGUAGE_CODE = 'nb'
-USE_L10N = True  # use locale dates, numbers etc.
+USE_L10N = False  # don't use the locale of the server
 DATE_FORMAT = 'j. F Y'
+
+DATE_INPUT_FORMATS = (
+    '%Y-%m-%d',
+    '%d/%m/%Y',
+    '%d/%m/%y',
+    '%d.%m.%Y',
+    '%d.%m.%y',
+    '%d.%n.%Y',
+    '%d.%n.%y',)
+
+TIME_INPUT_FORMATS = (
+    '%H:%M:%S',
+    '%H:%M',
+    '%H',)
 
 # Gjør det enkelt å bruke relative paths
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), "..", "..")

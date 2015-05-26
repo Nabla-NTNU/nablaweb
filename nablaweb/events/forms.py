@@ -1,125 +1,77 @@
 # -*- coding: utf-8 -*-
 
+import operator
 
-from django.forms import SplitDateTimeField, BooleanField 
-from django.contrib.admin.widgets import AdminSplitDateTime
+from django.forms import BooleanField, ValidationError, ModelForm
 from .models import Event
-from news.forms import NewsForm
-from news.forms import NewsCharField as EventCharField
-
-# Hvilke datoformat som aksepteres fra brukeren.
-DATE_FORMATS = ['%Y-%m-%d',
-                '%d/%m/%Y',
-                '%d/%m/%y',
-                '%d.%m.%Y',
-                '%d.%m.%y',
-                '%d.%n.%Y',
-                '%d.%n.%y',]
-
-TIME_FORMATS = ['%H:%M:%S',
-                '%H:%M',
-                '%H',]
 
 
-class EventSplitDateTimeField(SplitDateTimeField):
-    default_error_messages = {
-        'invalid_date': u'Ugyldig dato. Prøv formatet "DD.MM.ÅÅÅÅ".',
-        'invalid_time': u'Ugyldig tid. Prøv formatet "HH:MM".',
-        'required': u'Dette tidspunktet er påkrevd.',
-        }
+class EventForm(ModelForm):
+    has_queue = BooleanField(
+        required=False,
+        label="Har venteliste",
+        help_text=("Hvis arrangementet har venteliste, går det ann å melde seg på selv etter at det er fullt. "
+                   "Man havner da på venteliste, og blir automatisk meldt på om det blir ledig."))
 
-    def __init__(self, *args, **kwargs):
-        kwargs.update(input_date_formats=DATE_FORMATS,
-                      input_time_formats=TIME_FORMATS,
-                      widget=AdminSplitDateTime())
-        super(EventSplitDateTimeField, self).__init__(*args, **kwargs)
+    # Fields required when registration_required is set
+    required_registration_fields = ("places", "registration_deadline", "has_queue")
+    registration_fields = required_registration_fields + ("deregistration_deadline", "registration_start")
 
+    # Restrict order of the DateTimeFields
+    datetime_restrictions = (
+        # ("field_to_validate", "before/after", "field_to_compare_with"),
+        ("event_end", "after", "event_start"),
+        ("registration_start", "before", "event_start"),
+        ("registration_deadline", "before", "event_start"),
+        ("registration_deadline", "after", "registration_start"),
+        ("deregistration_deadline", "before", "event_start"),
+        ("deregistration_deadline", "after", "registration_start"),
+    )
 
-class EventForm(NewsForm):
-    # Spesifiser datowidget og aksepterte datoformat.
-    event_start = EventSplitDateTimeField(required=True, label="Starter")
-    event_end = EventSplitDateTimeField(required=False, label="Slutter")
-    registration_start = EventSplitDateTimeField(required=False, label="Påmelding åpner")
-    registration_deadline = EventSplitDateTimeField(required=False, label="Påmelding stenger")
-    deregistration_deadline = EventSplitDateTimeField(required=False, label="Avmelding stenger")
-
-    # For å få norske feilmeldinger.
-    location = EventCharField(label="Sted")
-
-    # I stedet for NullBooleanField.
-    has_queue = BooleanField(required=False, label="Har venteliste", help_text="Hvis arrangementet har venteliste, går det ann å melde seg på selv etter at det er fullt. Man havner da på venteliste, og blir automatisk meldt på om det blir ledig.")
-
-    # Lar brukeren spesifisere om arrangementet krever påmelding.
-    # Dersom registration_required ikke er True ignoreres de mottatte data
-    # for de andre registreringsrelaterte feltene, som i tillegg slettes.
-    registration_required = BooleanField(required=False, label="Registrering kreves")
-
-    class Meta(NewsForm.Meta):
+    class Meta:
         model = Event
+        fields = "__all__"
 
     def clean(self):
-        cleaned_data = self.cleaned_data
-        # Bind variabler lokalt for å slippe oppslag senere.
-        event_start = cleaned_data.get("event_start")
-        event_end = cleaned_data.get("event_end")
-        registration_required = cleaned_data.get("registration_required")
-        places = cleaned_data.get("places")
-        registration_deadline = cleaned_data.get("registration_deadline")
-        registration_start = cleaned_data.get("registration_start")
-        deregistration_deadline = cleaned_data.get("deregistration_deadline")
-        has_queue = cleaned_data.get("has_queue")
+        self._validate_datetime_order()
 
-        # Sjekk om både event_start og event_end har gyldige verdier, og verifiser
-        # i så fall at sluttidspunktet ikke er tidligere enn starttidspunktet.
-        if event_start and event_end and event_start > event_end:
-            self._errors["event_end"] = self.error_class([u'Arrangementslutt må ikke være tidligere enn arrangementstart.'])
-
-        # Tester som kun er relevante dersom påmelding er påkrevd.
-        if registration_required is True:
-            # Dersom places ikke har noen verdi og ikke har generert andre feil.
-            if places is None and "places" not in self._errors:
-                self._errors["places"] = self.error_class([u'Antall plasser er påkrevd når "registrering kreves" er valgt.'])
-
-            # Verifiser at en gyldig registreringsfrist er spesifisert.
-            if not registration_deadline and "registration_deadline" not in self._errors:
-                self._errors["registration_deadline"] = self.error_class([u'Påmeldingsfrist er påkrevd når "registrering kreves" er valgt.'])
-
-            # Ved gyldig registreringsfrist, sjekk at denne ikke er etter at arrangementet starter.
-            elif event_start and registration_deadline and registration_deadline > event_start:
-                self._errors["registration_deadline"] = self.error_class([u'Påmeldingsfrist må ikke være senere enn arrangementstart.'])
-
-            # Sjekk at en eventuell registreringsstart ikke er senere enn registeringsfrist.
-            if event_start and registration_start and registration_start > event_start:
-                self._errors["registration_start"] = self.error_class([u"Påmeldingsstart må ikke være senere enn påmeldingsfrist."])
-
-            # Sjekk at en eventuell avmeldingsfrist ikke er senere enn arrangementstart.
-            if event_start and deregistration_deadline and deregistration_deadline > event_start:
-                self._errors["deregistration_deadline"] = self.error_class([u"Avmeldingsfrist må ikke være senere enn arrangementstart."])
-
-            # Sjekk at en eventuell avmeldingsfrist ikke er senere enn en eventuell registreringsstart.
-            elif registration_start and deregistration_deadline and registration_start > deregistration_deadline:
-                self._errors["deregistration_deadline"] = self.error_class([u"Avmeldingsfrist må ikke være tidligere enn påmeldingsstart."])
-
-            # Sett has_queue til False dersom den av en eller annen grunn ikke skulle mottas.
-            if has_queue is None and "has_queue" not in self._errors:
-                cleaned_data["has_queue"] = False
-
-        # Dersom påmelding ikke er påkrevd ignoreres innholdet i de andre
-        # registreringsrelaterte feltene.
+        registration_required = self.cleaned_data.get("registration_required")
+        if registration_required:
+            self._assert_required_registration_fields_supplied()
         else:
-            # Felt som skal ignoreres.
-            field_names = (
-                "places",
-                "registration_deadline",
-                "registration_start",
-                "deregistration_deadline",
-                "has_queue",
-                )
-            for name in field_names:
-                # Ignorer verdier fra brukeren.
-                cleaned_data[name] = None
-                # Ignorer feil relatert til feltet.
-                if name in self._errors:
-                    del self._errors[name]
+            self._ignore_registration_fields()
+        return self.cleaned_data
 
-        return cleaned_data
+    def _validate_datetime_order(self):
+        """Check if the datetime fields have the correct order."""
+        comparison_dict = {
+            "after": (operator.gt, '"%(field1)s" må ikke være tidligere enn "%(field2)s".'),
+            "before": (operator.lt, '"%(field1)s" må ikke være senere enn "%(field2)s".'),
+            }
+
+        for field1, comparison, field2 in self.datetime_restrictions:
+            date1 = self.cleaned_data.get(field1)
+            date2 = self.cleaned_data.get(field2)
+            if not (date1 and date2):
+                continue
+
+            op, msg = comparison_dict.get(comparison)
+            if not op(date1, date2):
+                error = ValidationError(msg, params={"field1": self.fields[field1].label,
+                                                     "field2": self.fields[field2].label})
+                self.add_error(field1, error)
+
+    def _assert_required_registration_fields_supplied(self):
+        for field in self.required_registration_fields:
+            if self.cleaned_data.get(field) is None and (field not in self._errors):
+                error = ValidationError('Feltet "%(field)s" er påkrevd når %(field2)s er valgt.',
+                                        params={"field": self.fields[field].label,
+                                                "field2": self.fields["registration_required"].label})
+                self.add_error(field, error)
+
+    def _ignore_registration_fields(self):
+        for name in self.registration_fields:
+            self.cleaned_data[name] = None
+            # Ignorer feil relatert til feltet.
+            if name in self._errors:
+                del self._errors[name]
