@@ -6,3 +6,7 @@ tilpasset nyheter på forsiden.
 
 Alle Content-objekter har en slug, og skal ha en url "på" formen
 /modell/id/slug-er-her
+
+# Album #
+
+Denne appen er hjemmet til album enn så lenge.

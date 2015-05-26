@@ -121,7 +121,11 @@ class AlbumImage(models.Model):
         return self.file.url
 
     def __str__(self):
-        return self.file.url;
+        return self.file.url
+
+    class Meta:
+        verbose_name = "Albumbilde"
+        verbose_name_plural = "Albumbilder"
 
 
 class Album(EditableMedia):

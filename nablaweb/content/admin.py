@@ -5,6 +5,7 @@ from filebrowser.widgets import ClearableFileInput, FileInput
 from django.db import models
 
 from .models import Album, AlbumImage
+from .widgets import MultipleImagesChooser
 
 
 class ChangedByMixin(object):
@@ -26,7 +27,9 @@ class ContentAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
 
 
 class AlbumAdmin(admin.ModelAdmin):
-    pass
+    formfield_overrides = {
+        models.ManyToManyField: {"widget": MultipleImagesChooser}
+    }
 
 
 admin.site.register(Album, AlbumAdmin)

@@ -88,6 +88,14 @@ class ContentModelTest(TestCase):
 class AlbumTest(TestCase):
 
     def test_album_creation(self):
-        album = Abum()
-        album.title = "Some album"
-        album.save()
+        self.album = Album()
+        self.album.title = "Some album"
+        self.album.visibillity = 'p'
+        self.album.save()
+
+    def test_album_loaded(self):
+        self.response = self.client.get(
+            self.album.get_absolute_url()
+        )
+
+        self.assertIn(self.album.title, self.response)
