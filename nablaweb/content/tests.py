@@ -10,7 +10,7 @@ from django.contrib.sites.models import Site
 from django_comments.models import Comment
 from datetime import datetime
 
-from .models import Content
+from .models import Content, Album, AlbumImage
 
 # Content er en abstrakt klasse.
 # Lager derfor en indentisk underklasse av Content for å teste den.
@@ -83,3 +83,19 @@ class ContentModelTest(TestCase):
 
         self.assertGreaterEqual(content.created_date, before)
         self.assertLessEqual(content.created_date, after)
+
+
+class AlbumTest(TestCase):
+
+    def test_album_creation(self):
+        self.album = Album()
+        self.album.title = "Some album"
+        self.album.visibillity = 'p'
+        self.album.save()
+
+    def test_album_loaded(self):
+        self.response = self.client.get(
+            self.album.get_absolute_url()
+        )
+
+        self.assertIn(self.album.title, self.response)
