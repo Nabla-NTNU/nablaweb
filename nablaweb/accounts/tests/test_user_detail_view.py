@@ -1,10 +1,7 @@
-"""
-Tester for accounts-appen
-"""
-
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from accounts.models import NablaUser
+
 
 class TestUserDetail(TestCase):
 
