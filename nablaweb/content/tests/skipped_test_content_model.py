@@ -10,7 +10,7 @@ from django.contrib.sites.models import Site
 from django_comments.models import Comment
 from datetime import datetime
 
-from .models import Content, Album, AlbumImage
+from content.models import Content, Album, AlbumImage
 
 # Content er en abstrakt klasse.
 # Lager derfor en indentisk underklasse av Content for å teste den.
