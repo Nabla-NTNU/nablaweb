@@ -4,6 +4,28 @@ from django.db import models
 from image_cropping.fields import ImageRatioField
 
 
+class Season(models.Model):
+    number = models.IntegerField(
+        verbose_name="Sesongnummer",
+        unique=True,
+    )
+
+    banner = models.ImageField(
+        upload_to="podcast/images",
+        null=True,
+        blank=True,
+        verbose_name="Banner",
+        help_text="Sesongbanner."
+    )
+
+    def __str__(self):
+        return str(self.number)
+
+    class Meta:
+        verbose_name = 'Sesong'
+        verbose_name_plural = 'Sesonger'
+
+
 class Podcast(models.Model):
 
     # Bildeopplasting med resizing og cropping
@@ -48,6 +70,19 @@ class Podcast(models.Model):
     view_counter = models.IntegerField(
         editable=False,
         default=0
+    )
+
+    is_clip = models.BooleanField(
+        default=False,
+        verbose_name="Er lydklipp",
+        help_text="Lydklipp blir ikke vist sammen med episodene."
+    )
+
+    season = models.ForeignKey(
+        'Season',
+        verbose_name="Sesong",
+        null=True,
+        blank=True
     )
 
     def addView(self):
