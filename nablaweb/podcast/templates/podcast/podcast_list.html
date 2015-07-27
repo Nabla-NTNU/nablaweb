@@ -19,7 +19,9 @@
     </p>
     {% if season_name %}
         <h1>{{ season_name }}</h1>
-        <img src="{{ season.banner.url }}"/>
+        {% if season.banner %}
+            <img src="{{ season.banner.url }}"/>
+        {% endif %}
     {% endif %}
     {% if podcast_list %}
         <div class="list-container">
