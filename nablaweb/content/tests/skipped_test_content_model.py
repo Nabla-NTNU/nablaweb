@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Tester for Content.
-
 Inneholder tester for den abstrakte Content-modellen.
+
+Disse testene virker ikke lenger fordi content-appen er nå blitt migrert.
 """
 
 from django.test import TestCase
@@ -10,7 +10,8 @@ from django.contrib.sites.models import Site
 from django_comments.models import Comment
 from datetime import datetime
 
-from .models import Content, Album, AlbumImage
+from content.models import Content
+
 
 # Content er en abstrakt klasse.
 # Lager derfor en indentisk underklasse av Content for å teste den.
@@ -54,10 +55,10 @@ class ContentModelTest(TestCase):
         first_content.delete()
         self.assertEqual(Comment.objects.count(), 1, 'Comments have not been deleted.')
         self.assertEqual(Comment.objects.all()[0].content_object, second_content,
-                'The wrong comment has been deleted along with some content.')
+                         'The wrong comment has been deleted along with some content.')
 
     def _add_comment(self, content):
-        ## Lag en kommentar tilhørende content-objektet
+        # Lag en kommentar tilhørende content-objektet
         comment = Comment()
         comment.content_type = content.content_type
         comment.object_pk = content.id
@@ -83,19 +84,3 @@ class ContentModelTest(TestCase):
 
         self.assertGreaterEqual(content.created_date, before)
         self.assertLessEqual(content.created_date, after)
-
-
-class AlbumTest(TestCase):
-
-    def test_album_creation(self):
-        self.album = Album()
-        self.album.title = "Some album"
-        self.album.visibillity = 'p'
-        self.album.save()
-
-    def test_album_loaded(self):
-        self.response = self.client.get(
-            self.album.get_absolute_url()
-        )
-
-        self.assertIn(self.album.title, self.response)

@@ -1,0 +1,10 @@
+
+.banner-wrapper img {
+    display: block;
+    max-width: 750px;
+}
+
+.logo-wrapper img {
+    display: block;
+    max-width: 350px;
+}

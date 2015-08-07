@@ -2,6 +2,37 @@
 
 from django.db import models
 from image_cropping.fields import ImageRatioField
+from django.core.urlresolvers import reverse
+
+
+class Season(models.Model):
+    number = models.IntegerField(
+        verbose_name="Sesongnummer",
+        unique=True,
+    )
+
+    banner = models.ImageField(
+        upload_to="podcast/images",
+        null=True,
+        blank=True,
+        verbose_name="Banner",
+        help_text="Sesongbanner."
+    )
+
+    logo = models.ImageField(
+        upload_to="podcast/images",
+        null=True,
+        blank=True,
+        verbose_name="Logo",
+        help_text="Podcastlogo."
+    )
+
+    def __str__(self):
+        return str(self.number)
+
+    class Meta:
+        verbose_name = 'Sesong'
+        verbose_name_plural = 'Sesonger'
 
 
 class Podcast(models.Model):
@@ -50,9 +81,25 @@ class Podcast(models.Model):
         default=0
     )
 
-    def addView(self):
+    is_clip = models.BooleanField(
+        default=False,
+        verbose_name="Er lydklipp",
+        help_text="Lydklipp blir ikke vist sammen med episodene."
+    )
+
+    season = models.ForeignKey(
+        'Season',
+        verbose_name="Sesong",
+        null=True,
+        blank=True
+    )
+
+    def add_view(self):
         self.view_counter += 1
         self.save()
+
+    def get_absolute_url(self):
+        return reverse('podcast_detail', kwargs={'podcast_id': self.id})
 
     def __str__(self):
         return self.title

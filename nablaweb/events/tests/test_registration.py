@@ -7,7 +7,6 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-from accounts.models import NablaUser as User
 from events.exceptions import RegistrationAlreadyExists, EventException
 
 from .common import GeneralEventTest
@@ -31,15 +30,13 @@ class RegistrationTest(GeneralEventTest):
             self.assertFalse(self.event.is_registered(user))
 
     def test_email_list(self):
-
         for user in self.users:
             self.event.register_user(user)
 
         emails = self.event.users_attending_emails()
-        print(self.event.users_attending())
 
         for user in self.users:
-            self.assertTrue(user.email in emails)
+            self.assertIn(user.email, emails)
 
     def test_register_if_already_registered(self):
         self.event.register_user(self.user)
@@ -84,9 +81,9 @@ class WaitingListTest(GeneralEventTest):
         registered = len(self.users) + 1
         for i in range(registered, 2*self.event.places):
             u = User.objects.create(
-                    username="user%d" % i,
-                    password="user%d" % i,
-                    email="user%d@localhost" % i)
+                username="user%d" % i,
+                password="user%d" % i,
+                email="user%d@localhost" % i)
             self.event.register_user(u)
 
     def test_attending_ordering(self):
