@@ -67,7 +67,6 @@ class Podcast(models.Model):
         auto_now_add=True,
         blank=False,
         null=True,
-        editable=False,
     )
     file = models.FileField(
         upload_to='podcast',
