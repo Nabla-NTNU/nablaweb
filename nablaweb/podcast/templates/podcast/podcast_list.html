@@ -8,6 +8,7 @@
 {% block content %}
     {% addtoblock "css" %}
         <link href="{% static "podcast/list.css" %}" rel="stylesheet"/>
+        <link href="{% static "podcast/podcast.css" %}" rel="stylesheet"/>
     {% endaddtoblock %}
     <h1>Skråttcast</h1>
     <p>
@@ -20,7 +21,9 @@
     {% if season_name %}
         <h1>{{ season_name }}</h1>
         {% if season.banner %}
+        <div class="banner-wrapper">
             <img src="{{ season.banner.url }}"/>
+        </div>
         {% endif %}
     {% endif %}
     {% if podcast_list %}
@@ -32,7 +35,7 @@
                             <img src="{% thumbnail podcast.image 300x300 box=podcast.cropping quality=95 %}"
                                  alt="{{ podcast.title }}"/>
                         {% endif %}
-                        <a href="/podcast/{{ podcast.id }}">
+                        <a href="{{ podcast.get_absolute_url }}">
                             <h2>{{ podcast.title }}</h2>
                             <span>{{ podcast.pub_date }}</span>
                         </a>
@@ -66,8 +69,10 @@
     {% endif %}
 {% endblock %}
 {% block sidebar %}
-    {% if podcast_logo %}
-        <img src="{{ podcast_logo.url }}"/>
+    {% if season.logo %}
+    <div class="logo-wrapper">
+        <img class="thumbnail" src="{{ season.logo.url }}"/>
+    </div>
     {% endif %}
     {% if podcast_clips %}
         <h2>Lydklipp</h2>
@@ -76,7 +81,7 @@
         <ul>
             {% for clip in podcast_clips %}
                 <li>
-                    <a href="/podcast/{{ clip.id }}">
+                    <a href="{{ clip.get_absolute_url }}">
                         {{ clip.title }}
                     </a>
                 </li>

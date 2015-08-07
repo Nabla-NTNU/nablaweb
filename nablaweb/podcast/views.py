@@ -25,7 +25,7 @@ class PodcastIndexView(ListView):
             pass
 
         try:
-            data['info'] = FlatPage.objects.get(url="/scrattcast/")
+            data['info'] = FlatPage.objects.get(url="/skraattcast/")
         except FlatPage.DoesNotExist:
             pass
 
@@ -34,7 +34,7 @@ class PodcastIndexView(ListView):
 
 def detail(request, podcast_id):
     current_podcast = Podcast.objects.get(id=podcast_id)
-    current_podcast.addView()
+    current_podcast.add_view()
     template = loader.get_template('podcast/podcast_detail.html')
     context = RequestContext(request, {'podcast': current_podcast})
     return HttpResponse(template.render(context))

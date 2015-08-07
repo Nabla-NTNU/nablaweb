@@ -2,6 +2,7 @@
 
 from django.db import models
 from image_cropping.fields import ImageRatioField
+from django.core.urlresolvers import reverse
 
 
 class Season(models.Model):
@@ -16,6 +17,14 @@ class Season(models.Model):
         blank=True,
         verbose_name="Banner",
         help_text="Sesongbanner."
+    )
+
+    logo = models.ImageField(
+        upload_to="podcast/images",
+        null=True,
+        blank=True,
+        verbose_name="Logo",
+        help_text="Podcastlogo."
     )
 
     def __str__(self):
@@ -85,9 +94,12 @@ class Podcast(models.Model):
         blank=True
     )
 
-    def addView(self):
+    def add_view(self):
         self.view_counter += 1
         self.save()
+
+    def get_absolute_url(self):
+        return reverse('podcast_detail', kwargs={'podcast_id': self.id})
 
     def __str__(self):
         return self.title
