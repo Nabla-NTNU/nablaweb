@@ -13,7 +13,7 @@ Skråttcast - {{ podcast.title }}
   {% if podcast.image %}
   <img src="{{ podcast.image.url }}" alt="{{ podcast.title }}" style="max-width: 100%;"/>
   {% endif %}
-  <p><i>{{ podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ podcast.view_counter }}</i></p>
+  <p><i>Dato: {{ podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ podcast.view_counter }}</i></p>
 </div>
 </div>
 <div>
@@ -23,7 +23,7 @@ Skråttcast - {{ podcast.title }}
     </audio>
 </div>
 
-<p>{{ podcast.description | markdown }}</p>
+<p>{{ podcast.description }}</p>
 <div>
 <a class="btn btn-primary btn-large" href="{{ podcast.file.url }}">
     Last ned

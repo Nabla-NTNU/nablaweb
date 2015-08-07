@@ -3,7 +3,7 @@
 }
 
 .list-container h2 {
-  font: 400 40px/1.5 Helvetica, Verdana, sans-serif;
+  font: 400 30px/1.5 Helvetica, Verdana, sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -46,7 +46,19 @@
   transition: font-size 0.3s ease, background-color 0.3s ease;
 }
 
+.list-container li a p {
+
+  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+  transition: font-size 0.3s ease, background-color 0.3s ease;
+}
+
 .list-container li a:hover {
-  font-size: 25px;
   background: #f6f6f6;
+}
+
+.list-container li a:hover h2 {
+  font-size: 32px;
 }

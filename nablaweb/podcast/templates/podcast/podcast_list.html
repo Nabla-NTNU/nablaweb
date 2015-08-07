@@ -37,7 +37,7 @@
                         {% endif %}
                         <a href="{{ podcast.get_absolute_url }}">
                             <h2>{{ podcast.title }}</h2>
-                            <span>{{ podcast.pub_date }}</span>
+                            <p>{{ podcast.description }}</p>
                         </a>
                     </li>
                 {% endfor %}
