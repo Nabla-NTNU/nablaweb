@@ -1,0 +1,17 @@
+{% extends "content/includes/sidebar-admin.html" %}
+
+{% block sidebar-admin %}
+
+<li>
+    <a href="{% url "admin:news_news_change" news.id %}">
+        <span class="glyphicon glyphicon-pencil"></span>
+        Endre
+    </a>
+</li>
+<li>
+    <a href="{% url "admin:news_news_delete" news.id %}">
+        <span class="glyphicon glyphicon-trash"></span>
+        Slett
+    </a>
+</li>
+{% endblock %}

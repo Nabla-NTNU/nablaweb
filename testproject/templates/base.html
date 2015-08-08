@@ -1,0 +1,74 @@
+{% load cache %}
+{% load sekizai_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+
+<header>
+    <a class="pull-left" href="/">
+        {% block header_logo %}
+            <img src="{{ STATIC_URL }}img/nabla_logo_black.png" alt="Nabla">
+        {% endblock header_logo %}
+    </a>
+
+    <form id="searchtop" class="pull-right" method="get" action="/search/">
+        <div class="input-group">
+            <input name="q" placeholder="Søk..." type="text" class="form-control">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-default">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
+        </div>
+    </form>
+
+</header>
+
+<nav class="navbar navbar-default">
+<div class="container" style="width: auto;">
+</div>
+</nav>
+
+<div>
+<div>
+{% block main %}
+
+<div class="row"><!-- main row -->
+
+    {# content #}
+    <div class="col-md-8">
+        {% block content %}
+        {% endblock content %}
+    </div>
+    {# end content container #}
+
+    <aside class="col-md-4">{# sidebar #}
+
+        {% block sidebar %}
+        {% endblock sidebar %}
+
+
+    </aside>{# end sidebar #}
+</div>{# end main row #}
+
+{% endblock main %}
+</div>{# end main container  #}
+</div>{# end whitebox #}
+
+<footer>
+
+    <div class="container">
+    <div class="row">
+
+
+    </div>{# end row #}
+</div>{# end container #}
+</footer>
+{% render_block "js" %}
+</body>
+</html>

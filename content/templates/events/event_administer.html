@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.headline }}{% endblock %}
+
+{% block content %}
+<h2>{{ event.headline }}</h2>
+
+{% if event.registration_required %}
+<p>
+    Plasser: {{ event.places }}<br />
+    Påmeldte: {{ event.users_attending }}<br />
+    {% if event.has_queue %}
+        Ventende: {{ event.users_waiting }}<br />
+    {% endif %}
+    Epostliste:
+    <textarea>{% for email in event.users_attending_emails %}{{ email }}; {% endfor %}</textarea>
+</p>
+
+<form action="" method="post" class="form">{% csrf_token %}
+    <div class="form-inline">
+        <select name="action" class="form-control">
+            {% for int_name, ext_name in actions %}
+                <option value="{{ int_name }}">{{ ext_name }}</option>
+            {% endfor %}
+        </select>
+        <input class="form-control" type="text" name="text" size="10" maxlength="10" />
+        <input class="form-control" type="submit" name="commit_changes" value="Utfør" />
+    </div>
+
+    {% if event.eventregistration_set %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Plass</th>
+                    <th>Navn</th>
+                    <th>Klasse</th>
+                    <th align="center">X</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% with regs=event.attending_registrations %}
+                {% for reg in regs %}
+                    <tr class="success">
+                        <td>{{ reg.number }}</td>
+                        <td>{{ reg.user.get_full_name }}</td>
+                        <td>{{ reg.user.get_class_number }}</td>
+                        <td><input type="checkbox" name="user" value="{{ reg.user.username }}" /></td>
+                    </tr>
+                {% endfor %}
+                {% endwith %}
+
+                {% with regs=event.waiting_registrations %}
+                {% for reg in regs %}
+                    <tr class="warning">
+                        <td>{{ reg.number }}</td>
+                        <td>{{ reg.user.get_full_name }}</td>
+                        <td>{{ reg.user.get_class_number }}</td>
+                        <td><input type="checkbox" name="user" value="{{ reg.user.username }}" /></td>
+                    </tr>
+                {% endfor %}
+                {% endwith %}
+            </tbody>
+        </table>
+    {% else %}
+        Det er ingen påmeldte brukere.
+    {% endif %}
+</form>
+
+{% else %}
+    <p>Registrering er ikke nødvendig, så det er ikke så mye å gjøre her.</p>
+{% endif %}
+
+{% endblock %}
