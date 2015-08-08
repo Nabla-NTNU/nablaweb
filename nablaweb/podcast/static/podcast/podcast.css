@@ -2,9 +2,14 @@
 .banner-wrapper img {
     display: block;
     max-width: 750px;
+    margin-bottom: 5px;
 }
 
 .logo-wrapper img {
     display: block;
     max-width: 350px;
+}
+
+audio {
+    width: 750px;
 }
