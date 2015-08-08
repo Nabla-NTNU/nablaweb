@@ -18,8 +18,9 @@
   display: block;
   font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
   border-bottom: 1px solid #ccc;
-  min-height: 150px;
   overflow: hidden;
+  height: 150px;
+  overflow: hide;
 }
 
 .list-container li img {
