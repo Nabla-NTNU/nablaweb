@@ -37,28 +37,22 @@
   color: #000;
   padding: 5px;
   display: block;
-  min-height: 150px;
+  height: 150px;
+  overflow: hide;
 
-  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
-  transition: font-size 0.3s ease, background-color 0.3s ease;
-}
-
-.list-container li a p {
-
-  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
-  transition: font-size 0.3s ease, background-color 0.3s ease;
+  -webkit-transition: color 0.6s ease, background-color 0.3s ease;
+  -moz-transition: color 0.6s ease, background-color 0.3s ease;
+  -o-transition: color 0.6s ease, background-color 0.3s ease;
+  -ms-transition: color 0.6s ease, background-color 0.3s ease;
+  transition: color 0.6s ease, background-color 0.3s ease;
 }
 
 .list-container li a:hover {
   background: #f6f6f6;
 }
 
-.list-container li a:hover h2 {
-  font-size: 32px;
+.list-container li a .date-text {
+    font-size: 12px;
+    color: #888;
+    float: right;
 }

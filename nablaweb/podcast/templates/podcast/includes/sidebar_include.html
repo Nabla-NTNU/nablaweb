@@ -1,0 +1,25 @@
+
+{% if season.logo %}
+<div class="logo-wrapper">
+    <img class="thumbnail" src="{{ season.logo.url }}"/>
+</div>
+{% endif %}
+{% if podcast_clips %}
+    <h2>Lydklipp</h2>
+    <p>
+        Her finner du nedlastbare overganger, jingler og annet vi føler enhver Skråttcastlytter bør ha tilgang
+        til.
+    </p>
+    <p>
+        Hvis det er noen lydklipp du ikke finner i denne listen, så finner du dem nok i listene i de tidligere sesongene.
+    </p>
+    <ul>
+        {% for clip in podcast_clips %}
+            <li>
+                <a href="{{ clip.get_absolute_url }}">
+                    {{ clip.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

@@ -29,7 +29,8 @@
                         {% endif %}
                         <a href="{{ podcast.get_absolute_url }}">
                             <h2>{{ podcast.title }}</h2>
-                            <p>{{ podcast.description }}</p>
+                            <p>{{ podcast.get_short_description }}</p>
+                            <span class="date-text">{{ podcast.pub_date | date:"d.m.Y" }}</span>
                         </a>
                     </li>
                 {% endfor %}
@@ -37,20 +38,20 @@
         </div>
         <nav>
             <ul class="pager">
-                {% if page_obj.has_next %}
+                {% if previous %}
                     <li class="previous">
-                        <a href="?page={{ page_obj.next_page_number }}"><span aria-hidden="true">&larr;</span> Forrige
+                        <a href="{{ previous.get_absolute_url }}"><span aria-hidden="true">&larr;</span> Forrige
                             sesong</a>
                     </li>
                 {% endif %}
 
                 <li class="disabled pager-counter">
-                    Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
+                    Sesong {{ season.number }} av {{ season_count }}
                 </li>
 
-                {% if page_obj.has_previous %}
+                {% if next %}
                     <li class="next">
-                        <a href="?page={{ page_obj.previous_page_number }}">Neste sesong <span
+                        <a href="{{ next.get_absolute_url }}">Neste sesong <span
                                 aria-hidden="true">&rarr;</span></a>
                     </li>
                 {% endif %}
@@ -69,28 +70,6 @@
             Om <a href="/komite/skrattcast/">Skråttcast</a>.
         {% endif %}
     </p>
-    {% if season.logo %}
-    <div class="logo-wrapper">
-        <img class="thumbnail" src="{{ season.logo.url }}"/>
-    </div>
-    {% endif %}
-    {% if podcast_clips %}
-        <h2>Lydklipp</h2>
-        <p>
-            Her finner du nedlastbare overganger, jingler og annet vi føler enhver Skråttcastlytter bør ha tilgang
-            til.
-        </p>
-        <p>
-            Hvis det er noen lydklipp du ikke finner i denne listen, så finner du dem nok i listene i de tidligere sesongene.
-        </p>
-        <ul>
-            {% for clip in podcast_clips %}
-                <li>
-                    <a href="{{ clip.get_absolute_url }}">
-                        {{ clip.title }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    {% include "podcast/includes/sidebar_include.html" %}
 {% endblock %}
+

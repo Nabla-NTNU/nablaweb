@@ -13,3 +13,7 @@
 audio {
     width: 750px;
 }
+
+.black-link, .black-link:hover {
+    color: #000;
+}
