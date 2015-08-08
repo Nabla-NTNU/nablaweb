@@ -3,24 +3,32 @@ from django.contrib.flatpages.models import FlatPage
 
 from django.http import HttpResponse
 from django.template import RequestContext, loader
-from django.views.generic import ListView
-from .models import Podcast, Season
+from django.views.generic import TemplateView
+from .models import Podcast, Season, get_season_count
 
 
-class PodcastIndexView(ListView):
+class SeasonView(TemplateView):
     model = Season
-    paginate_by = 1
-    queryset = Season.objects.order_by('-number')
-    template_name = "podcast/podcast_list.html"
+    template_name = "podcast/season.html"
 
     def get_context_data(self, **kwargs):
-        data = super(PodcastIndexView, self).get_context_data(**kwargs)
-        season_list = data['season_list']
+        data = super(SeasonView, self).get_context_data(**kwargs)
+
         try:
-            data['season'] = season = season_list[0]
-            data['season_name'] = "Sesong " + str(season.number)
+            if 'number' in kwargs:
+                number = kwargs['number']
+                season = Season.objects.get(number=number)
+            else:
+                season = Season.objects.order_by('-number')[0]
+
+            data['season'] = season
+            data['season_name'] = season.name()
             data['podcast_list'] = Podcast.objects.filter(season=season).order_by('-pub_date').exclude(is_clip=True)
             data['podcast_clips'] = Podcast.objects.filter(season=season).order_by('-pub_date').exclude(is_clip=False)
+
+            data['next'] = season.get_next()
+            data['season_count'] = get_season_count()
+            data['previous'] = season.get_previous()
         except IndexError:
             pass
 
@@ -37,4 +45,9 @@ def detail(request, podcast_id):
     current_podcast.add_view()
     template = loader.get_template('podcast/podcast_detail.html')
     context = RequestContext(request, {'podcast': current_podcast})
+
+    context['season'] = season = current_podcast.season
+    context['season_name'] = season.name()
+    context['podcast_clips'] = Podcast.objects.filter(season=season).order_by('-pub_date').exclude(is_clip=False)
+
     return HttpResponse(template.render(context))

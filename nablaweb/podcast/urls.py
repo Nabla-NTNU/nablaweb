@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import patterns, url
-from podcast import views
+from .views import SeasonView, detail
 
-urlpatterns = patterns('',
-        url(r'^$', views.PodcastIndexView.as_view(), name='podcast_list'),
-        url(r'^(?P<podcast_id>\d+)/$', views.detail, name='podcast_detail'),
-)
+urlpatterns = \
+    patterns('',
+             url(r'^$', SeasonView.as_view(), name='season_view'),
+             url(r'^season(?P<number>\d+)$', SeasonView.as_view(), name='season_view'),
+             url(r'^(?P<podcast_id>\d+)/$', detail, name='podcast_detail'),
+             )

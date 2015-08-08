@@ -5,6 +5,10 @@ from image_cropping.fields import ImageRatioField
 from django.core.urlresolvers import reverse
 
 
+def get_season_count():
+    return Season.objects.count()
+
+
 class Season(models.Model):
     number = models.IntegerField(
         verbose_name="Sesongnummer",
@@ -26,6 +30,24 @@ class Season(models.Model):
         verbose_name="Logo",
         help_text="Podcastlogo."
     )
+
+    def name(self):
+        return "Sesong " + str(self.number)
+
+    def get_absolute_url(self):
+        return reverse('season_view', kwargs={'number': int(self.number)})
+
+    def get_next(self):
+        try:
+            return Season.objects.get(number=int(self.number) + 1)
+        except Season.DoesNotExist:
+            return None
+
+    def get_previous(self):
+        try:
+            return Season.objects.get(number=int(self.number) - 1)
+        except Season.DoesNotExist:
+            return None
 
     def __str__(self):
         return str(self.number)
@@ -99,6 +121,12 @@ class Podcast(models.Model):
 
     def get_absolute_url(self):
         return reverse('podcast_detail', kwargs={'podcast_id': self.id})
+
+    def get_short_description(self):
+        description = str(self.description)
+        if description.__len__() > 280:
+            description = description[:280] + "..."
+        return description
 
     def __str__(self):
         return self.title
