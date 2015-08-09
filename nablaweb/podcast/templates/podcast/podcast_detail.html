@@ -3,7 +3,7 @@
 {% load sekizai_tags %}
 {% load static %}
 {% block title %}
-Skråttcast - {{ podcast.title }}
+{{ podcast.title }}
 {% endblock %}
 {% block content %}
 
@@ -12,13 +12,11 @@ Skråttcast - {{ podcast.title }}
 {% endaddtoblock %}
 
 <div class="tittel">
-<div>
-  <h2>Skråttcast - {{ podcast.title }}</h2>
+  <h2>{{ podcast.title }}</h2>
   {% if podcast.image %}
   <img src="{{ podcast.image.url }}" alt="{{ podcast.title }}" style="max-width: 100%;"/>
   {% endif %}
   <p><i>Dato: {{ podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ podcast.view_counter }}</i></p>
-</div>
 </div>
 <div>
     <audio controls>
