@@ -9,7 +9,7 @@ from content import VERSION
 
 requirements = [
     'pytz',
-    'django==1.8',
+    'django==1.8.3',
     'django-contrib-comments',
     'django-image-cropping',
     'django-filebrowser',
