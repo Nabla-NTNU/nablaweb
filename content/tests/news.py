@@ -6,7 +6,7 @@ Tester for News-appen til Nablaweb
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from content.models.events import News
+from content.models.news import News
 
 User = get_user_model()
 

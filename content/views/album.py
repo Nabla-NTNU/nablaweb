@@ -44,6 +44,10 @@ class AlbumView(TemplateView):
             page_obj = paginator.page(1)
 
         context['page_obj'] = page_obj
-        context['image'] = page_obj.object_list[0]
+        try:
+            context['image'] = page_obj.object_list[0]
+        except IndexError:
+            # There are no images
+            pass
 
         return context

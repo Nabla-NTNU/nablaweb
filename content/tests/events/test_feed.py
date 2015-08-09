@@ -5,7 +5,7 @@ from content.models.events import Event
 
 
 class RecentEventsTestCase(TestCase):
-    urls = "events.urls"
+    urls = "content.urls"
 
     def test_feed(self):
         events = [Event.objects.create(headline="Event{}".format(i), lead_paragraph="Yo{}".format(i)) for i in range(10)]

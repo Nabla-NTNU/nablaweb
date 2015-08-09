@@ -8,6 +8,7 @@ from setuptools import setup, find_packages
 from content import VERSION
 
 requirements = [
+    'pytz',
     'django==1.8',
     'django-contrib-comments',
     'django-image-cropping',

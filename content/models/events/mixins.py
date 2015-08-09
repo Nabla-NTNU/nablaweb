@@ -100,7 +100,6 @@ class RegistrationInfoMixin(models.Model):
         Group,
         verbose_name="Åpen for",
         blank=True,
-        null=True,
         help_text=("Hvilke grupper som får lov til å melde seg på arrangementet. "
                    "Hvis ingen grupper er valgt er det åpent for alle.")
     )

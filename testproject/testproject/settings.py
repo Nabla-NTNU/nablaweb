@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'image_cropping',
     'sekizai',
-    'bootstrap3',
     'markdown_deux',
 
     'django_comments',
@@ -109,3 +108,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SITE_ID = 0

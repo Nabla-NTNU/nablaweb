@@ -1,15 +1,13 @@
 # Bytecode
 *.pyc
 
-# Vim swap files
 *.swp
 *.swo
 
-# Personlige settings
 nablaweb/nablaweb/settings/local.py
 
-# Egen mappe for variabelt innhold (media, log, database etc.
-var/
+testproject/var/
+testproject/db.sqlite3
 
 # Virtualenv
 venv/
@@ -18,4 +16,3 @@ venv/
 bower_components
 
 .idea
-requirements/build

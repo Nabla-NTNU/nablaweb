@@ -11,7 +11,6 @@ class AlbumTest(TestCase):
         self.album.visibillity = 'p'
         self.album.save()
 
-    def test_album_loaded(self):
         self.response = self.client.get(
             self.album.get_absolute_url()
         )
