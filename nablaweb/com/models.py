@@ -6,23 +6,40 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.template.defaultfilters import slugify
-
-from news.models import News
+from django.core.urlresolvers import reverse
 
 
 class ComPage(models.Model):
     """Model til en komiteside"""
     com = models.ForeignKey(Group)
 
-    description = models.TextField(verbose_name="Beskrivelse", help_text="Teksten på komitésiden", blank=True)
-    slug = models.CharField(verbose_name="Slug til URL-er", max_length=50,
-                            blank=False, unique=True, editable=False)
+    description = models.TextField(
+        verbose_name="Beskrivelse",
+        help_text="Teksten på komitésiden",
+        blank=True
+    )
 
-    last_changed_date = models.DateTimeField(verbose_name="Sist redigert", auto_now=True, null=True)
-    last_changed_by = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                        verbose_name="Sist endret av",
-                                        related_name="%(class)s_edited",
-                                        editable=False, blank=True, null=True)
+    slug = models.CharField(verbose_name="Slug til URL-er",
+                            max_length=50,
+                            blank=False,
+                            unique=True,
+                            editable=False
+                            )
+
+    last_changed_date = models.DateTimeField(
+        verbose_name="Sist redigert",
+        auto_now=True,
+        null=True
+    )
+
+    last_changed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name="Sist endret av",
+        related_name="%(class)s_edited",
+        editable=False,
+        blank=True,
+        null=True
+    )
 
     class Meta:
         verbose_name = "komiteside"
@@ -41,7 +58,8 @@ class ComPage(models.Model):
         return slugify(self.__unicode__())
 
     def get_absolute_url(self):
-        return "/komite/" + self.get_canonical_name()
+        return reverse('show_com_page', kwargs={'slug': self.get_canonical_name()})
+        #return "/komite/" + self.get_canonical_name()
 
     def save(self, *args, **kwargs):
         self.slug = self.get_canonical_name()
