@@ -18,12 +18,14 @@
   {% endif %}
   <p><i>Dato: {{ podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ podcast.view_counter }}</i></p>
 </div>
+{% if podcast.file %}
 <div>
     <audio controls>
         <source src="{{ podcast.file.url }}" type="audio/ogg">
         <source src="{{ podcast.file.url }}" type="audio/mpeg">
     </audio>
 </div>
+{% endif %}
 
 <p>{{ podcast.description }}</p>
 <div>
@@ -31,6 +33,11 @@
     Last ned
 </a>
 </div>
+{% if podcast.extra_markdown %}
+<div>
+    {{ podcast.extra_markdown | markdown:"unsafe"}}
+</div>
+{% endif %}
 
 {% endblock %}
 {% block sidebar %}
