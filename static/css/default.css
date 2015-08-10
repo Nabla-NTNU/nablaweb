@@ -49,6 +49,14 @@
         word-break: break-word;
     }
 
+    h1 {
+        margin-bottom: 8px;
+        font-size: 32px;
+        font-weight: bold;
+        line-height: 37.5px;
+        margin-top: 15px;
+    }
+
     h2 {
         margin-bottom: 8px;
         font-size: 30px;

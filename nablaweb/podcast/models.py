@@ -81,18 +81,25 @@ class Podcast(models.Model):
     )
     description = models.TextField(
         verbose_name='beskrivelse',
-        help_text='Tekst. Man kan her bruke <a href="http://en.wikipedis.org/wiki/Markdown\"target=\"_blank\">markdown</a> for å formatere teksten.',
+        help_text='Teksten vil bli kuttet etter 250 tegn på sesongsiden.',
         blank=True
     )
+
+    extra_markdown = models.TextField(
+        verbose_name='Ekstra markdown',
+        blank=True,
+        null=True,
+        help_text='Ekstra markdown for å putte inn videoer etc.',
+    )
+
     pub_date = models.DateTimeField(
         verbose_name='publisert',
-        auto_now_add=True,
         blank=False,
         null=True,
     )
     file = models.FileField(
         upload_to='podcast',
-        blank=False,
+        blank=True,
         verbose_name='lydfil',
         help_text='Filformat: MP3'
     )
@@ -124,8 +131,8 @@ class Podcast(models.Model):
 
     def get_short_description(self):
         description = str(self.description)
-        if description.__len__() > 280:
-            description = description[:280] + "..."
+        if description.__len__() > 250:
+            description = description[:250] + "..."
         return description
 
     def __str__(self):
