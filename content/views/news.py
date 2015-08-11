@@ -23,7 +23,7 @@ class NewsListView(ListView):
         from django.contrib.flatpages.models import FlatPage
         try:
             context['sidebarinfo'] = FlatPage.objects.get(url="/forsideinfo/")
-        except:
+        except FlatPage.DoesNotExist:
             pass
 
         news_list = context['news_list']
@@ -40,3 +40,4 @@ class NewsListView(ListView):
 class NewsDetailView(DetailView):
     model = News
     context_object_name = 'news'
+    template_name = 'news/news_detail.html'

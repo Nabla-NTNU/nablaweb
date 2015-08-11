@@ -7,7 +7,9 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template import Context, loader
 from django.views.generic import TemplateView, DetailView
-from django.contrib.auth import get_user_model; User = get_user_model()
+from django.contrib.auth import get_user_model;
+
+User = get_user_model()
 from django.utils.safestring import mark_safe
 
 import datetime
@@ -52,6 +54,7 @@ class AdministerRegistrationsView(PermissionRequiredMixin, DetailView):
             self.event.add_to_attending_or_waiting_list(user)
         except (User.DoesNotExist, UserRegistrationException):
             pass
+
     register_user.short = 'add'
     register_user.info = 'Legg til'
 
@@ -64,6 +67,7 @@ class AdministerRegistrationsView(PermissionRequiredMixin, DetailView):
                 self.event.deregister_user(user)
             except (User.DoesNotExist, UserRegistrationException):
                 pass
+
     deregister_users.short = 'del'
     deregister_users.info = 'Fjern'
 
@@ -95,7 +99,7 @@ def calendar(request, year=None, month=None):
 
     user = request.user
     future_attending_events = user.eventregistration_set.filter(event__event_start__gte=today) \
-                              if user.is_authenticated() else []
+        if user.is_authenticated() else []
 
     # Get some random dates in the current, next, and previous month.
     # These dates are used load the calendar for that month.
@@ -121,7 +125,7 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(EventRegistrationsView, self).get_context_data(**kwargs)
         event = self.object
-        context['eventregistrations'] = event.eventregistration_set.order_by('-attending','user__last_name')
+        context['eventregistrations'] = event.eventregistration_set.order_by('-attending', 'user__last_name')
         return context
 
 
@@ -129,6 +133,7 @@ class EventDetailView(DetailView):
     """Viser arrangementet."""
     model = Event
     context_object_name = "event"
+    template_name = 'events/event_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super(EventDetailView, self).get_context_data(**kwargs)
@@ -142,8 +147,8 @@ class EventDetailView(DetailView):
             context['is_waiting'] = event.is_waiting(user)
         return context
 
-# Bruker
 
+# Bruker
 class UserEventView(LoginRequiredMixin, TemplateView):
     template_name = 'events/event_showuser.html'
 
@@ -154,7 +159,7 @@ class UserEventView(LoginRequiredMixin, TemplateView):
         if user.is_authenticated():
             regs = user.eventregistration_set.all().order_by('event__event_start')
             context_data['eventregistration_list'] = regs
-            context_data['is_on_a_waiting_list']  = regs.filter(attending=False).exists()
+            context_data['is_on_a_waiting_list'] = regs.filter(attending=False).exists()
             context_data['is_attending_an_event'] = regs.filter(attending=True).exists()
         return context_data
 
@@ -223,7 +228,7 @@ def ical_event(request, event_id):
 
     # Use the same template for both Event and BedPres.
     template = loader.get_template('events/event_icalendar.ics')
-    context = Context({'event_list': (event,),})
+    context = Context({'event_list': (event,), })
     response = HttpResponse(template.render(context), content_type='text/calendar')
     response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.slug
     return response
