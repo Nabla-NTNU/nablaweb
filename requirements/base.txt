@@ -1,4 +1,4 @@
-Django==1.7.1
+Django==1.8.1
 pytz
 django-contrib-comments
 
@@ -34,3 +34,6 @@ django-filebrowser
 
 #django-wiki
 git+git://github.com/benjaoming/django-wiki.git
+
+# content
+git+https://bitbucket.org/webkom/content-app.git

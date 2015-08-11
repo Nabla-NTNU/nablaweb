@@ -13,7 +13,7 @@ Her kommer en rask guide for å gjøre det.
 
 Du trenger tilgang til et shell på en Linuxboks. (f.eks en av nablas servere) med følgende installert:
 
-- python 2.7
+- python 3.4
 - pip
 - virtualenv
 
@@ -40,7 +40,7 @@ Begynn med å lage et nytt virtuelt python miljø ved å kjøre kommandoen:
 
 ```
 #!bash
-virtualenv my_env
+virtualenv venv
 
 ```
 Det skal nå ha blitt laget en ny mappe i mappen du står i som heter my_env. Der lagres den nye python-executablen din og alle pakkene du laster ned.
@@ -50,17 +50,17 @@ Gå gjerne inn på http://virtualenv.readthedocs.org/en/latest/ for å lære mer
 For å aktivere det nye miljøet ditt skriver du i Linux
 ```
 #!bash
-source my_env/bin/activate
+source venv/bin/activate
 
 ```
 og i windows
 ```
 #!bash
-source my_env/Script/activate
+source venv/Script/activate
 
 ```
 
-Nå skal det stå **(my_env)** i prompten din.
+Nå skal det stå **(venv)** i prompten din.
 
 ## Installere nødvendige python-pakker ##
 Nå må du installere alle de python-pakkene som trenges for å kjøre nablaweb, for eksemple django.
@@ -71,7 +71,7 @@ Gå inn i mappen **nablaweb** ( hvis du ikke allerede har gjort det), og skriv
 pip install -r requirements/devel.txt
 
 ```
-Pip vil nå laste ned og installere alle pakkene som er nevnt i filen requirements/devel.txt nn i my_env-mappen din og en masse tekst vil flagre nedover skjermen. 
+Pip vil nå laste ned og installere alle pakkene som er nevnt i filen requirements/devel.txt nn i venv-mappen din og en masse tekst vil flagre nedover skjermen.
 
 ## Installere bower-pakker ##
 Nablaweb bruker også noen front-end-pakker som fås gjennom bower.
@@ -104,3 +104,14 @@ Det skal nå være mulig å nå din versjon av nablasiden på http://maskin_navn
 Neste gang du skal jobbe med nablaweb trenger du bare å aktivere virtualenv og kjøre nettsiden.
 
 Happy coding!
+
+## Mapper ##
+De aller fleste undermappene er en egen app, bortsett fra følgende, som er
+spesielle mapper:
+
+templates -- inneholder templates vi har laget, og templates som overskriver
+             Django sine.
+
+nablaweb -- inneholder settings og urls. Knutepunktet for prosjektet.
+
+w -- relatert til Wikien (burde strengt tatt ikke være i denne mappen trur jeg)
