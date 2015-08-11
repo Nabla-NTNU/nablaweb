@@ -1,5 +1,5 @@
-
 from collections import ChainMap
+
 from django.test import TestCase
 
 from content.forms import EventForm

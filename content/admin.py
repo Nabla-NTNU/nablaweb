@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
-
 from image_cropping import ImageCroppingMixin
 from filebrowser.widgets import ClearableFileInput, FileInput
 from django.db import models
+
 from content.models.news import News
 from .forms import EventForm
 from content.models.events import Event, EventRegistration
 from content.forms import NewsForm
-
 from content.models.album import Album, AlbumImage
 from content.widgets import MultipleImagesChooser
 

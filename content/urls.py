@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import patterns, url
+
 from content.views import *
 from content.feeds.events import RecentEvents
 

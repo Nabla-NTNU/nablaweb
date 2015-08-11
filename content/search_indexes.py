@@ -1,8 +1,9 @@
+import datetime
+
 from haystack import indexes
 from content.models.base import Content
 from content.models.album import Album
 from content.models.news import News
-import datetime
 
 
 class ContentIndex(indexes.SearchIndex, indexes.Indexable):

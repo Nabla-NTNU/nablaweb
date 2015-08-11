@@ -5,10 +5,11 @@ Inneholder tester for den abstrakte Content-modellen.
 Disse testene virker ikke lenger fordi content-appen er nå blitt migrert.
 """
 
+from datetime import datetime
+
 from django.test import TestCase
 from django.contrib.sites.models import Site
 from django_comments.models import Comment
-from datetime import datetime
 
 from content.models import Content
 

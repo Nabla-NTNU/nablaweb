@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView, ListView
 from django.shortcuts import redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from content.models import Album
 
 

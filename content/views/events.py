@@ -4,7 +4,7 @@
 from django.contrib import messages as django_messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.template import Context, loader
 from django.views.generic import TemplateView, DetailView
 from django.contrib.auth import get_user_model; User = get_user_model()

@@ -2,8 +2,9 @@
 
 from django.db import models
 from django.core.urlresolvers import reverse
-from .base import EditableMedia
 from filebrowser.fields import FileBrowseField
+
+from .base import EditableMedia
 
 
 class AlbumImage(models.Model):

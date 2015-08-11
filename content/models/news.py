@@ -2,6 +2,7 @@
 
 
 from django.db import models
+
 from content.models import Content
 
 
