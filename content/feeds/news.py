@@ -2,7 +2,7 @@
 
 from django.contrib.syndication.views import Feed
 
-from content.models.events import News
+from content.models import News
 
 
 class RecentNews(Feed):
