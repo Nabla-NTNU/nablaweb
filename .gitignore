@@ -7,7 +7,7 @@
 nablaweb/nablaweb/settings/local.py
 
 testproject/var/
-testproject/db.sqlite3
+*.sqlite3
 
 # Virtualenv
 venv/

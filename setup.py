@@ -16,7 +16,7 @@ requirements = [
     'Pillow',
     'easy-thumbnails',
     'django-braces',
-    'django-sekizai',
+    'django-sekizai>=0.8.2',
     'django-markdown-deux'
 ]
 
