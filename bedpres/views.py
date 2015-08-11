@@ -16,4 +16,5 @@ class BedPresRegisterUserView(RegisterUserView):
 
 class BedPresDetailView(EventDetailView):
     model = BedPres
+    template_name = 'bedpres/bedpres_detail.html'
     context_object_name = "bedpres"
