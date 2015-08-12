@@ -10,7 +10,7 @@ class AlbumOverview(ListView):
     context_object_name = "albums"
     template_name = "content/album_overview.html"
     paginate_by = 10
-    queryset = Album.objects.exclude(visibillity='h').order_by('created_date')
+    queryset = Album.objects.exclude(visibility='h').order_by('created_date')
 
     def get_context_data(self, **kwargs):
         context = super(AlbumOverview, self).get_context_data(**kwargs)

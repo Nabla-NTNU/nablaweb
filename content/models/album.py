@@ -41,16 +41,16 @@ class Album(EditableMedia):
         verbose_name="Bilder",
     )
 
-    VISIBILLITY_OPTIONS = (
+    VISIBILITY_OPTIONS = (
         ('p', 'public'),
         ('u', 'users'),
         ('h', 'hidden')
     )
 
-    visibillity = models.CharField(
+    visibility = models.CharField(
         max_length=1,
         verbose_name="Synlighet",
-        choices=VISIBILLITY_OPTIONS,
+        choices=VISIBILITY_OPTIONS,
         default='h',
         blank=False
     )
@@ -63,8 +63,8 @@ class Album(EditableMedia):
         return reverse('album', kwargs={'pk': self.pk,'num': '0'})
 
     def is_visible(self, user=None):
-        if self.visibillity != 'p':
-            if self.visibillity != 'h' and user is not None:
+        if self.visibility != 'p':
+            if self.visibility != 'h' and user is not None:
                 return user.is_authenticated()
             else:
                 return False
