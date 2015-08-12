@@ -12,7 +12,7 @@
 
     <div class="row">
     <h2><a href="{{ album.get_absolute_url }}">{{ album.title }}</a></h2>
-    {% if album.visibillity != 'u' %}
+    {% if album.visibility != 'u' %}
     <img src="{{ album.images.all.0.get_absolute_url }}" style="height: 150px; max-width: 100%;" />
     {% endif %}
     </div>
