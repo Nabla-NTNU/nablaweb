@@ -112,14 +112,17 @@ class BedPres(AbstractEvent):
 
     def open_for_classes(self):
         bpc_info = self.bpc_info
-        min_year = bpc_info['min_year']
-        max_year = bpc_info['max_year']
-        if max_year == '99':
-            max_year = ''
-        if min_year == max_year:
-            return min_year
-        else:
-            return min_year + '-' + max_year
+        if bpc_info is not None:
+            min_year = bpc_info['min_year']
+            max_year = bpc_info['max_year']
+            if max_year == '99':
+                max_year = ''
+            if min_year == max_year:
+                return min_year
+            else:
+                return min_year + '-' + max_year
+
+        return ''
 
     @property
     def bpc_info(self):
@@ -134,7 +137,7 @@ class BedPres(AbstractEvent):
                     self._bpc_info[x] = bpc_core.bpc_time_to_datetime(self._bpc_info[x])
                 self._bpc_info['seats'] = int(self._bpc_info['seats'])
             except bpc_core.BPCResponseException:
-                return {}
+                return None
         return self._bpc_info
 
     @property
