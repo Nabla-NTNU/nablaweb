@@ -1,4 +1,4 @@
-Django==1.7.1
+Django==1.8.3
 pytz
 django-contrib-comments
 
@@ -15,7 +15,7 @@ django-haystack
 whoosh>2.5
 
 # Templatetags
-django-sekizai
+django-sekizai>=0.8.2
 django-bootstrap3
 django-markdown-deux
 
@@ -34,3 +34,6 @@ django-filebrowser
 
 #django-wiki
 git+git://github.com/benjaoming/django-wiki.git
+
+# content
+git+https://bitbucket.org/webkom/content-app.git
