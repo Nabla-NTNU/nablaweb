@@ -4,7 +4,7 @@
 *.swp
 *.swo
 
-nablaweb/nablaweb/settings/local.py
+nablarevyen/settings/local.py
 
 testproject/var/
 *.sqlite3
