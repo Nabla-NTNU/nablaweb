@@ -2,6 +2,7 @@
 {% load flatpages %}
 {% load sekizai_tags %}
 {% load bootstrap3 %}
+{% load static %}
 {% include "includes/bootstrap_links.html" %}
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +20,7 @@
 
     {# Our custom CSS #}
     {% addtoblock "css" %}
-        <link href="{{ STATIC_URL }}css/default.css" rel="stylesheet">
+        <link href="{% static "css/default.css" %}" rel="stylesheet">
     {% endaddtoblock %}
     <!-- css-block -->
     {% render_block "css" %}
@@ -46,7 +47,7 @@
 <header>
     <a class="pull-left" href="/">
         {% block header_logo %}
-            <img src="{{ STATIC_URL }}img/nabla_logo_black.png" alt="Nabla">
+            <img src="{% static "img/nabla_logo_black.png" %}" alt="Nabla">
         {% endblock header_logo %}
     </a>
 
@@ -240,7 +241,7 @@
         {# nablalogo #}
         <div class="col-md-4 center" id="nablafooter">
             <br><br>
-            <img src="{{ STATIC_URL }}img/nabla-white.svg" alt="nabla logo">
+            <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo">
         </div>
 
     </div>{# end row #}

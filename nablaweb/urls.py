@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, TemplateView
 from content.feeds.news import RecentNews
 # nødvendig for django-wiki
 from wiki.urls import get_pattern as get_wiki_pattern
@@ -55,3 +55,11 @@ urlpatterns += patterns('',
     (r'^wiki/notifications/', get_nyt_pattern()),
     (r'^wiki/', get_wiki_pattern())
 )
+
+if settings.DEBUG:
+    urlpatterns += \
+        patterns('',
+                 (r'^500.html/$', TemplateView.as_view(template_name='500.html')),
+                 (r'^404.html/$', TemplateView.as_view(template_name='404.html')),
+                 )
+
