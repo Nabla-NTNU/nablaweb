@@ -30,7 +30,13 @@
                         <a href="{{ podcast.get_absolute_url }}">
                             <h2>{{ podcast.title }}</h2>
                             <p>{{ podcast.get_short_description }}</p>
-                            <span class="date-text">{{ podcast.pub_date | date:"d.m.Y" }}</span>
+                            <span class="date-text">
+                                {% if podcast.extra_markdown %}
+                                <span class="glyphicon glyphicon-film"></span>
+                                {% endif %}
+                            {{ podcast.view_counter }} visninger.
+                            {{ podcast.pub_date | date:"d.m.Y" }}
+                            </span>
                         </a>
                     </li>
                 {% endfor %}

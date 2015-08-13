@@ -28,11 +28,13 @@
 {% endif %}
 
 <p>{{ podcast.description }}</p>
+{% if podcast.file %}
 <div>
 <a class="btn btn-primary btn-large" href="{{ podcast.file.url }}" download>
     Last ned
 </a>
 </div>
+{% endif %}
 {% if podcast.extra_markdown %}
 <div>
     {{ podcast.extra_markdown | markdown:"unsafe"}}
