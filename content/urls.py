@@ -54,3 +54,8 @@ urlpatterns = patterns('content.views',
                        url(r'^feed/$', RecentEvents(), name="event_feed"),
 
                        )
+
+urlpatterns += patterns(
+    url(r'^archive$', ArchiveView.as_view(), name="archive_view"),
+    url(r'^archive/(?P<archive>[-\w]*)', ArchiveView.as_view(), name="archive_view"),
+)

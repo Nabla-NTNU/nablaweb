@@ -2,13 +2,12 @@
 
 from django.db import models
 from django.core.urlresolvers import reverse
-from filebrowser.fields import FileBrowseField
 
 from .base import EditableMedia
 
 
 class AlbumImage(models.Model):
-    file = FileBrowseField(
+    file = models.FileField(
         max_length=100,
         verbose_name="Bildefil"
     )
