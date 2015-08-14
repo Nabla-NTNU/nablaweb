@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 
 
 class ComPage(models.Model):
@@ -95,3 +96,50 @@ class ComMembership(models.Model):
 
     def __unicode__(self):
         return self.user.username
+
+
+class Committee(models.Model):
+    """
+    Representerer en komite
+    """
+    group = models.OneToOneField(
+        to='auth.Group',
+        primary_key=True,
+        verbose_name="Gruppe"
+    )
+
+    page = models.OneToOneField(
+        to='com.ComPage',
+        blank=True,
+        verbose_name="Komitéside"
+    )
+
+    mail_list = models.EmailField(
+        verbose_name="Epostliste",
+        blank=True
+    )
+
+    name = models.CharField(
+        _('name'),
+        max_length=80,
+        unique=True
+    )
+
+    leader = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL,
+        verbose_name="Leder",
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = "Komité"
+        verbose_name_plural = "Komitéer"
+
+
+def create_committee_from_group(group):
+    if isinstance(group, 'NablaGroup'):
+        com = Committee()
+        com.name = group.name
+        com.mail_list = group.mail_list
+        return com
+    return None
