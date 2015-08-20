@@ -3,6 +3,7 @@
 from django.db import models
 from django.conf import settings
 from django.template import loader, Context
+from django.core.urlresolvers import reverse
 
 from .managers import RelatedEventRegistrationManager, EventRegistrationManager
 
@@ -87,3 +88,6 @@ class EventRegistration(models.Model):
             template = loader.get_template("events/moved_to_attending_email.txt")
             message = template.render(Context({'event': self, 'name': self.user.get_full_name()}))
             self.user.email_user(subject, message)
+
+    def get_registration_url(self):
+        return reverse('registration', kwargs={'pk': self.pk})

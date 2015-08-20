@@ -19,15 +19,15 @@ urlpatterns = patterns('content.views',
                            NewsDetailView.as_view(),
                            name='news_detail'),
 
-                       url(r'^events/(?P<pk>\d{1,8})/admin2$',
+                       url(r'^arrangement/(?P<pk>\d{1,8})/admin2$',
                            AdministerRegistrationsView.as_view(),
                            name='event_admin'),
 
-                       url(r'^events/$',
+                       url(r'^arrangement/$',
                            'calendar',
                            name='event_list'),
 
-                       url(r'^events/(\d{4})/(\d{1,2})/$',
+                       url(r'^arrangement/(\d{4})/(\d{1,2})/$',
                            'calendar',
                            name='event_list'),
 
@@ -35,19 +35,19 @@ urlpatterns = patterns('content.views',
                            UserEventView.as_view(),
                            name="view_user_events"),
 
-                       url(r'^events/(?P<pk>\d{1,8})/registration$',
+                       url(r'^arrangement/(?P<pk>\d{1,8})/registration$',
                            RegisterUserView.as_view(),
                            name='registration'),
 
-                       url(r'^events/(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$',
+                       url(r'^arrangement/(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$',
                            EventDetailView.as_view(),
                            name='event_detail'),
 
-                       url(r'^events/reg/(?P<pk>\d{1,8})$',
+                       url(r'^arrangement/reg/(?P<pk>\d{1,8})$',
                            EventRegistrationsView.as_view(),
                            name='event_registrations'),
 
-                       url(r'^events/(?P<event_id>\d{1,8}).ics$',
+                       url(r'^arrangement/(?P<event_id>\d{1,8}).ics$',
                            ical_event,
                            name="ical_event"),
 

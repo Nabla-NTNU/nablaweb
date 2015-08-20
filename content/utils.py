@@ -15,5 +15,5 @@ def group_events_by_day(events):
 
 def day_range(start, end):
     """Returns a list of days (ints) between start and end (datetime)."""
-    end = start if (end is None or end<start) else end
+    end = start if (end is None or end < start) else end
     return range(start.day, end.day+1)

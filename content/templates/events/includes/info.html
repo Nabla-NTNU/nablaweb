@@ -102,7 +102,7 @@
     </tr>
 
     <!-- På/Avmeldingsknapp -->
-    <form name="registration" action="{{event.id}}/registration" method="post">
+    <form name="registration" action="{{ event.get_registration_url }}" method="post">
     {% csrf_token %}
     <input type="hidden" name="eventid" value="{{event.id}}">
     <tr><td colspan="2" style="text-align: center;">

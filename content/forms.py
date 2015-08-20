@@ -3,7 +3,7 @@
 
 import operator
 
-from django.forms import BooleanField, ValidationError, ModelForm
+from django.forms import BooleanField, ValidationError, ModelForm, Form
 
 from content.models import News, Event
 
