@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% load sekizai_tags %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}Skråttcast{% endblock %}
+{% block content %}
+    {% addtoblock "css" %}
+        <link href="{% static "podcast/list.css" %}" rel="stylesheet"/>
+        <link href="{% static "podcast/podcast.css" %}" rel="stylesheet"/>
+    {% endaddtoblock %}
+    {% if season_name %}
+        <h1>{{ season_name }}</h1>
+        {% if season.banner %}
+        <div class="banner-wrapper">
+            <img src="{{ season.banner.url }}"/>
+        </div>
+        {% endif %}
+    {% endif %}
+    {% if podcast_list %}
+        <div class="list-container">
+            <ul>
+                {% for podcast in podcast_list %}
+                    <li>
+                        {% if podcast.image %}
+                            <img src="{% thumbnail podcast.image 300x300 box=podcast.cropping quality=95 %}"
+                                 alt="{{ podcast.title }}"/>
+                        {% endif %}
+                        <a href="{{ podcast.get_absolute_url }}">
+                            <h2>{{ podcast.title }}</h2>
+                            <p>{{ podcast.get_short_description }}</p>
+                            <span class="date-text">
+                                {% if podcast.extra_markdown %}
+                                <span class="glyphicon glyphicon-film"></span>
+                                {% endif %}
+                            {{ podcast.view_counter }} visninger.
+                            {{ podcast.pub_date | date:"d.m.Y" }}
+                            </span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <nav>
+            <ul class="pager">
+                {% if previous %}
+                    <li class="previous">
+                        <a href="{{ previous.get_absolute_url }}"><span aria-hidden="true">&larr;</span> Forrige
+                            sesong</a>
+                    </li>
+                {% endif %}
+
+                <li class="disabled pager-counter">
+                    Sesong {{ season.number }} av {{ season_count }}
+                </li>
+
+                {% if next %}
+                    <li class="next">
+                        <a href="{{ next.get_absolute_url }}">Neste sesong <span
+                                aria-hidden="true">&rarr;</span></a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% else %}
+        <p>Ingen podcast tilgjengelig.</p>
+    {% endif %}
+{% endblock %}
+{% block sidebar %}
+    <h1>Skråttcast</h1>
+    <p>
+        {% if info %}
+            {{ info.content }}
+        {% else %}
+            Om <a href="/komite/skrattcast/">Skråttcast</a>.
+        {% endif %}
+    </p>
+    {% include "podcast/includes/sidebar_include.html" %}
+{% endblock %}
+
