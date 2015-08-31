@@ -7,6 +7,7 @@ from nabladet.models import Nablad
 
 class NabladDetailView(NewsDetailView):
     model = Nablad
+    template_name = 'nabladet/nablad_detail.html'
     context_object_name = 'nablad'
 
     def get_context_data(self, **kwargs):
@@ -17,4 +18,5 @@ class NabladDetailView(NewsDetailView):
 
 class NabladListView(ListView):
     model = Nablad
+    template_name = "nabladet/nablad_list.html"
     context_object_name = "nablad_list"
