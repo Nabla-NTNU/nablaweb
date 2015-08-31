@@ -1,0 +1,3 @@
+include README.md
+recursive-include content/templates *.html *.txt *.ics
+recursive-include content/static *.js *.png *.css

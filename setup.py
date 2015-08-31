@@ -41,5 +41,7 @@ setup(
         'Topic :: Software Development',
         'Topic :: Software Development :: Libraries :: Application Frameworks',
     ],
+    data_files=[('', 'templates/*'),
+                ('', 'static/*')],
     include_package_data=True,
 )
