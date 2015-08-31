@@ -104,7 +104,7 @@
     <!-- På/Avmeldingsknapp -->
     <form name="registration" action="{{event.id}}/registration" method="post">
     {% csrf_token %}
-    <input type="hidden" name="eventid" value="{{event.id}}">
+    <input type="hidden" name="eventid" value="{{ event.get_registration_url }}">
     <tr><td colspan="2" style="text-align: center;">
         {% if is_registered %}
             {% if event.deregistration_closed %}

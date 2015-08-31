@@ -36,9 +36,9 @@
 </div>
 {% endif %}
 {% if podcast.extra_markdown %}
-<div>
+<p>
     {{ podcast.extra_markdown | markdown:"unsafe"}}
-</div>
+</p>
 {% endif %}
 
 {% endblock %}
