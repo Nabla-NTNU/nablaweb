@@ -15,6 +15,7 @@ django-haystack
 whoosh>2.5
 
 # Templatetags
+django-classy-tags
 django-sekizai>=0.8.2
 django-bootstrap3
 django-markdown-deux
