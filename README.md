@@ -67,7 +67,7 @@ source venv/Script/activate
 
 ```
 
-Nå skal det stå **(venv)** i prompten din.
+Nå skal det stå **(venv)** i prompten din. (Hvis du får *OSError: [Errno 13] Permission denied* betyr det at du har glemt å aktivere virtualenv-en din.)
 
 ## Installere nødvendige python-pakker ##
 Nå må du installere alle de python-pakkene som trenges for å kjøre nablaweb, for eksemple django.
