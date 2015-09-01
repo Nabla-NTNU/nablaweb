@@ -72,8 +72,20 @@ class AdministerRegistrationsView(PermissionRequiredMixin, DetailView):
     deregister_users.info = 'Fjern'
 
 
-# Offentlig
+def get_current_events(year, month):
+    # Get this months events and bedpreser separately
+    events = Event.objects.select_related("content_type").filter(
+        event_start__year=year,
+        event_start__month=month)
+    # bedpress = BedPres.objects.select_related("content_type").filter(
+    #    event_start__year=year,
+    #    event_start__month=month)
 
+    # Combine them to a single calendar
+    return events
+
+
+# Offentlig
 def calendar(request, year=None, month=None):
     """
     Renders a calendar with events from the chosen month
@@ -86,15 +98,7 @@ def calendar(request, year=None, month=None):
     except ValueError:  # Not a valid year and month
         raise Http404
 
-    # Get this months events and bedpreser separately
-    events = Event.objects.select_related("content_type").filter(
-        event_start__year=year,
-        event_start__month=month)
-    # bedpress = BedPres.objects.select_related("content_type").filter(
-    #    event_start__year=year,
-    #    event_start__month=month)
-
-    # Combine them to a single calendar
+    events = get_current_events(year, month)
     cal = EventCalendar(chain(events)).formatmonth(year, month)
 
     user = request.user
