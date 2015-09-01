@@ -35,13 +35,19 @@ Det skal nå ha dukket opp en mappe som heter nablaweb i den mappen du står i.
 ## Sett opp virtualenv ##
 
 Nå må du sette opp Python-miljøet ditt og installere alle python-pakkene som trenges til nablaweb.
-Til dette bruker vi virtualenv, en python-modul som gjør at du kan ha separate vesjoner av pakker osv.
-Begynn med å lage et nytt virtuelt python miljø ved å kjøre kommandoen:
+Til dette bruker vi virtualenv, en python-modul som gjør at du kan ha separate vesjoner av pakker osv. Det er viktig at Python 3.4 brukes, og ikke lavere versjoner, ettersom Python 3.2 og lavere ikke støtter syntaksen u"streng", som brukes av enkelte dependencies. For å sjekke om du har Python 3.4 installert, kjør `python3.4`. Hvis du har Python 3.4 installert, kjør følgende kommando for å lage et virtuelt Python-miljø:
 
 ```
 #!bash
 cd nablaweb/var
-virtualenv --python=python3 venv
+virtualenv --python=python3.4 venv
+
+```
+Hvis du ikke har Python3.4 installert, men befinner deg på serveren Babel (hvor Nabla.no for øyeblikket kjøres fra), kan du bruke følgende:
+```
+#!bash
+cd nablaweb/var
+virtualenv --python=/opt/Python34/bin/python3.4 venv
 
 ```
 Det skal nå ha blitt laget en ny mappe i mappen du står i som heter `venv`. Der lagres den nye python-executablen din og alle pakkene du laster ned.
