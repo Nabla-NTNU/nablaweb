@@ -37,3 +37,9 @@ git+git://github.com/benjaoming/django-wiki.git
 
 # content
 git+https://bitbucket.org/webkom/content-app.git
+
+# Fancy admin skin
+django-grappelli
+
+# ??????? Forklar, noen
+django-appconf
