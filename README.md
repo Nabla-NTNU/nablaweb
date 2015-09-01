@@ -40,10 +40,11 @@ Begynn med å lage et nytt virtuelt python miljø ved å kjøre kommandoen:
 
 ```
 #!bash
-virtualenv venv
+cd nablaweb/var
+virtualenv --python=python3 venv
 
 ```
-Det skal nå ha blitt laget en ny mappe i mappen du står i som heter my_env. Der lagres den nye python-executablen din og alle pakkene du laster ned.
+Det skal nå ha blitt laget en ny mappe i mappen du står i som heter `venv`. Der lagres den nye python-executablen din og alle pakkene du laster ned.
 Gå gjerne inn på http://virtualenv.readthedocs.org/en/latest/ for å lære mer om virtualenv.
 
 ## Aktivere virtualenv ##
@@ -71,7 +72,7 @@ Gå inn i mappen **nablaweb** ( hvis du ikke allerede har gjort det), og skriv
 pip install -r requirements/devel.txt
 
 ```
-Pip vil nå laste ned og installere alle pakkene som er nevnt i filen requirements/devel.txt nn i venv-mappen din og en masse tekst vil flagre nedover skjermen.
+Skriv inn brukernavn/passord til Bitbucket om nødvendig, ettersom noen av pakkene er private. Pip vil nå laste ned og installere alle pakkene som er nevnt i filen requirements/devel.txt inn i venv-mappen din og en masse tekst vil flagre nedover skjermen.
 
 ## Installere bower-pakker ##
 Nablaweb bruker også noen front-end-pakker som fås gjennom bower.
