@@ -84,10 +84,13 @@ def get_current_events(year, month):
     # Combine them to a single calendar
     return events
 
+CURRENT_EVENTS = None
 
-def set_current_events(fun):
+
+def set_current_events(fun, override=False):
     global CURRENT_EVENTS
-    CURRENT_EVENTS = fun
+    if not CURRENT_EVENTS or override:
+        CURRENT_EVENTS = fun
 
 
 set_current_events(get_current_events)
