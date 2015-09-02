@@ -85,6 +85,14 @@ def get_current_events(year, month):
     return events
 
 
+def set_current_events(fun):
+    global CURRENT_EVENTS
+    CURRENT_EVENTS = fun
+
+
+set_current_events(get_current_events)
+
+
 # Offentlig
 def calendar(request, year=None, month=None):
     """
@@ -98,7 +106,7 @@ def calendar(request, year=None, month=None):
     except ValueError:  # Not a valid year and month
         raise Http404
 
-    events = get_current_events(year, month)
+    events = CURRENT_EVENTS(year, month)
     cal = EventCalendar(chain(events)).formatmonth(year, month)
 
     user = request.user
