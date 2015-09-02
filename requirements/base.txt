@@ -15,6 +15,7 @@ django-haystack
 whoosh>2.5
 
 # Templatetags
+django-classy-tags
 django-sekizai>=0.8.2
 django-bootstrap3
 django-markdown-deux
@@ -37,3 +38,9 @@ git+git://github.com/benjaoming/django-wiki.git
 
 # content
 git+https://bitbucket.org/webkom/content-app.git
+
+# Fancy admin skin
+django-grappelli
+
+# ??????? Forklar, noen
+django-appconf
