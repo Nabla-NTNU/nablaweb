@@ -59,6 +59,13 @@
 {% block sidebar %}
 
     {% include "events/includes/upcoming_events.html" %}
+    {% if sidebarinfo %}
+        <h2>{{ sidebarinfo.title }}</h2>
+        <p>
+            {{ sidebarinfo.content | markdown:"unsafe" }}
+        </p>
+    {% endif %}
+    {% include "poll/poll_include.html" %}
 
 {% endblock sidebar %}
 
