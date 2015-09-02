@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from content.views import EventDetailView, RegisterUserView
-from .models import BedPres
+from bedpres.event_overrides import *
 
 
 class BedPresRegisterUserView(RegisterUserView):
