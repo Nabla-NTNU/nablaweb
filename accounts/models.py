@@ -5,6 +5,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group, AbstractUser
 from hashlib import sha1
+from datetime import datetime
 
 
 class NablaUser(AbstractUser):
@@ -47,8 +48,9 @@ class NablaUser(AbstractUser):
         verbose_name="NTNU kortnr",
         max_length=10,
         blank=True,
-        help_text=("Dette er det 7-10 siffer lange nummeret <b>nede til venstre</b> på baksiden av NTNU-adgangskortet ditt. "
-                   "Det brukes blant annet for å komme inn på bedpresser."))
+        help_text=(
+        "Dette er det 7-10 siffer lange nummeret <b>nede til venstre</b> på baksiden av NTNU-adgangskortet ditt. "
+        "Det brukes blant annet for å komme inn på bedpresser."))
 
     def get_hashed_ntnu_card_number(self):
         """Returnerer sha1-hashen av ntnu kortnummeret som BPC-trenger."""
@@ -60,11 +62,18 @@ class NablaUser(AbstractUser):
          Returnerer 0 hvis brukeren ikke går på fysmat."""
         try:
             return FysmatClass.objects.filter(user=self).order_by('starting_year')[0].get_class_number()
-        except:
+        except FysmatClass.DoesNotExist:
             return 0
 
     def get_absolute_url(self):
         return reverse("member_profile", kwargs={"username": self.username})
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if not self.last_login:
+            self.last_login = datetime.today()
+
+        return super(NablaUser, self).save(force_insert, force_update, using, update_fields)
 
 
 class NablaGroup(Group):
@@ -81,13 +90,14 @@ class NablaGroup(Group):
         ('komleder', 'Komitéleder'),
         ('styremedlm', 'Styremedlem'),
         ('stilling', 'Stilling'),
-        )
+    )
 
     group_type = models.CharField(max_length=10, blank=True, choices=GROUP_TYPES)
 
 
 class FysmatClass(NablaGroup):
     """ Gruppe for kull """
+
     class Meta:
         verbose_name = "Kull"
         verbose_name_plural = "Kull"
