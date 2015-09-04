@@ -21,6 +21,7 @@ class GenericJobsList(ListView):
     context_object_name = 'jobs_list'
     template_name = 'jobs/jobs_list.html'
     paginate_by = 8
+    model = Advert
 
     def get_context_data(self, **kwargs):
         context = super(GenericJobsList, self).get_context_data(**kwargs)
