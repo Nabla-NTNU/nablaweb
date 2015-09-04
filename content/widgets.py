@@ -9,7 +9,7 @@ class MultipleImagesChooser(SelectMultiple):
         selected_html = ''
         if option_value in selected_choices:
             selected_html = mark_safe(' selected="selected"')
-        return "<option value=\"{value}\" data-img-src=\"{src}\">{label}</option>".format(
+        return "<option value=\"{value}\" data-img-src=\"{src}\" {selected}>{label}</option>".format(
             value=option_value, label=force_text(option_label), src=option_label, selected=selected_html)
 
     def render(self, name, value, attrs={}, choices=()):
