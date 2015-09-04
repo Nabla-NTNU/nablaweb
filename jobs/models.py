@@ -103,7 +103,6 @@ class Advert(News):
     relevant_for_year = models.ManyToManyField(
         YearChoices,
         blank=False,
-        null=True,
         verbose_name="Årskull",
         help_text="Hvilke årskull stillingsannonsen er relevant for.")
     tags = models.ManyToManyField(
