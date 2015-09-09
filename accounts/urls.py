@@ -3,7 +3,7 @@
 from django.conf.urls import url, patterns
 from django.views.generic import RedirectView
 
-from .views import UserDetailView, UpdateProfile, UserList, RegistrationView
+from .views import UserDetailView, UpdateProfile, UserList, RegistrationView, InjectUsersFormView
 
 urlpatterns = patterns('django.contrib.auth.views', 
     url(r'password/change/$', 'password_change', name='password_change'),
@@ -29,4 +29,7 @@ urlpatterns += patterns('accounts.views',
     url(r'registrer/$',
         RegistrationView.as_view(),
         name='user_registration'),
+    url(r'oppdater/$',
+        InjectUsersFormView.as_view(),
+        name='users_inject'),
 )

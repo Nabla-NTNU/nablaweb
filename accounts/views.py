@@ -2,12 +2,12 @@
 
 from django.views.generic import DetailView, ListView, UpdateView, FormView
 from django.contrib.auth import get_user_model
-
+from django.http import HttpResponseForbidden
 from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin
 
-from .forms import UserForm, RegistrationForm
+from .forms import UserForm, RegistrationForm, InjectUsersForm
 from .models import NablaUser
-from .utils import activate_user_and_create_password, send_activation_email
+from .utils import activate_user_and_create_password, send_activation_email, extract_usernames
 
 User = get_user_model()
 
@@ -52,3 +52,21 @@ class RegistrationView(MessageMixin, FormView):
 
         self.messages.info('Registreringsepost sendt til %s' % user.email)
         return super(RegistrationView, self).form_valid(form)
+
+
+class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
+    form_class = InjectUsersForm
+    form_valid_message = "Brukerne er lagt i databasen."
+    form_invalid_message = "Ikke riktig utfyllt."
+    template_name = 'form.html'
+    success_url = "/"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.has_module_perms("django.contrib.auth"):
+            return super(InjectUsersFormView, self).dispatch(request, *args, **kwargs)
+        return HttpResponseForbidden()
+
+    def form_valid(self, form):
+        data = form.cleaned_data['data']
+        extract_usernames(data)
+        return super(InjectUsersFormView, self).form_valid(form)

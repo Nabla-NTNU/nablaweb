@@ -9,7 +9,7 @@ from .views import BedPresDetailView, BedPresRegisterUserView
 
 urlpatterns = patterns('bedpres.views',
 
-    url(r'^$', RedirectView.as_view(url='/arrangement/')),
+    url(r'^$', RedirectView.as_view(url='/arrangement/', permanent=True)),
     url(r'^(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$',
         BedPresDetailView.as_view(),
         name='bedpres_detail'),
