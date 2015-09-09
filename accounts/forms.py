@@ -83,3 +83,11 @@ class NablaUserCreationForm(UserCreationForm):
     # instead of NablaUser
     def clean_username(self):
         return self.cleaned_data["username"]
+
+
+class InjectUsersForm(forms.Form):
+    title = "Putt brukernavn i databasen."
+    data = forms.CharField(
+        widget=forms.Textarea,
+        label="Data"
+    )

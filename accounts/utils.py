@@ -2,6 +2,7 @@
 
 from django.template import loader, Context
 from django.contrib.auth.models import UserManager
+import re
 
 
 def activate_user_and_create_password(user):
@@ -22,3 +23,12 @@ def send_activation_email(user, password):
     email_text = t.render(Context({"username": user.username,
                                    "password": password}))
     user.email_user('Bruker på nabla.no', email_text)
+
+
+def extract_usernames(string):
+    from accounts.models import NablaUser
+
+    m = re.findall('([a-z]+)@', string, re.IGNORECASE)
+    for u in m:
+        um = NablaUser.objects.get_or_create(username=u)
+

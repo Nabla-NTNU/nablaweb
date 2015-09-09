@@ -37,7 +37,7 @@ urlpatterns = patterns('',
     (r'^media/(?P<path>.*)$',  'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
     # Redirecte til favicon
-    (r'^favicon\.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'img/favicon.ico')),
+    (r'^favicon\.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'img/favicon.ico', permanent=True)),
 
     (r'^admin/', include(admin.site.urls)),
 
