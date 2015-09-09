@@ -4,10 +4,10 @@ from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group 
+from django.contrib.auth.models import Group
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 
-from .models import NablaUser, NablaGroup, FysmatClass
+from .models import NablaUser, NablaGroup, FysmatClass, RegistrationRequest
 from .forms import NablaUserChangeForm, NablaUserCreationForm
 
 User = get_user_model()
@@ -38,9 +38,11 @@ class GroupAdminForm(forms.ModelForm):
             group.user_set = self.cleaned_data['users']
         else:
             old_save_m2m = self.save_m2m
+
             def new_save_m2m():
                 old_save_m2m()
                 group.user_set = self.cleaned_data['users']
+
             self.save_m2m = new_save_m2m
         return group
 
@@ -58,13 +60,14 @@ class ExtendedGroupAdmin(GroupAdmin):
 class ExtendedNablaGroupAdmin(GroupAdmin):
     form = NablaGroupAdminForm
 
+
 try:
     admin.site.unregister(Group)
 except:
     pass
 
 admin.site.register(Group, ExtendedGroupAdmin)
-admin.site.register(NablaGroup,ExtendedNablaGroupAdmin)
+admin.site.register(NablaGroup, ExtendedNablaGroupAdmin)
 admin.site.register(FysmatClass)
 
 
@@ -76,10 +79,33 @@ class NablaUserAdmin(UserAdmin):
         (None, {'fields': ('username', 'password')}),
         (('Personlig informasjon'), {'fields': ('first_name', 'last_name', 'email', 'ntnu_card_number')}),
         (('Rettigheter'), {'fields': ('is_active', 'is_staff', 'is_superuser',
-                                       'groups', 'user_permissions')}),
+                                      'groups', 'user_permissions')}),
         (('Important dates'), {'fields': ('last_login', 'date_joined')}),
-        ('Adresse og telefon', {'fields': ('address', 'mail_number', 'telephone', 'cell_phone', )}),
+        ('Adresse og telefon', {'fields': ('address', 'mail_number', 'telephone', 'cell_phone',)}),
         ('Diverse', {'fields': ('birthday', 'web_page', 'about', 'wants_email')}),
     )
 
+
 admin.site.register(NablaUser, NablaUserAdmin)
+
+
+def reg_approve(modeladmin, request, queryset):
+    for req in queryset:
+        req.approve_request()
+        req.delete()
+
+
+def reg_decline(modeladmin, request, queryset):
+    for req in queryset:
+        req.delete()
+
+
+class RegistrationRequestAdmin(admin.ModelAdmin):
+    actions = [reg_approve, reg_decline]
+
+    class Meta:
+        model = RegistrationRequest
+        fields = '__all__'
+
+
+admin.site.register(RegistrationRequest, RegistrationRequestAdmin)
