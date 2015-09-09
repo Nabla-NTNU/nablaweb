@@ -2,7 +2,7 @@
 
 from django.views.generic import DetailView, ListView, UpdateView, FormView
 from django.contrib.auth import get_user_model
-
+from django.http import HttpResponseForbidden
 from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin
 
 from .forms import UserForm, RegistrationForm, InjectUsersForm
@@ -60,6 +60,11 @@ class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
     form_invalid_message = "Ikke riktig utfyllt."
     template_name = 'form.html'
     success_url = "/"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.has_module_perms("django.contrib.auth"):
+            return super(InjectUsersFormView, self).dispatch(request, *args, **kwargs)
+        return HttpResponseForbidden()
 
     def form_valid(self, form):
         data = form.cleaned_data['data']
