@@ -26,7 +26,7 @@ urlpatterns += patterns('accounts.views',
     url(r'view/(?P<username>\w+)/$',
         UserDetailView.as_view(),
         name='member_profile'),
-    url(r'register/$',
+    url(r'registrer/$',
         RegistrationView.as_view(),
         name='user_registration'),
 )

@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group, AbstractUser
 from hashlib import sha1
 from datetime import datetime
+from .utils import activate_user_and_create_password, send_activation_email
 
 
 class NablaUser(AbstractUser):
@@ -107,3 +108,33 @@ class FysmatClass(NablaGroup):
     def get_class_number(self):
         now = date.today()
         return now.year - int(self.starting_year) + int(now.month > 6)
+
+
+class RegistrationRequest(models.Model):
+    username = models.CharField(
+        max_length=80,
+        verbose_name="Brkuernavn"
+    )
+
+    created = models.DateTimeField(
+        auto_created=True,
+        verbose_name="Opprettet"
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created = datetime.today()
+        return super(RegistrationRequest, self).save(*args, **kwargs)
+
+    def approve_request(self):
+        user, created_user = NablaUser.objects.get_or_create(username=self.username)
+
+        password = activate_user_and_create_password(user)
+        send_activation_email(user, password)
+
+    class Meta:
+        verbose_name = "Registreringsforespørsel"
+        verbose_name_plural = "Registreringsforespørsler"
+
+    def __str__(self):
+        return self.username

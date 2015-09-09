@@ -4,7 +4,7 @@ from django.forms import DateField
 from django.forms.extras.widgets import SelectDateWidget
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
-from .models import NablaUser
+from .models import NablaUser, RegistrationRequest
 
 
 class UserForm(forms.ModelForm):
@@ -53,9 +53,13 @@ class RegistrationForm(forms.Form):
         try:
             user = NablaUser.objects.get(username=username)
         except NablaUser.DoesNotExist:
-            raise forms.ValidationError(
-                "Brukernavn ikke registrert i nabladatabase. "
-                "Send en epost til webkom@nabla.ntnu.no så lager vi en bruker til deg.")
+            request = RegistrationRequest()
+            request.username = username
+            request.clean()
+            request.save()
+            raise forms.ValidationError("Denne brukeren er ikke registrert. "
+                                        "En forespørsel har blitt opprettet og "
+                                        "du vil få en mail hvis den blir godkjent.")
 
         if user.is_active:
             raise forms.ValidationError("Denne brukeren er allerede aktivert.")
