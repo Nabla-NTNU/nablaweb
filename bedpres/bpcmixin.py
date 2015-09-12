@@ -1,12 +1,23 @@
 from django.utils.functional import cached_property
 
+from content.exceptions import (EventFullException,
+                                RegistrationAlreadyExists,
+                                RegistrationNotOpen)
 from bpc_client import BPCEvent
 from bpc_client.exceptions import BPCResponseException
 from accounts.models import NablaUser as User
-from .utils import get_bpc_user_dictionary, InvalidCardNum
+from .utils import get_bpc_user_dictionary
+
+
+class RegistrationInfo(object):
+    """A simple class used for the return value of register_user."""
+    def __init__(self, attending):
+        self.attending = attending
+        self.waiting = not attending
 
 
 class BPCEventMixin(object):
+    """Mixin-class to add the same methods for registration as the Event-model from content."""
     bpcid = None
 
     @cached_property
@@ -17,18 +28,18 @@ class BPCEventMixin(object):
         try:
             user_dict = get_bpc_user_dictionary(user)
             is_attending = self.bpc_event.add_attending(**user_dict)
-            return "Du ble påmeldt" if is_attending else "Du ble satt på venteliste"
-        except InvalidCardNum:
-            return "Du ble ikke påmeldt fordi du ikke har registrert gyldig kortnummer."
+            return RegistrationInfo(is_attending)
         except BPCResponseException as e:
-            return e.bpc_error_message
+            if e.bpc_error_code == "402":
+                raise EventFullException(event=self, user=user)
+            elif e.bpc_error_code == "405":
+                raise RegistrationAlreadyExists(event=self, user=user)
+            elif e.bpc_error_code in ("408", "409"):
+                raise RegistrationNotOpen(event=self, user=user)
+            raise e
 
     def deregister_user(self, user):
-        try:
-            self.bpc_event.rem_attending(username=user.username)
-            return "Du ble meldt av"
-        except BPCResponseException as e:
-            return e.bpc_error_message
+        self.bpc_event.rem_attending(username=user.username)
 
     def get_attendance_list(self):
         return User.objects.filter(username__in=self.bpc_event.attending_usernames)
