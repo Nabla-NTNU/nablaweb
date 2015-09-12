@@ -3,7 +3,7 @@ from django.utils.functional import cached_property
 from bpc_client import BPCEvent
 from bpc_client.exceptions import BPCResponseException
 from accounts.models import NablaUser as User
-from .utils import get_bpc_user_dictionary
+from .utils import get_bpc_user_dictionary, InvalidCardNum
 
 
 class BPCEventMixin(object):
@@ -14,14 +14,12 @@ class BPCEventMixin(object):
         return BPCEvent(bpc_id=self.bpcid)
 
     def register_user(self, user):
-        card_no = user.ntnu_card_number
-        if not card_no or not card_no.isdigit():
-            return "Du ble ikke påmeldt fordi du ikke har registrert gyldig kortnummer."
-
-        user_dict = get_bpc_user_dictionary(user)
         try:
+            user_dict = get_bpc_user_dictionary(user)
             is_attending = self.bpc_event.add_attending(**user_dict)
             return "Du ble påmeldt" if is_attending else "Du ble satt på venteliste"
+        except InvalidCardNum:
+            return "Du ble ikke påmeldt fordi du ikke har registrert gyldig kortnummer."
         except BPCResponseException as e:
             return e.bpc_error_message
 
