@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+from django.core.urlresolvers import reverse
 
 from content.exceptions import RegistrationAlreadyExists, EventFullException, DeregistrationClosed
 from .abstract_event import AbstractEvent
@@ -123,3 +124,6 @@ class Event(AbstractEvent):
             self.eventregistration_set.all().delete()
         elif not self.has_queue:
             self.waiting_registrations.delete()
+
+    def get_registration_url(self):
+        return reverse('registration', kwargs={'pk': self.pk})

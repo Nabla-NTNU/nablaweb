@@ -34,6 +34,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.humanize',
     'django.contrib.sites',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -72,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'sekizai.context_processors.sekizai',
             ],
         },
     },
@@ -102,7 +104,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -111,3 +113,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 SITE_ID = 1
+
+from easy_thumbnails.conf import Settings as EasyThumbnailSettings
+THUMBNAIL_PROCESSORS = (
+    'image_cropping.thumbnail_processors.crop_corners',
+) + EasyThumbnailSettings.THUMBNAIL_PROCESSORS
+THUMBNAIL_BASEDIR = 'thumbnails'

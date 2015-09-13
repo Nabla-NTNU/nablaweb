@@ -84,19 +84,13 @@
 
     <tr>
         <td style="text-align: center;" colspan="2">
-            {% if event.registration_required %}
-                {% if is_attending %}
-                    <span class="glyphicon glyphicon-ok"></span>
-                    <strong>Du er påmeldt</strong>
-                {% else %}
-                    {% if is_registered %}
-                        Du står på venteliste
-                    {% else %}
-                        Påmelding kreves
-                    {% endif %}
-                {% endif %}
+            {% if is_attending %}
+                <span class="glyphicon glyphicon-ok"></span>
+                <strong>Du er påmeldt</strong>
+            {% elif is_waiting %}
+                Du står på venteliste
             {% else %}
-                Påmelding unødvendig
+                Påmelding kreves
             {% endif %}
         </td>
     </tr>
@@ -104,40 +98,39 @@
     <!-- På/Avmeldingsknapp -->
     <form name="registration" action="{{ event.get_registration_url }}" method="post">
     {% csrf_token %}
-    <input type="hidden" name="eventid" value="{{event.id}}">
     <tr><td colspan="2" style="text-align: center;">
-        {% if is_registered %}
+        {% if not is_registered %} {# Show registration button #}
+            <input type="hidden" name="registration_type" value="registration">
+            {% if event.registration_open %}
+                <input type="submit"
+                       class="btn btn-primary"
+                       value="Meld deg på {% if event.has_queue and event.is_full %}ventelisten{% endif %}">
+            {% else %}
+                Påmeldingen er stengt.
+            {% endif %}
+        {% else %} {# Show deregistration button #}
+            <input type="hidden" name="registration_type" value="deregistration">
             {% if event.deregistration_closed %}
                 Avmeldingsfristen er ute.
             {% else %}
-            <input type="hidden" name="registration_type" value="deregistration">
-            <a href="#" 
-                id="meld-av"
-                class="btn btn-primary">Meld deg av
-                {% if is_registered and not is_attending %}ventelisten{% endif %}
-            </a>
-            <br>
-            <input type="submit"
-                id="meld-av-confirm"
-                class="btn btn-primary btn-warning"
-                value="Er du sikker?"
-                >
-            <script>
-    $("#meld-av-confirm").hide();
-    $("#meld-av").on("click", function(event) {
-        event.preventDefault();
-        $("#meld-av-confirm").slideDown();
-    });
-            </script>
-            {% endif %}
-        {% else %}
-            {% if event.registration_open %}
-            <input type="hidden" name="registration_type" value="registration">
-            <input type="submit"
-                class="btn btn-primary"
-                value="Meld deg på {% if event.has_queue and event.is_full %}ventelisten{% endif %}">
-            {% else %}
-            Påmeldingen er stengt.
+                <a href="#"
+                   id="meld-av"
+                   class="btn btn-primary">Meld deg av
+                    {% if is_waiting %}ventelisten{% endif %}
+                </a>
+                <br>
+                <input type="submit"
+                       id="meld-av-confirm"
+                       class="btn btn-primary btn-warning"
+                       value="Er du sikker?"
+                        >
+                <script>
+                    $("#meld-av-confirm").hide();
+                    $("#meld-av").on("click", function(event) {
+                        event.preventDefault();
+                        $("#meld-av-confirm").slideDown();
+                    });
+                </script>
             {% endif %}
         {% endif %}
     </td></tr>

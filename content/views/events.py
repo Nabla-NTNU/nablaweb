@@ -1,62 +1,53 @@
 # -*- coding: utf-8 -*-
 
-
-from django.contrib import messages as django_messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template import Context, loader
 from django.views.generic import TemplateView, DetailView
-from django.contrib.auth import get_user_model;
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 from django.utils.safestring import mark_safe
 
 import datetime
 from itertools import chain
-from braces.views import PermissionRequiredMixin, LoginRequiredMixin
+from braces.views import (PermissionRequiredMixin,
+                          LoginRequiredMixin,
+                          StaticContextMixin,
+                          MessageMixin)
 
-# from bedpres.models import BedPres
-from content.models.events import Event
-from content.exceptions import *
-from content.event_calendar import EventCalendar
+from ..models.events import Event
+from ..exceptions import *
+from ..event_calendar import EventCalendar
+from .mixins import AdminLinksMixin
 
 
-class AdministerRegistrationsView(PermissionRequiredMixin, DetailView):
+class AdministerRegistrationsView(StaticContextMixin,
+                                  PermissionRequiredMixin,
+                                  DetailView):
     """Viser påmeldingslisten til et Event med mulighet for å melde folk på og av."""
     model = Event
     template_name = "events/event_administer.html"
     permission_required = 'events.administer'
+    actions = {"add": ("Legg til", "register_user"),
+               "del": ("Fjern", "deregister_users")}
+    static_context = {'actions': [(key, name) for key, (name, _) in actions.items()]}
 
-    def __init__(self, **kwargs):
-        super(AdministerRegistrationsView, self).__init__(**kwargs)
-        self.actions = (self.register_user, self.deregister_users)
-
-    def get_context_data(self, **kwargs):
-        context = super(AdministerRegistrationsView, self).get_context_data(**kwargs)
-        context['actions'] = [(a.short, a.info) for a in self.actions]
-        return context
-
-    def post(self, *args, **kwargs):
-        self.event = self.get_object()
-        action_name = self.request.POST.get('action')
-        for action in self.actions:
-            if action.short == action_name:
-                action()
-                break
-        return HttpResponseRedirect(reverse('event_admin', kwargs={'pk': self.event.pk}))
+    def post(self, request, pk):
+        action_key = request.POST.get('action')
+        name, method = self.actions[action_key]
+        getattr(self, method)()
+        return HttpResponseRedirect(reverse('event_admin', kwargs={'pk': pk}))
 
     def register_user(self):
         """Melder på brukeren nevnt i POST['text'] på arrangementet."""
         username = self.request.POST.get('text')
         try:
             user = User.objects.get(username=username)
-            self.event.add_to_attending_or_waiting_list(user)
+            self.get_object().add_to_attending_or_waiting_list(user)
         except (User.DoesNotExist, UserRegistrationException):
             pass
-
-    register_user.short = 'add'
-    register_user.info = 'Legg til'
 
     def deregister_users(self):
         """Melder av brukerne nevnt i POST['user']."""
@@ -64,12 +55,9 @@ class AdministerRegistrationsView(PermissionRequiredMixin, DetailView):
         for username in user_list:
             try:
                 user = User.objects.get(username=username)
-                self.event.deregister_user(user)
+                self.get_object().deregister_user(user)
             except (User.DoesNotExist, UserRegistrationException):
                 pass
-
-    deregister_users.short = 'del'
-    deregister_users.info = 'Fjern'
 
 
 def get_current_events(year, month):
@@ -96,7 +84,6 @@ def set_current_events(fun, override=False):
 set_current_events(get_current_events)
 
 
-# Offentlig
 def calendar(request, year=None, month=None):
     """
     Renders a calendar with events from the chosen month
@@ -144,7 +131,7 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
         return context
 
 
-class EventDetailView(DetailView):
+class EventDetailView(AdminLinksMixin, DetailView):
     """Viser arrangementet."""
     model = Event
     context_object_name = "event"
@@ -163,7 +150,6 @@ class EventDetailView(DetailView):
         return context
 
 
-# Bruker
 class UserEventView(LoginRequiredMixin, TemplateView):
     template_name = 'events/event_showuser.html'
 
@@ -179,33 +165,34 @@ class UserEventView(LoginRequiredMixin, TemplateView):
         return context_data
 
 
-class RegisterUserView(LoginRequiredMixin, DetailView):
+class RegisterUserView(LoginRequiredMixin,
+                       MessageMixin,
+                       DetailView):
     """View for at en bruker skal kunne melde seg av og på."""
 
     model = Event
 
     def post(self, *args, **kwargs):
         reg_type = self.request.POST['registration_type']
-        event = self.get_object()
         user = self.request.user
 
         if reg_type == "registration":
-            message = self.register_user(event, user)
+            message = self.register_user(user)
         elif reg_type == "deregistration":
-            message = self.deregister_user(event, user)
+            message = self.deregister_user(user)
         else:
             message = "Her skjedde det noe galt."
 
-        django_messages.add_message(self.request, django_messages.INFO, message)
-        return HttpResponseRedirect(event.get_absolute_url())
+        self.messages.info(message)
+        return HttpResponseRedirect(self.get_object().get_absolute_url())
 
-    def register_user(self, event, user):
+    def register_user(self, user):
         """Prøver å melde en bruker på arrangementet.
 
-        Returnerer en melding som ment for brukeren.
+        Returnerer en melding som er ment for brukeren.
         """
         try:
-            reg = event.register_user(user)
+            reg = self.get_object().register_user(user)
         except EventFullException:
             return "Arrangementet er fullt"
         except RegistrationNotAllowed:
@@ -218,13 +205,13 @@ class RegisterUserView(LoginRequiredMixin, DetailView):
             return "Arrangementet har ikke påmelding."
         return "Du er påmeldt" if reg.attending else "Du står nå på venteliste."
 
-    def deregister_user(self, event, user):
+    def deregister_user(self, user):
         """Prøver å melde en bruker av arrangementet.
 
-        Returnerer en melding som ment for brukeren.
+        Returnerer en melding som er ment for brukeren.
         """
         try:
-            event.deregister_user(user)
+            self.get_object().deregister_user(user)
         except DeregistrationClosed:
             return "Avmeldingsfristen er ute."
         else:
