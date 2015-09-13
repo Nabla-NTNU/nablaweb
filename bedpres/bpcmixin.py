@@ -1,10 +1,11 @@
+import logging
 from django.utils.functional import cached_property
 
 from content.exceptions import (EventFullException,
                                 RegistrationAlreadyExists,
                                 RegistrationNotOpen)
 from bpc_client import BPCEvent
-from bpc_client.exceptions import BPCResponseException
+from bpc_client.exceptions import BPCResponseException, BPCConnectionError
 from accounts.models import NablaUser as User
 from .utils import get_bpc_user_dictionary
 
@@ -20,9 +21,26 @@ class BPCEventMixin(object):
     """Mixin-class to add the same methods for registration as the Event-model from content."""
     bpcid = None
 
+    # Dummy data in case of no connection with BPC
+    _dummy_data = {
+        "max_year": "10",
+        "min_year": "10",
+        "open_for": "10",
+        "seats": "0",
+        "seats_available": "0",
+        "this_attending": "0",
+    }
+
     @cached_property
     def bpc_event(self):
-        return BPCEvent(bpc_id=self.bpcid)
+        event = BPCEvent(bpc_id=self.bpcid)
+        try:
+            event.update_data()
+        except BPCConnectionError:
+            event.data = self._dummy_data
+            logger = logging.getLogger(__name__)
+            logger.warning("No connection to BPC. Used dummy data instead.")
+        return event
 
     def register_user(self, user):
         try:
@@ -42,19 +60,33 @@ class BPCEventMixin(object):
         self.bpc_event.rem_attending(username=user.username)
 
     def get_attendance_list(self):
-        return User.objects.filter(username__in=self.bpc_event.attending_usernames)
+        return User.objects.filter(username__in=self.attending_usernames)
 
     def get_waiting_list(self):
-        return User.objects.filter(username__in=self.bpc_event.waiting_usernames)
+        return User.objects.filter(username__in=self.waiting_usernames)
+
+    @property
+    def attending_usernames(self):
+        try:
+            return self.bpc_event.attending_usernames
+        except BPCConnectionError:
+            return []
+
+    @property
+    def waiting_usernames(self):
+        try:
+            return self.bpc_event.waiting_usernames
+        except BPCConnectionError:
+            return []
 
     def is_registered(self, user):
         return self.is_attending(user) or self.is_waiting(user)
 
     def is_attending(self, user):
-        return user.username in self.bpc_event.attending_usernames
+        return user.username in self.attending_usernames
 
     def is_waiting(self, user):
-        return user.username in self.bpc_event.waiting_usernames
+        return user.username in self.waiting_usernames
 
     def free_places(self):
         return self.bpc_event.seats_available
@@ -66,7 +98,7 @@ class BPCEventMixin(object):
         return self.bpc_event.this_attending
 
     def users_waiting(self):
-        return len(self.bpc_event.waiting_usernames)
+        return len(self.waiting_usernames)
 
     def percent_full(self):
         places = self.bpc_event.seats

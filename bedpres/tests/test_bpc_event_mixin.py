@@ -1,5 +1,6 @@
 from django.test import TestCase
 from bedpres.bpcmixin import BedpresNoModel
+from bpc_client.client import BPCClient
 
 
 bpc_event_data = {
@@ -35,3 +36,10 @@ class BPCTestCase(TestCase):
         b = BedpresNoModel(100)
         b.bpc_event.data = bpc_event_data
         self.assertIsInstance(b.bpc_event.registration_started, bool)
+
+    def test_no_connection_with_bpc(self):
+        BPCClient.BPC_TESTING_URL = "http://thisisnota.url"
+        BPCClient.BPC_URL = "http://thisisnota.url"
+        b = BedpresNoModel(100)
+        self.assertEqual(len(b.get_attendance_list()), 0)
+        self.assertEqual(b.users_attending(), 0)
