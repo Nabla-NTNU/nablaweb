@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
-from django.contrib import messages as django_messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
@@ -16,7 +14,8 @@ import datetime
 from itertools import chain
 from braces.views import (PermissionRequiredMixin,
                           LoginRequiredMixin,
-                          StaticContextMixin)
+                          StaticContextMixin,
+                          MessageMixin)
 
 from ..models.events import Event
 from ..exceptions import *
@@ -166,33 +165,34 @@ class UserEventView(LoginRequiredMixin, TemplateView):
         return context_data
 
 
-class RegisterUserView(LoginRequiredMixin, DetailView):
+class RegisterUserView(LoginRequiredMixin,
+                       MessageMixin,
+                       DetailView):
     """View for at en bruker skal kunne melde seg av og på."""
 
     model = Event
 
     def post(self, *args, **kwargs):
         reg_type = self.request.POST['registration_type']
-        event = self.get_object()
         user = self.request.user
 
         if reg_type == "registration":
-            message = self.register_user(event, user)
+            message = self.register_user(user)
         elif reg_type == "deregistration":
-            message = self.deregister_user(event, user)
+            message = self.deregister_user(user)
         else:
             message = "Her skjedde det noe galt."
 
-        django_messages.add_message(self.request, django_messages.INFO, message)
-        return HttpResponseRedirect(event.get_absolute_url())
+        self.messages.info(message)
+        return HttpResponseRedirect(self.get_object().get_absolute_url())
 
-    def register_user(self, event, user):
+    def register_user(self, user):
         """Prøver å melde en bruker på arrangementet.
 
-        Returnerer en melding som ment for brukeren.
+        Returnerer en melding som er ment for brukeren.
         """
         try:
-            reg = event.register_user(user)
+            reg = self.get_object().register_user(user)
         except EventFullException:
             return "Arrangementet er fullt"
         except RegistrationNotAllowed:
@@ -205,13 +205,13 @@ class RegisterUserView(LoginRequiredMixin, DetailView):
             return "Arrangementet har ikke påmelding."
         return "Du er påmeldt" if reg.attending else "Du står nå på venteliste."
 
-    def deregister_user(self, event, user):
+    def deregister_user(self, user):
         """Prøver å melde en bruker av arrangementet.
 
-        Returnerer en melding som ment for brukeren.
+        Returnerer en melding som er ment for brukeren.
         """
         try:
-            event.deregister_user(user)
+            self.get_object().deregister_user(user)
         except DeregistrationClosed:
             return "Avmeldingsfristen er ute."
         else:
