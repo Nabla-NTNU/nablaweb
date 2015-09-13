@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template import Context, loader
 from django.views.generic import TemplateView, DetailView
-from django.contrib.auth import get_user_model;
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 from django.utils.safestring import mark_safe
@@ -16,10 +16,10 @@ import datetime
 from itertools import chain
 from braces.views import PermissionRequiredMixin, LoginRequiredMixin
 
-# from bedpres.models import BedPres
-from content.models.events import Event
-from content.exceptions import *
-from content.event_calendar import EventCalendar
+from ..models.events import Event
+from ..exceptions import *
+from ..event_calendar import EventCalendar
+from .mixins import AdminLinksMixin
 
 
 class AdministerRegistrationsView(PermissionRequiredMixin, DetailView):
@@ -144,7 +144,7 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
         return context
 
 
-class EventDetailView(DetailView):
+class EventDetailView(AdminLinksMixin, DetailView):
     """Viser arrangementet."""
     model = Event
     context_object_name = "event"
