@@ -55,7 +55,7 @@ class BlogPost(EditableMedia):
 
     slug = models.SlugField(
         unique=True,
-        blank=False,
+        blank=True,
         editable=True,
     )
 
