@@ -11,13 +11,10 @@
 
         {% for post in post_list %}
         <a class="list-group-item" href="{{ post.get_absolute_url }}">
-            <div class="jumbotron">
 
-                <h2>{{ post.title }}</h2>
+            <h2>{{ post.title }}</h2>
 
-                <p>{{ post.content|markdown:"unsafe"}}</p>
-
-            </div>
+            <p>{{ post.content|markdown:"unsafe"}}</p>
         </a>
         {% empty %}
         Ingen posts her enda.

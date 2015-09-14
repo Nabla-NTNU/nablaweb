@@ -14,6 +14,7 @@ class BlogPostView(AdminLinksMixin, DetailView):
         context = super().get_context_data(**kwargs)
         post = kwargs['object']
         context['blog'] = post.blog
+        context['post_list'] = BlogPost.objects.filter(blog=post.blog).order_by('-created_date')
         return context
 
 

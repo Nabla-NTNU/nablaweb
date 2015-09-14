@@ -6,13 +6,27 @@
 {% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-  <h1>{{ post.title }}</h1>
-  <p>{{ post.content|markdown:"unsafe"}}</p>
+<div class="panel panel-default">
+
+    <h1>{{ post.title }}</h1>
+
+    <div class="panel-body">
+        {{ post.content|markdown:"unsafe"}}
+    </div>
 </div>
 {% endblock content %}
 
 {% block sidebar %}
+<h1>{{ blog.name }}</h1>
+<div class="list-group">
+    {% for post in post_list %}
+    <a class="list-group-item" href="{{ post.get_absolute_url }}">
+        <h2>{{ post.title }}</h2>
+    </a>
+    {% empty %}
+    Ingen posts her enda.
+    {% endfor %}
+</div>
 
 {% include "content/includes/sidebar-admin.html" %}
 

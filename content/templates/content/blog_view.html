@@ -5,16 +5,12 @@
 
 {% block content %}
 <div class="">
-  <h1>{{ post_list.name }}</h1>
+  <h1>{{ blog.name }}</h1>
   <div class="list-group">
   {% for post in post_list %}
     <a class="list-group-item" href="{{ post.get_absolute_url }}">
-    <div class="jumbotron">
-
           <h2>{{ post.title }}</h2>
           <p>{{ post.content|markdown:"unsafe"}}</p>
-
-    </div>
     </a>
   {% empty %}
   Ingen posts her enda. 
