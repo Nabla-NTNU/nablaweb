@@ -10,6 +10,7 @@ from .forms import EventForm
 from content.models.events import Event, EventRegistration
 from content.forms import NewsForm
 from content.models.album import Album, AlbumImage
+from content.models.blog import Blog, BlogPost
 from content.widgets import MultipleImagesChooser
 
 
@@ -28,6 +29,10 @@ class ContentAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
         models.ImageField: {"widget": ClearableFileInput},
         models.FileField: {"widget": FileInput}
     }
+
+
+class BlogPostAdmin(ChangedByMixin, admin.ModelAdmin):
+    ordering = ['-created_date']
 
 
 class AlbumAdmin(admin.ModelAdmin):
@@ -90,3 +95,5 @@ admin.site.register(AlbumImage)
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventRegistration)
 admin.site.register(News, NewsAdmin)
+admin.site.register(Blog)
+admin.site.register(BlogPost, BlogPostAdmin)

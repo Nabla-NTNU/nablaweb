@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block more_head %}
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+  <h1>{{ post.title }}</h1>
+  <p>{{ post.content|markdown:"unsafe"}}</p>
+</div>
+{% endblock content %}
+
+{% block sidebar %}
+
+{% include "content/includes/sidebar-admin.html" %}
+
+{% endblock %}

@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 
@@ -17,7 +18,6 @@
 <header>
     <a class="pull-left" href="/">
         {% block header_logo %}
-            <img src="{{ STATIC_URL }}img/nabla_logo_black.png" alt="Nabla">
         {% endblock header_logo %}
     </a>
 
@@ -39,8 +39,7 @@
 </div>
 </nav>
 
-<div>
-<div>
+<div class="container" style="width: auto;">
 {% block main %}
 
 <div class="row"><!-- main row -->
@@ -63,7 +62,6 @@
 
 {% endblock main %}
 </div>{# end main container  #}
-</div>{# end whitebox #}
 
 <footer>
     <div class="container">

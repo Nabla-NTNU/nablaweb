@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% block title %}Blogger{% endblock %}
+
+
+{% block content %}
+<div class="">
+    <h1>Blogg</h1>
+
+    <div class="list-group">
+
+        {% for post in post_list %}
+        <a class="list-group-item" href="{{ post.get_absolute_url }}">
+            <div class="jumbotron">
+
+                <h2>{{ post.title }}</h2>
+
+                <p>{{ post.content|markdown:"unsafe"}}</p>
+
+            </div>
+        </a>
+        {% empty %}
+        Ingen posts her enda.
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block sidebar %}
+
+<div class="list-group">
+    {% for blog in blog_list %}
+    <a class="list-group-item" href="{{ blog.get_absolute_url }}">
+        <h2>{{ blog.name }}</h2>
+    </a>
+    {% empty %}
+    Ingen bloger her enda.
+    {% endfor %}
+</div>
+
+{% endblock %}
