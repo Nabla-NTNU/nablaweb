@@ -63,7 +63,7 @@ class NablaUser(AbstractUser):
          Returnerer 0 hvis brukeren ikke går på fysmat."""
         try:
             return FysmatClass.objects.filter(user=self).order_by('starting_year')[0].get_class_number()
-        except FysmatClass.DoesNotExist:
+        except (FysmatClass.DoesNotExist, IndexError):
             return 0
 
     def get_absolute_url(self):
