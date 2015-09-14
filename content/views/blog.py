@@ -27,7 +27,6 @@ class BlogView(ListView):
     def get(self, *args, **kwargs):
         slug = kwargs.get('blog')
         try:
-            print(kwargs)
             self.blog = Blog.objects.get(slug=slug)
         except Blog.DoesNotExist:
             return HttpResponseNotFound()
