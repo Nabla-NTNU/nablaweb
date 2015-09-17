@@ -24,8 +24,9 @@ def get_primary_dir(request):
 
 def upcoming_events(request):
     """Legger globalt til en template-variabel upcoming_events"""
-    now = datetime.now()
+    # Henter alle events som startet for 6 timer siden og senere
+    now = datetime.now() - timedelta(hours=6)
     upcoming_events = Event.objects.filter(event_start__gte=now).order_by('event_start')[:6]
     upcoming_bedpresses = BedPres.objects.filter(event_start__gte=now).order_by('event_start')[:6]
-    upcoming = sorted(chain(upcoming_events), key=attrgetter("event_start"))[:6]
+    upcoming = sorted(chain(upcoming_events, upcoming_bedpresses), key=attrgetter("event_start"))[:6]
     return {'upcoming_events': upcoming}

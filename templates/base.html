@@ -84,6 +84,28 @@
         </li>
 
         <li class="dropdown">
+            <a href="#ting" class="dropdown-toggle" data-toggle="dropdown">
+                Nablamedia
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" >
+              {# Faste lenker om Nabla #}
+
+              <li><a href="{% url "nablad_list" %}">Nabladet</a></li>
+              <li><a href="{% url "season_view" %}">Skråttcast</a></li>
+              <li><a href="{% url "meeting_record_list" %}">Styremøtereferater</a></li>
+              <li><a href="{% url "albums" %}">Bilder</a></li>
+              <li><a href="{% url "blog" %}">Blogg</a></li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="{% url "committee_overview" %}" >
+                Komitéer
+            </a>
+        </li>
+
+        <li class="dropdown">
             <a href="#om" class="dropdown-toggle" data-toggle="dropdown">
                 Om Nabla
                 <span class="caret"></span>
@@ -95,20 +117,8 @@
             {% for page in about_pages %}
                 <li><a href="{{ page.url }}">{{ page.title }}</a></li>
             {% endfor %}
-
-            {# Faste lenker om Nabla #}
-			    <li><a href="{% url "nablad_list" %}">Nabladet</a></li>
-                <li><a href="{% url "season_view" %}">Skråttcast</a></li>
-                <li><a href="{% url "meeting_record_list" %}">Styremøtereferater</a></li>
-                <li><a href="{% url "albums" %}">Bilder</a></li>
             </ul>
         </li>
-        <li>
-            <a href="{% url "committee_overview" %}" >
-                Komitéer
-            </a>
-        </li>
-        <li><a href="http://bokskap.nabla.no">Bokskap</a></li>
     </ul>
     {# end navigasjonslenker #}
 
