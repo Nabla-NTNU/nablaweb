@@ -7,11 +7,11 @@ from bedpres.event_overrides import *
 class BedPresRegisterUserView(RegisterUserView):
     model = BedPres
 
-    def register_user(self, bedpres, user):
-        return bedpres.register_user(user)
+    def register_user(self, user):
+        return self.get_object().register_user(user)
 
-    def deregister_user(self, bedpres, user):
-        return bedpres.deregister_user(user)
+    def deregister_user(self, user):
+        return self.get_object().deregister_user(user)
 
 
 class BedPresDetailView(EventDetailView):

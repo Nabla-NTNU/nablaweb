@@ -38,6 +38,7 @@ git+git://github.com/benjaoming/django-wiki.git
 
 # content
 git+https://bitbucket.org/webkom/content-app.git
+git+https://bitbucket.org/webkom/bpc_client.git
 
 # Fancy admin skin
 django-grappelli
