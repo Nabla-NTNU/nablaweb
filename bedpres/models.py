@@ -3,7 +3,7 @@
 from django.db import models
 from content.models import AbstractEvent
 from jobs.models import Company
-from accounts.models import NablaUser as User
+from django.core.urlresolvers import reverse
 
 from .bpcmixin import BPCEventMixin
 
@@ -35,3 +35,6 @@ class BedPres(BPCEventMixin, AbstractEvent):
 
     def correct_cropping(self):
         return self.cropping if self.picture else self.company.cropping
+
+    def get_registration_url(self):
+        return reverse('bedpres_registration', kwargs={'pk': self.pk})

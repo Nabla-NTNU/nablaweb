@@ -3,7 +3,9 @@ from django.utils.functional import cached_property
 
 from content.exceptions import (EventFullException,
                                 RegistrationAlreadyExists,
-                                RegistrationNotOpen)
+                                RegistrationNotOpen,
+                                EventException)
+from .utils import InvalidCardNum
 from bpc_client import BPCEvent
 from bpc_client.exceptions import BPCResponseException, BPCConnectionError
 from accounts.models import NablaUser as User
@@ -12,6 +14,7 @@ from .utils import get_bpc_user_dictionary
 
 class RegistrationInfo(object):
     """A simple class used for the return value of register_user."""
+
     def __init__(self, attending):
         self.attending = attending
         self.waiting = not attending
@@ -40,6 +43,9 @@ class BPCEventMixin(object):
             event.data = self._dummy_data
             logger = logging.getLogger(__name__)
             logger.warning("No connection to BPC. Used dummy data instead.")
+        except BPCResponseException as e:
+            if e.bpc_error_code == '403' or e.bpc_error_code == '103':
+                event.data = self._dummy_data
         return event
 
     def register_user(self, user):
@@ -55,6 +61,8 @@ class BPCEventMixin(object):
             elif e.bpc_error_code in ("408", "409"):
                 raise RegistrationNotOpen(event=self, user=user)
             raise e
+        except InvalidCardNum as e:
+            return e
 
     def deregister_user(self, user):
         self.bpc_event.rem_attending(username=user.username)
@@ -71,6 +79,8 @@ class BPCEventMixin(object):
             return self.bpc_event.attending_usernames
         except BPCConnectionError:
             return []
+        except BPCResponseException as e:
+            raise EventException(e)
 
     @property
     def waiting_usernames(self):
@@ -78,6 +88,8 @@ class BPCEventMixin(object):
             return self.bpc_event.waiting_usernames
         except BPCConnectionError:
             return []
+        except BPCResponseException as e:
+            raise EventException(e)
 
     def is_registered(self, user):
         return self.is_attending(user) or self.is_waiting(user)
@@ -103,7 +115,7 @@ class BPCEventMixin(object):
     def percent_full(self):
         places = self.bpc_event.seats
         if places != 0:
-            return ((places - self.free_places())*100) / places
+            return ((places - self.free_places()) * 100) / places
         else:
             return 100
 
