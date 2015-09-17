@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime as dt
+
 from django import forms
 from django.forms import DateField
 from django.forms.extras.widgets import SelectDateWidget
@@ -33,8 +35,7 @@ class UserForm(forms.ModelForm):
     birthday = DateField(
         label="Bursdag",
         required=False,
-        # We assume that the user is born between 1980 and 1999 (so someone has to fix this before 2019)
-        widget=SelectDateWidget(years=reversed(range(1980, 2000))),
+        widget=SelectDateWidget(years=list(range(dt.now().year-15, dt.now().year-40, -1))),
     )
 
 
