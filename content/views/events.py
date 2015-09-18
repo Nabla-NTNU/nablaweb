@@ -131,7 +131,7 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
         return context
 
 
-class EventDetailView(AdminLinksMixin, DetailView):
+class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
     """Viser arrangementet."""
     model = Event
     context_object_name = "event"
@@ -144,9 +144,12 @@ class EventDetailView(AdminLinksMixin, DetailView):
 
         if user.is_authenticated():
             # Innlogget, så sjekk om de er påmeldt
-            context['is_registered'] = event.is_registered(user)
-            context['is_attending'] = event.is_attending(user)
-            context['is_waiting'] = event.is_waiting(user)
+            try:
+                context['is_registered'] = event.is_registered(user)
+                context['is_attending'] = event.is_attending(user)
+                context['is_waiting'] = event.is_waiting(user)
+            except EventException as e:
+                self.messages.error(e)
         return context
 
 

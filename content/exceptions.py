@@ -1,8 +1,12 @@
+
+
 class EventException(Exception):
     pass
 
+
 class UserRegistrationException(EventException):
     token = None
+
     def __init__(self, event=None, user=None):
         self.event = event
         self.user = user
