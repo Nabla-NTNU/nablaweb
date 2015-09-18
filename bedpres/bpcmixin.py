@@ -5,7 +5,6 @@ from content.exceptions import (EventFullException,
                                 RegistrationAlreadyExists,
                                 RegistrationNotOpen,
                                 EventException)
-from .utils import InvalidCardNum
 from bpc_client import BPCEvent
 from bpc_client.exceptions import BPCResponseException, BPCConnectionError
 from accounts.models import NablaUser as User
@@ -66,8 +65,6 @@ class BPCEventMixin(object):
             elif e.bpc_error_code in ("408", "409"):
                 raise RegistrationNotOpen(event=self, user=user)
             raise e
-        except InvalidCardNum as e:
-            return e
 
     def deregister_user(self, user):
         self.bpc_event.rem_attending(username=user.username)
