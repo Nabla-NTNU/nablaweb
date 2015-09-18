@@ -5,7 +5,6 @@ from content.exceptions import (EventFullException,
                                 RegistrationAlreadyExists,
                                 RegistrationNotOpen,
                                 EventException)
-from .utils import InvalidCardNum
 from bpc_client import BPCEvent
 from bpc_client.exceptions import BPCResponseException, BPCConnectionError
 from accounts.models import NablaUser as User
@@ -42,10 +41,15 @@ class BPCEventMixin(object):
         except BPCConnectionError:
             event.data = self._dummy_data
             logger = logging.getLogger(__name__)
-            logger.warning("No connection to BPC. Used dummy data instead.")
+            logger.error("No connection to BPC. Used dummy data instead.")
         except BPCResponseException as e:
             if e.bpc_error_code == '403' or e.bpc_error_code == '103':
                 event.data = self._dummy_data
+                logger = logging.getLogger(__name__)
+                logger.error("BPC doesn't have an event with id {}. "
+                             "Used dummy data instead.".format(self.bpcid))
+            else:
+                raise e
         return event
 
     def register_user(self, user):
@@ -61,8 +65,6 @@ class BPCEventMixin(object):
             elif e.bpc_error_code in ("408", "409"):
                 raise RegistrationNotOpen(event=self, user=user)
             raise e
-        except InvalidCardNum as e:
-            return e
 
     def deregister_user(self, user):
         self.bpc_event.rem_attending(username=user.username)
