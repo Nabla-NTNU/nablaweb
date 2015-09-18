@@ -8,6 +8,7 @@ from django.contrib.auth.models import Group
 from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from accounts.models import NablaGroup
 
 
 class ComPage(models.Model):
@@ -137,9 +138,11 @@ class Committee(models.Model):
 
 
 def create_committee_from_group(group):
-    if isinstance(group, 'NablaGroup'):
-        com = Committee()
+    if type(group) == NablaGroup:
+        com = Committee.objects.create()
         com.name = group.name
         com.mail_list = group.mail_list
+        com.page = ComPage.objects.get(group=group)
+        com.save()
         return com
     return None
