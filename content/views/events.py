@@ -220,16 +220,31 @@ class RegisterUserView(LoginRequiredMixin,
         else:
             return "Du er meldt av arrangementet."
 
+GET_EVENT = None
+
+
+def set_get_event(fun, override=False):
+    global GET_EVENT
+    if not GET_EVENT or override:
+        GET_EVENT = fun
+
+
+def get_event(event_id):
+    # Try Event first, then BedPres. 404 if none of them are found.
+    try:
+        return Event.objects.get(pk=event_id)
+    except Event.DoesNotExcist:
+        # event = get_object_or_404(BedPres, pk=event_id)
+        return None
+
+
+set_get_event(get_event)
+
 
 def ical_event(request, event_id):
     """Returns a given event or bedpres as an iCal .ics file"""
 
-    # Try Event first, then BedPres. 404 if none of them are found.
-    try:
-        event = Event.objects.get(pk=event_id)
-    except Event.DoesNotExcist:
-        # event = get_object_or_404(BedPres, pk=event_id)
-        event = None
+    event = GET_EVENT(event_id)
 
     # Use the same template for both Event and BedPres.
     template = loader.get_template('events/event_icalendar.ics')
