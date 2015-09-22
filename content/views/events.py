@@ -233,7 +233,7 @@ def get_event(event_id):
     # Try Event first, then BedPres. 404 if none of them are found.
     try:
         return Event.objects.get(pk=event_id)
-    except Event.DoesNotExcist:
+    except Event.DoesNotExist:
         # event = get_object_or_404(BedPres, pk=event_id)
         return None
 
