@@ -16,7 +16,7 @@
         {# Has voted, display results #}
         {% cache 900 poll_results poll.id poll_total_votes %}
             <pre>{{ poll_total_votes }} bruker{% if poll_total_votes > 1 %}e{% endif %} har stemt.</pre>
-            {% for choice in poll.choice_set.all %}
+            {% for choice in poll.choices.all %}
                 <div class="choice">{{ choice.choice }}</div>
                 <div class="progress">
                     <div class="progress-bar" style="width:{% widthratio choice.votes poll_total_votes 100 %}%">
@@ -31,7 +31,7 @@
         {# Has not voted, display form #}
         <form action="{% url "poll.views.vote" poll.id %}?next={% url "news_list" %}" method="post">
             {% csrf_token %}
-            {% for choice in poll.choice_set.all %}
+            {% for choice in poll.choices.all %}
                 <div class="radio">
                     <label>
                         <input type="radio" name="choice" value="{{ choice.id }}">

@@ -18,7 +18,7 @@ class TestPoll(UserHasVotedMixin, TestCase):
         )
         self.users = [User.objects.create(username=u"username%d" % i) for i in range(10)]
         self.first_user = self.users[0]
-        self.some_choice = self.poll.choice_set.first()
+        self.some_choice = self.poll.choices.first()
 
     def test_a_user_votes_once(self):
         self.some_choice.vote(self.first_user)
@@ -41,7 +41,7 @@ class TestPoll(UserHasVotedMixin, TestCase):
         self.assertEqual(num_users, self.poll.users_voted.count())
 
     def test_users_voting_for_different_things(self):
-        first_choice, second_choice = self.poll.choice_set.all()[:2]
+        first_choice, second_choice = self.poll.choices.all()[:2]
         for user in self.users[:5]:
             first_choice.vote(user)
 

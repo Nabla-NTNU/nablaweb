@@ -8,6 +8,7 @@ class ChoiceInline(admin.TabularInline):
     model = Choice
     extra = 5
     fields = ('choice', 'votes', )
+    fk_name = ""
 
 
 class PollAdmin(admin.ModelAdmin):
