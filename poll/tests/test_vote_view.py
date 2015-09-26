@@ -36,7 +36,7 @@ class TestLoggedInVote(UserHasVotedMixin, BaseVoteViewTest):
         self.client.login(username=self.username, password=self.password)
 
     def test_vote(self):
-        choice = self.poll.choice_set.first()
+        choice = self.poll.choices.first()
         self.post_vote(choice.id)
 
         choice = Choice.objects.get(id=choice.id)
@@ -49,7 +49,7 @@ class TestLoggedInVote(UserHasVotedMixin, BaseVoteViewTest):
         self.assertUserHasNotVoted(self.user, self.poll)
 
     def test_try_to_vote_again(self):
-        choice = self.poll.choice_set.first()
+        choice = self.poll.choices.first()
         choice.vote(self.user)
 
         # Vote again through the vote view
