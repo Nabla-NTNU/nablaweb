@@ -2,6 +2,7 @@
 
 from django.shortcuts import get_object_or_404, redirect
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseForbidden
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from braces.views import LoginRequiredMixin, FormMessagesMixin
@@ -89,6 +90,14 @@ class UpdateUserPollView(LoginRequiredMixin, FormMessagesMixin, UpdateView):
     form_valid_message = "Avstemning oppdatert."
     form_invalid_message = "Ikke riktig utfyllt."
     template_name = 'form.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        user = request.user
+        poll = self.get_object()
+        if poll.created_by == user:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return HttpResponseForbidden()
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
