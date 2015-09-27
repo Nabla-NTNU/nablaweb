@@ -2,9 +2,6 @@ Django==1.8.3
 pytz
 django-contrib-comments
 
-# Python 2/3 kompatibilitets bibliotek
-six
-
 # Bildebehandling
 Pillow
 easy-thumbnails
@@ -29,10 +26,6 @@ django-bower
 # File browser
 django-filebrowser
 
-# Tidligere brukt markdown bibliotek
-#Markdown
-#git+https://github.com/DataDog/markdown-urlize#egg=markdown_urlize
-
 #django-wiki
 git+git://github.com/benjaoming/django-wiki.git
 
@@ -45,3 +38,8 @@ django-grappelli
 
 # ??????? Forklar, noen
 django-appconf
+
+# Python-bindinger til databaser (MySql og memcached)
+# Brukes egentlig bare in produksjon, men det skader ikke å installere det på utviklingsmaskiner heller.
+PyMySQL
+python3-memcached
