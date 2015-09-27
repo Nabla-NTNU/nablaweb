@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-# URL-er for stillingsannonser-appen
+from django.conf.urls import url
+from .views import (YearList, MonthList, CompanyList, RelevantForLinjeList,
+                    RelevantForYearList, TagList, EverythingList, ShowJob)
+from .feeds import RecentJobs
 
-from django.conf.urls import patterns, url
-from jobs.views import (YearList, MonthList, CompanyList, RelevantForLinjeList,
-                        RelevantForYearList, TagList, EverythingList, ShowJob)
-from jobs.feeds import RecentJobs
-
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^dato/(?P<year>\d{4})/$',
         YearList.as_view(),
         name='jobs_year_list'),  # Stillingsannonser som er lagt inn dette året
@@ -33,4 +31,4 @@ urlpatterns = patterns('',
         ShowJob.as_view(),
         name='advert_detail'),
     url(r'^feed/$', RecentJobs()),
-)
+]
