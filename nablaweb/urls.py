@@ -5,6 +5,8 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.static import serve
 from django.views.generic import RedirectView, TemplateView
+from haystack.views import SearchView, search_view_factory
+from haystack.forms import SearchForm
 from content.feeds.news import RecentNews
 # nødvendig for django-wiki
 from wiki.urls import get_pattern as get_wiki_pattern
@@ -45,7 +47,10 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^feed/$', RecentNews()),
-    url(r'^search/', include('search.urls')),
+    url(r'^search/$',
+        search_view_factory(view_class=SearchView,
+                            form_class=SearchForm),
+        name='haystack_search'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
