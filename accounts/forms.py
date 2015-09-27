@@ -46,16 +46,36 @@ class RegistrationForm(forms.Form):
     The user-object has to have been created, but not activated.
     That is webkom must create it first.
     """
-    username = forms.CharField(label="NTNU-brukernavn", required=True)
+    username = forms.CharField(
+        label="NTNU-brukernavn",
+        required=True
+    )
+
+    first_name = forms.CharField(
+        label="Fornavn",
+        required=True
+    )
+
+    last_name = forms.CharField(
+        label="Etternavn",
+        required=True
+    )
 
     def clean(self):
         username = self.cleaned_data.get('username')
+        first_name = self.cleaned_data.get('first_name')
+        last_name = self.cleaned_data.get('last_name')
 
         try:
             user = NablaUser.objects.get(username=username)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
         except NablaUser.DoesNotExist:
             request = RegistrationRequest()
             request.username = username
+            request.first_name = first_name
+            request.last_name = last_name
             request.clean()
             request.save()
             raise forms.ValidationError("Denne brukeren er ikke registrert. "

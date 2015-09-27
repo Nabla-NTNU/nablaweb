@@ -121,6 +121,18 @@ class RegistrationRequest(models.Model):
         verbose_name="Opprettet"
     )
 
+    first_name = models.CharField(
+        max_length=80,
+        verbose_name="Fornavn",
+        null=True
+    )
+
+    last_name = models.CharField(
+        max_length=80,
+        verbose_name="Etternavn",
+        null=True
+    )
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.created = datetime.today()
@@ -128,6 +140,9 @@ class RegistrationRequest(models.Model):
 
     def approve_request(self):
         user, created_user = NablaUser.objects.get_or_create(username=self.username)
+
+        user.first_name = self.first_name
+        user.last_name = self.last_name
 
         password = activate_user_and_create_password(user)
         send_activation_email(user, password)
