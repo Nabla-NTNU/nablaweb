@@ -37,4 +37,4 @@ ADMINS = (
     ('Andreas Røssland', 'andreros@stud.ntnu.no'),
 )
 
-BPC_URL = 'https://www.bedriftspresentasjon.no/remote/'
+BPC_TESTING = False
