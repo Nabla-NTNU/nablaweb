@@ -28,7 +28,6 @@ urlpatterns = [
     url(r'^brukere/', include('accounts.urls')),
     url(r'^stillinger/', include('jobs.urls')),
     url(r'^komite/', include('com.urls')),
-    url(r'^sitater/', include('quotes.urls')),
     url(r'^nabladet/', include('nabladet.urls')),
     url(r'^referater/', include('meeting_records.urls')),
     url(r'^kommentarer/', include('django_comments.urls')),
