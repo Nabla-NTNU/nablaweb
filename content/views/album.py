@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView, ListView
 from django.shortcuts import redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from braces.views import LoginRequiredMixin
 
 from content.models import Album
 
@@ -20,10 +21,12 @@ class AlbumOverview(ListView):
 class AlbumView(TemplateView):
 
     template_name = "content/album.html"
-    visible = False
 
     def dispatch(self, request, *args, **kwargs):
         result = super(AlbumView, self).dispatch(request, *args, **kwargs)
+        pk = int(kwargs['pk'])
+        album = Album.objects.filter(pk=pk)[0]
+        self.visible = album.is_visible(request.user)
         if self.visible:
             return result
         else:
@@ -35,7 +38,6 @@ class AlbumView(TemplateView):
         pk = int(kwargs['pk'])
         album = Album.objects.filter(pk=pk)[0]
         context['album'] = album
-        self.visible = album.is_visible()
 
         images = album.images.all()
         paginator = Paginator(images, 1)

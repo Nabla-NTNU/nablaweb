@@ -1,0 +1,17 @@
+{% extends "content/includes/sidebar-admin.html" %}
+
+{% block sidebar-admin %}
+
+    <li>
+        <a href="{% url "admin:content_album_change" album.id %}">
+        <span class="glyphicon glyphicon-cog"></span>
+        Endre album
+        </a>
+    </li>
+    <li>
+        <a href="{% url "admin:content_albumimage_change" image.id %}">
+        <span class="glyphicon glyphicon-pencil"></span>
+        Endre bilde
+        </a>
+    </li>
+{% endblock %}
