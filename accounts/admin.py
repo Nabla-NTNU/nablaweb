@@ -102,6 +102,8 @@ def reg_decline(modeladmin, request, queryset):
 
 class RegistrationRequestAdmin(admin.ModelAdmin):
     actions = [reg_approve, reg_decline]
+    list_display = ['username', 'first_name', 'last_name', 'created']
+    ordering = ['-created']
 
     class Meta:
         model = RegistrationRequest

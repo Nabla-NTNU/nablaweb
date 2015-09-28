@@ -7,7 +7,11 @@ from accounts.models import NablaUser
 class RegistrationFormTest(TestCase):
     def setUp(self):
         self.username = "someusername"
-        self.form = RegistrationForm({"username": self.username})
+        self.form = RegistrationForm({
+            "username": self.username,
+            "first_name": "Ola",
+            "last_name": "Nordmann"
+        })
 
     def test_valid_new_user(self):
         NablaUser.objects.create(username=self.username, is_active=False)
