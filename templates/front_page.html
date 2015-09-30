@@ -66,6 +66,16 @@
     {% endif %}
     {% include "poll/poll_include.html" %}
 
+    <h2>Nyeste Skråttcast</h2>
+    {% if new_podcast %}
+        <a href="{{ new_podcast.get_absolute_url }}">
+          {% if new_podcast.image %}
+          <img src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
+          {% endif %}
+        </a>
+          <p><i>Dato: {{ new_podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ new_podcast.view_counter }}</i></p>
+    {% endif %}
+
 {% endblock sidebar %}
 
 {% block below_ad %}

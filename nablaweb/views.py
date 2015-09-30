@@ -2,6 +2,7 @@ from django.views.generic import DetailView, ListView
 
 from content.templatetags import listutil
 from content.models.news import News
+from podcast.models import Podcast, Season
 from content.views.mixins import AdminLinksMixin
 
 
@@ -22,6 +23,7 @@ class FrontPageView(ListView):
         from django.contrib.flatpages.models import FlatPage
         try:
             context['sidebarinfo'] = FlatPage.objects.get(url="/forsideinfo/")
+            context['new_podcast'] = Podcast.objects.filter(is_clip=False).order_by('-pub_date')[0]
         except FlatPage.DoesNotExist:
             pass
 
