@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.contrib.flatpages.models import FlatPage
 
-from django.http import HttpResponse
-from django.template import RequestContext, loader
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
 from .models import Podcast, Season, get_season_count
+from content.views.mixins import AdminLinksMixin
 
 
 class SeasonView(TemplateView):
@@ -40,14 +39,15 @@ class SeasonView(TemplateView):
         return data
 
 
-def detail(request, podcast_id):
-    current_podcast = Podcast.objects.get(id=podcast_id)
-    current_podcast.add_view()
-    template = loader.get_template('podcast/podcast_detail.html')
-    context = RequestContext(request, {'podcast': current_podcast})
+class PodcastDetailView(AdminLinksMixin, DetailView):
+    template_name = 'podcast/podcast_detail.html'
+    model = Podcast
+    context_object_name = "podcast"
 
-    context['season'] = season = current_podcast.season
-    context['season_name'] = season.name()
-    context['podcast_clips'] = Podcast.objects.filter(season=season).order_by('-pub_date').exclude(is_clip=False)
-
-    return HttpResponse(template.render(context))
+    def get_context_data(self, **kwargs):
+        context = super(PodcastDetailView, self).get_context_data(**kwargs)
+        self.object.add_view()
+        context['season'] = season = self.object.season
+        context['season_name'] = season.name()
+        context['podcast_clips'] = Podcast.objects.filter(season=season).order_by('-pub_date').exclude(is_clip=False)
+        return context

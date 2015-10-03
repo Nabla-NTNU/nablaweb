@@ -127,7 +127,7 @@ class Podcast(models.Model):
         self.save()
 
     def get_absolute_url(self):
-        return reverse('podcast_detail', kwargs={'podcast_id': self.id})
+        return reverse('podcast_detail', kwargs={'pk': self.id})
 
     def get_short_description(self):
         description = str(self.description)
