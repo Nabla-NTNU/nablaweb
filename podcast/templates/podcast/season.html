@@ -13,21 +13,22 @@
     {% if season_name %}
         <h1>{{ season_name }}</h1>
         {% if season.banner %}
-        <div class="banner-wrapper">
-            <img src="{{ season.banner.url }}"/>
+        <div class="container">
+            <img class="img-responsive" src="{{ season.banner.url }}"/>
         </div>
         {% endif %}
     {% endif %}
     {% if podcast_list %}
-        <div class="list-container">
+        <div class="container list-container">
             <ul>
                 {% for podcast in podcast_list %}
                     <li>
+                        <a href="{{ podcast.get_absolute_url }}">
                         {% if podcast.image %}
                             <img src="{% thumbnail podcast.image 300x300 box=podcast.cropping quality=95 %}"
                                  alt="{{ podcast.title }}"/>
                         {% endif %}
-                        <a href="{{ podcast.get_absolute_url }}">
+
                             <h2>{{ podcast.title }}</h2>
                             <p>{{ podcast.get_short_description }}</p>
                             <span class="date-text">
