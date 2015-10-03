@@ -1,5 +1,5 @@
 {% load cache %}
-{% load sekizai_tags %}
+{% load sekizai_tags i18n %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +11,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    {% addtoblock "js" %}
+    <script type="text/javascript">
+      URL_NOTIFY_GET_NEW = "{% url "nyt:json_get" %}";
+      URL_NOTIFY_MARK_READ = "{% url "nyt:json_mark_read_base" %}";
+      URL_NOTIFY_GOTO = "{% url "nyt:goto_base" %}";
+    </script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+        <script src="/static/core.js"></script>
+        <script type="text/javascript" src="/static/ui.js"></script>
+    {% endaddtoblock %}
 </head>
 
 <body>
@@ -32,12 +44,31 @@
         </div>
     </form>
 
-</header>
-
 <nav class="navbar navbar-default">
 <div class="container" style="width: auto;">
+    <ul class="nav navbar-nav">
+        <li><a href="{% url "news_list" %}">News</a></li>
+        <li><a href="{% url "event_list" %}">Events</a></li>
+        <li><a href="{% url "albums" %}">Albums</a></li>
+        <li><a href="{% url "blog" %}">Blog</a></li>
+    </ul>
+
 </div>
 </nav>
+
+<h2>Notifications:</h2>
+    <ul>
+      <li class="notifications-empty"><a href="#"><em>{% trans "No notifications" %}</em></a></li>
+      <li class="divider"></li>
+      <li>
+        <a href="#" onclick="notify_mark_read()">
+          <i class="icon-check"></i>
+            Empty
+        </a>
+      </li>
+    </ul>
+</header>
+
 
 <div class="container" style="width: auto;">
 {% block main %}

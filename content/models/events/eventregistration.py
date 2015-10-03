@@ -46,7 +46,7 @@ class EventRegistration(models.Model):
 
     objects = EventRegistrationManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s, %s is %s, place: %s' % (self.event,
                                              self.user,
                                              "Attending" if self.attending else "Waiting",

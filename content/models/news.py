@@ -50,6 +50,8 @@ class News(Content):
             "Dette fungerer for øyeblikket ikke. "
             "Bortsett fra at prioritering=0 fjerner saken fra forsiden."))
 
+    watch_fields = ["headline", "lead_paragraph", "body", "picture"]
+
     class Meta:
         verbose_name = "nyhet"
         verbose_name_plural = "nyheter"

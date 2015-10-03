@@ -8,63 +8,39 @@ from django.contrib.sites.models import Site
 
 from django_comments.models import Comment
 from image_cropping.fields import ImageRatioField
+from .mixins import EditableMedia
 
 
-class EditableMedia(models.Model):
-    # Metadata
-    created_date = models.DateTimeField(
-        verbose_name="Publiseringsdato",
-        auto_now_add=True,
-        null=True)
-    created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name="Opprettet av",
-        related_name="%(class)s_created",
-        editable=False,
-        blank=True,
-        null=True)
-    last_changed_date = models.DateTimeField(
-        verbose_name="Redigeringsdato",
-        auto_now=True,
-        null=True)
-    last_changed_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name="Endret av",
-        related_name="%(class)s_edited",
-        editable=False,
-        blank=True,
-        null=True)
-
-    class Meta:
-        abstract = True
-
-
-class Content(EditableMedia):
-
+class Content(EditableMedia, models.Model):
     # Bildeopplasting med resizing og cropping
     picture = models.ImageField(
         upload_to="news_pictures",
         null=True,
         blank=True,
         verbose_name="Bilde",
-        help_text="Bilder som er større enn 770x300 px ser best ut. Du kan beskjære bildet etter opplasting.")
+        help_text="Bilder som er større enn 770x300 px ser best ut. Du kan beskjære bildet etter opplasting."
+    )
+
     cropping = ImageRatioField(
         'picture',
         '770x300',
         allow_fullsize=False,
-        verbose_name="Beskjæring")
+        verbose_name="Beskjæring"
+    )
 
     # Slugs
     slug = models.SlugField(
         null=True,
         blank=True,
-        help_text="Denne teksten vises i adressen til siden, og trengs vanligvis ikke å endres")
+        help_text="Denne teksten vises i adressen til siden, og trengs vanligvis ikke å endres"
+    )
 
     allow_comments = models.BooleanField(
         blank=True,
         verbose_name="Tillat kommentarer",
         default=True,
-        help_text="Hvorvidt kommentering er tillatt")
+        help_text="Hvorvidt kommentering er tillatt"
+    )
 
     # content_type is here so that we can know which subclass of Content/News this is. (Polymorphism)
     content_type = models.ForeignKey(ContentType, editable=False, null=True)
@@ -102,5 +78,3 @@ class Content(EditableMedia):
         if not self.content_type:
             self.content_type = ContentType.objects.get_for_model(self.__class__)
         super(Content, self).save(*args, **kwargs)
-
-

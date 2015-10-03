@@ -28,7 +28,7 @@ class AlbumImage(models.Model):
         verbose_name_plural = "Albumbilder"
 
 
-class Album(EditableMedia):
+class Album(EditableMedia, models.Model):
     title = models.CharField(
         max_length=100,
         verbose_name="Albumtittel",

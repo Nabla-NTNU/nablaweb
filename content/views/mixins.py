@@ -2,7 +2,8 @@ from django.core.urlresolvers import reverse
 
 
 class AdminLinksMixin(object):
-    """Adds links to the admin page for an object to the context.
+    """
+    Adds links to the admin page for an object to the context.
 
     Meant to be used together with DetailView.
     """

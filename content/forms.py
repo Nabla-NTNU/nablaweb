@@ -3,12 +3,21 @@
 
 import operator
 
-from django.forms import BooleanField, ValidationError, ModelForm, Form
+from django.forms import BooleanField, ValidationError, ModelForm
 
-from content.models import News, Event
+from content.models import News, Event, BlogPost
+from django.forms.models import fields_for_model
 
 
-class EventForm(ModelForm):
+class ContentForm(ModelForm):
+    listen = BooleanField(
+        label="Overvåk",
+        help_text="Få notifikasjoner hvis objektet endres",
+        required=False
+    )
+
+
+class EventForm(ContentForm):
     has_queue = BooleanField(
         required=False,
         label="Har venteliste",
@@ -32,7 +41,7 @@ class EventForm(ModelForm):
 
     class Meta:
         model = Event
-        fields = "__all__"
+        fields = fields_for_model(Event)
 
     def clean(self):
         self._validate_datetime_order()
@@ -79,9 +88,15 @@ class EventForm(ModelForm):
                 del self._errors[name]
 
 
-class NewsForm(ModelForm):
-    #body = CharField(label="Brødtekst", widget=widgets.MarkdownEditor)
+class NewsForm(ContentForm):
 
     class Meta:
         model = News
-        fields = '__all__'
+        fields = fields_for_model(News)
+
+
+class BlogPostForm(ContentForm):
+
+    class Meta:
+        model = BlogPost
+        fields = fields_for_model(BlogPost)

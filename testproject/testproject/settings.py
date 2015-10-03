@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'markdown_deux',
 
     'django_comments',
+    'django_nyt',
     'content'
 )
 
@@ -109,6 +110,16 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
+
+PROJECT_ROOT = os.path.join(os.path.dirname(__file__), "..")
+
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
+
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+)
 
 STATIC_URL = '/static/'
 

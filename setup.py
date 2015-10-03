@@ -17,7 +17,8 @@ requirements = [
     'easy-thumbnails',
     'django-braces',
     'django-sekizai>=0.8.2',
-    'django-markdown-deux'
+    'django-markdown-deux',
+    'django-nyt'
 ]
 
 setup(

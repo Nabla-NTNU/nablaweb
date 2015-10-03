@@ -42,7 +42,7 @@ class Blog(models.Model):
         return reverse('blog', kwargs={'blog': self.slug})
 
 
-class BlogPost(EditableMedia):
+class BlogPost(EditableMedia, models.Model):
     blog = models.ForeignKey(
         "content.Blog",
         verbose_name="Blogg"
@@ -69,6 +69,8 @@ class BlogPost(EditableMedia):
         default=True,
         help_text="Hvorvidt kommentering er tillatt"
     )
+
+    watch_fields = ["content", "title", "blog"]
 
     class Meta:
         verbose_name = "Post"
