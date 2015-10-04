@@ -11,7 +11,7 @@
     <link href="{% static "podcast/podcast.css" %}" rel="stylesheet"/>
 {% endaddtoblock %}
 
-<div class="container tittel">
+<div class="tittel">
   <h2>{{ podcast.title }}</h2>
   {% if podcast.image %}
   <img class="img-responsive" src="{{ podcast.image.url }}" alt="{{ podcast.title }}" style="max-width: 100%;"/>
@@ -19,7 +19,7 @@
   <p><i>Dato: {{ podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ podcast.view_counter }}</i></p>
 </div>
 {% if podcast.file %}
-<div class="container">
+<div class="container-fluid">
     <audio controls>
         <source src="{{ podcast.file.url }}" type="audio/ogg">
         <source src="{{ podcast.file.url }}" type="audio/mpeg">
