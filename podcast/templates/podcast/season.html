@@ -13,13 +13,13 @@
     {% if season_name %}
         <h1>{{ season_name }}</h1>
         {% if season.banner %}
-        <div class="container">
+        <div class="">
             <img class="img-responsive" src="{{ season.banner.url }}"/>
         </div>
         {% endif %}
     {% endif %}
     {% if podcast_list %}
-        <div class="container list-container">
+        <div class="list-container">
             <ul>
                 {% for podcast in podcast_list %}
                     <li>
@@ -79,4 +79,3 @@
     </p>
     {% include "podcast/includes/sidebar_include.html" %}
 {% endblock %}
-
