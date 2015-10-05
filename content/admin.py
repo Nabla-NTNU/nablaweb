@@ -33,7 +33,7 @@ class ListenMixin(object):
         if form.cleaned_data.get('listen'):
             user = request.user
             obj.edit_listeners.add(user)
-        else:
+        elif obj.id:
             user = request.user
             obj.edit_listeners.remove(user)
 
