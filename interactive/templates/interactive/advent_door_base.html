@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load mediawiki_links %}
+{% load markdown_deux_tags %}
+{% load thumbnail %}
+{% load sekizai_tags %}
+
+{% block title %}{{ door.number }}{% endblock %}
+
+{% block content %}
+
+<h1>{{ door.number }}</h1>
+
+{{ door.content|markdown:"unsafe" }}
+
+{% endblock %}

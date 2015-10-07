@@ -61,7 +61,7 @@ class ComPage(models.Model):
 
     def get_absolute_url(self):
         return reverse('show_com_page', kwargs={'slug': self.get_canonical_name()})
-        #return "/komite/" + self.get_canonical_name()
+        # return "/komite/" + self.get_canonical_name()
 
     def save(self, *args, **kwargs):
         self.slug = self.get_canonical_name()
@@ -130,19 +130,10 @@ class Committee(models.Model):
         to=settings.AUTH_USER_MODEL,
         verbose_name="Leder",
         blank=True,
+        null=True
     )
 
     class Meta:
         verbose_name = "Komité"
         verbose_name_plural = "Komitéer"
 
-
-def create_committee_from_group(group):
-    if type(group) == NablaGroup:
-        com = Committee.objects.create()
-        com.name = group.name
-        com.mail_list = group.mail_list
-        com.page = ComPage.objects.get(group=group)
-        com.save()
-        return com
-    return None

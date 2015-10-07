@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load mediawiki_links listutil %}
+{% load markdown_deux_tags %}
+{% load thumbnail %}
+{% load sekizai_tags %}
+
+{% block title %}{{ calendar.year }}{% endblock %}
+
+{% block content %}
+
+<table>
+    {% for row in doors|row_split:4 %}
+    <tr>
+        {% for door in row %}
+        <td><a href="{{ door.get_absolute_url }}">{{ door.number }}</a></td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

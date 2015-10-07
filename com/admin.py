@@ -20,5 +20,10 @@ class ComMembershipAdmin(admin.ModelAdmin):
         verbose_name = "Komitemedlem"
         verbose_name_plural = "Komitemedlemmer"
 
+
+class CommitteeAdmin(admin.ModelAdmin):
+    class Meta:
+        fields = '__all__'
+
 admin.site.register(ComPage, ComPageAdmin)
 admin.site.register(ComMembership, ComMembershipAdmin)

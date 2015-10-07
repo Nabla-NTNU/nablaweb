@@ -108,6 +108,7 @@ INSTALLED_APPS = [
     'poll',     # Spørreundersøkelser
     'search',
     'podcast',
+    'interactive',
 
     ###########################
     # Eksternt utviklede apps #
