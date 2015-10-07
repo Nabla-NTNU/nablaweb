@@ -1,11 +1,11 @@
 
 from ..models.blog import *
-from .mixins import AdminLinksMixin
+from .mixins import AdminLinksMixin, ViewAddMixin
 from django.views.generic import DetailView, ListView
 from django.http import HttpResponseNotFound
 
 
-class BlogPostView(AdminLinksMixin, DetailView):
+class BlogPostView(ViewAddMixin, AdminLinksMixin, DetailView):
     model = BlogPost
     template_name = "content/blog_post.html"
     context_object_name = "post"

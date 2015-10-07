@@ -15,3 +15,13 @@ class AdminLinksMixin(object):
         context["change_url"] = reverse(view_name.format(action="change", **locals()), args=[self.object.id])
         context["delete_url"] = reverse(view_name.format(action="delete", **locals()), args=[self.object.id])
         return context
+
+
+class ViewAddMixin(object):
+    """
+    Adds one view to the object each time the object is dispatched
+    """
+
+    def get_context_data(self, *args, **kwargs):
+        self.object.add_view()
+        return super().get_context_data(*args, **kwargs)

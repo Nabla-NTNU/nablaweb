@@ -174,6 +174,7 @@ class RegisterUserView(LoginRequiredMixin,
     """View for at en bruker skal kunne melde seg av og på."""
 
     model = Event
+    template_name = 'events/event_detail.html'
 
     def post(self, *args, **kwargs):
         reg_type = self.request.POST['registration_type']

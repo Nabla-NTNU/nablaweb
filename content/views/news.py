@@ -4,7 +4,7 @@ from django.views.generic import DetailView, ListView
 
 from ..templatetags import listutil
 from ..models.news import News
-from .mixins import AdminLinksMixin
+from .mixins import AdminLinksMixin, ViewAddMixin
 
 
 class NewsListView(ListView):
@@ -38,7 +38,7 @@ class NewsListView(ListView):
         return context
 
 
-class NewsDetailView(AdminLinksMixin, DetailView):
+class NewsDetailView(ViewAddMixin, AdminLinksMixin, DetailView):
     model = News
     context_object_name = 'news'
     template_name = 'news/news_detail.html'
