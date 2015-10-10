@@ -1,0 +1,12 @@
+
+
+.advent-table {
+    width: 100%;
+
+}
+
+.advent-door {
+    display: block;
+    border: 1px;
+    margin: 10px;
+}
