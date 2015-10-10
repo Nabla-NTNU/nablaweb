@@ -106,7 +106,6 @@ INSTALLED_APPS = [
     'nabladet',  # Liste over nablad. Arver news.
     'meeting_records',  # Møtereferater fra styremøter og SKE
     'poll',     # Spørreundersøkelser
-    'search',
     'podcast',
     'interactive',
 

@@ -1,20 +1,37 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import url, patterns
+from django.conf.urls import url, include
+import django.contrib.auth.views as auth_views
 from django.views.generic import RedirectView
 
 from .views import UserDetailView, UpdateProfile, UserList, RegistrationView, InjectUsersFormView
 
-urlpatterns = patterns('django.contrib.auth.views', 
-    url(r'password/change/$', 'password_change', name='password_change'),
-    url(r'password/change/done$', 'password_change_done', name='password_change_done'),
-    url(r'password/reset/$', 'password_reset', name='password_reset'),
-    url(r'password/reset/done/$', 'password_reset_done', name='password_reset_done'),
-    url(r'password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', 'password_reset_confirm', name='password_reset_confirm'),
-    url(r'password/reset/complete/$', 'password_reset_complete', name='password_reset_complete'),
-)
 
-urlpatterns += patterns('accounts.views',
+password_change_patterns = [
+    url(r'^$',
+        auth_views.password_change,
+        name='password_change'),
+    url(r'^done$',
+        auth_views.password_change_done,
+        name='password_change_done'),
+]
+
+password_reset_patterns = [
+    url(r'^$',
+        auth_views.password_reset,
+        name='password_reset'),
+    url(r'^done/$',
+        auth_views.password_reset_done,
+        name='password_reset_done'),
+    url(r'^confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
+        auth_views.password_reset_confirm,
+        name='password_reset_confirm'),
+    url(r'^complete/$',
+        auth_views.password_reset_complete,
+        name='password_reset_complete'),
+]
+
+urlpatterns = [
     url(r'^$',
         RedirectView.as_view(url='view/')),
     url(r'edit/$',
@@ -32,4 +49,18 @@ urlpatterns += patterns('accounts.views',
     url(r'oppdater/$',
         InjectUsersFormView.as_view(),
         name='users_inject'),
-)
+    url(r'^password/change/', include(password_change_patterns)),
+    url(r'^password/reset/', include(password_reset_patterns))
+]
+
+# To be imported in the main urls.py
+login_urls = [
+    url(r'^login/$',
+        auth_views.login,
+        {'template_name': 'accounts/login.html'},
+        name='auth_login'),
+    url(r'^logout/$',
+        auth_views.logout,
+        {'next_page': '/'},
+        name='auth_logout'),
+]
