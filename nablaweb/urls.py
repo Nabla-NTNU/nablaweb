@@ -15,6 +15,7 @@ from django_nyt.urls import get_pattern as get_nyt_pattern
 from filebrowser.sites import site
 
 
+from accounts.urls import login_urls
 from .views import FrontPageView
 
 
@@ -25,14 +26,11 @@ urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^$', FrontPageView.as_view(), name='front_page'),
     url(r'^', include('content.urls')),
-    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'accounts/login.html'}, name='auth_login'),
-    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='auth_logout'),
-    url(r'^passord/reset/$', 'django.contrib.auth.views.password_reset', name='password_reset'),
     url(r'^bedpres/', include('bedpres.urls')),
     url(r'^brukere/', include('accounts.urls')),
+    url(r'^', include(login_urls)),
     url(r'^stillinger/', include('jobs.urls')),
     url(r'^komite/', include('com.urls')),
-    url(r'^sitater/', include('quotes.urls')),
     url(r'^nabladet/', include('nabladet.urls')),
     url(r'^referater/', include('meeting_records.urls')),
     url(r'^kommentarer/', include('django_comments.urls')),
