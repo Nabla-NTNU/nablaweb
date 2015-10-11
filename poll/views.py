@@ -6,7 +6,7 @@ from django.http import HttpResponseForbidden
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from braces.views import LoginRequiredMixin, FormMessagesMixin
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from .models import Poll, Choice, UserHasVoted
 from .forms import PollForm
@@ -67,11 +67,10 @@ class UserPollsView(LoginRequiredMixin, ListView):
         return context
 
 
-class CreateUserPollView(LoginRequiredMixin, FormMessagesMixin, CreateView):
+class UserPollCRUDMixin(LoginRequiredMixin, FormMessagesMixin):
     form_class = PollForm
     model = Poll
-    form_valid_message = "Avstemning publisert."
-    form_invalid_message = "Ikke riktig utfyllt."
+    form_invalid_message = "Ikke riktig utfylt."
     template_name = 'form.html'
 
     def get_form(self, form_class=None):
@@ -83,40 +82,24 @@ class CreateUserPollView(LoginRequiredMixin, FormMessagesMixin, CreateView):
         return reverse('poll_user')
 
 
-class UpdateUserPollView(LoginRequiredMixin, FormMessagesMixin, UpdateView):
-    form_class = PollForm
-    model = Poll
-    success_url = ""
-    form_valid_message = "Avstemning oppdatert."
-    form_invalid_message = "Ikke riktig utfyllt."
-    template_name = 'form.html'
+class CreatorRequiredMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
-        user = request.user
-        poll = self.get_object()
-        if poll.created_by == user:
-            return super().dispatch(request, *args, **kwargs)
-        else:
+        if self.get_object().created_by != request.user:
             return HttpResponseForbidden()
-
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        form.view = self
-        return form
-
-    def get_success_url(self):
-        return reverse('poll_user')
+        return super().dispatch(request, *args, **kwargs)
 
 
-@login_required
-def delete_poll(request, poll_id):
-    poll = get_object_or_404(Poll, pk=poll_id)
-    try:
-        poll.delete()
-    except:
-        messages.error(request, 'Noe gikk galt i slettingen.')
-    else:
-        messages.success(request, "Du har slettet {}".format(poll.question))
+class CreateUserPollView(UserPollCRUDMixin, CreateView):
+    form_valid_message = "Avstemning publisert."
 
-    redirect_to = request.REQUEST.get('next', request.META.get('HTTP_REFERER', '/'))
-    return redirect(redirect_to)
+
+class UpdateUserPollView(UserPollCRUDMixin, CreatorRequiredMixin, UpdateView):
+    form_valid_message = "Avstemning oppdatert."
+
+
+class DeleteUserPollView(UserPollCRUDMixin, CreatorRequiredMixin, DeleteView):
+    form_invalid_message = "Noe gikk galt i slettingen."
+
+    def get_form_valid_message(self):
+        return "Du har slettet {}".format(self.object.question)

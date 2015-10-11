@@ -13,13 +13,16 @@ Mine avstemninger
 
 <div class="btn-group">
     <a class="btn btn-default" href="{% url "poll_user_update" poll.id %}">
-    <span class="glyphicon glyphicon-pencil"></span>
-    Endre
+        <span class="glyphicon glyphicon-pencil"></span>
+        Endre
     </a>
-    <a class="btn btn-danger" href="{% url "poll_user_delete" poll.id %}">
-    <span class="glyphicon glyphicon-trash"></span>
-    Slett
-    </a>
+    <form style="display: inline" method="POST" action="{% url "poll_user_delete" poll.id %}">
+        <button class="btn btn-danger" type="submit">
+            <span class="glyphicon glyphicon-trash"></span>
+            Slett
+        </button>
+        {% csrf_token %}
+    </form>
 
 </div>
 <div class="poll well">
@@ -35,7 +38,6 @@ Mine avstemninger
                                 {% widthratio choice.votes poll.get_total_votes 100 %}%
                             </span>
             </div>
-        </div>
         {% endfor %}
     {% else %}
     <form action="{% url "poll.views.vote" poll.id %}?next={% url "poll_user" %}" method="post">
