@@ -33,7 +33,7 @@ password_reset_patterns = [
 
 urlpatterns = [
     url(r'^$',
-        RedirectView.as_view(url='view/')),
+        RedirectView.as_view(url='view/', permanent=True)),
     url(r'edit/$',
         UpdateProfile.as_view(),
         name='edit_profile'),
