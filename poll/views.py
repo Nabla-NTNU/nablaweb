@@ -25,7 +25,7 @@ def vote(request, poll_id):
     else:
         messages.success(request, u'Du har svart på "%s"' % poll.question)
 
-    redirect_to = request.REQUEST.get('next', request.META.get('HTTP_REFERER', '/'))
+    redirect_to = request.POST.get('next', request.META.get('HTTP_REFERER', '/'))
     return redirect(redirect_to)
 
 
