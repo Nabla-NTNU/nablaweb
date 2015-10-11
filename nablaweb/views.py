@@ -1,9 +1,10 @@
-from django.views.generic import DetailView, ListView
+from django.views.generic import ListView
 
 from content.templatetags import listutil
 from content.models.news import News
-from podcast.models import Podcast, Season
-from content.views.mixins import AdminLinksMixin
+from podcast.models import Podcast
+from poll.context_processors import poll_context
+from .context_processors import upcoming_events
 
 
 class FrontPageView(ListView):
@@ -34,5 +35,8 @@ class FrontPageView(ListView):
 
             # Deler f.eks. opp [1, 2, 3, 4, 5] til [[1, 2], [3, 4], [5]]
             context['news_rows'] = listutil.row_split(news_list[1:], 2)
+
+        context.update(upcoming_events(self.request))
+        context.update(poll_context(self.request))
 
         return context

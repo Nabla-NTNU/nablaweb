@@ -6,11 +6,6 @@ from jobs.models import Advert, Company, YearChoices, RelevantForChoices, TagCho
 from django.shortcuts import get_object_or_404
 
 
-def active_jobs(request):
-    """Used as a template context processor."""
-    return {'active_jobs': Advert.objects.all()}
-
-
 def split_into_rows(jobs):
     """Deler f.eks. opp [1, 2, 3, 4, 5] til [[1, 2], [3, 4], [5]]."""
     return row_split(jobs, 2) if jobs else None
