@@ -73,7 +73,7 @@ class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
         return super(InjectUsersFormView, self).form_valid(form)
 
 
-class BirthdayView(ListView):
+class BirthdayView(LoginRequiredMixin, ListView):
     model = NablaUser
     allow_empty = True
     date_field = "birthday"
