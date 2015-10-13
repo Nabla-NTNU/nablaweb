@@ -82,5 +82,7 @@ class BirthdayView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         today = datetime.date.today()
-        return NablaUser.objects.filter(birthday__day=today.day, is_active=True)
+        return NablaUser.objects.filter(birthday__day=today.day,
+                                        birthday__month=today.month,
+                                        is_active=True)
 
