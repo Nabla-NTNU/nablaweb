@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load markdown_deux_tags %}
+{% load mediawiki_links %}
+
+{% block title %}Bursdag{% endblock %}
+
+
+{% block content %}
+<h1>Hvem har bursdag i dag?</h1>
+<ul class="list-group">
+    {% for user in users %}
+    <li class="list-group-item">
+        <div class="row">
+        <div class="col-md-3"><img class="thumbnail" alt="avatar"
+                                   {% if user.avatar %}
+                                   src="{% thumbnail user.avatar 150x150 %}"
+                                   {% else %}
+                                   src="{{ STATIC_URL }}img/default_avatar.png"
+                                   {%endif %}></div>
+        <div class="col-md-9">
+            <h2>
+                {% if user.get_full_name %}
+                {{ user.get_full_name }}
+                {% else %}
+                {{ user.username }}
+                {% endif %}
+            </h2>
+
+            <p>
+                {{ user.about|markdown }}
+            </p>
+        </div>
+</div>
+
+    </li>
+    {% empty %}
+    Ingen har bursdag i dag.
+    {% endfor %}
+</ul>
+
+{% endblock %}

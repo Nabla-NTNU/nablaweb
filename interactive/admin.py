@@ -5,7 +5,7 @@ from .models import AdventCalendar, AdventDoor
 class AdventDoorInline(admin.TabularInline):
     model = AdventDoor
     extra = 24
-    fields = ('number', 'content', )
+    fields = ('number', 'content', 'template')
     fk_name = "calendar"
 
 
