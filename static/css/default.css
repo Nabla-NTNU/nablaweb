@@ -1,12 +1,11 @@
 /* MAIN */
-    body { 
+    body {
         background-color: #000; /* Background-color of footer */
     }
 
     /* Div that holds all parts of page except footer */
     #whitebox {
-        background-color: white;
-        background-image: url(../img/bgnoise.png);
+        background: white url(../img/bgnoise.png);
         border-bottom: 1px solid black;
         padding-top: 20px;
         padding-bottom: 20px;
@@ -46,14 +45,14 @@
     /* Typography */
 
     .news_item {
-        word-break: break-word;
+        word-wrap: break-word;
     }
 
     h1 {
         margin-bottom: 8px;
         font-size: 32px;
         font-weight: bold;
-        line-height: 37.5px;
+        line-height: 37px;
         margin-top: 15px;
     }
 
@@ -61,7 +60,7 @@
         margin-bottom: 8px;
         font-size: 30px;
         font-weight: bold;
-        line-height: 37.5px;
+        line-height: 37px;
         margin-top: 15px;
     }
 
@@ -106,8 +105,6 @@
 
     .registrations .waiting-place {
         opacity: 0.5;
-        -moz-opacity: 0.5;
-        -webkit-opacity: 0.5;
     }
 
 
@@ -135,9 +132,8 @@
         background: inherit;
         border: none;
         color: inherit;
-        font-size: 120%;
         font: inherit;
-        margin: 0px;
+        margin: 0;
     }
 
     .pagination {
@@ -170,7 +166,7 @@
     .ad.box img {
         text-align: center;
     }
-    
+
 
 /* MathJAX customisation */
 
@@ -214,15 +210,15 @@
     }
     form.add-comment {
         margin-top: 20px;
-        margin-left: 0px;
-        margin-right: 0px;
+        margin-left: 0;
+        margin-right: 0;
     }
     form.add-comment .control-group:first-of-type { padding-top: 9px;}
     form.add-comment textarea {
         width: 98%;
         height: 100px;
     }
-    .comment .text { width: 100%; overflow: hidden; }
+    .comment .text { width: 100%; overflow: hidden; }
     .comment .info { margin-bottom: 10px; } 
     .comment .author { font-weight: bold; } 
     .comment .date { color: #999; }
@@ -234,7 +230,7 @@
 /* for logo + søkefelt i headeren */
 
     form#searchtop {
-        margin-bottom: 0px;
+        margin-bottom: 0;
         margin-top: 15px; /* Logohøyde minus høyden på formen */
         width: 200px;
     }
@@ -250,7 +246,7 @@
 }
 
 .advert_footer {
-    bottom: 0px;
+    bottom: 0;
 }
 
 .btn-read-more {
