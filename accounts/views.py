@@ -4,6 +4,7 @@ from django.views.generic import DetailView, ListView, UpdateView, FormView
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseForbidden
 from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin
+import datetime
 
 from .forms import UserForm, RegistrationForm, InjectUsersForm
 from .models import NablaUser
@@ -70,3 +71,16 @@ class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
         data = form.cleaned_data['data']
         extract_usernames(data)
         return super(InjectUsersFormView, self).form_valid(form)
+
+
+class BirthdayView(ListView):
+    model = NablaUser
+    allow_empty = True
+    date_field = "birthday"
+    template_name = "accounts/user_birthday.html"
+    context_object_name = "users"
+
+    def get_queryset(self):
+        today = datetime.date.today()
+        return NablaUser.objects.filter(birthday__day=today.day)
+

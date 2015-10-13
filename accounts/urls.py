@@ -4,7 +4,7 @@ from django.conf.urls import url, include
 import django.contrib.auth.views as auth_views
 from django.views.generic import RedirectView
 
-from .views import UserDetailView, UpdateProfile, UserList, RegistrationView, InjectUsersFormView
+from .views import UserDetailView, UpdateProfile, UserList, RegistrationView, InjectUsersFormView, BirthdayView
 
 
 password_change_patterns = [
@@ -49,6 +49,9 @@ urlpatterns = [
     url(r'oppdater/$',
         InjectUsersFormView.as_view(),
         name='users_inject'),
+    url(r'^bursdag/(?P<day>[0-9]+)?',
+        BirthdayView.as_view(),
+        name='users_birthday'),
     url(r'^password/change/', include(password_change_patterns)),
     url(r'^password/reset/', include(password_reset_patterns))
 ]
