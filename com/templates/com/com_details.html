@@ -34,7 +34,7 @@
             <span class="name">
               <a class=""
                href="{% url "member_profile" membership.user.username %}"
-               >{{ membership.user.get_full_name }}</a>
+               >{% firstof membership.user.get_full_name membership.user.username %}</a>
             </span>
 
             {# Beskrivelse av stillingen #}

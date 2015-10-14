@@ -20,11 +20,7 @@ Brukeravstemninger
 </div>
 <div class="col-md-9">
 <h3>
-    {% if user.get_full_name %}
-    {{ user.get_full_name }}
-    {% else %}
-    {{ user.username }}
-    {% endif %}
+    {% firstof user.get_full_name user.username %}
 </h3>
 
 <div class="poll well">
