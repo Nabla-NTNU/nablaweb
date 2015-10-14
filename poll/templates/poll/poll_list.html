@@ -15,7 +15,7 @@ Brukeravstemninger
          {% if user.avatar %}
          src="{% thumbnail user.avatar 150x150 %}"
          {% else %}
-         src="{{ STATIC_URL }}img/default_avatar.png"
+         src="{% static "img/default_avatar.png" %}"
          {%endif %}>
 </div>
 <div class="col-md-9">

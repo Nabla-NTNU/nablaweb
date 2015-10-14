@@ -2,6 +2,7 @@
 {% load thumbnail %}
 {% load markdown_deux_tags %}
 {% load mediawiki_links %}
+{% load static %}
 {% load firstof from future %}
 
 {% for comment in comment_list %}
@@ -14,7 +15,7 @@
         {% if comment.user.avatar %}
             "{% thumbnail comment.user.avatar 150x150 %}"
         {% else %}
-            "{{ STATIC_URL }}img/default_avatar.png"
+            "{% static "img/default_avatar.png" %}"
         {%endif %}>
 
     <div class="col-xs-10 text">

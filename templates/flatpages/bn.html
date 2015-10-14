@@ -3,13 +3,14 @@
 {% load markdown_deux_tags %}
 {% load flatpages %}
 {% load thumbnail %}
+{% load static %}
 
 {% block title %}
     Bedriftskontakten Nabla
 {% endblock %}
 
 {% block header_logo %}
-    <img src="{{ STATIC_URL }}img/bedkomNabla.jpg" alt="Bedriftskontakten Nabla">
+    <img src="{% static "img/bedkomNabla.jpg" %}" alt="Bedriftskontakten Nabla">
 {% endblock %}
 
 {% block partner_logo %}{% endblock %}
@@ -73,7 +74,7 @@
     <style>
     #whitebox {
     background-color: #f5f5f5;
-    background-image: url({{ STATIC_URL }}bn/Graduated_Blue_Background.png);
+    background-image: url({% static "bn/Graduated_Blue_Background.png" %});
     background-size: cover;
     }
 

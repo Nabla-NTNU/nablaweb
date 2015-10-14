@@ -1,11 +1,13 @@
 {% load humanize %}
 {% load cache %}
 {% load sekizai_tags %}
+{% load static %}
+
 
 {% if poll %}
 
 {% addtoblock "css" %}
-    <link href="{{ STATIC_URL }}poll/poll_sidebar.css" rel="stylesheet">
+    <link href="{% static "poll/poll_sidebar.css" %}" rel="stylesheet">
 {% endaddtoblock %}
 
 <br>

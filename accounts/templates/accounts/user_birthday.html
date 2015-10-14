@@ -2,6 +2,7 @@
 {% load thumbnail %}
 {% load markdown_deux_tags %}
 {% load mediawiki_links %}
+{% load static %}
 
 {% block title %}Bursdag{% endblock %}
 
@@ -12,12 +13,14 @@
     {% for user in users %}
     <li class="list-group-item">
         <div class="row">
-        <div class="col-md-3"><img class="thumbnail" alt="avatar"
-                                   {% if user.avatar %}
-                                   src="{% thumbnail user.avatar 150x150 %}"
-                                   {% else %}
-                                   src="{{ STATIC_URL }}img/default_avatar.png"
-                                   {%endif %}></div>
+        <div class="col-md-3">
+            <img class="thumbnail" alt="avatar"
+                {% if user.avatar %}
+                    src="{% thumbnail user.avatar 150x150 %}"
+                {% else %}
+                    src="{% static "img/default_avatar.png" %}"
+                {%endif %}>
+        </div>
         <div class="col-md-9">
             <h2>
                 {% firstof user.get_full_name user.username %}
