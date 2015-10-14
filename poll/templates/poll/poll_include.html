@@ -15,38 +15,11 @@
     <h4>{{ poll.question }}</h4>
 
     {% if poll_has_voted %}
-        {# Has voted, display results #}
         {% cache 900 poll_results poll.id poll_total_votes %}
-            <pre>{{ poll_total_votes }} bruker{% if poll_total_votes > 1 %}e{% endif %} har stemt.</pre>
-            {% for choice in poll.choices.all %}
-                <div class="choice">{{ choice.choice }}</div>
-                <div class="progress">
-                    <div class="progress-bar" style="width:{% widthratio choice.votes poll_total_votes 100 %}%">
-                        <span class="percent{% if choice.votes == 0 %} zero{% endif %}">
-                            {% widthratio choice.votes poll_total_votes 100%}%
-                        </span>
-                    </div>
-                </div>
-            {% endfor %}
-        {% endcache %}{# Poll results #}
+            {% include "poll/includes/poll_result.html" %}
+        {% endcache %}
     {% else %}
-        {# Has not voted, display form #}
-        <form action="{% url "poll.views.vote" poll.id %}?next={% url "news_list" %}" method="post">
-            {% csrf_token %}
-            {% for choice in poll.choices.all %}
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="choice" value="{{ choice.id }}">
-                        <span class="choice">{{ choice.choice }}</span>
-                    </label>
-                </div>
-            {% endfor %}
-            {% if user.is_authenticated %}
-                <button class="btn btn-default btn-block" type="submit">Stem</button>
-            {% else %}
-                <div class="center" style="color:#999;">Logg inn for å stemme</div>
-            {% endif %}
-        </form>
+        {% include "poll/includes/vote_form.html" %}
     {% endif %}
 </div>
 {% endif %}

@@ -4,13 +4,16 @@
 {% load sekizai_tags %}
 {% load static %}
 {% load bootstrap3 %}
+
 {% block title %}
 Mine avstemninger
 {% endblock %}
-{% block content %}
-<h1>Mine avstemninger</h1>
-{% for poll in poll_list %}
 
+{% block content %}
+
+<h1>Mine avstemninger</h1>
+
+{% for poll in poll_list %}
 <div class="btn-group">
     <a class="btn btn-default" href="{% url "poll_user_update" poll.id %}">
         <span class="glyphicon glyphicon-pencil"></span>
@@ -23,40 +26,15 @@ Mine avstemninger
         </button>
         {% csrf_token %}
     </form>
-
 </div>
+
 <div class="poll well">
     <h4>{{ poll.question }}</h4>
 
     {% if poll.voted %}
-        <p>{{ poll.get_total_votes }} bruker{% if poll.get_total_votes > 1 %}e{% endif %} har stemt.</p>
-        {% for choice in poll.choices.all %}
-        <div class="choice">{{ choice.choice }}</div>
-        <div class="progress">
-            <div class="progress-bar" style="width:{% widthratio choice.votes poll.get_total_votes 100 %}%">
-                <span class="percent{% if choice.votes == 0 %} zero{% endif %}">
-                    {% widthratio choice.votes poll.get_total_votes 100 %}%
-                </span>
-            </div>
-        </div>
-        {% endfor %}
+        {% include "poll/includes/poll_result.html" %}
     {% else %}
-    <form action="{% url "poll.views.vote" poll.id %}?next={% url "poll_user" %}" method="post">
-    {% csrf_token %}
-    {% for choice in poll.choices.all %}
-    <div class="radio">
-        <label>
-            <input type="radio" name="choice" value="{{ choice.id }}">
-            <span class="choice">{{ choice.choice }}</span>
-        </label>
-    </div>
-    {% endfor %}
-    {% if user.is_authenticated %}
-    <button class="btn btn-default btn-block" type="submit">Stem</button>
-    {% else %}
-    <div class="center" style="color:#999;">Logg inn for å stemme</div>
-    {% endif %}
-    </form>
+        {% include "poll/includes/vote_form.html" %}
     {% endif %}
 </div>
 {% empty %}
