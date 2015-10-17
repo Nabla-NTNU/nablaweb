@@ -1,5 +1,5 @@
 from django.views.generic import DetailView, ListView
-from .models import AdventCalendar, AdventDoor
+from interactive.models import AdventCalendar, AdventDoor
 
 
 class AdventDoorView(DetailView):

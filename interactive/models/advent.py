@@ -1,23 +1,8 @@
 from django.db import models
+from .base import InteractiveElement
 from accounts.models import NablaUser
-from content.models.mixins import EditableMedia
 from com.models import Committee
 from django.core.urlresolvers import reverse
-
-
-class InteractiveElement(EditableMedia, models.Model):
-    """
-    Model for an element requiring user interaction.
-    """
-
-    template = models.CharField(
-        max_length=100,
-        verbose_name="Template",
-        default="interactive/advent_door_base.html"
-    )
-
-    class Meta:
-        abstract = True
 
 
 class AdventDoor(InteractiveElement):
@@ -98,6 +83,4 @@ class AdventCalendar(models.Model):
 
     def __str__(self):
         return str(self.year)
-
-
 
