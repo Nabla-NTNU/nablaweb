@@ -9,7 +9,7 @@
 
 {% block content %}
     {% addtoblock "css" %}
-        <link href="{{ STATIC_URL }}com/com.css" rel="stylesheet">
+        <link href="{% static "com/com.css" %}" rel="stylesheet">
     {% endaddtoblock %}
 <h1>Komitésider</h1>
 {% if compage_list %}

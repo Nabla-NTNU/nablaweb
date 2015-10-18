@@ -15,80 +15,30 @@ Brukeravstemninger
          {% if user.avatar %}
          src="{% thumbnail user.avatar 150x150 %}"
          {% else %}
-         src="{{ STATIC_URL }}img/default_avatar.png"
+         src="{% static "img/default_avatar.png" %}"
          {%endif %}>
 </div>
 <div class="col-md-9">
 <h3>
-    {% if user.get_full_name %}
-    {{ user.get_full_name }}
-    {% else %}
-    {{ user.username }}
-    {% endif %}
+    {% firstof user.get_full_name user.username %}
 </h3>
 
 <div class="poll well">
     <h4>{{ poll.question }}</h4>
 
     {% if poll.voted %}
-    <p>{{ poll.get_total_votes }} bruker{% if poll.get_total_votes > 1 %}e{% endif %} har stemt.</p>
-    {% for choice in poll.choices.all %}
-    <div class="choice">{{ choice.choice }}</div>
-    <div class="progress">
-        <div class="progress-bar" style="width:{% widthratio choice.votes poll.get_total_votes 100 %}%">
-                        <span class="percent{% if choice.votes == 0 %} zero{% endif %}">
-                            {% widthratio choice.votes poll.get_total_votes 100%}%
-                        </span>
-        </div>
-    </div>
-    {% endfor %}
+        {% include "poll/includes/poll_result.html" %}
     {% else %}
-    <form action="{% url "poll.views.vote" poll.id %}?next={% url "user_polls" %}" method="post">
-    {% csrf_token %}
-    {% for choice in poll.choices.all %}
-    <div class="radio">
-        <label>
-            <input type="radio" name="choice" value="{{ choice.id }}">
-
-            <div class="choice">{{ choice.choice }}</div>
-        </label>
-    </div>
-    {% endfor %}
-    {% if user.is_authenticated %}
-    <button class="btn btn-default btn-block" type="submit">Stem</button>
-    {% else %}
-    <div class="center" style="color:#999;">Logg inn for å stemme</div>
+        {% include "poll/includes/vote_form.html" %}
     {% endif %}
-    </form>
-    {% endif %}
-    </div>
+</div>
 </div>
 {% endwith %}
 {% empty %}
 Ingen brukeravstemninger her enda.
 {% endfor %}
 
-{% if is_paginated %}
-<nav>
-    <ul class="pager">
-        {% if page_obj.has_next %}
-        <li class="previous">
-            <a href="?page={{ page_obj.next_page_number }}"><span aria-hidden="true">&larr;</span> Eldre</a>
-        </li>
-        {% endif %}
-
-        <li class="disabled pager-counter">
-            Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
-        </li>
-
-        {% if page_obj.has_previous %}
-        <li class="next">
-            <a href="?page={{ page_obj.previous_page_number }}">Nyere <span aria-hidden="true">&rarr;</span></a>
-        </li>
-        {% endif %}
-    </ul>
-</nav>
-{% endif %}
+{% include "includes/pagination.html" %}
 
 {% endblock %}
 {% block sidebar %}

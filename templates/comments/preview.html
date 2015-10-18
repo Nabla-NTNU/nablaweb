@@ -3,6 +3,7 @@
 {% load mediawiki_links %}
 {% load thumbnail %}
 {% load markdown_deux_tags %}
+{% load static %}
 
 {% block title %}{% trans "Preview your comment" %}{% endblock %}
 
@@ -17,7 +18,7 @@
                 {% if comment.user.avatar %}
                     "{% thumbnail user.avatar 150x150 %}"
                 {% else %}
-                    "{{ STATIC_URL }}img/default_avatar.png"
+                    "{% static "img/default_avatar.png" %}"
                 {%endif %}>
 
             <div class="col-xs-10 text">

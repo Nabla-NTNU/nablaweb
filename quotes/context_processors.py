@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from quotes.models import Quote
-from utility_functions import get_random_item
+from utils.utility_functions import get_random_item
 
 def random_quote(request):
     """Henter et tilfeldig sitat fra databasen

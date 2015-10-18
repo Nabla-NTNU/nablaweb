@@ -26,12 +26,12 @@
     {% render_block "css" %}
 
     <!-- Fav and touch icons, for screen and mobile -->
-    <link rel="shortcut icon" href="{{STATIC_URL }}img/favicon.ico">
-    <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
+    <link rel="shortcut icon" href="{% static "img/favicon.ico" %}">
+    <link rel="apple-touch-icon" href="{% static "img/apple-touch-icon.png" %}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static "img/apple-touch-icon-72x72.png" %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static "img/apple-touch-icon-114x114.png" %}">
     {% addtoblock "js" %}
-    <script src="{{ STATIC_URL }}wiki/js/core.js"></script>
+    <script src="{% static "wiki/js/core.js" %}"></script>
     {% endaddtoblock %}
 
     {% render_block "js-head" %}
@@ -54,7 +54,7 @@
         {% endblock header_logo %}
     </a>
 
-    <form id="searchtop" class="pull-right" method="get" action="/search/">
+    <form id="searchtop" class="pull-right" method="get" action="{% url "haystack_search" %}">
         <div class="input-group">
             <input name="q" placeholder="Søk..." type="text" class="form-control">
             <span class="input-group-btn">
@@ -144,7 +144,7 @@
             <li class="dropdown navbar-right">
                 <a href="#bruker" class="dropdown-toggle" data-toggle="dropdown">
                     <span class="glyphicon glyphicon-user"></span>
-                    {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}
+                        {% firstof user.get_full_name user.username %}
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -156,7 +156,7 @@
                     <li class="divider"></li>
                     <li><a href="{% url "user_list" %}">Medlemsliste</a></li>
                     {% if user.is_staff %}
-                        <li><a href="/admin">Admin</a></li>
+                        <li><a href="{% url "admin:index" %}">Admin</a></li>
                         <li><a href="/admin/filebrowser/browse">Filer</a></li>
                     {% endif %}
                     {% include "wiki/plugins/notifications/menubaritem.html" %}

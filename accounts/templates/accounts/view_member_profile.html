@@ -2,8 +2,9 @@
 {% load thumbnail %}
 {% load markdown_deux_tags %}
 {% load mediawiki_links %}
+{% load static %}
 
-{% block title %}Medlem: {{member.get_full_name }} {% endblock %}
+{% block title %}Medlem: {% firstof member.get_full_name member.username %} {% endblock %}
 
 
 
@@ -14,16 +15,12 @@
             {% if member.avatar %}
                 src="{% thumbnail member.avatar 150x150 %}"
             {% else %}
-                src="{{ STATIC_URL }}img/default_avatar.png"
+                src="{% static "img/default_avatar.png" %}"
             {%endif %}>
     </div>
     <div class="col-md-9">
         <h2>
-        {% if member.get_full_name %}
-            {{ member.get_full_name }}
-        {% else %}
-            {{ member.username }}
-        {% endif %}
+        {% firstof member.get_full_name member.username %}
 
         {% if user == member %}
             <a href="{% url "edit_profile" %}">
