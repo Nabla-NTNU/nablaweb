@@ -74,7 +74,7 @@ class QuizScoreboardView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['replies'] = context['scoreboard'].replies.order_by('score')
+        context['replies'] = context['scoreboard'].replies.order_by('-score')
         return context
 
 
