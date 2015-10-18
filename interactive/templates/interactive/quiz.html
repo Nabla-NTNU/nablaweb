@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load mediawiki_links %}
+{% load markdown_deux_tags %}
+{% load thumbnail %}
+{% load sekizai_tags %}
+
+{% block title %}{{ quiz.title }}{% endblock %}
+
+{% block content %}
+
+
+<h1>{{ quiz.title }}</h1>
+
+<form action="{{ view.get_form_url }}" method="post">
+    {% csrf_token %}
+{% for question in quiz.questions.all %}
+    <h2>{{ forloop.counter }}. {{ question.question }}</h2>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <label>{{ question.alternative_1 }}</label>
+            <input type="radio" name="{{ question.id }}_alternative" value="1"/>
+        </li>
+        <li class="list-group-item">
+            <label>{{ question.alternative_2 }}</label>
+            <input type="radio" name="{{ question.id }}_alternative" value="2"/>
+        </li>
+        <li class="list-group-item">
+            <label>{{ question.alternative_3 }}</label>
+            <input type="radio" name="{{ question.id }}_alternative" value="3"/>
+        </li>
+        <li class="list-group-item">
+            <label>{{ question.alternative_4 }}</label>
+            <input type="radio" name="{{ question.id }}_alternative" value="4"/>
+        </li>
+    </ul>
+{% endfor %}
+    <button type="submit" class="btn btn-primary">
+        Send inn
+    </button>
+</form>
+{% endblock %}

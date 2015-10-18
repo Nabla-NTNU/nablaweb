@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load cache %}
+{% load static %}
+{% load thumbnail %}
+{% block title %}
+Highscore
+{% endblock %}
+{% block content %}
+{% with quiz=scoreboard.quiz %}
+
+<h1>Highscore - {{ quiz.title }}</h1>
+<ol class="list-group">
+{% for result in replies %}
+
+{% with user=result.user %}
+<li class="list-group-item">
+    {{ forloop.counter }}.
+
+    {% if user.get_full_name %}
+    {{ user.get_full_name }}
+    {% else %}
+    {{ user.username }}
+    {% endif %}
+
+    {{ result.when|date:"d.m.Y" }}
+
+    <a href="{{ result.get_absolute_url }}">{{ quiz.title }}</a>
+
+    {{ result.get_correct_count }} av {{ result.get_question_count }} riktig.
+
+    <div class="progress">
+    <div class="progress-bar" style="width:{% widthratio result.get_correct_count result.get_question_count 100 %}%">
+        <span class="percent{% if result.get_correct_count == 0 %} zero{% endif %}">
+            {% widthratio result.get_correct_count result.get_question_count 100 %}%
+        </span>
+    </div>
+</div>
+</li>
+{% endwith %}
+{% empty %}
+    Ingen resultater her enda.
+{% endfor %}
+</ol>
+{% endwith %}
+{% endblock %}
+{% block sidebar %}
+{% endblock %}
