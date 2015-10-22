@@ -7,6 +7,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+
 from .models import NablaUser, NablaGroup, FysmatClass, RegistrationRequest
 from .forms import NablaUserChangeForm, NablaUserCreationForm
 
@@ -57,8 +60,18 @@ class ExtendedGroupAdmin(GroupAdmin):
     form = GroupAdminForm
 
 
+def maillist(modeladmin, request, queryset):
+    selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+    url = reverse('mail_list', kwargs={'group': selected[0]})
+    return HttpResponseRedirect(url)
+
+
+maillist.short_description = "Vis mailliste"
+
+
 class ExtendedNablaGroupAdmin(GroupAdmin):
     form = NablaGroupAdminForm
+    actions = [maillist]
 
 
 try:

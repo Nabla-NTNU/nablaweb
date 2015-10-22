@@ -4,7 +4,7 @@ from django.conf.urls import url, include
 import django.contrib.auth.views as auth_views
 from django.views.generic import RedirectView
 
-from .views import UserDetailView, UpdateProfile, UserList, RegistrationView, InjectUsersFormView
+from .views import UserDetailView, UpdateProfile, UserList, RegistrationView, InjectUsersFormView, MailListView
 
 
 password_change_patterns = [
@@ -50,7 +50,10 @@ urlpatterns = [
         InjectUsersFormView.as_view(),
         name='users_inject'),
     url(r'^password/change/', include(password_change_patterns)),
-    url(r'^password/reset/', include(password_reset_patterns))
+    url(r'^password/reset/', include(password_reset_patterns)),
+    url(r'maillist/(?P<group>\d+)/$',
+        MailListView.as_view(),
+        name='mail_list'),
 ]
 
 # To be imported in the main urls.py
@@ -64,3 +67,5 @@ login_urls = [
         {'next_page': '/'},
         name='auth_logout'),
 ]
+
+

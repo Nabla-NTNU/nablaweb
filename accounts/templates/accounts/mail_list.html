@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}
+Gruppemailliste
+{% endblock %}
+{% block content %}
+    <h4>{{ group.name }}</h4>
+    </br>
+    <textarea rows="10" cols="50">{% for user in users %}{{ user.email }};{% endfor %}</textarea>
+{%endblock%}
