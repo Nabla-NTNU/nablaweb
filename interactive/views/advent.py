@@ -10,6 +10,11 @@ class AdventDoorView(DetailView):
     def get_template_names(self):
         return self.object.template
 
+    def get_context_data(self, **kwargs):
+        context = super(AdventDoorView, self).get_context_data(**kwargs)
+        context['calendar'] = context['door'].calendar
+        return context
+
 
 class AdventCalendarView(ListView):
     model = AdventDoor

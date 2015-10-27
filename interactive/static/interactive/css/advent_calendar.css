@@ -1,0 +1,63 @@
+
+
+.advent-table {
+    width: 100%;
+    text-align: center;
+}
+
+.advent-door {
+    border: 1px;
+    margin: 10px;
+    height: 240px;
+    width: 180px;
+
+    text-decoration: none;
+    font-size: 100px;
+}
+
+.advent-door p {
+    display: none;
+    font-size: 15px;
+}
+
+.advent-door-open p {
+    display: inline-block;
+}
+
+.advent-door-open span {
+    display: none;
+}
+
+.advent-door-open {
+    background: #000;
+
+    -webkit-transition: background 2s ease-in;
+    -moz-transition: background 2s ease-in;
+    -o-transition: background 2s ease-in;
+    -ms-transition: background 2s ease-in;
+    transition: background 2s ease-in;
+}
+
+body {
+    color: #fff;
+    background-color: #333;
+}
+
+.corner-left {
+    position: fixed;
+    left: 0;
+    top: 0;
+    font-size: 120px;
+}
+
+.corner-right {
+    position: fixed;
+    right: 0;
+    top: 0;
+    font-size: 120px;
+}
+
+h1 {
+    font-size: 40px;
+    text-align: center;
+}

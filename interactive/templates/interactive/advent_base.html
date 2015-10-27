@@ -10,9 +10,6 @@
 
 <head>
     <meta charset="utf-8">
-    {% addtoblock "css" %}
-    <link rel="css/stylesheet" href="{% static "interactive/css/advent_calendar.css" %}"/>
-    {% endaddtoblock %}
 
     <title>
         Nabla - Julekalender {{ calendar.year}}
@@ -25,7 +22,8 @@
 
 
     {% addtoblock "css" %}
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="{% static "interactive/css/advent_calendar.css" %}"/>
     {% endaddtoblock %}
 
     {% addtoblock "js" %}
@@ -56,25 +54,49 @@
 <body>
 
 
-{% block content %}
+
 <div class="container">
+
+{% block content %}
+    {% addtoblock "js" %}
+    <script src="{% static "interactive/js/advent_calendar.js" %}"></script>
+    {% endaddtoblock %}
+
     <h1>Nablas julekalender 2015</h1>
-<table class="table advent-table">
-    {% for row in doors|row_split:4 %}
-    <tr>
-        {% for door in row %}
-            <td class="advent-door">
+    <table class="advent-table">
+        {% for row in doors|row_split:4 %}
+        <tr>
+            {% for door in row %}
+
+                <td class="advent-door">
+                {% if door.is_published %}
+                <p>
                 <a href="{{ door.get_absolute_url }}">
                     <img src="{% static "img/logo.png" %}" />
-                    <span>{{ door.number }}</span>
                 </a>
-            </td>
+                {{ door.short_description }}
+                </p>
+                {% endif %}
+                <span>{{ door.number }}</span>
+                </td>
+            {% endfor %}
+        </tr>
         {% endfor %}
-    </tr>
-    {% endfor %}
-</table>
-</div>
+    </table>
+
 {% endblock %}
+</div>
+
+<div class="corner-left">
+   <img src="/media/misteltein.png" alt="misteltein" />
+</div>
+
+<div class="corner-right">
+<a href="{{ calendar.get_absolute_url }}">{{ calendar.year }}</a>
+</div>
+
+{% render_block "js" %}
 
 </body>
+</html>
 
