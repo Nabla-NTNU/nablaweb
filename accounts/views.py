@@ -76,7 +76,7 @@ class MailListView(PermissionRequiredMixin, ListView):
     template_name = 'accounts/mail_list.html'
     model = NablaUser
     context_object_name = 'users'
-    permission_required = 'streng'
+    permission_required = 'auth.change_user'
 
     def dispatch(self, request, *args, **kwargs):
         group = kwargs['group']
