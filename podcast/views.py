@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.views.generic import TemplateView, DetailView
-from content.views.mixins import AdminLinksMixin
+from content.views.mixins import AdminLinksMixin, ViewAddMixin, PublishedMixin, update_published_state
 from utils.view_mixins import FlatPageMixin
 
 from .models import Podcast, Season, get_season_count
@@ -24,8 +24,12 @@ class SeasonView(FlatPageMixin, TemplateView):
 
             data['season'] = season
             data['season_name'] = season.name()
-            data['podcast_list'] = Podcast.objects.filter(season=season).order_by('-pub_date').exclude(is_clip=True)
-            data['podcast_clips'] = Podcast.objects.filter(season=season).order_by('-pub_date').exclude(is_clip=False)
+
+            update_published_state(Podcast)
+            data['podcast_list'] = Podcast.objects.filter(season=season, published=True).order_by('-pub_date').exclude(
+                is_clip=True)
+            data['podcast_clips'] = Podcast.objects.filter(season=season, published=True).order_by('-pub_date').exclude(
+                is_clip=False)
 
             data['next'] = season.get_next()
             data['season_count'] = get_season_count()
@@ -36,15 +40,15 @@ class SeasonView(FlatPageMixin, TemplateView):
         return data
 
 
-class PodcastDetailView(AdminLinksMixin, DetailView):
+class PodcastDetailView(PublishedMixin, ViewAddMixin, AdminLinksMixin, DetailView):
     template_name = 'podcast/podcast_detail.html'
     model = Podcast
     context_object_name = "podcast"
 
     def get_context_data(self, **kwargs):
         context = super(PodcastDetailView, self).get_context_data(**kwargs)
-        self.object.add_view()
         context['season'] = season = self.object.season
         context['season_name'] = season.name()
-        context['podcast_clips'] = Podcast.objects.filter(season=season).order_by('-pub_date').exclude(is_clip=False)
+        context['podcast_clips'] = Podcast.objects.filter(season=season, published=False).order_by('-pub_date').exclude(
+            is_clip=False)
         return context
