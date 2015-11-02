@@ -3,9 +3,8 @@
 from django.conf.urls import url, include
 import django.contrib.auth.views as auth_views
 from django.views.generic import RedirectView
-
-from .views import UserDetailView, UpdateProfile, UserList, RegistrationView, InjectUsersFormView, BirthdayView
-
+from .views import UserDetailView, UpdateProfile, UserList, RegistrationView, InjectUsersFormView, MailListView, \
+    BirthdayView
 
 password_change_patterns = [
     url(r'^$',
@@ -34,26 +33,29 @@ password_reset_patterns = [
 urlpatterns = [
     url(r'^$',
         RedirectView.as_view(url='view/', permanent=True)),
-    url(r'edit/$',
+    url(r'^edit/$',
         UpdateProfile.as_view(),
         name='edit_profile'),
-    url(r'view/$',
+    url(r'^view/$',
         UserList.as_view(),
         name='user_list'),
-    url(r'view/(?P<username>\w+)/$',
+    url(r'^view/(?P<username>\w+)/$',
         UserDetailView.as_view(),
         name='member_profile'),
-    url(r'registrer/$',
+    url(r'^registrer/$',
         RegistrationView.as_view(),
         name='user_registration'),
-    url(r'oppdater/$',
+    url(r'^oppdater/$',
         InjectUsersFormView.as_view(),
         name='users_inject'),
     url(r'^bursdag/(?P<day>[0-9]+)?',
         BirthdayView.as_view(),
         name='users_birthday'),
     url(r'^password/change/', include(password_change_patterns)),
-    url(r'^password/reset/', include(password_reset_patterns))
+    url(r'^password/reset/', include(password_reset_patterns)),
+    url(r'^maillist/(?P<group>\d+)/$',
+        MailListView.as_view(),
+        name='mail_list'),
 ]
 
 # To be imported in the main urls.py
