@@ -48,7 +48,8 @@ def update_published_state(model):
     :param model: The model class to update
     """
     for m in model.objects.all():
-        m.save()
+        if not m.is_published:
+            m.save()
 
 
 class PublishedListMixin(object):
