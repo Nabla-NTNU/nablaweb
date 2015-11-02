@@ -3,25 +3,19 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 
-from .base import EditableMedia
+from .base import EditableMedia, BaseImageModel
 
 
-class AlbumImage(models.Model):
-    file = models.FileField(
-        max_length=100,
-        verbose_name="Bildefil"
-    )
+class AlbumImage(BaseImageModel):
+    """
+    An album image.
+    """
+
     description = models.TextField(
         verbose_name="Bildetekst",
         blank=True,
         null=True
     )
-
-    def get_absolute_url(self):
-        return self.file.url
-
-    def __str__(self):
-        return self.file.url
 
     class Meta:
         verbose_name = "Albumbilde"

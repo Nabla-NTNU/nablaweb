@@ -8,10 +8,28 @@ from django.contrib.sites.models import Site
 
 from django_comments.models import Comment
 from image_cropping.fields import ImageRatioField
-from .mixins import EditableMedia
+from .mixins import EditableMedia, PublicationManagerMixin
 
 
-class Content(EditableMedia, models.Model):
+class BaseImageModel(models.Model):
+
+    file = models.FileField(
+        max_length=100,
+        verbose_name="Bildefil",
+        upload_to="uploads/content"
+    )
+
+    def get_absolute_url(self):
+        return self.file.url
+
+    def __str__(self):
+        return "(" + str(self.id) + ") " + self.file.url
+
+    class Meta:
+        abstract = True
+
+
+class Content(PublicationManagerMixin, EditableMedia, models.Model):
     # Bildeopplasting med resizing og cropping
     picture = models.ImageField(
         upload_to="news_pictures",
@@ -78,3 +96,13 @@ class Content(EditableMedia, models.Model):
         if not self.content_type:
             self.content_type = ContentType.objects.get_for_model(self.__class__)
         super(Content, self).save(*args, **kwargs)
+
+
+class ContentImage(BaseImageModel):
+    """
+    An image associated with some content
+    """
+
+    class Meta:
+        verbose_name = "Innholdsbilde"
+        verbose_name_plural = "Innholdsbilder"

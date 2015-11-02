@@ -4,13 +4,13 @@ from django.views.generic import DetailView, ListView
 
 from ..templatetags import listutil
 from ..models.news import News
-from .mixins import AdminLinksMixin, ViewAddMixin
+from .mixins import AdminLinksMixin, ViewAddMixin, PublishedListMixin, PublishedMixin
 
 
-class NewsListView(ListView):
+class NewsListView(PublishedListMixin, ListView):
     model = News
     context_object_name = 'news_list'
-    template_name = 'news/news_list.html'
+    template_name = 'content/news/news_list.html'
     paginate_by = 7  # Oddetall ser finest ut
     queryset = News.objects.select_related('content_type').exclude(priority=0).order_by('-pk')
 
@@ -38,7 +38,7 @@ class NewsListView(ListView):
         return context
 
 
-class NewsDetailView(ViewAddMixin, AdminLinksMixin, DetailView):
+class NewsDetailView(PublishedMixin, ViewAddMixin, AdminLinksMixin, DetailView):
     model = News
     context_object_name = 'news'
-    template_name = 'news/news_detail.html'
+    template_name = 'content/news/news_detail.html'

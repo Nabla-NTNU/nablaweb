@@ -11,6 +11,7 @@ from content.models.events import Event, EventRegistration
 from content.forms import NewsForm
 from content.models.album import Album, AlbumImage
 from content.models.blog import Blog, BlogPost
+from content.models.base import ContentImage
 from content.widgets import MultipleImagesChooser
 
 
@@ -60,7 +61,9 @@ class AlbumAdmin(admin.ModelAdmin):
 
 
 class EventAdmin(ContentAdmin):
-    fields = ("picture",
+    fields = ("publication_date",
+              "published",
+              "picture",
               "cropping",
               "headline",
               "slug",
@@ -93,7 +96,9 @@ class EventAdmin(ContentAdmin):
 
 class NewsAdmin(ContentAdmin):
     form = NewsForm
-    fields = ("picture",
+    fields = ("publication_date",
+              "published",
+              "picture",
               "cropping",
               "headline",
               "slug",
@@ -112,6 +117,7 @@ class NewsAdmin(ContentAdmin):
 
 admin.site.register(Album, AlbumAdmin)
 admin.site.register(AlbumImage)
+admin.site.register(ContentImage)
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventRegistration)
 admin.site.register(News, NewsAdmin)

@@ -3,6 +3,11 @@
     <div class="panel-heading">
         Admin
     </div>
+        {% if not object.is_published %}
+        <div class="alert alert-warning">
+            Dette innholdet er ikke publisert og kan bare ses av de med riktige rettigheter.
+        </div>
+        {% endif %}
     <ul class="nav">
         {% block sidebar-admin %}
         {% endblock %}

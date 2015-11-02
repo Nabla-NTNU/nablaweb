@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
+{% load markdown %}
 {% block title %}Blogger{% endblock %}
 
 
@@ -31,7 +31,7 @@
         <h2>{{ blog.name }}</h2>
     </a>
     {% empty %}
-    Ingen bloger her enda.
+    Ingen blogger her enda.
     {% endfor %}
 </div>
 

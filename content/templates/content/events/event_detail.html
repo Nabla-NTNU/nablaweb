@@ -4,7 +4,8 @@
 
 {% block content %}
 
-{% include "news/includes/text_content.html" with news=event%}
+
+{% include "content/news/includes/text_content.html" with news=event%}
 
 {# Vis påmeldte #}
 {% if user.is_authenticated %}
@@ -37,8 +38,8 @@
 
 {% block sidebar %}
 
-{% include "events/includes/info.html" with event=event %}
+{% include "content/events/includes/info.html" with event=event %}
 {% include "content/includes/meta.html" with content=event %}
-{% include "events/includes/sidebar-admin.html" %}
+{% include "content/events/includes/sidebar-admin.html" %}
 
 {% endblock %}

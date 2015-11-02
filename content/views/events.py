@@ -28,7 +28,7 @@ class AdministerRegistrationsView(StaticContextMixin,
                                   DetailView):
     """Viser påmeldingslisten til et Event med mulighet for å melde folk på og av."""
     model = Event
-    template_name = "events/event_administer.html"
+    template_name = "content/events/event_administer.html"
     permission_required = 'events.administer'
     actions = {"add": ("Legg til", "register_user"),
                "del": ("Fjern", "deregister_users")}
@@ -108,7 +108,7 @@ def calendar(request, year=None, month=None):
     # * prev is some day in the previous month
     # * this is some day in this month
     # * next is some day in the next month
-    return render(request, 'events/event_list.html', {
+    return render(request, 'content/events/event_list.html', {
         'calendar': mark_safe(cal),
         'prev': first_of_month - datetime.timedelta(27),
         'this': first_of_month,
@@ -121,7 +121,7 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
     """Viser en liste over alle brukere påmeldt til arrangementet."""
     model = Event
     context_object_name = "event"
-    template_name = "events/event_registrations.html"
+    template_name = "content/events/event_registrations.html"
     permission_required = 'events.add_event'
 
     def get_context_data(self, **kwargs):
@@ -135,7 +135,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
     """Viser arrangementet."""
     model = Event
     context_object_name = "event"
-    template_name = 'events/event_detail.html'
+    template_name = 'content/events/event_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super(EventDetailView, self).get_context_data(**kwargs)
@@ -154,7 +154,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
 
 
 class UserEventView(LoginRequiredMixin, TemplateView):
-    template_name = 'events/event_showuser.html'
+    template_name = 'content/events/event_showuser.html'
 
     def get_context_data(self, **kwargs):
         context_data = super(UserEventView, self).get_context_data(**kwargs)
@@ -174,7 +174,7 @@ class RegisterUserView(LoginRequiredMixin,
     """View for at en bruker skal kunne melde seg av og på."""
 
     model = Event
-    template_name = 'events/event_detail.html'
+    template_name = 'content/events/event_detail.html'
 
     def post(self, *args, **kwargs):
         reg_type = self.request.POST['registration_type']
@@ -248,7 +248,7 @@ def ical_event(request, event_id):
     event = GET_EVENT(event_id)
 
     # Use the same template for both Event and BedPres.
-    template = loader.get_template('events/event_icalendar.ics')
+    template = loader.get_template('content/events/event_icalendar.ics')
     context = Context({'event_list': (event,), })
     response = HttpResponse(template.render(context), content_type='text/calendar')
     response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.slug

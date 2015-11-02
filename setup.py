@@ -8,6 +8,7 @@ from setuptools import setup, find_packages
 from content import VERSION
 
 requirements = [
+    'markdown',
     'pytz',
     'django==1.8.3',
     'django-contrib-comments',

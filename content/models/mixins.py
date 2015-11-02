@@ -1,6 +1,7 @@
 from django.db import models
 from django_nyt.utils import notify
 from django.conf import settings
+from datetime import datetime
 
 
 class ViewCounterMixin(models.Model):
@@ -40,10 +41,11 @@ class EditMessageMixin(models.Model):
 
     def __init__(self, *args, **kwargs):
         super(EditMessageMixin, self).__init__(*args, **kwargs)
-        for field in self.watch_fields:
-            old = getattr(self, field)
-            setattr(self,
-                    self.old_field_format.format(field=field), old)
+        if self.id:
+            for field in self.watch_fields:
+                old = getattr(self, field)
+                setattr(self,
+                        self.old_field_format.format(field=field), old)
 
     def get_message_key(self):
         if self.message_key:
@@ -68,11 +70,15 @@ class EditMessageMixin(models.Model):
         if self.id:
             changed = False
             for field in self.watch_fields:
-                new = getattr(self, field)
-                old = getattr(self, self.old_field_format.format(field=field))
-                if new != old:
-                    changed = True
-                    break
+                try:
+                    new = getattr(self, field)
+                    old = getattr(self, self.old_field_format.format(field=field))
+                    if new != old:
+                        changed = True
+                        break
+                except AttributeError:
+                    # Avoid causing trouble
+                    pass
 
             if changed:
                 self.notify("{object} har endret seg.".format(object=self))
@@ -118,4 +124,37 @@ class EditableMedia(ViewCounterMixin, EditMessageMixin):
     class Meta:
         abstract = True
 
+
+class PublicationManagerMixin(models.Model):
+    """
+    Adds several options for managing publication.
+    """
+
+    publication_date = models.DateTimeField(
+        editable=True,
+        null=True,
+        blank=True,
+        verbose_name="Publikasjonstid"
+    )
+
+    published = models.NullBooleanField(
+        default=True,
+        verbose_name="Publisert",
+        help_text="Dato har høyere prioritet enn dette feltet."
+    )
+
+    @property
+    def is_published(self):
+        if not self.publication_date:
+            return self.published
+        if datetime.now() >= self.publication_date:
+            return True
+        return False
+
+    def save(self, **kwargs):
+        self.published = self.is_published
+        return super().save(**kwargs)
+
+    class Meta:
+        abstract = True
 

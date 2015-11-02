@@ -10,7 +10,7 @@
 
 <div class="row">
 {% if featured_news %}
-    {% include "news/news_summary_include.html" with news=featured_news %}
+    {% include "content/news/news_summary_include.html" with news=featured_news %}
 {% else %}
     Her er det dessverre ingen nyheter. Så trist.
 {% endif %}
@@ -23,7 +23,7 @@
 
     <div class="row">
     {% for news in row %}
-            {% include "news/news_summary_include.html" with narrow="True" %}
+            {% include "content/news/news_summary_include.html" with narrow="True" %}
     {% endfor %}
     </div>
 
@@ -58,7 +58,7 @@
 
 {% block sidebar %}
 
-    {% include "events/includes/upcoming_events.html" %}
+    {% include "content/events/includes/upcoming_events.html" %}
 
 {% endblock sidebar %}
 

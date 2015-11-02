@@ -45,6 +45,7 @@ class Blog(models.Model):
 class BlogPost(EditableMedia, models.Model):
     blog = models.ForeignKey(
         "content.Blog",
+        related_name="posts",
         verbose_name="Blogg"
     )
 
@@ -60,7 +61,8 @@ class BlogPost(EditableMedia, models.Model):
     )
 
     content = models.TextField(
-        verbose_name="Innhold"
+        verbose_name="Innhold",
+        help_text="Her kan du skrive i Markdown"
     )
 
     allow_comments = models.BooleanField(
