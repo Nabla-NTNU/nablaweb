@@ -6,7 +6,7 @@
 
 {% block content %}
 
-{% include "news/includes/text_content.html" with news=bedpres%}
+{% include "content/news/includes/text_content.html" with news=bedpres%}
 
 {# Vis påmeldte #}
 {% if user.is_authenticated and bedpres.users_attending > 0 %}
