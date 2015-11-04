@@ -10,6 +10,20 @@
 
 
 <h1>{{ quiz.title }}</h1>
+{% if quiz.is_timed %}
+<div class="float-left well">
+    <h2>Tid igjen</h2>
+    <div class="countdown"></div>
+    <script>
+jQuery(function ($) {
+    var time = {{ quiz.duration }},
+        display = $('.countdown');
+    startTimer(time, display);
+});
+</script>
+
+</div>
+{% endif %}
 
 <form action="{{ view.get_form_url }}" method="post">
     {% csrf_token %}

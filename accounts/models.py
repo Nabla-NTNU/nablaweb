@@ -153,3 +153,30 @@ class RegistrationRequest(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class LikePress(models.Model):
+    """
+    Represents a like click on some object.
+    """
+
+    user = models.ForeignKey(
+        NablaUser,
+        related_name="likes"
+    )
+
+    reference_id = models.IntegerField(
+        null=True
+    )
+
+    model_name = models.CharField(
+        max_length=100,
+        null=True
+    )
+
+
+def get_like_count(id, model):
+    return LikePress.objects.filer(refrence_id=id, model_name=model).count()
+
+
+

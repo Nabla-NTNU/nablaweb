@@ -260,3 +260,15 @@
 li.pager-counter {
     cursor: default;
 }
+
+.countdown {
+    font-family: sans-serif;
+    font-size: 50px;
+    padding: 10px;
+}
+
+.float-left {
+    position: fixed;
+    left: 50px;
+    top: 20%;
+}

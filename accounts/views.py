@@ -3,11 +3,12 @@
 from django.views.generic import DetailView, ListView, UpdateView, FormView
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseForbidden
+from django.shortcuts import redirect
 import datetime
 from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin, PermissionRequiredMixin
 
 from .forms import UserForm, RegistrationForm, InjectUsersForm
-from .models import NablaUser, NablaGroup
+from .models import NablaUser, NablaGroup, LikePress
 from .utils import activate_user_and_create_password, send_activation_email, extract_usernames
 
 User = get_user_model()
@@ -107,3 +108,16 @@ class MailListView(PermissionRequiredMixin, ListView):
         context = super().get_context_data()
         context['group'] = self.group
         return context
+
+
+def process_like(request):
+    """
+    Processes a like click.
+    :param request:
+    :return:
+    """
+    model = request.POST.get('model')
+    id = request.POST.get('id')
+    next = request.POST.get('next')
+
+    return redirect(next)

@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from braces.views import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from datetime import datetime
+from datetime import datetime, timedelta
 from braces.views import FormMessagesMixin
 
 
@@ -26,17 +26,34 @@ class QuizView(LoginRequiredMixin, DetailView):
     def get_form_url(self):
         return reverse('quiz_reply', kwargs={'pk': self.object.id})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        QuizReply.objects.create(
+            user=self.request.user,
+            scoreboard_id=self.object.scoreboard.id,
+            start=datetime.now(),
+            when=datetime.now()
+        )
+        return context
+
 
 def quiz_reply(request, pk):
     if request.user.is_authenticated():
         quiz = get_object_or_404(Quiz, id=pk)
         questions = quiz.questions.all()
         replies = []
-        reply = QuizReply.objects.create(
+        reply = QuizReply.objects.filter(
             user=request.user,
-            scoreboard_id=quiz.scoreboard.id,
-            when=datetime.now()
-        )
+            scoreboard_id=quiz.scoreboard.id
+        ).order_by('-when')[0]
+        if quiz.is_timed:
+            if reply.start:
+                end = reply.start + timedelta(seconds=quiz.duration)
+                if end <= datetime.now():
+                    messages.info(request, "Beklager, tiden gikk ut")
+                    return redirect('/')
+            else:
+                messages.error(request, "Ingen start registrert")
 
         for q in questions:
             answer = request.POST.get("{id}_alternative".format(id=q.id))

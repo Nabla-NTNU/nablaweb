@@ -72,7 +72,8 @@ class Quiz(InteractiveElement):
     duration = models.PositiveIntegerField(
         verbose_name="Tidsbegrensning",
         blank=True,
-        null=True
+        null=True,
+        help_text="Tid til å fullføre quizen målt i sekunder."
     )
 
     scoreboard = models.OneToOneField(
@@ -137,6 +138,11 @@ class QuizReply(InteractionResult):
     score = models.IntegerField(
         null=True,
         blank=True
+    )
+
+    start = models.DateTimeField(
+        blank=True,
+        null=True
     )
 
     class Meta:

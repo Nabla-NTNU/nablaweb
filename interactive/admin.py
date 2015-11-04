@@ -21,8 +21,7 @@ class AdventCalendarAdmin(admin.ModelAdmin):
 class QuizQuestionInline(admin.TabularInline):
     model = QuizQuestion
     extra = 8
-    fields = ('question', 'alternative_1', 'alternative_2', 'alternative_3', 'alternative_4', 'correct_alternative',
-              'short_description')
+    fields = ('question', 'alternative_1', 'alternative_2', 'alternative_3', 'alternative_4', 'correct_alternative')
     fk_name = "quiz"
 
 
