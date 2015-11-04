@@ -48,7 +48,7 @@ def update_published_state(model):
     :param model: The model class to update
     """
     for m in model.objects.all():
-        if not m.is_published:
+        if not m.published and m.is_published:
             m.save()
 
 
