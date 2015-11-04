@@ -47,8 +47,8 @@ def update_published_state(model):
     Update the object with the new date.
     :param model: The model class to update
     """
-    for m in model.objects.all():
-        if not m.published and m.is_published:
+    for m in model.objects.filter(published=False):
+        if m.is_published:
             m.save()
 
 
