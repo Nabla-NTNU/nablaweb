@@ -6,7 +6,7 @@
 
 {% block content %}
 
-{% include "news/includes/text_content.html" with news=bedpres%}
+{% include "content/news/includes/text_content.html" with news=bedpres%}
 
 {# Vis påmeldte #}
 {% if user.is_authenticated and bedpres.users_attending > 0 %}
@@ -14,11 +14,7 @@
     <div class="registrations">
         {% for user in bedpres.get_attendance_list %}
         <span class="label label-default" style="display: inline-block;">
-            {% if user.get_full_name %}
-                {{ user.get_full_name }}
-            {% else %}
-                {{ user.username }}
-            {% endif %}
+            {% firstof user.get_full_name user.username %}
         </span>
         {% endfor %}
     </div>

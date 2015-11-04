@@ -3,11 +3,12 @@
 from django.views.generic import DetailView, ListView, UpdateView, FormView
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseForbidden
-from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin
+from django.shortcuts import redirect
 import datetime
+from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin, PermissionRequiredMixin
 
 from .forms import UserForm, RegistrationForm, InjectUsersForm
-from .models import NablaUser
+from .models import NablaUser, NablaGroup, LikePress
 from .utils import activate_user_and_create_password, send_activation_email, extract_usernames
 
 User = get_user_model()
@@ -86,3 +87,37 @@ class BirthdayView(LoginRequiredMixin, ListView):
                                         birthday__month=today.month,
                                         is_active=True)
 
+
+class MailListView(PermissionRequiredMixin, ListView):
+    template_name = 'accounts/mail_list.html'
+    model = NablaUser
+    context_object_name = 'users'
+    permission_required = 'auth.change_user'
+
+    def dispatch(self, request, *args, **kwargs):
+        group = kwargs['group']
+        self.group = NablaGroup.objects.get(id=group)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset.filter(groups__in=[self.group])
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['group'] = self.group
+        return context
+
+
+def process_like(request):
+    """
+    Processes a like click.
+    :param request:
+    :return:
+    """
+    model = request.POST.get('model')
+    id = request.POST.get('id')
+    next = request.POST.get('next')
+
+    return redirect(next)

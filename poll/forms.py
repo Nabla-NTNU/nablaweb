@@ -58,7 +58,7 @@ class PollForm(ChangedByMixin, forms.ModelForm):
         updated_choices = []
 
         i = 1
-        while True:
+        while i <= 20:
             choice = self.cleaned_data.get('choice_' + str(i))
             if not choice:
                 break

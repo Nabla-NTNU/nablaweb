@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load cache %}
+{% load static %}
+{% load thumbnail %}
+{% block title %}
+Quiz
+{% endblock %}
+{% block content %}
+<h1>Quiz</h1>
+<ul class="list-group">
+{% for quiz in quiz_list %}
+
+{% with user=quiz.created_by %}
+<li class="list-group-item">
+
+    {% if user.get_full_name %}
+    {{ user.get_full_name }}
+    {% else %}
+    {{ user.username }}
+    {% endif %}
+
+    <a href="{{ quiz.get_absolute_url }}">{{ quiz.title }}</a>
+    <a href="{{ quiz.scoreboard.get_absolute_url }}">Highscore</a>
+</li>
+{% endwith %}
+{% empty %}
+Ingen quiz her enda.
+{% endfor %}
+</ul>
+
+{% if is_paginated %}
+<nav>
+    <ul class="pager">
+        {% if page_obj.has_next %}
+        <li class="previous">
+            <a href="?page={{ page_obj.next_page_number }}"><span aria-hidden="true">&larr;</span> Eldre</a>
+        </li>
+        {% endif %}
+
+        <li class="disabled pager-counter">
+            Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
+        </li>
+
+        {% if page_obj.has_previous %}
+        <li class="next">
+            <a href="?page={{ page_obj.previous_page_number }}">Nyere <span aria-hidden="true">&rarr;</span></a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}
+{% block sidebar %}
+{% endblock %}

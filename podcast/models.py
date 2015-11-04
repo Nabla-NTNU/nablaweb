@@ -3,6 +3,7 @@
 from django.db import models
 from image_cropping.fields import ImageRatioField
 from django.core.urlresolvers import reverse
+from content.models.mixins import PublicationManagerMixin, ViewCounterMixin
 
 
 def get_season_count():
@@ -57,7 +58,7 @@ class Season(models.Model):
         verbose_name_plural = 'Sesonger'
 
 
-class Podcast(models.Model):
+class Podcast(PublicationManagerMixin, ViewCounterMixin, models.Model):
 
     # Bildeopplasting med resizing og cropping
     image = models.ImageField(
@@ -79,6 +80,7 @@ class Podcast(models.Model):
         max_length=200,
         blank=False
     )
+
     description = models.TextField(
         verbose_name='beskrivelse',
         help_text='Teksten vil bli kuttet etter 250 tegn på sesongsiden.',
@@ -97,16 +99,12 @@ class Podcast(models.Model):
         blank=False,
         null=True,
     )
+
     file = models.FileField(
         upload_to='podcast',
         blank=True,
         verbose_name='lydfil',
         help_text='Filformat: MP3'
-    )
-
-    view_counter = models.IntegerField(
-        editable=False,
-        default=0
     )
 
     is_clip = models.BooleanField(
@@ -121,10 +119,6 @@ class Podcast(models.Model):
         null=True,
         blank=True
     )
-
-    def add_view(self):
-        self.view_counter += 1
-        self.save()
 
     def get_absolute_url(self):
         return reverse('podcast_detail', kwargs={'pk': self.id})

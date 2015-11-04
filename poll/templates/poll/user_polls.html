@@ -4,91 +4,64 @@
 {% load sekizai_tags %}
 {% load static %}
 {% load bootstrap3 %}
+
 {% block title %}
 Mine avstemninger
 {% endblock %}
-{% block content %}
-<h1>Mine avstemninger</h1>
-{% for poll in poll_list %}
 
+{% block content %}
+
+<h1>Mine avstemninger</h1>
+
+{% for poll in poll_list %}
 <div class="btn-group">
     <a class="btn btn-default" href="{% url "poll_user_update" poll.id %}">
-    <span class="glyphicon glyphicon-pencil"></span>
-    Endre
+        <span class="glyphicon glyphicon-pencil"></span>
+        Endre
     </a>
-    <a class="btn btn-danger" href="{% url "poll_user_delete" poll.id %}">
-    <span class="glyphicon glyphicon-trash"></span>
-    Slett
-    </a>
-
+    <form style="display: inline" method="POST" action="{% url "poll_user_delete" poll.id %}">
+        <button class="btn btn-danger" type="submit">
+            <span class="glyphicon glyphicon-trash"></span>
+            Slett
+        </button>
+        {% csrf_token %}
+    </form>
 </div>
+
 <div class="poll well">
     <h4>{{ poll.question }}</h4>
 
     {% if poll.voted %}
-        <p>{{ poll.get_total_votes }} bruker{% if poll.get_total_votes > 1 %}e{% endif %} har stemt.</p>
-        {% for choice in poll.choices.all %}
-        <div class="choice">{{ choice.choice }}</div>
-        <div class="progress">
-            <div class="progress-bar" style="width:{% widthratio choice.votes poll.get_total_votes 100 %}%">
-                            <span class="percent{% if choice.votes == 0 %} zero{% endif %}">
-                                {% widthratio choice.votes poll.get_total_votes 100 %}%
-                            </span>
-            </div>
-        </div>
-        {% endfor %}
+        {% include "poll/includes/poll_result.html" %}
     {% else %}
-    <form action="{% url "poll.views.vote" poll.id %}?next={% url "poll_user" %}" method="post">
-    {% csrf_token %}
-    {% for choice in poll.choices.all %}
-    <div class="radio">
-        <label>
-            <input type="radio" name="choice" value="{{ choice.id }}">
-
-            <div class="choice">{{ choice.choice }}</div>
-        </label>
-    </div>
-    {% endfor %}
-    {% if user.is_authenticated %}
-    <button class="btn btn-default btn-block" type="submit">Stem</button>
-    {% else %}
-    <div class="center" style="color:#999;">Logg inn for å stemme</div>
-    {% endif %}
-    </form>
+        {% include "poll/includes/vote_form.html" %}
     {% endif %}
 </div>
 {% empty %}
 Ingen brukeravstemninger her enda.
 {% endfor %}
 
-{% if is_paginated %}
-<nav>
-    <ul class="pager">
-        {% if page_obj.has_next %}
-        <li class="previous">
-            <a href="?page={{ page_obj.next_page_number }}"><span aria-hidden="true">&larr;</span> Eldre</a>
-        </li>
-        {% endif %}
-
-        <li class="disabled pager-counter">
-            Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
-        </li>
-
-        {% if page_obj.has_previous %}
-        <li class="next">
-            <a href="?page={{ page_obj.previous_page_number }}">Nyere <span aria-hidden="true">&rarr;</span></a>
-        </li>
-        {% endif %}
-    </ul>
-</nav>
-{% endif %}
+{% include "includes/pagination.html" %}
 
 <h3>Lag en ny poll.</h3>
-<form method="post" action="{% url "poll_user_create" %}" >
+<form id="create" method="post" action="{% url "poll_user_create" %}" >
 {% csrf_token %}
 {% bootstrap_form form %}
+<button id="add-alternative" class="btn btn-lg" type="button">Legg til alternativ</button>
 <button class="btn btn-lg btn-primary" type="submit">Publiser</button>
 </form>
+
+<script>
+    $('#add-alternative').on("click", function () {
+    var i = $('#create input:last').attr("id");
+    i = parseInt(i.substring(10, i.length))+1;
+    $('<div class="form-group"><label class="control-label" for="id_choice_'+i+'">Alternativ '+
+    i+'</label><input class="form-control" id="id_choice_'+i
+    +'" maxlength="80" name="choice_'+i+'" placeholder="Alternativ '+i
+    +'" title="" type="text"></div>'
+    ).insertBefore(this);
+    });
+</script>
 
 {% endblock %}
 {% block sidebar %}

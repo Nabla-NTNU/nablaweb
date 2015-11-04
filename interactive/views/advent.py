@@ -1,5 +1,5 @@
 from django.views.generic import DetailView, ListView
-from .models import AdventCalendar, AdventDoor
+from interactive.models import AdventCalendar, AdventDoor
 
 
 class AdventDoorView(DetailView):
@@ -9,6 +9,11 @@ class AdventDoorView(DetailView):
 
     def get_template_names(self):
         return self.object.template
+
+    def get_context_data(self, **kwargs):
+        context = super(AdventDoorView, self).get_context_data(**kwargs)
+        context['calendar'] = context['door'].calendar
+        return context
 
 
 class AdventCalendarView(ListView):
