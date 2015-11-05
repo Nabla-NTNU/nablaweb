@@ -46,9 +46,10 @@ Du fikk {{ result.get_correct_count }} av {{ result.get_question_count }} riktig
 <a class="btn btn-primary" href="{% url "quiz_score" result.scoreboard.id %}">
     Highscore
 </a>
-
+{% if view.request.user == result.user %}
 <a class="btn btn-danger" href="{% url "quiz_result_delete" result.id %}">
     <span class="glyphicon glyphicon-trash"></span>
     Slett resultat
 </a>
+{% endif %}
 {% endblock %}
