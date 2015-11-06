@@ -116,8 +116,22 @@ def process_like(request):
     :param request:
     :return:
     """
-    model = request.POST.get('model')
-    id = request.POST.get('id')
-    next = request.POST.get('next')
+    model = request.GET.get('model')
+    id = request.GET.get('id')
+    next = request.GET.get('next')
+    user = request.user
+
+    try:
+        like = LikePress.objects.get(
+            user=user,
+            reference_id=id,
+            model_name=model
+        )
+    except LikePress.DoesNotExist:
+        like = LikePress.objects.create(
+            user=user,
+            reference_id=id,
+            model_name=model
+        )
 
     return redirect(next)
