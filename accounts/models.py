@@ -176,7 +176,7 @@ class LikePress(models.Model):
 
 
 def get_like_count(id, model):
-    return LikePress.objects.filer(refrence_id=id, model_name=model).count()
+    return LikePress.objects.filter(reference_id=id, model_name=model).count()
 
 
 

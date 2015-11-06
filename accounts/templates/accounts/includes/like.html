@@ -1,0 +1,6 @@
+{% load like %}
+Antall liker: {% like_count %}
+<a class="btn btn-large" href="{% url "process_like" model=object.content_type.model id=object.id %}?next={{ object.get_absolute_url }}">
+    <span class="glyphicon glyphicon-thumbs-up"></span>
+    Liker
+</a>

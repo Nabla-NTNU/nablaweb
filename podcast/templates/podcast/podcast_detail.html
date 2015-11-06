@@ -16,7 +16,7 @@
   {% if podcast.image %}
   <img class="img-responsive" src="{{ podcast.image.url }}" alt="{{ podcast.title }}" style="max-width: 100%;"/>
   {% endif %}
-  <p><i>Dato: {{ podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ podcast.view_counter }}</i></p>
+  <p><i>Dato: {{ podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ podcast.view_counter }}</i>{% include "accounts/includes/like.html" %}</p>
 </div>
 {% if podcast.file %}
 <div class="container-fluid">
