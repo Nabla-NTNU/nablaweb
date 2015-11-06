@@ -2,6 +2,8 @@ from django.db import models
 from django_nyt.utils import notify
 from django.conf import settings
 from datetime import datetime
+from django.contrib.contenttypes.models import ContentType
+from django_comments.models import Comment
 
 
 class ViewCounterMixin(models.Model):
@@ -124,6 +126,9 @@ class EditableMedia(ViewCounterMixin, EditMessageMixin):
     class Meta:
         abstract = True
 
+    def has_been_edited(self):
+        return abs((self.last_changed_date - self.created_date).seconds) > 1
+
 
 class PublicationManagerMixin(models.Model):
     """
@@ -157,4 +162,38 @@ class PublicationManagerMixin(models.Model):
 
     class Meta:
         abstract = True
+
+
+class CommentsMixin(models.Model):
+    allow_comments = models.BooleanField(
+        blank=True,
+        verbose_name="Tillat kommentarer",
+        default=True,
+        help_text="Hvorvidt kommentering er tillatt"
+    )
+
+    content_type = models.ForeignKey(
+        ContentType,
+        editable=False,
+        null=True
+    )
+
+    class Meta:
+        abstract = True
+
+    def delete(self, *args, **kwargs):
+        """
+        Override default method, so related comments are also deleted
+        """
+        comments = Comment.objects.filter(
+            object_pk=self.pk,
+            content_type=self.content_type
+        )
+        comments.delete()
+        super(CommentsMixin, self).delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if not self.content_type:
+            self.content_type = ContentType.objects.get_for_model(self.__class__)
+        super(CommentsMixin, self).save(*args, **kwargs)
 
