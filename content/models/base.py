@@ -3,10 +3,8 @@
 
 from django.db import models
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 
-from django_comments.models import Comment
 from image_cropping.fields import ImageRatioField
 from .mixins import EditableMedia, PublicationManagerMixin, CommentsMixin
 
