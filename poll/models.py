@@ -2,6 +2,7 @@
 
 from django.db import models
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 
 
 class UserHasVoted(Exception):
@@ -60,6 +61,12 @@ class Poll(models.Model):
         default=False
     )
 
+    content_type = models.ForeignKey(
+        ContentType,
+        editable=False,
+        null=True
+    )
+
     objects = PollManager()
 
     def __str__(self):
@@ -69,6 +76,8 @@ class Poll(models.Model):
         return self.question
 
     def save(self, *args, **kwargs):
+        if not self.content_type:
+            self.content_type = ContentType.objects.get_for_model(self.__class__)
         if self.is_current:
             Poll.objects.filter(is_current=True)\
                 .exclude(pk=self.pk)\

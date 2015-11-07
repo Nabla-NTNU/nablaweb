@@ -1,6 +1,25 @@
 {% load like %}
-Antall liker: {% like_count %}
-<a class="btn btn-large" href="{% url "process_like" model=object.content_type.model id=object.id %}?next={{ object.get_absolute_url }}">
+{% with id=object.id %}
+<span>
+Antall liker: <span id="likes-{{ id }}">{% like_count %}</span>
+<a class="btn btn-large" id="like-{{ id }}" href="{% url "process_like" model=object.content_type.model id=object.id %}?next={{ object.get_absolute_url }}">
     <span class="glyphicon glyphicon-thumbs-up"></span>
     Liker
 </a>
+<script>
+$(function () {
+    $('#like-{{ id }}').on('click', function (e) {
+        $.ajax("{% url "process_like" model=object.content_type.model id=object.id %}",
+        {
+            success: function (result) {
+                $('#likes-{{ id }}').text(result.count);
+            }
+        });
+        e.preventDefault();
+    });
+});
+</script>
+</span>
+{% endwith %}
+
+

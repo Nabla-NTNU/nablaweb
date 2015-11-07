@@ -14,8 +14,11 @@
         <td style="width:20%">
             <a href="{{ m.get_absolute_url }}"> {{ m.pub_date|date:"d. F Y" }} </a>
         </td>
-        <td style="width:70%;">
+        <td style="width:40%;">
             {{ m.headline }}
+        </td>
+        <td style="width:30%;">
+            {% include "accounts/includes/like.html" with object=m%}
         </td>
         <td style="width:10%; align:right;">
             <a class="btn btn-sm" href="{{ m.file.url }}"><i class="icon-download-alt"></i></a>

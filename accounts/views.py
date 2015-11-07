@@ -2,13 +2,14 @@
 
 from django.views.generic import DetailView, ListView, UpdateView, FormView
 from django.contrib.auth import get_user_model
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import redirect
+from django.core.urlresolvers import reverse
 import datetime
 from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin, PermissionRequiredMixin
 
 from .forms import UserForm, RegistrationForm, InjectUsersForm
-from .models import NablaUser, NablaGroup, LikePress
+from .models import NablaUser, NablaGroup, LikePress, get_like_count
 from .utils import activate_user_and_create_password, send_activation_email, extract_usernames
 
 User = get_user_model()
@@ -119,19 +120,24 @@ def process_like(request, model, id):
 
     next = request.GET.get('next')
     user = request.user
-
-    try:
-        like = LikePress.objects.get(
-            user=user,
-            reference_id=id,
-            model_name=model
-        )
-        like.delete()
-    except LikePress.DoesNotExist:
-        like = LikePress.objects.create(
-            user=user,
-            reference_id=id,
-            model_name=model
-        )
-
-    return redirect(next)
+    if user.is_authenticated():
+        try:
+            like = LikePress.objects.get(
+                user=user,
+                reference_id=id,
+                model_name=model
+            )
+            like.delete()
+        except LikePress.DoesNotExist:
+            like = LikePress.objects.create(
+                user=user,
+                reference_id=id,
+                model_name=model
+            )
+        count = get_like_count(id, model)
+        if next:
+            return redirect(next)
+        else:
+            return JsonResponse({'count': count})
+    else:
+        return redirect(reverse("auth_login"))
