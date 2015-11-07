@@ -4,7 +4,7 @@ from django.conf.urls import url, include
 import django.contrib.auth.views as auth_views
 from django.views.generic import RedirectView
 from .views import UserDetailView, UpdateProfile, UserList, RegistrationView, InjectUsersFormView, MailListView, \
-    BirthdayView
+    BirthdayView, process_like
 
 password_change_patterns = [
     url(r'^$',
@@ -56,6 +56,9 @@ urlpatterns = [
     url(r'^maillist/(?P<group>\d+)/$',
         MailListView.as_view(),
         name='mail_list'),
+    url(r'^like/(?P<model>[\w\.]+)/(?P<id>\d+)/',
+        process_like,
+        name="process_like")
 ]
 
 # To be imported in the main urls.py

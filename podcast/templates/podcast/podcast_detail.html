@@ -16,7 +16,7 @@
   {% if podcast.image %}
   <img class="img-responsive" src="{{ podcast.image.url }}" alt="{{ podcast.title }}" style="max-width: 100%;"/>
   {% endif %}
-  <p><i>Dato: {{ podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ podcast.view_counter }}</i></p>
+  <p><i>Dato: {{ podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ podcast.view_counter }}</i>{% include "accounts/includes/like.html" %}</p>
 </div>
 {% if podcast.file %}
 <div class="container-fluid">
@@ -37,8 +37,9 @@
 {% endif %}
 {% if podcast.extra_markdown %}
 <p>
-    {{ podcast.extra_markdown | markdown:"unsafe"}}
+    {{ podcast.extra_markdown | markdown:"unsafe" }}
 </p>
+{% include "content/includes/comments.html" with content=podcast %}
 {% endif %}
 
 {% endblock %}

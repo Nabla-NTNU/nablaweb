@@ -110,14 +110,28 @@ class MailListView(PermissionRequiredMixin, ListView):
         return context
 
 
-def process_like(request):
+def process_like(request, model, id):
     """
     Processes a like click.
     :param request:
     :return:
     """
-    model = request.POST.get('model')
-    id = request.POST.get('id')
-    next = request.POST.get('next')
+
+    next = request.GET.get('next')
+    user = request.user
+
+    try:
+        like = LikePress.objects.get(
+            user=user,
+            reference_id=id,
+            model_name=model
+        )
+        like.delete()
+    except LikePress.DoesNotExist:
+        like = LikePress.objects.create(
+            user=user,
+            reference_id=id,
+            model_name=model
+        )
 
     return redirect(next)
