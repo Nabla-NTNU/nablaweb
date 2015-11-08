@@ -39,8 +39,9 @@
 <p>
     {{ podcast.extra_markdown | markdown:"unsafe" }}
 </p>
-{% include "content/includes/comments.html" with content=podcast %}
 {% endif %}
+{% include "content/includes/comments.html" with content=podcast %}
+
 
 {% endblock %}
 {% block sidebar %}
