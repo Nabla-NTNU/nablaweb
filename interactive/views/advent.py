@@ -1,6 +1,7 @@
 from django.views.generic import DetailView, ListView
 from interactive.models import AdventCalendar, AdventDoor
-
+from django.shortcuts import redirect
+from django.core.urlresolvers import reverse
 
 class AdventDoorView(DetailView):
     model = AdventDoor
@@ -36,3 +37,21 @@ class AdventCalendarView(ListView):
         context = super().get_context_data(**kwargs)
         context['calendar'] = self.calendar
         return context
+
+
+def participate_in_competition(request, year, number):
+
+    user = request.user
+    calendar = AdventCalendar.objects.get(year=year)
+
+    if user.is_authenticated():
+        door = AdventDoor.objects.get(
+            calendar=calendar,
+            door=number
+        )
+        if door.is_lottery() and user not in door.users:
+            door.users.add(user)
+
+        return redirect(door.get_absoulte_url())
+    else:
+        return redirect(reverse("auth_login"))

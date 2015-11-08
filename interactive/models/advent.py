@@ -1,12 +1,12 @@
 from django.db import models
 from .base import InteractiveElement
-from accounts.models import NablaUser
+from accounts.models import NablaUser, LikeMixin
 from com.models import Committee
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta
 
 
-class AdventDoor(InteractiveElement):
+class AdventDoor(LikeMixin, InteractiveElement):
     """
     An element of the advent calendar.
     """
@@ -62,7 +62,8 @@ class AdventDoor(InteractiveElement):
     short_description = models.CharField(
         max_length=200,
         verbose_name="Kort beskrivelse",
-        null=True
+        null=True,
+        blank=True
     )
 
     class Meta:
@@ -102,7 +103,7 @@ class AdventCalendar(models.Model):
 
     @property
     def first(self):
-        return datetime(year=self.year, day=1, month=10)
+        return datetime(year=self.year, day=6, month=11)
 
     class Meta:
         verbose_name = "Adventskalender"
