@@ -47,11 +47,11 @@ def participate_in_competition(request, year, number):
     if user.is_authenticated():
         door = AdventDoor.objects.get(
             calendar=calendar,
-            door=number
+            number=number
         )
-        if door.is_lottery() and user not in door.users:
+        if door.is_lottery and user not in door.users.all():
             door.users.add(user)
 
-        return redirect(door.get_absoulte_url())
+        return redirect(door.get_absolute_url())
     else:
         return redirect(reverse("auth_login"))

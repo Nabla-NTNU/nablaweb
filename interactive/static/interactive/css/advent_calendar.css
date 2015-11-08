@@ -13,6 +13,7 @@
     font-size: 100px;
     z-index: 3;
     margin-top: 10px;
+    box-shadow: inset 0px 0px 10px 10px ;
 }
 
 .advent-door::before {
@@ -27,12 +28,18 @@
     left: 0px;
 }
 
-.advent-door p {
+.advent-door a {
     display: none;
     font-size: 15px;
+    vertical-align: middle;
 }
 
-.advent-door-open p {
+.advent-door img {
+    width: 100px;
+    height: 100px;
+}
+
+.advent-door-open a {
     display: inline-block;
 }
 
@@ -47,18 +54,24 @@
 }
 
 .advent-door-open {
-    background: #666;
+    background-image: url(/media/texture.jpg);
+    background-size: 100% 100%;
 
 }
 
 .advent-door-open::before {
     opacity: 0;
-    transition: opacity 2s ease-in;
+    transition: opacity 1s ease-in;
+    display:none;
 }
 
 body {
     color: #fff;
     background-color: #333;
+}
+
+a, a:hover {
+    color: black;
 }
 
 .corner-left {

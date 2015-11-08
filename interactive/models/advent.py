@@ -4,6 +4,7 @@ from accounts.models import NablaUser, LikeMixin
 from com.models import Committee
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta
+from random import choice
 
 
 class AdventDoor(LikeMixin, InteractiveElement):
@@ -87,6 +88,10 @@ class AdventDoor(LikeMixin, InteractiveElement):
     def is_published(self):
         return datetime.now() >= self.date
 
+    def choose_winner(self):
+        if self.is_lottery and self.is_published:
+            self.winner = choice(self.participating_users.all())
+
 
 class AdventCalendar(models.Model):
 
@@ -103,7 +108,7 @@ class AdventCalendar(models.Model):
 
     @property
     def first(self):
-        return datetime(year=self.year, day=6, month=11)
+        return datetime(year=self.year, day=1, month=12)
 
     class Meta:
         verbose_name = "Adventskalender"

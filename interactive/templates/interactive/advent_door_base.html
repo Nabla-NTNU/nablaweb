@@ -3,6 +3,7 @@
 {% load markdown %}
 {% load thumbnail %}
 {% load sekizai_tags %}
+{% load static %}
 
 {% block title %}{{ door.number }}{% endblock %}
 
@@ -11,8 +12,31 @@
 <h1>{{ door.number }}</h1>
 
 <div class="text">
-{{ door.content|markdown:"unsafe" }}
+    {% include "accounts/includes/like.html" with object=door%}
+    <p>
+    {{ door.content|markdown:"unsafe" }}
+    </p>
+    {% if door.is_lottery %}
+    <a class="btn btn-large btn-primary" href="{% url "advent_participate" door.calendar.year door.number %}">
+        Delta i trekningen
+    </a>
+    <h2>Med i trekningen:</h2>
+    <div>
+    {% for user in door.users.all %}
+        <a href="{{ user.get_absolute_url }}">
+        <img class="thumbnail" alt="avatar"
+                {% if user.avatar %}
+                    src="{% thumbnail user.avatar 50x50 %}"
+                {% else %}
+                    src="{% static "img/default_avatar.png" %}"
+                {% endif %} height="50" width="50" title="{% firstof user.get_full_name user.username %}">
+        </a>
+    {% endfor %}
+    </div>
+    {% endif %}
 </div>
+
+
 
 <div></div>
 {% endblock %}

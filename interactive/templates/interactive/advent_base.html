@@ -77,12 +77,14 @@
                 <td>
                 <div class="advent-door" data-open="{{ door.is_published }}">
                 {% if door.is_published %}
-                <p>
+
                 <a href="{{ door.get_absolute_url }}">
-                    <img src="{% static "img/logo.png" %}" />
-                </a>
-                {{ door.short_description }}
+                    <img src="/media/tree.ico" />
+                <p>
+                    {{ door.short_description }}
                 </p>
+                </a>
+
                 {% endif %}
                 <div class="advent-number">{{ door.number }}</div>
                 </div>

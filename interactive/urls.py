@@ -10,7 +10,7 @@ urlpatterns = [
         name="advent_door"),
     url(r'^julekalender/(?P<year>\d+)/(?P<number>\d+)/delta$',
         participate_in_competition,
-        name="advent_door"),
+        name="advent_participate"),
     url(r'^julekalender/(?P<year>\d+)/$',
         AdventCalendarView.as_view(),
         name="advent_calendar"),
