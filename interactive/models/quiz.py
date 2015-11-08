@@ -1,6 +1,7 @@
 from django.db import models
 from .base import InteractiveElement, Scoreboard, InteractionResult
 from django.core.urlresolvers import reverse
+from accounts.models import LikeMixin
 
 
 class QuizQuestion(models.Model):
@@ -54,7 +55,7 @@ class QuizQuestion(models.Model):
         return str(self.question)
 
 
-class Quiz(InteractiveElement):
+class Quiz(LikeMixin, InteractiveElement):
     """
     Represents a quiz.
     """

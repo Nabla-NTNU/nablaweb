@@ -162,11 +162,12 @@ INSTALLED_APPS = [
 ]
 
 BOWER_INSTALLED_APPS = (
-#    'jquery',
+    'jquery#1.9.x',
     'rangy',
-    'fullpage.js',
-    'hallo.js',
-    'font-awesome'
+    'font-awesome',
+    'pixi.js',
+    'PhysicsJS',
+    'requirejs'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

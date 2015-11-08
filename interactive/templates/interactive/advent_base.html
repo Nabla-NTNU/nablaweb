@@ -26,6 +26,12 @@
         <link rel="stylesheet" href="{% static "interactive/css/advent_calendar.css" %}"/>
     {% endaddtoblock %}
 
+    {% addtoblock "css" %}
+    <style>
+
+    </style>
+    {% endaddtoblock %}
+
     {% addtoblock "js" %}
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     {% endaddtoblock %}
@@ -68,16 +74,20 @@
         <tr>
             {% for door in row %}
 
-                <td class="advent-door">
+                <td>
+                <div class="advent-door" data-open="{{ door.is_published }}">
                 {% if door.is_published %}
-                <p>
+
                 <a href="{{ door.get_absolute_url }}">
-                    <img src="{% static "img/logo.png" %}" />
-                </a>
-                {{ door.short_description }}
+                    <img src="/media/tree.ico" />
+                <p>
+                    {{ door.short_description }}
                 </p>
+                </a>
+
                 {% endif %}
-                <span>{{ door.number }}</span>
+                <div class="advent-number">{{ door.number }}</div>
+                </div>
                 </td>
             {% endfor %}
         </tr>
@@ -88,7 +98,7 @@
 </div>
 
 <div class="corner-left">
-   <img src="/media/misteltein.png" alt="misteltein" />
+   <img src="/media/misteltein.png" alt="misteltein" height="150"/>
 </div>
 
 <div class="corner-right">

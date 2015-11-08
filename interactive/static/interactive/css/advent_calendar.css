@@ -6,41 +6,72 @@
 }
 
 .advent-door {
-    border: 1px;
-    margin: 10px;
     height: 240px;
-    width: 180px;
-
+    width: 220px;
+    position: relative;
     text-decoration: none;
     font-size: 100px;
+    z-index: 3;
+    margin-top: 10px;
+    box-shadow: inset 0px 0px 10px 10px ;
 }
 
-.advent-door p {
+.advent-door::before {
+    content: ' ';
+    background-image: url(/media/door.jpg);
+    background-size: 220px 240px;
+    position: absolute;
+    width: 220px;
+    height: 240px;
+    z-index: 2;
+    display: table-cell;
+    left: 0px;
+}
+
+.advent-door a {
     display: none;
     font-size: 15px;
+    vertical-align: middle;
 }
 
-.advent-door-open p {
+.advent-door img {
+    width: 100px;
+    height: 100px;
+}
+
+.advent-door-open a {
     display: inline-block;
 }
 
-.advent-door-open span {
+.advent-number {
+    z-index: 30;
+    display: block;
+    position: relative;
+}
+
+.advent-door-open .advent-number {
     display: none;
 }
 
 .advent-door-open {
-    background: #000;
+    background-image: url(/media/texture.jpg);
+    background-size: 100% 100%;
 
-    -webkit-transition: background 2s ease-in;
-    -moz-transition: background 2s ease-in;
-    -o-transition: background 2s ease-in;
-    -ms-transition: background 2s ease-in;
-    transition: background 2s ease-in;
+}
+
+.advent-door-open::before {
+    opacity: 0;
+    transition: opacity 1s ease-in;
+    display:none;
 }
 
 body {
     color: #fff;
     background-color: #333;
+}
+
+a, a:hover {
+    color: black;
 }
 
 .corner-left {
@@ -58,6 +89,42 @@ body {
 }
 
 h1 {
-    font-size: 40px;
+    font-size: 100px;
     text-align: center;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+body {
+    background: url(/media/jul.jpg) 0 0;
+    background-size: 100%;
+    background-repeat: repeat-y;
+}
+
+
+.info {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    font-size: 20px;
+    color: #ffd;
+    padding: 4px;
+}
+.info a {
+    color: #ffd;
+}
+body.before-game .info {
+    display: block;
+}
+.text {
+    background: rgba(0,0,0,0.5);
+    padding: 30px;
+    font-size: 20px;
+    border-radius: 15px;
 }

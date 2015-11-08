@@ -1,12 +1,13 @@
 from django.db import models
 from .base import InteractiveElement
-from accounts.models import NablaUser
+from accounts.models import NablaUser, LikeMixin
 from com.models import Committee
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta
+from random import choice
 
 
-class AdventDoor(InteractiveElement):
+class AdventDoor(LikeMixin, InteractiveElement):
     """
     An element of the advent calendar.
     """
@@ -62,7 +63,8 @@ class AdventDoor(InteractiveElement):
     short_description = models.CharField(
         max_length=200,
         verbose_name="Kort beskrivelse",
-        null=True
+        null=True,
+        blank=True
     )
 
     class Meta:
@@ -86,6 +88,10 @@ class AdventDoor(InteractiveElement):
     def is_published(self):
         return datetime.now() >= self.date
 
+    def choose_winner(self):
+        if self.is_lottery and self.is_published:
+            self.winner = choice(self.participating_users.all())
+
 
 class AdventCalendar(models.Model):
 
@@ -102,7 +108,7 @@ class AdventCalendar(models.Model):
 
     @property
     def first(self):
-        return datetime(year=self.year, day=1, month=10)
+        return datetime(year=self.year, day=1, month=12)
 
     class Meta:
         verbose_name = "Adventskalender"
