@@ -2,7 +2,7 @@
 
 from django.views.generic import DetailView, ListView, UpdateView, FormView
 from django.contrib.auth import get_user_model
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse, Http404
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 import datetime
@@ -94,20 +94,23 @@ class MailListView(PermissionRequiredMixin, ListView):
     model = NablaUser
     context_object_name = 'users'
     permission_required = 'auth.change_user'
-
-    def dispatch(self, request, *args, **kwargs):
-        group = kwargs['group']
-        self.group = NablaGroup.objects.get(id=group)
-        return super().dispatch(request, *args, **kwargs)
+    groups = []
 
     def get_queryset(self):
+        groups = self.kwargs['groups'].split('/')
+        groups = [int(i) for i in groups]
+        groups = list(set(groups))
+        try:
+            self.groups = [NablaGroup.objects.get(id=group) for group in groups]
+        except NablaGroup.DoesNotExist:
+            raise Http404('En av IDene har ikke en tilhørende gruppe')
         queryset = super().get_queryset()
-        queryset.filter(groups__in=[self.group])
+        queryset = queryset.filter(groups__in=self.groups)
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['group'] = self.group
+        context['groups'] = self.groups
         return context
 
 

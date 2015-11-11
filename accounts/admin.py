@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 from .models import NablaUser, NablaGroup, FysmatClass, RegistrationRequest
 from .forms import NablaUserChangeForm, NablaUserCreationForm
 
+
 User = get_user_model()
 
 
@@ -61,8 +62,11 @@ class ExtendedGroupAdmin(GroupAdmin):
 
 
 def maillist(modeladmin, request, queryset):
-    selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
-    url = reverse('mail_list', kwargs={'group': selected[0]})
+    ids = [g.id for g in queryset]
+    s = str(ids[0])
+    for i in ids[1:]:
+        s = s + '/' + str(i)
+    url = reverse('mail_list', kwargs={'groups': s})
     return HttpResponseRedirect(url)
 
 
