@@ -1,11 +1,9 @@
 {% extends "base.html" %}
 {% block title %}
-Mailingliste for {{ group.name }}
+Mailingliste for {{ groups.0.name }}{% if groups.1 %} m.fl.{% endif %}
 {% endblock %}
 {% block content %}
-    <h3>{{ group.name }}</h3>
+    <h3>{% for group in groups %}{% if not forloop.first %}, {% endif %}{{ group.name }}{% endfor %}</h3>
     <p>{{ group.mail_list }}</p>
-    <textarea rows="10" cols="50">{% for user in users %}
-{{ user.email }}{% endfor %}
-    </textarea>
+    <textarea rows="10" cols="60">{% for user in users %}{{ user.email }};{% empty %}Det ser ut som denne gruppen ikke har noen medlemmer!{% endfor %}</textarea>
 {%endblock%}

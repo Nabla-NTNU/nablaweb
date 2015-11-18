@@ -38,10 +38,5 @@ class InteractionResult(models.Model):
         auto_created=True
     )
 
-    user = models.ForeignKey(
-        NablaUser,
-        related_name="interaction_results"
-    )
-
     class Meta:
         abstract = True

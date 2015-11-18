@@ -238,6 +238,7 @@
 /* Endringer i Bootstrap-farger */
 .navbar-inner {border: 1px solid #c0c0c0;}/* Navbar border */
 .navbar .nav > li > a { color: #555;}/* Navbar link color */
+.navbar-right.dropdown {margin-right: 0px;}
 
 /* News */
 
@@ -267,8 +268,3 @@ li.pager-counter {
     padding: 10px;
 }
 
-/*.float-left {
-    position: fixed;
-    left: 50px;
-    top: 20%;
-}*/

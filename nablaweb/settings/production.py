@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from .base import *
 
 try:
     import pymysql
@@ -31,10 +31,5 @@ CACHES = {
 }
 
 SESSION_COOKIE_DOMAIN = '.nabla.no'
-
-ADMINS = (
-    ('Øystein Hiåsen', 'hiasen@stud.ntnu.no'),
-    ('Andreas Røssland', 'andreros@stud.ntnu.no'),
-)
 
 BPC_TESTING = False

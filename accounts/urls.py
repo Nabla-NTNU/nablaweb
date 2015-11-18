@@ -53,7 +53,7 @@ urlpatterns = [
         name='users_birthday'),
     url(r'^password/change/', include(password_change_patterns)),
     url(r'^password/reset/', include(password_reset_patterns)),
-    url(r'^maillist/(?P<group>\d+)/$',
+    url(r'^mailliste/(?P<groups>(\d+)(/\d+)*)/$',
         MailListView.as_view(),
         name='mail_list'),
     url(r'^like/(?P<model>[\w\.]+)/(?P<id>\d+)/',

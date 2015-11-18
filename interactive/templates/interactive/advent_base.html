@@ -22,7 +22,7 @@
 
 
     {% addtoblock "css" %}
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}"/>
         <link rel="stylesheet" href="{% static "interactive/css/advent_calendar.css" %}"/>
     {% endaddtoblock %}
 
@@ -33,7 +33,7 @@
     {% endaddtoblock %}
 
     {% addtoblock "js" %}
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
     {% endaddtoblock %}
     {% render_block "css" %}
 
@@ -60,21 +60,22 @@
 <body>
 
 
-
-<div class="container">
-
+<div class="container content">
+<div class="row">
+    <div class="col-md-2 corner-right">
+        <img src="/media/misteltein.png" alt="misteltein" height="150"/>
+    </div>
+<div class="col-md-8">
 {% block content %}
     {% addtoblock "js" %}
     <script src="{% static "interactive/js/advent_calendar.js" %}"></script>
     {% endaddtoblock %}
 
-    <h1>Nablas julekalender 2015</h1>
-    <table class="advent-table">
+    <h1>Nablas julekalender {{ calendar.year }}</h1>
+    <div class="advent-table">
         {% for row in doors|row_split:4 %}
-        <tr>
             {% for door in row %}
 
-                <td>
                 <div class="advent-door" data-open="{{ door.is_published }}">
                 {% if door.is_published %}
 
@@ -88,25 +89,22 @@
                 {% endif %}
                 <div class="advent-number">{{ door.number }}</div>
                 </div>
-                </td>
             {% endfor %}
-        </tr>
         {% endfor %}
-    </table>
+    </div>
 
 {% endblock %}
 </div>
 
-<div class="corner-left">
-   <img src="/media/misteltein.png" alt="misteltein" height="150"/>
+{% if door %}
+<div class="col-md-2 corner-right">
+<a href="{{ calendar.get_absolute_url }}"><span class="glyphicon glyphicon-share-alt"></span></a>
 </div>
-
-<div class="corner-right">
-<a href="{{ calendar.get_absolute_url }}">{{ calendar.year }}</a>
+{% endif %}
+</div>
 </div>
 
 {% render_block "js" %}
 
 </body>
 </html>
-
