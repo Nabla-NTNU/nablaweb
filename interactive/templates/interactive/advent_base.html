@@ -22,7 +22,7 @@
 
 
     {% addtoblock "css" %}
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}"/>
         <link rel="stylesheet" href="{% static "interactive/css/advent_calendar.css" %}"/>
     {% endaddtoblock %}
 
@@ -33,7 +33,7 @@
     {% endaddtoblock %}
 
     {% addtoblock "js" %}
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
     {% endaddtoblock %}
     {% render_block "css" %}
 

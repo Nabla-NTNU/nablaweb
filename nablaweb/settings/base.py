@@ -163,6 +163,7 @@ INSTALLED_APPS = [
 
 BOWER_INSTALLED_APPS = (
     'jquery#1.9.x',
+    'bootstrap',
     'rangy',
     'font-awesome',
     'pixi.js',
