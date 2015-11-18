@@ -1,4 +1,6 @@
-
+.content {
+    width: 100%;
+}
 
 .advent-table {
     width: 100%;
@@ -12,8 +14,9 @@
     text-decoration: none;
     font-size: 100px;
     z-index: 3;
-    margin-top: 10px;
+    margin: 10px;
     box-shadow: inset 0px 0px 10px 10px ;
+    display: inline-block;
 }
 
 .advent-door::before {
@@ -71,25 +74,21 @@ body {
 }
 
 a, a:hover {
-    color: black;
+    color: white;
 }
 
 .corner-left {
-    position: fixed;
-    left: 0;
-    top: 0;
-    font-size: 120px;
+    font-size: 100px;
+    text-align: center;
 }
 
 .corner-right {
-    position: fixed;
-    right: 0;
-    top: 0;
-    font-size: 120px;
+    font-size: 100px;
+    text-align: center;
 }
 
 h1 {
-    font-size: 100px;
+    font-size: 80px;
     text-align: center;
 }
 
@@ -105,6 +104,9 @@ body {
     background-repeat: repeat-y;
 }
 
+.user-pic {
+    display: inline-block;
+}
 
 .info {
     display: none;
@@ -127,4 +129,6 @@ body.before-game .info {
     padding: 30px;
     font-size: 20px;
     border-radius: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
 }

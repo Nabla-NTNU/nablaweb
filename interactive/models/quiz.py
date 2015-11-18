@@ -146,6 +146,11 @@ class QuizReply(InteractionResult):
         null=True
     )
 
+    user = models.ForeignKey(
+        'accounts.NablaUser',
+        related_name="interaction_results"
+    )
+
     class Meta:
         verbose_name = "Resultat"
         verbose_name_plural = "Resultater"

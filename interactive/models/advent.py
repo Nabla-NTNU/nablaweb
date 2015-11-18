@@ -1,5 +1,5 @@
 from django.db import models
-from .base import InteractiveElement
+from .base import InteractiveElement, InteractionResult
 from accounts.models import NablaUser, LikeMixin
 from com.models import Committee
 from django.core.urlresolvers import reverse
@@ -29,13 +29,6 @@ class AdventDoor(LikeMixin, InteractiveElement):
         null=True
     )
 
-    users = models.ManyToManyField(
-        NablaUser,
-        verbose_name="Deltagende brukere",
-        blank=True,
-        related_name="advent_participating"
-    )
-
     winner = models.ForeignKey(
         NablaUser,
         verbose_name="Vinner",
@@ -54,10 +47,9 @@ class AdventDoor(LikeMixin, InteractiveElement):
         verbose_name="Har trekning"
     )
 
-    participating_users = models.ManyToManyField(
-        'accounts.NablaUser',
-        blank=True,
-        related_name="participating_in_doors"
+    is_text_response = models.BooleanField(
+        default=False,
+        verbose_name="Har tekstsvar"
     )
 
     short_description = models.CharField(
@@ -88,6 +80,10 @@ class AdventDoor(LikeMixin, InteractiveElement):
     def is_published(self):
         return datetime.now() >= self.date
 
+    @property
+    def is_today(self):
+        return True or datetime.now() == self.calendar.first + timedelta(days=self.number)
+
     def choose_winner(self):
         if self.is_lottery and self.is_published:
             self.winner = choice(self.participating_users.all())
@@ -108,7 +104,7 @@ class AdventCalendar(models.Model):
 
     @property
     def first(self):
-        return datetime(year=self.year, day=1, month=12)
+        return datetime(year=self.year, day=1, month=10)
 
     class Meta:
         verbose_name = "Adventskalender"
@@ -119,4 +115,21 @@ class AdventCalendar(models.Model):
 
     def __str__(self):
         return str(self.year)
+
+
+class AdventParticipation(InteractionResult):
+
+    text = models.TextField(
+        null=True
+    )
+
+    door = models.ForeignKey(
+        AdventDoor,
+        related_name="participation"
+    )
+
+    user = models.ForeignKey(
+        NablaUser
+    )
+
 

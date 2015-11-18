@@ -1,7 +1,9 @@
 from django.views.generic import DetailView, ListView
-from interactive.models import AdventCalendar, AdventDoor
+from interactive.models.advent import AdventCalendar, AdventDoor, AdventParticipation
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
+from datetime import datetime
+
 
 class AdventDoorView(DetailView):
     model = AdventDoor
@@ -49,8 +51,28 @@ def participate_in_competition(request, year, number):
             calendar=calendar,
             number=number
         )
-        if door.is_lottery and user not in door.users.all():
-            door.users.add(user)
+
+        if door.is_lottery and door.is_today:
+            text = request.POST.get('text')
+            try:
+                part = AdventParticipation.objects.get(
+                    user=user
+                )
+                part.__dict__.update(
+                    user=user,
+                    text=text,
+                    door=door,
+                    when=datetime.now()
+                )
+                part.save()
+            except AdventParticipation.DoesNotExist:
+                part = AdventParticipation.objects.create(
+                    user=user,
+                    text=text,
+                    door=door,
+                    when=datetime.now()
+                )
+                door.participation.add(part)
 
         return redirect(door.get_absolute_url())
     else:

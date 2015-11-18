@@ -9,7 +9,7 @@
 
 {% block content %}
 
-<h1>{{ door.number }}</h1>
+<h1 xmlns="http://www.w3.org/1999/html">{{ door.number }}</h1>
 
 <div class="text">
     {% include "accounts/includes/like.html" with object=door%}
@@ -17,26 +17,29 @@
     {{ door.content|markdown:"unsafe" }}
     </p>
     {% if door.is_lottery %}
-    <a class="btn btn-large btn-primary" href="{% url "advent_participate" door.calendar.year door.number %}">
-        Delta i trekningen
-    </a>
-    <h2>Med i trekningen:</h2>
-    <div>
-    {% for user in door.users.all %}
-        <a href="{{ user.get_absolute_url }}">
-        <img class="thumbnail" alt="avatar"
-                {% if user.avatar %}
-                    src="{% thumbnail user.avatar 50x50 %}"
-                {% else %}
-                    src="{% static "img/default_avatar.png" %}"
-                {% endif %} height="50" width="50" title="{% firstof user.get_full_name user.username %}">
-        </a>
-    {% endfor %}
-    </div>
+        <form action="{% url "advent_participate" door.calendar.year door.number %}">
+            {% if door.is_text_reply %}
+            <h3>Ditt svar:</h3>
+                <textarea name="text">{{ user.adventparticipation_set.all }}</textarea>
+            {% endif %}
+            <button type="submit" class="btn btn-large btn-primary">
+                Delta i trekningen
+            </button>
+        </form>
+        <h2>Med i trekningen:</h2>
+        <div>
+        {% for part in door.participation.all %}{% with user=part.user %}
+            <a href="{{ user.get_absolute_url }}">
+            <img class="thumbnail user-pic" alt="avatar"
+                    {% if user.avatar %}
+                        src="{% thumbnail user.avatar 50x50 %}"
+                    {% else %}
+                        src="{% static "img/default_avatar.png" %}"
+                    {% endif %} height="50" width="50" title="{% firstof user.get_full_name user.username %}">
+            </a>
+        {% endwith %}{% endfor %}
+        </div>
     {% endif %}
 </div>
 
-
-
-<div></div>
 {% endblock %}
