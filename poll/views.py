@@ -73,10 +73,10 @@ class UserPollCRUDMixin(LoginRequiredMixin, FormMessagesMixin):
     form_invalid_message = "Ikke riktig utfylt."
     template_name = 'form.html'
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        form.view = self
-        return form
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get_success_url(self):
         return reverse('poll_user')
