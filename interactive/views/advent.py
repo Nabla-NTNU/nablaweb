@@ -1,7 +1,6 @@
 from django.views.generic import DetailView, ListView
 from interactive.models.advent import AdventCalendar, AdventDoor, AdventParticipation
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
@@ -45,34 +44,22 @@ class AdventCalendarView(ListView):
 @login_required
 def participate_in_competition(request, year, number):
 
-    user = request.user
     calendar = AdventCalendar.objects.get(year=year)
-
     door = AdventDoor.objects.get(
         calendar=calendar,
         number=number
     )
 
     if door.is_lottery and door.is_today:
+        user = request.user
         text = request.POST.get('text')
-        try:
-            part = AdventParticipation.objects.get(
-                user=user
-            )
-            part.__dict__.update(
-                user=user,
-                text=text,
-                door=door,
-                when=datetime.now()
-            )
-            part.save()
-        except AdventParticipation.DoesNotExist:
-            part = AdventParticipation.objects.create(
-                user=user,
-                text=text,
-                door=door,
-                when=datetime.now()
-            )
-            door.participation.add(part)
-
+        AdventParticipation.objects.update_or_create(
+            user=user,
+            defaults={
+                'user': user,
+                'text': text,
+                'door': door,
+                'when': datetime.now()
+            }
+        )
     return redirect(door.get_absolute_url())
