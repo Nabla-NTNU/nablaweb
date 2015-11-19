@@ -55,10 +55,9 @@ def participate_in_competition(request, year, number):
         text = request.POST.get('text')
         AdventParticipation.objects.update_or_create(
             user=user,
+            door=door,
             defaults={
-                'user': user,
                 'text': text,
-                'door': door,
                 'when': datetime.now()
             }
         )
