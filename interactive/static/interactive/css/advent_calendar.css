@@ -19,8 +19,7 @@
     display: inline-block;
 }
 
-.advent-door::before {
-    content: ' ';
+.advent-before {
     background-image: url(/media/door.jpg);
     background-size: 220px 240px;
     position: absolute;
@@ -62,7 +61,7 @@
 
 }
 
-.advent-door-open::before {
+.advent-door-open .advent-before {
     opacity: 0;
     transition: opacity 1s ease-in;
     display:none;
@@ -121,9 +120,7 @@ body {
 .info a {
     color: #ffd;
 }
-body.before-game .info {
-    display: block;
-}
+
 .text {
     background: rgba(0,0,0,0.5);
     padding: 30px;
