@@ -59,6 +59,12 @@ class AdventDoor(LikeMixin, InteractiveElement):
         blank=True
     )
 
+    image = models.ImageField(
+        verbose_name="Bilde",
+        null=True,
+        blank=True
+    )
+
     class Meta:
         verbose_name = "Adventsluke"
         verbose_name_plural = "Adventsluker"
