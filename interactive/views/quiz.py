@@ -23,6 +23,9 @@ class QuizView(LoginRequiredMixin, DetailView):
     model = Quiz
     template_name = "interactive/quiz.html"
 
+    def get_template_names(self):
+        return self.get_object().template or self.template_name
+
     def get_form_url(self):
         return reverse('quiz_reply', kwargs={'pk': self.object.id})
 

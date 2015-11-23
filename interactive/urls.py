@@ -2,7 +2,7 @@ from django.conf.urls import url
 from .views import AdventCalendarView, AdventDoorView, QuizListView, QuizView, QuizResultView
 from .views.quiz import quiz_reply, QuizScoreboardView, QuizResultDeleteView
 from .views.game import GameView
-from .views.advent import participate_in_competition
+from .views.advent import participate_in_competition, AdventDoorAdminView, reset_door
 
 urlpatterns = [
     url(r'^julekalender/(?P<year>\d+)/(?P<number>\d+)/$',
@@ -11,6 +11,12 @@ urlpatterns = [
     url(r'^julekalender/(?P<year>\d+)/(?P<number>\d+)/delta$',
         participate_in_competition,
         name="advent_participate"),
+    url(r'^julekalender/(?P<year>\d+)/(?P<number>\d+)/admin$',
+        AdventDoorAdminView.as_view(),
+        name="advent_admin"),
+    url(r'^julekalender/(?P<year>\d+)/(?P<number>\d+)/admin/reset$',
+        reset_door,
+        name="advent_admin_reset"),
     url(r'^julekalender/(?P<year>\d+)/$',
         AdventCalendarView.as_view(),
         name="advent_calendar"),

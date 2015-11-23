@@ -1,8 +1,11 @@
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, FormView
 from interactive.models.advent import AdventCalendar, AdventDoor, AdventParticipation
+from accounts.models import NablaUser
 from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from datetime import datetime
+from braces.views import PermissionRequiredMixin
+from django.contrib import messages
 
 
 class AdventDoorView(DetailView):
@@ -15,7 +18,16 @@ class AdventDoorView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(AdventDoorView, self).get_context_data(**kwargs)
-        context['calendar'] = context['door'].calendar
+        door = context['door']
+        context['calendar'] = door.calendar
+        try:
+            user = self.request.user
+            context['part'] = AdventParticipation.objects.get(
+                user=user,
+                door=door
+            )
+        except AdventParticipation.DoesNotExist:
+            pass
         return context
 
 
@@ -62,3 +74,45 @@ def participate_in_competition(request, year, number):
             }
         )
     return redirect(door.get_absolute_url())
+
+
+@permission_required("interactive.adventdoor_change")
+def reset_door(request, year, number):
+    calendar = AdventCalendar.objects.get(year=year)
+    door = AdventDoor.objects.get(
+        calendar=calendar,
+        number=number
+    )
+    next = request.GET.get('next')
+
+    if door.is_today:
+        door.winner = None
+        door.save()
+    return redirect(next)
+
+
+class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
+    model = AdventDoor
+    pk_url_kwarg = "number"
+    context_object_name = "door"
+    template_name = "interactive/advent_admin.html"
+    permission_required = "interactive.adventdoor_change"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.method == "POST":
+            door = self.get_object()
+            if door.winner:
+                messages.info(request, "Vinner allerede valgt")
+            else:
+                if door.is_text_response:
+                    try:
+                        winner = NablaUser.objects.get(username=request.POST.get('winner'))
+                        door.winner = winner
+                        door.save()
+                    except NablaUser.DoesNotExist:
+                        messages.error(request, "Ingen vinner valgt")
+                else:
+                    door.choose_winner()
+                    door.save()
+        return super().dispatch(request, *args, **kwargs)
+

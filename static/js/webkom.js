@@ -13,7 +13,7 @@ require(
   'physicsjs',
   
   // official modules
-  'physicsjs/renderers/dom',
+  'physicsjs/renderers/canvas',
   'physicsjs/bodies/circle',
   'physicsjs/bodies/rectangle',
   'physicsjs/bodies/convex-polygon',
@@ -26,14 +26,14 @@ require(
   require,
   Physics
 ){
-  var par = $('body').get(0);
+  var par = $('#viewport').get(0);
   try {
     par && par.innerWidth;
   } catch( e ){
     par = window;
   }
 
-  var renderer = Physics.renderer('dom', {
+  var renderer = Physics.renderer('canvas', {
     el: 'viewport',
     width: par.innerWidth,
     height: par.innerHeight,
@@ -44,7 +44,7 @@ require(
         strokeStyle: 'rgb(0, 30, 0)',
         lineWidth: 1,
         fillStyle: 'rgb(100, 200, 50)',
-        angleIndicator: false
+        angleIndicator: true
       },
       'rectangle': {
         strokeStyle: 'rgb(0, 0, 0)',

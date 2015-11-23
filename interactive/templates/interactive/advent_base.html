@@ -2,6 +2,7 @@
 {% load markdown_deux_tags %}
 {% load thumbnail %}
 {% load sekizai_tags %}
+{% load bootstrap3 %}
 {% load static %}
 
 
@@ -67,6 +68,7 @@
         <img src="/media/misteltein.png" alt="misteltein" height="150"/>
     </div>
 <div class="col-md-8">
+    {% bootstrap_messages %}
 {% block content %}
     {% addtoblock "js" %}
     <script src="{% static "interactive/js/advent_calendar.js" %}"></script>

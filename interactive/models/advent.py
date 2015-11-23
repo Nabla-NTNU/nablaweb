@@ -88,11 +88,12 @@ class AdventDoor(LikeMixin, InteractiveElement):
 
     @property
     def is_today(self):
+        # TODO in debug mode
         return True or datetime.now() == self.calendar.first + timedelta(days=self.number)
 
     def choose_winner(self):
         if self.is_lottery and self.is_published:
-            self.winner = choice(self.participating_users.all())
+            self.winner = choice(self.participation.all()).user
 
 
 class AdventCalendar(models.Model):
