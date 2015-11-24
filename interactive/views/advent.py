@@ -1,4 +1,4 @@
-from django.views.generic import DetailView, ListView, FormView
+from django.views.generic import DetailView, ListView
 from interactive.models.advent import AdventCalendar, AdventDoor, AdventParticipation
 from accounts.models import NablaUser
 from django.shortcuts import redirect
@@ -98,21 +98,18 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
     template_name = "interactive/advent_admin.html"
     permission_required = "interactive.adventdoor_change"
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.method == "POST":
-            door = self.get_object()
-            if door.winner:
-                messages.info(request, "Vinner allerede valgt")
-            else:
-                if door.is_text_response:
-                    try:
-                        winner = NablaUser.objects.get(username=request.POST.get('winner'))
-                        door.winner = winner
-                        door.save()
-                    except NablaUser.DoesNotExist:
-                        messages.error(request, "Ingen vinner valgt")
-                else:
-                    door.choose_winner()
-                    door.save()
-        return super().dispatch(request, *args, **kwargs)
-
+    def post(self, *args, **kwargs):
+        door = self.get_object()
+        if door.winner:
+            messages.info(self.request, "Vinner allerede valgt")
+        elif door.is_text_response:
+            try:
+                winner_username = self.request.POST.get('winner')
+                door.winner = NablaUser.objects.get(username=winner_username)
+                door.save()
+            except NablaUser.DoesNotExist:
+                messages.error(self.request, "Ingen vinner valgt")
+        else:
+            door.choose_winner()
+            door.save()
+        return super().get(*args, **kwargs)
