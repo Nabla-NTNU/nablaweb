@@ -16,6 +16,9 @@
     <p>
     {{ door.content|markdown:"unsafe" }}
     </p>
+    {% if door.quiz %}
+    <a href="{{ door.quiz.get_absolute_url }}" class="btn btn-large btn-wide btn-primary">Gå til quiz!</a>
+    {% endif %}
     {% if door.is_lottery %}
     {% if door.winner %}
         <h1>Gratulerer med seieren!</h1>
