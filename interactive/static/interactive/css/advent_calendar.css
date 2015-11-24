@@ -121,11 +121,15 @@ body {
     color: #ffd;
 }
 
-.text {
+.text, .well {
     background: rgba(0,0,0,0.5);
     padding: 30px;
     font-size: 20px;
     border-radius: 15px;
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.list-group-item {
+    background: rgba(0,0,0,0.5);
 }

@@ -65,6 +65,13 @@ class AdventDoor(LikeMixin, InteractiveElement):
         blank=True
     )
 
+    quiz = models.ForeignKey(
+        'interactive.Quiz',
+        verbose_name="Lenket quiz",
+        null=True,
+        blank=True
+    )
+
     class Meta:
         verbose_name = "Adventsluke"
         verbose_name_plural = "Adventsluker"
