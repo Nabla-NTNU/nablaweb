@@ -93,7 +93,7 @@ class MailListView(PermissionRequiredMixin, ListView):
     template_name = 'accounts/mail_list.html'
     model = NablaUser
     context_object_name = 'users'
-    permission_required = 'auth.change_user'
+    permission_required = 'accounts.change_nablagroup'
     groups = []
 
     def get_queryset(self):
