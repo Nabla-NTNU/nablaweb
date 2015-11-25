@@ -19,8 +19,7 @@
     display: inline-block;
 }
 
-.advent-door::before {
-    content: ' ';
+.advent-before {
     background-image: url(/media/door.jpg);
     background-size: 220px 240px;
     position: absolute;
@@ -62,7 +61,7 @@
 
 }
 
-.advent-door-open::before {
+.advent-door-open .advent-before {
     opacity: 0;
     transition: opacity 1s ease-in;
     display:none;
@@ -121,14 +120,16 @@ body {
 .info a {
     color: #ffd;
 }
-body.before-game .info {
-    display: block;
-}
-.text {
+
+.text, .well {
     background: rgba(0,0,0,0.5);
     padding: 30px;
     font-size: 20px;
     border-radius: 15px;
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.list-group-item {
+    background: rgba(0,0,0,0.5);
 }

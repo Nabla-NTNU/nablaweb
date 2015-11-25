@@ -1,0 +1,61 @@
+{% extends "interactive/advent_base.html" %}
+{% load thumbnail %}
+{% load sekizai_tags %}
+{% load static %}
+
+{% block title %}{{ door.number }}{% endblock %}
+
+{% block content %}
+
+<h1><a href="{{ door.get_absolute_url }}">{{ door.number }}</a></h1>
+
+<div class="text">
+    {% if door.winner %}
+    <h1>Vinner av konkurransen</h1>
+        {% include "accounts/includes/user_large.html" with user=door.winner %}
+        <a class="btn btn-danger btn-large" href="{% url "advent_admin_reset" door.calendar.year door.number %}?next={{ door.get_absolute_url }}">Fjern vinner</a>
+    {% else %}
+    <h1>Finn vinner</h1>
+    {% endif %}
+    {% if door.is_lottery %}
+        <form action="admin" method="post">
+            {% csrf_token %}
+            {% if door.is_text_response %}
+            <h2>Velg den som fortjener å vinne:</h2>
+            {% for part in door.participation.all %}{% with user=part.user %}
+            <div class="form-group">
+            <img class="thumbnail user-pic" alt="avatar"
+                    {% if user.avatar %}
+                        src="{% thumbnail user.avatar 50x50 %}"
+                    {% else %}
+                        src="{% static "img/default_avatar.png" %}"
+                    {% endif %} height="50" width="50" title="{% firstof user.get_full_name user.username %}">
+                <h3>Svar:</h3>
+                <p>
+                    {{ part.text }}
+                </p>
+                <label>{% firstof user.get_full_name user.username %}
+                    <input name="winner" type="radio" value="{{user.username}}">
+                </label>
+            </div>
+            <hr>
+            {% endwith %}{% endfor %}
+            {% else %}
+            <div>
+            {% for part in door.participation.all %}{% with user=part.user %}
+            <img class="thumbnail user-pic" alt="avatar"
+                    {% if user.avatar %}
+                        src="{% thumbnail user.avatar 50x50 %}"
+                    {% else %}
+                        src="{% static "img/default_avatar.png" %}"
+                    {% endif %} height="50" width="50" title="{% firstof user.get_full_name user.username %}">
+                {% endwith %}{% endfor %}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary btn-large">Bestem vinner</button>
+        </form>
+    {% endif %}
+</div>
+
+{% endblock %}

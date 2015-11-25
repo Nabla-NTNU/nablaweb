@@ -8,10 +8,12 @@ class InteractiveElement(EditableMedia, models.Model):
     Model for an element requiring user interaction.
     """
 
+    default_template = "interactive/advent_door_base.html"
+
     template = models.CharField(
         max_length=100,
         verbose_name="Template",
-        default="interactive/advent_door_base.html"
+        default=default_template
     )
 
     class Meta:

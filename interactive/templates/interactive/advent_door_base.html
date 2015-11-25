@@ -9,36 +9,46 @@
 
 {% block content %}
 
-<h1 xmlns="http://www.w3.org/1999/html">{{ door.number }}</h1>
+<h1>{{ door.number }}</h1>
 
 <div class="text">
     {% include "accounts/includes/like.html" with object=door%}
     <p>
     {{ door.content|markdown:"unsafe" }}
     </p>
+    {% if door.quiz %}
+    <a href="{{ door.quiz.get_absolute_url }}" class="btn btn-large btn-wide btn-primary">Gå til quiz!</a>
+    {% endif %}
     {% if door.is_lottery %}
-        <form action="{% url "advent_participate" door.calendar.year door.number %}">
-            {% if door.is_text_reply %}
-            <h3>Ditt svar:</h3>
-                <textarea name="text">{{ user.adventparticipation_set.all }}</textarea>
+    {% if door.winner %}
+        <h1>Gratulerer med seieren!</h1>
+        {% include "accounts/includes/user_large.html" with user=door.winner %}
+    {% else %}
+        <form action="{% url "advent_participate" door.calendar.year door.number %}" method="post">
+            {% csrf_token %}
+            {% if door.is_text_response %}
+            <div class="form-group">
+                {% if part %}
+                <label>Endre svar:</label>
+                <textarea class="form-control" name="text" rows="3">{{ part.text }}</textarea>
+                {% else %}
+                <label>Ditt svar:</label>
+                <textarea class="form-control" name="text" rows="3"></textarea>
+                {% endif %}
+            </div>
             {% endif %}
             <button type="submit" class="btn btn-large btn-primary">
                 Delta i trekningen
             </button>
         </form>
+    {% endif %}
         <h2>Med i trekningen:</h2>
         <div>
-        {% for part in door.participation.all %}{% with user=part.user %}
-            <a href="{{ user.get_absolute_url }}">
-            <img class="thumbnail user-pic" alt="avatar"
-                    {% if user.avatar %}
-                        src="{% thumbnail user.avatar 50x50 %}"
-                    {% else %}
-                        src="{% static "img/default_avatar.png" %}"
-                    {% endif %} height="50" width="50" title="{% firstof user.get_full_name user.username %}">
-            </a>
-        {% endwith %}{% endfor %}
+            {% for part in door.participation.all %}
+            {% include "accounts/includes/user_small.html" with user=part.user %}
+            {% endfor %}
         </div>
+
     {% endif %}
 </div>
 

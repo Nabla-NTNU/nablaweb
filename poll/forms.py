@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from itertools import takewhile, count
 
 from django import forms
 from django.forms.models import inlineformset_factory
@@ -7,6 +8,11 @@ from .models import *
 from content.admin import ChangedByMixin
 
 ChoiceFormSet = inlineformset_factory(Poll, Choice, fields=('choice',))
+
+
+def get_choice_field_iter():
+    """ Returns an infinite iterator of the choice field names for PollForm"""
+    return map('choice_{}'.format, count(start=1))
 
 
 class PollForm(ChangedByMixin, forms.ModelForm):
@@ -34,58 +40,44 @@ class PollForm(ChangedByMixin, forms.ModelForm):
         required=False
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.choices = ChoiceFormSet(
             instance=self.instance
         )
         choices = self.instance.choices.all()
-        i = 1
-        for c in choices:
-            self.initial['choice_'+str(i)] = c.choice
-            i += 1
+        self.initial.update(
+            dict(zip(get_choice_field_iter(), choices))
+        )
+        self.user = user
 
     def save(self, commit=True):
-        user = self.view.request.user
 
         self.instance.is_current = False
         self.instance.is_user_poll = True
-        if not self.instance.created_by:
-            self.instance.created_by = user
+        if not self.instance.created_by and self.user is not None:
+            self.instance.created_by = self.user
         self.instance.publication_date = datetime.now()
+        self.instance.save()
 
         related = self.instance.choices
-        updated_choices = []
 
-        i = 1
-        while i <= 20:
-            choice = self.cleaned_data.get('choice_' + str(i))
-            if not choice:
-                break
-            updated_choices.append(choice)
-            i += 1
+        # Iterator of the supplied choices
+        updated_choices = map(self.cleaned_data.get, get_choice_field_iter())
 
-        choices = related.all()
-        for i in range(0, len(updated_choices)):
-            new_name = updated_choices[i]
-            try:
-                choice = choices[i]
-            except IndexError:
-                choice = None
+        # Go through each choice and update it.
+        # Delete it if the field is empty
+        for choice in related.all():
+            new_name = next(updated_choices)
             if new_name:
-                if choice:
-                    choice.choice = new_name
-                    choice.save()
-                else:
-                    if not self.instance.id:
-                        self.instance.save()
-                    related.create(
-                        choice=new_name
-                    )
+                choice.choice = new_name
+                choice.save()
             else:
-                if choice:
-                    related.remove(choice)
-                break
+                choice.delete()
+
+        # Add the remaining new choices until reaching an empty field
+        for new_name in takewhile(bool, updated_choices):
+            related.create(choice=new_name)
 
         return super().save(commit)
 

@@ -59,6 +59,19 @@ class AdventDoor(LikeMixin, InteractiveElement):
         blank=True
     )
 
+    image = models.ImageField(
+        verbose_name="Bilde",
+        null=True,
+        blank=True
+    )
+
+    quiz = models.ForeignKey(
+        'interactive.Quiz',
+        verbose_name="Lenket quiz",
+        null=True,
+        blank=True
+    )
+
     class Meta:
         verbose_name = "Adventsluke"
         verbose_name_plural = "Adventsluker"
@@ -82,11 +95,12 @@ class AdventDoor(LikeMixin, InteractiveElement):
 
     @property
     def is_today(self):
+        # TODO in debug mode
         return True or datetime.now() == self.calendar.first + timedelta(days=self.number)
 
     def choose_winner(self):
         if self.is_lottery and self.is_published:
-            self.winner = choice(self.participating_users.all())
+            self.winner = choice(self.participation.all()).user
 
 
 class AdventCalendar(models.Model):

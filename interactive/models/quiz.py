@@ -60,6 +60,8 @@ class Quiz(LikeMixin, InteractiveElement):
     Represents a quiz.
     """
 
+    default_template = "interactive/quiz.html"
+
     title = models.CharField(
         max_length=80,
         verbose_name="Tittel"
