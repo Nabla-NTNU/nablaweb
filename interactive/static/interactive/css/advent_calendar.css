@@ -64,7 +64,7 @@
 .advent-door-open .advent-before {
     opacity: 0;
     transition: opacity 1s ease-in;
-    display:none;
+    pointer-events: none;
 }
 
 body {
