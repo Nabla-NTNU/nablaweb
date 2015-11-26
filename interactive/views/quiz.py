@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from content.views.mixins import PublishedListMixin
 from braces.views import FormMessagesMixin, LoginRequiredMixin
 
-from ..models.quiz import Quiz, QuizReply, QuestionReply, QuizScoreboard
+from ..models.quiz import Quiz, QuizReply, QuizScoreboard
 from .mixins import ObjectOwnerMixin
 
 
@@ -47,7 +47,6 @@ class QuizView(LoginRequiredMixin, DetailView):
 def quiz_reply(request, pk):
     quiz = get_object_or_404(Quiz, id=pk)
     questions = quiz.questions.all()
-    replies = []
     reply = QuizReply.objects.filter(
         user=request.user,
         scoreboard_id=quiz.scoreboard.id
@@ -61,18 +60,13 @@ def quiz_reply(request, pk):
         else:
             messages.error(request, "Ingen start registrert")
 
-    for q in questions:
-        answer = request.POST.get("{id}_alternative".format(id=q.id))
-        if answer:
-            replies.append(QuestionReply.objects.create(
-                question=q,
-                alternative=answer,
-                quiz_reply=reply
-            ))
-        else:
-            messages.error(request, "Ugyldig")
+    format_string = "{}_alternative"
+    answers = (request.POST.get(format_string.format(q.id)) for q in questions)
 
-    reply.save()
+    q_and_a = [(q, int(answer)) for q, answer in zip(questions, answers) if answer is not None]
+    reply.add_question_replies(q_and_a)
+
+    messages.info(request, "Du svarte på {} av {} spørsmål.".format(len(q_and_a), len(questions)))
     return redirect(reply.get_absolute_url())
 
 

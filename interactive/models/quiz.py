@@ -170,6 +170,17 @@ class QuizReply(InteractionResult):
     def get_question_count(self):
         return self.scoreboard.quiz.total_questions()
 
+    def add_question_replies(self, replies):
+        """
+        :param replies: list of tuples (question_object, alternative_number)
+        """
+        for q, alternative in replies:
+            QuestionReply.objects.create(
+                question=q,
+                alternative=alternative,
+                quiz_reply=self
+            )
+
 
 class QuizScoreboard(Scoreboard):
     """

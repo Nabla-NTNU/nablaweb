@@ -1,7 +1,14 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from .models import *
+from django.contrib.auth import get_user_model
+
 from random import random
+from datetime import datetime
+
+
+from .models import *
+
+User = get_user_model()
 
 
 class AdventTests(TestCase):
@@ -34,7 +41,7 @@ class AdventTests(TestCase):
         self.cal.delete()
 
 
-class QuizTests(TestCase):
+class BaseQuizTest(TestCase):
     def setUp(self):
         self.quiz = Quiz.objects.create(
             title="Test quiz",
@@ -54,6 +61,9 @@ class QuizTests(TestCase):
             )
             self.questions.append(question)
 
+
+class QuizTests(BaseQuizTest):
+
     def test_update(self):
         for q in self.questions:
             q.question = "Hello world?"
@@ -70,3 +80,20 @@ class QuizTests(TestCase):
     def test_reply(self):
         data = {'{id}_alternative'.format(id=q.id): int(random() * 4 + 1) for q in self.questions}
         self.client.post(reverse('quiz_reply', kwargs={'pk': self.quiz.id}), data=data)
+
+
+class QuizReplyTest(BaseQuizTest):
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create(username="quizlover")
+
+    def test_add_question_replies(self):
+        reply = QuizReply.objects.create(
+            user=self.user,
+            scoreboard=self.quiz.scoreboard,
+            start=datetime.now(),
+            when=datetime.now()
+        )
+        replies = [(q, q.correct_alternative) for q in self.questions]
+        reply.add_question_replies(replies)
+        self.assertEqual(reply.get_correct_count(), reply.get_question_count())
