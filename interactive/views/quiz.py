@@ -4,11 +4,11 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.views import login_required
 
-from datetime import datetime, timedelta
 from content.views.mixins import PublishedListMixin
+from datetime import datetime
 from braces.views import FormMessagesMixin, LoginRequiredMixin
 
-from ..models.quiz import Quiz, QuizReply, QuizScoreboard
+from ..models.quiz import Quiz, QuizReply, QuizScoreboard, QuizReplyTimeout
 from .mixins import ObjectOwnerMixin
 
 
@@ -51,20 +51,20 @@ def quiz_reply(request, pk):
         user=request.user,
         scoreboard_id=quiz.scoreboard.id
     ).order_by('-when')[0]
-    if quiz.is_timed:
-        if reply.start:
-            end = reply.start + timedelta(seconds=quiz.duration)
-            if end <= datetime.now():
-                messages.info(request, "Beklager, tiden gikk ut")
-                return redirect('/')
-        else:
-            messages.error(request, "Ingen start registrert")
 
     format_string = "{}_alternative"
     answers = (request.POST.get(format_string.format(q.id)) for q in questions)
 
-    q_and_a = [(q, int(answer)) for q, answer in zip(questions, answers) if answer is not None]
-    reply.add_question_replies(q_and_a)
+    q_and_a = [
+        (q, int(answer))
+        for q, answer in zip(questions, answers)
+        if answer is not None
+    ]
+    try:
+        reply.add_question_replies(q_and_a)
+    except QuizReplyTimeout:
+        messages.info(request, "Beklager, tiden gikk ut")
+        return redirect('/')
 
     messages.info(request, "Du svarte på {} av {} spørsmål.".format(len(q_and_a), len(questions)))
     return redirect(reply.get_absolute_url())

@@ -3,10 +3,11 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 
 from random import random
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 from .models import *
+from .models.quiz import QuizReplyTimeout
 
 User = get_user_model()
 
@@ -97,3 +98,15 @@ class QuizReplyTest(BaseQuizTest):
         replies = [(q, q.correct_alternative) for q in self.questions]
         reply.add_question_replies(replies)
         self.assertEqual(reply.get_correct_count(), reply.get_question_count())
+
+    def test_add_question_replies_raises_exception_on_timeout(self):
+        self.quiz.duration = 1
+        self.quiz.save()
+        reply = QuizReply.objects.create(
+            user=self.user,
+            scoreboard=self.quiz.scoreboard,
+            start=datetime.now()-timedelta(seconds=3600),
+            when=datetime.now()
+        )
+        with self.assertRaises(QuizReplyTimeout):
+            reply.add_question_replies([])
