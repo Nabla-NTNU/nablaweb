@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 
 from .models import *
-from .models.quiz import QuizReplyTimeout
+from .models.quiz import QuizReplyTimeout, QuestionReply
 
 User = get_user_model()
 
@@ -87,26 +87,27 @@ class QuizReplyTest(BaseQuizTest):
     def setUp(self):
         super().setUp()
         self.user = User.objects.create(username="quizlover")
-
-    def test_add_question_replies(self):
-        reply = QuizReply.objects.create(
+        self.reply = QuizReply.objects.create(
             user=self.user,
             scoreboard=self.quiz.scoreboard,
             start=datetime.now(),
             when=datetime.now()
         )
+
+    def test_add_question_replies(self):
         replies = [(q, q.correct_alternative) for q in self.questions]
-        reply.add_question_replies(replies)
-        self.assertEqual(reply.get_correct_count(), reply.get_question_count())
+        self.reply.add_question_replies(replies)
+        self.assertEqual(self.reply.get_correct_count(), self.reply.get_question_count())
 
     def test_add_question_replies_raises_exception_on_timeout(self):
         self.quiz.duration = 1
         self.quiz.save()
-        reply = QuizReply.objects.create(
-            user=self.user,
-            scoreboard=self.quiz.scoreboard,
-            start=datetime.now()-timedelta(seconds=3600),
-            when=datetime.now()
-        )
+        self.reply.start = datetime.now() - timedelta(seconds=3600)
         with self.assertRaises(QuizReplyTimeout):
-            reply.add_question_replies([])
+            self.reply.add_question_replies([])
+
+    def test_only_possible_to_have_one_answer_per_question(self):
+        replies = [(q, q.correct_alternative) for q in self.questions]
+        self.reply.add_question_replies(replies)
+        self.reply.add_question_replies(replies)
+        self.assertEqual(len(replies), QuestionReply.objects.filter(quiz_reply=self.reply).count())

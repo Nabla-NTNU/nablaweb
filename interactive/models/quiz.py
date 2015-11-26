@@ -198,10 +198,12 @@ class QuizReply(InteractionResult):
         if self.has_timed_out():
             raise QuizReplyTimeout
         for q, alternative in replies:
-            QuestionReply.objects.create(
+            QuestionReply.objects.update_or_create(
                 question=q,
-                alternative=alternative,
-                quiz_reply=self
+                quiz_reply=self,
+                defaults={
+                    'alternative': alternative,
+                }
             )
 
 
