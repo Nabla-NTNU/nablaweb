@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*-
-from datetime import date
 
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group, AbstractUser
 from hashlib import sha1
-from datetime import datetime
+from datetime import datetime, date
 from .utils import activate_user_and_create_password, send_activation_email
 from django.contrib.contenttypes.models import ContentType
+
+
+class NablaUserManager(models.Manager):
+    def filter_has_birthday_today(self, today=None):
+        today = today or date.today()
+        return self.filter(birthday__day=today.day,
+                           birthday__month=today.month,
+                           is_active=True)
 
 
 class NablaUser(AbstractUser):
@@ -218,6 +225,3 @@ class LikeMixin(models.Model):
         ).delete()
 
         return super(LikeMixin, self).delete(using)
-
-
-

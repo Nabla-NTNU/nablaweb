@@ -5,8 +5,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, JsonResponse, Http404
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse
-import datetime
 from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin, PermissionRequiredMixin
 
 from .forms import UserForm, RegistrationForm, InjectUsersForm
@@ -77,17 +75,13 @@ class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
 
 
 class BirthdayView(LoginRequiredMixin, ListView):
-    model = NablaUser
     allow_empty = True
     date_field = "birthday"
     template_name = "accounts/user_birthday.html"
     context_object_name = "users"
 
     def get_queryset(self):
-        today = datetime.date.today()
-        return NablaUser.objects.filter(birthday__day=today.day,
-                                        birthday__month=today.month,
-                                        is_active=True)
+        return NablaUser.objects.filter_has_birthday_today()
 
 
 class MailListView(PermissionRequiredMixin, ListView):
