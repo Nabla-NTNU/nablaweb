@@ -2,6 +2,7 @@
 
 from django.views.generic import DetailView, ListView, UpdateView, FormView
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, JsonResponse, Http404
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
@@ -114,6 +115,7 @@ class MailListView(PermissionRequiredMixin, ListView):
         return context
 
 
+@login_required
 def process_like(request, model, id):
     """
     Processes a like click.
@@ -123,24 +125,21 @@ def process_like(request, model, id):
 
     next = request.GET.get('next')
     user = request.user
-    if user.is_authenticated():
-        try:
-            like = LikePress.objects.get(
-                user=user,
-                reference_id=id,
-                model_name=model
-            )
-            like.delete()
-        except LikePress.DoesNotExist:
-            like = LikePress.objects.create(
-                user=user,
-                reference_id=id,
-                model_name=model
-            )
-        count = get_like_count(id, model)
-        if next:
-            return redirect(next)
-        else:
-            return JsonResponse({'count': count})
+    try:
+        like = LikePress.objects.get(
+            user=user,
+            reference_id=id,
+            model_name=model
+        )
+        like.delete()
+    except LikePress.DoesNotExist:
+        like = LikePress.objects.create(
+            user=user,
+            reference_id=id,
+            model_name=model
+        )
+    count = get_like_count(id, model)
+    if next:
+        return redirect(next)
     else:
-        return redirect(reverse("auth_login"))
+        return JsonResponse({'count': count})
