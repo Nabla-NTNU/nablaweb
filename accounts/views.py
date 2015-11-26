@@ -122,24 +122,16 @@ def process_like(request, model, id):
     :param request:
     :return:
     """
+    user = request.user
+    LikePress.objects.create_or_delete(
+        user=user,
+        reference_id=id,
+        model_name=model
+    )
 
     next = request.GET.get('next')
-    user = request.user
-    try:
-        like = LikePress.objects.get(
-            user=user,
-            reference_id=id,
-            model_name=model
-        )
-        like.delete()
-    except LikePress.DoesNotExist:
-        like = LikePress.objects.create(
-            user=user,
-            reference_id=id,
-            model_name=model
-        )
-    count = get_like_count(id, model)
     if next:
         return redirect(next)
     else:
+        count = get_like_count(id, model)
         return JsonResponse({'count': count})

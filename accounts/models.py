@@ -156,6 +156,13 @@ class RegistrationRequest(models.Model):
         return self.username
 
 
+class LikePressManager(models.Manager):
+    def create_or_delete(self, *args, **kwargs):
+        obj, created = self.get_or_create(*args, **kwargs)
+        if not created:
+            obj.delete()
+
+
 class LikePress(models.Model):
     """
     Represents a like click on some object.
@@ -174,6 +181,8 @@ class LikePress(models.Model):
         max_length=100,
         null=True
     )
+
+    objects = LikePressManager()
 
 
 def get_like_count(id, model):
