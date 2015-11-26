@@ -65,9 +65,6 @@ class Poll(LikeMixin, models.Model):
     def __str__(self):
         return self.question
 
-    def __unicode__(self):
-        return self.question
-
     def save(self, *args, **kwargs):
         if self.is_current:
             Poll.objects.filter(is_current=True)\
@@ -118,9 +115,6 @@ class Choice(models.Model):
     )
 
     def __str__(self):
-        return self.choice
-
-    def __unicode__(self):
         return self.choice
 
     class Meta:

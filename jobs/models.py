@@ -27,9 +27,6 @@ class YearChoices(models.Model):
     def __str__(self):
         return u'%s' % str(self.year)
 
-    def __unicode__(self):
-        return u'%s' % str(self.year)
-
 
 class RelevantForChoices(models.Model):
     studieretning = models.CharField(
@@ -43,10 +40,6 @@ class RelevantForChoices(models.Model):
 
     def __str__(self):
         return u'%s' % self.studieretning
-
-    # legacy
-    def __unicode__(self):
-        return self.__str__
 
 
 class TagChoices(models.Model):
@@ -63,9 +56,6 @@ class TagChoices(models.Model):
     def __str__(self):
         return u'%s' % self.tag
 
-    def __unicode__(self):
-        return u'%s' % self.tag
-
 
 class Company(Content):
     website = models.URLField(max_length=200, blank=True, verbose_name="Nettside")
@@ -78,9 +68,6 @@ class Company(Content):
         ordering = ("name",)
 
     def __str__(self):
-        return self.name
-
-    def __unicode__(self):
         return self.name
 
 
@@ -141,9 +128,6 @@ class Advert(News):
     objects = AdvertManager()
 
     def __str__(self):
-        return self.headline
-
-    def __unicode__(self):
         return self.headline
 
     def correct_picture(self):

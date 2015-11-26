@@ -131,9 +131,6 @@ class Podcast(CommentsMixin, PublicationManagerMixin, ViewCounterMixin, models.M
     def __str__(self):
         return self.title
 
-    def __unicode__(self):
-        return self.title
-
     class Meta:
         verbose_name = 'Podcast'
         verbose_name_plural = 'Podcast'
