@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from django.views.generic import DetailView, ListView, UpdateView, FormView
+from django.views.generic import DetailView, ListView, UpdateView, FormView, TemplateView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden, JsonResponse, Http404
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import redirect
 from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin, PermissionRequiredMixin
 
@@ -84,28 +84,16 @@ class BirthdayView(LoginRequiredMixin, ListView):
         return NablaUser.objects.filter_has_birthday_today()
 
 
-class MailListView(PermissionRequiredMixin, ListView):
+class MailListView(PermissionRequiredMixin, TemplateView):
     template_name = 'accounts/mail_list.html'
-    model = NablaUser
-    context_object_name = 'users'
     permission_required = 'accounts.change_nablagroup'
-    groups = []
-
-    def get_queryset(self):
-        groups = self.kwargs['groups'].split('/')
-        groups = [int(i) for i in groups]
-        groups = list(set(groups))
-        try:
-            self.groups = [NablaGroup.objects.get(id=group) for group in groups]
-        except NablaGroup.DoesNotExist:
-            raise Http404('En av IDene har ikke en tilhørende gruppe')
-        queryset = super().get_queryset()
-        queryset = queryset.filter(groups__in=self.groups)
-        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['groups'] = self.groups
+        group_ids = {int(i) for i in self.kwargs['groups'].split('/')}
+        groups = NablaGroup.objects.filter(id__in=group_ids)
+        context["users"] = NablaUser.objects.filter(groups__in=groups)
+        context["groups"] = groups
         return context
 
 
