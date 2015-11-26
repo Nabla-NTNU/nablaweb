@@ -62,10 +62,7 @@ class ExtendedGroupAdmin(GroupAdmin):
 
 
 def maillist(modeladmin, request, queryset):
-    ids = [g.id for g in queryset]
-    s = str(ids[0])
-    for i in ids[1:]:
-        s = s + '/' + str(i)
+    s = '/'.join(str(g.id) for g in queryset)
     url = reverse('mail_list', kwargs={'groups': s})
     return HttpResponseRedirect(url)
 
