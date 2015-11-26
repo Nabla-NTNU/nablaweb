@@ -72,12 +72,11 @@ class RegistrationForm(forms.Form):
             user.last_name = last_name
             user.save()
         except NablaUser.DoesNotExist:
-            request = RegistrationRequest()
-            request.username = username
-            request.first_name = first_name
-            request.last_name = last_name
-            request.clean()
-            request.save()
+            RegistrationRequest.objects.create(
+                username=username,
+                first_name=first_name,
+                last_name=last_name
+            )
             raise forms.ValidationError("Denne brukeren er ikke registrert. "
                                         "En forespørsel har blitt opprettet og "
                                         "du vil få en mail hvis den blir godkjent.")
