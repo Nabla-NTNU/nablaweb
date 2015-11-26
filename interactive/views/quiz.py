@@ -1,13 +1,14 @@
 from django.views.generic import DetailView, ListView, DeleteView
-from ..models.quiz import Quiz, QuizReply, QuestionReply, QuizScoreboard
-from .mixins import ObjectOwnerMixin
 from django.core.urlresolvers import reverse, reverse_lazy
-from braces.views import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
+
 from datetime import datetime, timedelta
-from braces.views import FormMessagesMixin
 from content.views.mixins import PublishedListMixin
+from braces.views import FormMessagesMixin, LoginRequiredMixin
+
+from ..models.quiz import Quiz, QuizReply, QuestionReply, QuizScoreboard
+from .mixins import ObjectOwnerMixin
 
 
 class QuizListView(PublishedListMixin, LoginRequiredMixin, ListView):
