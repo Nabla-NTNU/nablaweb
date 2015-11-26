@@ -6,8 +6,8 @@ from random import random
 from datetime import datetime, timedelta
 
 
-from .models import *
-from .models.quiz import QuizReplyTimeout, QuestionReply
+from interactive.models import *
+from interactive.models.quiz import QuizReplyTimeout, QuestionReply
 
 User = get_user_model()
 
