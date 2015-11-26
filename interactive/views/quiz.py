@@ -36,7 +36,7 @@ class QuizView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         QuizReply.objects.create(
             user=self.request.user,
-            scoreboard_id=self.object.scoreboard.id,
+            scoreboard=self.object.scoreboard,
             start=datetime.now(),
             when=datetime.now()
         )
@@ -49,7 +49,7 @@ def quiz_reply(request, pk):
     questions = quiz.questions.all()
     reply = QuizReply.objects.filter(
         user=request.user,
-        scoreboard_id=quiz.scoreboard.id
+        scoreboard=quiz.scoreboard
     ).order_by('-when')[0]
 
     format_string = "{}_alternative"
