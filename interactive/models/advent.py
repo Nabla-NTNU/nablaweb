@@ -95,8 +95,7 @@ class AdventDoor(LikeMixin, InteractiveElement):
 
     @property
     def is_today(self):
-        # TODO in debug mode
-        return True or datetime.now() == self.calendar.first + timedelta(days=self.number)
+        return datetime.now() == self.calendar.first + timedelta(days=self.number)
 
     def choose_winner(self):
         if self.is_lottery and self.is_published:
@@ -118,7 +117,7 @@ class AdventCalendar(models.Model):
 
     @property
     def first(self):
-        return datetime(year=self.year, day=1, month=10)
+        return datetime(year=self.year, day=1, month=12)
 
     class Meta:
         verbose_name = "Adventskalender"
