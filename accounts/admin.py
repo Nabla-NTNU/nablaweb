@@ -103,25 +103,23 @@ class NablaUserAdmin(UserAdmin):
 admin.site.register(NablaUser, NablaUserAdmin)
 
 
-def reg_approve(modeladmin, request, queryset):
-    for req in queryset:
-        req.approve_request()
-        req.delete()
-
-
-def reg_decline(modeladmin, request, queryset):
-    for req in queryset:
-        req.delete()
-
-
 class RegistrationRequestAdmin(admin.ModelAdmin):
-    actions = [reg_approve, reg_decline]
+    actions = ["approve", "decline"]
     list_display = ['username', 'first_name', 'last_name', 'created']
     ordering = ['-created']
 
     class Meta:
         model = RegistrationRequest
         fields = '__all__'
+
+    def approve(self, request, queryset):
+        for req in queryset:
+            req.approve_request()
+            req.delete()
+
+    def decline(self, request, queryset):
+        for req in queryset:
+            req.delete()
 
 
 admin.site.register(RegistrationRequest, RegistrationRequestAdmin)
