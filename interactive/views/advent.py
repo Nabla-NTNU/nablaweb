@@ -6,9 +6,10 @@ from django.contrib.auth.decorators import login_required, permission_required
 from datetime import datetime
 from braces.views import PermissionRequiredMixin
 from django.contrib import messages
+from content.views.mixins import PublishedMixin
 
 
-class AdventDoorView(DetailView):
+class AdventDoorView(PublishedMixin, DetailView):
     model = AdventDoor
     pk_url_kwarg = "number"
     context_object_name = "door"
@@ -18,7 +19,7 @@ class AdventDoorView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(AdventDoorView, self).get_context_data(**kwargs)
-        door = context['door']
+        door = self.object
         context['calendar'] = door.calendar
         try:
             user = self.request.user
