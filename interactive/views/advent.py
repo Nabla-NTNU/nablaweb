@@ -25,7 +25,7 @@ class AdventDoorView(PublishedMixin, DetailView):
             user = self.request.user
             context['part'] = AdventParticipation.objects.get(
                 user=user,
-                door=door
+                door=door.id
             )
         except AdventParticipation.DoesNotExist:
             pass
@@ -77,7 +77,7 @@ def participate_in_competition(request, year, number):
     return redirect(door.get_absolute_url())
 
 
-@permission_required("interactive.adventdoor_change")
+@permission_required("interactive.change_adventdoor")
 def reset_door(request, year, number):
     calendar = AdventCalendar.objects.get(year=year)
     door = AdventDoor.objects.get(
@@ -97,7 +97,7 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
     pk_url_kwarg = "number"
     context_object_name = "door"
     template_name = "interactive/advent_admin.html"
-    permission_required = "interactive.adventdoor_change"
+    permission_required = "interactive.change_adventdoor"
 
     def post(self, *args, **kwargs):
         door = self.get_object()
