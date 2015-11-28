@@ -4,6 +4,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 
 from image_cropping.fields import ImageRatioField
 from .mixins import EditableMedia, PublicationManagerMixin, CommentsMixin
@@ -53,13 +54,12 @@ class Content(CommentsMixin, PublicationManagerMixin, EditableMedia, models.Mode
     class Meta:
         abstract = True
 
-    @models.permalink
     def get_absolute_url(self):
         """
         Finner URL ved å reversere navnet på viewen.
         Krever at navnet på viewet er gitt ved modellnavn_detail
         """
-        return (self.content_type.model + "_detail", (), {
+        return reverse(self.content_type.model + "_detail", kwargs={
             'pk': self.pk,
             'slug': self.slug
         })
