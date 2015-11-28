@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from image_cropping import ImageCroppingMixin
 from filebrowser.widgets import ClearableFileInput, FileInput
 from django.db import models
+from .config_admin import ConfigurationModelAdmin
 
 from content.models.news import News
 from .forms import EventForm
@@ -12,6 +13,7 @@ from content.forms import NewsForm
 from content.models.album import Album, AlbumImage
 from content.models.blog import Blog, BlogPost
 from content.models.base import ContentImage
+from content.models.splash import SplashConfig
 from content.widgets import MultipleImagesChooser
 
 
@@ -115,6 +117,8 @@ class NewsAdmin(ContentAdmin):
         return qs.filter(content_type=this_type)
 
 
+
+
 admin.site.register(Album, AlbumAdmin)
 admin.site.register(AlbumImage)
 admin.site.register(ContentImage)
@@ -123,3 +127,4 @@ admin.site.register(EventRegistration)
 admin.site.register(News, NewsAdmin)
 admin.site.register(Blog)
 admin.site.register(BlogPost, BlogPostAdmin)
+admin.site.register(SplashConfig, ConfigurationModelAdmin)
