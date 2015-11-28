@@ -8,5 +8,5 @@
 {% endif %}
 <h2>{{ news.headline }}</h2>
 <strong>{{ news.lead_paragraph|markdown}}</strong>
-{{ news.body|markdown}}
+<div style="overflow: hidden;">{{ news.body|markdown}}</div>
 <hr>

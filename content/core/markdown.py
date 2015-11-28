@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from django.template import Context
 
 IMAGE_RE = re.compile(
-    r'.*(\[image\:(?P<id>\d+)(\s+align\:(?P<align>right|left))?\s*\]).*',
+    r'.*(\[image\:(?P<id>\d+)((\s+align\:(?P<align>right|left))|(\s+size\:(?P<size>small|large|full)))*\s*\]).*',
     re.IGNORECASE)
 
 
@@ -40,6 +40,7 @@ class ImagePreprocessor(markdown.preprocessors.Preprocessor):
                 previous_line_was_image = True
                 image_id = m.group('id').strip()
                 alignment = m.group('align')
+                size = m.group('size')
                 try:
                     image = ContentImage.objects.get(
                         id=image_id)
@@ -57,9 +58,12 @@ class ImagePreprocessor(markdown.preprocessors.Preprocessor):
                     caption_placeholder = "{{{IMAGECAPTION}}}"
                     html = render_to_string(
                         "content/images/render.html",
-                        Context(
-                            {'image': image, 'caption': caption_placeholder,
-                             'align': alignment}))
+                        Context({
+                                'image': image,
+                                'caption': caption_placeholder,
+                                'align': alignment,
+                                'size': size
+                            }))
                     html_before, html_after = html.split(caption_placeholder)
                     placeholder_before = self.markdown.htmlStash.store(
                         html_before,
