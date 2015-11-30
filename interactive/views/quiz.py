@@ -7,9 +7,10 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from datetime import datetime, timedelta
 from braces.views import FormMessagesMixin
+from content.views.mixins import PublishedListMixin
 
 
-class QuizListView(LoginRequiredMixin, ListView):
+class QuizListView(PublishedListMixin, LoginRequiredMixin, ListView):
     model = Quiz
     paginate_by = 10
     template_name = "interactive/quiz_list.html"
