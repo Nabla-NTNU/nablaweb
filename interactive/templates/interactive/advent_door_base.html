@@ -10,14 +10,17 @@
 {% block content %}
 
 <h1>{{ door.number }}</h1>
-
+{% if not door.is_published %}
+<div class="alert alert-warning alert-dismissible">Dette er bare synlig fordi du har riktige rettigheter</div>
+{% endif %}
+ 
 <div class="text">
     {% include "accounts/includes/like.html" with object=door%}
     <p>
     {{ door.content|markdown:"unsafe" }}
     </p>
     {% if door.quiz %}
-    <a href="{{ door.quiz.get_absolute_url }}" class="btn btn-large btn-wide btn-primary">Gå til quiz!</a>
+    <p><a href="{{ door.quiz.get_absolute_url }}" class="btn btn-large btn-wide btn-primary">Gå til quiz!</a></p>
     {% endif %}
     {% if door.is_lottery %}
     {% if door.winner %}
