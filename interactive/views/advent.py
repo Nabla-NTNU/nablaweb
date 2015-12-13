@@ -23,10 +23,11 @@ class AdventDoorView(PublishedMixin, DetailView):
         context['calendar'] = door.calendar
         try:
             user = self.request.user
-            context['part'] = AdventParticipation.objects.get(
-                user=user,
-                door=door.id
-            )
+            if not user.is_anonymous():
+                context['part'] = AdventParticipation.objects.get(
+                    user=user,
+                    door=door.id
+                )
         except AdventParticipation.DoesNotExist:
             pass
         return context
