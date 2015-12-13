@@ -1,4 +1,4 @@
-(function() {
+var bomb = function() {
   var Bomb, Explosion, Particle, targetTime, vendor, w, _i, _len, _ref,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
@@ -251,7 +251,7 @@
         setTimeout(function() {
           _this.confirmation.className = '';
           return setTimeout(function() {
-            _this.confirmation.innerHTML = "If you think fontBomb is a blast, follow me on twitter <a href='http://www.twitter.com/plehoux'>@plehoux</a> for my next experiment!";
+            _this.confirmation.innerHTML = "Bomb i vei";
             _this.confirmation.className = 'show';
             return setTimeout(function() {
               return _this.confirmation.className = '';
@@ -368,4 +368,4 @@
 
   new Explosion();
 
-}).call(this);
+};

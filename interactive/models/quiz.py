@@ -6,8 +6,7 @@ from content.models.mixins import PublicationManagerMixin
 
 
 class QuizQuestion(models.Model):
-    question = models.CharField(
-        max_length=200,
+    question = models.TextField(
         verbose_name="Spørsmål",
         blank=False
     )
