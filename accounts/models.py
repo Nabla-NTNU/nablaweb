@@ -2,14 +2,14 @@
 
 from django.db import models
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import Group, AbstractUser
+from django.contrib.auth.models import Group, AbstractUser, UserManager
 from hashlib import sha1
 from datetime import datetime, date
 from .utils import activate_user_and_create_password, send_activation_email
 from django.contrib.contenttypes.models import ContentType
 
 
-class NablaUserManager(models.Manager):
+class NablaUserManager(UserManager):
     def filter_has_birthday_today(self, today=None):
         today = today or date.today()
         return self.filter(birthday__day=today.day,
@@ -60,6 +60,8 @@ class NablaUser(AbstractUser):
         help_text=(
         "Dette er det 7-10 siffer lange nummeret <b>nede til venstre</b> på baksiden av NTNU-adgangskortet ditt. "
         "Det brukes blant annet for å komme inn på bedpresser."))
+
+    objects = NablaUserManager()
 
     def get_hashed_ntnu_card_number(self):
         """Returnerer sha1-hashen av ntnu kortnummeret som BPC-trenger."""
