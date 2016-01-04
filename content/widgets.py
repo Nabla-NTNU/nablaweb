@@ -1,5 +1,5 @@
 from django.utils.encoding import force_text
-from django.forms import Textarea, SelectMultiple
+from django.forms import Textarea, SelectMultiple, FileInput
 from django.utils.safestring import mark_safe
 
 
@@ -77,9 +77,30 @@ class MarkdownEditor(Textarea):
             )
         }
         js = (
-            # "jquery/dist/jquery.min.js",
             "jquery/jquery.min.js",
             "rangy/rangy-core.min.js",
             "jquery-ui/ui/minified/jquery-ui.min.js",
             "hallo.js/hallo.js",
+        )
+
+
+class MultipleFilesUpload(FileInput):
+
+    def render(self, name, value, attrs=None):
+        html = super().render(name, value, attrs)
+        html += """
+        <script type="text/javascript">
+        jQuery('[name="""+name+"""]').hallo({});
+        </script>
+        """
+        return mark_safe(html)
+
+    class Media:
+        css = {
+            "all": (
+                "css/jquery.fileupload.css"
+            )
+        }
+        js = (
+            ""
         )

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load listutil %}
+{% load thumbnail %}
+{% block title %}Bilder{% endblock %}
+
+{% block more_head %}
+{% endblock %}
+
+{% block content %}
+<h1>Bilder</h1>
+<div class="row">
+{% for row in albums|row_split:5 %}
+    {% for album in row %}
+    <div class="col-xs-6 col-md-3">
+        {% if album.visibility != 'u' %}
+        <a class="thumbnail" href="{{ album.get_absolute_url }}">
+        <img src="{{ album.first.file.url }}"/>
+        </a>
+        {% endif %}
+        <div class="caption">
+            <h3>{{ album.title }}</h3>
+        </div>
+    </div>
+    {% endfor %}
+
+{% endfor %}
+</div>
+<nav>
+    <ul class="pager">
+      {% if page_obj.has_previous %}
+          <li class="previous">
+              <a href="{{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> forrige</a>
+          </li>
+      {% endif %}
+
+        <li class="disabled pager-counter">
+            Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
+        </li>
+
+        {% if page_obj.has_next %}
+            <li class="next">
+                <a href="{{ page_obj.next_page_number }}">neste  <span aria-hidden="true">&rarr;</span></a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endblock content %}

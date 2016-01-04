@@ -7,11 +7,15 @@ from .feeds.events import RecentEvents
 
 urlpatterns = [
     url(r'^album/$',
-        AlbumOverview.as_view(),
+        AlbumList.as_view(),
         name='albums'),
-    url(r'^album/(?P<pk>\d{1,8})/(?P<num>\d{1,8})',
-        AlbumView.as_view(),
+    url(r'^album/(?P<pk>\d{1,8})/(?P<num>\d{1,8})/$',
+        AlbumImageView.as_view(),
+        name='album_image'),
+    url(r'^album/(?P<pk>\d{1,8})/$',
+        AlbumOverview.as_view(),
         name='album'),
+
     url(r'^$',
         NewsListView.as_view(),
         name='news_list'),

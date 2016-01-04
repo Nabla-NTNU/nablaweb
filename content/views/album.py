@@ -1,42 +1,53 @@
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from braces.views import LoginRequiredMixin
-
+from django.http.response import JsonResponse
 from content.models import Album
 
 
-class AlbumOverview(ListView):
+class AlbumList(ListView):
     model = Album
     context_object_name = "albums"
-    template_name = "content/album_overview.html"
+    template_name = "content/album_list.html"
     paginate_by = 10
     queryset = Album.objects.exclude(visibility='h').order_by('created_date')
 
-    def get_context_data(self, **kwargs):
-        context = super(AlbumOverview, self).get_context_data(**kwargs)
-        return context
 
-
-class AlbumView(TemplateView):
-
-    template_name = "content/album.html"
+class AlbumOverview(DetailView):
+    model = Album
+    context_object_name = "album"
+    template_name = "content/album_overview.html"
 
     def dispatch(self, request, *args, **kwargs):
-        result = super(AlbumView, self).dispatch(request, *args, **kwargs)
+        result = super(AlbumOverview, self).dispatch(request, *args, **kwargs)
         pk = int(kwargs['pk'])
-        album = Album.objects.filter(pk=pk)[0]
-        self.visible = album.is_visible(request.user)
-        if self.visible:
+        album = Album.objects.get(pk=pk)
+        visible = album.is_visible(request.user)
+        if visible:
+            return result
+        else:
+            return redirect('auth_login')
+
+
+class AlbumImageView(TemplateView):
+
+    template_name = "content/album_image.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        result = super(AlbumImageView, self).dispatch(request, *args, **kwargs)
+        pk = int(kwargs['pk'])
+        album = Album.objects.get(pk=pk)
+        if album.is_visible(request.user):
             return result
         else:
             return redirect('auth_login')
 
     def get_context_data(self, **kwargs):
-        context = super(AlbumView, self).get_context_data(**kwargs)
+        context = super(AlbumImageView, self).get_context_data(**kwargs)
         num = int(kwargs['num'])
         pk = int(kwargs['pk'])
-        album = Album.objects.filter(pk=pk)[0]
+        album = Album.objects.get(pk=pk)
         context['album'] = album
 
         images = album.images.all()
@@ -54,3 +65,21 @@ class AlbumView(TemplateView):
             pass
 
         return context
+
+
+@permission_required("content.create_album")
+def multiple_file_upload(request):
+    files = []
+
+    for field, file in request.FILES:
+        files.append({
+            "name": file.name,
+            "size": file.size,
+            "url": file.url,
+            "thumbnailUrl": file.url,
+            "deleteUrl": file.url,
+            "deleteType": "DELETE"
+        })
+
+    return JsonResponse({"files": files})
+

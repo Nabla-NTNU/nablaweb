@@ -17,6 +17,23 @@ class AlbumImage(BaseImageModel):
         null=True
     )
 
+    album = models.ForeignKey(
+        'content.Album',
+        verbose_name="Album",
+        related_name="images",
+        null=True
+    )
+
+    @property
+    def num(self):
+        return list(self.album.images.all()).index(self)+1
+
+    def get_absolute_url(self):
+        return reverse('album_image', kwargs={
+            "pk": self.album.id,
+            "num": self.num
+        })
+
     class Meta:
         verbose_name = "Albumbilde"
         verbose_name_plural = "Albumbilder"
@@ -28,10 +45,6 @@ class Album(EditableMedia, models.Model):
         verbose_name="Albumtittel",
         blank=False,
         null=True
-    )
-    images = models.ManyToManyField(
-        AlbumImage,
-        verbose_name="Bilder",
     )
 
     VISIBILITY_OPTIONS = (
@@ -53,7 +66,7 @@ class Album(EditableMedia, models.Model):
         verbose_name_plural = "Album"
 
     def get_absolute_url(self):
-        return reverse('album', kwargs={'pk': self.pk,'num': '0'})
+        return reverse('album', kwargs={'pk': self.pk})
 
     def is_visible(self, user=None):
         if self.visibility != 'p':
@@ -63,6 +76,13 @@ class Album(EditableMedia, models.Model):
                 return False
         else:
             return True
+
+    @property
+    def first(self):
+        try:
+            return self.images.all()[0]
+        except IndexError:
+            return None
 
     def __str__(self):
         return self.title

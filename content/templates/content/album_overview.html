@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
+{% load listutil %}
 {% load thumbnail %}
 {% block title %}Bilder{% endblock %}
 
@@ -7,34 +7,17 @@
 {% endblock %}
 
 {% block content %}
-
-{% for album in albums %}
-
-    <div class="row">
-    <h2><a href="{{ album.get_absolute_url }}">{{ album.title }}</a></h2>
-    {% if album.visibility != 'u' %}
-    <img src="{{ album.images.all.0.get_absolute_url }}" style="height: 150px; max-width: 100%;" />
-    {% endif %}
+<h1>{{ album.title }}</h1>
+<div class="row">
+{% for row in album.images.all|row_split:5 %}
+    {% for image in row %}
+    <div class="col-xs-6 col-md-3">
+        <a class="thumbnail" href="{{ image.get_absolute_url }}">
+        <img src="{{ image.file.url }}"/>
+        </a>
     </div>
+    {% endfor %}
 
 {% endfor %}
-<nav>
-    <ul class="pager">
-      {% if page_obj.has_previous %}
-          <li class="previous">
-              <a href="{{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> forrige</a>
-          </li>
-      {% endif %}
-
-        <li class="disabled pager-counter">
-            Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
-        </li>
-
-        {% if page_obj.has_next %}
-            <li class="next">
-                <a href="{{ page_obj.next_page_number }}">neste  <span aria-hidden="true">&rarr;</span></a>
-            </li>
-        {% endif %}
-    </ul>
-</nav>
+</div>
 {% endblock content %}

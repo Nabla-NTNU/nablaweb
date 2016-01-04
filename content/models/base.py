@@ -12,17 +12,23 @@ from .mixins import EditableMedia, PublicationManagerMixin, CommentsMixin
 
 class BaseImageModel(models.Model):
 
-    file = models.FileField(
+    file = models.ImageField(
         max_length=100,
         verbose_name="Bildefil",
         upload_to="uploads/content"
     )
 
-    def get_absolute_url(self):
-        return self.file.url
-
     def __str__(self):
         return "(" + str(self.id) + ") " + self.file.url
+
+    def image_thumb(self):
+        if self.file:
+                return u'<img src="%s" style="max-width:100px;max-height:100px;"/>' % self.file.url
+        else:
+            return 'No image'
+
+    image_thumb.allow_tags = True
+    image_thumb.short_description = "Thumbnail"
 
     class Meta:
         abstract = True
