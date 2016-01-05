@@ -168,7 +168,8 @@ BOWER_INSTALLED_APPS = (
     'font-awesome',
     'pixi.js',
     'PhysicsJS',
-    'requirejs'
+    'requirejs',
+    'jquery-file-upload'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

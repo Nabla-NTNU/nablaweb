@@ -60,7 +60,6 @@ class Season(models.Model):
 
 class Podcast(CommentsMixin, PublicationManagerMixin, ViewCounterMixin, models.Model):
 
-    # Bildeopplasting med resizing og cropping
     image = models.ImageField(
         upload_to="news_pictures",
         null=True,
