@@ -87,7 +87,7 @@ class AdventDoor(LikeMixin, InteractiveElement):
 
     @property
     def date(self):
-        return self.calendar.first + timedelta(days=self.number)
+        return self.calendar.first + timedelta(days=(self.number-1))
 
     @property
     def is_published(self):
@@ -95,7 +95,7 @@ class AdventDoor(LikeMixin, InteractiveElement):
 
     @property
     def is_today(self):
-        return datetime.now() == self.calendar.first + timedelta(days=self.number)
+        return datetime.now() >= self.date and datetime.now() <= self.date + timedelta(days=1) 
 
     def choose_winner(self):
         if self.is_lottery and self.is_published:
