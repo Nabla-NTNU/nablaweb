@@ -38,7 +38,6 @@ class PublishedMixin(object):
         app_label = self.model._meta.app_label
         model_name = self.model._meta.model_name
         perm = "{}.change_{}".format(app_label, model_name)
-        print(perm)
         if self.get_object().is_published or user.has_perm(perm):
             return super().dispatch(request, *args, **kwargs)
 
