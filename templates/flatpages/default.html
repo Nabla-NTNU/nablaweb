@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load mediawiki_links %}
-{% load markdown_deux_tags %}
+{% load markdown %}
 {% load flatpages %}
 
 {% block title %}
@@ -23,12 +23,6 @@
             <li><a href="{{ page.url }}">{{ page.title }}</a></li>
         {% endif %}
     {% endfor %}
-
-    {# Noen ekstra eksterne lenker. Lite pent, og vi burde lage en permanent #}
-    {# løsning for det. #}
-    {% if primary_dir == "bedriftskontakten" %}
-    <li><a href="{% url "jobs_list" %}">Stillingsannonser</a></li>
-    {% endif %}
 
     </ul>
 {% endblock %}
