@@ -1,0 +1,4 @@
+{{ object.title }}
+{% for image in object.images.all %}
+{{ image.description }}
+{% endfor %}

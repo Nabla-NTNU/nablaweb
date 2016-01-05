@@ -92,7 +92,7 @@ class EditMessageMixin(models.Model):
 
 
 class EditableMedia(ViewCounterMixin, EditMessageMixin):
-    # Metadata
+
     created_date = models.DateTimeField(
         verbose_name="Publiseringsdato",
         auto_now_add=True,

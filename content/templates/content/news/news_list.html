@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
+{% load markdown %}
+{% load listutil %}
 {% block title %}Nyheter{% endblock %}
 
 {% block more_head %}
@@ -7,30 +8,13 @@
 {% endblock %}
 
 {% block content %}
-
-<div class="row">
-{% if featured_news %}
-    {% include "content/news/news_summary_include.html" with news=featured_news %}
-{% else %}
-    Her er det dessverre ingen nyheter. Så trist.
-{% endif %}
-</div>
-
-
-<hr>
-
-{% for row in news_rows %}
-
+{% for row in news_list|row_split:2 %}
     <div class="row">
     {% for news in row %}
             {% include "content/news/news_summary_include.html" with narrow="True" %}
     {% endfor %}
     </div>
-
-    <hr>
-
 {% endfor %}
-
 
 {% if is_paginated %}
 <nav>
@@ -54,14 +38,3 @@
 </nav>
 {% endif %}
 {% endblock content %}
-
-
-{% block sidebar %}
-
-    {% include "content/events/includes/upcoming_events.html" %}
-
-{% endblock sidebar %}
-
-{% block below_ad %}
-
-{% endblock below_ad %}

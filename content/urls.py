@@ -16,10 +16,10 @@ urlpatterns = [
         AlbumOverview.as_view(),
         name='album'),
 
-    url(r'^$',
+    url(r'^nyheter/$',
         NewsListView.as_view(),
         name='news_list'),
-    url(r'^(?P<pk>\d{1,8})/(?P<slug>[-\w]*)$',
+    url(r'^nyheter/(?P<pk>\d{1,8})/(?P<slug>[-\w]*)$',
         NewsDetailView.as_view(),
         name='news_detail'),
 
@@ -35,7 +35,7 @@ urlpatterns = [
         calendar,
         name='event_list'),
 
-    url(r'^mine$',
+    url(r'^mine/$',
         UserEventView.as_view(),
         name="view_user_events"),
 

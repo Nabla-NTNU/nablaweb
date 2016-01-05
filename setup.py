@@ -10,6 +10,7 @@ from content import VERSION
 requirements = [
     'markdown',
     'pytz',
+    'django-haystack',
     'django==1.8.3',
     'django-contrib-comments',
     'django-image-cropping',
