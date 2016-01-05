@@ -8,16 +8,16 @@
 
 {% block content %}
 <h1>{{ album.title }}</h1>
+{% for row in album.images.all|row_split:4 %}
 <div class="row">
-{% for row in album.images.all|row_split:5 %}
     {% for image in row %}
     <div class="col-xs-6 col-md-3">
         <a class="thumbnail" href="{{ image.get_absolute_url }}">
-        <img src="{{ image.file.url }}"/>
+        <img src="{% thumbnail image.file 770x250 quality=95 %}"/>
         </a>
     </div>
     {% endfor %}
-
-{% endfor %}
 </div>
+{% endfor %}
+
 {% endblock content %}

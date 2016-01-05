@@ -8,13 +8,14 @@
 
 {% block content %}
 <h1>Bilder</h1>
+
+{% for row in albums|row_split:4 %}
 <div class="row">
-{% for row in albums|row_split:5 %}
     {% for album in row %}
     <div class="col-xs-6 col-md-3">
         {% if album.visibility != 'u' %}
         <a class="thumbnail" href="{{ album.get_absolute_url }}">
-        <img src="{{ album.first.file.url }}"/>
+        <img src="{% thumbnail album.first.file 770x250 quality=95 %}"/>
         </a>
         {% endif %}
         <div class="caption">
@@ -22,9 +23,8 @@
         </div>
     </div>
     {% endfor %}
-
-{% endfor %}
 </div>
+{% endfor %}
 <nav>
     <ul class="pager">
       {% if page_obj.has_previous %}
