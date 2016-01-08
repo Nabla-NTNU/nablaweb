@@ -24,7 +24,7 @@ class AlbumOverview(DetailView):
         pk = int(kwargs['pk'])
         album = Album.objects.get(pk=pk)
         visible = album.is_visible(request.user)
-        if visible:
+        if visible or request.user.has_perm('content.change_album'):
             return result
         else:
             return redirect('auth_login')
@@ -38,7 +38,7 @@ class AlbumImageView(TemplateView):
         result = super(AlbumImageView, self).dispatch(request, *args, **kwargs)
         pk = int(kwargs['pk'])
         album = Album.objects.get(pk=pk)
-        if album.is_visible(request.user):
+        if album.is_visible(request.user) or request.user.has_perm('content.change_album'):
             return result
         else:
             return redirect('auth_login')

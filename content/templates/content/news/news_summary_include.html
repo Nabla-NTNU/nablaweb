@@ -1,5 +1,5 @@
 {% load mediawiki_links %}
-{% load markdown_deux_tags %}
+{% load markdown %}
 {% load thumbnail %}
 
 
@@ -29,7 +29,5 @@
             <a href="{{ newsurl }}">{{ news.headline }}</a>
     {% if narrow %}</h3>{% else %}</h2>{% endif %}
     {{ news.lead_paragraph|markdown:"unsafe"|wikilinks}}
-
-    <p><a class="btn btn-default btn-read-more" href="{{ newsurl }}">Les mer &raquo;</a></p>
 </div>
 {% endwith %}
