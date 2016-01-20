@@ -15,7 +15,7 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, ListView):
     context_object_name = 'news_list'
     template_name = 'front_page.html'
     paginate_by = 7
-    queryset = News.objects.select_related('content_type').exclude(priority=0).order_by('-pk')
+    queryset = News.objects.select_related('content_type').exclude(priority=0, published=False).order_by('-pk')
     flatpages = [("sidebarinfo", "/forsideinfo/")]
 
     def get_context_data(self, **kwargs):
@@ -30,14 +30,6 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, ListView):
             context['new_podcast'] = Podcast.objects.exclude(published=False).filter(is_clip=False).order_by('-pub_date')[0]
         except IndexError:
             pass
-
-        news_list = context['news_list']
-
-        if news_list:
-            context['featured_news'] = news_list[0]
-
-            # Deler f.eks. opp [1, 2, 3, 4, 5] til [[1, 2], [3, 4], [5]]
-            context['news_rows'] = listutil.row_split(news_list[1:], 2)
 
         context.update(upcoming_events(self.request))
         context.update(poll_context(self.request))

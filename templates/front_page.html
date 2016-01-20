@@ -1,24 +1,13 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
-
+{% load markdown %}
+{% load listutil %}
 {% block more_head %}
 <link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
 {% endblock %}
 
 {% block content %}
 
-<div class="row">
-{% if featured_news %}
-    {% include "content/news/news_summary_include.html" with news=featured_news %}
-{% else %}
-    Her er det dessverre ingen nyheter. Så trist.
-{% endif %}
-</div>
-
-
-<hr>
-
-{% for row in news_rows %}
+{% for row in news_list|row_split:2 %}
 
     <div class="row">
     {% for news in row %}
