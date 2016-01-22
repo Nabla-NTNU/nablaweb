@@ -4,7 +4,7 @@
 {% load cropping %}
 
 {% if news.as_child_class.correct_picture %}
-<img alt="header" class="news-picture" src="{% thumbnail news.as_child_class.correct_picture 770x250 box=news.as_child_class.correct_cropping quality=95 %}">
+<img alt="header" class="img-responsive" src="{% thumbnail news.as_child_class.correct_picture 770x250 box=news.as_child_class.correct_cropping quality=95 %}">
 {% endif %}
 <h2>{{ news.headline }}</h2>
 <strong>{{ news.lead_paragraph|markdown}}</strong>
