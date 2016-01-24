@@ -1,5 +1,9 @@
 # Nablaweb #
 
+## Systemavhangigheter (ufullstendig)
+
+* libmagickwand-dev (ImageMagick)
+
 Velkommen til nablaweb!
 
 All python-kode, html, css, javascript og andre statiske filer som har med http://nabla.no skal ligge her.
