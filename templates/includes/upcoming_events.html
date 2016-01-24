@@ -1,0 +1,24 @@
+{% load sekizai_tags %}
+{% addtoblock "css" %}
+    <link href="{{ STATIC_URL }}events/upcoming_events.css" rel="stylesheet">
+{% endaddtoblock %}
+
+<ul class="nav">
+{% for event in upcoming_events %}
+    <li>
+        <a href="{{ event.get_absolute_url }}">
+            <time class="label {{ class }}"
+                  datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.m" }}</time>
+            {{ event.headline }}
+            {% if event.registration_required %}
+                <span title="Ledige plasser / Totalt antall plasser">
+                    {{ event.users_attending }}/{{ event.places }}
+                </span>
+            {% endif %}
+        </a>
+    </li>
+{% empty %}
+    <li>Ingen arrangementer</li>
+{% endfor %}
+</ul>
+

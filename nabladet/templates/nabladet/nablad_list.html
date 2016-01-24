@@ -3,7 +3,7 @@
 
 {% block title %}Nabladet{% endblock %}
 
-{% block content %}
+{% block main %}
 
 <h2>Nabladet</h2>
 <p>Nabladet er vårt kjære tidsskrift, som blir publisert av <a
@@ -34,7 +34,6 @@
     <p>Ingen Nablad er blitt publisert på nettsiden hittil.</p>
 {% endfor %}
 </table>
+{% include "includes/pagination.html" %}
 
-{% endblock content %}
-
-{% block sidebar %} {% endblock sidebar %}
+{% endblock main %}

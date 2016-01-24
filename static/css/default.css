@@ -6,7 +6,41 @@ body {
 
 .logo {
 padding: 7px;
+}
 
+nav.navbar {
+    background: #222222;
+    border-bottom: solid 4px #b1b1b1;
+}
+.navbar .nav>li>a {
+    text-shadow: 0 1px 0 #000;
+    color: #efefef;
+    font-family: 'PT Sans', Helvetica, arial, sans-serif;
+}
+
+
+.box {
+    word-wrap: break-word;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.24);
+    padding: 0;
+    overflow: hidden;
+    margin-bottom: 7px;
+}
+
+.box a {
+    color: #222222;
+}
+
+.box header {
+    border-top: 4px solid #222222;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+.box p {
+    padding-left:   7px;
+    padding-right: 7px;
+    padding-bottom: 7px;
 }
 
     /* Div that holds all parts of page except footer */
@@ -39,10 +73,6 @@ padding: 7px;
     }
 
     /* Typography */
-
-    .news_item {
-        word-wrap: break-word;
-    }
 
     h1 {
         margin-bottom: 8px;
@@ -114,14 +144,6 @@ padding: 7px;
     img[alt=left] {
         float: left;
     }
-
-    .box {
-        background-color: white;
-        border: 1px solid #eee;
-        padding: 3px;
-        margin-bottom: 5px;
-    }
-    .box img:last-child { margin-bottom: -4px; }
 
     /* Remove code styling from rendered LaTeX */
     code.jax {
@@ -231,7 +253,6 @@ padding: 7px;
 
 /* Endringer i Bootstrap-farger */
 .navbar-inner {border: 1px solid #c0c0c0;}/* Navbar border */
-.navbar .nav > li > a { color: #555;}/* Navbar link color */
 .navbar-right.dropdown {margin-right: 0px;}
 
 /* News */
@@ -260,4 +281,12 @@ li.pager-counter {
     font-family: sans-serif;
     font-size: 50px;
     padding: 10px;
+}
+
+.c-event {
+    background-color: #5cb85c;
+}
+
+.c-bedpres {
+    background-color: #d9534f;
 }

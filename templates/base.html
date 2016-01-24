@@ -3,7 +3,6 @@
 {% load sekizai_tags %}
 {% load bootstrap3 %}
 {% load static %}
-{% include "includes/bootstrap_links.html" %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,17 +20,22 @@
 
     <!-- Bootstrap Core CSS -->
     {% addtoblock "css" %}
+    <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap-theme.min.css" %}">
+    <link rel="stylesheet" href="{% static "font-awesome/css/font-awesome.min.css" %}">
     <link href="{% static "css/default.css" %}" rel="stylesheet">
     {% endaddtoblock %}
     <!-- css-block -->
     {% render_block "css" %}
 
     <!-- Fav and touch icons, for screen and mobile -->
-    <link rel="shortcut icon" href="{% static "img/favicon.ico" %}">
+    <link rel="shortcut icon" href="{% if options.favicon %}{{options.favicon}}{% else %}{% static "img/favicon.ico" %}{% endif %}">
     <link rel="apple-touch-icon" href="{% static "img/apple-touch-icon.png" %}">
     <link rel="apple-touch-icon" sizes="72x72" href="{% static "img/apple-touch-icon-72x72.png" %}">
     <link rel="apple-touch-icon" sizes="114x114" href="{% static "img/apple-touch-icon-114x114.png" %}">
+
     {% addtoblock "js" %}
+    <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
     <script src="{% static "wiki/js/core.js" %}"></script>
     <script src="{% static "js/base.js" %}"></script>
     {% endaddtoblock %}
@@ -205,139 +209,75 @@
   {% bootstrap_messages %}
 
     <!-- Page Content -->
-    <div class="container">
+<div class="container">
 {% block main %}
-        <div class="row">
+<div class="row">
+    <!-- Blog Entries Column -->
+    <div class="col-md-8">
+      {% block content %}{% endblock content %}
+    </div>
 
-            <!-- Blog Entries Column -->
-            <div class="col-md-8">
-              {% block content %}
-                <h1 class="page-header">
-                    Page Heading
-                    <small>Secondary Text</small>
-                </h1>
+    <!-- Blog Sidebar Widgets Column -->
+    <div class="col-md-4">
+        {% block sidebar %}
+        {% endblock sidebar %}
+    </div>
 
-                <!-- First Blog Post -->
-                <h2>
-                    <a href="#">Blog Post Title</a>
-                </h2>
-                <p class="lead">
-                    by <a href="index.php">Start Bootstrap</a>
-                </p>
-                <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:00 PM</p>
-                <hr>
-                <img class="img-responsive" src="http://placehold.it/900x300" alt="">
-                <hr>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, veritatis, tempora, necessitatibus inventore nisi quam quia repellat ut tempore laborum possimus eum dicta id animi corrupti debitis ipsum officiis rerum.</p>
-                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+</div>
+<!-- /.row -->
+{% endblock main %}
+</div>
 
-                <hr>
+<!-- Footer -->
+<footer>
 
-                <!-- Second Blog Post -->
-                <h2>
-                    <a href="#">Blog Post Title</a>
-                </h2>
-                <p class="lead">
-                    by <a href="index.php">Start Bootstrap</a>
-                </p>
-                <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:45 PM</p>
-                <hr>
-                <img class="img-responsive" src="http://placehold.it/900x300" alt="">
-                <hr>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, quasi, fugiat, asperiores harum voluptatum tenetur a possimus nesciunt quod accusamus saepe tempora ipsam distinctio minima dolorum perferendis labore impedit voluptates!</p>
-                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+    <div class="container">
+    <div class="row">
 
-                <hr>
+        {# kontakt #}
+        <div class="col-md-4 kontakt">
+            <h2>Kontakt</h2>
 
-                <!-- Third Blog Post -->
-                <h2>
-                    <a href="#">Blog Post Title</a>
-                </h2>
-                <p class="lead">
-                    by <a href="index.php">Start Bootstrap</a>
-                </p>
-                <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:45 PM</p>
-                <hr>
-                <img class="img-responsive" src="http://placehold.it/900x300" alt="">
-                <hr>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate, voluptates, voluptas dolore ipsam cumque quam veniam accusantium laudantium adipisci architecto itaque dicta aperiam maiores provident id incidunt autem. Magni, ratione.</p>
-                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+            <p>Du kan nå oss på <a class="email" href="mailto:nabla@nabla.ntnu.no">nabla@nabla.ntnu.no</a></p>
 
-                <hr>
+            <p>Bedrift? Kontakt Bedriftskontakten Nabla på <a class="email" href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no</a></p>
 
-                <!-- Pager -->
-                <ul class="pager">
-                    <li class="previous">
-                        <a href="#">&larr; Older</a>
-                    </li>
-                    <li class="next">
-                        <a href="#">Newer &rarr;</a>
-                    </li>
-                </ul>
-                {% endblock content %}
-            </div>
+            <address>
+                Nabla <br>
+                Kjemiblokk 2 <br>
+                Sem Sælands vei 10, NTNU <br>
+                7034 Trondheim <br>
+                Norway
+            </address>
+        </div>
+        {# end kontakt #}
 
-            <!-- Blog Sidebar Widgets Column -->
-            <div class="col-md-4">
-                {% block sidebar %}
-                {% endblock sidebar %}
-            </div>
+        {# om nabla #}
+        <div class="col-md-4">
+            <h2>Tilbakemelding</h2>
+            <p>Har du
+            funnet en feil, får du ikke logget på, eller er det noe som burde
+            forbedres? Kontakt webkom:<br>
+                <a class="email" href="mailto:webkom@nabla.ntnu.no">webkom@nabla.ntnu.no</a>
+            </p>
 
         </div>
-        <!-- /.row -->
-        {% endblock main %}
-      </div>
+        {# end om nabla #}
 
-        <!-- Footer -->
-        <footer>
-
-            <div class="container">
-            <div class="row">
-
-                {# kontakt #}
-                <div class="col-md-4 kontakt">
-                    <h2>Kontakt</h2>
-
-                    <p>Du kan nå oss på <a class="email" href="mailto:nabla@nabla.ntnu.no">nabla@nabla.ntnu.no</a></p>
-
-                    <p>Bedrift? Kontakt Bedriftskontakten Nabla på <a class="email" href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no</a></p>
-
-                    <address>
-                        Nabla <br>
-                        Kjemiblokk 2 <br>
-                        Sem Sælands vei 10, NTNU <br>
-                        7034 Trondheim <br>
-                        Norway
-                    </address>
-                </div>
-                {# end kontakt #}
-
-                {# om nabla #}
-                <div class="col-md-4">
-                    <h2>Tilbakemelding</h2>
-                    <p>Har du
-                    funnet en feil, får du ikke logget på, eller er det noe som burde
-                    forbedres? Kontakt webkom:<br>
-                        <a class="email" href="mailto:webkom@nabla.ntnu.no">webkom@nabla.ntnu.no</a>
-                    </p>
-
-                </div>
-                {# end om nabla #}
-
-                {# nablalogo #}
-                <div class="col-md-4 center" id="nablafooter">
-                    <br><br>
-                    <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo">
-                </div>
-
-            </div>
+        {# nablalogo #}
+        <div class="col-md-4 center" id="nablafooter">
+            <br><br>
+            <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo">
         </div>
-        </footer>
+
+    </div>
+</div>
+</footer>
 
 
-    <!-- /.container -->
+<!-- /.container -->
 
-    {% render_block "js" %}
+{% render_block "js" %}
 
 </body>
 
