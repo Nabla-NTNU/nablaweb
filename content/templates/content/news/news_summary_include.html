@@ -1,10 +1,8 @@
-{% load mediawiki_links %}
-{% load markdown %}
 {% load thumbnail %}
 
 
 {% with newsurl=news.get_absolute_url %}
-<div class="col-md-{% if narrow %}6{% else %}12{% endif %} news_item {{ news.content_type.model }}">
+<div class="col-md-{% if narrow %}6{% else %}12{% endif %} box {{ news.content_type.model }}">
     {% if news.as_child_class.correct_picture %}
     {% if news.as_child_class.correct_cropping %}
         <a href="{{ newsurl }}">
@@ -25,9 +23,12 @@
     {% endif %}
     {% endif %}
 
-    {% if narrow %}<h3>{% else %}<h2>{% endif %}
+    <header>{% if narrow %}<h3>{% else %}<h2>{% endif %}
             <a href="{{ newsurl }}">{{ news.headline }}</a>
     {% if narrow %}</h3>{% else %}</h2>{% endif %}
-    {{ news.lead_paragraph|markdown:"unsafe"|wikilinks}}
+        </header>
+    <p>
+    {{ news.lead_paragraph}}
+    </p>
 </div>
 {% endwith %}

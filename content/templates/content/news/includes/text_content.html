@@ -3,10 +3,13 @@
 {% load thumbnail %}
 {% load cropping %}
 
-{% if news.as_child_class.correct_picture %}
-<img alt="header" class="img-responsive" src="{% thumbnail news.as_child_class.correct_picture 770x250 box=news.as_child_class.correct_cropping quality=95 %}">
-{% endif %}
-<h2>{{ news.headline }}</h2>
-<strong>{{ news.lead_paragraph|markdown}}</strong>
-<div style="overflow: hidden;">{{ news.body|markdown}}</div>
-<hr>
+
+<div class="box">
+    {% if news.as_child_class.correct_picture %}
+    <img alt="header" class="img-responsive" src="{% thumbnail news.as_child_class.correct_picture 770x300 box=news.as_child_class.correct_cropping quality=95 %}">
+    {% endif %}
+
+    <header><h2>{{ news.headline }}</h2></header>
+    <strong>{{ news.lead_paragraph}}</strong>
+    <div style="overflow: hidden;">{{ news.body|markdown}}</div>
+</div>
