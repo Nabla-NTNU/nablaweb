@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+from .models import GeneralOptions
+
+
+def general_options(request):
+    return {'options': GeneralOptions.get_current()}
 
 
 def get_primary_dir(request):

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
+{% load thumbnail %}
 
 {% block title %}Nabladet{% endblock %}
 
@@ -12,17 +12,22 @@
 <table style="table-layout:fixed;" class="table table-striped">
 {% for n in nablad_list %}
 <tr>
+    <td style="width:120px;">
+        {% if n.thumbnail %}
+        <a href="{{ n.get_absolute_url }}"> <img src="{% thumbnail n.thumbnail 250x150 quality=95 %}"></a>
+        {% endif %}
+    </td>
     <td style="width:20%">
         <a href="{{ n.get_absolute_url }}"> {{ n.pub_date|date:"F Y" }} </a>
     </td>
-    <td style="width:40%;">
+    <td style="width:30%;">
         {{ n.headline }}
     </td>
-    <td style="width:30%;">
+    <td>
         {% include "accounts/includes/like.html" with object=n%}
     </td>
-    <td style="width:10%; align:right;">
-        <a class="btn btn-small" href="{{ n.file.url }}"><i class="icon-download-alt"></i></a>
+    <td>
+        <a class="btn btn-lg" href="{{ n.file.url }}"><span class="glyphicon glyphicon-cloud-download"></span> Last ned</a>
     </td>
 </tr>
 {% empty %}

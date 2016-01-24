@@ -108,6 +108,7 @@ INSTALLED_APPS = [
     'poll',     # Spørreundersøkelser
     'podcast',
     'interactive',
+    'nablaweb',
 
     ###########################
     # Eksternt utviklede apps #
