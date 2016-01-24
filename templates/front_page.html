@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load markdown %}
 {% load listutil %}
+{% load thumbnail %}
 {% block more_head %}
 <link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
 {% endblock %}
@@ -15,11 +16,18 @@
     {% endfor %}
     </div>
 
-    <hr>
-
 {% endfor %}
 
 {% include "includes/pagination.html" %}
+<h2>Nye Nablad</h2>
+<div class="row">
+    {% for nablad in new_nablad %}
+            <div class="col-md-8">
+                <img src="{% thumbnail nablad.thumbnail 300x400 %}">
+            </div>
+    {% endfor %}
+</div>
+
 {% endblock content %}
 
 

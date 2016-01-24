@@ -4,6 +4,11 @@ body {
   margin-top: 60px;
 }
 
+.logo {
+padding: 7px;
+
+}
+
     /* Div that holds all parts of page except footer */
     #whitebox {
         background: white url(../img/bgnoise.png);
@@ -220,9 +225,8 @@ body {
 /* for logo + søkefelt i headeren */
 
     form#searchtop {
-        margin-bottom: 0;
-        margin-top: 15px; /* Logohøyde minus høyden på formen */
-        width: 200px;
+        display: inline-block;
+        padding-top: 10px;
     }
 
 /* Endringer i Bootstrap-farger */

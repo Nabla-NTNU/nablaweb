@@ -181,6 +181,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'sekizai.context_processors.sekizai',
 
     'nablaweb.context_processors.get_primary_dir',
+    'nablaweb.context_processors.get_primary_dir',
 )
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'

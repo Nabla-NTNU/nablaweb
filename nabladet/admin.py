@@ -4,7 +4,8 @@ from content.admin import ContentAdmin
 
 
 class NabladAdmin(ContentAdmin):
-    fields = ("picture",
+    fields = ("published",
+              "picture",
               "cropping",
               "headline",
               "slug",
