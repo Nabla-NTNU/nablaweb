@@ -25,7 +25,9 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
             pass
 
         context['new_nablad'] = Nablad.objects.exclude(published=False).order_by('-pub_date')[:4]
-        context['news_list'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[:6]
+
+        context['main_news'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[0]
+        context['news_list'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[1:7]
 
         now = datetime.now() - timedelta(hours=6)
         context['upcoming_events'] = Event.objects.filter(event_start__gte=now).order_by('event_start')[:6]

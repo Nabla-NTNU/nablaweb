@@ -7,7 +7,27 @@
 {% endblock %}
 
 {% block content %}
-<h3>Nyheter</h3>
+{% with main_news as news %}
+<article>
+    <div class="box {{ news.content_type.model }}">
+    {% if news.as_child_class.correct_cropping and news.as_child_class.correct_picture %}
+        <a href="{{ news.get_absolute_url }}">
+            <img alt="" class="news-picture" src="{% thumbnail news.as_child_class.correct_picture 760x300 box=news.as_child_class.correct_cropping upscale quality=95 detail %}">
+        </a>
+    {% elif news.as_child_class.correct_picture %}
+        <a href="{{ news.get_absolute_url }}">
+            <img alt="" class="news-picture" src="{% thumbnail news.as_child_class.correct_picture 760x300 quality=95 upscale crop="smart" detail %}">
+        </a>
+    {% endif %}
+    <header>
+    <h2>
+        <a href="{{ news.get_absolute_url }}">{{ news.headline }}</a>
+    </h2>
+    </header>
+    <p>{{ news.lead_paragraph}}</p>
+    </div>
+</article>
+{% endwith %}
 {% for row in news_list|row_split:2 %}
 
 <div class="row">
