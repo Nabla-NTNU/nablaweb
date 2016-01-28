@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin, PermissionRequiredMixin
 
 from .forms import UserForm, RegistrationForm, InjectUsersForm
-from .models import NablaUser, NablaGroup, LikePress, get_like_count
+from .models import NablaUser, NablaGroup, LikePress, get_like_count, RegistrationRequest
 from .utils import activate_user_and_create_password, send_activation_email, extract_usernames
 
 User = get_user_model()
@@ -43,16 +43,34 @@ class UserList(LoginRequiredMixin, ListView):
 class RegistrationView(MessageMixin, FormView):
     form_class = RegistrationForm
     template_name = 'accounts/user_registration.html'
-    success_url = '/'
+    success_url = '/login/'
 
     def form_valid(self, form):
-        username = form.cleaned_data['username'] 
-        user, created_user = NablaUser.objects.get_or_create(username=username)
+        username = form.cleaned_data['username']
+        first_name = form.cleaned_data.get('first_name')
+        last_name = form.cleaned_data.get('last_name')
 
-        password = activate_user_and_create_password(user)
-        send_activation_email(user, password)
-
-        self.messages.info('Registreringsepost sendt til %s' % user.email)
+        # Activate a user or create a registration request.
+        try:
+            user = NablaUser.objects.get(username=username)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+            if user.is_active:
+                self.messages.error("Denne brukeren er allerede aktivert.")
+            else:
+                password = activate_user_and_create_password(user)
+                send_activation_email(user, password)
+                self.messages.info("Registreringsepost sendt til {}".format(user.email))
+        except NablaUser.DoesNotExist:
+            RegistrationRequest.objects.create(
+                    username=username,
+                    first_name=first_name,
+                    last_name=last_name
+            )
+            self.messages.info("Denne brukeren er ikke registrert. "
+                               "En forespørsel har blitt opprettet og "
+                               "du vil få en epost hvis den blir godkjent.")
         return super(RegistrationView, self).form_valid(form)
 
 

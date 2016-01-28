@@ -40,12 +40,7 @@ class UserForm(forms.ModelForm):
 
 
 class RegistrationForm(forms.Form):
-    """Form used to activate a new user.
-
-    Validates a username that has been supplied by a new user.
-    The user-object has to have been created, but not activated.
-    That is webkom must create it first.
-    """
+    """Form used to activate a new user or send a registration request."""
     username = forms.CharField(
         label="NTNU-brukernavn",
         required=True
@@ -60,31 +55,6 @@ class RegistrationForm(forms.Form):
         label="Etternavn",
         required=True
     )
-
-    def clean(self):
-        username = self.cleaned_data.get('username')
-        first_name = self.cleaned_data.get('first_name')
-        last_name = self.cleaned_data.get('last_name')
-
-        try:
-            user = NablaUser.objects.get(username=username)
-            user.first_name = first_name
-            user.last_name = last_name
-            user.save()
-        except NablaUser.DoesNotExist:
-            RegistrationRequest.objects.create(
-                username=username,
-                first_name=first_name,
-                last_name=last_name
-            )
-            raise forms.ValidationError("Denne brukeren er ikke registrert. "
-                                        "En forespørsel har blitt opprettet og "
-                                        "du vil få en mail hvis den blir godkjent.")
-
-        if user.is_active:
-            raise forms.ValidationError("Denne brukeren er allerede aktivert.")
-
-        return self.cleaned_data
 
 
 # Forms for admin
