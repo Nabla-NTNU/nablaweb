@@ -28,42 +28,12 @@
     </div>
 </article>
 {% endwith %}
-{% for row in news_list|row_split:2 %}
 
+{% include "includes/event_widget.html" %}
 <div class="row">
-{% for news in row %}
-<article class="col-md-6">
-    <div class="box {{ news.content_type.model }}">
-    {% if news.as_child_class.correct_cropping and news.as_child_class.correct_picture %}
-        <a href="{{ news.get_absolute_url }}">
-            <img alt="" class="news-picture" src="{% thumbnail news.as_child_class.correct_picture 360x200 box=news.as_child_class.correct_cropping upscale quality=95 detail %}">
-        </a>
-    {% elif news.as_child_class.correct_picture %}
-        <a href="{{ news.get_absolute_url }}">
-            <img alt="" class="news-picture" src="{% thumbnail news.as_child_class.correct_picture 360x200 quality=95 upscale crop="smart" detail %}">
-        </a>
-    {% endif %}
-    <header>
-    <h2>
-        <a href="{{ news.get_absolute_url }}">{{ news.headline }}</a>
-    </h2>
-    </header>
-    <p>{{ news.lead_paragraph}}</p>
-    </div>
-</article>
+{% for news in news_list_1 %}
+{% include "includes/article_widget.html" %}
 {% endfor %}
-</div>
-
-{% endfor %}
-<div class="row">
-    <div class="col-md-6">
-        <h3>Arrangementer</h3>
-        {% include "includes/upcoming_events.html" with upcomming=upcomming_events class="c-event" %}
-    </div>
-    <div class="col-md-6">
-        <h3>Bedpres</h3>
-        {% include "includes/upcoming_events.html" with upcomming=upcomming_bedpreses class="c-bedpres"%}
-    </div>
 </div>
 
 <h3>Siste Nablad</h3>
@@ -76,9 +46,19 @@
             </div>
     {% endfor %}
 </div>
+<div class="row">
+{% for news in news_list_3 %}
+{% include "includes/article_widget.html" %}
+{% endfor %}
+</div>
+
+<div class="row">
+{% for news in news_list_3 %}
+{% include "includes/article_widget.html" %}
+{% endfor %}
+</div>
 
 {% endblock content %}
-
 
 {% block sidebar %}
     {% if sidebarinfo %}

@@ -249,6 +249,7 @@ nav.navbar {
     form#searchtop {
         display: inline-block;
         padding-top: 10px;
+        width: 180px;
     }
 
 /* Endringer i Bootstrap-farger */

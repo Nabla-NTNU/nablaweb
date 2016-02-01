@@ -21,13 +21,14 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
         try:
             context['new_podcast'] = Podcast.objects.exclude(published=False)\
                 .filter(is_clip=False).order_by('-pub_date')[0]
+            context['main_news'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[0]
+            context['news_list_1'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[1:3]
+            context['news_list_2'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[3:5]
+            context['news_list_3'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[5:7]
         except IndexError:
             pass
 
         context['new_nablad'] = Nablad.objects.exclude(published=False).order_by('-pub_date')[:4]
-
-        context['main_news'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[0]
-        context['news_list'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[1:7]
 
         now = datetime.now() - timedelta(hours=6)
         context['upcoming_events'] = Event.objects.filter(event_start__gte=now).order_by('event_start')[:6]
