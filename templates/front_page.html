@@ -52,6 +52,22 @@
 {% endfor %}
 </div>
 
+<h3>Album</h3>
+<div class="row">
+{% for album in album_list %}
+<div class="col-md-3">
+    {% if album.visibility != 'u' %}
+    <a class="thumbnail" href="{{ album.get_absolute_url }}">
+    <img src="{% thumbnail album.first.file 770x250 quality=95 %}"/>
+    </a>
+    {% endif %}
+    <div class="caption">
+        <h3>{{ album.title }}</h3>
+    </div>
+</div>
+{% endfor %}
+</div>
+
 <div class="row">
 {% for news in news_list_3 %}
 {% include "includes/article_widget.html" %}

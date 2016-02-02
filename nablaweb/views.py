@@ -3,6 +3,7 @@ from content.models import Event
 from bedpres.models import BedPres
 from datetime import datetime, timedelta
 from content.models.news import News
+from content.models import Album
 from content.views.mixins import PublishedListMixin
 from podcast.models import Podcast
 from nabladet.models import Nablad
@@ -25,6 +26,8 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
             context['news_list_1'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[1:3]
             context['news_list_2'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[3:5]
             context['news_list_3'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[5:7]
+
+            context['album_list'] = Album.objects.exclude(visibility='h').order_by('-last_changed_date')[:4]
         except IndexError:
             pass
 

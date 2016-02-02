@@ -4,7 +4,7 @@
 {% endaddtoblock %}
 
 <ul class="nav">
-{% for event in upcoming_events %}
+{% for event in upcoming %}
     <li>
         <a href="{{ event.get_absolute_url }}">
             <time class="label {{ class }}"
