@@ -15,6 +15,8 @@ from .forms import NablaUserChangeForm, NablaUserCreationForm
 
 
 User = get_user_model()
+admin.site.register(FysmatClass)
+admin.site.unregister(Group)
 
 
 class GroupAdminForm(forms.ModelForm):
@@ -57,37 +59,25 @@ class NablaGroupAdminForm(GroupAdminForm):
         fields = '__all__'
 
 
+@admin.register(Group)
 class ExtendedGroupAdmin(GroupAdmin):
     form = GroupAdminForm
 
 
 def maillist(modeladmin, request, queryset):
-    ids = [g.id for g in queryset]
-    s = str(ids[0])
-    for i in ids[1:]:
-        s = s + '/' + str(i)
+    s = '/'.join(str(g.id) for g in queryset)
     url = reverse('mail_list', kwargs={'groups': s})
     return HttpResponseRedirect(url)
-
-
 maillist.short_description = "Vis mailliste"
 
 
+@admin.register(NablaGroup)
 class ExtendedNablaGroupAdmin(GroupAdmin):
     form = NablaGroupAdminForm
     actions = [maillist]
 
 
-try:
-    admin.site.unregister(Group)
-except:
-    pass
-
-admin.site.register(Group, ExtendedGroupAdmin)
-admin.site.register(NablaGroup, ExtendedNablaGroupAdmin)
-admin.site.register(FysmatClass)
-
-
+@admin.register(NablaUser)
 class NablaUserAdmin(UserAdmin):
     form = NablaUserChangeForm
     add_form = NablaUserCreationForm
@@ -103,22 +93,9 @@ class NablaUserAdmin(UserAdmin):
     )
 
 
-admin.site.register(NablaUser, NablaUserAdmin)
-
-
-def reg_approve(modeladmin, request, queryset):
-    for req in queryset:
-        req.approve_request()
-        req.delete()
-
-
-def reg_decline(modeladmin, request, queryset):
-    for req in queryset:
-        req.delete()
-
-
+@admin.register(RegistrationRequest)
 class RegistrationRequestAdmin(admin.ModelAdmin):
-    actions = [reg_approve, reg_decline]
+    actions = ["approve", "decline"]
     list_display = ['username', 'first_name', 'last_name', 'created']
     ordering = ['-created']
 
@@ -126,5 +103,11 @@ class RegistrationRequestAdmin(admin.ModelAdmin):
         model = RegistrationRequest
         fields = '__all__'
 
+    def approve(self, request, queryset):
+        for req in queryset:
+            req.approve_request()
+            req.delete()
 
-admin.site.register(RegistrationRequest, RegistrationRequestAdmin)
+    def decline(self, request, queryset):
+        for req in queryset:
+            req.delete()
