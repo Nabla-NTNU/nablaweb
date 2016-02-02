@@ -240,7 +240,7 @@ h3 a, h3 a:hover, h3 a:active, h3 a:focus{
     form#searchtop {
         display: inline-block;
         padding-top: 10px;
-        width: 180px;
+        width: 150px;
     }
 
 /* Endringer i Bootstrap-farger */
