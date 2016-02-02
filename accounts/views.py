@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from django.views.generic import DetailView, ListView, UpdateView, FormView
+from django.views.generic import DetailView, ListView, UpdateView, FormView, TemplateView
 from django.contrib.auth import get_user_model
-from django.http import HttpResponseForbidden, JsonResponse, Http404
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse
-import datetime
 from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin, PermissionRequiredMixin
 
 from .forms import UserForm, RegistrationForm, InjectUsersForm
-from .models import NablaUser, NablaGroup, LikePress, get_like_count
+from .models import NablaUser, NablaGroup, LikePress, get_like_count, RegistrationRequest
 from .utils import activate_user_and_create_password, send_activation_email, extract_usernames
 
 User = get_user_model()
@@ -44,16 +43,34 @@ class UserList(LoginRequiredMixin, ListView):
 class RegistrationView(MessageMixin, FormView):
     form_class = RegistrationForm
     template_name = 'accounts/user_registration.html'
-    success_url = '/'
+    success_url = '/login/'
 
     def form_valid(self, form):
-        username = form.cleaned_data['username'] 
-        user, created_user = NablaUser.objects.get_or_create(username=username)
+        username = form.cleaned_data['username']
+        first_name = form.cleaned_data.get('first_name')
+        last_name = form.cleaned_data.get('last_name')
 
-        password = activate_user_and_create_password(user)
-        send_activation_email(user, password)
-
-        self.messages.info('Registreringsepost sendt til %s' % user.email)
+        # Activate a user or create a registration request.
+        try:
+            user = NablaUser.objects.get(username=username)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+            if user.is_active:
+                self.messages.error("Denne brukeren er allerede aktivert.")
+            else:
+                password = activate_user_and_create_password(user)
+                send_activation_email(user, password)
+                self.messages.info("Registreringsepost sendt til {}".format(user.email))
+        except NablaUser.DoesNotExist:
+            RegistrationRequest.objects.create(
+                    username=username,
+                    first_name=first_name,
+                    last_name=last_name
+            )
+            self.messages.info("Denne brukeren er ikke registrert. "
+                               "En forespørsel har blitt opprettet og "
+                               "du vil få en epost hvis den blir godkjent.")
         return super(RegistrationView, self).form_valid(form)
 
 
@@ -76,71 +93,45 @@ class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
 
 
 class BirthdayView(LoginRequiredMixin, ListView):
-    model = NablaUser
     allow_empty = True
     date_field = "birthday"
     template_name = "accounts/user_birthday.html"
     context_object_name = "users"
 
     def get_queryset(self):
-        today = datetime.date.today()
-        return NablaUser.objects.filter(birthday__day=today.day,
-                                        birthday__month=today.month,
-                                        is_active=True)
+        return NablaUser.objects.filter_has_birthday_today()
 
 
-class MailListView(PermissionRequiredMixin, ListView):
+class MailListView(PermissionRequiredMixin, TemplateView):
     template_name = 'accounts/mail_list.html'
-    model = NablaUser
-    context_object_name = 'users'
     permission_required = 'accounts.change_nablagroup'
-    groups = []
-
-    def get_queryset(self):
-        groups = self.kwargs['groups'].split('/')
-        groups = [int(i) for i in groups]
-        groups = list(set(groups))
-        try:
-            self.groups = [NablaGroup.objects.get(id=group) for group in groups]
-        except NablaGroup.DoesNotExist:
-            raise Http404('En av IDene har ikke en tilhørende gruppe')
-        queryset = super().get_queryset()
-        queryset = queryset.filter(groups__in=self.groups)
-        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['groups'] = self.groups
+        group_ids = {int(i) for i in self.kwargs['groups'].split('/')}
+        groups = NablaGroup.objects.filter(id__in=group_ids)
+        context["users"] = NablaUser.objects.filter(groups__in=groups)
+        context["groups"] = groups
         return context
 
 
+@login_required
 def process_like(request, model, id):
     """
     Processes a like click.
     :param request:
     :return:
     """
+    user = request.user
+    LikePress.objects.create_or_delete(
+        user=user,
+        reference_id=id,
+        model_name=model
+    )
 
     next = request.GET.get('next')
-    user = request.user
-    if user.is_authenticated():
-        try:
-            like = LikePress.objects.get(
-                user=user,
-                reference_id=id,
-                model_name=model
-            )
-            like.delete()
-        except LikePress.DoesNotExist:
-            like = LikePress.objects.create(
-                user=user,
-                reference_id=id,
-                model_name=model
-            )
-        count = get_like_count(id, model)
-        if next:
-            return redirect(next)
-        else:
-            return JsonResponse({'count': count})
+    if next:
+        return redirect(next)
     else:
-        return redirect(reverse("auth_login"))
+        count = get_like_count(id, model)
+        return JsonResponse({'count': count})

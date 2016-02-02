@@ -1,36 +1,15 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
+{% load listutil %}
 {% block title %}Nyheter{% endblock %}
 
-{% block more_head %}
-<link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
-{% endblock %}
-
 {% block content %}
-
-<div class="row">
-{% if featured_news %}
-    {% include "news/news_summary_include.html" with news=featured_news %}
-{% else %}
-    Her er det dessverre ingen nyheter. Så trist.
-{% endif %}
-</div>
-
-
-<hr>
-
-{% for row in news_rows %}
-
+{% for row in news_list|row_split:2 %}
     <div class="row">
     {% for news in row %}
-            {% include "news/news_summary_include.html" with narrow="True" %}
+            {% include "includes/article_widget.html" %}
     {% endfor %}
     </div>
-
-    <hr>
-
 {% endfor %}
-
 
 {% if is_paginated %}
 <nav>
@@ -54,21 +33,3 @@
 </nav>
 {% endif %}
 {% endblock content %}
-
-
-{% block sidebar %}
-
-    {% include "events/includes/upcoming_events.html" %}
-    {% if sidebarinfo %}
-        <h2>{{ sidebarinfo.title }}</h2>
-        <p>
-            {{ sidebarinfo.content | markdown:"unsafe" }}
-        </p>
-    {% endif %}
-    {% include "poll/poll_include.html" %}
-
-{% endblock sidebar %}
-
-{% block below_ad %}
-
-{% endblock below_ad %}

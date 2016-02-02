@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*-
-from datetime import date
 
 from django.db import models
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import Group, AbstractUser
+from django.contrib.auth.models import Group, AbstractUser, UserManager
 from hashlib import sha1
-from datetime import datetime
+from datetime import datetime, date
 from .utils import activate_user_and_create_password, send_activation_email
 from django.contrib.contenttypes.models import ContentType
+
+
+class NablaUserManager(UserManager):
+    def filter_has_birthday_today(self, today=None):
+        today = today or date.today()
+        return self.filter(birthday__day=today.day,
+                           birthday__month=today.month,
+                           is_active=True)
 
 
 class NablaUser(AbstractUser):
@@ -53,6 +60,8 @@ class NablaUser(AbstractUser):
         help_text=(
         "Dette er det 7-10 siffer lange nummeret <b>nede til venstre</b> på baksiden av NTNU-adgangskortet ditt. "
         "Det brukes blant annet for å komme inn på bedpresser."))
+
+    objects = NablaUserManager()
 
     def get_hashed_ntnu_card_number(self):
         """Returnerer sha1-hashen av ntnu kortnummeret som BPC-trenger."""
@@ -156,6 +165,13 @@ class RegistrationRequest(models.Model):
         return self.username
 
 
+class LikePressManager(models.Manager):
+    def create_or_delete(self, *args, **kwargs):
+        obj, created = self.get_or_create(*args, **kwargs)
+        if not created:
+            obj.delete()
+
+
 class LikePress(models.Model):
     """
     Represents a like click on some object.
@@ -174,6 +190,8 @@ class LikePress(models.Model):
         max_length=100,
         null=True
     )
+
+    objects = LikePressManager()
 
 
 def get_like_count(id, model):
@@ -209,6 +227,3 @@ class LikeMixin(models.Model):
         ).delete()
 
         return super(LikeMixin, self).delete(using)
-
-
-

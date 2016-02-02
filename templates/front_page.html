@@ -1,42 +1,82 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
-
+{% load markdown %}
+{% load listutil %}
+{% load thumbnail %}
 {% block more_head %}
 <link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
 {% endblock %}
 
 {% block content %}
+{% with main_news as news %}
+<article>
+    <div class="box {{ news.content_type.model }}">
+    {% if news.as_child_class.correct_cropping and news.as_child_class.correct_picture %}
+        <a href="{{ news.get_absolute_url }}">
+            <img alt="" class="news-picture" src="{% thumbnail news.as_child_class.correct_picture 760x300 box=news.as_child_class.correct_cropping upscale quality=95 detail %}">
+        </a>
+    {% elif news.as_child_class.correct_picture %}
+        <a href="{{ news.get_absolute_url }}">
+            <img alt="" class="news-picture" src="{% thumbnail news.as_child_class.correct_picture 760x300 quality=95 upscale crop="smart" detail %}">
+        </a>
+    {% endif %}
+    <header>
+    <h2>
+        <a href="{{ news.get_absolute_url }}">{{ news.headline }}</a>
+    </h2>
+    </header>
+    <p>{{ news.lead_paragraph}}</p>
+    </div>
+</article>
+{% endwith %}
 
+{% include "includes/event_widget.html" %}
 <div class="row">
-{% if featured_news %}
-    {% include "content/news/news_summary_include.html" with news=featured_news %}
-{% else %}
-    Her er det dessverre ingen nyheter. Så trist.
-{% endif %}
+{% for news in news_list_1 %}
+{% include "includes/article_widget.html" %}
+{% endfor %}
 </div>
 
-
-<hr>
-
-{% for row in news_rows %}
-
-    <div class="row">
-    {% for news in row %}
-            {% include "content/news/news_summary_include.html" with narrow="True" %}
-    {% endfor %}
+<h3><a href="{% url "nablad_list" %}">Siste Nablad</a></h3>
+<div class="row">
+{% for nablad in new_nablad %}
+    <div class="col-md-3">
+        <a class="thumbnail" href="{{ nablad.get_absolute_url }}">
+            <img src="{% thumbnail nablad.thumbnail 280x400 %}">
+        </a>
     </div>
-
-    <hr>
-
 {% endfor %}
+</div>
+<div class="row">
+{% for news in news_list_3 %}
+{% include "includes/article_widget.html" %}
+{% endfor %}
+</div>
 
-{% include "includes/pagination.html" %}
+<h3><a href="{% url "albums" %}">Album</a></h3>
+<div class="row">
+{% for album in album_list %}
+<div class="col-md-3">
+    {% if album.visibility != 'u' %}
+    <a class="thumbnail" href="{{ album.get_absolute_url }}">
+    <img src="{% thumbnail album.first.file 770x250 quality=95 %}"/>
+    </a>
+    {% endif %}
+    <div class="caption">
+        <h3>{{ album.title }}</h3>
+    </div>
+</div>
+{% endfor %}
+</div>
+
+<div class="row">
+{% for news in news_list_3 %}
+{% include "includes/article_widget.html" %}
+{% endfor %}
+</div>
+<a href="{% url "news_list" %}" class="btn">Flere nyheter</a>
 {% endblock content %}
 
-
 {% block sidebar %}
-
-    {% include "content/events/includes/upcoming_events.html" %}
     {% if sidebarinfo %}
         <h2>{{ sidebarinfo.title }}</h2>
         <p>
@@ -57,6 +97,3 @@
 
 {% endblock sidebar %}
 
-{% block below_ad %}
-
-{% endblock below_ad %}

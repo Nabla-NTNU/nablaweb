@@ -76,7 +76,6 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
-    'sessionprofile.middleware.SessionProfileMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -113,10 +112,6 @@ INSTALLED_APPS = [
     ###########################
     # Eksternt utviklede apps #
     ###########################
-
-    # Sessionprofile gjør det mulig å logge direkte inn på blant annet Wikien,
-    # phpBB, og annet, hvis man er logget på Nablaweb
-    'sessionprofile',
 
     # Django-image-cropping (pip install) gjør det mulig for staff å croppe
     # opplastede bilder
@@ -178,9 +173,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
-
     'sekizai.context_processors.sekizai',
-
     'nablaweb.context_processors.get_primary_dir',
 )
 

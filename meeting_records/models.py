@@ -23,6 +23,3 @@ class MeetingRecord(News):
 
     def __str__(self):
         return self.headline
-
-    def __unicode__(self):
-        return self.headline

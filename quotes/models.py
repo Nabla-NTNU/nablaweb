@@ -16,6 +16,3 @@ class Quote(models.Model):
 
     def __str__(self):
         return self.quote
-
-    def __unicode__(self):
-        return self.quote

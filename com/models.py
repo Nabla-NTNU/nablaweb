@@ -50,14 +50,11 @@ class ComPage(models.Model):
     def __str__(self):
         return self.com.name
 
-    def __unicode__(self):
-        return self.com.name
-
     def has_been_edited(self):
         return self.last_changed_by is not None
 
     def get_canonical_name(self):
-        return slugify(self.__unicode__())
+        return slugify(str(self))
 
     def get_absolute_url(self):
         return reverse('show_com_page', kwargs={'slug': self.get_canonical_name()})
@@ -93,9 +90,6 @@ class ComMembership(models.Model):
         super(ComMembership, self).delete(*args, **kwargs)
 
     def __str__(self):
-        return self.user.username
-
-    def __unicode__(self):
         return self.user.username
 
 
