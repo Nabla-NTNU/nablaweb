@@ -19,6 +19,13 @@ class RegistrationInfo(object):
         self.waiting = not attending
 
 
+class WrongClass(Exception):
+    """Exception to be thrown when a BPC says that a user is in a wrong class."""
+    def __init__(self, event, user):
+        self.user = user
+        self.event = event
+
+
 class BPCEventMixin(object):
     """Mixin-class to add the same methods for registration as the Event-model from content."""
     bpcid = None
@@ -64,6 +71,8 @@ class BPCEventMixin(object):
                 raise RegistrationAlreadyExists(event=self, user=user)
             elif e.bpc_error_code in ("408", "409"):
                 raise RegistrationNotOpen(event=self, user=user)
+            elif e.bpc_error_code in ("401", "410"):
+                raise WrongClass(event=self, user=user)
             raise e
 
     def deregister_user(self, user):
