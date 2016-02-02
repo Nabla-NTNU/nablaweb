@@ -36,15 +36,15 @@
 {% endfor %}
 </div>
 
-<h3>Siste Nablad</h3>
+<h3><a href="{% url "nablad_list" %}">Siste Nablad</a></h3>
 <div class="row">
-    {% for nablad in new_nablad %}
-            <div class="col-md-3">
-                <a class="thumbnail" href="{{ nablad.get_absolute_url }}">
-                    <img src="{% thumbnail nablad.thumbnail 280x400 %}">
-                </a>
-            </div>
-    {% endfor %}
+{% for nablad in new_nablad %}
+    <div class="col-md-3">
+        <a class="thumbnail" href="{{ nablad.get_absolute_url }}">
+            <img src="{% thumbnail nablad.thumbnail 280x400 %}">
+        </a>
+    </div>
+{% endfor %}
 </div>
 <div class="row">
 {% for news in news_list_3 %}
@@ -52,7 +52,7 @@
 {% endfor %}
 </div>
 
-<h3>Album</h3>
+<h3><a href="{% url "albums" %}">Album</a></h3>
 <div class="row">
 {% for album in album_list %}
 <div class="col-md-3">
@@ -73,7 +73,7 @@
 {% include "includes/article_widget.html" %}
 {% endfor %}
 </div>
-
+<a href="{% url "news_list" %}" class="btn">Flere nyheter</a>
 {% endblock content %}
 
 {% block sidebar %}
