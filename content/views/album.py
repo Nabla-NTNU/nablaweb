@@ -11,7 +11,7 @@ class AlbumList(ListView):
     context_object_name = "albums"
     template_name = "content/album_list.html"
     paginate_by = 10
-    queryset = Album.objects.exclude(visibility='h').order_by('created_date')
+    queryset = Album.objects.exclude(visibility='h').order_by('-created_date')
 
 
 class AlbumOverview(DetailView):
