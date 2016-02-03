@@ -50,7 +50,7 @@ class AlbumImageView(TemplateView):
         album = Album.objects.get(pk=pk)
         context['album'] = album
 
-        images = album.images.all()
+        images = album.images.order_by('num').all()
         paginator = Paginator(images, 1)
         try:
             page_obj = paginator.page(num)

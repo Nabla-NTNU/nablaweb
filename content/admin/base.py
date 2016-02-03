@@ -57,8 +57,9 @@ class BlogPostAdmin(ListenMixin, ChangedByMixin, admin.ModelAdmin):
 class AlbumImageInline(admin.TabularInline):
     model = AlbumImage
     fk_name = "album"
-    fields = ('file', 'description', 'image_thumb')
+    fields = ('num', 'file', 'description', 'image_thumb')
     readonly_fields = ('image_thumb',)
+    ordering = ('num',)
 
 
 class AlbumAdmin(ChangedByMixin, admin.ModelAdmin):

@@ -24,14 +24,15 @@ class AlbumImage(BaseImageModel):
         null=True
     )
 
-    @property
-    def num(self):
-        return list(self.album.images.all()).index(self)+1
+    num = models.PositiveIntegerField(
+        verbose_name="Nummer",
+        null=True
+    )
 
     def get_absolute_url(self):
         return reverse('album_image', kwargs={
             "pk": self.album.id,
-            "num": self.num
+            "num": self.num+1
         })
 
     class Meta:
@@ -80,8 +81,8 @@ class Album(EditableMedia, models.Model):
     @property
     def first(self):
         try:
-            return self.images.all()[0]
-        except IndexError:
+            return self.images.get(num=0)
+        except AlbumImage.DoesNotExist:
             return None
 
     def __str__(self):
