@@ -111,18 +111,18 @@
                           </ul>
                       </li>
 
-                      <li>
-                          <a href="{% url "committee_overview" %}" >
-                              Komitéer
-                          </a>
-                      </li>
-
+                      
                       <li class="dropdown">
                           <a href="#om" class="dropdown-toggle" data-toggle="dropdown">
                               Om Nabla
                               <span class="caret"></span>
                           </a>
                           <ul class="dropdown-menu" >
+                             <li>
+                                 <a href="{% url "committee_overview" %}" >
+                                     Komitéer
+                                 </a>
+                             </li>
 
                           {# Hent alle sider som starter på /om/ #}
                           {% get_flatpages '/om/' as about_pages %}
@@ -131,20 +131,6 @@
                           {% endfor %}
                           </ul>
                       </li>
-                      {% if user.is_authenticated %}
-                      <li class="dropdown">
-                          <a href="#bruker" class="dropdown-toggle" data-toggle="dropdown">
-                              Brukersider
-                              <span class="caret"></span>
-                          </a>
-                          <ul class="dropdown-menu" >
-                              <li><a href="{% url "user_polls" %}">Brukeravstemninger</a></li>
-                              <li><a href="{% url "users_birthday" %}">Bursdag</a></li>
-                              <li><a href="{% url "quiz_list" %}">Quiz</a></li>
-                          </ul>
-                      </li>
-                      {% endif %}
-
                   </ul>
                   {# end navigasjonslenker #}
                 <form class="form-inline" id="searchtop" method="get" action="{% url "haystack_search" %}">
@@ -173,6 +159,10 @@
                                   <li><a href="{% url "password_change" %}">Endre passord</a></li>
                                   <li><a href="{% url "view_user_events" %}">Påmeldte arrangementer</a></li>
                                   <li><a href="{% url "auth_logout" %}">Logg ut</a></li>
+                                  <li class="divider"></li>
+                                  <li><a href="{% url "user_polls" %}">Brukeravstemninger</a></li>
+                                  <li><a href="{% url "users_birthday" %}">Bursdag</a></li>
+                                  <li><a href="{% url "quiz_list" %}">Quiz</a></li>
                                   <li class="divider"></li>
                                   <li><a href="{% url "user_list" %}">Medlemsliste</a></li>
                                   {% if user.is_staff %}
