@@ -17,5 +17,7 @@ venv/
 # Bower-components
 bower_components
 
+node_modules
+
 .idea
 requirements/build
