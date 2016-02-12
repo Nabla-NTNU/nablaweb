@@ -19,17 +19,13 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(FrontPageView, self).get_context_data(**kwargs)
 
-        try:
-            context['new_podcast'] = Podcast.objects.exclude(published=False)\
-                .filter(is_clip=False).order_by('-pub_date')[0]
-            context['main_news'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[0]
-            context['news_list_1'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[1:3]
-            context['news_list_2'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[3:5]
-            context['news_list_3'] = News.objects.exclude(priority=0, published=False).order_by('-created_date')[5:7]
-
-            context['album_list'] = Album.objects.exclude(visibility='h').order_by('-last_changed_date')[:4]
-        except IndexError:
-            pass
+        context['new_podcast'] = Podcast.objects.exclude(published=False, is_clip=True).first()
+        news_list = News.objects.exclude(priority=0, published=False).order_by('-created_date')
+        context['main_news'] = news_list.first()
+        context['news_list_1'] = news_list[1:3]
+        context['news_list_2'] = news_list[3:5]
+        context['news_list_3'] = news_list[5:7]
+        context['album_list'] = Album.objects.exclude(visibility='h').order_by('-last_changed_date')[:4]
 
         context['new_nablad'] = Nablad.objects.exclude(published=False).order_by('-pub_date')[:4]
 
