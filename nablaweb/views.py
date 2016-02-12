@@ -19,8 +19,8 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(FrontPageView, self).get_context_data(**kwargs)
 
-        context['new_podcast'] = Podcast.objects.exclude(published=False, is_clip=True).first()
-        news_list = News.objects.exclude(priority=0, published=False).order_by('-created_date')
+        context['new_podcast'] = Podcast.objects.exclude(published=False).exclude(is_clip=True).first()
+        news_list = News.objects.exclude(priority=0).exclude(published=False).order_by('-created_date')
         context['main_news'] = news_list.first()
         context['news_list_1'] = news_list[1:3]
         context['news_list_2'] = news_list[3:5]
