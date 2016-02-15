@@ -2,6 +2,7 @@
 
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import AnonymousUser
 
 from .base import EditableMedia, BaseImageModel
 
@@ -69,14 +70,8 @@ class Album(EditableMedia, models.Model):
     def get_absolute_url(self):
         return reverse('album', kwargs={'pk': self.pk})
 
-    def is_visible(self, user=None):
-        if self.visibility != 'p':
-            if self.visibility != 'h' and user is not None:
-                return user.is_authenticated()
-            else:
-                return False
-        else:
-            return True
+    def is_visible(self, user=AnonymousUser()):
+        return self.visibility == 'p' or (self.visibility == 'u' and user.is_authenticated())
 
     @property
     def first(self):
