@@ -3,9 +3,10 @@
 from django.views.generic import ListView
 from content.views import NewsDetailView
 from nabladet.models import Nablad
+from braces.views import LoginRequiredMixin
 
 
-class NabladDetailView(NewsDetailView):
+class NabladDetailView(LoginRequiredMixin, NewsDetailView):
     model = Nablad
     template_name = 'nabladet/nablad_detail.html'
     context_object_name = 'nablad'
@@ -16,7 +17,7 @@ class NabladDetailView(NewsDetailView):
         return context
 
 
-class NabladListView(ListView):
+class NabladListView(LoginRequiredMixin, ListView):
     model = Nablad
     template_name = "nabladet/nablad_list.html"
     context_object_name = "nablad_list"
