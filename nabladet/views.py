@@ -13,6 +13,8 @@ class NabladDetailView(NewsDetailView):
 
     def get_context_data(self, **kwargs):
         context = super(NabladDetailView, self).get_context_data(**kwargs)
+        if not (self.request.user.is_authenticated()):
+            context['nablad_archive'] = Nablad.objects.exclude(is_public=False)
         context['nablad_archive'] = Nablad.objects.order_by('-pub_date')
         return context
 
@@ -30,8 +32,12 @@ class NabladListView(ListView):
     context_object_name = "nablad_list"
     paginate_by = 12
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.request = None
+
     def get_context_data(self, **kwargs):
         context = super(NabladListView, self).get_context_data(**kwargs)
         if not (self.request.user.is_authenticated()):
-            context["nablad_list"] = Nablad.objects.exclude(is_public=False)
+            context['nablad_list'] = Nablad.objects.exclude(is_public=False)
         return context
