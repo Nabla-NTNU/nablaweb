@@ -24,7 +24,6 @@ class NabladDetailView(NewsDetailView):
         return super(NabladDetailView, self).dispatch(request, *args, **kwargs)
 
 
-
 class NabladListView(ListView):
     model = Nablad
     template_name = "nabladet/nablad_list.html"
