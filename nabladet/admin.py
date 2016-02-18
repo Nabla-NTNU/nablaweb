@@ -5,6 +5,7 @@ from content.admin import ContentAdmin
 
 class NabladAdmin(ContentAdmin):
     fields = ("published",
+              "is_public",
               "picture",
               "cropping",
               "headline",
