@@ -25,6 +25,12 @@ class Nablad(News):
         null=True
     )
 
+    is_public = models.BooleanField(
+        default=False,
+        help_text="Offentlig tilgjengelighet",
+        verbose_name="tilgjengelighet"
+    )
+
     class Meta:
         verbose_name = 'nablad'
         verbose_name_plural = 'nablad'
