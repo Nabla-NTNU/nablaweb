@@ -13,9 +13,9 @@ class NabladDetailView(NewsDetailView):
 
     def get_context_data(self, **kwargs):
         context = super(NabladDetailView, self).get_context_data(**kwargs)
-        if not (self.request.user.is_authenticated()):
-            context['nablad_archive'] = Nablad.objects.exclude(is_public=False)
         context['nablad_archive'] = Nablad.objects.order_by('-pub_date')
+        if not (self.request.user.is_authenticated()):
+            context['nablad_archive'] = Nablad.objects.exclude(is_public=False).order_by('-pub_date')
         return context
 
     def dispatch(self, request, *args, **kwargs):
