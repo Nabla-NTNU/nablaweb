@@ -19,9 +19,7 @@ class NabladDetailView(NewsDetailView):
         return context
 
     def dispatch(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        context = self.get_context_data(**kwargs)
-        if not (request.user.is_authenticated() or context['nablad'].is_public):
+        if not (request.user.is_authenticated() or Nablad.objects.get(pk=kwargs['pk']).is_public ):
             return HttpResponseRedirect('/login/')
         return super(NabladDetailView, self).dispatch(request, *args, **kwargs)
 
