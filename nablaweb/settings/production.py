@@ -9,7 +9,6 @@ except ImportError:
 
 
 DEBUG = False
-TEMPLATE_DEBUG = False
 
 DATABASES = {
     'default': {
