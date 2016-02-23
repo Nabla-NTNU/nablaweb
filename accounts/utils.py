@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.template import loader, Context
+from django.template import loader
 from django.contrib.auth.models import UserManager
 import re
 
@@ -20,8 +20,8 @@ def activate_user_and_create_password(user):
 
 def send_activation_email(user, password):
     t = loader.get_template('accounts/registration_email.txt')
-    email_text = t.render(Context({"username": user.username,
-                                   "password": password}))
+    email_text = t.render({"username": user.username,
+                           "password": password})
     user.email_user('Bruker på nabla.no', email_text)
 
 
@@ -30,5 +30,4 @@ def extract_usernames(string):
 
     m = re.findall('([a-z]+)@', string, re.IGNORECASE)
     for u in m:
-        um = NablaUser.objects.get_or_create(username=u)
-
+        NablaUser.objects.get_or_create(username=u)
