@@ -10,6 +10,6 @@
     {% endif %}
 
     <header><h2>{{ news.headline }}</h2></header>
-    <strong>{{ news.lead_paragraph}}</strong>
+    <p><strong>{{ news.lead_paragraph}}</strong></p>
     <div style="overflow: hidden;">{{ news.body|markdown}}</div>
 </div>
