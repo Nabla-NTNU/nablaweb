@@ -12,7 +12,7 @@
 <table style="table-layout:fixed;" class="table table-striped">
 {% for n in nablad_list %}
 <tr>
-    <td style="width:120px;">
+    <td style="width:140px;">
         {% if n.thumbnail %}
         <a href="{{ n.get_absolute_url }}"> <img src="{% thumbnail n.thumbnail 250x150 quality=95 %}"></a>
         {% endif %}
