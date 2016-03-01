@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http.response import JsonResponse
+from django.http import Http404
 from content.models import Album
 
 
@@ -47,7 +48,10 @@ class AlbumImageView(TemplateView):
         context = super(AlbumImageView, self).get_context_data(**kwargs)
         num = int(kwargs['num'])
         pk = int(kwargs['pk'])
-        album = Album.objects.get(pk=pk)
+        try:
+            album = Album.objects.get(pk=pk)
+        except Album.DoesNotExist:
+            raise Http404("Albumet finnes ikke.")
         context['album'] = album
 
         images = album.images.order_by('num').all()
