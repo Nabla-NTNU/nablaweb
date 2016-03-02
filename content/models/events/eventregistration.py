@@ -85,6 +85,6 @@ class EventRegistration(models.Model):
         if self.user.email:
             subject = u'Påmeldt %s' % self.event.headline
             template = loader.get_template("content/events/moved_to_attending_email.txt")
-            message = template.render(Context({'event': self, 'name': self.user.get_full_name()}))
+            message = template.render({'event': self, 'name': self.user.get_full_name()})
             self.user.email_user(subject, message)
 
