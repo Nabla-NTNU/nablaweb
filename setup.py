@@ -11,7 +11,7 @@ requirements = [
     'markdown',
     'pytz',
     'django-haystack',
-    'django==1.8.3',
+    'django>=1.8,<1.10',
     'django-contrib-comments',
     'django-image-cropping',
     'django-filebrowser',
