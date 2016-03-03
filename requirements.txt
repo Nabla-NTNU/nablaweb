@@ -22,7 +22,7 @@ django-markdown-deux==1.0.5
 django-mptt==0.8.3
 django-nyt==0.9.9
 django-sekizai==0.9.0
-django==1.8.3
+django==1.9.3
 easy-thumbnails==2.3
 first==2.0.1              # via pip-tools
 markdown2==2.3.0          # via django-markdown-deux
