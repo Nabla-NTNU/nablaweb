@@ -14,11 +14,11 @@ For å komme i gang med Nablaweb, sjekk wikien på: https://bitbucket.org/webkom
 
 Nyttige make-kommandoer:
 
-'''
+```
 #!bash
 
 make all # Installerer fra pip og kjører migrasjoner
 make content # Oppdaterer content-appen til nyeste versjon
 make run # Kjører siden på port 1337
 make seed # Putter inn test-data i databasen
-'''
+```
