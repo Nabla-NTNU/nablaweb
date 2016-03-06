@@ -57,8 +57,7 @@ class ComPage(models.Model):
         return slugify(str(self))
 
     def get_absolute_url(self):
-        return reverse('show_com_page', kwargs={'slug': self.get_canonical_name()})
-        # return "/komite/" + self.get_canonical_name()
+        return reverse('show_com_page', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = self.get_canonical_name()
