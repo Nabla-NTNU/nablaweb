@@ -10,7 +10,6 @@ import os
 from easy_thumbnails.conf import Settings as EasyThumbnailSettings
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 SITE_ID = 1
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "nabla.no"]
@@ -69,10 +68,25 @@ ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 ##############################################################################
 
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'DIRS': [
+            os.path.join(PROJECT_ROOT, 'templates'),
+        ],
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.static',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'sekizai.context_processors.sekizai',
+                'nablaweb.context_processors.get_primary_dir',
+            ],
+        },
+    }
+]
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
@@ -89,9 +103,6 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'nablaweb.urls'
 
-TEMPLATE_DIRS = (
-    os.path.join(PROJECT_ROOT, 'templates'),
-)
 
 INSTALLED_APPS = [
     ##########################
@@ -168,14 +179,6 @@ BOWER_INSTALLED_APPS = (
     'jquery-file-upload'
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.static',
-    'django.core.context_processors.request',
-    'django.contrib.auth.context_processors.auth',
-    'django.contrib.messages.context_processors.messages',
-    'sekizai.context_processors.sekizai',
-    'nablaweb.context_processors.get_primary_dir',
-)
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 

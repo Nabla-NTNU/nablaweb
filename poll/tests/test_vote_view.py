@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.test.client import Client
 
 from poll.models import Choice
@@ -11,8 +11,8 @@ from .utils import UserHasVotedMixin, create_poll
 User = get_user_model()
 
 
+@override_settings(ROOT_URLCONF="poll.urls")
 class BaseVoteViewTest(TestCase):
-    urls = "poll.urls"  # To test the url independently from root-url config
 
     def setUp(self):
         self.poll = create_poll(u"Er dette et spørsmål?", "Ja", "Nei", "Kanskje", "Vet ikke")
