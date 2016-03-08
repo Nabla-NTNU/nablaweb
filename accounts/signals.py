@@ -7,12 +7,12 @@ from django.contrib.auth.signals import user_logged_in, user_logged_out
 
 def login_message(sender, request, user, **kwargs):
     with suppress(MessageFailure):
-        messages.info(request, u'Velkommen inn <strong>{user.username}</strong>'.format(user=user))
+        messages.info(request, u'Velkommen inn {user.username}'.format(user=user))
 
 
 def logout_message(sender, request, user, **kwargs):
     with suppress(MessageFailure):
-        messages.info(request, u'<strong>{user.username}</strong> ble logget ut'.format(user=user))
+        messages.info(request, u'{user.username} ble logget ut'.format(user=user))
 
 
 def register_signals():

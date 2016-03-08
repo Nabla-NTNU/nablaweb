@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 
 from django.views.generic import DetailView, ListView
 from django.template.defaultfilters import slugify
@@ -9,14 +9,11 @@ class ShowPage(DetailView):
     template_name = 'com/com_details.html'
     model = ComPage
     context_object_name = 'com'
-
-    def canonical_name(self):
-        return slugify(self.kwargs['slug'])
-
+    
     def get_context_data(self, **kwargs):
         context = super(ShowPage, self).get_context_data(**kwargs)
         com = self.get_object().com
-        context['members'] = ComMembership.objects.filter(com=com)
+        context['members'] = ComMembership.objects.filter(com=com).order_by('joined_date')
         context['compages'] = ComPage.objects.order_by('com__name')
         return context
 
