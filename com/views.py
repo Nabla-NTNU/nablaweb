@@ -13,7 +13,7 @@ class ShowPage(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ShowPage, self).get_context_data(**kwargs)
         com = self.get_object().com
-        context['members'] = ComMembership.objects.filter(com=com)
+        context['members'] = ComMembership.objects.filter(com=com).order_by('joined_date')
         context['compages'] = ComPage.objects.order_by('com__name')
         return context
 
