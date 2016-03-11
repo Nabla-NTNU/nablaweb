@@ -15,11 +15,11 @@ class NabladDetailView(NewsDetailView):
         context = super(NabladDetailView, self).get_context_data(**kwargs)
         context['nablad_archive'] = Nablad.objects.order_by('-pub_date')
         if not self.request.user.is_authenticated():
-            context['nablad_archive'].exclude(is_public=False).order_by('-pub_date')
+            context['nablad_archive'] = context['nablad_archive'].exclude(is_public=False).order_by('-pub_date')
         return context
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated() or Nablad.objects.get(pk=kwargs['pk']).is_public :
+        if not (request.user.is_authenticated() or Nablad.objects.get(pk=kwargs['pk']).is_public):
             return HttpResponseRedirect('/login/')
         return super(NabladDetailView, self).dispatch(request, *args, **kwargs)
 
