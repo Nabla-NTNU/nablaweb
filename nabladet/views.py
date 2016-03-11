@@ -28,7 +28,7 @@ class NabladListView(ListView):
     model = Nablad
     template_name = "nabladet/nablad_list.html"
     context_object_name = "nablad_list"
-    paginate_by = 1
+    paginate_by = 12
 
     def get_queryset(self):
         queryset = super().get_queryset()
