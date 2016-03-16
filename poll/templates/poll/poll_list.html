@@ -1,10 +1,11 @@
 {% extends "base.html" %}
-{% load cache %}
 {% load static %}
-{% load thumbnail %}
+{% load easy_thumbnails %}
+
 {% block title %}
 Brukeravstemninger
 {% endblock %}
+
 {% block content %}
 
 {% for poll in poll_list %}
@@ -46,3 +47,4 @@ Ingen brukeravstemninger her enda.
 Mine avstemninger
 </a>
 {% endblock %}
+

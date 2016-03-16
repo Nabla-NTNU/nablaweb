@@ -1,4 +1,4 @@
-{% load thumbnail %}
+{% load easy_thumbnails %}
 <article class="col-md-6">
     <div class="box {{ news.content_type.model }}">
     {% if news.as_child_class.correct_cropping and news.as_child_class.correct_picture %}
@@ -18,3 +18,4 @@
     <p>{{ news.lead_paragraph}}</p>
     </div>
 </article>
+

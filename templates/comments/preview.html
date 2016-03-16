@@ -1,7 +1,6 @@
 {% extends "comments/base.html" %}
 {% load i18n %}
-{% load mediawiki_links %}
-{% load thumbnail %}
+{% load easy_thumbnails %}
 {% load markdown_deux_tags %}
 {% load static %}
 
@@ -44,7 +43,7 @@
                     <span class="date">i dag</span>
                 </div>
 
-                {{ form.data.comment|markdown|wikilinks }}
+                {{ form.data.comment|markdown}}
             </div>
         </div>
     {% endif %}

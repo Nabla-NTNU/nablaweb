@@ -1,4 +1,4 @@
-{% load thumbnail %}
+{% load easy_thumbnails %}
 {% load static %}
 <a href="{{ user.get_absolute_url }}">
             <img class="thumbnail user-pic" alt="avatar"
@@ -8,3 +8,4 @@
                         src="{% static "img/default_avatar.png" %}"
                     {% endif %} height="50" width="50" title="{% firstof user.get_full_name user.username %}">
 </a>
+
