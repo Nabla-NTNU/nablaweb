@@ -38,7 +38,7 @@ TIME_INPUT_FORMATS = (
 
 # Gjør det enkelt å bruke relative paths
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
-VARIABLE_CONTENT = os.path.join(PROJECT_ROOT, 'var')
+VARIABLE_CONTENT = os.environ.get("VARIABLE_CONTENT", os.path.join(PROJECT_ROOT, 'var'))
 
 # Absolute path to the directory that holds media.
 MEDIA_ROOT = os.path.join(VARIABLE_CONTENT, 'media')
