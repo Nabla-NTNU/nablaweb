@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from django.contrib.auth.views import redirect_to_login
 from django.views.generic import ListView
 from content.views import NewsDetailView
 from nabladet.models import Nablad
-from django.http import HttpResponseRedirect
 
 
 class NabladDetailView(NewsDetailView):
@@ -18,10 +18,12 @@ class NabladDetailView(NewsDetailView):
             context['nablad_archive'] = context['nablad_archive'].exclude(is_public=False).order_by('-pub_date')
         return context
 
-    def dispatch(self, request, *args, **kwargs):
-        if not (request.user.is_authenticated() or Nablad.objects.get(pk=kwargs['pk']).is_public):
-            return HttpResponseRedirect('/login/')
-        return super(NabladDetailView, self).dispatch(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        if request.user.is_anonymous():
+            nablad = self.get_object()
+            if not nablad.is_public:
+                return redirect_to_login(next=nablad.get_absolute_url())
+        return super().get(request, *args, **kwargs)
 
 
 class NabladListView(ListView):
