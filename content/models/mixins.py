@@ -91,7 +91,7 @@ class EditMessageMixin(models.Model):
         abstract = True
 
 
-class EditableMedia(ViewCounterMixin, EditMessageMixin):
+class TimeStamped(models.Model):
 
     created_date = models.DateTimeField(
         verbose_name="Publiseringsdato",
@@ -128,6 +128,12 @@ class EditableMedia(ViewCounterMixin, EditMessageMixin):
 
     def has_been_edited(self):
         return abs((self.last_changed_date - self.created_date).seconds) > 1
+
+
+class EditableMedia(TimeStamped, ViewCounterMixin, EditMessageMixin):
+
+    class Meta:
+        abstract = True
 
 
 class PublicationManagerMixin(models.Model):
@@ -197,4 +203,3 @@ class CommentsMixin(models.Model):
         if not self.content_type or self.content_type != content_type:
             self.content_type = ContentType.objects.get_for_model(self.__class__)
         super(CommentsMixin, self).save(*args, **kwargs)
-
