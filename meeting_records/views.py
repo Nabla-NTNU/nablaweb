@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from django.views.generic import ListView
-from content.views import NewsDetailView
-from meeting_records.models import MeetingRecord
+from django.views.generic import ListView, DetailView
+from .models import MeetingRecord
 
 
-class MeetingRecordDetailView(NewsDetailView):
+class MeetingRecordDetailView(DetailView):
     model = MeetingRecord
     context_object_name = 'meeting_record'
     template_name = "meeting_records/meeting_record_detail.html"
@@ -20,8 +19,3 @@ class MeetingRecordListView(ListView):
     model = MeetingRecord
     context_object_name = 'meeting_record_list'
     template_name = "meeting_records/meeting_record_list.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(MeetingRecordListView, self).get_context_data(**kwargs)
-        context['meeting_record_list'] = MeetingRecord.objects.order_by('-pub_date')
-        return context

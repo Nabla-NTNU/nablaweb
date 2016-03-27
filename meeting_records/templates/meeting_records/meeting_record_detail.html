@@ -2,29 +2,22 @@
 {% load markdown_deux_tags %}
 {% load humanize %}
 {% load comments %}
-{% load mediawiki_links %}
-{% load easy_thumbnails %}
 
 {% block morehead %}
 
-<meta property="og:image" content="{{ meeting_record.get_picture_url }}" />
-<meta property="og:title" content="{{ meeting_record.headline|striptags }}" />
+<meta property="og:title" content="{{ meeting_record.title|striptags }}" />
 <meta property="og:type"  content="article" />
-<meta property="og:description" content="{% spaceless %}{{ meeting_record.lead_paragraph|striptags }}{% endspaceless %}" />
+<meta property="og:description" content="{% spaceless %}{{ meeting_record.description|striptags }}{% endspaceless %}" />
 
 {% endblock %}
 
-{% block title %}{{ meeting_record.headline }}{% endblock %}
+{% block title %}{{ meeting_record.title }}{% endblock %}
 
 {% block content %}
 
-{% if meeting_record.picture %}
-    <img alt="header" width="100%" src="{% thumbnail meeting_record.picture 770x250 box=meeting_record.cropping quality=95 %}">
-{% endif %}
 
-<h2>{{ meeting_record.headline }}</h2>
-{{ meeting_record.lead_paragraph|markdown:"unsafe"|wikilinks}}
-{{ meeting_record.body|markdown:"unsafe"|wikilinks}}
+<h2>{{ meeting_record.title }}</h2>
+{{ meeting_record.description|markdown:"unsafe"}}
 
 {# Comments #}
     {% get_comment_count for meeting_record as comment_count %}

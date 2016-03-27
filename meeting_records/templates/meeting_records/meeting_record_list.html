@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
 
 {% block title %}Møtereferater{% endblock %}
 
@@ -15,11 +14,13 @@
             <a href="{{ m.get_absolute_url }}"> {{ m.pub_date|date:"d. F Y" }} </a>
         </td>
         <td style="width:40%;">
-            {{ m.headline }}
+            {{ m.title }}
         </td>
+{% comment %}
         <td style="width:30%;">
             {% include "accounts/includes/like.html" with object=m%}
         </td>
+{% endcomment %}
         <td style="width:10%; align:right;">
             <a class="btn btn-sm" href="{{ m.file.url }}"><i class="icon-download-alt"></i></a>
         </td>

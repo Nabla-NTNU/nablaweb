@@ -2,19 +2,15 @@
 
 from .models import MeetingRecord
 from django.contrib import admin
-from content.admin import ContentAdmin
+from content.admin import ChangedByMixin
 
 
 @admin.register(MeetingRecord)
-class MeetingRecordAdmin(ContentAdmin):
-    fields = ("picture",
-              "cropping",
-              "headline",
-              "slug",
-              "lead_paragraph",
-              "body",
-              "priority",
-              "pub_date",
-              "file")
-    prepopulated_fields = {"slug": ("headline",)}
-
+class MeetingRecordAdmin(ChangedByMixin, admin.ModelAdmin):
+    fields = (
+        "title",
+        "slug",
+        "description",
+        "pub_date",
+        "file")
+    prepopulated_fields = {"slug": ("title",)}
