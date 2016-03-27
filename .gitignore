@@ -16,3 +16,5 @@ venv/
 bower_components
 
 .idea
+
+content.egg-info
