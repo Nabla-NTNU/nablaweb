@@ -1,8 +1,11 @@
 from django.db import models
-from .base import InteractiveElement, Scoreboard, InteractionResult
 from django.core.urlresolvers import reverse
+
+from datetime import timedelta, datetime
+
 from accounts.models import LikeMixin
 from content.models.mixins import PublicationManagerMixin
+from .base import InteractiveElement, Scoreboard, InteractionResult
 
 
 class QuizQuestion(models.Model):
@@ -94,6 +97,9 @@ class Quiz(PublicationManagerMixin, LikeMixin, InteractiveElement):
             self.scoreboard = QuizScoreboard.objects.create()
         return super().save(*args, **kwargs)
 
+    def duration_timedelta(self):
+        return timedelta(seconds=self.duration)
+
     def total_questions(self):
         return self.questions.count()
 
@@ -126,6 +132,10 @@ class QuestionReply(models.Model):
     @property
     def is_correct(self):
         return self.question.correct_alternative == self.alternative
+
+
+class QuizReplyTimeout(Exception):
+    pass
 
 
 class QuizReply(InteractionResult):
@@ -161,6 +171,16 @@ class QuizReply(InteractionResult):
         self.score = self.get_correct_count()
         return super().save(**kwargs)
 
+    @property
+    def quiz(self):
+        return self.scoreboard.quiz
+
+    def end_time(self):
+        return self.start + self.quiz.duration_timedelta() if self.start else None
+
+    def has_timed_out(self):
+        return self.quiz.is_timed and self.end_time() < datetime.now()
+
     def get_absolute_url(self):
         return reverse('quiz_result', kwargs={'pk': self.id})
 
@@ -169,6 +189,22 @@ class QuizReply(InteractionResult):
 
     def get_question_count(self):
         return self.scoreboard.quiz.total_questions()
+
+    def add_question_replies(self, replies):
+        """
+        :param replies: list of tuples (question_object, alternative_number)
+        :raises QuizReplyTimeout if the quiz is timed and the reply timed out.
+        """
+        if self.has_timed_out():
+            raise QuizReplyTimeout
+        for q, alternative in replies:
+            QuestionReply.objects.update_or_create(
+                question=q,
+                quiz_reply=self,
+                defaults={
+                    'alternative': alternative,
+                }
+            )
 
 
 class QuizScoreboard(Scoreboard):

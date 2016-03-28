@@ -1,13 +1,15 @@
 from django.views.generic import DetailView, ListView, DeleteView
-from ..models.quiz import Quiz, QuizReply, QuestionReply, QuizScoreboard
-from .mixins import ObjectOwnerMixin
 from django.core.urlresolvers import reverse, reverse_lazy
-from braces.views import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from datetime import datetime, timedelta
-from braces.views import FormMessagesMixin
+from django.contrib.auth.views import login_required
+
 from content.views.mixins import PublishedListMixin
+from datetime import datetime
+from braces.views import FormMessagesMixin, LoginRequiredMixin
+
+from ..models.quiz import Quiz, QuizReply, QuizScoreboard, QuizReplyTimeout
+from .mixins import ObjectOwnerMixin
 
 
 class QuizListView(PublishedListMixin, LoginRequiredMixin, ListView):
@@ -34,47 +36,38 @@ class QuizView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         QuizReply.objects.create(
             user=self.request.user,
-            scoreboard_id=self.object.scoreboard.id,
+            scoreboard=self.object.scoreboard,
             start=datetime.now(),
             when=datetime.now()
         )
         return context
 
 
+@login_required
 def quiz_reply(request, pk):
-    if request.user.is_authenticated():
-        quiz = get_object_or_404(Quiz, id=pk)
-        questions = quiz.questions.all()
-        replies = []
-        reply = QuizReply.objects.filter(
-            user=request.user,
-            scoreboard_id=quiz.scoreboard.id
-        ).order_by('-when')[0]
-        if quiz.is_timed:
-            if reply.start:
-                end = reply.start + timedelta(seconds=quiz.duration)
-                if end <= datetime.now():
-                    messages.info(request, "Beklager, tiden gikk ut")
-                    return redirect('/')
-            else:
-                messages.error(request, "Ingen start registrert")
+    quiz = get_object_or_404(Quiz, id=pk)
+    questions = quiz.questions.all()
+    reply = QuizReply.objects.filter(
+        user=request.user,
+        scoreboard=quiz.scoreboard
+    ).order_by('-when')[0]
 
-        for q in questions:
-            answer = request.POST.get("{id}_alternative".format(id=q.id))
-            if answer:
-                replies.append(QuestionReply.objects.create(
-                    question=q,
-                    alternative=answer,
-                    quiz_reply=reply
-                ))
-            else:
-                messages.error(request, "Ugyldig")
+    format_string = "{}_alternative"
+    answers = (request.POST.get(format_string.format(q.id)) for q in questions)
 
-        reply.save()
-        return redirect(reply.get_absolute_url())
-    else:
-        messages.error(request, "Ikke logget inn.")
+    q_and_a = [
+        (q, int(answer))
+        for q, answer in zip(questions, answers)
+        if answer is not None
+    ]
+    try:
+        reply.add_question_replies(q_and_a)
+    except QuizReplyTimeout:
+        messages.info(request, "Beklager, tiden gikk ut")
         return redirect('/')
+
+    messages.info(request, "Du svarte på {} av {} spørsmål.".format(len(q_and_a), len(questions)))
+    return redirect(reply.get_absolute_url())
 
 
 class QuizResultView(LoginRequiredMixin, DetailView):
