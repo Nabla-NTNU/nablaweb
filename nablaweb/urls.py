@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^poll/', include('poll.urls')),
     url(r'^podcast/', include('podcast.urls')),
     url(r'^', include('interactive.urls')),
+    url(r'^likes/', include('likes.urls')),
 
 
     # For å dele filer under utviklingen selv om DEBUG=False

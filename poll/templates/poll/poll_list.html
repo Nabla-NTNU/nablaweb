@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load like %}
 {% load easy_thumbnails %}
 
 {% block title %}
@@ -26,7 +27,7 @@ Brukeravstemninger
 
 <div class="poll well">
     <h4>{{ poll.question }}</h4>
-    {% include "accounts/includes/like.html" with object=poll%}
+    {% show_like_button_for poll %}
     {% if poll.voted %}
         {% include "poll/includes/poll_result.html" %}
     {% else %}

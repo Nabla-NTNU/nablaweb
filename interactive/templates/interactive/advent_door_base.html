@@ -1,5 +1,6 @@
 {% extends "interactive/advent_base.html" %}
 {% load markdown %}
+{% load like %}
 
 {% block title %}{{ door.number }}{% endblock %}
 
@@ -11,7 +12,7 @@
 {% endif %}
  
 <div class="text">
-    {% include "accounts/includes/like.html" with object=door%}
+    {% show_like_button_for door %}
     <p>
     {{ door.content|markdown:"unsafe" }}
     </p>

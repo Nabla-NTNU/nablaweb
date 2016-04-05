@@ -2,7 +2,6 @@
 
 from django.db import models
 from django.conf import settings
-from accounts.models import LikeMixin
 
 class UserHasVoted(Exception):
     pass
@@ -14,7 +13,7 @@ class PollManager(models.Manager):
         return queryset.get(is_current=True)
 
 
-class Poll(LikeMixin, models.Model):
+class Poll(models.Model):
     question = models.CharField(
         'Spørsmål',
         max_length=1000

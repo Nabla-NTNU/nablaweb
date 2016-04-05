@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load easy_thumbnails %}
+{% load like %}
 
 {% block title %}Nabladet{% endblock %}
 
@@ -24,7 +25,7 @@
         {{ n.headline }}
     </td>
     <td>
-        {% include "accounts/includes/like.html" with object=n%}
+        {% show_like_button_for n %}
     </td>
     <td>
         <a class="btn btn-lg" href="{{ n.file.url }}"><span class="glyphicon glyphicon-cloud-download"></span> Last ned</a>

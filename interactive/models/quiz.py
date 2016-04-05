@@ -3,7 +3,6 @@ from django.core.urlresolvers import reverse
 
 from datetime import timedelta, datetime
 
-from accounts.models import LikeMixin
 from content.models.mixins import PublicationManagerMixin
 from .base import InteractiveElement, Scoreboard, InteractionResult
 
@@ -58,7 +57,7 @@ class QuizQuestion(models.Model):
         return str(self.question)
 
 
-class Quiz(PublicationManagerMixin, LikeMixin, InteractiveElement):
+class Quiz(PublicationManagerMixin, InteractiveElement):
     """
     Represents a quiz.
     """

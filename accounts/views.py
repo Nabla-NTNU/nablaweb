@@ -3,12 +3,12 @@
 from django.views.generic import DetailView, ListView, UpdateView, FormView, TemplateView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin, PermissionRequiredMixin
 
 from .forms import UserForm, RegistrationForm, InjectUsersForm
-from .models import NablaUser, NablaGroup, LikePress, get_like_count, RegistrationRequest
+from .models import NablaUser, NablaGroup, RegistrationRequest
 from .utils import activate_user_and_create_password, send_activation_email, extract_usernames
 
 User = get_user_model()
@@ -113,25 +113,3 @@ class MailListView(PermissionRequiredMixin, TemplateView):
         context["users"] = NablaUser.objects.filter(groups__in=groups)
         context["groups"] = groups
         return context
-
-
-@login_required
-def process_like(request, model, id):
-    """
-    Processes a like click.
-    :param request:
-    :return:
-    """
-    user = request.user
-    LikePress.objects.create_or_delete(
-        user=user,
-        reference_id=id,
-        model_name=model
-    )
-
-    next = request.GET.get('next')
-    if next:
-        return redirect(next)
-    else:
-        count = get_like_count(id, model)
-        return JsonResponse({'count': count})
