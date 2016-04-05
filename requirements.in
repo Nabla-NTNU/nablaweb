@@ -11,7 +11,7 @@
 pip-tools
 
 # django pinned to the major version we are using.
-django>=1.9,<1.10
+django>=1.8,<1.9
 
 # Misc django packages
 django-bootstrap3
@@ -33,7 +33,8 @@ django-haystack
 whoosh
 
 # Wiki
--e git+git://github.com/django-wiki/django-wiki.git#egg=wiki
+#-e git+git://github.com/django-wiki/django-wiki.git#egg=wiki
+wiki~=0.1
 
 # Python bindings for database software (MySql and memcached)
 PyMySQL

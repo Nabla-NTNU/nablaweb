@@ -27,7 +27,7 @@ class MeetingRecord(TimeStamped):
         verbose_name='publisert',
         blank=False,
         null=True,
-        default=lambda: date.today(),
+        default=date.today,
         help_text="Publikasjonsdato")
 
     file = models.FileField(
