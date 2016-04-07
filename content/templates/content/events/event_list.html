@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load sekizai_tags %}
+{% load staticfiles %}
 
 
 {% block title %}Arrangement{% endblock %}
@@ -11,7 +12,7 @@
 {% block main %}
 
 {% addtoblock "css" %}
-    <link href="{{ STATIC_URL }}events/calendar.css" rel="stylesheet">
+    <link href="{% static 'events/calendar.css' %}" rel="stylesheet">
 {% endaddtoblock %}
 
 <!-- calendar row -->

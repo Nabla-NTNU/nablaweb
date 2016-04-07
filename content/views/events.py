@@ -7,7 +7,6 @@ from django.template import Context, loader
 from django.views.generic import TemplateView, DetailView
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
 from django.utils.safestring import mark_safe
 
 import datetime
@@ -17,10 +16,15 @@ from braces.views import (PermissionRequiredMixin,
                           StaticContextMixin,
                           MessageMixin)
 
+from ..event_overrides import get_eventgetter
+
 from ..models.events import Event
 from ..exceptions import *
 from ..event_calendar import EventCalendar
 from .mixins import AdminLinksMixin
+
+User = get_user_model()
+EventGetter = get_eventgetter()
 
 
 class AdministerRegistrationsView(StaticContextMixin,
@@ -60,30 +64,6 @@ class AdministerRegistrationsView(StaticContextMixin,
                 pass
 
 
-def get_current_events(year, month):
-    # Get this months events and bedpreser separately
-    events = Event.objects.select_related("content_type").filter(
-        event_start__year=year,
-        event_start__month=month)
-    # bedpress = BedPres.objects.select_related("content_type").filter(
-    #    event_start__year=year,
-    #    event_start__month=month)
-
-    # Combine them to a single calendar
-    return events
-
-CURRENT_EVENTS = None
-
-
-def set_current_events(fun, override=False):
-    global CURRENT_EVENTS
-    if not CURRENT_EVENTS or override:
-        CURRENT_EVENTS = fun
-
-
-set_current_events(get_current_events)
-
-
 def calendar(request, year=None, month=None):
     """
     Renders a calendar with events from the chosen month
@@ -96,7 +76,7 @@ def calendar(request, year=None, month=None):
     except ValueError:  # Not a valid year and month
         raise Http404
 
-    events = CURRENT_EVENTS(year, month)
+    events = EventGetter.get_current_events(year, month)
     cal = EventCalendar(chain(events)).formatmonth(year, month)
 
     user = request.user
@@ -221,31 +201,11 @@ class RegisterUserView(LoginRequiredMixin,
         else:
             return "Du er meldt av arrangementet."
 
-GET_EVENT = None
-
-
-def set_get_event(fun, override=False):
-    global GET_EVENT
-    if not GET_EVENT or override:
-        GET_EVENT = fun
-
-
-def get_event(event_id):
-    # Try Event first, then BedPres. 404 if none of them are found.
-    try:
-        return Event.objects.get(pk=event_id)
-    except Event.DoesNotExist:
-        # event = get_object_or_404(BedPres, pk=event_id)
-        return None
-
-
-set_get_event(get_event)
-
 
 def ical_event(request, event_id):
     """Returns a given event or bedpres as an iCal .ics file"""
 
-    event = GET_EVENT(event_id)
+    event = EventGetter.get_event(event_id)
 
     # Use the same template for both Event and BedPres.
     template = loader.get_template('content/events/event_icalendar.ics')
