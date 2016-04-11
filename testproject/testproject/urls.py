@@ -19,10 +19,5 @@ urlpatterns = [
     url(r'^feed/$', RecentNews()),
     url(r'^comments/', include('django_comments.urls')),
 
-    # Dummyview to fix a reverse lookup error on 'member_profile'
-    url(r'^userprofile/(?P<username>\w+)$',
-        RedirectView.as_view(permanent=False, url="/"),
-        name="member_profile"),
-
     url(r'^notifications/', get_nyt_pattern()),
 ]
