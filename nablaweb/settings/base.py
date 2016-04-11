@@ -229,3 +229,5 @@ MARKDOWN_DEUX_STYLES = {
 BPC_FORENING = '3'
 BPC_KEY = 'a88fb706bc435dba835b89ddb2ba4debacc3afe4'
 BPC_TESTING = True
+
+EVENT_GETTER_CLASS = 'bedpres.event_overrides.BedPresAndEventGetter'
