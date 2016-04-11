@@ -80,8 +80,7 @@ def calendar(request, year=None, month=None):
     cal = EventCalendar(chain(events)).formatmonth(year, month)
 
     user = request.user
-    future_attending_events = user.eventregistration_set.filter(event__event_start__gte=today) \
-        if user.is_authenticated() else []
+    future_attending_events = EventGetter.attending_events(user, today)
 
     # Get some random dates in the current, next, and previous month.
     # These dates are used load the calendar for that month.

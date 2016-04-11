@@ -18,6 +18,19 @@ class EventGetter(object):
         except Event.DoesNotExist:
             return None
 
+    @staticmethod
+    def attending_events(user, today):
+        if user.is_anonymous():
+            return []
+        regs = user.eventregistration_set.filter(event__event_start__gte=today)
+        events = []
+        for reg in regs:
+            event = reg.event
+            event.attending = reg.attending
+            event.waiting = not reg.attending
+            events.append(event)
+        return events
+
 
 def get_eventgetter():
     try:
@@ -27,4 +40,3 @@ def get_eventgetter():
     module_path, _, class_name = class_path.rpartition('.')
     module = importlib.import_module(module_path)
     return getattr(module, class_name)
-
