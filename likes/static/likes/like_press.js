@@ -9,4 +9,5 @@ $("button.likeButton").click(function (e) {
             button.find(".likeText").text(result.liked ? "Liker ikke" : "Liker");
         },
     });
+    button.blur();
 });
