@@ -6,7 +6,6 @@ from django.contrib.auth.models import Group, AbstractUser, UserManager
 from hashlib import sha1
 from datetime import datetime, date
 from .utils import activate_user_and_create_password, send_activation_email
-from django.contrib.contenttypes.models import ContentType
 
 
 class NablaUserManager(UserManager):
@@ -163,67 +162,3 @@ class RegistrationRequest(models.Model):
 
     def __str__(self):
         return self.username
-
-
-class LikePressManager(models.Manager):
-    def create_or_delete(self, *args, **kwargs):
-        obj, created = self.get_or_create(*args, **kwargs)
-        if not created:
-            obj.delete()
-
-
-class LikePress(models.Model):
-    """
-    Represents a like click on some object.
-    """
-
-    user = models.ForeignKey(
-        NablaUser,
-        related_name="likes"
-    )
-
-    reference_id = models.IntegerField(
-        null=True
-    )
-
-    model_name = models.CharField(
-        max_length=100,
-        null=True
-    )
-
-    objects = LikePressManager()
-
-
-def get_like_count(id, model):
-    return LikePress.objects.filter(reference_id=id, model_name=model).count()
-
-
-class LikeMixin(models.Model):
-
-    content_type = models.ForeignKey(
-        ContentType,
-        editable=False,
-        null=True
-    )
-
-    class Meta:
-        abstract = True
-
-    def save(self, *args, **kwargs):
-        if not self.content_type:
-            self.content_type = ContentType.objects.get_for_model(self.__class__)
-        return super(LikeMixin, self).save(*args, **kwargs)
-
-    def delete(self, using=None):
-        """
-        Delete related likes
-        :param using:
-        :return:
-        """
-
-        LikePress.objects.filter(
-            model_name=self.content_type.model,
-            reference_id=self.id
-        ).delete()
-
-        return super(LikeMixin, self).delete(using)

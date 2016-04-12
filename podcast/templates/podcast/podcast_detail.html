@@ -2,6 +2,8 @@
 {% load markdown_deux_tags %}
 {% load sekizai_tags %}
 {% load static %}
+{% load like %}
+
 {% block title %}
 {{ podcast.title }}
 {% endblock %}
@@ -16,7 +18,10 @@
   {% if podcast.image %}
   <img class="img-responsive" src="{{ podcast.image.url }}" alt="{{ podcast.title }}" style="max-width: 100%;"/>
   {% endif %}
-  <p><i>Dato: {{ podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ podcast.view_counter }}</i>{% include "accounts/includes/like.html" %}</p>
+  <p>
+  <i>Dato: {{ podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ podcast.view_counter }}</i>
+  {% show_like_button_for podcast %}
+  </p>
 </div>
 {% if podcast.file %}
 <div class="container-fluid">

@@ -1,0 +1,22 @@
+{% load staticfiles %}
+{% load like %}
+{% load sekizai_tags %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dummy list</title>
+    </head>
+    <body>
+
+{% for dummy in object_list %}
+<p>{{ dummy }} - {% show_like_button_for dummy %}</p>
+{% endfor %}
+
+<script
+    src="https://code.jquery.com/jquery-2.2.2.js"
+    integrity="sha256-4/zUCqiq0kqxhZIyp4G0Gk+AOtCJsY1TA00k5ClsZYE="
+    crossorigin="anonymous"></script>
+{% render_block "js" %}
+</body>
+</html>

@@ -119,6 +119,7 @@ INSTALLED_APPS = [
     'podcast',
     'interactive',
     'nablaweb',
+    'likes',
 
     ###########################
     # Eksternt utviklede apps #

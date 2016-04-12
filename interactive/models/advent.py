@@ -1,13 +1,13 @@
 from django.db import models
 from .base import InteractiveElement, InteractionResult
-from accounts.models import NablaUser, LikeMixin
+from accounts.models import NablaUser
 from com.models import Committee
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta
 from random import choice
 
 
-class AdventDoor(LikeMixin, InteractiveElement):
+class AdventDoor(InteractiveElement):
     """
     An element of the advent calendar.
     """
