@@ -8,6 +8,7 @@ from content.views.mixins import PublishedListMixin
 from podcast.models import Podcast
 from nabladet.models import Nablad
 from utils.view_mixins import FlatPageMixin
+from poll.models import Poll
 
 
 class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
@@ -28,11 +29,13 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
         context['album_list'] = Album.objects.exclude(visibility='h').order_by('-last_changed_date')[:4]
 
         context['new_nablad'] = Nablad.objects.exclude(published=False).order_by('-pub_date')[:4]
-        if not (self.request.user.is_authenticated()):
+        if not self.request.user.is_authenticated():
             context['new_nablad'] = Nablad.objects.exclude(published=False).exclude(is_public=False).order_by('-pub_date')[:4]
 
         now = datetime.now() - timedelta(hours=6)
         context['upcoming_events'] = Event.objects.filter(event_start__gte=now).order_by('event_start')[:6]
         context['upcoming_bedpreses'] = BedPres.objects.filter(event_start__gte=now).order_by('event_start')[:6]
-
+        context['poll'] = Poll.objects.exclude(is_user_poll=True).order_by('-publication_date').first()
+        if self.request.user.is_authenticated() and context['poll'] is not None:
+            context['poll_has_voted'] = context['poll'].user_has_voted(self.request.user)
         return context
