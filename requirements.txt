@@ -36,3 +36,4 @@ sorl-thumbnail==12.3      # via wiki
 Wand==0.4.2
 whoosh==2.7.2
 wiki==0.1
+loremipsum==1.0.5
