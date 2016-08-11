@@ -33,8 +33,11 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
             context['new_nablad'] = Nablad.objects.exclude(published=False).exclude(is_public=False).order_by('-pub_date')[:4]
 
         now = datetime.now() - timedelta(hours=6)
-        context['upcoming_events'] = Event.objects.filter(event_start__gte=now).order_by('event_start')[:6]
-        context['upcoming_bedpreses'] = BedPres.objects.filter(event_start__gte=now).order_by('event_start')[:6]
+        context['upcoming_events'] = Event.objects.filter(event_start__gte=now).exclude(organizer='BN').order_by('event_start')[:6]
+        # denne løsningen er litt stygg, men jeg tror det er den letteste
+        bedpresArr = list(Event.objects.filter(event_start__gte=now,organizer='BN'))
+        bedpres = list(BedPres.objects.filter(event_start__gte=now))
+        context['upcoming_bedpreses'] = sorted((bedpres + bedpresArr), key=lambda x: x.event_start)[:6]
         context['poll'] = Poll.objects.exclude(is_user_poll=True).order_by('-publication_date').first()
         if self.request.user.is_authenticated() and context['poll'] is not None:
             context['poll_has_voted'] = context['poll'].user_has_voted(self.request.user)
