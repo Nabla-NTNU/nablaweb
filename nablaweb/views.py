@@ -9,6 +9,7 @@ from podcast.models import Podcast
 from nabladet.models import Nablad
 from utils.view_mixins import FlatPageMixin
 from poll.models import Poll
+from itertools import chain
 
 
 class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
@@ -35,9 +36,9 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
         now = datetime.now() - timedelta(hours=6)
         context['upcoming_events'] = Event.objects.filter(event_start__gte=now).exclude(organizer='BN').order_by('event_start')[:6]
         # denne løsningen er litt stygg, men jeg tror det er den letteste
-        bedpresArr = list(Event.objects.filter(event_start__gte=now,organizer='BN'))
-        bedpres = list(BedPres.objects.filter(event_start__gte=now))
-        context['upcoming_bedpreses'] = sorted((bedpres + bedpresArr), key=lambda x: x.event_start)[:6]
+        bedpresArr = Event.objects.filter(event_start__gte=now, organizer='BN')
+        bedpres = BedPres.objects.filter(event_start__gte=now)
+        context['upcoming_bedpreses'] = sorted(chain(bedpresArr, bedpres), key=lambda x: x.event_start)[:6]
         context['poll'] = Poll.objects.exclude(is_user_poll=True).order_by('-publication_date').first()
         if self.request.user.is_authenticated() and context['poll'] is not None:
             context['poll_has_voted'] = context['poll'].user_has_voted(self.request.user)
