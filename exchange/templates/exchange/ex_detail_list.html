@@ -1,0 +1,41 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+<div class="container">
+    <h2>Universitets navn</h2>
+    <p>Her finner du en liste over fysmater:</p>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Navn</th>
+            <th>Retning</th>
+            <th>Epost</th>
+            <th>År</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for obj in ex_detail_list %}
+        <tr>
+            <td>{{obj.student_navn}}</td>
+            <td>{{obj.retning}}</td>
+            <td>{{obj.epost}}</td>
+            <td>{{obj.ex_year}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Her finner du linker: </h3>
+
+    <ul style="list-style-type:disc">
+        {% for ob in link_list %}
+        <li><a href="{{ob.linken}}" >{{ob.link_info}}</a></li>
+        {% endfor %}
+    </ul>
+
+
+</div>
+
+
+{% endblock content%}
