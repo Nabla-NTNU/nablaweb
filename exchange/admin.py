@@ -1,30 +1,31 @@
 from django.contrib import admin
-from .models import Universitet, Utveksling,Link
+from .models import University, Exchange, Info
 
 
-class UtvekslingAdmin(admin.ModelAdmin):
-    list_display = ["student_navn"]
-    search_fields = ["student_navn"]
+class ExchangeAdmin(admin.ModelAdmin):
+    list_display = ["student"]
+    search_fields = ["student"]
 
     class Meta:
-        model = Utveksling
+        model = Exchange
 
-class UniversitetAdmin(admin.ModelAdmin):
+
+class UniversityAdmin(admin.ModelAdmin):
     list_display = ["univ_navn"]
     search_fields = ["univ_navn"]
 
     class Meta:
-        model = Universitet
+        model = University
 
-class LinkAdmin(admin.ModelAdmin):
-    list_display = ["link_info"]
-    search_fields = ["link_info"]
+
+class InfoAdmin(admin.ModelAdmin):
+    exclude = ('url',)
 
     class Meta:
-        model = Link
+        model = Info
 
-admin.site.register(Utveksling,UtvekslingAdmin)
-admin.site.register(Universitet,UniversitetAdmin)
-admin.site.register(Link,LinkAdmin)
+admin.site.register(Exchange, ExchangeAdmin)
+admin.site.register(University, UniversityAdmin)
+admin.site.register(Info, InfoAdmin)
 
 # Register your models here.

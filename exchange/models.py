@@ -1,111 +1,71 @@
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.conf import settings
+from django.contrib.flatpages.models import FlatPage
 
-class Universitet(models.Model):
+
+class University(models.Model):
     univ_navn = models.CharField(
-        max_length=30,
+        max_length=50,
         verbose_name='universitets navn',
         blank=False,
-        null=True,
-        help_text='Universitets navn',
-        default = "",
+        help_text='Navnet til universitetet',
+        default="",
     )
-    class Meta:
-        ordering=("univ_navn",)
 
-    land = models.TextField(
+    class Meta:
+        ordering = ['univ_navn']
+
+    land = models.CharField(
+        max_length=30,
         verbose_name='land',
         blank=False,
-        null=True,
-        help_text='Land',
-        default = "",
+        help_text='Landet universitetet ligger i',
+        default="",
     )
-
-    def get_absolute_url(self):
-        return reverse("exchange:ex_detail_list", kwargs={"id": self.id})
-        # return  "/posts/%s/" %(self.id)
-
 
     def __str__(self):
         return self.univ_navn
 
 RETNINGER = (
-    ("Biofysikk og medisinteknologi","Biofysikk og medisinteknologi"),
-    ("Industriell matematikk","Industriell matematikk"),
-    ("Teknisk fysikk","Teknisk fysikk")
+    ("Biofysikk og medisinteknologi", "biofys"),
+    ("Industriell matematikk", "indmat"),
+    ("Teknisk fysikk", "tekfys")
 )
-CHOICES = Universitet.objects.values_list('univ_navn','univ_navn')
 
 
-class Utveksling(models.Model):
-    student_navn = models.CharField(
-        max_length=30,
-        verbose_name='student_navn',
-        blank=False,
-        null=True,
-        help_text='Student navn'
-    )
+class Exchange(models.Model):
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
     class Meta:
-        ordering=("student_navn",)
+        ordering = ['student']
 
     retning = models.CharField(
         max_length=30,
         blank=False,
-        null = True,
         help_text='Retning',
-        choices = RETNINGER,
-    )
-    epost = models.CharField(
-        max_length=50,
-        null=True,
-        help_text='E-post',
-        default="",
+        choices=RETNINGER,
     )
 
-
-    ex_year = models.IntegerField(
-        verbose_name = "Arstall",
+    start = models.DateField(
         blank=False,
-        null=True,
+        help_text='Dato utveksling startet'
     )
-    univ_navn = models.CharField(
-        max_length=30,
+    end = models.DateField(
         blank=False,
-        choices=CHOICES,
-        null=True,
-
+        help_text='Dato utveksling sluttet'
     )
-
-
+    univ = models.ForeignKey(University, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.student_navn
+        return str(self.student) + ' - ' + str(self.univ)
 
-class Link(models.Model):
-    link_info = models.CharField(
-        max_length=120,
-        verbose_name='link info',
-        blank=False,
-        null=True,
-        help_text='Link info'
-    )
-    class Meta:
-        ordering=("link_info",)
 
-    linken = models.TextField(
-        verbose_name='linken',
-        blank=False,
-        null=True,
-        help_text='Linken'
-    )
-    univ_navn = models.CharField(
-        verbose_name='Universitet',
-        max_length=30,
-        blank=False,
-        choices=CHOICES,
-        null=True,
+class Info(FlatPage):
+    ex = models.ForeignKey(Exchange, on_delete=models.CASCADE)
 
-    )
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.url = '/utveksling/' +str(self.ex.univ.pk) + '/' + self.title.replace(" ", "-") + '/'
+        super(Info, self).save()
 
-    def __str__(self):
-        return self.link_info

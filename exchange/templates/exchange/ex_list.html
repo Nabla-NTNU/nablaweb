@@ -8,7 +8,7 @@
         <input type="text" name="q" placeholder="" value="{{request.GET.q}}"/>
         <input type="submit" value="Søk"/>
     </form>
-    <p>Her finner du en liste over alle universiter :</p>
+    <p>Her finner du en liste over univseriteter hvor fysmattere har vært på utveksling:</p>
     <table class="table">
         <thead>
         <tr>
@@ -19,7 +19,7 @@
     <tbody>
     {% for obj in ex_list %}
     <tr>
-        <td><a href="{{obj.get_absolute_url}}">{{obj.univ_navn}}</a></td>
+        <td><a href="{% url 'ex_detail_list' obj.id %}">{{obj.univ_navn}}</a></td>
         <td>{{obj.land}}</td>
     </tr>
 
@@ -27,7 +27,6 @@
     </tbody>
   </table>
 </div>
-
 
 
 </div>

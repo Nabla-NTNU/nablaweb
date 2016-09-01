@@ -3,34 +3,42 @@
 {% block content %}
 
 <div class="container">
-    <h2>Universitets navn</h2>
-    <p>Her finner du en liste over fysmater:</p>
+    <h2>{{ object.univ_navn }}</h2>
+    <p>Liste over utvekslinger:</p>
     <table class="table table-bordered">
         <thead>
         <tr>
             <th>Navn</th>
             <th>Retning</th>
+            {% if user.is_authenticated %}
             <th>Epost</th>
-            <th>År</th>
+            {% endif %}
+            <th>Utveksling start</th>
+            <th>Slutt</th>
         </tr>
         </thead>
         <tbody>
         {% for obj in ex_detail_list %}
         <tr>
-            <td>{{obj.student_navn}}</td>
+            <td>{{obj.student.name}}</td>
             <td>{{obj.retning}}</td>
-            <td>{{obj.epost}}</td>
-            <td>{{obj.ex_year}}</td>
+            {% if user.is_authenticated %}
+            <td>{{obj.student.mail}}</td>
+            {% endif %}
+            <td>{{obj.start|date:"F Y"}}</td>
+            <td>{{obj.end|date:"F Y"}}</td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <h3>Her finner du linker: </h3>
+    <h3>Relevante intervjuer og reisebrev</h3>
 
     <ul style="list-style-type:disc">
-        {% for ob in link_list %}
-        <li><a href="{{ob.linken}}" >{{ob.link_info}}</a></li>
+        {% load flatpages %}
+        {% get_flatpages url as info_pages %}
+        {% for page in info_pages %}
+            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
         {% endfor %}
     </ul>
 
