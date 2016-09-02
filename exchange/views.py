@@ -10,10 +10,10 @@ class ExchangeListView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get("q")
-        ex_list = University.objects.order_by('land')
+        queryset = University.objects.order_by('land')
         if query:
-            ex_list = University.objects.filter(Q(land__icontains=query)|Q(univ_navn__icontains=query))
-        return ex_list
+            queryset = queryset.filter(Q(land__icontains=query) | Q(univ_navn__icontains=query))
+        return queryset
 
 
 class UnivDetailView(DetailView):
@@ -23,18 +23,10 @@ class UnivDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['info'] = Info.objects.filter(ex__univ=self.object)
-        context['ex_detail_list'] = Exchange.objects.filter(univ=self.object)
-        for obj in context['ex_detail_list']:
-            obj.name = obj.student.get_full_name()
-            obj.mail = obj.student.email
+        context['ex_detail_list'] = Exchange.objects.filter(univ=self.object).select_related("student")
         return context
 
 
 class InfoDetailView(DetailView):
     template_name = "exchange/info.html"
     model = Info
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['univ'] = self.object.ex.univ
-        return context
