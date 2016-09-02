@@ -19,7 +19,6 @@ class UniversityAdmin(admin.ModelAdmin):
 
 
 class InfoAdmin(admin.ModelAdmin):
-    exclude = ('url',)
 
     class Meta:
         model = Info

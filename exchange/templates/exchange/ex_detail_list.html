@@ -4,6 +4,7 @@
 
 <div class="container">
     <h2>{{ object.univ_navn }}</h2>
+    <p>{{ object.desc }}</p>
     <p>Liste over utvekslinger:</p>
     <table class="table table-bordered">
         <thead>
@@ -20,10 +21,10 @@
         <tbody>
         {% for obj in ex_detail_list %}
         <tr>
-            <td>{{obj.student.name}}</td>
+            <td>{{obj.name}}</td>
             <td>{{obj.retning}}</td>
             {% if user.is_authenticated %}
-            <td>{{obj.student.mail}}</td>
+            <td>{{obj.mail}}</td>
             {% endif %}
             <td>{{obj.start|date:"F Y"}}</td>
             <td>{{obj.end|date:"F Y"}}</td>
@@ -32,13 +33,11 @@
         </tbody>
     </table>
 
-    <h3>Relevante intervjuer og reisebrev</h3>
+    <h3>Relevante intervjuer og reisebrev:</h3>
 
     <ul style="list-style-type:disc">
-        {% load flatpages %}
-        {% get_flatpages url as info_pages %}
-        {% for page in info_pages %}
-            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+        {% for page in info %}
+            <li><a href="{% url 'info_detail' page.pk %}">{{ page.title }}</a></li>
         {% endfor %}
     </ul>
 
