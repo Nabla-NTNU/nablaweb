@@ -22,10 +22,10 @@
             <tbody>
             {% for obj in ex_detail_list %}
             <tr>
-                <td>{{obj.name}}</td>
+                <td>{{obj.student.get_full_name}}</td>
                 <td>{{obj.retning}}</td>
                 {% if user.is_authenticated %}
-                <td>{{obj.mail}}</td>
+                <td>{{obj.student.email}}</td>
                 {% endif %}
                 <td>{{obj.start|date:"F Y"}}</td>
                 <td>{{obj.end|date:"F Y"}}</td>
@@ -41,7 +41,11 @@
             <li><a href="{% url 'info_detail' page.pk %}">{{ page.title }}</a></li>
         {% endfor %}
     </ul>
-
+    <ul class="pager">
+        <li class="previous">
+            <a href="{% url 'ex_list' %}"><span aria-hidden="true">&larr;</span> Tilbake til oversikten</a>
+        </li>
+    </ul>
 
 </div>
 
