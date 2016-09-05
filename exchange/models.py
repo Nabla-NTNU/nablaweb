@@ -17,11 +17,6 @@ class University(models.Model):
         help_text="En kort beskrivelse av universitetet. Valgfritt."
     )
 
-    class Meta:
-        verbose_name = "universitet"
-        verbose_name_plural = "universiteter"
-        ordering = ['univ_navn']
-
     land = models.CharField(
         max_length=30,
         verbose_name='land',
@@ -29,6 +24,11 @@ class University(models.Model):
         help_text='Landet universitetet ligger i',
         default="",
     )
+
+    class Meta:
+        verbose_name = "universitet"
+        verbose_name_plural = "universiteter"
+        ordering = ['univ_navn']
 
     def __str__(self):
         return self.univ_navn
@@ -42,11 +42,7 @@ RETNINGER = (
 
 class Exchange(models.Model):
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = "utveksling",
-        verbose_name_plural = "utvekslinger"
-        ordering = ['student']
+    univ = models.ForeignKey(University, on_delete=models.CASCADE)
 
     retning = models.CharField(
         max_length=30,
@@ -63,7 +59,11 @@ class Exchange(models.Model):
         blank=False,
         help_text='Dato utveksling sluttet'
     )
-    univ = models.ForeignKey(University, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "utveksling",
+        verbose_name_plural = "utvekslinger"
+        ordering = ['student']
 
     def __str__(self):
         return str(self.student) + ' - ' + str(self.univ)
