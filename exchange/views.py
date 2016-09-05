@@ -1,5 +1,5 @@
 from django.views.generic import ListView, DetailView
-from .models import University, Exchange, Info
+from .models import University, Exchange, Info, RETNINGER
 from django.db.models import Q
 
 
@@ -14,6 +14,15 @@ class ExchangeListView(ListView):
         if query:
             ex_list = University.objects.filter(Q(land__icontains=query)|Q(univ_navn__icontains=query))
         return ex_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['retninger'] = [i[1].capitalize() for i in RETNINGER]
+        for univ in context['ex_list']:
+            univ.retninger = []
+            for retn in RETNINGER:
+                univ.retninger.append(Exchange.objects.filter(univ=univ).filter(retning=retn[0]).exists())
+        return context
 
 
 class UnivDetailView(DetailView):

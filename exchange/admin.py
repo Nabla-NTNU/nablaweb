@@ -3,8 +3,12 @@ from .models import University, Exchange, Info
 
 
 class ExchangeAdmin(admin.ModelAdmin):
-    list_display = ["student"]
-    search_fields = ["student"]
+    list_display = ("get_full_name", "univ")
+
+    def get_full_name(self, obj):
+        return obj.student.get_full_name()
+
+    get_full_name.short_description = "student"
 
     class Meta:
         model = Exchange
@@ -19,6 +23,7 @@ class UniversityAdmin(admin.ModelAdmin):
 
 
 class InfoAdmin(admin.ModelAdmin):
+    list_display = ["title"]
 
     class Meta:
         model = Info
