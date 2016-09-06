@@ -69,7 +69,7 @@ class Exchange(models.Model):
     )
 
     class Meta:
-        verbose_name = "utveksling",
+        verbose_name = "utveksling"
         verbose_name_plural = "utvekslinger"
         ordering = ['student']
 
@@ -94,7 +94,7 @@ class Info(models.Model):
             "markdown</a> for å formatere teksten."))
 
     class Meta:
-        verbose_name = "info",
+        verbose_name = "info"
         verbose_name_plural = "info"
 
     def __str__(self):
