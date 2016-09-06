@@ -17,7 +17,7 @@ class ExchangeListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['retninger'] = [short_name.capitalize() for short_name, _ in RETNINGER]
+        context['retninger'] = [long_name.capitalize() for _, long_name in RETNINGER]
         return context
 
 
@@ -29,6 +29,7 @@ class UnivDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['info'] = Info.objects.filter(ex__univ=self.object)
         context['ex_detail_list'] = Exchange.objects.filter(univ=self.object).select_related("student")
+        
         return context
 
 
