@@ -32,4 +32,3 @@ class TestUniversityGetRetningList(TestCase):
         )
         l = self.univ.get_has_retning_list()
         self.assertTrue(l[number])
-
