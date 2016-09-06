@@ -1,0 +1,53 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+<div class="container">
+    <h2>{{ object.univ_navn }}</h2>
+    <p>{{ object.desc }}</p>
+    <p>Liste over utvekslinger:</p>
+    <div style="overflow: auto">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Retning</th>
+                {% if user.is_authenticated %}
+                <th>Epost</th>
+                {% endif %}
+                <th>Utveksling start</th>
+                <th>Slutt</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in ex_detail_list %}
+            <tr>
+                <td>{{obj.student.get_full_name}}</td>
+                <td>{{obj.get_retning_display}}</td>
+                {% if user.is_authenticated %}
+                <td>{{obj.student.email}}</td>
+                {% endif %}
+                <td>{{obj.start|date:"F Y"}}</td>
+                <td>{{obj.end|date:"F Y"}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <h3>Relevante intervjuer og reisebrev:</h3>
+
+    <ul style="list-style-type:disc">
+        {% for page in info %}
+            <li><a href="{% url 'info_detail' page.pk %}">{{ page.title }}</a></li>
+        {% endfor %}
+    </ul>
+    <ul class="pager">
+        <li class="previous">
+            <a href="{% url 'ex_list' %}"><span aria-hidden="true">&larr;</span> Tilbake til oversikten</a>
+        </li>
+    </ul>
+
+</div>
+
+
+{% endblock content%}
