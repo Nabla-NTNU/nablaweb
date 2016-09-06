@@ -17,7 +17,7 @@ class ExchangeListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['retninger'] = [short_name.capitalize() for _, short_name in RETNINGER]
+        context['retninger'] = [short_name.capitalize() for short_name, _ in RETNINGER]
         return context
 
 

@@ -42,9 +42,9 @@ class University(models.Model):
 
 
 RETNINGER = (
-    ("Biofysikk og medisinteknologi", "biofys"),
-    ("Industriell matematikk", "indmat"),
-    ("Teknisk fysikk", "tekfys")
+    ("biofys", "Biofysikk og medisinteknologi"),
+    ("indmat", "Industriell matematikk"),
+    ("tekfys", "Teknisk fysikk")
 )
 
 
@@ -53,7 +53,7 @@ class Exchange(models.Model):
     univ = models.ForeignKey(University, on_delete=models.CASCADE)
 
     retning = models.CharField(
-        max_length=30,
+        max_length=6,
         blank=False,
         help_text='Retning',
         choices=RETNINGER,
