@@ -24,7 +24,7 @@
         {% for obj in ex_list %}
             <tr>
                 <td><a href="{% url 'ex_detail_list' obj.id %}">{{obj.univ_navn}}</a></td>
-                {% for retn in obj.retninger %}
+                {% for retn in obj.get_has_retning_list %}
                     <td>{% if retn %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
                 {% endfor %}
                 <td>{{obj.land}}</td>

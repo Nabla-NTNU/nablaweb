@@ -33,6 +33,14 @@ class University(models.Model):
     def __str__(self):
         return self.univ_navn
 
+    def get_has_retning_list(self):
+        """ Returns a list of booleans indicating whether there exists an exchange in each retning"""
+        return [
+            self.exchange_set.filter(retning=retn).exists()
+            for retn, _ in RETNINGER
+        ]
+
+
 RETNINGER = (
     ("Biofysikk og medisinteknologi", "biofys"),
     ("Industriell matematikk", "indmat"),
