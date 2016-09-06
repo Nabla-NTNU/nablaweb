@@ -74,7 +74,7 @@ class Exchange(models.Model):
         ordering = ['student']
 
     def __str__(self):
-        return str(self.student) + ' - ' + str(self.univ)
+        return "{} - {}".format(self.student, self.univ)
 
 
 class Info(models.Model):
