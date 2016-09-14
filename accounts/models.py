@@ -119,6 +119,10 @@ class FysmatClass(NablaGroup):
         num = now.year - int(self.starting_year) + int(now.month > 6)
         return 5 if num > 5  else num
 
+    def save(self, *args, **kwargs):
+        self.group_type = 'kull'
+        super().save(*args, **kwargs)
+
 
 class RegistrationRequest(models.Model):
     username = models.CharField(

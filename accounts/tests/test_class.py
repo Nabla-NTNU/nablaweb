@@ -28,8 +28,6 @@ class ClassesTest(TestCase):
             self.users += users 
             
     def test_user_class(self):
-        for i in range(28):
-            cls = self.classes[int(i/7)]
-            u = self.users[i]
+        for i, u in enumerate(self.users):
             assert u.get_class_number() <= 5
             
