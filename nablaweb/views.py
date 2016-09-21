@@ -10,6 +10,7 @@ from nabladet.models import Nablad
 from utils.view_mixins import FlatPageMixin
 from poll.models import Poll
 from itertools import chain
+from .models import GeneralOptions
 
 
 class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
@@ -23,7 +24,11 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
 
         context['new_podcast'] = Podcast.objects.exclude(published=False).exclude(is_clip=True).first()
         news_list = News.objects.exclude(priority=0).exclude(published=False).order_by('-created_date')
-        context['main_news'] = news_list.first()
+        options = GeneralOptions.get_current()
+        if options.main_story is not None:
+            context['main_news'] = options.main_story
+        else:
+            context['main_news'] = news_list.first()
         context['news_list_1'] = news_list[1:3]
         context['news_list_2'] = news_list[3:5]
         context['news_list_3'] = news_list[5:7]
