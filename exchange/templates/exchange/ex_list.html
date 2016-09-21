@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="container">
+    <h2>Utveksling</h2>
+    <form method="GET" action="">
+        <input type="text" name="q" placeholder="" value="{{request.GET.q}}"/>
+        <input type="submit" value="Søk"/>
+    </form>
+    <p>Her finner du en liste over universiteter hvor fysmattere har vært på utveksling:</p>
+    <div style="overflow: auto">
+        <table class="table">
+        <thead>
+        <tr>
+            <th>Universitet</th>
+            {% for retn in retninger %}
+            <th>{{ retn }}</th>
+            {% endfor %}
+            <th>Land</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for obj in ex_list %}
+            <tr>
+                <td><a href="{% url 'ex_detail_list' obj.id %}">{{obj.univ_navn}}</a></td>
+                {% for retn in obj.get_has_retning_list %}
+                    <td>{% if retn %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+                {% endfor %}
+                <td>{{obj.land}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+</div>
+{% endblock content %}

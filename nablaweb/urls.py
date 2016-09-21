@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^podcast/', include('podcast.urls')),
     url(r'^', include('interactive.urls')),
     url(r'^likes/', include('likes.urls')),
+    url(r'^utveksling/', include('exchange.urls')),
 
 
     # For å dele filer under utviklingen selv om DEBUG=False
