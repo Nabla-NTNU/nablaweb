@@ -8,6 +8,10 @@ body {
   margin-top: 80px;
 }
 
+ul.nav.nav-list>li {
+    margin-left: 10px;
+}
+
 .logo {
 padding: 7px;
 }
