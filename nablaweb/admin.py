@@ -24,9 +24,8 @@ class GeneralOptionsForm(forms.ModelForm):
     def save(self, commit=True):
         options = super(forms.ModelForm, self).save(commit=commit)
 
-        news = self.cleaned_data['news']
-        options.main_story = news
-        return group
+        options.main_story = self.cleaned_data['news']
+        return options
 
 
 @admin.register(GeneralOptions)
