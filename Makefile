@@ -12,4 +12,4 @@ run:
 	$(MA) runserver 1337
 .PHONY:
 seed:
-	$(MA) loaddata seeds/base.json 
+	$(MA) seed 
