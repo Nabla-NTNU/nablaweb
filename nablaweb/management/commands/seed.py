@@ -1,18 +1,21 @@
 # Custom seed script for nablaweb
 from accounts.models import NablaUser as User
-from loremipsum import get_sentences, generate_paragraph
 from content.models.news import News
 from content.models.events import Event
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
-from datetime import datetime as dt
+from faker import Factory
+
+fake = Factory.create('no_NO')
 
 
 def g():
-    return '\n\n'.join([generate_paragraph(1)[2] for j in range(0, 4)])
+    return fake.text()
+
     
 def s():
-    return get_sentences(1)
+    return fake.sentence()
+
 
 class Command(BaseCommand):
         help = 'Puts data into the database'
@@ -23,20 +26,32 @@ class Command(BaseCommand):
                 raise Exception("Trying to seed in production.")
             
             User.objects.all().delete()
-            User.objects.update_or_create(
+            admin = User.objects.create_user(
                     username='admin',
                     password='admin',
-                    email='admin@stud.ntnu.no'
+                    first_name=fake.first_name(),
+                    last_name=fake.last_name(),
+                    address=fake.address(),
+                    email='admin@stud.ntnu.no',
+                    about=fake.text(),
+                    birthday=fake.date_time_between_dates(datetime_start=None, datetime_end=None, tzinfo=None),
                     )
+            admin.is_superuser = True
+            admin.is_staff = True
+            admin.save()
             
             for i in range(100):
                 username = "komponent%d" % (i)
-                User.objects.update_or_create(
+                User.objects.create_user(
                         username=username,
+                        first_name=fake.first_name(),
+                        last_name=fake.last_name(),
+                        address=fake.address(),
                         password='password',
                         email=username+'@stud.ntnu.no',
-                        about=generate_paragraph(4)[2]
-                        )
+                        about=fake.text(),
+                        birthday=fake.date_time_between_dates(datetime_start=None, datetime_end=None, tzinfo=None)
+                )
 
             News.objects.all().delete()
 
@@ -44,7 +59,7 @@ class Command(BaseCommand):
                 News.objects.create(
                         headline=s(),
                         body=g(),
-                        lead_paragraph=generate_paragraph()
+                        lead_paragraph=g()
                         )
 
 
