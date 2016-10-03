@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from content.exceptions import RegistrationAlreadyExists, EventFullException, DeregistrationClosed
 from .abstract_event import AbstractEvent
 from .eventregistration import EventRegistration
-
+from .managers import  EventRegistrationManager
 
 class Event(AbstractEvent):
     """Arrangementer både med og uten påmelding.
@@ -23,6 +23,7 @@ class Event(AbstractEvent):
     def save(self, *args, **kwargs):
         super(Event, self).save(*args, **kwargs)
         self._prune_queue()
+        EventRegistration.objects.update_lists(self)
 
     @property
     def registrations_manager(self):
