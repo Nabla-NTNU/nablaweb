@@ -85,6 +85,11 @@ class NablaUser(AbstractUser):
 
         return super(NablaUser, self).save(force_insert, force_update, using, update_fields)
 
+    @property
+    def nablagroups(self):
+        groups = self.groups.all()
+        return [NablaGroup.objects.get(id=group.id) for group in groups]
+
 
 class NablaGroup(Group):
     """
@@ -92,6 +97,13 @@ class NablaGroup(Group):
     """
     description = models.TextField(verbose_name="Beskrivelse", blank=True)
     mail_list = models.EmailField(verbose_name="Epostliste", blank=True)
+
+    logo = models.FileField(
+        upload_to="logos",
+        verbose_name="Logo",
+        blank=True,
+        null=True
+    )
 
     GROUP_TYPES = (
         ('komite', 'Komité'),
@@ -103,6 +115,7 @@ class NablaGroup(Group):
     )
 
     group_type = models.CharField(max_length=10, blank=True, choices=GROUP_TYPES)
+    
 
 
 class FysmatClass(NablaGroup):
