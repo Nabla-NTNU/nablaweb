@@ -32,7 +32,9 @@
             <td class="cell_groups"> 
             {# Grupper brukeren er med i #}
                 {% for group in user.nablagroups %}
-                    <img alt="{{ group.name }}" title="{{ group.name }}" src="{{ group.logo.url }}" width="30" />
+                    {% if group.logo %}
+                        <img alt="{{ group.name }}" title="{{ group.name }}" src="{{ group.logo.url }}" width="30" />
+                    {% endif %}
                 {% endfor %}
             </td>
 
