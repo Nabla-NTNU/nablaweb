@@ -117,3 +117,12 @@ class WaitingListTest(GeneralEventTest):
         self.assertTrue(self.event.is_attending(u))
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to[0], u.email)
+
+    def test_add_places(self):
+        w_0 = self.event.users_waiting()
+        u = self.event.waiting_registrations[5].user
+        self.event.places += 5
+        self.event.save()
+        self.assertTrue(self.event.is_full())
+        self.assertEqual(w_0 - 5, self.event.users_waiting())
+        self.assertEqual(u, self.event.registrations_manager.first_on_waiting_list().user)
