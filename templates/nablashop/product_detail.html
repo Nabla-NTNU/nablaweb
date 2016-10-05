@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ product.name }}</h1>
+
+
+    {% include "content/includes/comments.html" with content=product %}
+
+{% endblock %}
+
+{% block sidebar %}
+    {% include "content/includes/sidebar-admin.html" %}
+
+{% endblock %}
