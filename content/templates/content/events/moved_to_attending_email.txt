@@ -3,7 +3,7 @@ Hei {{ name }},
 Du har nå fått plass på arrangementet "{{ event.headline }}".
 Plassen er tildelt fordi du stod på venteliste.
 {% if event.deregistration_closed %}
-Fristen for å melde seg av arrangementet har gått ut. Dersom du allikevel ikke kan komme, kan du prøve å ta kontakt med {{ event.organizer }} så fort som mulig.
+Fristen for å melde seg av arrangementet har gått ut. Dersom du allikevel ikke kan komme, kan du prøve å ta kontakt med {% if event.organizer %}{{ event.organizer }}{% else %}arrangement-ansvarlig{% endif %} så fort som mulig.
 {% elif event.deregistration_deadline %}
 Hvis du alikevel ikke kan komme, må du melde deg av før avmeldingsfristen.
 {% else %}
