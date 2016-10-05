@@ -7,7 +7,6 @@ from content.exceptions import RegistrationAlreadyExists, EventFullException, De
 from .abstract_event import AbstractEvent
 from .eventregistration import EventRegistration
 
-
 class Event(AbstractEvent):
     """Arrangementer både med og uten påmelding.
     Dukker opp som nyheter på forsiden.
@@ -23,6 +22,7 @@ class Event(AbstractEvent):
     def save(self, *args, **kwargs):
         super(Event, self).save(*args, **kwargs)
         self._prune_queue()
+        EventRegistration.objects.update_lists(self)
 
     @property
     def registrations_manager(self):
