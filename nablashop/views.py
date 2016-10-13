@@ -1,19 +1,35 @@
 from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView, TemplateView
 from .models import Product, Category
 
 
-def index(request):
-    product_list = Product.objects.all()
-    category_list = Category.objects.all()
-    context = {'product_list': product_list, 'category_list': category_list}
-    return render(request, 'nablashop/index.html', context)
+class IndexView(ListView):
+    model = Product
+    template_name = 'nablashop/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
 
 
-def product_detail(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-    return render(request, 'nablashop/product_detail.html', {'product': product})
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'nablashop/product_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
 
 
-def category_detail(request, category_id):
-    category = get_object_or_404(Category, pk=category_id)
-    return render(request, 'nablashop/category_detail.html', {'category': category})
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = 'nablashop/category_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+

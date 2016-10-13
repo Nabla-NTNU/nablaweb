@@ -1,14 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ product.name }}</h1>
+    <img class="img" src="{{ product.photo.url }}"></p>
+    <h1>{{ product.name }} - {{ product.price }} kr</h1>
+    <p>{{ product.description }}</p>
 
 
-    {% include "content/includes/comments.html" with content=product %}
+
 
 {% endblock %}
 
 {% block sidebar %}
-    {% include "content/includes/sidebar-admin.html" %}
+       {% include "nablashop/includes/category-sidebar.html" with category_list=categories %}
 
 {% endblock %}

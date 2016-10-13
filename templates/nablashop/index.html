@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load listutil %}
+{% load thumbnail %}
 {% block content %}
     <h1>Nablashop</h1>
 {% if product_list %}
@@ -29,9 +30,6 @@
 {% endblock %}
 
 {% block sidebar %}
-    <ul class="nav nav-pills nav-stacked">
-        {% for category in category_list %}
-        <li><a href="{% url 'nablashop:category_detail' category.id %}">{{ category.name }}</a></li>
-        {% endfor %}
-    </ul>
+    {% include "nablashop/includes/category-sidebar.html" with category_list=categories %}
+
 {% endblock %}

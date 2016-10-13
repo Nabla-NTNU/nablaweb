@@ -1,9 +1,10 @@
 from django.conf.urls import url
-from . import views
+from .views import IndexView, ProductDetailView, CategoryDetailView
+
 
 app_name = "nablashop"
 urlpatterns = [
-    url(r'^$', view=views.index, name='index'),
-    url(r'^product/(?P<product_id>[0-9]+)/$', view=views.product_detail, name='product_detail'),
-    url(r'^category/(?P<category_id>[0-9]+)/$', view=views.category_detail, name='category_detail')
+    url(r'^$', view=IndexView.as_view(), name='index'),
+    url(r'^product/(?P<pk>[0-9]+)/$', view=ProductDetailView.as_view(), name='product_detail'),
+    url(r'^category/(?P<pk>[0-9]+)/$', view=CategoryDetailView.as_view(), name='category_detail')
 ]

@@ -30,3 +30,7 @@
 
 
 {% endblock %}
+
+{% block sidebar %}
+     {% include "nablashop/includes/category-sidebar.html" with category_list=categories %}
+{% endblock %}

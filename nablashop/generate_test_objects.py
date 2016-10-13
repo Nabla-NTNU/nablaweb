@@ -1,10 +1,12 @@
+from Scripts.pilprint import description
+
 from .models import Category, Product
 
 
 def create():
 
-    daljer, _= Category.objects.get_or_create(name='Daljer', description='Her er masse daljer', pk=1)
-    kompendier, _ = Category.objects.get_or_create(name='Kompendier', description='Her er masse kompendier', pk=2)
+    daljer, _= Category.objects.get_or_create(name='Daljer', description='Her er masse daljer', pk=2)
+    kompendier, _ = Category.objects.get_or_create(name='Kompendier', description='Her er masse kompendier', pk=3)
 
     for i in range(1,6):
         name = 'Dalje %d'
@@ -17,6 +19,7 @@ def create():
         k, _ = Product.objects.get_or_create(name=(name % (i-5)), category=kompendier, pk=i)
         k.photo.name = 'product_photo/kompendium.jpg'
         k.save()
+
 
     print('Objects generated')
 
