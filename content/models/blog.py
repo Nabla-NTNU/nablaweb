@@ -65,6 +65,14 @@ class BlogPost(EditableMedia, models.Model):
         help_text="Her kan du skrive i Markdown"
     )
 
+    list_image = models.ImageField(
+        upload_to="blogpics",
+        verbose_name="Listebilde",
+        help_text="Bilde som vises i listevisningen av bloggene",
+        blank=True,
+        null=True
+    )
+
     allow_comments = models.BooleanField(
         blank=True,
         verbose_name="Tillat kommentarer",

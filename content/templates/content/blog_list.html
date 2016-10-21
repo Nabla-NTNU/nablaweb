@@ -1,23 +1,35 @@
 {% extends "base.html" %}
 {% load markdown %}
+{% load static %}
+{% load thumbnail %}
 {% block title %}Blogger{% endblock %}
 
 
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static "blog/blog.css" %}">
 <div class="">
     <h1>Blogg</h1>
 
     <div class="list-group">
 
         {% for post in post_list %}
-        <a class="list-group-item" href="{{ post.get_absolute_url }}">
-
-            <h2>{{ post.title }}</h2>
-
-            <p>{{ post.content|markdown:"unsafe"}}</p>
-        </a>
-        {% empty %}
-        Ingen posts her enda.
+            <div class="list-group-item row">
+            <div class="col-lg-7">
+                <a href="{{ post.get_absolute_url }}">
+                <h2>{{ post.title }}</h2>
+                </a>
+                <p>
+                    {{ post.content|markdown:"unsafe"|truncatechars_html:250}}
+                </p>
+            </div>
+            <div class="col-lg-5">
+                {% if post.list_image %}
+                    <img src="{% thumbnail post.list_image 300x200 %}" class="rounded align-bottom" />
+                {% endif %}
+            </div>
+            </div>
+            {% empty %}
+            Ingen posts her enda.
         {% endfor %}
     </div>
 </div>
