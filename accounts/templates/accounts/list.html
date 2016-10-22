@@ -33,7 +33,7 @@
             {# Grupper brukeren er med i #}
                 {% for group in user.nablagroups %}
                     {% if group.logo %}
-                        <img alt="{{ group.name }}" title="{{ group.name }}" src="{{ group.logo.url }}" width="30" />
+                        <img alt="{{ group.name }}" title="{{ group.name }}" src="{{ group.logo.url }}" height="20" />
                     {% endif %}
                 {% endfor %}
             </td>
