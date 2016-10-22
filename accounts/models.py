@@ -88,7 +88,7 @@ class NablaUser(AbstractUser):
     @property
     def nablagroups(self):
         groups = self.groups.all()
-        return [NablaGroup.objects.get(id=group.id) for group in groups]
+        return [NablaGroup.objects.filter(id=group.id).first() for group in groups]
 
 
 class NablaGroup(Group):
