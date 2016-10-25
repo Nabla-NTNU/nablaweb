@@ -4,7 +4,7 @@ $.ajaxSetup({
   timeout: 7000,
   cache: false,
   error: function(e, xhr, settings, exception) {
-      ajaxError();
+    ajaxError();
   }
 });
 
@@ -17,4 +17,3 @@ function jsonWrapper(url, callback) {
     }
   });
 }
-

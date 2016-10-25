@@ -132,3 +132,32 @@ THUMBNAIL_PROCESSORS = (
 ) + EasyThumbnailSettings.THUMBNAIL_PROCESSORS
 THUMBNAIL_BASEDIR = 'thumbnails'
 
+LOG_FOLDER = PROJECT_ROOT
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_FOLDER, 'app.log'),
+            'formatter': 'default',
+        },
+    },
+    'loggers': {
+        'content': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        }
+    },
+    'formatters': {
+        'default': {
+            'format': '%(asctime)s %(levelname)s %(name)s: %(message)s',
+        },
+    },
+}

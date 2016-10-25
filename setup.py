@@ -21,7 +21,7 @@ requirements = [
     'django-braces',
     'django-sekizai>=0.8.2',
     'django-markdown-deux',
-    'django-nyt'
+    'django-nyt>=1.0b1'
 ]
 
 setup(
