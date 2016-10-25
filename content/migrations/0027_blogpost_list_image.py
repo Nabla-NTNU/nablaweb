@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='blogpost',
             name='list_image',
-            field=models.ImageField(verbose_name='Listebilde', upload_to='blogpics', help_text='Her kan du legge til bilde som vises i listevisningen av bloggene', blank=True),
+            field=models.ImageField(upload_to='blogpics', verbose_name='Listebilde', help_text='Bilde som vises i listevisningen av bloggene', blank=True, null=True),
         ),
     ]
