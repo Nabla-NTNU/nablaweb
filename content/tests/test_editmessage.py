@@ -19,7 +19,9 @@ class SubscriptionTest(EditTest):
         self.assertTrue(Subscription.objects.all())
 
     def test_watch_field_has_changed(self):
-        pass
+        self.news._save_watch_fields_as_old_fields()
+        self.news.headline = 'asfasdfasdfasdfasdfasdf'
+        self.assertTrue(self.news._watch_fields_has_changed())
 
 
 class NotificationTest(EditTest):
