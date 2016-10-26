@@ -6,3 +6,11 @@
     max-width: 100%;
     float: right;
 }
+
+.blog-move-right {
+    float: right;
+}
+
+.list-without-bullets {
+    list-style: none;
+}

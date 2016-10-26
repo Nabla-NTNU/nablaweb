@@ -40,6 +40,7 @@ class BlogView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['blog'] = self.blog
+        context['full_list'] = BlogPost.objects.filter(blog=self.blog).order_by('-created_date')
         return context
 
 
