@@ -1,33 +1,35 @@
 {% extends "base.html" %}
 {% load markdown %}
+{% load static %}
+{% load sekizai_tags %}
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block more_head %}
 {% endblock %}
 
 {% block content %}
-<div class="panel panel-default">
-
-    <h1>{{ post.title }}</h1>
-
-    <div class="panel-body">
+<div class="panel panel-default panel-body">
+        <h1>{{ post.title }}</h1>
         {{ post.content|markdown:"unsafe"}}
-    </div>
+        <i>{{ post.created_date|date:"d.m.y"}}</i>
 </div>
 {% endblock content %}
 
 {% block sidebar %}
-<h1>{{ blog.name }}</h1>
-<div class="list-group">
+    {% addtoblock "css" %}
+        <link href="{% static "blog/blog.css" %}" rel="stylesheet"/>
+    {% endaddtoblock %}
+<ul class="list-group list-without-bullets">
+    <a href="{% url "blog" post.blog %}" class="list-group-item list-group-item-info"><li><b>{{ blog.name }}</b></li></a>
     {% for post in post_list %}
     <a class="list-group-item" href="{{ post.get_absolute_url }}">
-        <h2>{{ post.title }}</h2>
+        <li>{{ post.title }}</li>
     </a>
     {% empty %}
-    Ingen posts her enda.
+    Ingen blogger her enda.
     {% endfor %}
-</div>
+</ul>
 
-{% include "content/includes/sidebar-admin.html" %}
+{% include "content/includes/blog_sidebar_admin.html" %}
 
 {% endblock %}

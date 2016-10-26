@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load markdown %}
+{% load static %}
+{% load sekizai_tags %}
 {% block title %}{{ blog.name }}{% endblock %}
 
 
@@ -8,10 +10,12 @@
   <h1>{{ blog.name }}</h1>
   <div class="list-group">
   {% for post in post_list %}
-    <a class="list-group-item" href="{{ post.get_absolute_url }}">
-          <h2>{{ post.title }}</h2>
+    <div class="list-group-item">
+          <a href="{{ post.get_absolute_url }}">
+              <h2>{{ post.title }}</h2>
+          </a>
           <p>{{ post.content|markdown:"unsafe"}}</p>
-    </a>
+    </div>
   {% empty %}
   Ingen posts her enda. 
   {% endfor %}
@@ -20,6 +24,19 @@
 {% endblock content %}
 
 {% block sidebar %}
+    {% addtoblock "css" %}
+        <link href="{% static "blog/blog.css" %}" rel="stylesheet"/>
+    {% endaddtoblock %}
+<ul class="list-group list-without-bullets">
+    <a class="list-group-item list-group-item-info" href="{% url "blog" %}"><li><b>Gå tilbake til oversikt</b></li></a>
+    {% for post in full_list %}
+    <a class="list-group-item" href="{{ post.get_absolute_url }}">
+        <li>{{ post.title }}</li>
+    </a>
+    {% empty %}
+    Ingen blogger her enda.
+    {% endfor %}
+</ul>
 
 {% include "content/includes/blog_sidebar_admin.html" %}
 
