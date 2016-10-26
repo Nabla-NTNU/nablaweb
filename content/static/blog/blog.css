@@ -2,7 +2,7 @@
     overflow-wrap: break-word;
 }
 
-.list-group-item img {
+.blog-floating-image {
     max-width: 100%;
     float: right;
 }
