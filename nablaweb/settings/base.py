@@ -121,6 +121,7 @@ INSTALLED_APPS = [
     'nablaweb',
     'likes',
     'exchange',
+    'nablashop',
 
     ###########################
     # Eksternt utviklede apps #

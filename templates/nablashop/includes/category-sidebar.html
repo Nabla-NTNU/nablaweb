@@ -1,0 +1,7 @@
+<ul class="nav nav-pills nav-stacked">
+    <li><a href="{% url 'nablashop:index' %}">Alt</a></li>
+    {% for category in category_list %}
+    <li><a href="{% url 'nablashop:category_detail' category.id %}">{{ category.name }}</a></li>
+    {% endfor %}
+</ul>
+
