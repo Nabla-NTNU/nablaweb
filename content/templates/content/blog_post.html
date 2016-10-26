@@ -20,7 +20,7 @@
         <link href="{% static "blog/blog.css" %}" rel="stylesheet"/>
     {% endaddtoblock %}
 <ul class="list-group list-without-bullets">
-    <a href="{% url "blog" post.blog %}" class="list-group-item list-group-item-info"><li><b>{{ blog.name }}</b></li></a>
+    <a href="{{ blog.get_absolute_url }}" class="list-group-item list-group-item-info"><li><b>{{ blog.name }}</b></li></a>
     {% for post in post_list %}
     <a class="list-group-item" href="{{ post.get_absolute_url }}">
         <li>{{ post.title }}</li>
