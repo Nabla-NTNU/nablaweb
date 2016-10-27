@@ -19,12 +19,12 @@ class EventRegistrationManager(models.Manager):
         self.move_waiting_to_attending(event=event)
 
     def fix_list_numbering(self, event):
-        attending_regs = self.filter(event=event, attending=True)
+        attending_regs = self.filter(event=event, attending=True).order_by('date')
         for n, reg in enumerate(attending_regs, start=1):
             reg.number = n
             reg.save()
 
-        waiting_regs = self.filter(event=event, attending=False)
+        waiting_regs = self.filter(event=event, attending=False).order_by('date')
         for n, reg in enumerate(waiting_regs, start=1):
             reg.number = n
             reg.save()
