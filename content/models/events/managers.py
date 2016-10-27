@@ -31,7 +31,7 @@ class EventRegistrationManager(models.Manager):
 
     def move_waiting_to_attending(self, event):
         free_places = event.free_places()
-        waiting_regs = self.filter(event=event, attending=False)[:free_places]
+        waiting_regs = self.filter(event=event, attending=False).order_by('date')[:free_places]
         for reg in waiting_regs:
             reg.set_attending_and_send_email()
         self.fix_list_numbering(event)
