@@ -46,7 +46,7 @@ class AdventCalendarView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset.filter(calendar=self.calendar)
+        queryset = queryset.filter(calendar=self.calendar)
         return queryset
 
     def get_context_data(self, **kwargs):
