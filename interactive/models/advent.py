@@ -3,8 +3,10 @@ from .base import InteractiveElement, InteractionResult
 from accounts.models import NablaUser
 from com.models import Committee
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 from random import choice
+from django.conf import settings
 
 
 class AdventDoor(InteractiveElement):
@@ -13,8 +15,7 @@ class AdventDoor(InteractiveElement):
     """
 
     number = models.IntegerField(
-        verbose_name="Nummer",
-        unique=True
+        verbose_name="Nummer"
     )
 
     content = models.TextField(
@@ -75,6 +76,7 @@ class AdventDoor(InteractiveElement):
     class Meta:
         verbose_name = "Adventsluke"
         verbose_name_plural = "Adventsluker"
+        unique_together = ('number','calendar',)
 
     def __str__(self):
         return str(self.number)
@@ -91,6 +93,8 @@ class AdventDoor(InteractiveElement):
 
     @property
     def is_published(self):
+        if settings.DEBUG:
+            return True
         return datetime.now() >= self.date
 
     @property
