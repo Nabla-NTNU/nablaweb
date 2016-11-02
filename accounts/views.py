@@ -25,6 +25,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
             view_user = NablaUser.objects.get(username=self.kwargs['username'])
         except NablaUser.DoesNotExist:
             raise Http404("Bruker finnes ikke")
+        return view_user
 
 class UpdateProfile(LoginRequiredMixin, FormMessagesMixin, UpdateView):
     form_class = UserForm
