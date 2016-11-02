@@ -3,7 +3,7 @@
 from django.views.generic import DetailView, ListView, UpdateView, FormView, TemplateView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, Http404
 from django.shortcuts import redirect
 from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin, PermissionRequiredMixin
 
@@ -21,8 +21,10 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     template_name = "accounts/view_member_profile.html"
 
     def get_object(self, queryset=None):
-        return NablaUser.objects.get(username=self.kwargs['username'])
-
+        try:
+            view_user = NablaUser.objects.get(username=self.kwargs['username'])
+        except NablaUser.DoesNotExist:
+            raise Http404("Bruker finnes ikke")
 
 class UpdateProfile(LoginRequiredMixin, FormMessagesMixin, UpdateView):
     form_class = UserForm
