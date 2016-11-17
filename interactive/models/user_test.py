@@ -3,14 +3,6 @@ from .base import InteractiveElement
 
 
 class Test(InteractiveElement):
-    
-    questions = models.ManyToManyField(
-        "interactive.TestQuestion"
-    )
-
-    results = models.ManyToManyField(
-        "interactive.TestResult"
-    )
 
     def to_map(self):
         map = {}
@@ -30,8 +22,9 @@ class TestQuestion(models.Model):
 
     text = models.TextField()
 
-    alternatives = models.ManyToManyField(
-        "interactive.TestQuestionAlternative"
+    test = models.ForeignKey(
+        "Test",
+        related_name="questions"
     )
 
     def to_map(self):
@@ -45,6 +38,10 @@ class TestQuestionAlternative(models.Model):
 
     text = models.TextField()
 
+    question = models.ForeignKey(
+        'TestQuestion',
+        related_name="alternatives")
+
 
 class TestResult(models.Model):
     
@@ -53,6 +50,11 @@ class TestResult(models.Model):
     )
 
     content = models.TextField()
+
+    test = models.ForeignKey(
+        "Test",
+        related_name="results"
+    )
 
     def to_map():
         map = {}

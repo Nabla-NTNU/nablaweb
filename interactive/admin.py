@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AdventCalendar, AdventDoor, Quiz, QuizQuestion
+from .models import AdventCalendar, AdventDoor, Quiz, QuizQuestion, Test, TestQuestion, TestQuestionAlternative, TestResult
 
 
 class AdventDoorInline(admin.TabularInline):
@@ -35,5 +35,32 @@ class QuizAdmin(admin.ModelAdmin):
         verbose_name = "Quiz"
 
 
+class TestQuestionAlternativeInline(admin.TabularInline):
+    model = TestQuestionAlternative
+    fields = ['text']
+    fk_name = "question"
+
+
+class TestQuestionInline(admin.TabularInline):
+    model = TestQuestion
+    inlines = [TestQuestionAlternativeInline]
+    fields = ['text']
+    fk_name = "test"
+
+
+class TestResultInline(admin.TabularInline):
+    model = TestResult
+    fields = ('title', 'content')
+    fk_name = "test"
+
+
+class TestAdmin(admin.ModelAdmin):
+    inlines = [TestQuestionInline, TestResultInline]
+
+    class Meta:
+        verbose_name = "Brukertest"
+
+
 admin.site.register(AdventCalendar, AdventCalendarAdmin)
 admin.site.register(Quiz, QuizAdmin)
+admin.site.register(Test, TestAdmin)
