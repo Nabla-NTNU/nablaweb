@@ -1,5 +1,8 @@
 from django.contrib import admin
+from django.db import models
+from django.forms import TextInput, Textarea
 from .models import AdventCalendar, AdventDoor, Quiz, QuizQuestion, Test, TestQuestion, TestQuestionAlternative, TestResult
+from django import forms
 
 
 class AdventDoorInline(admin.TabularInline):
@@ -35,32 +38,83 @@ class QuizAdmin(admin.ModelAdmin):
         verbose_name = "Quiz"
 
 
+class TestQuestionAlternativeForm(forms.ModelForm):
+
+    class Meta:
+        model = TestQuestionAlternative
+        fields = ['target']
+
+    def __init__(self, *args, **kwargs):
+        super(TestQuestionAlternativeForm, self).__init__(*args, **kwargs)
+        if self.instance.id:
+            self.fields['target'].queryset = TestResult.objects.filter(
+                                        test=self.instance.question.test)
+
+
 class TestQuestionAlternativeInline(admin.TabularInline):
     model = TestQuestionAlternative
-    fields = ['text']
+    fields = ('text', 'target','weights',)
     fk_name = "question"
+    extra = 1
+    form = TestQuestionAlternativeForm
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(
+            attrs={'rows': 1,
+                   'cols': 10,
+                   'style': 'height: 4em;'})},
+    }
+
+
+class TestQuestionAdmin(admin.ModelAdmin):
+    inlines = [TestQuestionAlternativeInline]
+    exclude = ('test',)
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(
+            attrs={'rows': 1,
+                   'cols': 10,
+                   'style': 'height: 4em;'})},
+    }
+
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 class TestQuestionInline(admin.TabularInline):
     model = TestQuestion
-    inlines = [TestQuestionAlternativeInline]
-    fields = ['text']
+    extra = 1
+    fields = ('text', 'changeform_link')
     fk_name = "test"
+    readonly_fields = ('changeform_link',)
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(
+            attrs={'rows': 1,
+                   'cols': 10,
+                   'style': 'height: 4em;'})},
+    }
 
 
 class TestResultInline(admin.TabularInline):
     model = TestResult
     fields = ('title', 'content')
     fk_name = "test"
+    extra = 1
 
 
 class TestAdmin(admin.ModelAdmin):
     inlines = [TestQuestionInline, TestResultInline]
-
-    class Meta:
-        verbose_name = "Brukertest"
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(
+            attrs={'rows': 1,
+                   'cols': 10,
+                   'style': 'height: 4em;'})},
+    }
+    exclude = ('edit_listeners',)
 
 
 admin.site.register(AdventCalendar, AdventCalendarAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Test, TestAdmin)
+admin.site.register(TestQuestion, TestQuestionAdmin)
