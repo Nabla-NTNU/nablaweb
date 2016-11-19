@@ -1,6 +1,7 @@
 from django.views.generic import DetailView
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
+from django.http import Http404
 from django.template.response import TemplateResponse
 
 from ..models.user_test import Test
@@ -9,6 +10,13 @@ from ..models.user_test import Test
 class TestView(DetailView):
     model = Test
     template_name = "interactive/user_test.html"
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=None)
+        if obj.is_published:
+            return obj
+        else:
+            raise Http404("Ikke publisert")
 
     def get_form_url(self):
         return reverse('test_result', kwargs={'pk': self.object.id})
