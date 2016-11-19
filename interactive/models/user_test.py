@@ -18,19 +18,6 @@ class Test(PublicationManagerMixin, InteractiveElement):
         help_text="Tittel på brukertesten"
     )
 
-    def to_map(self):
-        map = {}
-        questions = []
-        for q in self.questions.all():
-            questions.append(q.to_map())
-        map.put("questions", questions)
-
-        results = []
-        for r in self.results.all():
-            results.append(r.to_map())
-        map.put("results", results)
-        return map
-
     class Meta:
         verbose_name = "brukertest"
         verbose_name_plural = "brukertester"
@@ -52,12 +39,6 @@ class TestQuestion(models.Model):
         null=True,
         related_name="questions"
     )
-
-    def to_map(self):
-        alternatives = []
-        for a in self.alternatives.all():
-            alternatives.append(a.text)
-        return alternatives
 
     def changeform_link(self):
         if self.id:
@@ -159,12 +140,6 @@ class TestResult(models.Model):
         null=True,
         related_name="results"
     )
-
-    def to_map(self):
-        map = {}
-        map.put("name", title)
-        map.put("text", content)
-        return map
 
     def __str__(self):
         return str(self.title)
