@@ -9,7 +9,7 @@ class AdventDoorInline(admin.TabularInline):
     model = AdventDoor
     extra = 24
     fields = ('number', 'content', 'short_description', 'is_lottery', 'template', 'image', 'is_text_response', 'winner',
-              'quiz')
+              'quiz', 'user_test')
     readonly_fields = ['winner']
     fk_name = "calendar"
 

@@ -73,6 +73,13 @@ class AdventDoor(InteractiveElement):
         blank=True
     )
 
+    user_test = models.ForeignKey(
+        'interactive.Test',
+        verbose_name="Lenket brukertest",
+        null=True,
+        blank=True
+    )
+
     class Meta:
         verbose_name = "Adventsluke"
         verbose_name_plural = "Adventsluker"

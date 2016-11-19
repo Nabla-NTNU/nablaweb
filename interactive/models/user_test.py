@@ -22,6 +22,9 @@ class Test(PublicationManagerMixin, InteractiveElement):
         verbose_name = "brukertest"
         verbose_name_plural = "brukertester"
 
+    def get_absolute_url(self):
+        return urlresolvers.reverse('user_test', kwargs={'pk': self.id})
+
     def __str__(self):
         return str(self.title)
 
