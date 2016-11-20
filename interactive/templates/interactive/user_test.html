@@ -14,7 +14,7 @@
         {% for alt in question.alternatives.all %}
         <li class="list-group-item">
             <label>{{ alt.text }}</label>
-            <input type="radio" name="{{ question.id }}_alternative" value="{{ forloop.counter0 }}"/>
+            <input type="radio" name="{{ question.id }}_alternative" value="{{ alt.id }}"/>
         </li>
         {% endfor %}
     </ul>
