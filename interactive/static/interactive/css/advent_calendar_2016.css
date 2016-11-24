@@ -2,8 +2,31 @@
     width: 100%;
 }
 
+/* prøvde å bruke disse fordi Script MT er proprietary,
+   men positioning blir ødelagt når man åpner luker
+
+@font-face {
+    font-family: 'kaushan_scriptregular';
+    src: url('../fonts/kaushanscript-regular-webfont.woff2') format('woff2'),
+         url('../fonts/kaushanscript-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'lobster_1.3regular';
+    src: url('../fonts/lobster_1.3-webfont.woff2') format('woff2'),
+         url('../fonts/lobster_1.3-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+*/
+
 h1 {
-    font-family: "Script MT";
+    font-family: 'Script MT';
     color: rgb(154,16,39);
     font-size: 70px;
     text-align: center;
@@ -59,7 +82,7 @@ h2 {
     z-index: 30;
     display: block;
     position: relative;
-    font-family: "Script MT";
+    font-family: 'Script MT';
     color: rgb(154,16,39);
 }
 
@@ -70,7 +93,6 @@ h2 {
 .advent-door-open {
     background-image: url(/media/texture_2016.jpg);
     background-size: 100% 100%;
-
 }
 
 .advent-door-open .advent-before {
@@ -139,4 +161,12 @@ body {
 
 .list-group-item {
     background: rgba(0,0,0,0.5);
+}
+
+.likeButton {
+    color: #FFFFFF;
+}
+
+.likeButton:hover{
+    color: #c3bbbb;
 }

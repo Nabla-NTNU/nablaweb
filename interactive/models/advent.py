@@ -102,7 +102,7 @@ class AdventDoor(InteractiveElement):
     def is_published(self):
         if settings.DEBUG:
             return True
-        return datetime.now() >= self.date
+        return datetime.now() >= self.date + timedelta(hours=10)
 
     @property
     def is_today(self):
