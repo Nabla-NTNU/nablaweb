@@ -1,0 +1,142 @@
+.content {
+    width: 100%;
+}
+
+h1 {
+    font-family: "Script MT";
+    color: rgb(154,16,39);
+    font-size: 70px;
+    text-align: center;
+}
+
+h2 {
+    color: rgb(154,16,39);
+}
+
+.advent-table {
+    width: 100%;
+    text-align: center;
+}
+
+.advent-door {
+    height: 107px;
+    width: 94px;
+    position: relative;
+    text-decoration: none;
+    font-size: 75px;
+    z-index: 3;
+    margin: 10px;
+    display: inline-block;
+}
+
+.advent-before {
+    background-image: url(/media/door_2016.png);
+    background-size: 94px 107px;
+    position: absolute;
+    width: 94px;
+    height: 107px;
+    z-index: 2;
+    display: table-cell;
+    left: 0px;
+}
+
+.advent-door a {
+    display: none;
+    font-size: 15px;
+    vertical-align: middle;
+}
+
+.advent-door img {
+    width: 50px;
+    height: 50px;
+}
+
+.advent-door-open a {
+    display: inline-block;
+}
+
+.advent-number {
+    z-index: 30;
+    display: block;
+    position: relative;
+    font-family: "Script MT";
+    color: rgb(154,16,39);
+}
+
+.advent-door-open .advent-number {
+    display: none;
+}
+
+.advent-door-open {
+    background-image: url(/media/texture_2016.jpg);
+    background-size: 100% 100%;
+
+}
+
+.advent-door-open .advent-before {
+    opacity: 0;
+    transition: opacity 1s ease-in;
+    pointer-events: none;
+}
+
+body {
+    color: #fff;
+    background-color: #333;
+}
+
+a, a:hover {
+    color: white;
+}
+
+.corner-left {
+    font-size: 100px;
+    text-align: center;
+}
+
+.corner-right {
+    font-size: 100px;
+    text-align: center;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+body {
+    background: url(/media/jul_2016.jpg) 0 0;
+    background-size: 100%;
+    background-repeat: repeat-y;
+}
+
+.user-pic {
+    display: inline-block;
+}
+
+.info {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    font-size: 20px;
+    color: #ffd;
+    padding: 4px;
+}
+.info a {
+    color: #ffd;
+}
+
+.text, .well {
+    background: rgba(0,0,0,0.5);
+    padding: 30px;
+    font-size: 20px;
+    border-radius: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.list-group-item {
+    background: rgba(0,0,0,0.5);
+}

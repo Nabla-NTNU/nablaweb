@@ -115,3 +115,13 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
             door.choose_winner()
             door.save()
         return super().get(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        year = context['door'].calendar.year
+        # TODO: gjør advent_base til advent_base_2015 og fiks default greien
+        if year == 2015:
+            context['base_template'] = "interactive/advent_base.html"
+        else:
+            context['base_template'] =  "interactive/advent_base_" + str(year) + ".html"
+        return context
