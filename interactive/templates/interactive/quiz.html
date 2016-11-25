@@ -5,7 +5,10 @@
 {% block content %}
 
 
-<h1>{{ quiz.title }}{% if not quiz.is_published %} (Ikke publisert){% endif %}</h1>
+<h1>{{ quiz.title }}</h1>
+    {% if not quiz.is_published %}
+<div class="alert alert-warning alert-dismissible">Dette er bare synlig fordi du har riktige rettigheter</div>
+{% endif %}
 {% if quiz.is_timed %}
 <div class="float-left well">
     <h2>Tid igjen</h2>

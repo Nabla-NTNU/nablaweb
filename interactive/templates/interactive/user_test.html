@@ -4,7 +4,10 @@
 
 {% block content %}
 
-<h1>{{ test.title }}{% if not test.is_published %} (Ikke publisert){% endif %}</h1>
+<h1>{{ test.title }}</h1>
+    {% if not test.is_published %}
+<div class="alert alert-warning alert-dismissible">Dette er bare synlig fordi du har riktige rettigheter</div>
+{% endif %}
 
 <form action="{{ view.get_form_url }}" method="post">
     {% csrf_token %}
