@@ -1,7 +1,8 @@
 from django.views.generic import DetailView, ListView
 from interactive.models.advent import AdventCalendar, AdventDoor, AdventParticipation
 from accounts.models import NablaUser
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
+from django.http import Http404
 from django.contrib.auth.decorators import login_required, permission_required
 from datetime import datetime
 from braces.views import PermissionRequiredMixin
@@ -13,6 +14,14 @@ class AdventDoorView(PublishedMixin, DetailView):
     model = AdventDoor
     pk_url_kwarg = "number"
     context_object_name = "door"
+
+    def get_object(self, queryset=None):
+        calendar = get_object_or_404(AdventCalendar, year=self.kwargs['year'])
+        door = get_object_or_404(AdventDoor, number=self.kwargs['number'], calendar=calendar)
+        if door.is_published or self.request.user.has_perm("interactive.change_adventdoor"):
+            return door
+        else:
+            raise Http404("Ikke publisert")
 
     def get_template_names(self):
         return self.object.template
@@ -58,11 +67,11 @@ class AdventCalendarView(ListView):
 @login_required
 def participate_in_competition(request, year, number):
 
-    calendar = AdventCalendar.objects.get(year=year)
-    door = AdventDoor.objects.get(
-        calendar=calendar,
-        number=number
-    )
+    calendar = get_object_or_404(AdventCalendar, year=year)
+    door = get_object_or_404(AdventDoor,
+                             calendar=calendar,
+                             number=number
+                             )
 
     if door.is_lottery and door.is_today:
         user = request.user
@@ -80,17 +89,17 @@ def participate_in_competition(request, year, number):
 
 @permission_required("interactive.change_adventdoor")
 def reset_door(request, year, number):
-    calendar = AdventCalendar.objects.get(year=year)
-    door = AdventDoor.objects.get(
-        calendar=calendar,
-        number=number
-    )
-    next = request.GET.get('next')
+    calendar = get_object_or_404(AdventCalendar, year=year)
+    door = get_object_or_404(AdventDoor,
+                             calendar=calendar,
+                             number=number
+                             )
+    my_next = request.GET.get('next')
 
     if door.is_today:
         door.winner = None
         door.save()
-    return redirect(next)
+    return redirect(my_next)
 
 
 class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
@@ -99,6 +108,10 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
     context_object_name = "door"
     template_name = "interactive/advent_admin.html"
     permission_required = "interactive.change_adventdoor"
+
+    def get_object(self, queryset=None):
+        calendar = get_object_or_404(AdventCalendar, year=self.kwargs['year'])
+        return get_object_or_404(AdventDoor, number=self.kwargs['number'], calendar=calendar)
 
     def post(self, *args, **kwargs):
         door = self.get_object()

@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h1>{{ test.title }}{% if test.is_published %}{% else %} (Ikke publisert){% endif %}</h1>
+<h1>{{ test.title }}{% if not test.is_published %} (Ikke publisert){% endif %}</h1>
 
 <form action="{{ view.get_form_url }}" method="post">
     {% csrf_token %}
