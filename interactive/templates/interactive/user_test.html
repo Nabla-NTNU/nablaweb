@@ -4,12 +4,12 @@
 
 {% block content %}
 
-<h1>{{ test.title }}</h1>
+<h1>{{ test.title }}{% if test.is_published %}{% else %} (Ikke publisert){% endif %}</h1>
 
 <form action="{{ view.get_form_url }}" method="post">
     {% csrf_token %}
     {% for question in test.questions.all %}
-    <h2>{{ forloop.counter }}. {{ question.text }}</h2>
+    <h2 class="quiz-question">{{ forloop.counter }}. {{ question.text }}</h2>
     <ul class="list-group">
         {% for alt in question.alternatives.all %}
         <li class="list-group-item">

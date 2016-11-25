@@ -32,10 +32,6 @@ h1 {
     text-align: center;
 }
 
-h2 {
-    color: rgb(0,0,0);
-}
-
 .advent-table {
     width: 100%;
     text-align: center;
@@ -169,4 +165,17 @@ body {
 
 .likeButton:hover{
     color: #c3bbbb;
+}
+
+.quiz-question {
+    background: rgba(0,0,0,0.5);
+    padding: 30px;
+    font-size: 20px;
+    border-radius: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+audio {
+    width: 100%;
 }

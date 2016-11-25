@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.views import login_required
+from django.http import Http404
 
 from content.views.mixins import PublishedListMixin
 from datetime import datetime
@@ -25,6 +26,13 @@ class QuizView(LoginRequiredMixin, DetailView):
 
     model = Quiz
     template_name = "interactive/quiz.html"
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=None)
+        if obj.is_published or self.request.user.has_perm("interactive.change_quiz"):
+            return obj
+        else:
+            raise Http404("Ikke publisert")
 
     def get_template_names(self):
         return self.template_name

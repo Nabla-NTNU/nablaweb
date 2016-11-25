@@ -16,7 +16,7 @@
 
             }
         } else {
-            alert("Ikke åpen enda.");
+            alert("Åpnes kl. 10:00 på den gjeldende dagen");
         }
     });
 

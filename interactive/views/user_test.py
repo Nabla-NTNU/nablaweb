@@ -15,7 +15,7 @@ class TestView(DetailView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=None)
-        if obj.is_published:
+        if obj.is_published or self.request.user.has_perm("interactive.change_test"):
             return obj
         else:
             raise Http404("Ikke publisert")
