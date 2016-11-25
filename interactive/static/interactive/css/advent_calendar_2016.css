@@ -179,3 +179,7 @@ body {
 audio {
     width: 100%;
 }
+
+.door-desc, .door-desc:hover {
+    color: white;
+}
