@@ -26,7 +26,7 @@
 */
 
 h1 {
-    font-family: 'Script MT';
+    font-family: 'Script MT', Arial, sans-serif;
     color: rgb(154,16,39);
     font-size: 60px;
     text-align: center;
@@ -78,7 +78,7 @@ h1 {
     z-index: 30;
     display: block;
     position: relative;
-    font-family: 'Script MT';
+    font-family: 'Script MT', Arial, sans-serif;
     color: rgb(154,16,39);
 }
 
@@ -103,7 +103,7 @@ body {
 }
 
 a, a:hover {
-    color: white;
+    color: rgb(154,16,39);
 }
 
 .corner-left {
