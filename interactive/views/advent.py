@@ -5,9 +5,12 @@ from django.shortcuts import redirect, get_object_or_404
 from django.http import Http404
 from django.contrib.auth.decorators import login_required, permission_required
 from datetime import datetime
+from datetime import timedelta
 from braces.views import PermissionRequiredMixin
 from django.contrib import messages
 from content.views.mixins import PublishedMixin
+from wsgiref.handlers import format_date_time
+from time import mktime
 
 
 class AdventDoorView(PublishedMixin, DetailView):
@@ -62,6 +65,17 @@ class AdventCalendarView(ListView):
         context = super().get_context_data(**kwargs)
         context['calendar'] = self.calendar
         return context
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        now = datetime.now()
+        if now < datetime(now.year, now.month, now.day, 10):
+            now = now - timedelta(days=1)
+        response['Cache-Control'] = "max-age=" \
+                                    + str((datetime(now.year, now.month, now.day+1, 10) - now).seconds)
+        stamp = mktime(datetime(now.year, now.month, now.day+1, 10).timetuple())
+        response['Expires'] = format_date_time(stamp)  # legacy support
+        return response
 
 
 @login_required
