@@ -18,7 +18,7 @@ Du fikk {{ result.get_correct_count }} av {{ result.get_question_count }} riktig
 </div>
 
 {% for reply in result.questions.all %}
-    <h2>{{ forloop.counter }}. {{ reply.question.question }}</h2>
+    <h2>{{ forloop.counter }}. {{ reply.question.question | safe }}</h2>
     <ul class="list-group">
         <li class="list-group-item">
             {{ reply.question.alternative_1 }}
