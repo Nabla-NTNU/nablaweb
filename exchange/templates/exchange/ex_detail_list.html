@@ -34,13 +34,21 @@
             </tbody>
         </table>
     </div>
+    {% if info %}
     <h3>Relevante intervjuer og reisebrev:</h3>
 
     <ul style="list-style-type:disc">
         {% for page in info %}
+            {% if page.link %}
+            <li><a href="{{ page.link }}">{{ page.title }} [ekstern link]</a></li>
+            {% elif page.file %}
+            <li><a href="{{ page.file.url }}">{{ page.title }} [PDF]</a></li>
+            {% else %}
             <li><a href="{% url 'info_detail' page.pk %}">{{ page.title }}</a></li>
+            {% endif %}
         {% endfor %}
     </ul>
+    {% endif %}
     <ul class="pager">
         <li class="previous">
             <a href="{% url 'ex_list' %}"><span aria-hidden="true">&larr;</span> Tilbake til oversikten</a>

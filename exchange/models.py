@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 
 class University(models.Model):
@@ -61,11 +62,11 @@ class Exchange(models.Model):
 
     start = models.DateField(
         blank=False,
-        help_text='Dato utveksling startet'
+        help_text='Dato utveksling startet. Kun måned som brukes.'
     )
     end = models.DateField(
         blank=False,
-        help_text='Dato utveksling sluttet'
+        help_text='Dato utveksling sluttet. Kun måned som brukes.'
     )
 
     class Meta:
@@ -76,6 +77,9 @@ class Exchange(models.Model):
     def __str__(self):
         return "{} - {}".format(self.student, self.univ)
 
+def validate_file_extension(value):
+    if not value.name.endswith('.pdf'):
+        raise ValidationError(u'Må være en PDF-fil')
 
 class Info(models.Model):
     ex = models.ForeignKey(Exchange, on_delete=models.CASCADE)
@@ -92,6 +96,21 @@ class Info(models.Model):
         help_text=(
             "Man kan her bruke <a href=\"http://en.wikipedia.org/wiki/Markdown\" target=\"_blank\">"
             "markdown</a> for å formatere teksten."))
+
+    file = models.FileField(
+        upload_to='utveksling',
+        verbose_name='PDF-fil',
+        blank=True,
+        null=True,
+        help_text="PDF-fil. Hvis dette eksisterer vil ikke teksten ovenfor bli brukt.",
+        validators=[validate_file_extension]
+    )
+
+    link = models.TextField(
+        verbose_name='ekstern link',
+        blank=True,
+        help_text="Link som kan brukes i stedet for pdf-fil eller tekst. Har høyest prioritet"
+    )
 
     class Meta:
         verbose_name = "info"
