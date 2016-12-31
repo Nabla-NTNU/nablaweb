@@ -124,6 +124,9 @@
                                  </a>
                              </li>
 
+                             {# url for /nablashop/ #}
+                             <li><a href="{% url 'nablashop:index' %}" >Nablashop</a></li>
+
                           {# Hent alle sider som starter på /om/ #}
                           {% get_flatpages '/om/' as about_pages %}
                           {% for page in about_pages %}
