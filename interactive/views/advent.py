@@ -71,9 +71,10 @@ class AdventCalendarView(ListView):
         now = datetime.now()
         if now < datetime(now.year, now.month, now.day, 10):
             now = now - timedelta(days=1)
+        next = datetime(now.year, now.month, now.day, 10) + timedelta(days=1)
         response['Cache-Control'] = "max-age=" \
-                                    + str((datetime(now.year, now.month, now.day+1, 10) - now).seconds)
-        stamp = mktime(datetime(now.year, now.month, now.day+1, 10).timetuple())
+                                    + str((next - now).seconds)
+        stamp = mktime(next.timetuple())
         response['Expires'] = format_date_time(stamp)  # legacy support
         return response
 
