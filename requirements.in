@@ -43,3 +43,5 @@ python3-memcached
 # Python packages developed by webkom
 -e git+https://bitbucket.org/webkom/content-app.git#egg=content
 -e git+https://bitbucket.org/webkom/bpc_client.git#egg=bpc_client
+
+faker
