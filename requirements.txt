@@ -6,6 +6,7 @@
 #
 -e git+https://bitbucket.org/webkom/bpc_client.git#egg=bpc_client
 -e git+https://bitbucket.org/webkom/content-app.git#egg=content
+-e git+https://github.com/nablawebkom/django-wiki#egg=wiki
 click==6.3                # via pip-tools
 django-appconf==1.0.1     # via django-image-cropping
 django-bootstrap3==7.0.0
@@ -38,4 +39,3 @@ sorl-thumbnail==12.3      # via wiki
 South==1.0.2              # via wiki
 Wand==0.4.2
 whoosh==2.7.2
-wiki==0.1
