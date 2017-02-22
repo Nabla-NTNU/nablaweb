@@ -1,0 +1,40 @@
+div.table-responsive {
+	display: inline;
+}
+
+div.table-responsive table {
+
+	width: 50%;
+	float: right;
+	margin: 6px 10px 10px 10px;
+	border-collapse: collapse;
+	font-size: 13px;
+	@media screen and (max-width: 480px) {
+		float: center;
+		width: 100%;
+	}
+	border: 1px solid #a5afa8;
+}
+
+
+
+div.table-responsive td {
+	padding: .3em 1em;
+	border-right: 1px solid #a5afa8;
+}
+div.table-responsive th {
+	padding: .3em 1em;
+	border-right: 1px solid #a5afa8;
+	border-bottom: 1px solid #a5afa8;
+	font-size: large;
+	background: #f4f9fe;
+	text-align: center;
+}
+
+div.table-responsive td:first-child, div.tableresponsive th:first-child {
+	font-weight: bold;
+}
+
+.linknotfound {
+	color: #aa3333;
+}
