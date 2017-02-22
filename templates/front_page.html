@@ -59,7 +59,7 @@
 </style>
 
  <ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#Nablad">Home</a></li>
+  <li class="active"><a data-toggle="tab" href="#Nablad">Nablad</a></li>
   <li><a data-toggle="tab" href="#Album">Album</a></li>
   <li><a data-toggle="tab" href="#Blogg">Blogg</a></li>
 </ul>
@@ -70,9 +70,9 @@
             <h3><a href="{% url "nablad_list" %}">Siste Nablad</a></h3>
             <div class="row">
                 {% for nablad in new_nablad %}
-                    <div class="col-md-3">
+                    <div class="col-md-3{% if not forloop.first %} hidden-xs{% endif %}">
                         <a class="thumbnail" href="{{ nablad.get_absolute_url }}">
-                            <img src="{% thumbnail nablad.thumbnail 280x400 %}", width = 160, height = 90>
+                            <img src="{% thumbnail nablad.thumbnail 730x200 %}", width = 160, height = 100>
                         </a>
                     </div >
                 {% endfor %}
@@ -82,10 +82,10 @@
             <h3><a href="{% url "albums" %}">Album</a></h3>
             <div class="row">
                 {% for album in album_list %}
-                    <div class="col-md-3">
+                    <div class="col-md-3 {% if not forloop.first %} hidden-xs{% endif %}">
                         {% if album.visibility != 'u' %}
                             <a class="thumbnail" href="{{ album.get_absolute_url }}">
-                                <img src="{% thumbnail album.first.file 770x250 quality=95 %}"/>
+                                <img src="{% thumbnail album.first.file 730x200 quality=95 %}"/>
                             </a>
                         {% endif %}
                         <div class="caption">
@@ -99,9 +99,9 @@
             <h3><a href="{% url "blog" %}">Siste Blogginnlegg</a></h3>
             <div class="row">
                 {% for blog in new_blog %}
-                    <div class="col-md-3">
+                    <div class="col-md-3 {% if not forloop.first %} hidden-xs{% endif %}">
                             <a class="thumbnail" href="{{ blog.get_absolute_url }}">
-                                <img src="{% thumbnail blog.list_image 770x250 quality=95 %}"/>
+                                <img src="{% thumbnail blog.list_image 730x200 quality=95 %}"/>
                             </a>
                         <div class="caption">
                      <h3>{{ blog.title }}</h3>
