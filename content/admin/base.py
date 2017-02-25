@@ -25,23 +25,7 @@ class ChangedByMixin(object):
         super(ChangedByMixin, self).save_model(request, obj, form, change)
 
 
-class ListenMixin(object):
-    """
-    Assumes the form has a boolean field 'listen'.
-    """
-
-    def save_model(self, request, obj, form, change):
-        if form.cleaned_data.get('listen'):
-            user = request.user
-            obj.edit_listeners.add(user)
-        elif obj.id:
-            user = request.user
-            obj.edit_listeners.remove(user)
-
-        super(ListenMixin, self).save_model(request, obj, form, change)
-
-
-class ContentAdmin(ListenMixin, ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
+class ContentAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
     formfield_overrides = {
         models.ImageField: {"widget": ClearableFileInput},
         models.FileField: {"widget": FileInput}
@@ -49,7 +33,7 @@ class ContentAdmin(ListenMixin, ImageCroppingMixin, ChangedByMixin, admin.ModelA
     readonly_fields = ["view_counter"]
 
 
-class BlogPostAdmin(ListenMixin, ChangedByMixin, admin.ModelAdmin):
+class BlogPostAdmin(ChangedByMixin, admin.ModelAdmin):
     readonly_fields = ["view_counter"]
     ordering = ['-created_date']
 
@@ -97,7 +81,7 @@ class EventAdmin(ContentAdmin):
               "allow_comments",
               "open_for",
               "facebook_url",
-              "edit_listeners")
+              )
     form = EventForm
     list_display = ['__unicode__', 'registration_required']
     date_hierarchy = 'event_start'
@@ -119,7 +103,7 @@ class NewsAdmin(ContentAdmin):
               "body",
               "priority",
               "allow_comments",
-              "edit_listeners")
+              )
     prepopulated_fields = {"slug": ("headline",)}
 
     def get_queryset(self, request):

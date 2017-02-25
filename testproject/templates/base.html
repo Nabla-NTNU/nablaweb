@@ -1,5 +1,6 @@
-{% load cache %}
-{% load sekizai_tags i18n %}
+{% load i18n %}
+{% load static %}
+{% load sekizai_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,15 +14,13 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
     {% addtoblock "js" %}
-    <script type="text/javascript">
-      URL_NOTIFY_GET_NEW = "{% url "nyt:json_get" %}";
-      URL_NOTIFY_MARK_READ = "{% url "nyt:json_mark_read_base" %}";
-      URL_NOTIFY_GOTO = "{% url "nyt:goto_base" %}";
-    </script>
-    {% endaddtoblock %}
-    {% addtoblock "js" %}
-        <script src="/static/core.js"></script>
-        <script type="text/javascript" src="/static/ui.js"></script>
+        <script type="text/javascript">
+          URL_NYT_GET_NEW = "{% url "nyt:json_get" %}";
+          URL_NYT_MARK_READ = "{% url "nyt:json_mark_read_base" %}";
+          URL_NYT_GOTO = "{% url "nyt:goto_base" %}";
+        </script>
+        <script src="{% static 'core.js' %}"></script>
+        <script type="text/javascript" src="{% static 'ui.js' %}"></script>
     {% endaddtoblock %}
 </head>
 
@@ -56,52 +55,40 @@
 </div>
 </nav>
 
+
 <h2>Notifications:</h2>
-    <ul>
-      <li class="notifications-empty"><a href="#"><em>{% trans "No notifications" %}</em></a></li>
-      <li class="divider"></li>
-      <li>
-        <a href="#" onclick="notify_mark_read()">
-          <i class="icon-check"></i>
-            Empty
-        </a>
-      </li>
-    </ul>
+<ul>
+  <li class="notification-before-list">Notifications (<span class="badge notification-cnt">0</span>):</li>
+  <li class="notifications-empty"><a href="#"><em>{% trans "No notifications" %}</em></a></li>
+</ul>
+
+<a href="#" onclick="nyt_mark_read()">
+  <i class="icon-check"></i>
+  {% trans "Clear notifications list" %}
+</a>
+
 </header>
 
 
 <div class="container" style="width: auto;">
 {% block main %}
 
-<div class="row"><!-- main row -->
+<div class="row">
 
-    {# content #}
     <div class="col-md-8">
         {% block content %}
         {% endblock content %}
     </div>
-    {# end content container #}
 
-    <aside class="col-md-4">{# sidebar #}
-
+    <aside class="col-md-4">
         {% block sidebar %}
         {% endblock sidebar %}
-
-
-    </aside>{# end sidebar #}
-</div>{# end main row #}
+    </aside>
+</div>
 
 {% endblock main %}
-</div>{# end main container  #}
+</div>
 
-<footer>
-    <div class="container">
-    <div class="row">
-
-
-    </div>{# end row #}
-</div>{# end container #}
-</footer>
 {% render_block "js" %}
 </body>
 </html>

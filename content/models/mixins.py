@@ -1,9 +1,16 @@
-from django.db import models
-from django_nyt.utils import notify
-from django.conf import settings
 from datetime import datetime
+import logging
+
+from django.db import models
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+
 from django_comments.models import Comment
+from django_nyt.utils import notify, subscribe
+from django_nyt.models import Settings
+
+
+logger = logging.getLogger(__name__)
 
 
 class ViewCounterMixin(models.Model):
@@ -29,66 +36,58 @@ class EditMessageMixin(models.Model):
     Sends notifications if the object is changed.
     """
 
-    edit_listeners = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        blank=True,
-        verbose_name="Lyttere",
-        help_text="Brukere som overvåker dette objektet"
-    )
-
-    message_key = None
     notification_url = None
     watch_fields = []
-    old_field_format = "__old_{field}"
+    __old_fields = {}
+
+    class Meta:
+        abstract = True
 
     def __init__(self, *args, **kwargs):
         super(EditMessageMixin, self).__init__(*args, **kwargs)
         if self.id:
-            for field in self.watch_fields:
-                old = getattr(self, field)
-                setattr(self,
-                        self.old_field_format.format(field=field), old)
+            self._save_watch_fields_as_old_fields()
 
-    def get_message_key(self):
-        if self.message_key:
-            return self.message_key
-        else:
-            return "{app_label}_{model_name}_{id}".format(
-                app_label=self._meta.app_label,
-                model_name=self._meta.model_name,
-                id=self.id
-            )
+    def _save_watch_fields_as_old_fields(self):
+        self.__old_fields = {
+            field: getattr(self, field)
+            for field in self.watch_fields
+         }
+
+    def _watch_fields_has_changed(self):
+        return any(
+            getattr(self, field, old) != old
+            for field, old in self.__old_fields.items()
+        )
+
+    def subscribe_to_changes(self, user, key="object_changed"):
+        """
+        Add a subscription to change notifications to this object
+
+        :param user: Ths user that wants to subscribe to changes.
+        """
+        setting = Settings.get_default_setting(user)
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        subscribe(setting, key, content_type=content_type, object_id=self.id)
+
+    def save(self, *args, **kwargs):
+        if self.id and self._watch_fields_has_changed():
+            self.notify("{object} har endret seg.".format(object=self))
+            self._save_watch_fields_as_old_fields()
+        return super(EditMessageMixin, self).save(*args, **kwargs)
+
+    def notify(self, message, key="object_changed"):
+        notify(
+            message, key,
+            target_object=self,
+            url=self.get_notification_url()
+        )
 
     def get_notification_url(self):
         if self.notification_url:
             return self.notification_url
         else:
             return self.get_absolute_url()
-
-    def notify(self, message):
-        notify(message, self.get_message_key(), target_object=self, url=self.get_notification_url())
-
-    def save(self, *args, **kwargs):
-        if self.id:
-            changed = False
-            for field in self.watch_fields:
-                try:
-                    new = getattr(self, field)
-                    old = getattr(self, self.old_field_format.format(field=field))
-                    if new != old:
-                        changed = True
-                        break
-                except AttributeError:
-                    # Avoid causing trouble
-                    pass
-
-            if changed:
-                self.notify("{object} har endret seg.".format(object=self))
-
-        return super(EditMessageMixin, self).save(*args, **kwargs)
-
-    class Meta:
-        abstract = True
 
 
 class TimeStamped(models.Model):
