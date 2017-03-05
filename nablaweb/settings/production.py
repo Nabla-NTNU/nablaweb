@@ -1,23 +1,19 @@
 # -*- coding: utf-8 -*-
+import os
+import pymysql
 from .base import *
 
-try:
-    import pymysql
-    pymysql.install_as_MySQLdb()
-except ImportError:
-    pass
-
+pymysql.install_as_MySQLdb()
+get_env = os.environ.get
 
 DEBUG = False
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'nabla_no',
-        'USER': 'nabla_no',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'NAME': get_env('MYSQL_DATABASE'),
+        'USER': get_env('MYSQL_USER'),
+        'PASSWORD': get_env('MYSQL_USER_PASSWORD'),
     }
 }
 
