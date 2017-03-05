@@ -31,15 +31,15 @@ LOGGING = {
 	'disable_existing_loggers': False,
 	'handlers': {
 		'file': {
-			'level': 'DEBUG',
+			'level': 'ERROR',
 			'class': 'logging.FileHandler',
-			'filename': '/var/log/django/nablaweb/debug.log',
+			'filename': '/var/log/django/nablaweb/error.log',
 			},
 	},
 	'loggers': {
 		'django': {
 			'handlers': ['file'],
-			'level': 'DEBUG',
+			'level': 'ERROR',
 			'propagate': True,
 		},
 	},
