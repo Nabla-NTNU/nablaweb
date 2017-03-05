@@ -6,7 +6,8 @@ from .base import *
 pymysql.install_as_MySQLdb()
 get_env = os.environ.get
 
-DEBUG = False
+DEBUG = bool(get_env('DEBUG', False))
+ADMINS = [("Django-logging", "django-log@abel.nabla.no")]
 
 DATABASES = {
     'default': {
@@ -23,6 +24,25 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
         'KEY_PREFIX': 'nabla_no',
     }
+}
+
+LOGGING = {
+	'version': 1,
+	'disable_existing_loggers': False,
+	'handlers': {
+		'file': {
+			'level': 'DEBUG',
+			'class': 'logging.FileHandler',
+			'filename': '/var/log/django/nablaweb/debug.log',
+			},
+	},
+	'loggers': {
+		'django': {
+			'handlers': ['file'],
+			'level': 'DEBUG',
+			'propagate': True,
+		},
+	},
 }
 
 SESSION_COOKIE_DOMAIN = '.nabla.no'
