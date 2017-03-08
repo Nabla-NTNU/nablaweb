@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^dato/(?P<year>\d{4})/(?P<month>\d{2})/$',
         MonthList.as_view(),
         name='jobs_month_list'),  # Stillingsannonser som er lagt inn denne måneden
-    url(r'^bedrift/(?P<slug>[-\w\s]*)$',
+    url(r'^bedrift/(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$',
         CompanyList.as_view(),
         name='company_detail'),  # Stillingsannonser fra én bedrift
     url(r'^linje/(?P<linje>[-\w\s]{1,50})/$',

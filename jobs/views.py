@@ -38,7 +38,7 @@ class EverythingList(GenericJobsList):
 class CompanyList(GenericJobsList):
     """Stillingsannonser for en spesifikk bedrift."""
     def get_queryset(self):
-        company = get_object_or_404(Company, name__iexact=self.kwargs['slug'])
+        company = get_object_or_404(Company, id=self.kwargs['pk'])
         return super(CompanyList, self).get_queryset().filter(company=company)
 
 
