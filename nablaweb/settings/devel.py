@@ -21,9 +21,6 @@ CACHES = {
 # All epost blir sendt til terminalen, istedet for ut til brukerne.
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Krevd av mediawiki_import
-USE_TZ = True
-
 # easy_thumbnail debugging
 # Gjør at man får en feilmelding dersom thumbnail-taggen ikke klarer å lage ny
 # thumbnail
