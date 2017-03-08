@@ -122,9 +122,8 @@
                                  <a href="{% url "committee_overview" %}" >
                                      Komitéer
                                  </a>
-                                 <li><a href="https://nabla.no/komite/styret/">Styret</a></li>
-                             </li>
-
+                            </li>
+                              <li><a href="{% url 'show_com_page' slug="styret"%}">Styret</a></li>
                              {# url for /nablashop/ #}
                              <li><a href="{% url 'nablashop:index' %}" >Nablashop</a></li>
 
