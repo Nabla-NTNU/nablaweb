@@ -18,31 +18,23 @@ DATABASES = {
     }
 }
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-        'KEY_PREFIX': 'nablaweb',
-    }
-}
-
 LOGGING = {
-	'version': 1,
-	'disable_existing_loggers': False,
-	'handlers': {
-		'file': {
-			'level': 'ERROR',
-			'class': 'logging.FileHandler',
-			'filename': '/var/log/django/nablaweb/error.log',
-			},
-	},
-	'loggers': {
-		'django': {
-			'handlers': ['file'],
-			'level': 'ERROR',
-			'propagate': True,
-		},
-	},
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': get_env('DJANGO_LOG_PATH', '/var/log/django/nablaweb/error.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
 }
 
 SESSION_COOKIE_DOMAIN = '.nabla.no'
