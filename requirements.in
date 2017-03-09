@@ -34,14 +34,15 @@ whoosh
 
 # Wiki
 #-e git+git://github.com/django-wiki/django-wiki.git#egg=wiki
-wiki~=0.1
+#wiki~=0.1
+-e git+https://github.com/nablawebkom/django-wiki#egg=wiki
 
 # Python bindings for database software (MySql and memcached)
 PyMySQL
-python3-memcached
 
 # Python packages developed by webkom
 -e git+https://bitbucket.org/webkom/content-app.git#egg=content
 -e git+https://bitbucket.org/webkom/bpc_client.git#egg=bpc_client
 
 faker
+gunicorn
