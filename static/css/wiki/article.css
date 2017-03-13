@@ -38,3 +38,7 @@ div.table-responsive td:first-child, div.tableresponsive th:first-child {
 .linknotfound {
 	color: #aa3333;
 }
+
+div#article-container {
+	padding-bottom: 5em;
+}
