@@ -6,7 +6,7 @@
 #
 -e git+https://bitbucket.org/webkom/bpc_client.git#egg=bpc_client
 -e git+https://bitbucket.org/webkom/content-app.git#egg=content
--e git+https://github.com/nablawebkom/django-wiki#egg=wiki
+-e git+https://bitbucket.org/webkom/django-wiki.git#egg=wiki
 bleach==1.5.0
 click==6.3                # via pip-tools
 django-appconf==1.0.1     # via django-image-cropping
