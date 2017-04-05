@@ -2,12 +2,12 @@
 
 
 from django.contrib import admin
-from content.admin import ContentAdmin
+from content.admin import ContentAdmin, ChangedByMixin
 from jobs.models import Advert, Company, RelevantForChoices, TagChoices, YearChoices
 from jobs.forms import AdvertForm, CompanyForm
 
 
-class AdvertAdmin(admin.ModelAdmin):
+class AdvertAdmin(ChangedByMixin, admin.ModelAdmin):
     fields = (
         "company",
         "headline",
