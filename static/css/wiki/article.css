@@ -42,3 +42,60 @@ div.table-responsive td:first-child, div.tableresponsive th:first-child {
 div#article-container {
 	padding-bottom: 5em;
 }
+
+.article_list {
+	/*background: #000000;*/
+}
+.list_header {
+	font-size: large;
+	font-weight: bold;
+}
+
+.article-index-element a {
+	color: #000;
+}
+
+.article-index-element { 
+	list-style-type: none;
+	margin: 0;
+	position: relative; 
+	display: list-item;
+}
+
+li .article-index-element {
+	display: none;
+}
+
+.article-index-element input {
+	position: absolute;
+	left: 0;
+	z-index: 2;
+	cursor: pointer;
+	opacity: 0;
+	height: 1em;
+	width: 1em;
+	top: 0;
+}
+
+.article-index-element label {
+	padding-left: 1.5em;
+	background: url("/static/img/wiki/toggle-small-expand.png") no-repeat;
+	cursor: pointer;
+	display: list-item;
+}
+
+.article-index-element input:checked + label {
+	background: url("/static/img/wiki/toggle-small.png") no-repeat;
+}
+
+.article-index-element input:checked + label + ul {
+	height: auto;
+}
+input:checked + label + ul > li.article-index-element {
+	display: list-item;
+}
+
+#id_parent {
+	width: 100%;
+	margin-bottom: 0.2em;
+}
