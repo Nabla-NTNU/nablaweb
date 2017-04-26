@@ -80,8 +80,16 @@ li .article-index-element {
 .article-index-element label {
 	padding-left: 1.5em;
 	background: url("/static/img/wiki/toggle-small-expand.png") no-repeat;
-	cursor: pointer;
-	display: list-item;
+	cursor: pointer;\
+}
+
+.article-index-container {
+	border: 1px solid silver;
+	padding: 0;
+}
+
+.article-index-element ul, .article-index-container {
+	background-color: gainsboro;
 }
 
 .article-index-element input:checked + label {
@@ -90,9 +98,28 @@ li .article-index-element {
 
 .article-index-element input:checked + label + ul {
 	height: auto;
+	border: 1px solid silver;
+	border-right: 0;
 }
 input:checked + label + ul > li.article-index-element {
 	display: list-item;
+}
+
+.article-index-element p {
+	display: none;
+}
+
+.article-index-element:not(ul) {
+	background-color: whitesmoke;
+}
+
+.article-index-element li {
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;
+}
+
+.article-index-element a {
+	padding-left: 1.0em;
 }
 
 #id_parent {
