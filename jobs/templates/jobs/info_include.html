@@ -34,7 +34,7 @@
                 {% if job.company.website %}
                 <li><a href="{{ job.company.website }}">Nettside</a></li>
                 {% endif %}
-                <li><a href="{% url "company_detail" pk=job.company.id slug=job.company.name %}">Alle stillingsannonser</a></li>
+                <li><a href="{% url "company_detail" pk=job.company.id slug=job.company.slug %}">Alle stillingsannonser</a></li>
             </ul>
         </td>
     </tr>
