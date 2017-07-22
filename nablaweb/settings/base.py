@@ -169,6 +169,10 @@ INSTALLED_APPS = [
     'wiki.plugins.notifications',
     'wiki.plugins.images',
     'wiki.plugins.macros',
+    'wiki.plugins.mediawikiimport',
+    'wiki.plugins.links',
+    'wiki.plugins.move',
+    'wiki.plugins.index'
 ]
 
 BOWER_INSTALLED_APPS = (
@@ -234,3 +238,10 @@ BPC_KEY = 'a88fb706bc435dba835b89ddb2ba4debacc3afe4'
 BPC_TESTING = True
 
 EVENT_GETTER_CLASS = 'bedpres.event_overrides.BedPresAndEventGetter'
+
+# wiki
+WIKI_REVISIONS_PER_HOUR = 500
+WIKI_REVISIONS_PER_MINUTES = 20
+WIKI_REVISIONS_PER_HOUR_ANONYMOUS = 0
+WIKI_REVISIONS_PER_MINUTES_ANONYMOUS = 0
+
