@@ -294,3 +294,9 @@ li.pager-counter {
 .well {
     background: #F1F1F1;
 }
+
+.fixed-tab-height {
+height:340px;
+Overflow-y: auto;
+Overflow-x: hidden;
+}

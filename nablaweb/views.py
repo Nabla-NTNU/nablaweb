@@ -10,6 +10,7 @@ from nabladet.models import Nablad
 from utils.view_mixins import FlatPageMixin
 from poll.models import Poll
 from itertools import chain
+from content.models.blog import BlogPost
 from .models import GeneralOptions
 
 
@@ -42,6 +43,8 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
         context['new_nablad'] = Nablad.objects.exclude(published=False).order_by('-pub_date')[:4]
         if not self.request.user.is_authenticated():
             context['new_nablad'] = Nablad.objects.exclude(published=False).exclude(is_public=False).order_by('-pub_date')[:4]
+
+        context['new_blog'] = BlogPost.objects.exclude(list_image=None).order_by('-last_changed_date')[:4]
 
         now = datetime.now() - timedelta(hours=6)
         context['upcoming_events'] = Event.objects.filter(event_start__gte=now).exclude(organizer='BN').order_by('event_start')[:6]
