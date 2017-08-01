@@ -65,6 +65,7 @@
               <img src="{% static "img/nabla_logo_white.png" %}" alt="Nabla">
           {% endblock header_logo %}
       </a>
+
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -75,6 +76,7 @@
                     <span class="icon-bar"></span>
                 </button>
             </div>
+
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               {% block navbar_container %}
@@ -146,7 +148,6 @@
                             </span>
                         </div>
                     </form>
-
                   <ul class="nav navbar-nav navbar-right">
                       {% if user.is_authenticated %}
                           {# bruker-dropdown #}
@@ -192,6 +193,9 @@
                               </form>
                           </li>
                       {% endif %}
+                      <li><a class="logo" href="/english/">
+                        <img src="{% static "img/GB_flag.png" %}" alt="Eng">
+                      </a></li>
                   </ul>
               {% endblock navbar_container %}
             </div>
