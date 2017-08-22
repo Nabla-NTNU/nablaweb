@@ -30,4 +30,8 @@ def extract_usernames(string):
 
     m = re.findall('([a-z]+)@', string, re.IGNORECASE)
     for u in m:
-        NablaUser.objects.get_or_create(username=u)
+        new_user, was_created = NablaUser.objects.get_or_create(username=u)
+        if not was_created:
+            continue
+        new_user.is_active = False
+        new_user.save()

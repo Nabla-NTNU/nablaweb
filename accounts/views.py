@@ -56,12 +56,12 @@ class RegistrationView(MessageMixin, FormView):
         # Activate a user or create a registration request.
         try:
             user = NablaUser.objects.get(username=username)
-            user.first_name = first_name
-            user.last_name = last_name
-            user.save()
             if user.is_active:
                 self.messages.error("Denne brukeren er allerede aktivert.")
             else:
+                user.first_name = first_name
+                user.last_name = last_name
+                user.save()
                 password = activate_user_and_create_password(user)
                 send_activation_email(user, password)
                 self.messages.info("Registreringsepost sendt til {}".format(user.email))
