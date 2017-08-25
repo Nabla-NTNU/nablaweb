@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
+
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
-from image_cropping import ImageCroppingMixin
-from filebrowser.widgets import ClearableFileInput, FileInput
 from django.db import models
+from django.forms.widgets import ClearableFileInput, FileInput
+
+from image_cropping import ImageCroppingMixin
+
 from .config import ConfigurationModelAdmin
 
 from content.models.news import News
