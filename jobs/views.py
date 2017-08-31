@@ -4,6 +4,9 @@ from django.views.generic import ListView, DetailView
 from content.templatetags.listutil import row_split
 from jobs.models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
 
 
 def split_into_rows(jobs):
@@ -24,7 +27,18 @@ class GenericJobsList(ListView):
         context['years'] = YearChoices.objects.all()
         context['choices'] = RelevantForChoices.objects.all()
         context['tags'] = TagChoices.objects.all()
-        context['jobs_rows'] = split_into_rows(self.object_list)
+
+        paginator = Paginator(self.object_list, self.paginate_by)
+        page = self.request.GET.get('page')
+
+        try:
+            jobs_rows = paginator.page(page)
+        except PageNotAnInteger:
+            jobs_rows = paginator.page(1)
+        except EmptyPage:
+            jobs_rows = paginator.page(paginator.num_pages)
+
+        context['jobs_rows'] = split_into_rows(jobs_rows)
 
         return context
 
