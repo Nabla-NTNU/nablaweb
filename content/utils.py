@@ -1,5 +1,4 @@
 from collections import defaultdict
-from wand.image import Image
 
 
 def group_events_by_day(events):
@@ -21,6 +20,8 @@ def day_range(start, end):
 
 
 def thumbnail_pdf(filename):
+    from wand.image import Image
+
     pdf = Image(filename=filename)
     pdf.format = 'jpeg'
     thumb_name = filename + ".jpg"
