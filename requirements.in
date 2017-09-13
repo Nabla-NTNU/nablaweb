@@ -24,7 +24,7 @@ django-markdown-deux
 django-sekizai
 
 # Image
-Pillow
+Pillow>=4.2.1
 easy-thumbnails
 django-image-cropping
 
@@ -35,7 +35,7 @@ whoosh
 # Wiki
 #-e git+git://github.com/django-wiki/django-wiki.git#egg=wiki
 #wiki~=0.1
--e git+https://github.com/nablawebkom/django-wiki#egg=wiki
+-e git+https://bitbucket.org/webkom/django-wiki.git#egg=wiki
 
 # Python bindings for database software (MySql and memcached)
 PyMySQL

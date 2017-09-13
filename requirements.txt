@@ -31,7 +31,8 @@ gunicorn==19.7.0
 html5lib==0.9999999       # via bleach
 markdown2==2.3.0          # via django-markdown-deux
 markdown==2.6.5
-pillow==3.1.1
+olefile==0.44             # via pillow
+pillow==4.2.1             # via easy-thumbnails
 pip-tools==1.6
 pymysql==0.7.2
 python-dateutil==2.5.3    # via faker
