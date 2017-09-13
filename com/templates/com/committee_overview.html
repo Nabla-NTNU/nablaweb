@@ -8,31 +8,20 @@
     {% addtoblock "css" %}
         <link href="{% static "com/com.css" %}" rel="stylesheet">
     {% endaddtoblock %}
-<h1>Komitésider</h1>
-{% if compage_list %}
-
-    <ul class="podcast/list.css">
-    {% for compage in compage_list %}
-        <li><a href="{{ compage.get_absolute_url }}">{{ compage.com.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Ingen komitéesider.</p>
-{% endif %}
-
-{% endblock %}
-{% block sidebar %}
-
-<h3>Nablas komiteer</h3>
+<h3>Komiteer</h3>
 <ul class="nav nav-pills nav-stacked">
 {% for c in compage_list %}
-    {% if c == com %}
-    <li class="active"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
-    {% else %}
-    <li><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
+    {% if not c.is_interest_group %}
+    <li class="panel-title"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
+    {% endif %}
+{% endfor %}
+<h3>Interessegrupper</h3>
+{% for c in compage_list %}
+    {% if c.is_interest_group %}
+    <li class="panel-title"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
     {% endif %}
 {% endfor %}
 </ul>
 
-{% endblock sidebar %}
+{% endblock %}
 

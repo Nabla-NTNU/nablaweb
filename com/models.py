@@ -15,6 +15,12 @@ class ComPage(models.Model):
     """Model til en komiteside"""
     com = models.ForeignKey(Group)
 
+    is_interest_group = models.BooleanField(
+        verbose_name="Interessegruppe",
+        help_text="Er ikke fullverdig komité",
+        default=True
+    )
+
     description = models.TextField(
         verbose_name="Beskrivelse",
         help_text="Teksten på komitésiden",
