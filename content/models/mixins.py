@@ -25,7 +25,7 @@ class ViewCounterMixin(models.Model):
 
     def add_view(self):
         self.view_counter += 1
-        self.save()
+        self.save(update_fields=["view_counter"])
 
     class Meta:
         abstract = True
