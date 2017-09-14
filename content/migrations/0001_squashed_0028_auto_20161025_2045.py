@@ -69,7 +69,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
                 ('created_date', models.DateTimeField(auto_now_add=True, verbose_name='Publiseringsdato', null=True)),
                 ('last_changed_date', models.DateTimeField(verbose_name='Redigeringsdato', null=True, auto_now=True)),
-                ('picture', models.ImageField(upload_to='news_pictures', blank=True, help_text='Bilder som er større enn 770x300 px ser best ut. Du kan beskjære bildet etter opplasting.', verbose_name='Bilde', null=True)),
+                ('picture', models.ImageField(upload_to='uploads/news_pictures', blank=True, help_text='Bilder som er større enn 770x300 px ser best ut. Du kan beskjære bildet etter opplasting.', verbose_name='Bilde', null=True)),
                 ('cropping', image_cropping.fields.ImageRatioField('picture', '770x300', adapt_rotation=False, verbose_name='Beskjæring', size_warning=False, allow_fullsize=False, help_text=None, free_crop=False, hide_image_field=False)),
                 ('slug', models.SlugField(blank=True, help_text='Denne teksten vises i adressen til siden, og trengs vanligvis ikke å endres', null=True)),
                 ('allow_comments', models.BooleanField(help_text='Hvorvidt kommentering er tillatt', verbose_name='Tillat kommentarer', default=True)),
@@ -83,7 +83,6 @@ class Migration(migrations.Migration):
                 ('publication_date', models.DateTimeField(blank=True, verbose_name='Publikasjonstid', null=True)),
                 ('published', models.NullBooleanField(help_text='Dato har høyere prioritet enn dette feltet.', verbose_name='Publisert', default=True)),
                 ('content_type', models.ForeignKey(editable=False, to='contenttypes.ContentType', null=True)),
-                ('picture', models.ImageField(upload_to='uploads/news_pictures', blank=True, help_text='Bilder som er større enn 770x300 px ser best ut. Du kan beskjære bildet etter opplasting.', verbose_name='Bilde', null=True)),
             ],
             options={
                 'verbose_name': 'nyhet',
@@ -159,7 +158,6 @@ class Migration(migrations.Migration):
                 ('created', models.DateField(verbose_name='Opprettet', auto_created=True)),
                 ('name', models.CharField(max_length=80, verbose_name='Navn')),
                 ('slug', models.SlugField(blank=True, null=True, unique=True)),
-                ('created', models.DateField(editable=False, verbose_name='Opprettet')),
             ],
             options={
                 'verbose_name': 'Blogg',
