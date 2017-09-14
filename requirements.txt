@@ -23,7 +23,7 @@ django-markdown-deux==1.0.5
 django-mptt==0.8.7
 django-nyt==1.0b5
 django-sekizai==0.10.0
-django==1.9.13
+django==1.11.5
 dnspython==1.15.0         # via email-validator
 easy-thumbnails==2.4.1
 email-validator==1.0.2    # via faker
@@ -39,7 +39,7 @@ pillow==4.2.1
 pip-tools==1.9.0
 pymysql==0.7.11
 python-dateutil==2.6.1    # via faker
-pytz==2017.2
+pytz==2017.2              # via django
 six==1.10.0               # via bleach, django-appconf, django-bower, django-image-cropping, django-nyt, faker, html5lib, pip-tools, python-dateutil
 sorl-thumbnail==12.3
 wand==0.4.4
