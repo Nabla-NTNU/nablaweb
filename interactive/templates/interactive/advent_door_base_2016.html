@@ -1,10 +1,14 @@
 {% extends "interactive/advent_base_2016.html" %}
 {% load markdown %}
 {% load like %}
+{% load sekizai_tags %}
 
 {% block title %}{{ door.number }}{% endblock %}
 
 {% block content %}
+{% addtoblock "js" %}
+{% include "likes/like_js_config.html" %}
+{% endaddtoblock %}
 
 <h1>{{ door.number }}</h1>
 {% if not door.is_published %}

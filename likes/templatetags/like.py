@@ -8,12 +8,6 @@ register = template.Library()
 
 @register.inclusion_tag('likes/like_button_include.html', takes_context=True)
 def show_like_button_for(context, object):
-
-    # Adds to the context of the currently rendering template and discards output.
-    # This has to be done here and not in likes/like_button_include.html because
-    # the templates are passed different context objects.
-    get_template('likes/like_js_config_using_sekizai.html').render(context)
-
     user = context['user']
     return {
         'object': object,
