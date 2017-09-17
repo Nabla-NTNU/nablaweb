@@ -54,13 +54,17 @@
 
 {% block sidebar %}
 
-<h3>Nablas komiteer</h3>
+<h3>Komiteer</h3>
 <ul class="nav nav-pills nav-stacked">
 {% for c in compages %}
-    {% if c == com %}
-    <li class="active"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
-    {% else %}
-    <li><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
+    {% if not c.is_interest_group %}
+    <li class="panel-title"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
+    {% endif %}
+{% endfor %}
+<h3>Interessegrupper</h3>
+{% for c in compages %}
+    {% if c.is_interest_group %}
+    <li class="panel-title"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
     {% endif %}
 {% endfor %}
 </ul>
