@@ -4,5 +4,5 @@ from django.apps import AppConfig
 
 
 class InteractiveConfig(AppConfig):
-    name = 'interactive'
+    name = 'nablapps.interactive'
     verbose_name = 'Interaktiv'

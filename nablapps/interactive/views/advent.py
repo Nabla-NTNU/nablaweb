@@ -1,5 +1,5 @@
 from django.views.generic import DetailView, ListView
-from interactive.models.advent import AdventCalendar, AdventDoor, AdventParticipation
+from ..models.advent import AdventCalendar, AdventDoor, AdventParticipation
 from accounts.models import NablaUser
 from django.shortcuts import redirect, get_object_or_404
 from django.http import Http404

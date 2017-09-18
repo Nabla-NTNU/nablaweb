@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from interactive.models import *
+from nablapps.interactive.models import *
 
 
 class AdventTests(TestCase):

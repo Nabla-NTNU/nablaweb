@@ -2,9 +2,8 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import interactive.models.user_test
-import datetime
 from django.conf import settings
+import nablapps.interactive.models
 
 
 class Migration(migrations.Migration):
@@ -133,7 +132,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('text', models.TextField(verbose_name='svaralternativ')),
-                ('weights', models.TextField(help_text='Bestem hvor mye hvert resultat vektlegges ved valg av dette alternativet. Format er 3,1,4 (altså heltall) det 3 er vekten til det øveste resultatet osv. Hvis blank får alle vekt 1, og hvis listen ikke er lang nok får resten vekt 1', verbose_name='vektlegging av resultater', validators=[interactive.models.user_test.validate_weight_syntax], blank=True)),
+                ('weights', models.TextField(help_text='Bestem hvor mye hvert resultat vektlegges ved valg av dette alternativet. Format er 3,1,4 (altså heltall) det 3 er vekten til det øveste resultatet osv. Hvis blank får alle vekt 1, og hvis listen ikke er lang nok får resten vekt 1', verbose_name='vektlegging av resultater', validators=[nablapps.interactive.models.user_test.validate_weight_syntax], blank=True)),
                 ('question', models.ForeignKey(null=True, to='interactive.TestQuestion', related_name='alternatives')),
                 ('target', models.ManyToManyField(to='interactive.TestResult', verbose_name='tilsvarende resultat (lagre én gang for å få korrekte resultater)', help_text='Velg resultatene dette alternativet svarer til.', blank=True)),
             ],

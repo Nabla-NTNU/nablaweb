@@ -117,7 +117,7 @@ INSTALLED_APPS = [
     'nablapps.meeting_records',  # Møtereferater fra styremøter og SKE
     'nablapps.poll',     # Spørreundersøkelser
     'nablapps.podcast',
-    'interactive',
+    'nablapps.interactive',
     'nablaweb',
     'nablapps.likes',
     'nablapps.exchange',

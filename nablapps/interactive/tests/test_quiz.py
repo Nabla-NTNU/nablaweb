@@ -6,8 +6,13 @@ from random import random
 from datetime import datetime, timedelta
 
 
-from interactive.models import *
-from interactive.models.quiz import QuizReplyTimeout, QuestionReply
+from nablapps.interactive.models.quiz import (
+    QuizReplyTimeout,
+    QuestionReply,
+    Quiz,
+    QuizQuestion,
+    QuizReply,
+)
 
 User = get_user_model()
 
