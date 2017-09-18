@@ -111,7 +111,7 @@ INSTALLED_APPS = [
     'content',  # Abstrakt: created, updated, created by, updated by.
     'accounts',  # Inneholder UserProfile med ekstra informasjon.
     'nablapps.jobs',     # Stillingsannonser og firmaer
-    'bedpres',  # Utvider events med BPC-tilkobling. Arver events.
+    'nablapps.bedpres',  # Utvider events med BPC-tilkobling. Arver events.
     'nablapps.com',      # Viser sider for komiteene.
     'nablapps.nabladet',  # Liste over nablad. Arver news.
     'nablapps.meeting_records',  # Møtereferater fra styremøter og SKE
@@ -237,7 +237,7 @@ BPC_FORENING = '3'
 BPC_KEY = 'a88fb706bc435dba835b89ddb2ba4debacc3afe4'
 BPC_TESTING = True
 
-EVENT_GETTER_CLASS = 'bedpres.event_overrides.BedPresAndEventGetter'
+EVENT_GETTER_CLASS = 'nablapps.bedpres.event_overrides.BedPresAndEventGetter'
 
 # wiki
 WIKI_REVISIONS_PER_HOUR = 500

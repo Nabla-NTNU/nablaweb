@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^$', FrontPageView.as_view(), name='front_page'),
     url(r'^', include('content.urls')),
-    url(r'^bedpres/', include('bedpres.urls')),
+    url(r'^bedpres/', include('nablapps.bedpres.urls')),
     url(r'^brukere/', include('accounts.urls')),
     url(r'^', include(login_urls)),
     url(r'^stillinger/', include('nablapps.jobs.urls')),

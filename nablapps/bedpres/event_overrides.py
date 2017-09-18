@@ -1,5 +1,5 @@
 from datetime import datetime, time
-from bedpres.models import BedPres
+from .models import BedPres
 from content.models import Event
 
 from bpc_client.event import get_events as get_bpc_events

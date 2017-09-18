@@ -4,5 +4,5 @@ from django.apps import AppConfig
 
 
 class BedpresConfig(AppConfig):
-    name = 'bedpres'
+    name = 'nablapps.bedpres'
     verbose_name = 'Bedriftspresentasjoner'

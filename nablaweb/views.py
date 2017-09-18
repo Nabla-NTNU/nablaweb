@@ -8,7 +8,7 @@ from content.models.news import News
 from content.views.mixins import PublishedListMixin
 from django.views.generic import TemplateView
 
-from bedpres.models import BedPres
+from nablapps.bedpres.models import BedPres
 from nablapps.nabladet.models import Nablad
 from nablapps.podcast.models import Podcast
 from nablapps.poll.models import Poll

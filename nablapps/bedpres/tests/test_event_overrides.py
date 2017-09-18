@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 from content.models.events import Event
 from django.test import TestCase
 
-from bedpres.event_overrides import BedPresAndEventGetter
-from bedpres.models import BedPres
+from nablapps.bedpres.event_overrides import BedPresAndEventGetter
+from nablapps.bedpres.models import BedPres
 from nablapps.jobs.models import Company
 
 

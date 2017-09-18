@@ -1,4 +1,4 @@
-default_app_config = 'bedpres.apps.BedpresConfig'
+default_app_config = 'nablapps.bedpres.apps.BedpresConfig'
 
 from django.conf import settings
 from bpc_client.client import DefaultClientFactory

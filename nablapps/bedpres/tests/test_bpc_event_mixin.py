@@ -1,5 +1,5 @@
 from django.test import TestCase
-from bedpres.bpcmixin import BedpresNoModel
+from nablapps.bedpres.bpcmixin import BedpresNoModel
 from bpc_client.client import BPCClient
 
 

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from accounts.models import NablaUser, FysmatClass
-from bedpres.utils import get_bpc_user_dictionary, InvalidCardNum
+from nablapps.bedpres.utils import get_bpc_user_dictionary, InvalidCardNum
 
 
 class BpcUserDictionaryTest(TestCase):
