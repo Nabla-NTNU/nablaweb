@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from accounts.models import NablaUser
+from nablapps.accounts.models import NablaUser
 
 
 class TestUserDetail(TestCase):

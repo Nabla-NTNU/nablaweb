@@ -1,7 +1,7 @@
 from django.test import TestCase
 from datetime import datetime
 
-from accounts.models import NablaUser
+from nablapps.accounts.models import NablaUser
 from nablapps.exchange.models import University, Exchange, RETNINGER
 
 

@@ -2,7 +2,7 @@ from datetime import date
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 
-from accounts.models import NablaUser
+from nablapps.accounts.models import NablaUser
 
 
 class BirthdayTest(TestCase):

@@ -4,7 +4,7 @@ from django.apps import AppConfig
 
 
 class AccountsConfig(AppConfig):
-    name = 'accounts'
+    name = 'nablapps.accounts'
     verbose_name = 'Brukerkontoer'
 
     def ready(self):

@@ -1,6 +1,5 @@
 from django.db import models
 from content.models.mixins import EditableMedia
-from accounts.models import NablaUser
 
 
 class InteractiveElement(EditableMedia, models.Model):

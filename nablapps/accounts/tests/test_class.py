@@ -1,7 +1,7 @@
 from datetime import date
 from django.test import TestCase
 
-from accounts.models import NablaUser, FysmatClass
+from nablapps.accounts.models import NablaUser, FysmatClass
 
 
 class ClassesTest(TestCase):

@@ -1,5 +1,5 @@
 from haystack import indexes
-from accounts.models import NablaUser
+from .models import NablaUser
 
 
 class NablaUserIndex(indexes.SearchIndex, indexes.Indexable):

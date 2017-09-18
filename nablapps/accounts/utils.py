@@ -26,7 +26,7 @@ def send_activation_email(user, password):
 
 
 def extract_usernames(string):
-    from accounts.models import NablaUser
+    from .models import NablaUser
 
     m = re.findall('([a-z]+)@', string, re.IGNORECASE)
     for u in m:

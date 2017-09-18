@@ -1,5 +1,5 @@
 # Custom seed script for nablaweb
-from accounts.models import NablaUser as User, FysmatClass, NablaGroup
+from nablapps.accounts.models import NablaUser as User, FysmatClass, NablaGroup
 from content.models.news import News
 from content.models.events import Event
 from django.conf import settings

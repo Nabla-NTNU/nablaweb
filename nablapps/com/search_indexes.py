@@ -1,5 +1,5 @@
 from haystack import indexes
-from com.models import ComPage
+from .models import ComPage
 
 
 class ComIndex(indexes.SearchIndex, indexes.Indexable):

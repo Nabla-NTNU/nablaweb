@@ -8,7 +8,7 @@ from django.contrib.auth.models import Group
 from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-from accounts.models import NablaGroup
+from nablapps.accounts.models import NablaGroup
 
 
 class ComPage(models.Model):

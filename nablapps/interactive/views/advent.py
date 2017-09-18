@@ -1,6 +1,6 @@
 from django.views.generic import DetailView, ListView
 from ..models.advent import AdventCalendar, AdventDoor, AdventParticipation
-from accounts.models import NablaUser
+from nablapps.accounts.models import NablaUser
 from django.shortcuts import redirect, get_object_or_404
 from django.http import Http404
 from django.contrib.auth.decorators import login_required, permission_required

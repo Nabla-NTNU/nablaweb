@@ -7,7 +7,7 @@ from content.exceptions import (EventFullException,
                                 EventException)
 from bpc_client import BPCEvent
 from bpc_client.exceptions import BPCResponseException, BPCConnectionError
-from accounts.models import NablaUser as User
+from nablapps.accounts.models import NablaUser as User
 from .utils import get_bpc_user_dictionary
 
 

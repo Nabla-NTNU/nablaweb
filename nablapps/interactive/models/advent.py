@@ -1,9 +1,8 @@
 from django.db import models
 from .base import InteractiveElement, InteractionResult
-from accounts.models import NablaUser
+from nablapps.accounts.models import NablaUser
 from nablapps.com.models import Committee
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 from random import choice
 from django.conf import settings

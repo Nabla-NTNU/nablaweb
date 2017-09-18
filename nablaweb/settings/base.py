@@ -109,7 +109,7 @@ INSTALLED_APPS = [
     # Internt utviklede apps #
     ##########################
     'content',  # Abstrakt: created, updated, created by, updated by.
-    'accounts',  # Inneholder UserProfile med ekstra informasjon.
+    'nablapps.accounts',  # Inneholder UserProfile med ekstra informasjon.
     'nablapps.jobs',     # Stillingsannonser og firmaer
     'nablapps.bedpres',  # Utvider events med BPC-tilkobling. Arver events.
     'nablapps.com',      # Viser sider for komiteene.

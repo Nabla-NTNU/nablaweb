@@ -2,8 +2,7 @@ from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from django.core import mail
 
-from accounts.forms import RegistrationForm
-from accounts.models import NablaUser, RegistrationRequest
+from nablapps.accounts.models import NablaUser, RegistrationRequest
 
 
 class BaseRegistrationTest(TestCase):

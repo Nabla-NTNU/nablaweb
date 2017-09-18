@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import accounts.models
+import nablapps.accounts.models
 
 
 class Migration(migrations.Migration):
@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterModelManagers(
             name='nablauser',
             managers=[
-                ('objects', accounts.models.NablaUserManager()),
+                ('objects', nablapps.accounts.models.NablaUserManager()),
             ],
         ),
     ]
