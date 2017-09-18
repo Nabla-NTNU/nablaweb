@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from com.models import ComPage, ComMembership
+from .models import ComPage, ComMembership
 
 
 class ComPageAdmin(admin.ModelAdmin):

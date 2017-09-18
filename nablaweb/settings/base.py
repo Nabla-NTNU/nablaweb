@@ -112,7 +112,7 @@ INSTALLED_APPS = [
     'accounts',  # Inneholder UserProfile med ekstra informasjon.
     'nablapps.jobs',     # Stillingsannonser og firmaer
     'bedpres',  # Utvider events med BPC-tilkobling. Arver events.
-    'com',      # Viser sider for komiteene.
+    'nablapps.com',      # Viser sider for komiteene.
     'nablapps.nabladet',  # Liste over nablad. Arver news.
     'nablapps.meeting_records',  # Møtereferater fra styremøter og SKE
     'nablapps.poll',     # Spørreundersøkelser

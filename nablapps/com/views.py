@@ -1,8 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 
 from django.views.generic import DetailView, ListView
-from django.template.defaultfilters import slugify
-from com.models import ComPage, ComMembership
+from .models import ComPage, ComMembership
 
 
 class ShowPage(DetailView):

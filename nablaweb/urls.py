@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^brukere/', include('accounts.urls')),
     url(r'^', include(login_urls)),
     url(r'^stillinger/', include('nablapps.jobs.urls')),
-    url(r'^komite/', include('com.urls')),
+    url(r'^komite/', include('nablapps.com.urls')),
     # url(r'^komite/', include('committees.urls')),
     url(r'^nabladet/', include('nablapps.nabladet.urls')),
     url(r'^referater/', include('nablapps.meeting_records.urls')),
