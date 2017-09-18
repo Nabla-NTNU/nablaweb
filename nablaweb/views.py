@@ -9,7 +9,7 @@ from content.views.mixins import PublishedListMixin
 from django.views.generic import TemplateView
 
 from bedpres.models import BedPres
-from nabladet.models import Nablad
+from nablapps.nabladet.models import Nablad
 from nablapps.podcast.models import Podcast
 from nablapps.poll.models import Poll
 from utils.view_mixins import FlatPageMixin

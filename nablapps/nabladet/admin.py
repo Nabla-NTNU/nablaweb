@@ -1,6 +1,7 @@
-from nabladet.models import Nablad
-from django.contrib import admin
 from content.admin import ContentAdmin
+from django.contrib import admin
+
+from nablapps.nabladet.models import Nablad
 
 
 class NabladAdmin(ContentAdmin):

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from content.views import NewsDetailView
 from django.contrib.auth.views import redirect_to_login
 from django.views.generic import ListView
-from content.views import NewsDetailView
-from nabladet.models import Nablad
+
+from nablapps.nabladet.models import Nablad
 
 
 class NabladDetailView(NewsDetailView):
