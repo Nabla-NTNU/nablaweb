@@ -8,11 +8,8 @@ from django.conf import settings
 
 class Migration(migrations.Migration):
 
-    replaces = [('jobs', '0001_initial'), ('jobs', '0002_auto_20150811_1047'), ('jobs', '0003_auto_20150904_1947'), ('jobs', '0004_auto_20151003_1026'), ('jobs', '0005_auto_20151003_1155'), ('jobs', '0006_auto_20151023_1633'), ('jobs', '0007_auto_20151102_2035'), ('jobs', '0008_company_images'), ('jobs', '0009_remove_company_images'), ('jobs', '0010_auto_20151103_0013'), ('jobs', '0011_auto_20151106_1907'), ('jobs', '0012_auto_20151106_1921')]
-
     dependencies = [
-        ('content', '0018_auto_20151102_2115'),
-        ('content', '0001_initial'),
+        ('content', '0001_squashed_0028_auto_20161025_2045'),
         ('contenttypes', '0002_remove_content_type_name'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('contenttypes', '0001_initial'),

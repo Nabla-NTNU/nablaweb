@@ -7,8 +7,8 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('content', '0001_initial'),
-        ('jobs', '0002_auto_20150811_1047'),
+        ('content', '0001_squashed_0028_auto_20161025_2045'),
+        ('jobs', '0001_squashed_0012_auto_20151106_1921'),
         ('auth', '0006_require_contenttypes_0002'),
     ]
 
