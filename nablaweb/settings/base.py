@@ -119,7 +119,7 @@ INSTALLED_APPS = [
     'podcast',
     'interactive',
     'nablaweb',
-    'likes',
+    'nablapps.likes',
     'nablapps.exchange',
     'nablapps.nablashop',
 

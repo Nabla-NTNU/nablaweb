@@ -1,9 +1,8 @@
-from likes.models import toggle_like
 from .base import BaseLikeTest
 
-from django.template.loader import get_template
 from django.template.base import Template
 from django.template import Context
+
 
 class TestTemplateTag(BaseLikeTest):
     def test_tag(self):

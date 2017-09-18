@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from likes.models import toggle_like, get_like_count
+from nablapps.likes.models import toggle_like, get_like_count
 
 from .base import User, create_test_object
 

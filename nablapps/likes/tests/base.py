@@ -4,14 +4,14 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from likes.models import user_likes
+from nablapps.likes.models import user_likes
 
 User = get_user_model()
 
 
 def create_test_object():
     if "dummyapp" in settings.INSTALLED_APPS:
-        from likes.tests.dummyapp.models import DummyModel
+        from nablapps.likes.tests.dummyapp import DummyModel
         object = DummyModel.objects.create()
     else:
         from django.contrib.auth.models import Group

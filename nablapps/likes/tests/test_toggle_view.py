@@ -1,6 +1,6 @@
 import json
-from likes.models import toggle_like
-from .base import BaseLikeTest, BaseViewTest, User
+from nablapps.likes.models import toggle_like
+from .base import BaseViewTest, User
 
 
 class LoggedInTest(BaseViewTest):

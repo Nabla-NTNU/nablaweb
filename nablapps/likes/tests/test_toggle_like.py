@@ -1,4 +1,4 @@
-from likes.models import toggle_like
+from nablapps.likes.models import toggle_like
 from .base import BaseLikeTest
 
 

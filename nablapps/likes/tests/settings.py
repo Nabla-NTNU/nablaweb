@@ -8,7 +8,7 @@ import os
 DEBUG = True
 BASE_DIR = os.path.dirname(__file__)
 SECRET_KEY = 'very_secret'
-ROOT_URLCONF = "likes.tests.urls"
+ROOT_URLCONF = "nablapps.likes.tests.urls"
 STATIC_URL = '/static/'
 
 INSTALLED_APPS = [
@@ -17,8 +17,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.staticfiles',
     'django.contrib.sessions',
-    'likes',
-    'likes.tests.dummyapp',
+    'nablapps.likes',
+    'nablapps.likes.tests.dummyapp',
     'sekizai',
 ]
 MIDDLEWARE_CLASSES = [
