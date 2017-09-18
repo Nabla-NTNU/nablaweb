@@ -40,7 +40,7 @@ urlpatterns = [
     url(r'^', include('interactive.urls')),
     url(r'^likes/', include('likes.urls')),
     url(r'^utveksling/', include('nablapps.exchange.urls')),
-    url(r'^shop/', include('nablashop.urls', namespace='nablashop')),
+    url(r'^shop/', include('nablapps.nablashop.urls', namespace='nablashop')),
 
 
     # For å dele filer under utviklingen selv om DEBUG=False
