@@ -1,15 +1,17 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from django_nyt.models import Subscription, Notification
 
 from content.models.news import News
 
+UserModel = get_user_model()
+
 
 class EditTest(TestCase):
     def setUp(self):
         self.news = News.objects.create(headline='Hei')
-        self.user = User.objects.create(username='jaja')
+        self.user = UserModel.objects.create(username='jaja')
 
 
 class SubscriptionTest(EditTest):
