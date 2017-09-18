@@ -71,7 +71,3 @@ urlpatterns = [
         BlogPostView.as_view(),
         name="blog_post"),
 ]
-
-urlpatterns += [
-    url(r'^arkiv/(?P<archive>[-\w]+)/', ArchiveView.as_view(), name="archive_view"),
-]

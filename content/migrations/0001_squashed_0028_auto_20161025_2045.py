@@ -122,34 +122,6 @@ class Migration(migrations.Migration):
             unique_together=set([('number', 'attending'), ('event', 'user')]),
         ),
         migrations.CreateModel(
-            name='Archive',
-            fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
-                ('name', models.CharField(max_length=80, verbose_name='Navn')),
-                ('description', models.TextField(blank=True, verbose_name='Beskrivelse')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='ArchiveEntry',
-            fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
-                ('title', models.CharField(blank=True, max_length=80, verbose_name='Tittel')),
-                ('pub_date', models.DateField(help_text='Publikasjonsdato', verbose_name='publisert', null=True)),
-                ('file', models.FileField(help_text='Filnavn', verbose_name='Fil', upload_to='archive')),
-                ('archive', models.ForeignKey(related_name='archive', to='content.Archive', verbose_name='Arkiv')),
-            ],
-            options={
-                'ordering': ('-pub_date',),
-                'verbose_name': 'Arkivinnlegg',
-                'verbose_name_plural': 'Arkivinnlegg',
-            },
-        ),
-        migrations.AddField(
-            model_name='archive',
-            name='entries',
-            field=models.ManyToManyField(blank=True, related_name='entries', to='content.ArchiveEntry', verbose_name='Innlegg'),
-        ),
-        migrations.CreateModel(
             name='Blog',
             fields=[
                 ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
