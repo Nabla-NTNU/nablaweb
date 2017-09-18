@@ -1,7 +1,7 @@
 
 from django.test import TestCase
-from poll.models import Poll
 
+from nablapps.poll.models import Poll
 from .utils import create_poll
 
 

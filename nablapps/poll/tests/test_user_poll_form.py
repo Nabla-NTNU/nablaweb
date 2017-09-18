@@ -1,11 +1,10 @@
 """ Tests for the
 """
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
+from nablapps.poll.forms import PollForm
 
-from poll.forms import PollForm
-from poll.models import Poll, Choice
-
+from nablapps.poll.models import Poll, Choice
 
 User = get_user_model()
 

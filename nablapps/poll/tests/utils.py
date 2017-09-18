@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime
 
-from poll.models import Poll, Choice
+from nablapps.poll.models import Poll, Choice
 
 
 def create_poll(question, *choices):

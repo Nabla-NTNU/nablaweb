@@ -4,14 +4,13 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase, override_settings
 from django.test.client import Client
 
-from poll.models import Choice
-
+from nablapps.poll.models import Choice
 from .utils import UserHasVotedMixin, create_poll
 
 User = get_user_model()
 
 
-@override_settings(ROOT_URLCONF="poll.urls")
+@override_settings(ROOT_URLCONF="nablapps.poll.urls")
 class BaseVoteViewTest(TestCase):
 
     def setUp(self):

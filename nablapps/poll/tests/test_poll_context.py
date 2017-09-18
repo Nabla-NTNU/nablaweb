@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase, RequestFactory
-from poll.context_processors import poll_context
 
+from nablapps.poll.context_processors import poll_context
 from .utils import create_poll
 
 

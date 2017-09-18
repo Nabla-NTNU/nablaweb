@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from django.test import TestCase
 from django.contrib.auth import get_user_model
-from poll.models import UserHasVoted
+from django.test import TestCase
+
+from nablapps.poll.models import UserHasVoted
 from .utils import UserHasVotedMixin, create_poll
 
 User = get_user_model()

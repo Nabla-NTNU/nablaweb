@@ -115,7 +115,7 @@ INSTALLED_APPS = [
     'com',      # Viser sider for komiteene.
     'nabladet',  # Liste over nablad. Arver news.
     'nablapps.meeting_records',  # Møtereferater fra styremøter og SKE
-    'poll',     # Spørreundersøkelser
+    'nablapps.poll',     # Spørreundersøkelser
     'podcast',
     'interactive',
     'nablaweb',

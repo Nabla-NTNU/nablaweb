@@ -1,16 +1,18 @@
-from django.views.generic import TemplateView
-from content.models import Event
-from bedpres.models import BedPres
 from datetime import datetime, timedelta
-from content.models.news import News
-from content.models import Album
-from content.views.mixins import PublishedListMixin
-from podcast.models import Podcast
-from nabladet.models import Nablad
-from utils.view_mixins import FlatPageMixin
-from poll.models import Poll
 from itertools import chain
+
+from content.models import Album
+from content.models import Event
 from content.models.blog import BlogPost
+from content.models.news import News
+from content.views.mixins import PublishedListMixin
+from django.views.generic import TemplateView
+
+from bedpres.models import BedPres
+from nabladet.models import Nablad
+from nablapps.poll.models import Poll
+from podcast.models import Podcast
+from utils.view_mixins import FlatPageMixin
 from .models import GeneralOptions
 
 
