@@ -18,7 +18,7 @@ def split_into_rows(jobs):
 class GenericJobsList(ListView):
     """Abstrakt rotklasse som håndterer info for sidebaren."""
     context_object_name = 'jobs_list'
-    template_name = 'jobs/templates/jobs/jobs_list.html'
+    template_name = 'jobs/jobs_list.html'
     paginate_by = 8
     model = Advert
 
@@ -93,4 +93,4 @@ class ShowJob(DetailView):
     """Detaljviewet for en spesifikk stillingsannonse."""
     model = Advert
     context_object_name = 'job'
-    template_name = "jobs/templates/jobs/jobs_detail.html"
+    template_name = "jobs/jobs_detail.html"
