@@ -9,8 +9,6 @@ from django.conf import settings
 
 class Migration(migrations.Migration):
 
-    replaces = [('interactive', '0001_initial'), ('interactive', '0002_auto_20151016_1758'), ('interactive', '0003_quizreply_when'), ('interactive', '0004_quizreply_score'), ('interactive', '0005_adventdoor_is_lottery'), ('interactive', '0006_adventdoor_participating_users'), ('interactive', '0007_adventdoor_short_description'), ('interactive', '0008_auto_20151104_0131'), ('interactive', '0009_adventdoor_content_type'), ('interactive', '0010_auto_20151108_1501'), ('interactive', '0011_quiz_content_type'), ('interactive', '0012_auto_20151110_2156'), ('interactive', '0013_adventdoor_is_text_response'), ('interactive', '0014_adventdoor_image'), ('interactive', '0015_adventdoor_quiz'), ('interactive', '0016_auto_20151130_1056'), ('interactive', '0017_auto_20151210_1519'), ('interactive', '0018_auto_20151212_2135'), ('interactive', '0019_auto_20160402_1630'), ('interactive', '0020_auto_20161102_1946'), ('interactive', '0021_auto_20161118_0407'), ('interactive', '0022_adventdoor_user_test')]
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('com', '0003_auto_20151007_1436'),
