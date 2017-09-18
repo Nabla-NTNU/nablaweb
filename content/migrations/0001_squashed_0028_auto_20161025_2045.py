@@ -9,8 +9,6 @@ import image_cropping.fields
 
 class Migration(migrations.Migration):
 
-    replaces = [('content', '0001_initial'), ('content', '0002_auto_20150812_0721'), ('content', '0003_auto_20150813_2043'), ('content', '0004_blog_blogpost'), ('content', '0005_auto_20150914_0651'), ('content', '0006_auto_20150914_0724'), ('content', '0007_auto_20150914_0729'), ('content', '0008_auto_20150914_1703'), ('content', '0009_auto_20150914_1718'), ('content', '0010_auto_20151003_0657'), ('content', '0011_auto_20151003_0748'), ('content', '0012_auto_20151003_0824'), ('content', '0013_auto_20151003_1155'), ('content', '0014_auto_20151023_1633'), ('content', '0015_auto_20151102_2035'), ('content', '0016_contentimage'), ('content', '0017_news_images'), ('content', '0018_auto_20151102_2115'), ('content', '0019_auto_20151102_2126'), ('content', '0020_auto_20151102_2242'), ('content', '0021_auto_20151106_1907'), ('content', '0022_auto_20151106_1820'), ('content', '0023_splashconfig'), ('content', '0024_auto_20160103_1532'), ('content', '0025_auto_20160103_1656'), ('content', '0026_albumimage_num'), ('content', '0027_blogpost_list_image'), ('content', '0028_auto_20161025_2045')]
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('auth', '0006_require_contenttypes_0002'),
