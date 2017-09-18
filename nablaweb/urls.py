@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'^referater/', include('nablapps.meeting_records.urls')),
     url(r'^kommentarer/', include('django_comments.urls')),
     url(r'^poll/', include('nablapps.poll.urls')),
-    url(r'^podcast/', include('podcast.urls')),
+    url(r'^podcast/', include('nablapps.podcast.urls')),
     url(r'^', include('interactive.urls')),
     url(r'^likes/', include('nablapps.likes.urls')),
     url(r'^utveksling/', include('nablapps.exchange.urls')),

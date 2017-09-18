@@ -10,8 +10,8 @@ from django.views.generic import TemplateView
 
 from bedpres.models import BedPres
 from nabladet.models import Nablad
+from nablapps.podcast.models import Podcast
 from nablapps.poll.models import Poll
-from podcast.models import Podcast
 from utils.view_mixins import FlatPageMixin
 from .models import GeneralOptions
 
