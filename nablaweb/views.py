@@ -3,7 +3,7 @@ from itertools import chain
 
 from content.models import Album
 from content.models import Event
-from content.models.blog import BlogPost
+from contentapps.blog.models import BlogPost
 from content.models.news import News
 from content.views.mixins import PublishedListMixin
 from django.views.generic import TemplateView

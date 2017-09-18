@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^admin/filebrowser/', include(filebrowser.sites.site.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^bedpres/', include('nablapps.bedpres.urls')),
+    url(r'^blogg/', include('contentapps.blog.urls')),
     url(r'^brukere/', include('nablapps.accounts.urls')),
     url(r'^favicon\.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'img/favicon.ico', permanent=True)),
     url(r'^feed/$', RecentNews()),
