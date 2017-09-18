@@ -194,22 +194,4 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Innholdsbilder'
             },
         ),
-        migrations.CreateModel(
-            name='SplashConfig',
-            fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
-                ('change_date', models.DateTimeField(auto_now_add=True, verbose_name='Change date')),
-                ('enabled', models.BooleanField(verbose_name='Enabled', default=False)),
-                ('cookie_name', models.TextField(help_text='The name of the cookie to check when assessing if the user needs to be redirected', default='splash_screen')),
-                ('cookie_allowed_values', models.TextField(help_text='Comma-separated list of values accepted as cookie values to prevent the redirect', default='seen')),
-                ('unaffected_usernames', models.TextField(blank=True, help_text='Comma-separated list of users which should never be redirected (usernames)', default='')),
-                ('unaffected_url_paths', models.TextField(blank=True, help_text='Comma-separated list of URL paths (not including the hostname) which should not be redirected. Paths may include wildcards denoted by * (example: /*/student_view)', default='')),
-                ('redirect_url', models.URLField(help_text="The URL the users should be redirected to when they don't have the right cookie", default='https://example.com')),
-                ('changed_by', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, editable=False, to=settings.AUTH_USER_MODEL, verbose_name='Changed by', null=True)),
-            ],
-            options={
-                'abstract': False,
-                'ordering': ('-change_date',),
-            },
-        ),
     ]

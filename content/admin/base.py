@@ -7,7 +7,6 @@ from django.forms.widgets import ClearableFileInput, FileInput
 
 from image_cropping import ImageCroppingMixin
 
-from .config import ConfigurationModelAdmin
 
 from content.models.news import News
 from content.models.events import Event, EventRegistration
@@ -15,7 +14,6 @@ from content.forms import NewsForm, EventForm
 from content.models.album import Album, AlbumImage
 from content.models.blog import Blog, BlogPost
 from content.models.base import ContentImage
-from content.models.splash import SplashConfig
 
 
 class ChangedByMixin(object):
@@ -126,4 +124,3 @@ admin.site.register(EventRegistration)
 admin.site.register(News, NewsAdmin)
 admin.site.register(Blog)
 admin.site.register(BlogPost, BlogPostAdmin)
-admin.site.register(SplashConfig, ConfigurationModelAdmin)
