@@ -1,7 +1,7 @@
 from haystack import indexes
 from content.models.album import Album
 from content.models.news import News
-from content.models.blog import BlogPost
+
 
 
 class AlbumIndex(indexes.SearchIndex, indexes.Indexable):
@@ -25,14 +25,4 @@ class NewsIndex(indexes.SearchIndex, indexes.Indexable):
 
     def index_queryset(self, using=None):
         return self.get_model().objects.exclude(published=False)
-
-
-class BlogIndex(indexes.SearchIndex, indexes.Indexable):
-    title = indexes.CharField(model_attr='title')
-    content = indexes.CharField(model_attr='content')
-    created_date = indexes.DateTimeField(model_attr='created_date')
-    text = indexes.CharField(document=True, use_template=True)
-
-    def get_model(self):
-        return BlogPost
 

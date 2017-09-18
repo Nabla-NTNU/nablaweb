@@ -5,8 +5,7 @@ from django.contrib.auth.views import login, logout
 from django.views.generic import TemplateView
 
 from content.feeds.news import RecentNews
-import content.urls
-from django_nyt.urls import get_pattern as get_nyt_pattern
+import django_nyt.urls
 
 
 urlpatterns = [
@@ -17,9 +16,9 @@ urlpatterns = [
         ),
     url(r'^logout/$', logout),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'', include(content.urls)),
+    url(r'^blogg/', include('contentapps.blog.urls')),
+    url(r'', include('content.urls')),
     url(r'^feed/$', RecentNews()),
     url(r'^comments/', include('django_comments.urls')),
-
-    url(r'^notifications/', get_nyt_pattern()),
+    url(r'^notifications/', django_nyt.urls.get_pattern()),
 ]

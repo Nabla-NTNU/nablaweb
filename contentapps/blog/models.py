@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.utils.text import slugify
 from datetime import date
 
-from .base import EditableMedia
+from content.models.base import EditableMedia
 
 
 class Blog(models.Model):
@@ -28,6 +28,7 @@ class Blog(models.Model):
     class Meta:
         verbose_name = "Blogg"
         verbose_name_plural = "Blogger"
+        db_table = "content_blog"
 
     def save(self, **kwargs):
         if not self.id:
@@ -44,7 +45,7 @@ class Blog(models.Model):
 
 class BlogPost(EditableMedia, models.Model):
     blog = models.ForeignKey(
-        "content.Blog",
+        Blog,
         related_name="posts",
         verbose_name="Blogg"
     )
@@ -85,6 +86,7 @@ class BlogPost(EditableMedia, models.Model):
     class Meta:
         verbose_name = "Post"
         verbose_name_plural = "Poster"
+        db_table = "content_blogpost"
 
     def save(self, **kwargs):
         self.slug = slugify(self.title)

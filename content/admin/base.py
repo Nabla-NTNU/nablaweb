@@ -7,23 +7,13 @@ from django.forms.widgets import ClearableFileInput, FileInput
 
 from image_cropping import ImageCroppingMixin
 
-
 from content.models.news import News
 from content.models.events import Event, EventRegistration
 from content.forms import NewsForm, EventForm
 from content.models.album import Album, AlbumImage
-from content.models.blog import Blog, BlogPost
 from content.models.base import ContentImage
 
-
-class ChangedByMixin(object):
-    def save_model(self, request, obj, form, change):
-        obj.last_changed_by = request.user
-
-        # Update created_by
-        if getattr(obj, 'created_by', None) is None:
-            obj.created_by = request.user
-        super(ChangedByMixin, self).save_model(request, obj, form, change)
+from .mixins import ChangedByMixin
 
 
 class ContentAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
@@ -32,11 +22,6 @@ class ContentAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
         models.FileField: {"widget": FileInput}
     }
     readonly_fields = ["view_counter"]
-
-
-class BlogPostAdmin(ChangedByMixin, admin.ModelAdmin):
-    readonly_fields = ["view_counter"]
-    ordering = ['-created_date']
 
 
 class AlbumImageInline(admin.TabularInline):
@@ -122,5 +107,3 @@ admin.site.register(ContentImage, ContentImageAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventRegistration)
 admin.site.register(News, NewsAdmin)
-admin.site.register(Blog)
-admin.site.register(BlogPost, BlogPostAdmin)

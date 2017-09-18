@@ -58,16 +58,4 @@ urlpatterns = [
     url(r'^feed/$',
         RecentEvents(),
         name="event_feed"),
-
-    url(r'^blogg/$',
-        BlogListView.as_view(),
-        name="blog"),
-
-    url(r'^blogg/(?P<blog>[\w-]+)/$',
-        BlogView.as_view(),
-        name="blog"),
-
-    url(r'^blogg/(?P<blog>[\w-]+)/(?P<slug>[\w-]+)$',
-        BlogPostView.as_view(),
-        name="blog_post"),
 ]

@@ -5,7 +5,7 @@ import operator
 
 from django.forms import BooleanField, ValidationError, ModelForm
 
-from content.models import News, Event, BlogPost
+from content.models import News, Event
 from django.forms.models import fields_for_model
 
 
@@ -93,10 +93,3 @@ class NewsForm(ContentForm):
     class Meta:
         model = News
         fields = fields_for_model(News)
-
-
-class BlogPostForm(ContentForm):
-
-    class Meta:
-        model = BlogPost
-        fields = fields_for_model(BlogPost)

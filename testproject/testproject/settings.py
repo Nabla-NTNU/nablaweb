@@ -47,7 +47,8 @@ INSTALLED_APPS = (
 
     'django_comments',
     'django_nyt',
-    'content'
+    'content',
+    'contentapps.blog',
 )
 
 MIDDLEWARE_CLASSES = (

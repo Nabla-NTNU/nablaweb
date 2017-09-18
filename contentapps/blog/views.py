@@ -1,13 +1,13 @@
 
-from ..models.blog import *
-from .mixins import AdminLinksMixin, ViewAddMixin
+from .models import Blog, BlogPost
+from content.views.mixins import AdminLinksMixin, ViewAddMixin
 from django.views.generic import DetailView, ListView
 from django.http import HttpResponseNotFound
 
 
 class BlogPostView(ViewAddMixin, AdminLinksMixin, DetailView):
     model = BlogPost
-    template_name = "content/blog_post.html"
+    template_name = "blog/blog_post.html"
     context_object_name = "post"
 
     def get_context_data(self, **kwargs):
@@ -21,7 +21,7 @@ class BlogPostView(ViewAddMixin, AdminLinksMixin, DetailView):
 
 class BlogView(ListView):
     model = BlogPost
-    template_name = "content/blog_view.html"
+    template_name = "blog/blog_view.html"
     context_object_name = "post_list"
     paginate_by = 5
 
@@ -46,7 +46,7 @@ class BlogView(ListView):
 
 class BlogListView(ListView):
     model = Blog
-    template_name = "content/blog_list.html"
+    template_name = "blog/blog_list.html"
     context_object_name = "blog_list"
 
     def get_context_data(self, **kwargs):
