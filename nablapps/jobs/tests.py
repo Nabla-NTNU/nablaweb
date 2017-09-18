@@ -2,8 +2,9 @@
 
 
 from django.test import TestCase
-from jobs.templatetags.jobs_filters import commas_no
-from jobs.models import TagChoices
+from nablapps.jobs.templatetags.jobs_filters import commas_no
+
+from nablapps.jobs.models import TagChoices
 
 
 class NorwegianCommasTest(TestCase):

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
-from django.contrib import admin
 from content.admin import ContentAdmin, ChangedByMixin
-from jobs.models import Advert, Company, RelevantForChoices, TagChoices, YearChoices
-from jobs.forms import AdvertForm, CompanyForm
+from django.contrib import admin
+from .forms import AdvertForm, CompanyForm
+
+from .models import Advert, Company, RelevantForChoices, TagChoices, YearChoices
 
 
 class AdvertAdmin(ChangedByMixin, admin.ModelAdmin):

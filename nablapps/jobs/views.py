@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from django.views.generic import ListView, DetailView
 from content.templatetags.listutil import row_split
-from jobs.models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
-from django.shortcuts import get_object_or_404
-from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
+from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView, DetailView
+
+from nablapps.jobs.models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
 
 
 def split_into_rows(jobs):
@@ -17,7 +18,7 @@ def split_into_rows(jobs):
 class GenericJobsList(ListView):
     """Abstrakt rotklasse som håndterer info for sidebaren."""
     context_object_name = 'jobs_list'
-    template_name = 'jobs/jobs_list.html'
+    template_name = 'jobs/templates/jobs/jobs_list.html'
     paginate_by = 8
     model = Advert
 
@@ -92,4 +93,4 @@ class ShowJob(DetailView):
     """Detaljviewet for en spesifikk stillingsannonse."""
     model = Advert
     context_object_name = 'job'
-    template_name = "jobs/jobs_detail.html"
+    template_name = "jobs/templates/jobs/jobs_detail.html"

@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
-from django.test import TestCase
 
 from content.models.events import Event
-from jobs.models import Company
+from django.test import TestCase
+
 from bedpres.event_overrides import BedPresAndEventGetter
 from bedpres.models import BedPres
+from nablapps.jobs.models import Company
 
 
 class EventGetterTest(TestCase):

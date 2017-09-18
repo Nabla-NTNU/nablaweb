@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.syndication.views import Feed
-from jobs.models import Advert
+
+from nablapps.jobs.models import Advert
+
 
 class RecentJobs(Feed):
     title = "Stillingsannonser på Nabla.no"

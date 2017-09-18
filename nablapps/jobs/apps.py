@@ -3,5 +3,5 @@
 from django.apps import AppConfig
 
 class JobsConfig(AppConfig):
-    name = 'jobs'
+    name = 'nablapps.jobs'
     verbose_name = 'Stillingsannonser'

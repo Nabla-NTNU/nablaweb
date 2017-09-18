@@ -2,7 +2,8 @@
 
 from django import forms
 from django.forms import ModelForm
-from jobs.models import Advert, Company
+
+from nablapps.jobs.models import Advert, Company
 
 
 class AdvertForm(ModelForm):

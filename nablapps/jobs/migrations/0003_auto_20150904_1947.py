@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='advert',
             name='relevant_for_year',
-            field=models.ManyToManyField(verbose_name='Årskull', help_text='Hvilke årskull stillingsannonsen er relevant for.', to='jobs.YearChoices'),
+            field=models.ManyToManyField(verbose_name='Årskull', help_text='Hvilke årskull stillingsannonsen er relevant for.', to='nablapps.jobs.YearChoices'),
         ),
     ]

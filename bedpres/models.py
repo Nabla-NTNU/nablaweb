@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from django.db import models
 from content.models import AbstractEvent
-from jobs.models import Company
 from django.core.urlresolvers import reverse
+from django.db import models
 
+from nablapps.jobs.models import Company
 from .bpcmixin import BPCEventMixin
 
 

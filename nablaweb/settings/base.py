@@ -110,7 +110,7 @@ INSTALLED_APPS = [
     ##########################
     'content',  # Abstrakt: created, updated, created by, updated by.
     'accounts',  # Inneholder UserProfile med ekstra informasjon.
-    'jobs',     # Stillingsannonser og firmaer
+    'nablapps.jobs',     # Stillingsannonser og firmaer
     'bedpres',  # Utvider events med BPC-tilkobling. Arver events.
     'com',      # Viser sider for komiteene.
     'nablapps.nabladet',  # Liste over nablad. Arver news.

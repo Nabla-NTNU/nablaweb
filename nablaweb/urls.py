@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^bedpres/', include('bedpres.urls')),
     url(r'^brukere/', include('accounts.urls')),
     url(r'^', include(login_urls)),
-    url(r'^stillinger/', include('jobs.urls')),
+    url(r'^stillinger/', include('nablapps.jobs.urls')),
     url(r'^komite/', include('com.urls')),
     # url(r'^komite/', include('committees.urls')),
     url(r'^nabladet/', include('nablapps.nabladet.urls')),
