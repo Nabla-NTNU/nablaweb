@@ -14,21 +14,8 @@ For å komme i gang med Nablaweb, sjekk wikien på: https://bitbucket.org/webkom
 * python 3.4 (eller nyere)
 * bower
 
-## Nyttige make-kommandoer:
-
-```
-#!bash
-
-make all # Installerer fra pip og kjører migrasjoner
-make content # Oppdaterer content-appen til nyeste versjon
-make run # Kjører siden på port 1337
-make seed # Putter inn test-data i databasen
-```
-
 ## Mappestruktur ##
-De aller fleste undermappene er en egen app, bortsett fra følgende, som er
-spesielle mapper:
-
+- nablapps -- Inneholder alle djangoappene
 - templates -- inneholder templates vi har laget, og templates som overskriver
              Django sine.
 - nablaweb -- inneholder settings og urls. Knutepunktet for prosjektet.
