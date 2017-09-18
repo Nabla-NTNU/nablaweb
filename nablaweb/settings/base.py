@@ -114,7 +114,7 @@ INSTALLED_APPS = [
     'bedpres',  # Utvider events med BPC-tilkobling. Arver events.
     'com',      # Viser sider for komiteene.
     'nabladet',  # Liste over nablad. Arver news.
-    'meeting_records',  # Møtereferater fra styremøter og SKE
+    'nablapps.meeting_records',  # Møtereferater fra styremøter og SKE
     'poll',     # Spørreundersøkelser
     'podcast',
     'interactive',

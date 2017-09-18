@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^komite/', include('com.urls')),
     # url(r'^komite/', include('committees.urls')),
     url(r'^nabladet/', include('nabladet.urls')),
-    url(r'^referater/', include('meeting_records.urls')),
+    url(r'^referater/', include('nablapps.meeting_records.urls')),
     url(r'^kommentarer/', include('django_comments.urls')),
     url(r'^poll/', include('poll.urls')),
     url(r'^podcast/', include('podcast.urls')),
