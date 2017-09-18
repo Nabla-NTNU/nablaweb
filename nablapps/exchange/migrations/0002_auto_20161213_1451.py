@@ -2,8 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import exchange.models
-
+import nablapps.exchange
 
 class Migration(migrations.Migration):
 
@@ -23,7 +22,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='info',
             name='file',
-            field=models.FileField(null=True, validators=[exchange.models.validate_file_extension], upload_to='utveksling', blank=True, help_text='PDF-fil. Hvis dette eksisterer vil ikke teksten ovenfor bli brukt.', verbose_name='PDF-fil'),
+            field=models.FileField(null=True, validators=[nablapps.exchange.models.validate_file_extension], upload_to='utveksling', blank=True, help_text='PDF-fil. Hvis dette eksisterer vil ikke teksten ovenfor bli brukt.', verbose_name='PDF-fil'),
         ),
         migrations.AddField(
             model_name='info',

@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'^podcast/', include('podcast.urls')),
     url(r'^', include('interactive.urls')),
     url(r'^likes/', include('likes.urls')),
-    url(r'^utveksling/', include('exchange.urls')),
+    url(r'^utveksling/', include('nablapps.exchange.urls')),
     url(r'^shop/', include('nablashop.urls', namespace='nablashop')),
 
 

@@ -120,7 +120,7 @@ INSTALLED_APPS = [
     'interactive',
     'nablaweb',
     'likes',
-    'exchange',
+    'nablapps.exchange',
     'nablashop',
 
     ###########################
