@@ -16,6 +16,7 @@ urlpatterns = [
         ),
     url(r'^logout/$', logout),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^album/', include('contentapps.album.urls')),
     url(r'^blogg/', include('contentapps.blog.urls')),
     url(r'', include('content.urls')),
     url(r'^feed/$', RecentNews()),

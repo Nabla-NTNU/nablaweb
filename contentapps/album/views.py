@@ -4,13 +4,13 @@ from django.contrib.auth.decorators import permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http.response import JsonResponse
 from django.http import Http404
-from content.models import Album
+from .models import Album
 
 
 class AlbumList(ListView):
     model = Album
     context_object_name = "albums"
-    template_name = "content/album_list.html"
+    template_name = "album/album_list.html"
     paginate_by = 10
     queryset = Album.objects.exclude(visibility='h').order_by('-created_date')
 
@@ -18,7 +18,7 @@ class AlbumList(ListView):
 class AlbumOverview(DetailView):
     model = Album
     context_object_name = "album"
-    template_name = "content/album_overview.html"
+    template_name = "album/album_overview.html"
 
     def dispatch(self, request, *args, **kwargs):
         result = super(AlbumOverview, self).dispatch(request, *args, **kwargs)
@@ -33,7 +33,7 @@ class AlbumOverview(DetailView):
 
 class AlbumImageView(TemplateView):
 
-    template_name = "content/album_image.html"
+    template_name = "album/album_image.html"
 
     def dispatch(self, request, *args, **kwargs):
         result = super(AlbumImageView, self).dispatch(request, *args, **kwargs)
@@ -86,4 +86,3 @@ def multiple_file_upload(request):
         })
 
     return JsonResponse({"files": files})
-

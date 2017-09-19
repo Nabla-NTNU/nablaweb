@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import AnonymousUser
 
-from .base import EditableMedia, BaseImageModel
+from content.models.base import EditableMedia, BaseImageModel
 
 
 class AlbumImage(BaseImageModel):
@@ -19,7 +17,7 @@ class AlbumImage(BaseImageModel):
     )
 
     album = models.ForeignKey(
-        'content.Album',
+        'album.Album',
         verbose_name="Album",
         related_name="images",
         null=True
@@ -39,6 +37,7 @@ class AlbumImage(BaseImageModel):
     class Meta:
         verbose_name = "Albumbilde"
         verbose_name_plural = "Albumbilder"
+        db_table = "content_albumimage"
 
 
 class Album(EditableMedia, models.Model):
@@ -66,6 +65,7 @@ class Album(EditableMedia, models.Model):
     class Meta:
         verbose_name = "Album"
         verbose_name_plural = "Album"
+        db_table = "content_album"
 
     def get_absolute_url(self):
         return reverse('album', kwargs={'pk': self.pk})

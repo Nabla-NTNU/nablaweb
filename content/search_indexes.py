@@ -1,16 +1,5 @@
 from haystack import indexes
-from content.models.album import Album
 from content.models.news import News
-
-
-
-class AlbumIndex(indexes.SearchIndex, indexes.Indexable):
-    title = indexes.CharField(model_attr='title')
-    created_date = indexes.DateTimeField(model_attr='created_date')
-    text = indexes.CharField(document=True, use_template=True)
-
-    def get_model(self):
-        return Album
 
 
 class NewsIndex(indexes.SearchIndex, indexes.Indexable):
