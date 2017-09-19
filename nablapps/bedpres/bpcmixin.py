@@ -1,10 +1,12 @@
 import logging
 from django.utils.functional import cached_property
 
-from content.exceptions import (EventFullException,
-                                RegistrationAlreadyExists,
-                                RegistrationNotOpen,
-                                EventException)
+from contentapps.events.exceptions import (
+    EventFullException,
+    RegistrationAlreadyExists,
+    RegistrationNotOpen,
+    EventException,
+)
 from bpc_client import BPCEvent
 from bpc_client.exceptions import BPCResponseException, BPCConnectionError
 from nablapps.accounts.models import NablaUser as User

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from content.models import AbstractEvent
+from contentapps.events.models.abstract_event import AbstractEvent
 from django.core.urlresolvers import reverse
 from django.db import models
 

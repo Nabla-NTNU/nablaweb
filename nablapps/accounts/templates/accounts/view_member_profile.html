@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load easy_thumbnails %}
 {% load markdown_deux_tags %}
-{% load mediawiki_links %}
 {% load static %}
 
 {% block title %}Medlem: {% firstof member.get_full_name member.username %} {% endblock %}
@@ -71,7 +70,7 @@
             <tr>
                 <td>Biografi</td>
                 <td>
-                    {{ member.about|markdown|wikilinks }}
+                    {{ member.about|markdown }}
                 </td>
             </tr>
             {% endif %}

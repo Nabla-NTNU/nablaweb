@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load mediawiki_links %}
 {% load markdown %}
 {% load flatpages %}
 
@@ -9,7 +8,7 @@
 
 {% block content %}
     <h2>{{ flatpage.title }}</h2>
-    {{ flatpage.content|markdown:"unsafe"|wikilinks}}
+    {{ flatpage.content|markdown:"unsafe"}}
 {% endblock %}
 
 {% block sidebar %}

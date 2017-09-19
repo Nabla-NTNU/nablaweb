@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load mediawiki_links %}
 {% load markdown %}
 {% load easy_thumbnails %}
 {% load sekizai_tags %}
@@ -14,7 +13,7 @@
 
 <h2>{{ com.com.name }}</h2>
 {% if com.com.nablagroup.mail_list %}<p><b>{{ com.com.nablagroup.mail_list }}</b></p>{% endif %}
-<p>{{ com.description|markdown:"unsafe"|wikilinks}}</p>
+<p>{{ com.description|markdown:"unsafe"}}</p>
 
 
 {# List of memberships #}

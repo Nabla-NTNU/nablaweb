@@ -1,10 +1,10 @@
 from datetime import datetime, time
 from .models import BedPres
-from content.models import Event
+from contentapps.events.models import Event
 
 from bpc_client.event import get_events as get_bpc_events
 
-from content.event_overrides import EventGetter
+from contentapps.events.event_overrides import EventGetter
 from itertools import chain
 from django.shortcuts import get_object_or_404
 

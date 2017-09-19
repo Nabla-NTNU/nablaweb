@@ -94,8 +94,9 @@ INSTALLED_APPS = [
     # Internt utviklede apps #
     ##########################
     'content',
-    'contentapps.blog',
     'contentapps.album',
+    'contentapps.blog',
+    'contentapps.events',
     'nablapps.accounts',
     'nablapps.bedpres',
     'nablapps.com',

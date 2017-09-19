@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from content.models.events import Event
+from contentapps.events.models import Event
 from django.test import TestCase
 
 from nablapps.bedpres.event_overrides import BedPresAndEventGetter

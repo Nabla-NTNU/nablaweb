@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from content.views import EventDetailView, RegisterUserView
+from contentapps.events.views import EventDetailView, RegisterUserView
 from .event_overrides import *
 from .utils import InvalidCardNum
 from .bpcmixin import WrongClass

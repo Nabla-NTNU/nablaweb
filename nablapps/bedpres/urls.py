@@ -3,7 +3,7 @@
 from django.conf.urls import url
 from django.views.generic import RedirectView
 
-from content.views import ical_event
+from contentapps.events.views import ical_event
 
 from .views import BedPresDetailView, BedPresRegisterUserView
 
