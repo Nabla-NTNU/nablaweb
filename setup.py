@@ -17,7 +17,6 @@ requirements = [
     'django-filebrowser',
     'Pillow',
     'easy-thumbnails',
-    'Wand',
     'django-braces',
     'django-sekizai>=0.8.2',
     'django-markdown-deux',
