@@ -13,24 +13,24 @@ class UserRegistrationException(EventException):
 
 
 class RegistrationNotRequiredException(UserRegistrationException):
-    token = "noreg"
+    pass
 
 
 class RegistrationNotOpen(UserRegistrationException):
-    token = "not_open"
+    pass
 
 
 class RegistrationAlreadyExists(UserRegistrationException):
-    token = "reg_exists"
+    pass
 
 
 class RegistrationNotAllowed(UserRegistrationException):
-    token = "not_allowed"
+    pass
 
 
 class EventFullException(UserRegistrationException):
-    token = "full"
+    pass
 
 
 class DeregistrationClosed(UserRegistrationException):
-    token = "dereg_closed"
+    pass

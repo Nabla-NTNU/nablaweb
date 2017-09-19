@@ -3,7 +3,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from content.models import Event, News
+from contentapps.events.models import Event
 
 
 class MyTest(TestCase):

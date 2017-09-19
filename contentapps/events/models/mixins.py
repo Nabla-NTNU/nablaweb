@@ -6,7 +6,7 @@ from django.db import models
 from django.contrib.auth.models import Group
 
 from six.moves.urllib.parse import urlparse
-from content.exceptions import RegistrationNotRequiredException, RegistrationNotAllowed, RegistrationNotOpen
+from ..exceptions import RegistrationNotRequiredException, RegistrationNotAllowed, RegistrationNotOpen
 
 
 class EventInfoMixin(models.Model):

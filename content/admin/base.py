@@ -8,8 +8,7 @@ from django.forms.widgets import ClearableFileInput, FileInput
 from image_cropping import ImageCroppingMixin
 
 from content.models.news import News
-from content.models.events import Event, EventRegistration
-from content.forms import NewsForm, EventForm
+from content.forms import NewsForm
 
 from content.models.base import ContentImage
 
@@ -22,40 +21,6 @@ class ContentAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
         models.FileField: {"widget": FileInput}
     }
     readonly_fields = ["view_counter"]
-
-
-class EventAdmin(ContentAdmin):
-    fields = ("publication_date",
-              "published",
-              "picture",
-              "cropping",
-              "headline",
-              "slug",
-              "short_name",
-              "lead_paragraph",
-              "body",
-              "priority",
-              "organizer",
-              "location",
-              "event_start",
-              "event_end",
-              "registration_required",
-              "registration_deadline",
-              "registration_start",
-              "deregistration_deadline",
-              "places",
-              "has_queue",
-              "allow_comments",
-              "open_for",
-              "facebook_url",
-              )
-    form = EventForm
-    list_display = ['__unicode__', 'registration_required']
-    date_hierarchy = 'event_start'
-    ordering = ['-event_start']
-    search_fields = ['headline', 'body']
-    list_filter = ['event_start', 'organizer', 'location']
-    actions_on_top = True
 
 
 class NewsAdmin(ContentAdmin):
@@ -85,6 +50,5 @@ class ContentImageAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ContentImage, ContentImageAdmin)
-admin.site.register(Event, EventAdmin)
-admin.site.register(EventRegistration)
+
 admin.site.register(News, NewsAdmin)

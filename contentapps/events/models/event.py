@@ -3,9 +3,10 @@
 import logging
 from django.core.urlresolvers import reverse
 
-from content.exceptions import RegistrationAlreadyExists, EventFullException, DeregistrationClosed
+from ..exceptions import RegistrationAlreadyExists, EventFullException, DeregistrationClosed
 from .abstract_event import AbstractEvent
 from .eventregistration import EventRegistration
+
 
 class Event(AbstractEvent):
     """Arrangementer både med og uten påmelding.
@@ -16,8 +17,9 @@ class Event(AbstractEvent):
         verbose_name = "arrangement"
         verbose_name_plural = "arrangement"
         permissions = (
-            ("administer", "Can administer events"),
+            ("administer", "Can administer models"),
         )
+        db_table = "content_event"
 
     def save(self, *args, **kwargs):
         super(Event, self).save(*args, **kwargs)

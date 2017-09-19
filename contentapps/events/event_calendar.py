@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 from calendar import HTMLCalendar
+from collections import defaultdict
 from datetime import date
 
 from django.utils.html import conditional_escape as esc
 
-from content.utils import group_events_by_day
-
 
 class EventCalendar(HTMLCalendar):
     """
-    Class for rendering events in a calendar, based on HTMLCalendar_.
+    Class for rendering models in a calendar, based on HTMLCalendar_.
 
     .. _HTMLCalendar: http://hg.python.org/cpython/file/2.7/Lib/calendar.py
     """
@@ -95,3 +94,21 @@ class EventCalendar(HTMLCalendar):
             url=event.get_absolute_url(),
             name=esc(event.get_short_name())
         )
+
+
+def group_events_by_day(events):
+    """Groups a list of models by day.
+
+    Events spanning multiple days are grouped multiple times.
+    """
+    day_dict = defaultdict(list)
+    for e in events:
+        for day in day_range(e.event_start, e.event_end):
+            day_dict[day].append(e)
+    return day_dict
+
+
+def day_range(start, end):
+    """Returns a list of days (ints) between start and end (datetime)."""
+    end = start if (end is None or end < start) else end
+    return range(start.day, end.day+1)

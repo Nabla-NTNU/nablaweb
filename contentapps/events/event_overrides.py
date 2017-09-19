@@ -1,7 +1,7 @@
 from django.conf import settings
 import importlib
 
-from content.models import Event
+from .models import Event
 
 
 class EventGetter(object):

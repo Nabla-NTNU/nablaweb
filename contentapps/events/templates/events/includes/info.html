@@ -1,5 +1,4 @@
 {% load humanize %}
-{% load event_extras %}
 
 <!-- event-info -->
 <h3 class="pull-left">Informasjon </h3>
@@ -156,11 +155,6 @@
 {% endif %}
 
 <div class="center">
-<a class="btn btn-default btn-xs" href="{{ event|google_calendarize }}">
-    <span class="glyphicon glyphicon-calendar"></span>
-    Google Calendar
-</a>
-
 <a class="btn btn-default btn-xs" href="{% url "ical_event" event.pk %}">
     <span class="glyphicon glyphicon-calendar"></span>
     iCalendar

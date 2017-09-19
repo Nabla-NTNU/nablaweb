@@ -1,10 +1,10 @@
 from django.test import TestCase, Client, override_settings
 from django.core.urlresolvers import reverse
 
-from content.models.events import Event
+from contentapps.events.models import Event
 
 
-@override_settings(ROOT_URLCONF="content.urls")
+@override_settings(ROOT_URLCONF="contentapps.events.urls")
 class RecentEventsTestCase(TestCase):
 
     def test_feed(self):

@@ -3,7 +3,7 @@ from datetime import datetime
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from content.models.events import Event
+from contentapps.events.models import Event
 User = get_user_model()
 
 

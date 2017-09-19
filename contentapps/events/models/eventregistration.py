@@ -2,7 +2,7 @@
 
 from django.db import models
 from django.conf import settings
-from django.template import loader, Context
+from django.template import loader
 
 from .managers import RelatedEventRegistrationManager, EventRegistrationManager
 
@@ -43,6 +43,7 @@ class EventRegistration(models.Model):
         verbose_name = 'påmelding'
         verbose_name_plural = 'påmeldte'
         unique_together = (("event", "user"), ("number", "attending"))
+        db_table = "content_eventregistration"
 
     objects = EventRegistrationManager()
 
@@ -84,7 +85,7 @@ class EventRegistration(models.Model):
     def _send_moved_to_attending_email(self):
         if self.user.email:
             subject = u'Påmeldt %s' % self.event.headline
-            template = loader.get_template("content/events/moved_to_attending_email.txt")
+            template = loader.get_template("events/moved_to_attending_email.txt")
             message = template.render({'event': self.event, 'name': self.user.get_full_name()})
             self.user.email_user(subject, message)
 

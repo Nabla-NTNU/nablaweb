@@ -2,7 +2,7 @@ from collections import ChainMap
 
 from django.test import TestCase
 
-from content.forms import EventForm
+from contentapps.events.forms import EventForm
 
 
 class EventFormTestCase(TestCase):
