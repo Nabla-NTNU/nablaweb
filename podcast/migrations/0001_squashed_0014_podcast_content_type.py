@@ -34,7 +34,6 @@ class Migration(migrations.Migration):
                 ('file', models.FileField(upload_to='podcast', verbose_name='lydfil', help_text='Filformat: MP3', blank=True)),
                 ('view_counter', models.IntegerField(verbose_name='Visninger', editable=False, default=0)),
                 ('cropping', image_cropping.fields.ImageRatioField('image', '300x300', allow_fullsize=False, adapt_rotation=False, size_warning=False, help_text='Bildet vises i full form på detaljsiden.', free_crop=False, verbose_name='Beskjæring', hide_image_field=False)),
-                ('image', models.ImageField(help_text='Bilder som er større enn 770x300 px ser best ut. Du kan beskjære bildet etter opplasting.', null=True, upload_to='news_pictures', verbose_name='Bilde', blank=True)),
                 ('image', models.ImageField(help_text='Bilder som er større enn 300x300 px ser best ut. Du kan beskjære bildet etter opplasting.', null=True, upload_to='news_pictures', verbose_name='Bilde', blank=True)),
                 ('is_clip', models.BooleanField(verbose_name='Er lydklipp', help_text='Lydklipp blir ikke vist sammen med episodene.', default=False)),
                 ('season', models.ForeignKey(to='podcast.Season', null=True, verbose_name='Sesong', blank=True)),

@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^kull/(?P<year>\d{1,5})/$',
         RelevantForYearList.as_view(),
         name='relevant_for_year_list'),
-    url(r'^tag/(?P<tag>[-\w]{1,50})/$',
+    url(r'^tag/(?P<tag>[-\w ]{1,50})/$',
         TagList.as_view(),
         name='tag_list'),
     url(r'^$',

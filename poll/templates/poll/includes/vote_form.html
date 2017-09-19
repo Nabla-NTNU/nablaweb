@@ -1,4 +1,4 @@
-<form action="{% url "poll.views.vote" poll.id %}" method="post">
+<form action="{% url "poll_vote" poll.id %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="next" value="{% firstof next request.path %}">
     {% for choice in poll.choices.all %}

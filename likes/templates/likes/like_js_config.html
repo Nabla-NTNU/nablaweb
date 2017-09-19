@@ -1,12 +1,5 @@
-{% comment %}
-This template doesn't actually render anything, but adds to the "js" sekizai block
-the required javascript for the like button.
-{% endcomment %}
-
-{% load sekizai_tags %}
 {% load staticfiles %}
 
-{% addtoblock "js" %}
     <script src="{% static 'likes/like_press.js' %}"></script>
     <script>
 var likeToggleUrl = "{% url 'toggle_like' %}";
@@ -16,4 +9,3 @@ $.ajaxSetup({
     },
 });
     </script>
-{% endaddtoblock %}

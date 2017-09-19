@@ -1,10 +1,15 @@
 {% extends "base.html" %}
 {% load easy_thumbnails %}
 {% load like %}
+{% load sekizai_tags %}
 
 {% block title %}Nabladet{% endblock %}
 
 {% block main %}
+
+{% addtoblock "js" %}
+{% include "likes/like_js_config.html" %}
+{% endaddtoblock %}
 
 <h2>Nabladet</h2>
 <p>Nabladet er vårt kjære tidsskrift, som blir publisert av <a
