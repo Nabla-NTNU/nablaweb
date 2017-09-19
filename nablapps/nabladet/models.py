@@ -2,7 +2,7 @@
 import os
 from django.conf import settings
 from django.db import models
-from content.models import News
+from contentapps.news.models import News
 from content.utils import thumbnail_pdf
 
 

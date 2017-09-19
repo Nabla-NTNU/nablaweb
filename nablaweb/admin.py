@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import GeneralOptions
 from django import forms
-from content.models import News
+from contentapps.news.models import News
 
 
 class GeneralOptionsForm(forms.ModelForm):

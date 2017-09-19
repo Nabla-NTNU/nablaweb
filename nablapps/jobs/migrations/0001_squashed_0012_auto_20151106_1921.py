@@ -9,7 +9,7 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('content', '0001_squashed_0028_auto_20161025_2045'),
+        ('news', '0001_initial'),
         ('contenttypes', '0002_remove_content_type_name'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('contenttypes', '0001_initial'),
@@ -81,7 +81,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Advert',
             fields=[
-                ('news_ptr', models.OneToOneField(auto_created=True, parent_link=True, primary_key=True, serialize=False, to='content.News')),
+                ('news_ptr', models.OneToOneField(auto_created=True, parent_link=True, primary_key=True, serialize=False, to='news.News')),
                 ('deadline_date', models.DateTimeField(help_text='Søknadsfrist', blank=True, null=True, verbose_name='Frist')),
                 ('removal_date', models.DateTimeField(help_text='Når annonsen fjernes fra listen, f.eks. samtidig som søknadsfristen', verbose_name='Forsvinner')),
                 ('info_file', models.FileField(help_text='Informasjon om stillingen', blank=True, upload_to='stillinger', verbose_name='Informasjonsfil')),
@@ -92,6 +92,6 @@ class Migration(migrations.Migration):
                 ('tags', models.ManyToManyField(verbose_name='Tags', blank=True, help_text='F.eks. sommerjobb, bergen, kirkenes, olje, konsultering...', to='jobs.TagChoices')),
             ],
             options={'verbose_name_plural': 'stillingsannonser', 'verbose_name': 'stillingsannonse', 'ordering': ('-created_date', 'headline')},
-            bases=('content.news',),
+            bases=('news.news',),
         ),
     ]

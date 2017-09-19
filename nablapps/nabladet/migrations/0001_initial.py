@@ -7,14 +7,14 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('content', '0001_squashed_0028_auto_20161025_2045'),
+        ('news', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
             name='Nablad',
             fields=[
-                ('news_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='content.News')),
+                ('news_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='news.News')),
                 ('pub_date', models.DateField(help_text='Publikasjonsdato', null=True, verbose_name='publisert')),
                 ('file', models.FileField(help_text='Filnavn', upload_to='nabladet', verbose_name='PDF-fil')),
             ],
@@ -23,6 +23,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'nablad',
                 'verbose_name_plural': 'nablad',
             },
-            bases=('content.news',),
+            bases=('news.news',),
         ),
     ]

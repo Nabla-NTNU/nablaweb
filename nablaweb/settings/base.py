@@ -97,6 +97,8 @@ INSTALLED_APPS = [
     'contentapps.album',
     'contentapps.blog',
     'contentapps.events',
+    'contentapps.image',
+    'contentapps.news',
     'nablapps.accounts',
     'nablapps.bedpres',
     'nablapps.com',

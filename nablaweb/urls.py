@@ -2,7 +2,7 @@ import django_nyt.urls
 import filebrowser.sites
 import wiki.urls
 
-from content.feeds.news import RecentNews
+from contentapps.news.feeds import RecentNews
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
@@ -21,7 +21,6 @@ urlpatterns = [
     url(r'^$', FrontPageView.as_view(), name='front_page'),
     url(r'^', include(login_urls)),
     url(r'^', include('nablapps.interactive.urls')),
-    url(r'^', include('content.urls')),
     url(r'^admin/filebrowser/', include(filebrowser.sites.site.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^album/', include('contentapps.album.urls')),
@@ -36,6 +35,7 @@ urlpatterns = [
     url(r'^kommentarer/', include('django_comments.urls')),
     url(r'^likes/', include('nablapps.likes.urls')),
     url(r'^nabladet/', include('nablapps.nabladet.urls')),
+    url(r'^nyheter/', include('contentapps.news.urls')),
     url(r'^podcast/', include('nablapps.podcast.urls')),
     url(r'^poll/', include('nablapps.poll.urls')),
     url(r'^referater/', include('nablapps.meeting_records.urls')),

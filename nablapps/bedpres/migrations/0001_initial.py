@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('content', '0001_squashed_0028_auto_20161025_2045'),
+        ('news', '0001_initial'),
         ('jobs', '0001_squashed_0012_auto_20151106_1921'),
         ('auth', '0006_require_contenttypes_0002'),
     ]
@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BedPres',
             fields=[
-                ('news_ptr', models.OneToOneField(to='content.News', primary_key=True, parent_link=True, serialize=False, auto_created=True)),
+                ('news_ptr', models.OneToOneField(to='news.News', primary_key=True, parent_link=True, serialize=False, auto_created=True)),
                 ('short_name', models.CharField(help_text='Brukes på steder hvor det ikke er plass til å skrive hele overskriften, for eksempel kalenderen.', blank=True, max_length=20, null=True, verbose_name='kort navn')),
                 ('organizer', models.CharField(help_text='Den som står bak arrangementet', blank=True, max_length=100, verbose_name='organisert av')),
                 ('location', models.CharField(max_length=100, verbose_name='sted')),
@@ -37,6 +37,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'bedriftspresentasjon',
                 'verbose_name_plural': 'bedriftspresentasjoner',
             },
-            bases=('content.news', models.Model),
+            bases=('news.news', models.Model),
         ),
     ]
