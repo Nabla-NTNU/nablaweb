@@ -1,6 +1,6 @@
 from markdown.treeprocessors import Treeprocessor
 import markdown
-from ..models import ContentImage
+from .models import ContentImage
 import re
 
 from django.template.loader import render_to_string

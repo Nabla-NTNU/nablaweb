@@ -10,8 +10,6 @@ from image_cropping import ImageCroppingMixin
 from content.models.news import News
 from content.forms import NewsForm
 
-from content.models.base import ContentImage
-
 from .mixins import ChangedByMixin
 
 
@@ -44,11 +42,5 @@ class NewsAdmin(ContentAdmin):
         return qs.filter(content_type=this_type)
 
 
-class ContentImageAdmin(admin.ModelAdmin):
-    list_display = ['id', 'file', 'image_thumb']
-
-
-
-admin.site.register(ContentImage, ContentImageAdmin)
 
 admin.site.register(News, NewsAdmin)

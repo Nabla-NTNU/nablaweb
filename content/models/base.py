@@ -72,13 +72,3 @@ class Content(CommentsMixin, PublicationManagerMixin, EditableMedia, models.Mode
 
     def get_picture_url(self):
         return 'http://%s%s%s' % (Site.objects.get_current().domain, settings.MEDIA_URL, self.picture.name)
-
-
-class ContentImage(BaseImageModel):
-    """
-    An image associated with some content
-    """
-
-    class Meta:
-        verbose_name = "Innholdsbilde"
-        verbose_name_plural = "Innholdsbilder"

@@ -1,7 +1,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
-from ..core.markdown import content_markdown
+from ..markdownprocessing import content_markdown
 
 register = template.Library()
 

@@ -41,15 +41,4 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'nyheter',
             },
         ),
-        migrations.CreateModel(
-            name='ContentImage',
-            fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
-                ('file', models.ImageField(verbose_name='Bildefil', upload_to='uploads/content')),
-            ],
-            options={
-                'verbose_name': 'Innholdsbilde',
-                'verbose_name_plural': 'Innholdsbilder'
-            },
-        ),
     ]
