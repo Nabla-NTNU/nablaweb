@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 from itertools import chain
 
-from content.models import Album
+
 from content.models import Event
+from contentapps.album.models import Album
 from contentapps.blog.models import BlogPost
 from content.models.news import News
 from content.views.mixins import PublishedListMixin

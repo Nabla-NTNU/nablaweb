@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^', include('content.urls')),
     url(r'^admin/filebrowser/', include(filebrowser.sites.site.urls)),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^album/', include('contentapps.album.urls')),
     url(r'^bedpres/', include('nablapps.bedpres.urls')),
     url(r'^blogg/', include('contentapps.blog.urls')),
     url(r'^brukere/', include('nablapps.accounts.urls')),
