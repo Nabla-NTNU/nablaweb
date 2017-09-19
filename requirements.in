@@ -27,6 +27,7 @@ django-sekizai
 Pillow>=4.2.1
 easy-thumbnails
 django-image-cropping
+Wand
 
 # Search related packages
 django-haystack
