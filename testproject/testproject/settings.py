@@ -51,6 +51,8 @@ INSTALLED_APPS = (
     'contentapps.album',
     'contentapps.blog',
     'contentapps.events',
+    'contentapps.image',
+    'contentapps.news',
 )
 
 MIDDLEWARE_CLASSES = (

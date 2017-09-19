@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 from django_nyt.models import Subscription, Notification
 
-from content.models.news import News
+from contentapps.news.models import News
 
 UserModel = get_user_model()
 

@@ -11,7 +11,7 @@
 {% for row in news_list|row_split:2 %}
     <div class="row">
     {% for news in row %}
-            {% include "content/news/news_summary_include.html" with narrow="True" %}
+            {% include "news/news_summary_include.html" with narrow="True" %}
     {% endfor %}
     </div>
 {% endfor %}

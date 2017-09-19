@@ -1,5 +1,5 @@
 from haystack import indexes
-from content.models.news import News
+from .models import News
 
 
 class NewsIndex(indexes.SearchIndex, indexes.Indexable):
@@ -14,4 +14,3 @@ class NewsIndex(indexes.SearchIndex, indexes.Indexable):
 
     def index_queryset(self, using=None):
         return self.get_model().objects.exclude(published=False)
-

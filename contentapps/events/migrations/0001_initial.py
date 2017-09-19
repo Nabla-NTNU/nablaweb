@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('content', '0001_squashed_0028_auto_20161025_2045')
+        ('news', '0001_initial')
     ]
 
     operations = [
@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Event',
             fields=[
-                ('news_ptr', models.OneToOneField(parent_link=True, serialize=False, auto_created=True, primary_key=True, to='content.News')),
+                ('news_ptr', models.OneToOneField(parent_link=True, serialize=False, auto_created=True, primary_key=True, to='news.News')),
                 ('short_name', models.CharField(blank=True, help_text='Brukes på steder hvor det ikke er plass til å skrive hele overskriften, for eksempel kalenderen.', max_length=20, null=True, verbose_name='kort navn')),
                 ('organizer', models.CharField(blank=True, help_text='Den som står bak arrangementet', max_length=100, verbose_name='organisert av')),
                 ('location', models.CharField(max_length=100, verbose_name='sted')),
@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'arrangement',
                 'db_table': 'content_event',
             },
-            bases=('content.news', models.Model),
+            bases=('news.news', models.Model),
         ),
         migrations.AddField(
             model_name='eventregistration',

@@ -1,5 +1,5 @@
 
-from content.models import News
+from contentapps.news.models import News
 from .mixins import RegistrationInfoMixin, EventInfoMixin
 
 

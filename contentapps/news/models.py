@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 from django.db import models
 from django.utils.text import slugify
 
@@ -55,6 +52,7 @@ class News(Content):
     class Meta:
         verbose_name = "nyhet"
         verbose_name_plural = "nyheter"
+        db_table = "content_news"
 
     def correct_picture(self):
         return self.picture

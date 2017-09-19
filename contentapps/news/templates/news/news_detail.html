@@ -14,7 +14,7 @@
 
 
 {% block content %}
-{% include "content/news/includes/text_content.html" %}
+{% include "news/includes/text_content.html" with news=news %}
 {% include "content/includes/comments.html" with content=news %}
 {% endblock %}
 

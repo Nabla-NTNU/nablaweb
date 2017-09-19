@@ -5,7 +5,7 @@
 {% block content %}
 
 
-{% include "content/news/includes/text_content.html" with news=event%}
+{% include "news/includes/text_content.html" with news=event%}
 
 {# Vis påmeldte #}
 {% if user.is_authenticated %}

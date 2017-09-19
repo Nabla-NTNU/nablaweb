@@ -39,6 +39,7 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': 'nyhet',
                 'verbose_name_plural': 'nyheter',
+                'db_table': 'content_news',
             },
         ),
     ]
