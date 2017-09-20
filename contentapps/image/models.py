@@ -1,4 +1,4 @@
-from content.models.base import BaseImageModel
+from content.models import BaseImageModel
 
 
 class ContentImage(BaseImageModel):

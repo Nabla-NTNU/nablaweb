@@ -19,7 +19,7 @@ from .event_overrides import get_eventgetter
 from .models import Event
 from .exceptions import *
 from .event_calendar import EventCalendar
-from content.views.mixins import AdminLinksMixin
+from content.views import AdminLinksMixin
 
 User = get_user_model()
 EventGetter = get_eventgetter()

@@ -1,13 +1,15 @@
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 
-from content.admin import ContentAdmin
+from image_cropping import ImageCroppingMixin
+from content.admin import ChangedByMixin
+
 from .models import News
 from .forms import NewsForm
 
 
 @admin.register(News)
-class NewsAdmin(ContentAdmin):
+class NewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
     form = NewsForm
     fields = ("publication_date",
               "published",

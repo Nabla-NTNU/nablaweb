@@ -2,7 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.views.generic import DetailView, ListView
 from django.shortcuts import redirect
 
-from content.views.mixins import AdminLinksMixin, ViewAddMixin, PublishedListMixin, PublishedMixin
+from content.views import AdminLinksMixin, ViewAddMixin, PublishedListMixin, PublishedMixin
 from .models import News
 
 

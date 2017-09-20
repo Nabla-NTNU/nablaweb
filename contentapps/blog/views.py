@@ -1,6 +1,6 @@
 
 from .models import Blog, BlogPost
-from content.views.mixins import AdminLinksMixin, ViewAddMixin
+from content.views import AdminLinksMixin, ViewAddMixin
 from django.views.generic import DetailView, ListView
 from django.http import HttpResponseNotFound
 

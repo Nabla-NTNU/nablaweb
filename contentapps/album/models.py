@@ -2,7 +2,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import AnonymousUser
 
-from content.models.base import TimeStamped, ViewCounterMixin, BaseImageModel
+from content.models import TimeStamped, ViewCounterMixin, BaseImageModel
 
 
 class AlbumImage(BaseImageModel):

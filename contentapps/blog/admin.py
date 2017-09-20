@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from content.admin.mixins import ChangedByMixin
+from content.admin import ChangedByMixin
 from .models import Blog, BlogPost
 
 

@@ -1,5 +1,7 @@
 from django.contrib import admin
-from content.admin import ContentAdmin
+from image_cropping import ImageCroppingMixin
+from content.admin import ChangedByMixin
+
 from .forms import EventForm
 from .models import Event, EventRegistration
 
@@ -7,7 +9,7 @@ admin.site.register(EventRegistration)
 
 
 @admin.register(Event)
-class EventAdmin(ContentAdmin):
+class EventAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
     fields = ("publication_date",
               "published",
               "picture",

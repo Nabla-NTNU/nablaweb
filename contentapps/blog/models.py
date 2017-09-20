@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.utils.text import slugify
 from datetime import date
 
-from content.models.base import TimeStamped, ViewCounterMixin
+from content.models import TimeStamped, ViewCounterMixin
 
 
 class Blog(models.Model):
