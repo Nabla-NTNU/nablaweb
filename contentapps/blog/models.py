@@ -81,8 +81,6 @@ class BlogPost(EditableMedia, models.Model):
         help_text="Hvorvidt kommentering er tillatt"
     )
 
-    watch_fields = ["content", "title", "blog"]
-
     class Meta:
         verbose_name = "Post"
         verbose_name_plural = "Poster"

@@ -1,9 +1,5 @@
-from django.forms import BooleanField, ModelForm
+from django.forms import ModelForm
 
 
 class ContentForm(ModelForm):
-    listen = BooleanField(
-        label="Overvåk",
-        help_text="Få notifikasjoner hvis objektet endres",
-        required=False
-    )
+    pass
