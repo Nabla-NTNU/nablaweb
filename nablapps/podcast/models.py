@@ -3,7 +3,7 @@
 from django.db import models
 from image_cropping.fields import ImageRatioField
 from django.core.urlresolvers import reverse
-from content.models.mixins import PublicationManagerMixin, ViewCounterMixin, CommentsMixin
+from content.models.mixins import PublicationManagerMixin, ViewCounterMixin
 
 
 def get_season_count():
@@ -58,7 +58,7 @@ class Season(models.Model):
         verbose_name_plural = 'Sesonger'
 
 
-class Podcast(CommentsMixin, PublicationManagerMixin, ViewCounterMixin, models.Model):
+class Podcast(PublicationManagerMixin, ViewCounterMixin, models.Model):
 
     image = models.ImageField(
         upload_to="news_pictures",

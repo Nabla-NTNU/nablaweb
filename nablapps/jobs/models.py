@@ -3,7 +3,12 @@
 from datetime import datetime
 
 from django.db import models
-from content.models import Content
+from content.models import (
+    PublicationManagerMixin,
+    TimeStamped,
+    ViewCounterMixin,
+    ContentBase,
+)
 from contentapps.news.models import News
 
 
@@ -57,7 +62,12 @@ class TagChoices(models.Model):
         return u'%s' % self.tag
 
 
-class Company(Content):
+class Company(
+    PublicationManagerMixin,
+    TimeStamped,
+    ViewCounterMixin,
+    ContentBase,
+    ):
     website = models.URLField(max_length=200, blank=True, verbose_name="Nettside")
     name = models.CharField(verbose_name="navn", max_length=200, blank=False)
     description = models.TextField(verbose_name="beskrivelse", blank=True)
