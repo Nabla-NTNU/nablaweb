@@ -1,8 +1,8 @@
 from django.db import models
-from content.models.mixins import EditableMedia
+from content.models.mixins import TimeStamped, ViewCounterMixin
 
 
-class InteractiveElement(EditableMedia, models.Model):
+class InteractiveElement(TimeStamped, ViewCounterMixin, models.Model):
     """
     Model for an element requiring user interaction.
     """
