@@ -1,10 +1,9 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
 
 from image_cropping.fields import ImageRatioField
-from .mixins import PublicationManagerMixin, CommentsMixin, TimeStamped, ViewCounterMixin
+from .mixins import PublicationManagerMixin, TimeStamped, ViewCounterMixin
 
 
 class BaseImageModel(models.Model):
@@ -57,20 +56,10 @@ class ContentBase(models.Model):
     class Meta:
         abstract = True
 
-    def get_absolute_url(self):
-        """
-        Finner URL ved å reversere navnet på viewen.
-        Krever at navnet på viewet er gitt ved modellnavn_detail
-        """
-        return reverse(self.content_type.model + "_detail", kwargs={
-            'pk': self.pk,
-            'slug': self.slug
-        })
-
     def get_picture_url(self):
         return 'http://%s%s%s' % (Site.objects.get_current().domain, settings.MEDIA_URL, self.picture.name)
 
 
-class Content(CommentsMixin, PublicationManagerMixin, TimeStamped, ViewCounterMixin, ContentBase):
+class Content(PublicationManagerMixin, TimeStamped, ViewCounterMixin, ContentBase):
     class Meta:
         abstract = True

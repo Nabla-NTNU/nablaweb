@@ -1,8 +1,9 @@
 from django.db import models
 from django.utils.text import slugify
+from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 
 from content.models import (
-    CommentsMixin,
     PublicationManagerMixin,
     TimeStamped,
     ViewCounterMixin,
@@ -11,14 +12,11 @@ from content.models import (
 
 
 class News(
-    CommentsMixin,
     PublicationManagerMixin,
     TimeStamped,
     ViewCounterMixin,
     ContentBase
 ):
-
-    # Tekstinnhold
     headline = models.CharField(
         verbose_name="tittel",
         max_length=100,
@@ -59,6 +57,12 @@ class News(
             "Dette fungerer for øyeblikket ikke. "
             "Bortsett fra at prioritering=0 fjerner saken fra forsiden."))
 
+    content_type = models.ForeignKey(
+        ContentType,
+        editable=False,
+        null=True
+    )
+
     class Meta:
         verbose_name = "nyhet"
         verbose_name_plural = "nyheter"
@@ -82,7 +86,19 @@ class News(
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.headline)
+        if not self.content_type:
+            self.content_type = ContentType.objects.get_for_model(self.__class__)
         return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.headline
+
+    def get_absolute_url(self):
+        """
+        Finner URL ved å reversere navnet på viewen.
+        Krever at navnet på viewet er gitt ved modellnavn_detail
+        """
+        return reverse(self.content_type.model + "_detail", kwargs={
+            'pk': self.pk,
+            'slug': self.slug
+        })

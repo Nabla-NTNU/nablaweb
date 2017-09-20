@@ -1,13 +1,6 @@
 from datetime import datetime
-import logging
-
 from django.db import models
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
-
-from django_comments.models import Comment
-
-logger = logging.getLogger(__name__)
 
 
 class ViewCounterMixin(models.Model):
@@ -99,21 +92,3 @@ class PublicationManagerMixin(models.Model):
 
     class Meta:
         abstract = True
-
-
-class CommentsMixin(models.Model):
-
-    content_type = models.ForeignKey(
-        ContentType,
-        editable=False,
-        null=True
-    )
-
-    class Meta:
-        abstract = True
-
-    def save(self, *args, **kwargs):
-        content_type = ContentType.objects.get_for_model(self.__class__)
-        if not self.content_type or self.content_type != content_type:
-            self.content_type = ContentType.objects.get_for_model(self.__class__)
-        super().save(*args, **kwargs)
