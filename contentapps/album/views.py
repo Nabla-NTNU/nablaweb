@@ -71,7 +71,7 @@ class AlbumImageView(TemplateView):
         return context
 
 
-@permission_required("content.create_album")
+@permission_required("album.create_album")
 def multiple_file_upload(request):
     files = []
 

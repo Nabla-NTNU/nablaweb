@@ -31,7 +31,7 @@ class AdministerRegistrationsView(StaticContextMixin,
     """Viser påmeldingslisten til et Event med mulighet for å melde folk på og av."""
     model = Event
     template_name = "events/event_administer.html"
-    permission_required = 'models.administer'
+    permission_required = 'events.administer'
     actions = {"add": ("Legg til", "register_user"),
                "del": ("Fjern", "deregister_users")}
     static_context = {'actions': [(key, name) for key, (name, _) in actions.items()]}
@@ -99,7 +99,7 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
     model = Event
     context_object_name = "event"
     template_name = "events/event_registrations.html"
-    permission_required = 'models.add_event'
+    permission_required = 'events.add_event'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
