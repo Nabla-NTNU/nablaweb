@@ -11,7 +11,6 @@ requirements = [
     'pytz',
     'django-haystack',
     'django>=1.8',
-    'django-contrib-comments',
     'django-image-cropping',
     'django-filebrowser',
     'Pillow',

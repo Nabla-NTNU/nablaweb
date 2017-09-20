@@ -102,12 +102,6 @@ class PublicationManagerMixin(models.Model):
 
 
 class CommentsMixin(models.Model):
-    allow_comments = models.BooleanField(
-        blank=True,
-        verbose_name="Tillat kommentarer",
-        default=True,
-        help_text="Hvorvidt kommentering er tillatt"
-    )
 
     content_type = models.ForeignKey(
         ContentType,
@@ -117,17 +111,6 @@ class CommentsMixin(models.Model):
 
     class Meta:
         abstract = True
-
-    def delete(self, *args, **kwargs):
-        """
-        Override default method, so related comments are also deleted
-        """
-        comments = Comment.objects.filter(
-            object_pk=self.pk,
-            content_type=self.content_type
-        )
-        comments.delete()
-        super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         content_type = ContentType.objects.get_for_model(self.__class__)

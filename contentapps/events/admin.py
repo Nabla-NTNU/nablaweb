@@ -28,7 +28,6 @@ class EventAdmin(ContentAdmin):
               "deregistration_deadline",
               "places",
               "has_queue",
-              "allow_comments",
               "open_for",
               "facebook_url",
               )

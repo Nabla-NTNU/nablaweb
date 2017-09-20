@@ -74,13 +74,6 @@ class BlogPost(TimeStamped, ViewCounterMixin, models.Model):
         null=True
     )
 
-    allow_comments = models.BooleanField(
-        blank=True,
-        verbose_name="Tillat kommentarer",
-        default=True,
-        help_text="Hvorvidt kommentering er tillatt"
-    )
-
     class Meta:
         verbose_name = "Post"
         verbose_name_plural = "Poster"
