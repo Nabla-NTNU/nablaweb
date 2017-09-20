@@ -31,7 +31,7 @@ class BaseImageModel(models.Model):
         abstract = True
 
 
-class Content(CommentsMixin, PublicationManagerMixin, TimeStamped, ViewCounterMixin, models.Model):
+class ContentBase(models.Model):
 
     picture = models.ImageField(
         upload_to="uploads/news_pictures",
@@ -69,3 +69,8 @@ class Content(CommentsMixin, PublicationManagerMixin, TimeStamped, ViewCounterMi
 
     def get_picture_url(self):
         return 'http://%s%s%s' % (Site.objects.get_current().domain, settings.MEDIA_URL, self.picture.name)
+
+
+class Content(CommentsMixin, PublicationManagerMixin, TimeStamped, ViewCounterMixin, ContentBase):
+    class Meta:
+        abstract = True

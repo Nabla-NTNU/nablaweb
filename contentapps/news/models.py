@@ -1,10 +1,22 @@
 from django.db import models
 from django.utils.text import slugify
 
-from content.models import Content
+from content.models import (
+    CommentsMixin,
+    PublicationManagerMixin,
+    TimeStamped,
+    ViewCounterMixin,
+    ContentBase,
+)
 
 
-class News(Content):
+class News(
+    CommentsMixin,
+    PublicationManagerMixin,
+    TimeStamped,
+    ViewCounterMixin,
+    ContentBase
+):
 
     # Tekstinnhold
     headline = models.CharField(
