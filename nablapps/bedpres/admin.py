@@ -1,9 +1,9 @@
 from django.contrib import admin
-from content.admin import ContentAdmin
+from image_cropping import ImageCroppingMixin
 from .models import BedPres
 
 
-class BedPresAdmin(ContentAdmin):
+class BedPresAdmin(ImageCroppingMixin, admin.ModelAdmin):
     fields = ("picture",
               "cropping",
               "bpcid",

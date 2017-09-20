@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.views.generic import TemplateView, DetailView
-from content.views.mixins import AdminLinksMixin, ViewAddMixin, PublishedMixin, update_published_state
+from content.views import AdminLinksMixin, ViewAddMixin, PublishedMixin, update_published_state
 from utils.view_mixins import FlatPageMixin
 
 from .models import Podcast, Season, get_season_count

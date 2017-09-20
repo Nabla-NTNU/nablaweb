@@ -5,7 +5,7 @@ from contentapps.album.models import Album
 from contentapps.blog.models import BlogPost
 from contentapps.events.models import Event
 from contentapps.news.models import News
-from content.views.mixins import PublishedListMixin
+from content.views import PublishedListMixin
 from django.views.generic import TemplateView
 
 from nablapps.bedpres.models import BedPres

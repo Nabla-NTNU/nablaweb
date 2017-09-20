@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.views import login_required
 from django.http import Http404
 
-from content.views.mixins import PublishedListMixin
+from content.views import PublishedListMixin
 from datetime import datetime
 from braces.views import FormMessagesMixin, LoginRequiredMixin
 

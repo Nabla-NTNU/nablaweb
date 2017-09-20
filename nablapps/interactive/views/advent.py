@@ -8,7 +8,7 @@ from datetime import datetime
 from datetime import timedelta
 from braces.views import PermissionRequiredMixin
 from django.contrib import messages
-from content.views.mixins import PublishedMixin
+from content.views import PublishedMixin
 from wsgiref.handlers import format_date_time
 from time import mktime
 

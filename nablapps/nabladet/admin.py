@@ -1,10 +1,10 @@
-from content.admin import ContentAdmin
+from image_cropping import ImageCroppingMixin
 from django.contrib import admin
 
 from nablapps.nabladet.models import Nablad
 
 
-class NabladAdmin(ContentAdmin):
+class NabladAdmin(ImageCroppingMixin, admin.ModelAdmin):
     fields = ("published",
               "is_public",
               "picture",
