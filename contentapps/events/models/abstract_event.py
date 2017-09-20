@@ -11,8 +11,8 @@ class AbstractEvent(RegistrationInfoMixin, EventInfoMixin, News):
     class Meta:
         abstract = True
 
-    def __unicode__(self):
-        return u'%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
+    def __str__(self):
+        return '%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
 
     def get_short_name(self):
         """Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke."""

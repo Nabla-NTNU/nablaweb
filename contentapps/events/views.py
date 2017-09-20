@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
@@ -104,7 +102,7 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
     permission_required = 'models.add_event'
 
     def get_context_data(self, **kwargs):
-        context = super(EventRegistrationsView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         event = self.object
         context['eventregistrations'] = event.eventregistration_set.order_by('-attending', 'user__last_name')
         return context
@@ -117,7 +115,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
     template_name = 'events/event_detail.html'
 
     def get_context_data(self, **kwargs):
-        context = super(EventDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         event = self.object
         user = self.request.user
 
@@ -136,7 +134,7 @@ class UserEventView(LoginRequiredMixin, TemplateView):
     template_name = 'events/event_showuser.html'
 
     def get_context_data(self, **kwargs):
-        context_data = super(UserEventView, self).get_context_data(**kwargs)
+        context_data = super().get_context_data(**kwargs)
         user = self.request.user
         context_data['user'] = user
         if user.is_authenticated():

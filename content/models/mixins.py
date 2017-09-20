@@ -127,10 +127,10 @@ class CommentsMixin(models.Model):
             content_type=self.content_type
         )
         comments.delete()
-        super(CommentsMixin, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         content_type = ContentType.objects.get_for_model(self.__class__)
         if not self.content_type or self.content_type != content_type:
             self.content_type = ContentType.objects.get_for_model(self.__class__)
-        super(CommentsMixin, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)

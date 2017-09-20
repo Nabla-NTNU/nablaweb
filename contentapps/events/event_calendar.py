@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from calendar import HTMLCalendar
 from collections import defaultdict
 from datetime import date
@@ -13,10 +12,10 @@ class EventCalendar(HTMLCalendar):
     .. _HTMLCalendar: http://hg.python.org/cpython/file/2.7/Lib/calendar.py
     """
     day_full = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag',
-                'Fredag', u'Lørdag', u'Søndag']
+                'Fredag', 'Lørdag', 'Søndag']
 
     def __init__(self, events):
-        super(EventCalendar, self).__init__()
+        super().__init__()
         self.events_grouped_by_day = group_events_by_day(events)
 
     def formatmonth(self, theyear, themonth, withyear=True):
@@ -38,17 +37,17 @@ class EventCalendar(HTMLCalendar):
         Return a header for a week as a table row.
         """
         s = ''.join(self.formatweekday(i) for i in self.iterweekdays())
-        return u'<ul class="daynames">{}</ul>'.format(s)
+        return '<ul class="daynames">{}</ul>'.format(s)
 
     def formatweekday(self, i):
-        return u'<li class="dayname">{}</li>'.format(self.day_full[i])
+        return '<li class="dayname">{}</li>'.format(self.day_full[i])
 
     def formatweek(self, theweek):
         """
         Return a complete week as a table row.
         """
         s = ''.join(self.formatday(d, wd) for (d, wd) in theweek)
-        return u'<ul class="week">{}</ul>'.format(s)
+        return '<ul class="week">{}</ul>'.format(s)
 
     def formatday(self, day, weekday):
         """Returns the body of a single day formatted as a list"""
@@ -58,7 +57,7 @@ class EventCalendar(HTMLCalendar):
         if html_event_list:
             css_classes.append("filled")
 
-        day_format_string = u'''
+        day_format_string = '''
             <div class="date">
                 <span class="day">{weekday}</span>
                 <span class="num">{day}.</span>
@@ -68,7 +67,7 @@ class EventCalendar(HTMLCalendar):
             day=day,
             body=html_event_list
         )
-        return u'<li class="cell {css_classes}">{day_string}</li>'.format(
+        return '<li class="cell {css_classes}">{day_string}</li>'.format(
             css_classes=" ".join(css_classes),
             day_string=day_string)
 
@@ -84,13 +83,13 @@ class EventCalendar(HTMLCalendar):
         events_list = self.events_grouped_by_day.get(day, [])
         list_items = list(map(self.format_event_list_item, events_list))
         if list_items:
-            return u"".join([u'<ul>'] + list_items + [u'</ul>'])
+            return "".join(['<ul>'] + list_items + ['</ul>'])
         else:
-            return u""
+            return ""
 
     @staticmethod
     def format_event_list_item(event):
-        return u'<li><a href="{url}">{name}</a></li>\n'.format(
+        return '<li><a href="{url}">{name}</a></li>\n'.format(
             url=event.get_absolute_url(),
             name=esc(event.get_short_name())
         )

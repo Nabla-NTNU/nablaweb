@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 from django.db import models
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -23,7 +20,7 @@ class BaseImageModel(models.Model):
 
     def image_thumb(self):
         if self.file:
-                return u'<img src="%s" style="max-width:100px;max-height:100px;"/>' % self.file.url
+            return '<img src="%s" style="max-width:100px;max-height:100px;"/>' % self.file.url
         else:
             return 'No image'
 

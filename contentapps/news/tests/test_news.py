@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Tester for News-appen til Nablaweb
-"""
-
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
@@ -18,8 +13,8 @@ class NewsDetailViewTest(TestCase):
         self.news = News()
         self.news.headline = 'Overskrifta er kul'
         self.user = User.objects.create(
-            first_name=u'Oystein',
-            last_name=u'Hiasen',
+            first_name='Oystein',
+            last_name='Hiasen',
             username='hiasen_test')
         self.lead_paragraph = "Dette er en veldig spennende nyhet som du bare må lese!"
         self.body = "Haha, jeg lurte deg. Det er ikke så spennende alikevel."

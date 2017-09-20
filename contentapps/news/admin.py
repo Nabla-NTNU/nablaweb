@@ -24,5 +24,5 @@ class NewsAdmin(ContentAdmin):
 
     def get_queryset(self, request):
         this_type = ContentType.objects.get_for_model(News)
-        qs = super(NewsAdmin, self).get_queryset(request)
+        qs = super().get_queryset(request)
         return qs.filter(content_type=this_type)

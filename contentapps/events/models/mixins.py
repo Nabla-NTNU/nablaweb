@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from datetime import datetime
 
 from django.db import models
@@ -23,7 +21,7 @@ class EventInfoMixin(models.Model):
         blank=True,
         help_text="Den som står bak arrangementet")
     location = models.CharField(
-        verbose_name=u"sted",
+        verbose_name="sted",
         max_length=100,
         blank=False)
     event_start = models.DateTimeField(
@@ -51,7 +49,7 @@ class EventInfoMixin(models.Model):
 
     def clean(self):
         self.clean_facebook_url()
-        super(EventInfoMixin, self).clean()
+        super().clean()
 
     def clean_facebook_url(self):
         """Verifiserer formen på facebook-urlen, og endrer den hvis den er feil."""

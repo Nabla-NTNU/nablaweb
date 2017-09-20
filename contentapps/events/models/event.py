@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import logging
 from django.core.urlresolvers import reverse
 
@@ -22,7 +20,7 @@ class Event(AbstractEvent):
         db_table = "content_event"
 
     def save(self, *args, **kwargs):
-        super(Event, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self._prune_queue()
         EventRegistration.objects.update_lists(self)
 

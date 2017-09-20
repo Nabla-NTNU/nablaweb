@@ -21,7 +21,7 @@ class AlbumOverview(DetailView):
     template_name = "album/album_overview.html"
 
     def dispatch(self, request, *args, **kwargs):
-        result = super(AlbumOverview, self).dispatch(request, *args, **kwargs)
+        result = super().dispatch(request, *args, **kwargs)
         pk = int(kwargs['pk'])
         album = Album.objects.get(pk=pk)
         visible = album.is_visible(request.user)
@@ -36,7 +36,7 @@ class AlbumImageView(TemplateView):
     template_name = "album/album_image.html"
 
     def dispatch(self, request, *args, **kwargs):
-        result = super(AlbumImageView, self).dispatch(request, *args, **kwargs)
+        result = super().dispatch(request, *args, **kwargs)
         pk = int(kwargs['pk'])
         album = Album.objects.get(pk=pk)
         if album.is_visible(request.user) or request.user.has_perm('content.change_album'):
@@ -45,7 +45,7 @@ class AlbumImageView(TemplateView):
             return redirect('auth_login')
 
     def get_context_data(self, **kwargs):
-        context = super(AlbumImageView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         num = int(kwargs['num'])
         pk = int(kwargs['pk'])
         try:

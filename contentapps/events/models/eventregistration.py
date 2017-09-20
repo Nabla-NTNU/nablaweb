@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.db import models
 from django.conf import settings
 from django.template import loader
@@ -48,13 +46,13 @@ class EventRegistration(models.Model):
     objects = EventRegistrationManager()
 
     def __str__(self):
-        return u'%s, %s is %s, place: %s' % (self.event,
+        return '%s, %s is %s, place: %s' % (self.event,
                                              self.user,
                                              "Attending" if self.attending else "Waiting",
                                              self.number)
 
     def delete(self, *args, **kwargs):
-        super(EventRegistration, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
         EventRegistration.objects.update_lists(self.event)
 
     @classmethod
@@ -84,7 +82,7 @@ class EventRegistration(models.Model):
 
     def _send_moved_to_attending_email(self):
         if self.user.email:
-            subject = u'Påmeldt %s' % self.event.headline
+            subject = 'Påmeldt %s' % self.event.headline
             template = loader.get_template("events/moved_to_attending_email.txt")
             message = template.render({'event': self.event, 'name': self.user.get_full_name()})
             self.user.email_user(subject, message)

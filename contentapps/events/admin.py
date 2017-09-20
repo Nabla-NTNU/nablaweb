@@ -33,7 +33,7 @@ class EventAdmin(ContentAdmin):
               "facebook_url",
               )
     form = EventForm
-    list_display = ['__unicode__', 'registration_required']
+    list_display = ['__str__', 'registration_required']
     date_hierarchy = 'event_start'
     ordering = ['-event_start']
     search_fields = ['headline', 'body']

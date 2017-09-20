@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import random
 from datetime import datetime
 
@@ -72,7 +70,7 @@ class RegistrationTest(GeneralEventTest):
 
 class WaitingListTest(GeneralEventTest):
     def setUp(self):
-        super(WaitingListTest, self).setUp()
+        super().setUp()
 
         # Lag og registrer noen brukere
         self.event.register_user(self.user)
