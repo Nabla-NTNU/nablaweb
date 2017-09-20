@@ -7,7 +7,7 @@ from content.models import (
     PublicationManagerMixin,
     TimeStamped,
     ViewCounterMixin,
-    ContentBase,
+    WithPicture,
 )
 
 
@@ -15,7 +15,7 @@ class News(
     PublicationManagerMixin,
     TimeStamped,
     ViewCounterMixin,
-    ContentBase
+    WithPicture,
 ):
     headline = models.CharField(
         verbose_name="tittel",
@@ -62,6 +62,7 @@ class News(
         editable=False,
         null=True
     )
+    slug = models.SlugField(null=True, blank=True)
 
     class Meta:
         verbose_name = "nyhet"
