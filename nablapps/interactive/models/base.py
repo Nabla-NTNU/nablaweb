@@ -1,5 +1,5 @@
 from django.db import models
-from content.models.mixins import TimeStamped, ViewCounterMixin
+from content.models.base import TimeStamped, ViewCounterMixin
 
 
 class InteractiveElement(TimeStamped, ViewCounterMixin, models.Model):

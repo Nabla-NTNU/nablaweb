@@ -7,7 +7,7 @@ from content.models import (
     PublicationManagerMixin,
     TimeStamped,
     ViewCounterMixin,
-    ContentBase,
+    WithPicture,
 )
 from contentapps.news.models import News
 
@@ -66,11 +66,12 @@ class Company(
     PublicationManagerMixin,
     TimeStamped,
     ViewCounterMixin,
-    ContentBase,
-    ):
+    WithPicture,
+):
     website = models.URLField(max_length=200, blank=True, verbose_name="Nettside")
     name = models.CharField(verbose_name="navn", max_length=200, blank=False)
     description = models.TextField(verbose_name="beskrivelse", blank=True)
+    slug = models.SlugField(null=True, blank=True)
 
     class Meta:
         verbose_name = "bedrift"

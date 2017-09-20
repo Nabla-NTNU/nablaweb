@@ -3,7 +3,7 @@
 from django.db import models
 from image_cropping.fields import ImageRatioField
 from django.core.urlresolvers import reverse
-from content.models.mixins import PublicationManagerMixin, ViewCounterMixin
+from content.models.base import PublicationManagerMixin, ViewCounterMixin
 
 
 def get_season_count():

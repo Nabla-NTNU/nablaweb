@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 
 from datetime import timedelta, datetime
 
-from content.models.mixins import PublicationManagerMixin
+from content.models.base import PublicationManagerMixin
 from .base import InteractiveElement, Scoreboard, InteractionResult
 
 

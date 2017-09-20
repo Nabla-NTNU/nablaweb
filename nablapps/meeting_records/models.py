@@ -3,7 +3,7 @@
 from datetime import date
 from django.db import models
 from django.core.urlresolvers import reverse
-from content.models.mixins import TimeStamped
+from content.models.base import TimeStamped
 
 
 class MeetingRecord(TimeStamped):

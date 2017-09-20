@@ -1,6 +1,6 @@
 from django.db import models
 from .base import InteractiveElement
-from content.models.mixins import PublicationManagerMixin
+from content.models.base import PublicationManagerMixin
 from django.core import urlresolvers
 from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
