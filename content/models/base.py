@@ -7,7 +7,7 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 
 from image_cropping.fields import ImageRatioField
-from .mixins import EditableMedia, PublicationManagerMixin, CommentsMixin
+from .mixins import PublicationManagerMixin, CommentsMixin, TimeStamped, ViewCounterMixin
 
 
 class BaseImageModel(models.Model):
@@ -34,7 +34,7 @@ class BaseImageModel(models.Model):
         abstract = True
 
 
-class Content(CommentsMixin, PublicationManagerMixin, EditableMedia, models.Model):
+class Content(CommentsMixin, PublicationManagerMixin, TimeStamped, ViewCounterMixin, models.Model):
 
     picture = models.ImageField(
         upload_to="uploads/news_pictures",

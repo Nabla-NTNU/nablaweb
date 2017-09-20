@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.utils.text import slugify
 from datetime import date
 
-from content.models.base import EditableMedia
+from content.models.base import TimeStamped, ViewCounterMixin
 
 
 class Blog(models.Model):
@@ -43,7 +43,7 @@ class Blog(models.Model):
         return reverse('blog', kwargs={'blog': self.slug})
 
 
-class BlogPost(EditableMedia, models.Model):
+class BlogPost(TimeStamped, ViewCounterMixin, models.Model):
     blog = models.ForeignKey(
         Blog,
         related_name="posts",

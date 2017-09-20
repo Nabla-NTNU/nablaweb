@@ -67,12 +67,6 @@ class TimeStamped(models.Model):
         return abs((self.last_changed_date - self.created_date).seconds) > 1
 
 
-class EditableMedia(TimeStamped, ViewCounterMixin, models.Model):
-
-    class Meta:
-        abstract = True
-
-
 class PublicationManagerMixin(models.Model):
     """
     Adds several options for managing publication.

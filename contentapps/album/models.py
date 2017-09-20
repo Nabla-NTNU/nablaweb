@@ -2,7 +2,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import AnonymousUser
 
-from content.models.base import EditableMedia, BaseImageModel
+from content.models.base import TimeStamped, ViewCounterMixin, BaseImageModel
 
 
 class AlbumImage(BaseImageModel):
@@ -40,7 +40,7 @@ class AlbumImage(BaseImageModel):
         db_table = "content_albumimage"
 
 
-class Album(EditableMedia, models.Model):
+class Album(TimeStamped, ViewCounterMixin, models.Model):
     title = models.CharField(
         max_length=100,
         verbose_name="Albumtittel",
