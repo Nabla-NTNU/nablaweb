@@ -1,13 +1,12 @@
 import operator
 
-from django.forms import BooleanField, ValidationError
+from django.forms import BooleanField, ValidationError, ModelForm
 from django.forms.models import fields_for_model
 
-from content.forms import ContentForm
 from .models import Event
 
 
-class EventForm(ContentForm):
+class EventForm(ModelForm):
     has_queue = BooleanField(
         required=False,
         label="Har venteliste",
