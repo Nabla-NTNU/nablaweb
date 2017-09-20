@@ -111,7 +111,6 @@ class TestAdmin(admin.ModelAdmin):
                    'cols': 10,
                    'style': 'height: 4em;'})},
     }
-    exclude = ('edit_listeners',)
 
 
 admin.site.register(AdventCalendar, AdventCalendarAdmin)

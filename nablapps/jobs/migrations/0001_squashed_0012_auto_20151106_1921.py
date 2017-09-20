@@ -29,7 +29,6 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(verbose_name='beskrivelse', blank=True)),
                 ('created_by', models.ForeignKey(related_name='company_created', to=settings.AUTH_USER_MODEL, verbose_name='Opprettet av', blank=True, null=True, editable=False)),
                 ('last_changed_by', models.ForeignKey(related_name='company_edited', to=settings.AUTH_USER_MODEL, verbose_name='Endret av', blank=True, null=True, editable=False)),
-                ('edit_listeners', models.ManyToManyField(help_text='Brukere som overvåker dette objektet', blank=True, to=settings.AUTH_USER_MODEL, verbose_name='Lyttere')),
                 ('view_counter', models.IntegerField(verbose_name='Visninger', default=0, editable=False)),
                 ('publication_date', models.DateTimeField(verbose_name='Publikasjonstid', blank=True, null=True)),
                 ('published', models.NullBooleanField(help_text='Dato har høyere prioritet enn dette feltet.', default=True, verbose_name='Publisert')),

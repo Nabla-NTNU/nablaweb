@@ -20,8 +20,4 @@ class Migration(migrations.Migration):
             model_name='company',
             name='content_type',
         ),
-        migrations.RemoveField(
-            model_name='company',
-            name='edit_listeners',
-        ),
     ]

@@ -12,7 +12,7 @@
 {% block title %}{{ nablad.headline }}{% endblock %}
 
 {% block content %}
-    {% include "content/news/includes/text_content.html" with news=nablad %}
+    {% include "news/includes/text_content.html" with news=nablad %}
     {% include "content/includes/comments.html" with content=nablad %}
 {% endblock %}
 
