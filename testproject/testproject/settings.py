@@ -46,7 +46,6 @@ INSTALLED_APPS = (
     'markdown_deux',
 
     'django_comments',
-    'django_nyt',
     'content',
     'contentapps.album',
     'contentapps.blog',

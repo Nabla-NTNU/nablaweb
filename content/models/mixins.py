@@ -6,9 +6,6 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 
 from django_comments.models import Comment
-from django_nyt.utils import notify, subscribe
-from django_nyt.models import Settings
-
 
 logger = logging.getLogger(__name__)
 
@@ -29,65 +26,6 @@ class ViewCounterMixin(models.Model):
 
     class Meta:
         abstract = True
-
-
-class EditMessageMixin(models.Model):
-    """
-    Sends notifications if the object is changed.
-    """
-
-    notification_url = None
-    watch_fields = []
-    __old_fields = {}
-
-    class Meta:
-        abstract = True
-
-    def __init__(self, *args, **kwargs):
-        super(EditMessageMixin, self).__init__(*args, **kwargs)
-        if self.id:
-            self._save_watch_fields_as_old_fields()
-
-    def _save_watch_fields_as_old_fields(self):
-        self.__old_fields = {
-            field: getattr(self, field)
-            for field in self.watch_fields
-         }
-
-    def _watch_fields_has_changed(self):
-        return any(
-            getattr(self, field, old) != old
-            for field, old in self.__old_fields.items()
-        )
-
-    def subscribe_to_changes(self, user, key="object_changed"):
-        """
-        Add a subscription to change notifications to this object
-
-        :param user: Ths user that wants to subscribe to changes.
-        """
-        setting = Settings.get_default_setting(user)
-        content_type = ContentType.objects.get_for_model(self.__class__)
-        subscribe(setting, key, content_type=content_type, object_id=self.id)
-
-    def save(self, *args, **kwargs):
-        if self.id and self._watch_fields_has_changed():
-            self.notify("{object} har endret seg.".format(object=self))
-            self._save_watch_fields_as_old_fields()
-        return super(EditMessageMixin, self).save(*args, **kwargs)
-
-    def notify(self, message, key="object_changed"):
-        notify(
-            message, key,
-            target_object=self,
-            url=self.get_notification_url()
-        )
-
-    def get_notification_url(self):
-        if self.notification_url:
-            return self.notification_url
-        else:
-            return self.get_absolute_url()
 
 
 class TimeStamped(models.Model):
@@ -129,7 +67,7 @@ class TimeStamped(models.Model):
         return abs((self.last_changed_date - self.created_date).seconds) > 1
 
 
-class EditableMedia(TimeStamped, ViewCounterMixin, EditMessageMixin):
+class EditableMedia(TimeStamped, ViewCounterMixin, models.Model):
 
     class Meta:
         abstract = True

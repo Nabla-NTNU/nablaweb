@@ -4,7 +4,6 @@ from django.contrib.auth.views import login, logout
 from django.views.generic import TemplateView
 
 from contentapps.news.feeds import RecentNews
-import django_nyt.urls
 
 
 urlpatterns = [
@@ -21,5 +20,4 @@ urlpatterns = [
     url(r'^nyheter/', include('contentapps.news.urls')),
     url(r'^feed/$', RecentNews()),
     url(r'^comments/', include('django_comments.urls')),
-    url(r'^notifications/', django_nyt.urls.get_pattern()),
 ]

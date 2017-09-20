@@ -13,15 +13,6 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-    {% addtoblock "js" %}
-        <script type="text/javascript">
-          URL_NYT_GET_NEW = "{% url "nyt:json_get" %}";
-          URL_NYT_MARK_READ = "{% url "nyt:json_mark_read_base" %}";
-          URL_NYT_GOTO = "{% url "nyt:goto_base" %}";
-        </script>
-        <script src="{% static 'core.js' %}"></script>
-        <script type="text/javascript" src="{% static 'ui.js' %}"></script>
-    {% endaddtoblock %}
 </head>
 
 <body>
@@ -55,17 +46,6 @@
 </div>
 </nav>
 
-
-<h2>Notifications:</h2>
-<ul>
-  <li class="notification-before-list">Notifications (<span class="badge notification-cnt">0</span>):</li>
-  <li class="notifications-empty"><a href="#"><em>{% trans "No notifications" %}</em></a></li>
-</ul>
-
-<a href="#" onclick="nyt_mark_read()">
-  <i class="icon-check"></i>
-  {% trans "Clear notifications list" %}
-</a>
 
 </header>
 
