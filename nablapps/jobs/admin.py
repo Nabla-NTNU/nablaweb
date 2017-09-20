@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
-
-
-from content.admin import ContentAdmin, ChangedByMixin
+from content.admin import ChangedByMixin
 from django.contrib import admin
+from image_cropping import ImageCroppingMixin
 from .forms import AdvertForm, CompanyForm
-
 from .models import Advert, Company, RelevantForChoices, TagChoices, YearChoices
 
 
@@ -29,7 +26,7 @@ class AdvertAdmin(ChangedByMixin, admin.ModelAdmin):
     form = AdvertForm
 
 
-class CompanyAdmin(ContentAdmin):
+class CompanyAdmin(ImageCroppingMixin, admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     fields = (
         "name",
