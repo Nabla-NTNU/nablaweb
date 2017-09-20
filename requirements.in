@@ -8,42 +8,31 @@
 # to recreate requirements.txt with updated version numbers.
 # Remember to test whether the updated packages work as expected.
 
-pip-tools
+pip-tools	# Used to update requirements file
 
-# django pinned to the major version we are using.
 django~=1.11.5
-
-# Misc django packages
-django-bootstrap3
-django-bower
-django-braces
+django-bootstrap3   # Templatetags for bootstrap3
+django-bower        # Frontend/staticfiles packagemanager
+django-braces       # Extra mixinclasses for models and views
 django-contrib-comments
-django-filebrowser
-django-grappelli
-django-markdown-deux
-django-sekizai
-
-# Image
-Pillow>=4.2.1
-easy-thumbnails
+django-filebrowser  # Filebrowser for mediafiles.
+django-grappelli    # Makes the django adminpage more fancy
+django-haystack     # Search functionality for django models. See also whoosh.
 django-image-cropping
-Wand
+django-markdown-deux
+django-sekizai      # Templatetag library for extra block functionality
+easy-thumbnails     # Thumbnail creator
+faker       # Fake data generator, used in tests.
+gunicorn    # Web-server used to run django
+PyMySQL     # Database bindings for mysql
+Wand        # python bindings for ImageMagick. Needs ImageMagick installed on machine to work.
+whoosh      # Backend for django-haystack
 
-# Search related packages
-django-haystack
-whoosh
 
-# Wiki
-#-e git+git://github.com/django-wiki/django-wiki.git#egg=wiki
-#wiki~=0.1
--e git+https://bitbucket.org/webkom/django-wiki.git#egg=wiki
-
-# Python bindings for database software (MySql and memcached)
-PyMySQL
+# Fork of django-wiki
+-e git+https://bitbucket.org/webkom/django-wiki.git@0c41490d293a28d2e08c1252336672ad7bc4be85#egg=wiki
 
 # Python packages developed by webkom
--e git+https://bitbucket.org/webkom/content-app.git#egg=content
--e git+https://bitbucket.org/webkom/bpc_client.git#egg=bpc_client
+-e git+https://bitbucket.org/webkom/content-app.git@27fa0af752822fdd6e00da14615a632711ef233e#egg=content
+-e git+https://bitbucket.org/webkom/bpc_client.git@556ede6bd15b4296b1f2a29730ad6e5f00b27428#egg=bpc_client
 
-faker
-gunicorn
