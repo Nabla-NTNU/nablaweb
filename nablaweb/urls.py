@@ -46,6 +46,10 @@ urlpatterns = [
     url(r'^utveksling/', include('nablapps.exchange.urls')),
     url(r'^wiki/notifications/', django_nyt.urls.get_pattern()),
     url(r'^wiki/', wiki.urls.get_pattern()),
+
+    # Del filer (Husk manage.py collectstatic for static filer når DEBUG=False)
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 ]
 
 
@@ -53,10 +57,4 @@ if settings.DEBUG:
     urlpatterns += [
          url(r'^500.html/$', TemplateView.as_view(template_name='500.html')),
          url(r'^404.html/$', TemplateView.as_view(template_name='404.html')),
-    ]
-else:
-    # Del filer selv om DEBUG=False. (Husk manage.py collectstatic for static filer)
-    urlpatterns += [
-        url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
-        url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     ]
