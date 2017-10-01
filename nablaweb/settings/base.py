@@ -3,8 +3,6 @@
 # Ikke bruk denne til å kjøre django med
 # Bruk heller devel.py eller production.py
 
-# Django settings
-#########################################
 
 import os
 from easy_thumbnails.conf import Settings as EasyThumbnailSettings
@@ -46,10 +44,7 @@ MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
 
-FILEBROWSER_DIRECTORY = ''
-
-# Mappe hvor alle statiske filer blir lagt etter at man kjører
-# manage.py collectstatic
+# Mappe hvor alle statiske filer blir lagt etter at man kjører manage.py collectstatic
 STATIC_ROOT = os.path.join(VARIABLE_CONTENT, 'static_collected')
 
 STATICFILES_DIRS = (
@@ -61,12 +56,6 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     'djangobower.finders.BowerFinder'
 )
-
-BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT)
-
-ADMIN_MEDIA_PREFIX = '/static/admin/'
-
-##############################################################################
 
 TEMPLATES = [
     {
@@ -95,69 +84,58 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    # django-wiki
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'nablaweb.urls'
 
-
 INSTALLED_APPS = [
     ##########################
     # Internt utviklede apps #
     ##########################
-    'content',  # Abstrakt: created, updated, created by, updated by.
-    'accounts',  # Inneholder UserProfile med ekstra informasjon.
-    'jobs',     # Stillingsannonser og firmaer
-    'bedpres',  # Utvider events med BPC-tilkobling. Arver events.
-    'com',      # Viser sider for komiteene.
-    'nabladet',  # Liste over nablad. Arver news.
-    'meeting_records',  # Møtereferater fra styremøter og SKE
-    'poll',     # Spørreundersøkelser
-    'podcast',
-    'interactive',
+    'content',
+    'contentapps.album',
+    'contentapps.blog',
+    'contentapps.events',
+    'contentapps.image',
+    'contentapps.news',
+    'nablapps.accounts',
+    'nablapps.bedpres',
+    'nablapps.com',
+    'nablapps.exchange',
+    'nablapps.interactive',
+    'nablapps.jobs',
+    'nablapps.likes',
+    'nablapps.meeting_records',
+    'nablapps.nabladet',
+    'nablapps.nablashop',
+    'nablapps.podcast',
+    'nablapps.poll',
     'nablaweb',
-    'likes',
-    'exchange',
-    'nablashop',
 
     ###########################
     # Eksternt utviklede apps #
     ###########################
-
-    # Django-image-cropping (pip install) gjør det mulig for staff å croppe
-    # opplastede bilder
-    'easy_thumbnails',  # thumbnail-taggen i templates
-    'image_cropping',  # Admindelen
-
-    # http://django-sekizai.readthedocs.org/en/latest/#
-    'sekizai',
-
     'bootstrap3',
-    'markdown_deux',
     'django_comments',
-
-    # Bower handterer frontend pakker
     'djangobower',
-
-    # Haystack er en app for søking. (Krever 2.0.0 beta samt Whoosh!)
-    'haystack',
-
-    # Filebrowser
-    'grappelli',
+    'easy_thumbnails',  # thumbnail-taggen i templates
+    'image_cropping',  # gjør det mulig for staff å croppe opplastede bilder
     'filebrowser',
+    'grappelli',
+    'haystack',
+    'markdown_deux',
+    'sekizai', # http://django-sekizai.readthedocs.org/en/latest/#
 
     # Djangoting
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.admin',
     'django.contrib.flatpages',
     'django.contrib.humanize',
+    'django.contrib.messages',
+    'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
 
     # django-wiki
@@ -175,6 +153,16 @@ INSTALLED_APPS = [
     'wiki.plugins.index'
 ]
 
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+###########################
+# App-spesifikke settings #
+###########################
+
+
+FILEBROWSER_DIRECTORY = ''
+BOWER_COMPONENTS_ROOT = VARIABLE_CONTENT
 BOWER_INSTALLED_APPS = (
     'jquery#1.9.x',
     'bootstrap',
@@ -186,12 +174,6 @@ BOWER_INSTALLED_APPS = (
     'jquery-file-upload'
 )
 
-
-TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-
-###########################
-# App-spesifikke settings #
-###########################
 
 # django.contrib.auth
 LOGIN_URL = '/login/'
@@ -237,11 +219,10 @@ BPC_FORENING = '3'
 BPC_KEY = 'a88fb706bc435dba835b89ddb2ba4debacc3afe4'
 BPC_TESTING = True
 
-EVENT_GETTER_CLASS = 'bedpres.event_overrides.BedPresAndEventGetter'
+EVENT_GETTER_CLASS = 'nablapps.bedpres.event_overrides.BedPresAndEventGetter'
 
 # wiki
 WIKI_REVISIONS_PER_HOUR = 500
 WIKI_REVISIONS_PER_MINUTES = 20
 WIKI_REVISIONS_PER_HOUR_ANONYMOUS = 0
 WIKI_REVISIONS_PER_MINUTES_ANONYMOUS = 0
-

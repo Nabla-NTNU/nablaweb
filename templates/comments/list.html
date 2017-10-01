@@ -1,7 +1,6 @@
 {% load humanize %}
 {% load easy_thumbnails %}
 {% load markdown_deux_tags %}
-{% load mediawiki_links %}
 {% load static %}
 
 {% for comment in comment_list %}
@@ -29,7 +28,7 @@
                 (<a href="{% url "comments-delete" comment.id %}">fjern</a>)
             {% endif %}
         </div>
-        {{ comment.comment|striptags|markdown|wikilinks }}
+        {{ comment.comment|striptags|markdown }}
     </div>
 </div>
 

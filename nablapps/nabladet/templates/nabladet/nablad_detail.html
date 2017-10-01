@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block morehead %}
+
+<meta property="og:image" content="{{ nablad.get_picture_url }}" />
+<meta property="og:title" content="{{ nablad.headline|striptags }}" />
+<meta property="og:type"  content="article" />
+<meta property="og:description" content="{% spaceless %}{{ nablad.lead_paragraph|striptags }}{% endspaceless %}" />
+
+{% endblock %}
+
+{% block title %}{{ nablad.headline }}{% endblock %}
+
+{% block content %}
+    {% include "news/includes/text_content.html" with news=nablad %}
+    {% include "content/includes/comments.html" with content=nablad %}
+{% endblock %}
+
+
+{% block sidebar %}
+
+{% include "content/includes/meta.html" with content=nablad %}
+
+<a class="btn btn-primary btn-lg btn-block" href="{{ nablad.file.url }}">
+        Last ned Nabladet {{ nablad.pub_date|date:"F Y" }}
+</a>
+
+<br>
+
+<h3>Arkiv</h3>
+<table class="table table-striped">
+{% for n in nablad_archive %}
+<tr><td>
+    {% if n == nablad %}
+    {{ n.pub_date|date:"F Y" }}
+    {% else %}
+    <a href="{{ n.get_absolute_url }}"> {{ n.pub_date|date:"F Y" }} </a>
+    {% endif %}
+</td></tr>
+{% endfor %}
+</table>
+
+{% include "nabladet/sidebar_admin_include.html" %}
+{% endblock %}

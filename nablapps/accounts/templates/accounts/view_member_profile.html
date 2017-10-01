@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load easy_thumbnails %}
+{% load markdown_deux_tags %}
+{% load static %}
+
+{% block title %}Medlem: {% firstof member.get_full_name member.username %} {% endblock %}
+
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <img class="thumbnail" alt="avatar"
+            {% if member.avatar %}
+                src="{% thumbnail member.avatar 150x150 %}"
+            {% else %}
+                src="{% static "img/default_avatar.png" %}"
+            {%endif %}>
+    </div>
+    <div class="col-md-9">
+        <h2>
+        {% firstof member.get_full_name member.username %}
+
+        {% if user == member %}
+            <a href="{% url "edit_profile" %}">
+                <span class="glyphicon glyphicon-edit"></span>
+            </a>
+        {% endif %}
+        </h2>
+        <br />
+        <table class="table table-striped table-bordered">
+            <tr>
+                <td>Brukernavn</td>
+                <td>{{ member.username }}</td>
+            <tr>
+                <td>Epost </td>
+                <td>{{member.email}}</td>
+            </tr>
+
+            <tr>
+                <td>Hjemmeside </td>
+                {% if member.web_page %}
+                <td><a href="{{ member.web_page }}" target="_blank" >{{ member.web_page }}</a></td>
+                {% else %}
+                <td><a href="http://folk.ntnu.no/{{ member.username }}">http://folk.ntnu.no/{{ member.username }}</a></td>
+                {% endif %}
+            </tr>
+
+            {% if member.birthday %}
+            <tr>
+                <td>Bursdag </td>
+                <td>{{member.birthday}}</td>
+            </tr>
+            {% endif %}
+
+            <tr>
+                <td>Medlem av </td>
+                <td>
+                    <ul class="list-unstyled">
+                        {% for group in member.groups.all %}
+                            <li><span class="icon"></span> {{ group.name }}</li>
+                        {% empty %}
+                            Ingenting
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+
+            {% if member.about %}
+            <tr>
+                <td>Biografi</td>
+                <td>
+                    {{ member.about|markdown }}
+                </td>
+            </tr>
+            {% endif %}
+
+        </table>
+    </div>
+</div>
+
+{% endblock %}

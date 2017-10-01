@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load markdown %}
+{% load easy_thumbnails %}
+{% load sekizai_tags %}
+{% load static %}
+
+{% block title %}{{ com.com.name }}{% endblock %}
+
+{% block content %}
+    {% addtoblock "css" %}
+        <link href="{% static "com/com.css" %}" rel="stylesheet">
+    {% endaddtoblock %}
+
+<h2>{{ com.com.name }}</h2>
+{% if com.com.nablagroup.mail_list %}<p><b>{{ com.com.nablagroup.mail_list }}</b></p>{% endif %}
+<p>{{ com.description|markdown:"unsafe"}}</p>
+
+
+{# List of memberships #}
+{% for membership in members %}
+
+<div class="com-member">
+        <div class="avatar">
+          <img class="thumbnail" alt="avatar"
+              {% if membership.user.avatar %}
+                  src="{% thumbnail membership.user.avatar 150x150 %}"
+              {% else %}
+                  src="{% static "img/default_avatar.png" %}"
+              {%endif %}>
+        </div>
+
+        <div class="info">
+
+            <span class="name">
+              <a class=""
+               href="{% url "member_profile" membership.user.username %}"
+               >{% firstof membership.user.get_full_name membership.user.username %}</a>
+            </span>
+
+            {# Beskrivelse av stillingen #}
+            {% if membership.story %}
+                <p class="story">{{ membership.story }}</p>
+            {% endif %}
+        </div>
+</div>
+
+{% empty %}
+    <p>Denne komiteen har ingen medlemmer. Det var rart.</p>
+{% endfor %}
+
+{% endblock content %}
+
+
+{% block sidebar %}
+
+<h3>Komiteer</h3>
+<ul class="nav nav-pills nav-stacked">
+{% for c in compages %}
+    {% if not c.is_interest_group %}
+    <li class="panel-title"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
+    {% endif %}
+{% endfor %}
+<h3>Interessegrupper</h3>
+{% for c in compages %}
+    {% if c.is_interest_group %}
+    <li class="panel-title"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
+    {% endif %}
+{% endfor %}
+</ul>
+
+{% endblock sidebar %}
