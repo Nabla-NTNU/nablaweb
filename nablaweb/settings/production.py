@@ -8,6 +8,7 @@ get_env = os.environ.get
 
 DEBUG = bool(get_env('DEBUG', False))
 ADMINS = [("Django-logging", "django-log@abel.nabla.no")]
+TEMPLATE_DEBUG=False
 
 DATABASES = {
     'default': {
@@ -40,3 +41,6 @@ LOGGING = {
 SESSION_COOKIE_DOMAIN = '.nabla.no'
 
 BPC_TESTING = False
+
+FILE_UPLOAD_PERMISSIONS = 0o644
+FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o755
