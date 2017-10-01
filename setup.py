@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
@@ -12,16 +11,13 @@ requirements = [
     'pytz',
     'django-haystack',
     'django>=1.8',
-    'django-contrib-comments',
     'django-image-cropping',
     'django-filebrowser',
     'Pillow',
     'easy-thumbnails',
-    'Wand',
     'django-braces',
     'django-sekizai>=0.8.2',
     'django-markdown-deux',
-    'django-nyt>=1.0b1'
 ]
 
 setup(

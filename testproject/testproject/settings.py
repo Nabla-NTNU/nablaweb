@@ -46,8 +46,12 @@ INSTALLED_APPS = (
     'markdown_deux',
 
     'django_comments',
-    'django_nyt',
-    'content'
+    'content',
+    'contentapps.album',
+    'contentapps.blog',
+    'contentapps.events',
+    'contentapps.image',
+    'contentapps.news',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -161,3 +165,6 @@ LOGGING = {
         },
     },
 }
+
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, "media")
+MEDIA_URL = "/media/"
