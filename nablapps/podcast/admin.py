@@ -7,7 +7,7 @@ from image_cropping import ImageCroppingMixin
 
 class PodcastAdmin(ImageCroppingMixin, admin.ModelAdmin):
     fields = ("publication_date", "published", 'image', 'cropping', 'title', 'season', 'description', 'extra_markdown',
-              'is_clip', 'file', 'pub_date', 'allow_comments')
+              'is_clip', 'file', 'pub_date',)
     list_display = ('title', 'pub_date', 'season', 'is_clip')
     list_filter = ['pub_date']
 

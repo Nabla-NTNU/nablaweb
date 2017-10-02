@@ -19,7 +19,6 @@ class AdvertAdmin(ChangedByMixin, admin.ModelAdmin):
         "relevant_for_group",
         "relevant_for_year",
         "info_file",
-        "allow_comments",
         "tags"
     )
     prepopulated_fields = {"slug": ("headline",)}
