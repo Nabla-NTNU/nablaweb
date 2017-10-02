@@ -7,17 +7,12 @@ from setuptools import setup, find_packages
 from content import VERSION
 
 requirements = [
-    'markdown',
-    'pytz',
-    'django-haystack',
     'django>=1.8',
-    'django-image-cropping',
-    'django-filebrowser',
-    'Pillow',
-    'easy-thumbnails',
     'django-braces',
+    'django-image-cropping',
     'django-sekizai>=0.8.2',
-    'django-markdown-deux',
+    'easy-thumbnails',
+    'markdown',
 ]
 
 setup(

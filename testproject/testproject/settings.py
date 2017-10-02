@@ -43,9 +43,7 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'image_cropping',
     'sekizai',
-    'markdown_deux',
 
-    'django_comments',
     'content',
     'contentapps.album',
     'contentapps.blog',
