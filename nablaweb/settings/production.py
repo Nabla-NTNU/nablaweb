@@ -22,11 +22,17 @@ DATABASES = {
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'timestamp': {
+            'format': '%(asctime)s %(message)s',
+        },
+    },
     'handlers': {
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
             'filename': get_env('DJANGO_LOG_PATH', '/var/log/django/nablaweb/error.log'),
+            'formatter': 'timestamp',
         },
     },
     'loggers': {
