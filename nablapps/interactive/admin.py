@@ -1,15 +1,35 @@
+from django import forms
 from django.contrib import admin
 from django.db import models
 from django.forms import TextInput, Textarea
-from .models import AdventCalendar, AdventDoor, Quiz, QuizQuestion, Test, TestQuestion, TestQuestionAlternative, TestResult
-from django import forms
+
+from .models import (
+    AdventCalendar,
+    AdventDoor,
+    Quiz,
+    QuizQuestion,
+    Test,
+    TestResult,
+    TestQuestion,
+    TestQuestionAlternative,
+)
 
 
 class AdventDoorInline(admin.TabularInline):
     model = AdventDoor
     extra = 24
-    fields = ('number', 'content', 'short_description', 'is_lottery', 'template', 'image', 'is_text_response', 'winner',
-              'quiz', 'user_test')
+    fields = (
+        'number',
+        'content',
+        'short_description',
+        'is_lottery',
+        'template',
+        'image',
+        'is_text_response',
+        'winner',
+        'quiz',
+        'user_test',
+    )
     readonly_fields = ['winner']
     fk_name = "calendar"
 
@@ -26,7 +46,14 @@ class AdventCalendarAdmin(admin.ModelAdmin):
 class QuizQuestionInline(admin.TabularInline):
     model = QuizQuestion
     extra = 8
-    fields = ('question', 'alternative_1', 'alternative_2', 'alternative_3', 'alternative_4', 'correct_alternative')
+    fields = (
+        'question',
+        'alternative_1',
+        'alternative_2',
+        'alternative_3',
+        'alternative_4',
+        'correct_alternative',
+    )
     fk_name = "quiz"
 
 
@@ -53,7 +80,7 @@ class TestQuestionAlternativeForm(forms.ModelForm):
 
 class TestQuestionAlternativeInline(admin.TabularInline):
     model = TestQuestionAlternative
-    fields = ('text', 'target','weights',)
+    fields = ('text', 'target', 'weights', )
     fk_name = "question"
     extra = 1
     form = TestQuestionAlternativeForm

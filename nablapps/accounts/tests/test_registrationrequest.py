@@ -1,6 +1,6 @@
-from django.test import TestCase, Client
-from django.core.urlresolvers import reverse
 from django.core import mail
+from django.core.urlresolvers import reverse
+from django.test import TestCase, Client
 
 from nablapps.accounts.models import NablaUser, RegistrationRequest
 
@@ -44,5 +44,6 @@ class RegistrationViewTest(BaseRegistrationTest):
         )
         user = NablaUser.objects.get(username=self.username)
         self.assertTrue(user.is_active, msg="The user should be active.")
-        self.assertEqual(mail.outbox[0].to[0], user.email,
+        self.assertEqual(
+            mail.outbox[0].to[0], user.email,
             msg="There should have been sent an email to the new user.")

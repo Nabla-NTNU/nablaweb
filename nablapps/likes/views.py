@@ -21,4 +21,4 @@ def toggle_like_view(request):
     is_liked = toggle_like(instance=object, user=request.user)
 
     count = get_like_count(object)
-    return JsonResponse({'count': count, 'liked': is_liked })
+    return JsonResponse({'count': count, 'liked': is_liked})

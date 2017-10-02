@@ -1,5 +1,5 @@
-from django.db import models
 from content.models import TimeStamped, ViewCounterMixin
+from django.db import models
 
 
 class InteractiveElement(TimeStamped, ViewCounterMixin, models.Model):
@@ -25,10 +25,10 @@ class Scoreboard(models.Model):
     """
 
     element = None
-    
+
     class Meta:
         abstract = True
- 
+
 
 class InteractionResult(models.Model):
     """

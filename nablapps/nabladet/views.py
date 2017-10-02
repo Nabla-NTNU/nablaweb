@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from contentapps.news.views import NewsDetailView
 from django.contrib.auth.views import redirect_to_login
 from django.views.generic import ListView
@@ -16,7 +14,8 @@ class NabladDetailView(NewsDetailView):
         context = super(NabladDetailView, self).get_context_data(**kwargs)
         context['nablad_archive'] = Nablad.objects.order_by('-pub_date')
         if not self.request.user.is_authenticated():
-            context['nablad_archive'] = context['nablad_archive'].exclude(is_public=False).order_by('-pub_date')
+            context['nablad_archive'] = context['nablad_archive'].exclude(is_public=False)\
+                                                                 .order_by('-pub_date')
         return context
 
     def get(self, request, *args, **kwargs):

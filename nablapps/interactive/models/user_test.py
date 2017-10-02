@@ -1,9 +1,9 @@
-from django.db import models
-from .base import InteractiveElement
 from content.models import PublicationManagerMixin
 from django.core import urlresolvers
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.utils.safestring import mark_safe
+from .base import InteractiveElement
 
 
 class Test(PublicationManagerMixin, InteractiveElement):
@@ -48,15 +48,20 @@ class TestQuestion(models.Model):
             changeform_url = urlresolvers.reverse(
                 'admin:interactive_testquestion_change', args=(self.id,)
             )
-            liste = u"<ul>"
+            liste = "<ul>"
             for alt in self.alternatives.all():
-                liste += u"<li>" + str(alt.text) + u" - "
+                liste += "<li>" + str(alt.text) + " - "
                 for result in alt.get_target_with_weights():
                     liste += str(result[0]) + "[" + str(result[1]) + "], "
                 liste = liste[:-2]
-            liste += u"</ul>"
-            return mark_safe(u'<a href="%s" target="_blank">Endre alternativer</a>' % changeform_url + liste)
-        return u'Du må lagre (og fortsette å redigere) spørsmål én gang først. \nKan også være smart å sette publisert=nei før du lagrer.'
+            liste += "</ul>"
+            return mark_safe(
+                '<a href="%s" target="_blank">Endre alternativer</a>' % changeform_url + liste
+            )
+        return (
+            'Du må lagre (og fortsette å redigere) spørsmål én gang først. \n'
+            'Kan også være smart å sette publisert=nei før du lagrer.'
+        )
 
     changeform_link.short_description = 'Alternativer'  # omit column header
 
@@ -96,7 +101,9 @@ class TestQuestionAlternative(models.Model):
 
     weights = models.TextField(
         verbose_name="vektlegging av resultater",
-        help_text="Bestem hvor mye hvert resultat vektlegges ved valg av dette alternativet. Format er 3,1,4 (altså heltall) det 3 er vekten til det øveste resultatet osv. Hvis blank får alle vekt 1, og hvis listen ikke er lang nok får resten vekt 1",
+        help_text=("Bestem hvor mye hvert resultat vektlegges ved valg av dette alternativet. "
+                   "Format er 3,1,4 (altså heltall) det 3 er vekten til det øveste resultatet osv. "
+                   "Hvis blank får alle vekt 1, og hvis listen ikke er lang nok får resten vekt 1"),
         blank=True,
         validators=[validate_weight_syntax]
     )
@@ -127,7 +134,7 @@ class TestQuestionAlternative(models.Model):
 
 
 class TestResult(models.Model):
-    
+
     title = models.CharField(
         max_length=100,
         blank=False

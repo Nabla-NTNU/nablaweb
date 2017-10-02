@@ -1,6 +1,6 @@
-from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.db import models
 
 
 class University(models.Model):
@@ -35,7 +35,7 @@ class University(models.Model):
         return self.univ_navn
 
     def get_has_retning_list(self):
-        """ Returns a list of booleans indicating whether there exists an exchange in each retning"""
+        """Return a list of booleans indicating whether there exists an exchange in each retning"""
         return [
             self.exchange_set.filter(retning=retn).exists()
             for retn, _ in RETNINGER
@@ -77,9 +77,11 @@ class Exchange(models.Model):
     def __str__(self):
         return "{} - {}".format(self.student, self.univ)
 
+
 def validate_file_extension(value):
     if not value.name.endswith('.pdf'):
         raise ValidationError(u'Må være en PDF-fil')
+
 
 class Info(models.Model):
     ex = models.ForeignKey(Exchange, on_delete=models.CASCADE)

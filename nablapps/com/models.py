@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
-
-# Modeller for com-appen
+"""
+Modeller for com-appen
+"""
 
 from django.db import models
 from django.conf import settings
@@ -135,4 +135,3 @@ class Committee(models.Model):
     class Meta:
         verbose_name = "Komité"
         verbose_name_plural = "Komitéer"
-

@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-
-from django.db import models
 from django.conf import settings
+from django.db import models
+
 
 class UserHasVoted(Exception):
     pass
@@ -122,7 +121,8 @@ class Choice(models.Model):
 
     def vote(self, user):
         if self.poll.user_has_voted(user):
-            raise UserHasVoted(u"{user} has already voted on {poll}.".format(user=user, poll=self.poll))
+            raise UserHasVoted(
+                "{user} has already voted on {poll}.".format(user=user, poll=self.poll))
         else:
             self.votes += 1
             self.save()

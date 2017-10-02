@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-
+from content.models import TimeStamped
 from datetime import date
 from django.db import models
 from django.core.urlresolvers import reverse
-from content.models import TimeStamped
 
 
 class MeetingRecord(TimeStamped):

@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-
-from .models import MeetingRecord
-from django.contrib import admin
 from content.admin import ChangedByMixin
+from django.contrib import admin
+from .models import MeetingRecord
 
 
 @admin.register(MeetingRecord)

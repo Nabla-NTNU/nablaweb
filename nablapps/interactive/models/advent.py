@@ -1,11 +1,12 @@
+from datetime import datetime, timedelta
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
-from .base import InteractiveElement, InteractionResult
 from nablapps.accounts.models import NablaUser
 from nablapps.com.models import Committee
-from django.core.urlresolvers import reverse
-from datetime import datetime, timedelta
 from random import choice
-from django.conf import settings
+
+from .base import InteractiveElement, InteractionResult
 
 
 class AdventDoor(InteractiveElement):
@@ -82,7 +83,7 @@ class AdventDoor(InteractiveElement):
     class Meta:
         verbose_name = "Adventsluke"
         verbose_name_plural = "Adventsluker"
-        unique_together = ('number','calendar',)
+        unique_together = ('number', 'calendar', )
 
     def __str__(self):
         return str(self.number)
@@ -105,7 +106,7 @@ class AdventDoor(InteractiveElement):
 
     @property
     def is_today(self):
-        return datetime.now() >= self.date and datetime.now() <= self.date + timedelta(days=1) 
+        return datetime.now() >= self.date and datetime.now() <= self.date + timedelta(days=1)
 
     def choose_winner(self):
         if self.is_lottery and self.is_published:
@@ -154,5 +155,3 @@ class AdventParticipation(InteractionResult):
     user = models.ForeignKey(
         NablaUser
     )
-
-

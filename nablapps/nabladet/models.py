@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 from django.conf import settings
 from django.db import models
@@ -37,8 +36,9 @@ class Nablad(News):
         ordering = ("-pub_date",)
 
     def update_thumbnail(self):
-        self.thumbnail.name = os.path.relpath(thumbnail_pdf(os.path.join(settings.MEDIA_ROOT, self.file.name)),
-                                              start=settings.MEDIA_ROOT)
+        absolute_pdfpath = os.path.join(settings.MEDIA_ROOT, self.file.name)
+        absolute_thumbpath = thumbnail_pdf(absolute_pdfpath)
+        self.thumbnail.name = os.path.relpath(absolute_thumbpath, start=settings.MEDIA_ROOT)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

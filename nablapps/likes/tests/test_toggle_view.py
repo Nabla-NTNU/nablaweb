@@ -18,7 +18,8 @@ class TestProcessLikePress(LoggedInTest):
 
     def test_return_bad_request_on_missing_data(self):
         response = self.client.post(self.url)
-        self.assertEqual(response.status_code, 400, "Should return HTTP 400 Bad Request on missing data")
+        self.assertEqual(response.status_code, 400,
+                         "Should return HTTP 400 Bad Request on missing data")
 
     def test_return_bad_request_on_unknown_content_type(self):
         response = self.client.post(self.url, {'contenttypeId': 1000, 'objectId': 1})
@@ -40,7 +41,8 @@ class TestProcessLikePress(LoggedInTest):
 
     def test_get_not_allowed(self):
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 405, "Only POST requests should be allowed, not GET.")
+        self.assertEqual(response.status_code, 405,
+                         "Only POST requests should be allowed, not GET.")
 
 
 class TestJsonResponse(LoggedInTest):
@@ -49,7 +51,10 @@ class TestJsonResponse(LoggedInTest):
         super().setUp()
 
         self.initial_likes = 10
-        self.users = [User.objects.create(username="user{}".format(i)) for i in range(self.initial_likes)]
+        self.users = [
+            User.objects.create(username="user{}".format(i))
+            for i in range(self.initial_likes)
+        ]
         for user in self.users:
             toggle_like(self.object, user)
 

@@ -1,6 +1,4 @@
-
 from django.test import TestCase
-
 from nablapps.poll.models import Poll
 from .utils import create_poll
 

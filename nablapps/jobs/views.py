@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from content.templatetags.listutil import row_split
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
@@ -23,7 +21,7 @@ class GenericJobsList(ListView):
     model = Advert
 
     def get_context_data(self, **kwargs):
-        context = super(GenericJobsList, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         context['years'] = YearChoices.objects.all()
         context['choices'] = RelevantForChoices.objects.all()
@@ -54,31 +52,31 @@ class CompanyList(GenericJobsList):
     """Stillingsannonser for en spesifikk bedrift."""
     def get_queryset(self):
         company = get_object_or_404(Company, id=self.kwargs['pk'])
-        return super(CompanyList, self).get_queryset().filter(company=company)
+        return super().get_queryset().filter(company=company)
 
 
 class YearList(GenericJobsList):
     """Stillingsannonser som er lagt inn dette året."""
     def get_queryset(self):
-        return super(YearList, self).get_queryset().filter(created_date__year=self.kwargs['year'])
+        return super().get_queryset().filter(created_date__year=self.kwargs['year'])
 
 
 class MonthList(YearList):
     """Stillingsannonser som er lagt inn denne måneden."""
     def get_queryset(self):
-        return super(MonthList, self).get_queryset().filter(created_date__month=self.kwargs['month'])
+        return super().get_queryset().filter(created_date__month=self.kwargs['month'])
 
 
 class TagList(GenericJobsList):
     """Stillingsannonser merket med en spesifikk tag."""
     def get_queryset(self):
-        return super(TagList, self).get_queryset().filter(tags__tag__iexact=self.kwargs['tag'])
+        return super().get_queryset().filter(tags__tag__iexact=self.kwargs['tag'])
 
 
 class RelevantForLinjeList(GenericJobsList):
     """Stillingsannonser merket som relevante for en spesifikk studieretning."""
     def get_queryset(self):
-        return super(RelevantForLinjeList, self).get_queryset()\
+        return super().get_queryset()\
             .filter(relevant_for_group__studieretning__iexact=self.kwargs['linje'])
 
 

@@ -1,11 +1,15 @@
-# -*- coding: utf-8 -*-
-
-from django.conf.urls import url, include
 import django.contrib.auth.views as auth_views
+from django.conf.urls import url, include
 from django.views.generic import RedirectView
 from .views import (
-        UserDetailView, UpdateProfile, UserList, RegistrationView,
-        InjectUsersFormView, MailListView, BirthdayView)
+    BirthdayView,
+    InjectUsersFormView,
+    MailListView,
+    RegistrationView,
+    UpdateProfile,
+    UserDetailView,
+    UserList,
+)
 
 password_change_patterns = [
     url(r'^$',

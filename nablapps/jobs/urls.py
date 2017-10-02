@@ -1,8 +1,14 @@
-# -*- coding: utf-8 -*-
-
 from django.conf.urls import url
-from .views import (YearList, MonthList, CompanyList, RelevantForLinjeList,
-                    RelevantForYearList, TagList, EverythingList, ShowJob)
+from .views import (
+    EverythingList,
+    CompanyList,
+    MonthList,
+    RelevantForLinjeList,
+    RelevantForYearList,
+    ShowJob,
+    TagList,
+    YearList,
+)
 from .feeds import RecentJobs
 
 urlpatterns = [

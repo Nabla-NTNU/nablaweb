@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-
-from django.template import loader
 from django.contrib.auth.models import UserManager
+from django.template import loader
 import re
 
 

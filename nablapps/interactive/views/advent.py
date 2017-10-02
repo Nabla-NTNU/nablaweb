@@ -1,16 +1,16 @@
-from django.views.generic import DetailView, ListView
-from ..models.advent import AdventCalendar, AdventDoor, AdventParticipation
-from nablapps.accounts.models import NablaUser
-from django.shortcuts import redirect, get_object_or_404
-from django.http import Http404
-from django.contrib.auth.decorators import login_required, permission_required
-from datetime import datetime
-from datetime import timedelta
 from braces.views import PermissionRequiredMixin
-from django.contrib import messages
 from content.views import PublishedMixin
-from wsgiref.handlers import format_date_time
+from datetime import datetime, timedelta
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
+from django.http import Http404
+from django.shortcuts import redirect, get_object_or_404
+from django.views.generic import DetailView, ListView
+from nablapps.accounts.models import NablaUser
 from time import mktime
+from wsgiref.handlers import format_date_time
+
+from ..models.advent import AdventCalendar, AdventDoor, AdventParticipation
 
 
 class AdventDoorView(PublishedMixin, DetailView):
@@ -151,5 +151,5 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
         if year == 2015:
             context['base_template'] = "interactive/advent_base.html"
         else:
-            context['base_template'] =  "interactive/advent_base_" + str(year) + ".html"
+            context['base_template'] = "interactive/advent_base_" + str(year) + ".html"
         return context

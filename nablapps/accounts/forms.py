@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime as dt
-
 from django import forms
-from django.forms import DateField
-from django.forms.extras.widgets import SelectDateWidget
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.forms.extras.widgets import SelectDateWidget
 
 from .models import NablaUser, RegistrationRequest
 
@@ -32,7 +29,7 @@ class UserForm(forms.ModelForm):
             'about')
 
     # Use a select widget for picking date of birth
-    birthday = DateField(
+    birthday = forms.DateField(
         label="Bursdag",
         required=False,
         widget=SelectDateWidget(years=list(range(dt.now().year-15, dt.now().year-40, -1))),

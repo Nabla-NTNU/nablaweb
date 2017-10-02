@@ -1,21 +1,20 @@
-
 from contextlib import suppress
 from django.contrib import messages
-from django.contrib.messages.api import MessageFailure
 from django.contrib.auth.signals import user_logged_in, user_logged_out
-from django.utils.safestring import mark_safe
+from django.contrib.messages.api import MessageFailure
 from django.utils.html import escape
+from django.utils.safestring import mark_safe
 
 
 def login_message(sender, request, user, **kwargs):
     with suppress(MessageFailure):
-        msg = 'Velkommen inn <strong>' + escape(user.username) + '</strong>'
+        msg = 'Velkommen inn <strong>{}</strong>'.format(escape(user.username))
         messages.info(request, mark_safe(msg))
 
 
 def logout_message(sender, request, user, **kwargs):
     with suppress(MessageFailure):
-        msg  = '<strong>' + escape(user.username) + '</strong> ble logget ut'
+        msg = '<strong>{} </strong> ble logget ut'.format(escape(user.username))
         messages.info(request, mark_safe(msg))
 
 

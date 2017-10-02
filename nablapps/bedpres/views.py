@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-
 from contentapps.events.views import EventDetailView, RegisterUserView
+from .bpcmixin import WrongClass
 from .event_overrides import *
 from .utils import InvalidCardNum
-from .bpcmixin import WrongClass
 
 
 class BedPresRegisterUserView(RegisterUserView):
@@ -23,7 +21,8 @@ class BedPresRegisterUserView(RegisterUserView):
                 return (
                     "Du ble ikke påmeldt fordi du går i feil klasse for dette arrangementet.\n"
                     "I følge våre systemer går du i {klasse}. klasse og arrangementet "
-                    "er kun åpent for {event.bpc_event.min_year}. til {event.bpc_event.max_year}. klasse."
+                    "er kun åpent for {event.bpc_event.min_year}. "
+                    "til {event.bpc_event.max_year}. klasse."
                 ).format(klasse=e.user.get_class_number(), event=e.event)
 
 

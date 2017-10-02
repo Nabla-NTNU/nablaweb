@@ -11,7 +11,7 @@ class ClassesTest(TestCase):
         self.classes = [
             FysmatClass.objects.create(
                 name="kull{}".format(year),
-                starting_year=year 
+                starting_year=year
             ) for year in years
         ]
         self.users = []
@@ -22,12 +22,11 @@ class ClassesTest(TestCase):
                     username="user{}".format(j*10+i)
                 ) for i in range(4)
             ]
-            
+
             for u in users:
                 cls.user_set.add(u)
-            self.users += users 
-            
+            self.users += users
+
     def test_user_class(self):
         for i, u in enumerate(self.users):
             assert u.get_class_number() <= 5
-            

@@ -9,7 +9,11 @@ from contentapps.news.models import News
 
 
 class YearChoices(models.Model):
-    year = models.IntegerField(blank=False, verbose_name="Klasse", help_text="Klasse: 1, 2, 3, 4 og 5")
+    year = models.IntegerField(
+        blank=False,
+        verbose_name="Klasse",
+        help_text="Klasse: 1, 2, 3, 4 og 5"
+    )
 
     class Meta:
         verbose_name = "Klasse"
@@ -43,7 +47,9 @@ class TagChoices(models.Model):
     tag = models.CharField(
         max_length=100,
         verbose_name="Tags",
-        help_text="Tags for stillingsannonsen. Eksempler: deltid, sommerjobb, fulltid, utlandet, by. Søkbar.")
+        help_text=("Tags for stillingsannonsen. "
+                   "Eksempler: deltid, sommerjobb, fulltid, utlandet, by. Søkbar."),
+    )
 
     class Meta:
         verbose_name = 'Tag'

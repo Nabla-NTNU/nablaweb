@@ -1,7 +1,7 @@
 from django.test import TestCase
 from .models import Podcast, Season
 
-# Create your tests here.
+
 class PodcastBaseTests(TestCase):
 
     def test_creation(self):

@@ -1,7 +1,12 @@
-# -*- coding: utf-8 -*-
-
 from django.conf.urls import url
-from .views import vote, UserPollsView, PollListView, CreateUserPollView, UpdateUserPollView, DeleteUserPollView
+from .views import (
+    vote,
+    CreateUserPollView,
+    DeleteUserPollView,
+    PollListView,
+    UpdateUserPollView,
+    UserPollsView,
+)
 
 urlpatterns = [
     url(r'^(?P<poll_id>\d+)/vote/$',

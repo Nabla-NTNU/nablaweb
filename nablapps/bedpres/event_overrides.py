@@ -1,12 +1,10 @@
-from datetime import datetime, time
-from .models import BedPres
-from contentapps.events.models import Event
-
 from bpc_client.event import get_events as get_bpc_events
-
 from contentapps.events.event_overrides import EventGetter
-from itertools import chain
+from contentapps.events.models import Event
+from datetime import datetime, time
 from django.shortcuts import get_object_or_404
+from itertools import chain
+from .models import BedPres
 
 
 class BedPresAndEventGetter(EventGetter):
@@ -36,7 +34,10 @@ class BedPresAndEventGetter(EventGetter):
         if user.is_anonymous():
             return []
         events = EventGetter.attending_events(user, today)
-        bpc_events = get_bpc_events(username=user.username, fromdate=datetime.combine(today, time()))
+        bpc_events = get_bpc_events(
+            username=user.username,
+            fromdate=datetime.combine(today, time())
+        )
         bpcids = [e.id for e in bpc_events]
         bedpresses = BedPres.objects.filter(bpcid__in=bpcids)
         return list(events) + list(bedpresses)

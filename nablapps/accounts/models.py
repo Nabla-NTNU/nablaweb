@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
-from django.db import models
-from django.core.urlresolvers import reverse
-from django.contrib.auth.models import Group, AbstractUser, UserManager
-from hashlib import sha1
 from datetime import datetime, date
+from django.contrib.auth.models import Group, AbstractUser, UserManager
+from django.core.urlresolvers import reverse
+from django.db import models
+from hashlib import sha1
 from .utils import activate_user_and_create_password, send_activation_email
 
 
@@ -57,8 +55,10 @@ class NablaUser(AbstractUser):
         max_length=10,
         blank=True,
         help_text=(
-        "Dette er det 7-10 siffer lange nummeret <b>nede til venstre</b> på baksiden av NTNU-adgangskortet ditt. "
-        "Det brukes blant annet for å komme inn på bedpresser."))
+            "Dette er det 7-10 siffer lange nummeret <b>nede til venstre</b> "
+            "på baksiden av NTNU-adgangskortet ditt. "
+            "Det brukes blant annet for å komme inn på bedpresser.")
+        )
 
     objects = NablaUserManager()
 
@@ -71,7 +71,8 @@ class NablaUser(AbstractUser):
 
          Returnerer 0 hvis brukeren ikke går på fysmat."""
         try:
-            return FysmatClass.objects.filter(user=self).order_by('starting_year')[0].get_class_number()
+            theclass = FysmatClass.objects.filter(user=self).order_by('starting_year')[0]
+            return theclass.get_class_number()
         except (FysmatClass.DoesNotExist, IndexError):
             return 0
 
@@ -115,7 +116,6 @@ class NablaGroup(Group):
     )
 
     group_type = models.CharField(max_length=10, blank=True, choices=GROUP_TYPES)
-    
 
 
 class FysmatClass(NablaGroup):
@@ -130,7 +130,7 @@ class FysmatClass(NablaGroup):
     def get_class_number(self):
         now = date.today()
         num = now.year - int(self.starting_year) + int(now.month > 6)
-        return 5 if num > 5  else num
+        return 5 if num > 5 else num
 
     def save(self, *args, **kwargs):
         self.group_type = 'kull'

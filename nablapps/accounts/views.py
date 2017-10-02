@@ -1,11 +1,14 @@
-# -*- coding: utf-8 -*-
-
-from django.views.generic import DetailView, ListView, UpdateView, FormView, TemplateView
+from braces.views import (
+    FormMessagesMixin,
+    LoginRequiredMixin,
+    MessageMixin,
+    PermissionRequiredMixin,
+)
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, Http404
 from django.shortcuts import redirect
-from braces.views import LoginRequiredMixin, FormMessagesMixin, MessageMixin, PermissionRequiredMixin
+from django.views.generic import DetailView, ListView, UpdateView, FormView, TemplateView
 
 from .forms import UserForm, RegistrationForm, InjectUsersForm
 from .models import NablaUser, NablaGroup, RegistrationRequest
@@ -14,7 +17,6 @@ from .utils import activate_user_and_create_password, send_activation_email, ext
 User = get_user_model()
 
 
-#  Brukerprofil
 class UserDetailView(LoginRequiredMixin, DetailView):
     """Viser brukerens profil."""
     context_object_name = 'member'
@@ -27,6 +29,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
             raise Http404("Bruker finnes ikke")
         return view_user
 
+
 class UpdateProfile(LoginRequiredMixin, FormMessagesMixin, UpdateView):
     form_class = UserForm
     template_name = 'accounts/edit_profile.html'
@@ -38,7 +41,9 @@ class UpdateProfile(LoginRequiredMixin, FormMessagesMixin, UpdateView):
 
 
 class UserList(LoginRequiredMixin, ListView):
-    queryset = NablaUser.objects.filter(is_active=True).prefetch_related('groups').order_by('username')
+    queryset = NablaUser.objects.filter(is_active=True)\
+                        .prefetch_related('groups')\
+                        .order_by('username')
     context_object_name = 'users'
     template_name = 'accounts/list.html'
 

@@ -1,14 +1,11 @@
-# -*- coding: utf-8 -*-
-from django.contrib import admin
 from django import forms
+from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
-
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-
-from django.http import HttpResponseRedirect
+from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 from .models import NablaUser, NablaGroup, FysmatClass, RegistrationRequest
 from .forms import NablaUserChangeForm, NablaUserCreationForm
@@ -84,7 +81,8 @@ class NablaUserAdmin(UserAdmin):
 
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (('Personlig informasjon'), {'fields': ('first_name', 'last_name', 'email', 'ntnu_card_number')}),
+        (('Personlig informasjon'), {'fields': ('first_name', 'last_name',
+                                                'email', 'ntnu_card_number')}),
         (('Rettigheter'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                       'groups', 'user_permissions')}),
         (('Important dates'), {'fields': ('last_login', 'date_joined')}),

@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
-
 from django import forms
 from django.forms import ModelForm
-
 from nablapps.jobs.models import Advert, Company
 
 
 class AdvertForm(ModelForm):
-    headline = forms.CharField(help_text="Tittelen på stillingsannonsen. Bør inneholde bedriftens navn")
+    headline = forms.CharField(
+        help_text="Tittelen på stillingsannonsen. Bør inneholde bedriftens navn",
+    )
 
     class Meta:
         model = Advert

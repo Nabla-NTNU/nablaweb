@@ -1,9 +1,6 @@
-""" Tests for the
-"""
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from nablapps.poll.forms import PollForm
-
 from nablapps.poll.models import Poll, Choice
 
 User = get_user_model()
@@ -104,5 +101,3 @@ class TestUpdate(BasePollTest):
 
         self.assertEqual(3, Choice.objects.count())
         self.assertTrue(Choice.objects.filter(choice=new_choice).exists())
-
-

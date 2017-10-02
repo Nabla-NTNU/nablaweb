@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.views.generic import TemplateView, DetailView
 from content.views import AdminLinksMixin, ViewAddMixin, PublishedMixin, update_published_state
 from utils.view_mixins import FlatPageMixin
@@ -8,7 +6,6 @@ from .models import Podcast, Season, get_season_count
 
 
 class SeasonView(FlatPageMixin, TemplateView):
-    model = Season
     template_name = "podcast/season.html"
     flatpages = [("info", "/skraattcast/")]
 
@@ -26,10 +23,9 @@ class SeasonView(FlatPageMixin, TemplateView):
             data['season_name'] = season.name()
 
             update_published_state(Podcast)
-            data['podcast_list'] = Podcast.objects.filter(season=season, published=True).order_by('-pub_date').exclude(
-                is_clip=True)
-            data['podcast_clips'] = Podcast.objects.filter(season=season, published=True).order_by('-pub_date').exclude(
-                is_clip=False)
+            published = Podcast.objects.filter(season=season, published=True).order_by('-pub_date')
+            data['podcast_list'] = published.filter(is_clip=False)
+            data['podcast_clips'] = published.filter(is_clip=True)
 
             data['next'] = season.get_next()
             data['season_count'] = get_season_count()
@@ -49,6 +45,6 @@ class PodcastDetailView(PublishedMixin, ViewAddMixin, AdminLinksMixin, DetailVie
         context = super(PodcastDetailView, self).get_context_data(**kwargs)
         context['season'] = season = self.object.season
         context['season_name'] = season.name()
-        context['podcast_clips'] = Podcast.objects.filter(season=season, published=False).order_by('-pub_date').exclude(
-            is_clip=False)
+        published = Podcast.objects.filter(season=season, published=True).order_by('-pub_date')
+        context['podcast_clips'] = published.filter(is_clip=True)
         return context

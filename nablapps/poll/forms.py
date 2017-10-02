@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
+from content.admin import ChangedByMixin
 from datetime import datetime
-from itertools import takewhile, count
-
 from django import forms
 from django.forms.models import inlineformset_factory
-from .models import *
-from content.admin import ChangedByMixin
+from itertools import takewhile, count
+from .models import Poll, Choice
 
 ChoiceFormSet = inlineformset_factory(Poll, Choice, fields=('choice',))
 
@@ -83,5 +81,4 @@ class PollForm(ChangedByMixin, forms.ModelForm):
 
     class Meta:
         model = Poll
-        fields = ('question',
-                  )
+        fields = ('question', )

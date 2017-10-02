@@ -1,7 +1,8 @@
 """
 Settings used for testing the likes-app without all the installed apps
 for the entire project.
-This is because it takes a lot of time to run all the migrations for all the apps in the nablaweb project.
+This is because it takes a lot of time to run all the migrations
+for all the apps in the nablaweb project.
 """
 import os
 

@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-
-from django.db import models
-from image_cropping.fields import ImageRatioField
-from django.core.urlresolvers import reverse
 from content.models import PublicationManagerMixin, ViewCounterMixin
+from django.db import models
+from django.core.urlresolvers import reverse
+from image_cropping.fields import ImageRatioField
 
 
 def get_season_count():
@@ -65,7 +63,9 @@ class Podcast(PublicationManagerMixin, ViewCounterMixin, models.Model):
         null=True,
         blank=True,
         verbose_name="Bilde",
-        help_text="Bilder som er større enn 300x300 px ser best ut. Du kan beskjære bildet etter opplasting.")
+        help_text=("Bilder som er større enn 300x300 px ser best ut. "
+                   "Du kan beskjære bildet etter opplasting."),
+        )
     cropping = ImageRatioField(
         'image',
         '300x300',

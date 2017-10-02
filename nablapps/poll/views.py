@@ -1,15 +1,13 @@
-# -*- coding: utf-8 -*-
-
-from django.shortcuts import get_object_or_404, redirect
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseForbidden
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect
 from braces.views import LoginRequiredMixin, FormMessagesMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
-from .models import Poll, Choice, UserHasVoted
 from .forms import PollForm
+from .models import Poll, Choice, UserHasVoted
 
 
 @login_required
