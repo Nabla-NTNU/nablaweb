@@ -33,6 +33,6 @@ whoosh      # Backend for django-haystack
 -e git+https://bitbucket.org/webkom/django-wiki.git@0c41490d293a28d2e08c1252336672ad7bc4be85#egg=wiki
 
 # Python packages developed by webkom
--e git+https://bitbucket.org/webkom/content-app.git@27fa0af752822fdd6e00da14615a632711ef233e#egg=content
+-e git+https://bitbucket.org/webkom/content-app.git@f516e82f37fb456f2377e743b6aaffdb6938fe6d#egg=content
 -e git+https://bitbucket.org/webkom/bpc_client.git@556ede6bd15b4296b1f2a29730ad6e5f00b27428#egg=bpc_client
 
