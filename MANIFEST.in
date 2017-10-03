@@ -1,3 +1,5 @@
 include README.md
 recursive-include content/templates *.html *.txt *.ics
 recursive-include content/static *.js *.png *.css
+recursive-include contentapps/*/templates *.html *.txt *.ics
+recursive-include contentapps/*/static *.js *.png *.css
