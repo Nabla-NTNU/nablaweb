@@ -6,13 +6,13 @@ from .views import (
 )
 
 urlpatterns = [
-    url(r'^album/$',
+    url(r'^$',
         AlbumList.as_view(),
         name='albums'),
-    url(r'^album/(?P<pk>\d{1,8})/(?P<num>\d{1,8})/$',
+    url(r'^(?P<pk>\d{1,8})/(?P<num>\d{1,8})/$',
         AlbumImageView.as_view(),
         name='album_image'),
-    url(r'^album/(?P<pk>\d{1,8})/$',
+    url(r'^(?P<pk>\d{1,8})/$',
         AlbumOverview.as_view(),
         name='album'),
 ]
