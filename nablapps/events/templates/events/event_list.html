@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load sekizai_tags %}
+{% load staticfiles %}
+
+
+{% block title %}Arrangement{% endblock %}
+
+{% block more_head %}
+<link rel="alternate" type="application/rss+xml" href="/arrangement/feed/" title="RSS feed">
+{% endblock %}
+
+{% block main %}
+
+{% addtoblock "css" %}
+    <link href="{% static 'events/calendar.css' %}" rel="stylesheet">
+{% endaddtoblock %}
+
+<!-- calendar row -->
+<div class="row">
+<div class="col-md-12">
+
+<h2>Kalender {{ this.year }}</h2>
+<ul class="pager">
+    <li>
+        <a href="{% url "event_list" prev.year prev.month %}">&laquo;</a>
+    </li>
+    <li class="inactive">
+        <a>{{ this|date:"F"|capfirst }}</a>
+    </li>
+    <li>
+        <a href="{% url "event_list" next.year next.month %}">&raquo;</a>
+    </li>
+</ul>
+
+
+{{ calendar }}
+
+
+</div> <!-- end col-md-12 -->
+</div><!-- row -->
+
+<div class="row">
+
+    {% if user.is_authenticated %}
+
+        <div class="col-md-4">
+            <h2>Påmeldinger</h2>
+            <table class="table table-bordered table-striped">
+
+            {% for event in future_attending_events %}
+                <tr>
+                    <td>
+                        <a href="{{ event.get_absolute_url }}">{{ event.headline }}</a>
+                    </td>
+                    <td>
+                        {% if event.waiting %}
+                            På venteliste
+                        {% endif %}
+
+                        {% if event.attending %}
+                            <span class="glyphicon glyphicon-check"></span> Har plass
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td>Du er ikke meldt på noe.</td></tr>
+            {% endfor %}
+            </table>
+        </div>
+
+        <div class="col-md-4">
+        </div>
+
+        <div class="col-md-4">
+            <h2>Venteliste</h2> 
+            <p>Melder du deg på et fullbooket arrangement, blir du satt på venteliste.
+            Blir det ledige plasser, går de til dem som har ventet lengst.</p>
+        </div>
+
+    {% else %}
+
+        <div class="col-md-12">
+            <p>Logg på for å se hvilke arrangement du er påmeldt.</p>
+        </div>
+
+    {% endif %}
+</div>
+
+
+{% endblock main %}
