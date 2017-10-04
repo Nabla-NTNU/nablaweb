@@ -1,7 +1,7 @@
 # Custom seed script for nablaweb
 from nablapps.accounts.models import NablaUser as User, FysmatClass, NablaGroup
-from contentapps.news.models import News
-from contentapps.events.models import Event
+from nablapps.news.models import News
+from nablapps.events.models import Event
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from faker import Factory

@@ -1,4 +1,4 @@
-from contentapps.news.views import NewsDetailView
+from nablapps.news.views import NewsDetailView
 from django.contrib.auth.views import redirect_to_login
 from django.views.generic import ListView
 

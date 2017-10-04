@@ -1,4 +1,4 @@
-from contentapps.events.views import EventDetailView, RegisterUserView
+from nablapps.events.views import EventDetailView, RegisterUserView
 from .bpcmixin import WrongClass
 from .event_overrides import *
 from .utils import InvalidCardNum

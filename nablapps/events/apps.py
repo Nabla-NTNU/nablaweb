@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class EventsConfig(AppConfig):
-    name = 'contentapps.events'
+    name = 'nablapps.events'
     verbose_name = 'Arrangement'

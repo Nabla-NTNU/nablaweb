@@ -1,2 +1,2 @@
-default_app_config = 'contentapps.events.apps.EventsConfig'
+default_app_config = 'nablapps.events.apps.EventsConfig'
 

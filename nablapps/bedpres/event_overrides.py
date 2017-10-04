@@ -1,6 +1,6 @@
 from bpc_client.event import get_events as get_bpc_events
-from contentapps.events.event_overrides import EventGetter
-from contentapps.events.models import Event
+from nablapps.events.event_overrides import EventGetter
+from nablapps.events.models import Event
 from datetime import datetime, time
 from django.shortcuts import get_object_or_404
 from itertools import chain

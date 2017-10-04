@@ -3,8 +3,8 @@ from itertools import chain
 
 from contentapps.album.models import Album
 from contentapps.blog.models import BlogPost
-from contentapps.events.models import Event
-from contentapps.news.models import News
+from nablapps.events.models import Event
+from nablapps.news.models import News
 from content.views import PublishedListMixin
 from django.views.generic import TemplateView
 

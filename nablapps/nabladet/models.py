@@ -1,7 +1,7 @@
 import os
 from django.conf import settings
 from django.db import models
-from contentapps.news.models import News
+from nablapps.news.models import News
 from .pdfthumbnailer import thumbnail_pdf
 
 

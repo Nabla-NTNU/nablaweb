@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from contentapps.events.models import Event
+from nablapps.events.models import Event
 
 
 class MyTest(TestCase):

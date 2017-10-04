@@ -1,5 +1,5 @@
 
-from contentapps.news.models import News
+from nablapps.news.models import News
 from .mixins import RegistrationInfoMixin, EventInfoMixin
 
 

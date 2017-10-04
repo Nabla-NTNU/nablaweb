@@ -1,10 +1,10 @@
 from django.test import TestCase, Client, override_settings
 from django.core.urlresolvers import reverse
 
-from contentapps.events.models import Event
+from nablapps.events.models import Event
 
 
-@override_settings(ROOT_URLCONF="contentapps.events.urls")
+@override_settings(ROOT_URLCONF="nablapps.events.urls")
 class RecentEventsTestCase(TestCase):
 
     def test_feed(self):

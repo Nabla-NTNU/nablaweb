@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.db import models
 from content.models import WithPicture
-from contentapps.news.models import News
+from nablapps.news.models import News
 
 
 # Det er litt stygt å bruke modeller for YearChoices og RelevantForChoices, men

@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from contentapps.news.models import News
+from nablapps.news.models import News
 
 User = get_user_model()
 

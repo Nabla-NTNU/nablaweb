@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 from django.test import TestCase, override_settings
 from django.conf import settings
 
-from contentapps.events.models import Event
-from contentapps.events.event_overrides import EventGetter, get_eventgetter
+from nablapps.events.models import Event
+from nablapps.events.event_overrides import EventGetter, get_eventgetter
 
 from .event_override_test_dummy_module import TestGetter
 
@@ -37,11 +37,11 @@ class GetEventGetterTest(TestCase):
         del settings.EVENT_GETTER_CLASS
         self.assertIs(get_eventgetter(), EventGetter)
 
-    @override_settings(EVENT_GETTER_CLASS='contentapps.events.event_overrides.EventGetter')
+    @override_settings(EVENT_GETTER_CLASS='nablapps.events.event_overrides.EventGetter')
     def test_with_event_override_setting(self):
         self.assertIs(get_eventgetter(), EventGetter)
 
-    @override_settings(EVENT_GETTER_CLASS='contentapps.events.tests.event_override_test_dummy_module.TestGetter')
+    @override_settings(EVENT_GETTER_CLASS='nablapps.events.tests.event_override_test_dummy_module.TestGetter')
     def test_with_event_override_setting_dummy(self):
         self.assertIs(get_eventgetter(), TestGetter)
 
@@ -49,6 +49,6 @@ class GetEventGetterTest(TestCase):
     def test_unknown_module(self):
         self.assertRaises(ImportError, get_eventgetter)
 
-    @override_settings(EVENT_GETTER_CLASS='contentapps.events.tests.event_override_test_dummy_module.NonExistantClass')
+    @override_settings(EVENT_GETTER_CLASS='nablapps.events.tests.event_override_test_dummy_module.NonExistantClass')
     def test_unknown_class(self):
         self.assertRaises(AttributeError, get_eventgetter)
