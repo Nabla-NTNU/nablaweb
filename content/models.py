@@ -14,7 +14,7 @@ class BaseImageModel(models.Model):
     )
 
     def __str__(self):
-        return "(" + str(self.id) + ") " + self.file.url
+        return "({}) {}".format(self.id, self.file.url if self.file else "")
 
     def image_thumb(self):
         if self.file:
