@@ -11,7 +11,7 @@ from content.models import (
 )
 
 
-class News(
+class NewsBase(
     PublicationManagerMixin,
     TimeStamped,
     ViewCounterMixin,
@@ -20,7 +20,7 @@ class News(
     headline = models.CharField(
         verbose_name="tittel",
         max_length=100,
-        blank=False)
+        blank=True)
     lead_paragraph = models.TextField(
         verbose_name="ingress",
         blank=True,
@@ -32,13 +32,24 @@ class News(
             "Vises kun i artikkelen. "
             "Man kan her bruke <a href=\"http://en.wikipedia.org/wiki/Markdown\" target=\"_blank\">"
             "markdown</a> for å formatere teksten."))
+    slug = models.SlugField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.headline)
+        return super().save(*args, **kwargs)
+
+
+class News(NewsBase):
 
     content_type = models.ForeignKey(
         ContentType,
         editable=False,
         null=True
     )
-    slug = models.SlugField(null=True, blank=True)
 
     class Meta:
         verbose_name = "nyhet"
@@ -61,8 +72,6 @@ class News(
             return self
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.headline)
         if not self.content_type:
             self.content_type = ContentType.objects.get_for_model(self.__class__)
         return super().save(*args, **kwargs)
