@@ -33,7 +33,7 @@
             {% endif %}
             <div class="media-body">
             <div class="media-heading">
-            {% if result.content_type == "content.news" %}
+            {% if result.content_type == "news.news" %}
             <a href="{{ result.object.get_absolute_url }}">{{ result.object.headline }}</a>
             {% elif result.content_type == "com.compage" %}
             <a href="{% url "show_com_page" result.object.get_canonical_name %}">{{ result.object.com.name }}</a>
@@ -43,12 +43,12 @@
                 <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
             {% endif %}
             </div>
-            {% if result.content_type == "content.news" %}
+            {% if result.content_type == "news.news" %}
             {{ result.object.created_date }}
             {% elif result.content_type == "com.compage" %}
             {{ result.object.last_changed_date }}{% endif %}
 
-            {% if result.content_type == "content.news" %}
+            {% if result.content_type == "news.news" %}
             <p>{{ result.object.lead_paragraph|truncatewords_html:58 }}</p>
             {% elif result.content_type == "com.compage" %}
             <p>{{ result.object.description|truncatewords_html:58 }}</p>
