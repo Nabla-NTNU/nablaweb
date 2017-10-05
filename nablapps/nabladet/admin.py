@@ -13,7 +13,6 @@ class NabladAdmin(ImageCroppingMixin, admin.ModelAdmin):
               "slug",
               "lead_paragraph",
               "body",
-              "priority",
               "pub_date",
               "file")
     prepopulated_fields = {"slug": ("headline",)}

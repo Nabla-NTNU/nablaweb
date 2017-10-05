@@ -12,7 +12,6 @@ class AdvertAdmin(ChangedByMixin, admin.ModelAdmin):
         "slug",
         "lead_paragraph",
         "body",
-        "priority",
         "info_website",
         "deadline_date",
         "removal_date",

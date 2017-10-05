@@ -33,30 +33,6 @@ class News(
             "Man kan her bruke <a href=\"http://en.wikipedia.org/wiki/Markdown\" target=\"_blank\">"
             "markdown</a> for å formatere teksten."))
 
-    PRIORITY_NUMBERS = (
-        (0, '0 - Dukker ikke opp'),
-        (1, '1'),
-        (2, '2'),
-        (3, '3'),
-        (4, '4'),
-        (5, '5'),
-        (6, '6'),
-        (7, '7'),
-        (8, '8'),
-        (9, '9'),
-        (10, '10 - Er på forsida hele tiden')
-        )
-    priority = models.IntegerField(
-        verbose_name="Prioritering",
-        choices=PRIORITY_NUMBERS,
-        default=5,
-        blank=False,
-        null=False,
-        help_text=(
-            "Prioritering av saken på forsiden. "
-            "Dette fungerer for øyeblikket ikke. "
-            "Bortsett fra at prioritering=0 fjerner saken fra forsiden."))
-
     content_type = models.ForeignKey(
         ContentType,
         editable=False,

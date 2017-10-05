@@ -19,7 +19,6 @@ class EventAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
               "short_name",
               "lead_paragraph",
               "body",
-              "priority",
               "organizer",
               "location",
               "event_start",

@@ -7,7 +7,7 @@ class RecentNews(Feed):
     link = "/"
 
     def items(self):
-        return News.objects.exclude(priority=0).order_by('-created_date')[:10]
+        return News.objects.order_by('-created_date')[:10]
 
     def item_title(self, item):
         return item.headline

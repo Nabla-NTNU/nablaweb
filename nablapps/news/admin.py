@@ -19,7 +19,6 @@ class NewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
               "slug",
               "lead_paragraph",
               "body",
-              "priority",
               )
     prepopulated_fields = {"slug": ("headline",)}
 

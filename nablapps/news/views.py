@@ -16,7 +16,7 @@ class NewsListView(PublishedListMixin, ListView):
     context_object_name = 'news_list'
     template_name = 'news/news_list.html'
     paginate_by = 8
-    queryset = News.objects.select_related('content_type').exclude(priority=0).order_by('-pk')
+    queryset = News.objects.select_related('content_type').order_by('-pk')
 
 
 class NewsDetailView(PublishedMixin, ViewAddMixin, AdminLinksMixin, DetailView):

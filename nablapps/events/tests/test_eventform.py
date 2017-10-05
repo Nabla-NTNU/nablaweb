@@ -17,7 +17,6 @@ class EventFormTestCase(TestCase):
         return {
             "headline": "Headline",
             "event_start": "2015-10-01",
-            "priority": "5",
             "location": "Here"
         }
 

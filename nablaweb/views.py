@@ -26,7 +26,7 @@ class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
         context = super(FrontPageView, self).get_context_data(**kwargs)
 
         context['new_podcast'] = Podcast.objects.exclude(published=False).exclude(is_clip=True).first()
-        news_list = News.objects.exclude(priority=0).exclude(published=False).order_by('-created_date')
+        news_list = News.objects.exclude(published=False).order_by('-created_date')
         options = GeneralOptions.get_current()
         if options.main_story is not None:
             context['main_news'] = main_story = options.main_story
