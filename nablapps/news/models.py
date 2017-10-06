@@ -99,6 +99,10 @@ class NewsBase(
         return self.headline
 
 
+class NewsArticle(NewsBase):
+    pass
+
+
 class News(NewsBase):
 
     content_type = models.ForeignKey(
