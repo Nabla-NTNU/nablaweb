@@ -1,10 +1,9 @@
 from django.contrib import admin
-from django.contrib.contenttypes.models import ContentType
 
 from image_cropping import ImageCroppingMixin
 from content.admin import ChangedByMixin
 
-from .models import News
+from .models import News, NewsArticle
 from .forms import NewsForm
 
 
@@ -22,7 +21,7 @@ class NewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
               )
     prepopulated_fields = {"slug": ("headline",)}
 
-    def get_queryset(self, request):
-        this_type = ContentType.objects.get_for_model(News)
-        qs = super().get_queryset(request)
-        return qs.filter(content_type=this_type)
+
+@admin.register(NewsArticle)
+class NewsArticleAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("headline", )}

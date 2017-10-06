@@ -97,12 +97,17 @@ class NewsBase(
             self.slug = slugify(self.headline)
         return super().save(*args, **kwargs)
 
+    @property
+    def as_child_class(self):
+        return self
+
     def __str__(self):
         return self.headline
 
 
 class NewsArticle(NewsBase):
-    pass
+    def get_absolute_url(self):
+        return reverse("news_detail", kwargs={"pk": self.pk, "slug": self.slug})
 
 
 class News(NewsBase):
@@ -129,21 +134,8 @@ class News(NewsBase):
         else:
             return self
 
-    def save(self, *args, **kwargs):
-        if not self.content_type:
-            self.content_type = ContentType.objects.get_for_model(self.__class__)
-        return super().save(*args, **kwargs)
-
-
     def get_absolute_url(self):
-        """
-        Finner URL ved å reversere navnet på viewen.
-        Krever at navnet på viewet er gitt ved modellnavn_detail
-        """
-        return reverse(self.content_type.model + "_detail", kwargs={
-            'pk': self.pk,
-            'slug': self.slug
-        })
+        return self.content_object.get_absolute_url()
 
 
 class NewsBaseWithNewsPtr(NewsBase):
@@ -159,7 +151,3 @@ class NewsBaseWithNewsPtr(NewsBase):
     @property
     def id(self):
         return self.news_ptr.id
-
-    @property
-    def as_child_class(self):
-        return self

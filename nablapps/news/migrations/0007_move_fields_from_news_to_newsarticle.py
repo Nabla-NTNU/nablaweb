@@ -27,15 +27,16 @@ def forwards_func(apps, schema_editor):
     NewsArticle = apps.get_model("news", "NewsArticle")
 
     # db_alias = schema_editor.connection.alias
-
+    ct_article, _ = ContentType.objects.get_or_create(app_label="news", model="newsarticle")
     news = News.objects.filter(content_type=ct)
     for n in news:
         a = NewsArticle()
         for field in fields_to_copy:
             setattr(a, field, getattr(n, field))
+        a.id = n.id
         a.save()
-        #n.content_type = ContentType.objects.get(app_label="news", model="newsarticle")
-        #n.save(update_fields=["content_type"])
+        n.content_type = ct_article
+        n.save(update_fields=["content_type"])
 
 
 def reverse_func(apps, schema_editor):
