@@ -1,11 +1,11 @@
 import os
 from django.conf import settings
 from django.db import models
-from nablapps.news.models import News
+from nablapps.news.models import News, NewsBaseWithNewsPtr
 from .pdfthumbnailer import thumbnail_pdf
 
 
-class Nablad(News):
+class Nablad(NewsBaseWithNewsPtr):
     pub_date = models.DateField(
         verbose_name='publisert',
         blank=False,

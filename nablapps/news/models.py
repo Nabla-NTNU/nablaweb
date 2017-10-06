@@ -135,3 +135,10 @@ class News(NewsBase):
             'pk': self.pk,
             'slug': self.slug
         })
+
+
+class NewsBaseWithNewsPtr(NewsBase):
+    news_ptr = models.OneToOneField(News, primary_key=True)
+
+    class Meta:
+        abstract = True
