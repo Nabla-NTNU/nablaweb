@@ -1,8 +1,10 @@
 from django.utils import timezone
 from django.db import models
 from django.utils.text import slugify
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
+
 
 from content.models import (
     PublicationManagerMixin,
@@ -105,11 +107,13 @@ class NewsArticle(NewsBase):
 
 class News(NewsBase):
 
+    object_id = models.PositiveIntegerField(blank=True, null=True)
     content_type = models.ForeignKey(
         ContentType,
         editable=False,
         null=True
     )
+    content_object = GenericForeignKey('content_type', 'object_id')
 
     class Meta:
         verbose_name = "nyhet"
