@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
-from django.template import Context, loader
+from django.template import loader
 from django.views.generic import TemplateView, DetailView
 from django.contrib.auth import get_user_model
 
@@ -202,11 +202,11 @@ class RegisterUserView(LoginRequiredMixin,
 def ical_event(request, event_id):
     """Returns a given event or bedpres as an iCal .ics file"""
 
-    event = EventGetter.get_event(event_id)
+    event = Event.objects.get(event_id)
 
     # Use the same template for both Event and BedPres.
     template = loader.get_template('events/event_icalendar.ics')
-    context = Context({'event_list': (event,), })
+    context = {'event_list': (event,), }
     response = HttpResponse(template.render(context), content_type='text/calendar')
     response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.slug
     return response

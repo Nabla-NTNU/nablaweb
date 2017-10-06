@@ -10,11 +10,6 @@ from .event_override_test_dummy_module import TestGetter
 
 class EventGetterTest(TestCase):
 
-    def test_get_event(self):
-        Event.objects.create()
-        event = Event.objects.first()
-        self.assertEqual(EventGetter.get_event(event.id), event)
-
     def test_get_current_events(self):
         some_year = 2016
         some_month = 4

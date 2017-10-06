@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from nablapps.news.models import News
+from nablapps.news.models import NewsArticle
 
 User = get_user_model()
 
@@ -10,7 +10,7 @@ class NewsDetailViewTest(TestCase):
 
     def setUp(self):
         # Lager en ny nyhet som brukes i testing
-        self.news = News()
+        self.news = NewsArticle()
         self.news.headline = 'Overskrifta er kul'
         self.user = User.objects.create(
             first_name='Oystein',

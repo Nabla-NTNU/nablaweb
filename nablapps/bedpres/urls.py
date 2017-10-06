@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.generic import RedirectView
 
-from nablapps.events.views import ical_event
+from .views import ical_event
 
 from .views import BedPresDetailView, BedPresRegisterUserView
 

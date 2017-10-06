@@ -12,13 +12,6 @@ class EventGetter(object):
             event_start__month=month)
 
     @staticmethod
-    def get_event(event_id):
-        try:
-            return Event.objects.get(pk=event_id)
-        except Event.DoesNotExist:
-            return None
-
-    @staticmethod
     def attending_events(user, today):
         if user.is_anonymous():
             return []
