@@ -1,5 +1,6 @@
 import os
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from nablapps.news.models import News, NewsBaseWithNewsPtr
 from .pdfthumbnailer import thumbnail_pdf
@@ -48,3 +49,6 @@ class Nablad(NewsBaseWithNewsPtr):
 
     def __str__(self):
         return self.headline
+
+    def get_absolute_url(self):
+        return reverse("nablad_detail", kwargs={'pk': self.pk, 'slug': self.slug})
