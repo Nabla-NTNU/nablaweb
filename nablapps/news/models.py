@@ -81,6 +81,12 @@ class NewsBase(
             "markdown</a> for å formatere teksten."))
     slug = models.SlugField(null=True, blank=True)
 
+    def correct_picture(self):
+        return self.picture
+
+    def correct_cropping(self):
+        return self.cropping
+
     class Meta:
         abstract = True
 
@@ -88,6 +94,9 @@ class NewsBase(
         if not self.slug:
             self.slug = slugify(self.headline)
         return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.headline
 
 
 class News(NewsBase):
@@ -103,12 +112,6 @@ class News(NewsBase):
         verbose_name_plural = "nyheter"
         db_table = "content_news"
 
-    def correct_picture(self):
-        return self.picture
-
-    def correct_cropping(self):
-        return self.cropping
-
     @property
     def as_child_class(self):
         if hasattr(self, 'advert'):
@@ -123,8 +126,6 @@ class News(NewsBase):
             self.content_type = ContentType.objects.get_for_model(self.__class__)
         return super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.headline
 
     def get_absolute_url(self):
         """
@@ -142,3 +143,15 @@ class NewsBaseWithNewsPtr(NewsBase):
 
     class Meta:
         abstract = True
+
+    @property
+    def content_type(self):
+        return ContentType.objects.get_for_model(self.__class__)
+
+    @property
+    def id(self):
+        return self.news_ptr.id
+
+    @property
+    def as_child_class(self):
+        return self
