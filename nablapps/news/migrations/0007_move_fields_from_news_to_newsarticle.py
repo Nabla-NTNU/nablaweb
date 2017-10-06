@@ -22,7 +22,7 @@ fields_to_copy = [
 
 def forwards_func(apps, schema_editor):
     ContentType = apps.get_model("contenttypes", "ContentType")
-    ct = ContentType.objects.get(app_label="news", model="news")
+    ct, _ = ContentType.objects.get_or_create(app_label="news", model="news")
     News = apps.get_model("news", "News")
     NewsArticle = apps.get_model("news", "NewsArticle")
 
