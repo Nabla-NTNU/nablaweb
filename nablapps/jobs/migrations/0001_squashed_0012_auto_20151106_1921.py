@@ -90,6 +90,6 @@ class Migration(migrations.Migration):
                 ('tags', models.ManyToManyField(verbose_name='Tags', blank=True, help_text='F.eks. sommerjobb, bergen, kirkenes, olje, konsultering...', to='jobs.TagChoices')),
             ],
             options={'verbose_name_plural': 'stillingsannonser', 'verbose_name': 'stillingsannonse', 'ordering': ('-created_date', 'headline')},
-            bases=('news.news',),
+            #bases=('news.news',),
         ),
     ]
