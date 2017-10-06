@@ -13,32 +13,21 @@ from nablapps.nabladet.models import Nablad
 from nablapps.podcast.models import Podcast
 from nablapps.poll.models import Poll
 from utils.view_mixins import FlatPageMixin
-from .models import GeneralOptions
 
 
-class FrontPageView(PublishedListMixin, FlatPageMixin, TemplateView):
-    model = News
-    context_object_name = 'news_list'
+class FrontPageView(FlatPageMixin, TemplateView):
     template_name = 'front_page.html'
     flatpages = [("sidebarinfo", "/forsideinfo/")]
 
     def get_context_data(self, **kwargs):
-        context = super(FrontPageView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         context['new_podcast'] = Podcast.objects.exclude(published=False).exclude(is_clip=True).first()
-        news_list = News.objects.exclude(published=False).order_by('-created_date')
-        options = GeneralOptions.get_current()
-        if options.main_story is not None:
-            context['main_news'] = main_story = options.main_story
-            news_list = news_list.exclude(id=main_story.id)
-            context['news_list_1'] = news_list[0:2]
-            context['news_list_2'] = news_list[2:4]
-            context['news_list_3'] = news_list[4:6]
-        else:
-            context['main_news'] = news_list.first()
-            context['news_list_1'] = news_list[1:3]
-            context['news_list_2'] = news_list[3:5]
-            context['news_list_3'] = news_list[5:7]
+        news_list = News.objects.filter(visible=True)
+        context['main_news'] = news_list.first()
+        context['news_list_1'] = news_list[1:3]
+        context['news_list_2'] = news_list[3:5]
+        context['news_list_3'] = news_list[5:7]
 
         context['album_list'] = Album.objects.exclude(visibility='h').order_by('-last_changed_date')[:4]
 

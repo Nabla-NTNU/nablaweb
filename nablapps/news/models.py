@@ -105,7 +105,6 @@ class NewsBase(
     class Meta:
         abstract = True
 
-
     def __str__(self):
         return self.headline
 
@@ -115,12 +114,30 @@ class NewsArticle(NewsBase):
         return reverse("news_detail", kwargs={"pk": self.pk, "slug": self.slug})
 
 
-class News(NewsBase):
+class News(WithPicture):
 
+    created_date = models.DateTimeField(
+        auto_now_add=True,
+        null=True
+    )
+    bump_time = models.DateTimeField(
+        default=timezone.now,
+        blank=False,
+    )
+    visible = models.BooleanField(default=True)
+    sticky = models.BooleanField(default=False)
+
+    headline = models.CharField(
+        verbose_name="tittel",
+        max_length=100,
+        blank=True)
+    lead_paragraph = models.TextField(
+        verbose_name="ingress",
+        blank=True,
+        help_text="Vises på forsiden og i artikkelen")
     object_id = models.PositiveIntegerField(blank=True, null=True)
     content_type = models.ForeignKey(
         ContentType,
-        editable=False,
         null=True
     )
     content_object = GenericForeignKey('content_type', 'object_id')
@@ -129,6 +146,32 @@ class News(NewsBase):
         verbose_name = "nyhet"
         verbose_name_plural = "nyheter"
         db_table = "content_news"
+        ordering = ("-sticky", "-bump_time",)
+
+    def __str__(self):
+        return self.headline
 
     def get_absolute_url(self):
         return self.content_object.get_absolute_url()
+
+    def correct_picture(self):
+        if self.picture:
+            return self.picture
+        try:
+            return self.content_object.picture
+        except AttributeError:
+            try:
+                return self.content_object.correct_picture()
+            except AttributeError:
+                return None
+
+    def correct_cropping(self):
+        if self.cropping:
+            return self.cropping
+        try:
+            return self.content_object.cropping
+        except AttributeError:
+            try:
+                return self.content_object.correct_cropping()
+            except AttributeError:
+                return None
