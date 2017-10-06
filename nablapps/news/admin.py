@@ -4,12 +4,10 @@ from image_cropping import ImageCroppingMixin
 from content.admin import ChangedByMixin
 
 from .models import News, NewsArticle
-from .forms import NewsForm
 
 
 @admin.register(News)
 class NewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
-    form = NewsForm
     fields = ("publication_date",
               "published",
               "picture",
