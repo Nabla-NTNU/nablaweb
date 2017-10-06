@@ -60,12 +60,7 @@ class TimeStampedWhileRefactoring(models.Model):
         super().save(*args, **kwargs)
 
 
-class NewsBase(
-    PublicationManagerMixin,
-    TimeStampedWhileRefactoring,
-    ViewCounterMixin,
-    WithPicture,
-):
+class TextContent(models.Model):
     headline = models.CharField(
         verbose_name="tittel",
         max_length=100,
@@ -81,7 +76,25 @@ class NewsBase(
             "Vises kun i artikkelen. "
             "Man kan her bruke <a href=\"http://en.wikipedia.org/wiki/Markdown\" target=\"_blank\">"
             "markdown</a> for å formatere teksten."))
+
     slug = models.SlugField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.headline)
+        return super().save(*args, **kwargs)
+
+
+class NewsBase(
+    PublicationManagerMixin,
+    TimeStampedWhileRefactoring,
+    ViewCounterMixin,
+    WithPicture,
+    TextContent
+):
 
     def correct_picture(self):
         return self.picture
@@ -92,10 +105,6 @@ class NewsBase(
     class Meta:
         abstract = True
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.headline)
-        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.headline
