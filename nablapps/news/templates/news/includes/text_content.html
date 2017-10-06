@@ -3,8 +3,8 @@
 
 
 <div class="box">
-    {% if news.as_child_class.correct_picture %}
-    <img alt="header" class="img-responsive" src="{% thumbnail news.as_child_class.correct_picture 760x300 box=news.as_child_class.correct_cropping upscale=True detail=True quality=95 %}">
+    {% if news.correct_picture %}
+    <img alt="header" class="img-responsive" src="{% thumbnail news.correct_picture 760x300 box=news.correct_cropping upscale=True detail=True quality=95 %}">
     {% endif %}
 
     <header><h2>{{ news.headline }}</h2></header>

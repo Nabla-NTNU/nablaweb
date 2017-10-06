@@ -97,10 +97,6 @@ class NewsBase(
             self.slug = slugify(self.headline)
         return super().save(*args, **kwargs)
 
-    @property
-    def as_child_class(self):
-        return self
-
     def __str__(self):
         return self.headline
 
@@ -124,15 +120,6 @@ class News(NewsBase):
         verbose_name = "nyhet"
         verbose_name_plural = "nyheter"
         db_table = "content_news"
-
-    @property
-    def as_child_class(self):
-        if hasattr(self, 'advert'):
-            return self.advert
-        elif hasattr(self, 'bedpres'):
-            return self.bedpres
-        else:
-            return self
 
     def get_absolute_url(self):
         return self.content_object.get_absolute_url()
