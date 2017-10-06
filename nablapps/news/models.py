@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.contenttypes.models import ContentType
@@ -10,10 +11,56 @@ from content.models import (
     WithPicture,
 )
 
+from django.conf import settings
+
+
+class TimeStampedWhileRefactoring(models.Model):
+
+    created_date = models.DateTimeField(
+        verbose_name="Publiseringsdato",
+        auto_now_add=True,
+        null=True
+    )
+
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name="Opprettet av",
+        related_name="%(class)s_created",
+        editable=False,
+        blank=True,
+        null=True
+    )
+
+    last_changed_date = models.DateTimeField(
+        verbose_name="Redigeringsdato",
+        default=timezone.now,
+        null=True,
+        blank=True,
+    )
+
+    last_changed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name="Endret av",
+        related_name="%(class)s_edited",
+        editable=False,
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        abstract = True
+
+    def has_been_edited(self):
+        return abs((self.last_changed_date - self.created_date).seconds) > 1
+
+    def save(self, *args, **kwargs):
+        #self.last_changed_date = timezone.now()
+        super().save(*args, **kwargs)
+
 
 class NewsBase(
     PublicationManagerMixin,
-    TimeStamped,
+    TimeStampedWhileRefactoring,
     ViewCounterMixin,
     WithPicture,
 ):
