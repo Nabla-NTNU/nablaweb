@@ -136,18 +136,3 @@ class News(NewsBase):
 
     def get_absolute_url(self):
         return self.content_object.get_absolute_url()
-
-
-class NewsBaseWithNewsPtr(NewsBase):
-    news_ptr = models.OneToOneField(News, primary_key=True)
-
-    class Meta:
-        abstract = True
-
-    @property
-    def content_type(self):
-        return ContentType.objects.get_for_model(self.__class__)
-
-    @property
-    def id(self):
-        return self.news_ptr.id
