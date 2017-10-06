@@ -37,6 +37,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'bedriftspresentasjon',
                 'verbose_name_plural': 'bedriftspresentasjoner',
             },
-            bases=('news.news', models.Model),
+            #bases=('news.news', models.Model),
         ),
     ]

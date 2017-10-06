@@ -127,3 +127,6 @@ class Event(AbstractEvent):
 
     def get_registration_url(self):
         return reverse('registration', kwargs={'pk': self.pk})
+
+    def get_absolute_url(self):
+        return reverse("event_detail", kwargs={'pk': self.pk, 'slug': self.slug})

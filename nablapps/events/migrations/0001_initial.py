@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'arrangement',
                 'db_table': 'content_event',
             },
-            bases=('news.news', models.Model),
+            #bases=('news.news', models.Model),
         ),
         migrations.AddField(
             model_name='eventregistration',

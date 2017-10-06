@@ -36,3 +36,6 @@ class BedPres(BPCEventMixin, AbstractEvent):
 
     def get_registration_url(self):
         return reverse('bedpres_registration', kwargs={'pk': self.pk})
+
+    def get_absolute_url(self):
+        return reverse("bedpres_detail", kwargs={'pk': self.pk, 'slug': self.slug})

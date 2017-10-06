@@ -1,9 +1,9 @@
 
-from nablapps.news.models import News
+from nablapps.news.models import NewsBaseWithNewsPtr
 from .mixins import RegistrationInfoMixin, EventInfoMixin
 
 
-class AbstractEvent(RegistrationInfoMixin, EventInfoMixin, News):
+class AbstractEvent(RegistrationInfoMixin, EventInfoMixin, NewsBaseWithNewsPtr):
     """
     Abstract model with the things that are common between Event and Bedpres.
     """
