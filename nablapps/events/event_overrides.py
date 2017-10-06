@@ -7,7 +7,7 @@ from .models import Event
 class EventGetter(object):
     @staticmethod
     def get_current_events(year, month):
-        return Event.objects.select_related("content_type").filter(
+        return Event.objects.filter(
             event_start__year=year,
             event_start__month=month)
 

@@ -12,10 +12,10 @@ class BedPresAndEventGetter(EventGetter):
     @staticmethod
     def get_current_events(year, month):
         # Get this months events and bedpreser separately
-        events = Event.objects.select_related("content_type").filter(
+        events = Event.objects.filter(
             event_start__year=year,
             event_start__month=month)
-        bedpress = BedPres.objects.select_related("content_type").filter(
+        bedpress = BedPres.objects.filter(
             event_start__year=year,
             event_start__month=month)
 
