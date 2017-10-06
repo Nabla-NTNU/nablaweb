@@ -2,7 +2,7 @@ from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.db import models
 from content.models import WithPicture
-from nablapps.news.models import News, NewsBaseWithNewsPtr
+from nablapps.news.models import News, NewsBase
 
 
 # Det er litt stygt å bruke modeller for YearChoices og RelevantForChoices, men
@@ -81,7 +81,7 @@ class AdvertManager(models.Manager):
         return self.exclude(removal_date__lte=datetime.now())
 
 
-class Advert(NewsBaseWithNewsPtr):
+class Advert(NewsBase):
     company = models.ForeignKey(
         'Company',
         verbose_name="Bedrift",

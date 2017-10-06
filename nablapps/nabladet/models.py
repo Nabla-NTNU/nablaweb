@@ -2,11 +2,11 @@ import os
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
-from nablapps.news.models import News, NewsBaseWithNewsPtr
+from nablapps.news.models import NewsBase
 from .pdfthumbnailer import thumbnail_pdf
 
 
-class Nablad(NewsBaseWithNewsPtr):
+class Nablad(NewsBase):
     pub_date = models.DateField(
         verbose_name='publisert',
         blank=False,
