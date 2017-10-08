@@ -1,12 +1,15 @@
-# Custom seed script for nablaweb
-from nablapps.accounts.models import NablaUser as User, FysmatClass, NablaGroup
-from nablapps.news.models import News
-from nablapps.events.models import Event
-from django.conf import settings
-from django.core.management.base import BaseCommand, CommandError
-from faker import Factory
-from datetime import datetime as dt, timedelta as td
+"""
+Custom seed script for nablaweb
+"""
 import random
+from datetime import datetime as dt, timedelta as td
+from django.conf import settings
+from django.core.management.base import BaseCommand
+from faker import Factory
+from nablapps.accounts.models import NablaUser as User, FysmatClass, NablaGroup
+from nablapps.events.models import Event
+from nablapps.news.models import NewsArticle
+
 
 fake = Factory.create('no_NO')
 
@@ -42,19 +45,21 @@ class Command(BaseCommand):
             User.objects.all().delete()
         
         print("Creating superuser admin")
-        admin = User.objects.create_user(
-                username='admin',
-                password='admin',
-                first_name=fake.first_name(),
-                last_name=fake.last_name(),
-                address=fake.address(),
-                email='admin@stud.ntnu.no',
-                about=fake.text(),
-                birthday=fake.date_time_between_dates(datetime_start=None, datetime_end=None, tzinfo=None),
-                )
-        admin.is_superuser = True
-        admin.is_staff = True
-        admin.save()
+        User.objects.create_user(
+            username='admin',
+            password='admin',
+            first_name=fake.first_name(),
+            last_name=fake.last_name(),
+            address=fake.address(),
+            email='admin@stud.ntnu.no',
+            about=fake.text(),
+            birthday=fake.date_time_between_dates(
+                datetime_start=None,
+                datetime_end=None,
+                tzinfo=None),
+            is_superuser=True,
+            is_staff=True
+        )
 
         if delete:
             FysmatClass.objects.all().delete()
@@ -62,60 +67,63 @@ class Command(BaseCommand):
         count = random.randint(7, 10)
         print("Creating %d FysmatClasses" % count)
         year = dt.now().year
-        classes = []
-        for i in range(count):
-            classes.append(FysmatClass.objects.create(
+        classes = [
+            FysmatClass.objects.create(
                 starting_year=year-i,
                 name="kull%d" % (year-i)
-            ))
+            )
+            for i in range(count)
+        ]
         
         if delete:
             NablaGroup.objects.all().delete()
 
         count = random.randint(5, 10)
         print("Creating %d NablaGroups" % count)
-        year = dt.now().year
-        ngroups = []
-        for i in range(count):
-            ngroups.append(NablaGroup.objects.create(
+        ngroups = [
+            NablaGroup.objects.create(
                 name=fake.word()+"-komitéen"
-            ))
+            )
+            for _ in range(count)
+        ]
         
         count = random.randint(50, 100)
         print("Creating %d NablaUsers" % count)
         for i in range(count):
-            username = "komponent%d" % (i)
+            username = "komponent%d" % i
             groups = [
                 random.choice(ngroups),
                 random.choice(classes)
             ]
             user = User.objects.create_user(
-                    username=username,
-                    first_name=fake.first_name(),
-                    last_name=fake.last_name(),
-                    address=fake.address(),
-                    password='password',
-                    email=username+'@stud.ntnu.no',
-                    about=fake.text(),
-                    birthday=fake.date_time_between_dates(datetime_start=None, datetime_end=None, tzinfo=None),
+                username=username,
+                first_name=fake.first_name(),
+                last_name=fake.last_name(),
+                address=fake.address(),
+                password='password',
+                email=username+'@stud.ntnu.no',
+                about=fake.text(),
+                birthday=fake.date_time_between_dates(
+                    datetime_start=None,
+                    datetime_end=None,
+                    tzinfo=None),
             )
             
             user.groups.add(*groups)
             user.save()
 
         if delete:
-            News.objects.all().delete()
+            NewsArticle.objects.all().delete()
 
         count = random.randint(10, 20)
         print("Creating %d News" % count)
         for i in range(count):
-            News.objects.create(
-                    headline=s(),
-                    body=g(),
-                    lead_paragraph=g()
-                    )
+            NewsArticle.objects.create(
+                headline=s(),
+                body=g(),
+                lead_paragraph=g()
+            )
 
-        
         count = random.randint(10, 20)
         print("Creating %d Events" % count)
         for i in range(count):
@@ -134,8 +142,3 @@ class Command(BaseCommand):
                 organizer=fake.name(),
                 location=fake.address()
             )
-
-
-
-
-
