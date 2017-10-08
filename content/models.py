@@ -135,9 +135,9 @@ class PublicationManagerMixin(models.Model):
             return True
         return False
 
-    def save(self, **kwargs):
+    def save(self, *args, **kwargs):
         self.published = self.is_published
-        return super().save(**kwargs)
+        return super().save(*args, **kwargs)
 
     class Meta:
         abstract = True

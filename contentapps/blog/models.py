@@ -30,11 +30,11 @@ class Blog(models.Model):
         verbose_name_plural = "Blogger"
         db_table = "content_blog"
 
-    def save(self, **kwargs):
+    def save(self, *args, **kwargs):
         if not self.id:
             self.created = date.today()
         self.slug = slugify(self.name)
-        return super().save(**kwargs)
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -79,9 +79,9 @@ class BlogPost(TimeStamped, ViewCounterMixin, models.Model):
         verbose_name_plural = "Poster"
         db_table = "content_blogpost"
 
-    def save(self, **kwargs):
+    def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
-        return super().save(**kwargs)
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
