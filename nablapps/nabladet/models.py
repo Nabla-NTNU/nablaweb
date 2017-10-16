@@ -1,6 +1,5 @@
 import os
 from content.models import (
-    PublicationManagerMixin,
     TimeStamped,
     ViewCounterMixin,
     WithPicture,
@@ -13,7 +12,6 @@ from .pdfthumbnailer import thumbnail_pdf
 
 
 class Nablad(
-    PublicationManagerMixin,
     TimeStamped,
     ViewCounterMixin,
     WithPicture,

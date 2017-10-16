@@ -31,9 +31,9 @@ class FrontPageView(FlatPageMixin, TemplateView):
 
         context['album_list'] = Album.objects.exclude(visibility='h').order_by('-last_changed_date')[:4]
 
-        context['new_nablad'] = Nablad.objects.exclude(published=False).order_by('-pub_date')[:4]
+        context['new_nablad'] = Nablad.objects.order_by('-pub_date')[:4]
         if not self.request.user.is_authenticated():
-            context['new_nablad'] = Nablad.objects.exclude(published=False).exclude(is_public=False).order_by('-pub_date')[:4]
+            context['new_nablad'] = Nablad.objects.exclude(is_public=False).order_by('-pub_date')[:4]
 
         context['new_blog'] = BlogPost.objects.exclude(list_image=None).order_by('-last_changed_date')[:4]
 
