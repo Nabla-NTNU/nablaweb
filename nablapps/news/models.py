@@ -13,52 +13,6 @@ from content.models import (
     WithPicture,
 )
 
-from django.conf import settings
-
-
-class TimeStampedWhileRefactoring(models.Model):
-
-    created_date = models.DateTimeField(
-        verbose_name="Publiseringsdato",
-        auto_now_add=True,
-        null=True
-    )
-
-    created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name="Opprettet av",
-        related_name="%(class)s_created",
-        editable=False,
-        blank=True,
-        null=True
-    )
-
-    last_changed_date = models.DateTimeField(
-        verbose_name="Redigeringsdato",
-        default=timezone.now,
-        null=True,
-        blank=True,
-    )
-
-    last_changed_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name="Endret av",
-        related_name="%(class)s_edited",
-        editable=False,
-        blank=True,
-        null=True
-    )
-
-    class Meta:
-        abstract = True
-
-    def has_been_edited(self):
-        return abs((self.last_changed_date - self.created_date).seconds) > 1
-
-    def save(self, *args, **kwargs):
-        #self.last_changed_date = timezone.now()
-        super().save(*args, **kwargs)
-
 
 class TextContent(models.Model):
     headline = models.CharField(
@@ -88,22 +42,17 @@ class TextContent(models.Model):
         return super().save(*args, **kwargs)
 
 
-class NewsBase(
+class NewsArticle(
     PublicationManagerMixin,
-    TimeStampedWhileRefactoring,
+    TimeStamped,
     ViewCounterMixin,
     WithPicture,
     TextContent
 ):
 
-    class Meta:
-        abstract = True
-
     def __str__(self):
         return self.headline
 
-
-class NewsArticle(NewsBase):
     def get_absolute_url(self):
         return reverse("news_detail", kwargs={"pk": self.pk, "slug": self.slug})
 

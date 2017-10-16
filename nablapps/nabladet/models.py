@@ -1,12 +1,24 @@
 import os
+from content.models import (
+    PublicationManagerMixin,
+    TimeStamped,
+    ViewCounterMixin,
+    WithPicture,
+)
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
-from nablapps.news.models import NewsBase
+from nablapps.news.models import TextContent
 from .pdfthumbnailer import thumbnail_pdf
 
 
-class Nablad(NewsBase):
+class Nablad(
+    PublicationManagerMixin,
+    TimeStamped,
+    ViewCounterMixin,
+    WithPicture,
+    TextContent,
+):
     pub_date = models.DateField(
         verbose_name='publisert',
         blank=False,
