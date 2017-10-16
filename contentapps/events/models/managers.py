@@ -18,19 +18,19 @@ class EventRegistrationManager(models.Manager):
         self.move_waiting_to_attending(event=event)
 
     def fix_list_numbering(self, event):
-        attending_regs = self.filter(event=event, attending=True).order_by('date')
+        attending_regs = self.filter(event=event, attending=True).order_by('date').order_by('id')
         for n, reg in enumerate(attending_regs, start=1):
             reg.number = n
             reg.save()
 
-        waiting_regs = self.filter(event=event, attending=False).order_by('date')
+        waiting_regs = self.filter(event=event, attending=False).order_by('date').order_by('id')
         for n, reg in enumerate(waiting_regs, start=1):
             reg.number = n
             reg.save()
 
     def move_waiting_to_attending(self, event):
         free_places = event.free_places()
-        waiting_regs = self.filter(event=event, attending=False).order_by('date')[:free_places]
+        waiting_regs = self.filter(event=event, attending=False).order_by('date').order_by('id')[:free_places]
         for reg in waiting_regs:
             reg.set_attending_and_send_email()
         self.fix_list_numbering(event)
@@ -49,13 +49,13 @@ class RelatedEventRegistrationManager(models.Manager):
         return self.get_queryset().filter(attending=False)
 
     def waiting_ordered(self):
-        return self.waiting().order_by('number')
+        return self.waiting().order_by('number').order_by('id')
 
     def attending(self):
         return self.get_queryset().filter(attending=True)
 
     def attending_ordered(self):
-        return self.attending().order_by('number')
+        return self.attending().order_by('number').order_by('id')
 
     def first_on_waiting_list(self):
         """Hente førstemann på ventelista."""
