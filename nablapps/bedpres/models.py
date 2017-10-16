@@ -28,12 +28,6 @@ class BedPres(BPCEventMixin, AbstractEvent):
         verbose_name = "bedriftspresentasjon"
         verbose_name_plural = "bedriftspresentasjoner"
 
-    def correct_picture(self):
-        return self.picture if self.picture else self.company.picture
-
-    def correct_cropping(self):
-        return self.cropping if self.picture else self.company.cropping
-
     def get_registration_url(self):
         return reverse('bedpres_registration', kwargs={'pk': self.pk})
 

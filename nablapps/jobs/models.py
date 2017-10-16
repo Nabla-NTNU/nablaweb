@@ -135,10 +135,12 @@ class Advert(TimeStampedWhileRefactoring, TextContent):
     def __str__(self):
         return self.headline
 
-    def correct_picture(self):
+    @property
+    def picture(self):
         return self.company.picture
 
-    def correct_cropping(self):
+    @property
+    def cropping(self):
         return self.company.cropping
 
     def get_absolute_url(self):

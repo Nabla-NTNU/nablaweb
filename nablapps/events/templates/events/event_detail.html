@@ -1,11 +1,22 @@
 {% extends "base.html" %}
+{% load markdown %}
+{% load easy_thumbnails %}
 
 {% block title %}{{ event.headline }}{% endblock %}
 
 {% block content %}
 
 
-{% include "news/includes/text_content.html" with news=event%}
+<div class="box">
+    {% if event.picture %}
+    <img alt="header" class="img-responsive"
+         src="{% thumbnail event.picture 760x300 box=event.cropping upscale=True detail=True quality=95 %}">
+    {% endif %}
+
+    <header><h2>{{ event.headline }}</h2></header>
+    <p><strong>{{ event.lead_paragraph}}</strong></p>
+    <div style="overflow: hidden;">{{ event.body|markdown}}</div>
+</div>
 
 {# Vis påmeldte #}
 {% if user.is_authenticated %}

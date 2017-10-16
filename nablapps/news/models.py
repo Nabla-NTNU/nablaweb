@@ -96,12 +96,6 @@ class NewsBase(
     TextContent
 ):
 
-    def correct_picture(self):
-        return self.picture
-
-    def correct_cropping(self):
-        return self.cropping
-
     class Meta:
         abstract = True
 
@@ -153,25 +147,3 @@ class News(WithPicture):
 
     def get_absolute_url(self):
         return self.content_object.get_absolute_url()
-
-    def correct_picture(self):
-        if self.picture:
-            return self.picture
-        try:
-            return self.content_object.picture
-        except AttributeError:
-            try:
-                return self.content_object.correct_picture()
-            except AttributeError:
-                return None
-
-    def correct_cropping(self):
-        if self.cropping:
-            return self.cropping
-        try:
-            return self.content_object.cropping
-        except AttributeError:
-            try:
-                return self.content_object.correct_cropping()
-            except AttributeError:
-                return None

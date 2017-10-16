@@ -12,7 +12,20 @@
 {% block title %}{{ nablad.headline }}{% endblock %}
 
 {% block content %}
-    {% include "news/includes/text_content.html" with news=nablad %}
+{% load markdown %}
+{% load easy_thumbnails %}
+
+
+<div class="box">
+    {% if nablad.picture %}
+    <img alt="header" class="img-responsive" src="{% thumbnail nablad.picture 760x300 box=nablad.cropping upscale=True detail=True quality=95 %}">
+    {% endif %}
+
+    <header><h2>{{ nablad.headline }}</h2></header>
+    <p><strong>{{ nablad.lead_paragraph}}</strong></p>
+    <div style="overflow: hidden;">{{ nablad.body|markdown}}</div>
+</div>
+
     {% include "content/includes/comments.html" with content=nablad %}
 {% endblock %}
 

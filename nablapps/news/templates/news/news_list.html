@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load markdown %}
 {% load listutil %}
+{% load easy_thumbnails %}
+
 {% block title %}Nyheter{% endblock %}
 
 {% block more_head %}
@@ -8,11 +10,28 @@
 {% endblock %}
 
 {% block content %}
-{% for row in news_list|row_split:2 %}
+{% for news in news_list %}
     <div class="row">
-    {% for news in row %}
-            {% include "news/news_summary_include.html" with narrow="True" %}
-    {% endfor %}
+        {% with newsurl=news.get_absolute_url %}
+    <div class="col-md-12 box">
+    {% if news.picture %}
+        <a href="{{ newsurl }}">
+            <img alt=""
+                 class="news-picture"
+                 src="{% thumbnail news.picture 760x300 box=news.cropping upscale quality=95 detail %}">
+        </a>
+    {% endif %}
+
+    <header>
+        <h3>
+            <a href="{{ newsurl }}">{{ news.headline }}</a>
+        </h3>
+    </header>
+    <p>
+    {{ news.lead_paragraph}}
+    </p>
+</div>
+{% endwith %}
     </div>
 {% endfor %}
 

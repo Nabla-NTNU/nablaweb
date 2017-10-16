@@ -10,13 +10,15 @@
 {% with main_news as news %}
 <article>
     <div class="box {{ news.content_type.model }}">
-        {% if news.correct_cropping and news.correct_picture %}
+        {% if news.cropping and news.picture %}
             <a href="{{ news.get_absolute_url }}">
-                <img alt="" class="img-responsive" src="{% thumbnail news.correct_picture 760x300 box=news.correct_cropping upscale=True quality=95 detail=True %}">
+                <img alt="" class="img-responsive"
+                     src="{% thumbnail news.picture 760x300 box=news.cropping upscale=True quality=95 detail=True %}">
             </a>
-        {% elif news.correct_picture %}
+        {% elif news.picture %}
             <a href="{{ news.get_absolute_url }}">
-                <img alt="" class="img-responsive" src="{% thumbnail news.correct_picture 760x300 quality=95 upscale=True crop="smart" detail=True %}">
+                <img alt="" class="img-responsive"
+                     src="{% thumbnail news.picture 760x300 quality=95 upscale=True crop="smart" detail=True %}">
             </a>
         {% endif %}
         <header>
