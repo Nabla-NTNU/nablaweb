@@ -19,10 +19,10 @@ class NewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
         "created_date",
     )
     fields = (
-        "headline",
-        "lead_paragraph",
-        "picture",
-        "cropping",
+        "title_override",
+        "text_override",
+        "picture_override",
+        "cropping_override",
         "sticky",
         "visible",
         "content_type",
