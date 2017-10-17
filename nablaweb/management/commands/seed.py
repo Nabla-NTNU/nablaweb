@@ -8,7 +8,7 @@ from django.core.management.base import BaseCommand
 from faker import Factory
 from nablapps.accounts.models import NablaUser as User, FysmatClass, NablaGroup
 from nablapps.events.models import Event
-from nablapps.news.models import NewsArticle
+from nablapps.news.models import NewsArticle, FrontPageNews
 
 
 fake = Factory.create('no_NO')
@@ -40,6 +40,8 @@ class Command(BaseCommand):
         
         delete = options['delete']
         print("Deleting old entries: " + str(delete))
+        if delete:
+            FrontPageNews.objects.all().delete()
         
         if delete:
             User.objects.all().delete()
@@ -118,11 +120,15 @@ class Command(BaseCommand):
         count = random.randint(10, 20)
         print("Creating %d News" % count)
         for i in range(count):
-            NewsArticle.objects.create(
+            article = NewsArticle.objects.create(
                 headline=s(),
                 body=g(),
                 lead_paragraph=g()
             )
+            f = FrontPageNews()
+            f.content_object = article
+            f.save()
+
 
         count = random.randint(10, 20)
         print("Creating %d Events" % count)
@@ -132,7 +138,7 @@ class Command(BaseCommand):
                 datetime_end=(dt.now()+td(30))
             )
 
-            Event.objects.create(
+            event = Event.objects.create(
                 headline=s(),
                 body=g(),
                 lead_paragraph=g(),
@@ -142,3 +148,6 @@ class Command(BaseCommand):
                 organizer=fake.name(),
                 location=fake.address()
             )
+            f = FrontPageNews()
+            f.content_object = event
+            f.save()
