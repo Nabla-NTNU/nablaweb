@@ -1,7 +1,8 @@
 from image_cropping import ImageCroppingMixin
 from django.contrib import admin
+from nablapps.news.admin import add_to_frontpage
 
-from nablapps.nabladet.models import Nablad
+from .models import Nablad
 
 
 @admin.register(Nablad)
@@ -18,3 +19,4 @@ class NabladAdmin(ImageCroppingMixin, admin.ModelAdmin):
         "file",
     )
     prepopulated_fields = {"slug": ("headline",)}
+    actions = [add_to_frontpage]

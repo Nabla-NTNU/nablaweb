@@ -2,6 +2,7 @@ from django.contrib import admin
 from image_cropping import ImageCroppingMixin
 from content.admin import ChangedByMixin
 
+from nablapps.news.admin import add_to_frontpage
 from .forms import EventForm
 from .models import Event, EventRegistration
 
@@ -39,3 +40,4 @@ class EventAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
     search_fields = ['headline', 'body']
     list_filter = ['event_start', 'organizer', 'location']
     actions_on_top = True
+    actions = [add_to_frontpage]

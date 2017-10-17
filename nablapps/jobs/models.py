@@ -2,7 +2,7 @@ from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.db import models
 from content.models import WithPicture, TimeStamped
-from nablapps.news.models import News, TextContent
+from nablapps.news.models import FrontPageNews, TextContent
 
 
 # Det er litt stygt å bruke modeller for YearChoices og RelevantForChoices, men

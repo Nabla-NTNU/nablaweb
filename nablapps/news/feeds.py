@@ -1,5 +1,5 @@
 from django.contrib.syndication.views import Feed
-from .models import News
+from .models import FrontPageNews
 
 
 class RecentNews(Feed):
@@ -7,7 +7,7 @@ class RecentNews(Feed):
     link = "/"
 
     def items(self):
-        return News.objects.order_by('-created_date')[:10]
+        return FrontPageNews.objects.order_by('-created_date')[:10]
 
     def item_title(self, item):
         return item.headline

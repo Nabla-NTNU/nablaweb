@@ -1,13 +1,13 @@
 from django.contrib import admin
 from .models import GeneralOptions
 from django import forms
-from nablapps.news.models import News
+from nablapps.news.models import FrontPageNews
 
 
 class GeneralOptionsForm(forms.ModelForm):
     
     news = forms.ModelChoiceField(
-        queryset=News.objects.order_by('-created_date'),
+        queryset=FrontPageNews.objects.order_by('-created_date'),
         required=False,
         label="Hovednyhet",
         help_text="Nyheten som vises øverst på siden"

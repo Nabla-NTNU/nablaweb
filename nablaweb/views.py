@@ -4,8 +4,7 @@ from itertools import chain
 from contentapps.album.models import Album
 from contentapps.blog.models import BlogPost
 from nablapps.events.models import Event
-from nablapps.news.models import News
-from content.views import PublishedListMixin
+from nablapps.news.models import FrontPageNews
 from django.views.generic import TemplateView
 
 from nablapps.bedpres.models import BedPres
@@ -23,7 +22,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         context['new_podcast'] = Podcast.objects.exclude(published=False).exclude(is_clip=True).first()
-        news_list = News.objects.filter(visible=True)
+        news_list = FrontPageNews.objects.filter(visible=True)
         context['main_news'] = news_list.first()
         context['news_list_1'] = news_list[1:3]
         context['news_list_2'] = news_list[3:5]
