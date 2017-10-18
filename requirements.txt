@@ -5,7 +5,7 @@
 #    pip-compile --output-file requirements.txt requirements.in
 #
 -e git+https://bitbucket.org/webkom/bpc_client.git@556ede6bd15b4296b1f2a29730ad6e5f00b27428#egg=bpc_client
--e git+https://bitbucket.org/webkom/content-app.git@70365efe0b1ccde421a26a095727e54ce72c8353#egg=content
+-e git+https://bitbucket.org/webkom/content-app.git@1e451bfd956fcdbfa8df2d5bb834137e2819752a#egg=content
 -e git+https://bitbucket.org/webkom/django-wiki.git@0c41490d293a28d2e08c1252336672ad7bc4be85#egg=wiki
 bleach==1.5.0
 click==6.7                # via pip-tools
