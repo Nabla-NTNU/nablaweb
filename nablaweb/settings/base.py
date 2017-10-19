@@ -147,10 +147,7 @@ INSTALLED_APPS = [
     'wiki.plugins.notifications',
     'wiki.plugins.images',
     'wiki.plugins.macros',
-    'wiki.plugins.mediawikiimport',
     'wiki.plugins.links',
-    'wiki.plugins.move',
-    'wiki.plugins.index'
 ]
 
 

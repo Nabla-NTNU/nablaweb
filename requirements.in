@@ -27,10 +27,8 @@ gunicorn    # Web-server used to run django
 PyMySQL     # Database bindings for mysql
 Wand        # python bindings for ImageMagick. Needs ImageMagick installed on machine to work.
 whoosh      # Backend for django-haystack
+wiki~=0.3b3
 
-
-# Fork of django-wiki
--e git+https://bitbucket.org/webkom/django-wiki.git@0c41490d293a28d2e08c1252336672ad7bc4be85#egg=wiki
 
 # Python packages developed by webkom
 -e git+https://bitbucket.org/webkom/content-app.git@1e451bfd956fcdbfa8df2d5bb834137e2819752a#egg=content
