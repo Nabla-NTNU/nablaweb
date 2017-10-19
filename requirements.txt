@@ -6,8 +6,7 @@
 #
 -e git+https://bitbucket.org/webkom/bpc_client.git@556ede6bd15b4296b1f2a29730ad6e5f00b27428#egg=bpc_client
 -e git+https://bitbucket.org/webkom/content-app.git@1e451bfd956fcdbfa8df2d5bb834137e2819752a#egg=content
--e git+https://bitbucket.org/webkom/django-wiki.git@0c41490d293a28d2e08c1252336672ad7bc4be85#egg=wiki
-bleach==1.5.0
+bleach==1.5.0             # via wiki
 click==6.7                # via pip-tools
 django-appconf==1.0.1     # via django-image-cropping
 django-bootstrap3==9.0.0
@@ -20,8 +19,8 @@ django-grappelli==2.10.1
 django-haystack==2.6.1
 django-image-cropping==1.1.0
 django-markdown-deux==1.0.5
-django-mptt==0.8.7
-django-nyt==1.0b5
+django-mptt==0.8.7        # via wiki
+django-nyt==1.0b5         # via wiki
 django-sekizai==0.10.0
 django==1.11.5
 dnspython==1.15.0         # via email-validator
@@ -33,14 +32,15 @@ gunicorn==19.7.1
 html5lib==0.9999999       # via bleach
 idna==2.6                 # via email-validator
 markdown2==2.3.4          # via django-markdown-deux
-markdown==2.6.9
+markdown==2.6.9           # via wiki
 olefile==0.44             # via pillow
-pillow==4.2.1             # via easy-thumbnails
+pillow==4.2.1             # via easy-thumbnails, wiki
 pip-tools==1.9.0
 pymysql==0.7.11
 python-dateutil==2.6.1    # via faker
 pytz==2017.2              # via django
-six==1.10.0               # via bleach, django-appconf, django-bower, django-image-cropping, django-nyt, faker, html5lib, pip-tools, python-dateutil
-sorl-thumbnail==12.3
+six==1.10.0               # via bleach, django-appconf, django-bower, django-image-cropping, django-nyt, faker, html5lib, pip-tools, python-dateutil, wiki
+sorl-thumbnail==12.3      # via wiki
 wand==0.4.4
 whoosh==2.7.4
+wiki==0.3b3
