@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from contentapps.events.models import Event
+from nablapps.events.models import Event
 from django.test import TestCase
 
 from nablapps.bedpres.event_overrides import BedPresAndEventGetter
@@ -9,13 +9,6 @@ from nablapps.jobs.models import Company
 
 
 class EventGetterTest(TestCase):
-
-    def test_get_event(self):
-        event = Event.objects.create()
-        company = Company.objects.create()
-        bedpres = BedPres.objects.create(company=company)
-        self.assertEqual(BedPresAndEventGetter.get_event(event.id), event)
-        self.assertEqual(BedPresAndEventGetter.get_event(bedpres.id), bedpres)
 
     def test_get_current_events(self):
         some_year = 2016
@@ -27,7 +20,9 @@ class EventGetterTest(TestCase):
             for i, (a, b) in enumerate(zip(event_start, event_end))
             ]
         bedpres_in_month = [
-            Event.objects.create(headline="event %s" % i, event_start=a, event_end=b)
+            BedPres.objects.create(headline="event %s" % i, event_start=a, event_end=b,
+                                   company=Company.objects.get_or_create()[0],
+                                   bpcid=i)
             for i, (a, b) in enumerate(zip(event_start, event_end))
             ]
         self.assertCountEqual(

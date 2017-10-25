@@ -1,8 +1,7 @@
 from bpc_client.event import get_events as get_bpc_events
-from contentapps.events.event_overrides import EventGetter
-from contentapps.events.models import Event
+from nablapps.events.event_overrides import EventGetter
+from nablapps.events.models import Event
 from datetime import datetime, time
-from django.shortcuts import get_object_or_404
 from itertools import chain
 from .models import BedPres
 
@@ -12,22 +11,15 @@ class BedPresAndEventGetter(EventGetter):
     @staticmethod
     def get_current_events(year, month):
         # Get this months events and bedpreser separately
-        events = Event.objects.select_related("content_type").filter(
+        events = Event.objects.filter(
             event_start__year=year,
             event_start__month=month)
-        bedpress = BedPres.objects.select_related("content_type").filter(
+        bedpress = BedPres.objects.filter(
             event_start__year=year,
             event_start__month=month)
 
         # Combine them to a single calendar
         return chain(events, bedpress)
-
-    @staticmethod
-    def get_event(event_id):
-        try:
-            return Event.objects.get(pk=event_id)
-        except Event.DoesNotExist:
-            return get_object_or_404(BedPres, pk=event_id)
 
     @staticmethod
     def attending_events(user, today):

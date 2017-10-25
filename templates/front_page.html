@@ -10,13 +10,15 @@
 {% with main_news as news %}
 <article>
     <div class="box {{ news.content_type.model }}">
-        {% if news.as_child_class.correct_cropping and news.as_child_class.correct_picture %}
+        {% if news.cropping and news.picture %}
             <a href="{{ news.get_absolute_url }}">
-                <img alt="" class="img-responsive" src="{% thumbnail news.as_child_class.correct_picture 760x300 box=news.as_child_class.correct_cropping upscale=True quality=95 detail=True %}">
+                <img alt="" class="img-responsive"
+                     src="{% thumbnail news.picture 760x300 box=news.cropping upscale=True quality=95 detail=True %}">
             </a>
-        {% elif news.as_child_class.correct_picture %}
+        {% elif news.picture %}
             <a href="{{ news.get_absolute_url }}">
-                <img alt="" class="img-responsive" src="{% thumbnail news.as_child_class.correct_picture 760x300 quality=95 upscale=True crop="smart" detail=True %}">
+                <img alt="" class="img-responsive"
+                     src="{% thumbnail news.picture 760x300 quality=95 upscale=True crop="smart" detail=True %}">
             </a>
         {% endif %}
         <header>
@@ -99,14 +101,18 @@
             <h3><a href="{% url "blog" %}">Siste Blogginnlegg</a></h3>
             <div class="row">
                 {% for blog in new_blog %}
+                    <a class="thumbnail" href="{{ blog.get_absolute_url }}">
                     <div class="col-md-3 {% if not forloop.first %} hidden-xs{% endif %}">
-                            <a class="thumbnail" href="{{ blog.get_absolute_url }}">
-                                <img src="{% thumbnail blog.list_image 730x200 quality=95 %}"/>
-                            </a>
+
+                        {% if blog.list_image %}
+                           <img src="{% thumbnail blog.list_image 730x200 quality=95 %}"/>
+                        {% endif %}
+
                         <div class="caption">
-                     <h3>{{ blog.title }}</h3>
+                            <h3>{{ blog.title }}</h3>
                         </div>
                     </div>
+                    </a>
                 {% endfor %}
             </div>
         </div>

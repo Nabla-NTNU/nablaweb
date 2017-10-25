@@ -4,7 +4,22 @@
 
 {% block content %}
 
-{% include "news/includes/text_content.html" with news=job %}
+{% load markdown %}
+{% load easy_thumbnails %}
+
+
+<div class="box">
+    {% if job.company.picture %}
+    <img alt="header"
+         class="img-responsive"
+         src="{% thumbnail job.company.picture 760x300 box=job.company.cropping upscale=True detail=True quality=95 %}">
+    {% endif %}
+
+    <header><h2>{{ job.headline }}</h2></header>
+    <p><strong>{{ job.lead_paragraph }}</strong></p>
+    <div style="overflow: hidden;">{{ job.body|markdown }}</div>
+</div>
+
 {% include "content/includes/comments.html" with content=job %}
 
 {% endblock %}

@@ -1,7 +1,8 @@
 from datetime import datetime
+from django.core.urlresolvers import reverse
 from django.db import models
-from content.models import WithPicture
-from contentapps.news.models import News
+from content.models import WithPicture, TimeStamped
+from nablapps.news.models import FrontPageNews, TextContent
 
 
 # Det er litt stygt å bruke modeller for YearChoices og RelevantForChoices, men
@@ -80,7 +81,7 @@ class AdvertManager(models.Manager):
         return self.exclude(removal_date__lte=datetime.now())
 
 
-class Advert(News):
+class Advert(TimeStamped, TextContent):
     company = models.ForeignKey(
         'Company',
         verbose_name="Bedrift",
@@ -134,8 +135,13 @@ class Advert(News):
     def __str__(self):
         return self.headline
 
-    def correct_picture(self):
+    @property
+    def picture(self):
         return self.company.picture
 
-    def correct_cropping(self):
+    @property
+    def cropping(self):
         return self.company.cropping
+
+    def get_absolute_url(self):
+        return reverse("advert_detail", kwargs={'pk': self.pk, 'slug': self.slug})

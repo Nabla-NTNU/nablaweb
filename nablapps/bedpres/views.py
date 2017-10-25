@@ -1,4 +1,6 @@
-from contentapps.events.views import EventDetailView, RegisterUserView
+from django.http import HttpResponse
+from django.template import loader
+from nablapps.events.views import EventDetailView, RegisterUserView
 from .bpcmixin import WrongClass
 from .event_overrides import *
 from .utils import InvalidCardNum
@@ -30,3 +32,16 @@ class BedPresDetailView(EventDetailView):
     model = BedPres
     template_name = 'bedpres/bedpres_detail.html'
     context_object_name = "bedpres"
+
+
+def ical_event(request, event_id):
+    """Returns a given event or bedpres as an iCal .ics file"""
+
+    event = BedPres.objects.get(event_id)
+
+    # Use the same template for both Event and BedPres.
+    template = loader.get_template('events/event_icalendar.ics')
+    context = {'event_list': (event,), }
+    response = HttpResponse(template.render(context), content_type='text/calendar')
+    response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.slug
+    return response

@@ -1,7 +1,7 @@
 import logging
 from django.utils.functional import cached_property
 
-from contentapps.events.exceptions import (
+from nablapps.events.exceptions import (
     EventFullException,
     RegistrationAlreadyExists,
     RegistrationNotOpen,

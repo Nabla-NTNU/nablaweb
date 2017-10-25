@@ -1,12 +1,24 @@
 {% extends "base.html" %}
-
+{% load markdown %}
+{% load easy_thumbnails %}
 
 {% block title %}{{ bedpres.headline }}{% endblock %}
 
 
 {% block content %}
 
-{% include "news/includes/text_content.html" with news=bedpres%}
+<div class="box">
+    {% if bedpres.company.picture %}
+    <img alt="header"
+         class="img-responsive"
+         src="{% thumbnail bedpres.company.picture 760x300 box=bedpres.company.cropping upscale=True detail=True quality=95 %}">
+    {% endif %}
+
+    <header><h2>{{ bedpres.headline }}</h2></header>
+    <p><strong>{{ bedpres.lead_paragraph}}</strong></p>
+    <div style="overflow: hidden;">{{ bedpres.body|markdown}}</div>
+</div>
+
 
 {# Vis påmeldte #}
 {% if user.is_authenticated and bedpres.users_attending > 0 %}

@@ -1,13 +1,17 @@
 {% load easy_thumbnails %}
 <article class="col-md-6">
     <div class="box {{ news.content_type.model }}">
-    {% if news.as_child_class.correct_cropping and news.as_child_class.correct_picture %}
+    {% if news.cropping and news.picture %}
         <a href="{{ news.get_absolute_url }}">
-            <img alt="" class="news-picture img-responsive" src="{% thumbnail news.as_child_class.correct_picture 360x200 box=news.as_child_class.correct_cropping upscale quality=95 detail %}">
+            <img alt=""
+                 class="news-picture img-responsive"
+                 src="{% thumbnail news.picture 360x200 box=news.cropping upscale quality=95 detail %}">
         </a>
-    {% elif news.as_child_class.correct_picture %}
+    {% elif news.picture %}
         <a href="{{ news.get_absolute_url }}">
-            <img alt="" class="news-picture img-responsive" src="{% thumbnail news.as_child_class.correct_picture 360x200 quality=95 upscale crop="smart" detail %}">
+            <img alt=""
+                 class="news-picture img-responsive"
+                 src="{% thumbnail news.picture 360x200 quality=95 upscale crop="smart" detail %}">
         </a>
     {% endif %}
     <header>

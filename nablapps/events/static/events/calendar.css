@@ -1,0 +1,59 @@
+
+/* Calendar */
+
+@media (min-width: 600px) {
+    .month {
+        display: table;
+        border-collapse: separate;
+        width: 100%;
+        border-spacing: 3px;
+    }
+
+    .daynames { display: table-header-group; }
+
+    .week { display: table-row; }
+
+    .dayname, .cell {
+        display: table-cell;
+        width: 14%;
+        height: 120px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        padding: 5px;
+        padding-bottom: 10px;
+    }
+    .dayname {
+        text-align: center;
+        font-weight: bold;
+        height: 20px;
+        border: none;
+    }
+    .cell { background-color: #f9f9f9; }
+    .cell .date .day { display: none; }
+    .today { background-color: #f7f7ff; }
+    .noday { visibility: hidden; }
+}
+
+/* Mobile calendar */
+@media (max-width: 600px) {
+    .month { display: block; }
+    .daynames { display: none; }
+    .week { list-style: none; margin: 0;}
+    .noday { display: none; }
+    .cell { display: none; }
+    .filled { display: block; margin-bottom: 15px;}
+    .cell .date {
+        font-size: 20px;
+        text-align: center;
+    }
+    .cell ul { list-style: none; padding: 5px; margin: 0;}
+    .cell ul li a {
+        display: block;
+        line-height: 60px;
+        background-color: #f3f3f3;
+        padding-left: 15px;
+    }
+    .cell ul li a:hover {
+        background-color: #f0f0f8;
+    }
+}

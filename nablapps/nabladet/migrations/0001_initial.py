@@ -23,6 +23,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'nablad',
                 'verbose_name_plural': 'nablad',
             },
-            bases=('news.news',),
+            #bases=('news.news',),
         ),
     ]

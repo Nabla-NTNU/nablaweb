@@ -1,11 +1,22 @@
 import os
+from content.models import (
+    TimeStamped,
+    ViewCounterMixin,
+    WithPicture,
+)
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
-from contentapps.news.models import News
+from nablapps.news.models import TextContent
 from .pdfthumbnailer import thumbnail_pdf
 
 
-class Nablad(News):
+class Nablad(
+    TimeStamped,
+    ViewCounterMixin,
+    WithPicture,
+    TextContent,
+):
     pub_date = models.DateField(
         verbose_name='publisert',
         blank=False,
@@ -48,3 +59,6 @@ class Nablad(News):
 
     def __str__(self):
         return self.headline
+
+    def get_absolute_url(self):
+        return reverse("nablad_detail", kwargs={'pk': self.pk, 'slug': self.slug})

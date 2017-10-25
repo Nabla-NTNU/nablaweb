@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load markdown %}
+{% load listutil %}
+{% load easy_thumbnails %}
+
+{% block title %}Nyheter{% endblock %}
+
+{% block more_head %}
+<link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
+{% endblock %}
+
+{% block content %}
+{% for news in news_list %}
+    <div class="row">
+        {% with newsurl=news.get_absolute_url %}
+    <div class="col-md-12 box">
+    {% if news.picture %}
+        <a href="{{ newsurl }}">
+            <img alt=""
+                 class="news-picture"
+                 src="{% thumbnail news.picture 760x300 box=news.cropping upscale quality=95 detail %}">
+        </a>
+    {% endif %}
+
+    <header>
+        <h3>
+            <a href="{{ newsurl }}">{{ news.headline }}</a>
+        </h3>
+    </header>
+    <p>
+    {{ news.lead_paragraph}}
+    </p>
+</div>
+{% endwith %}
+    </div>
+{% endfor %}
+
+{% if is_paginated %}
+<nav>
+    <ul class="pager">
+        {% if page_obj.has_next %}
+            <li class="previous">
+                <a href="?page={{ page_obj.next_page_number }}"><span aria-hidden="true">&larr;</span> Eldre</a>
+            </li>
+        {% endif %}
+
+        <li class="disabled pager-counter">
+            Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
+        </li>
+
+        {% if page_obj.has_previous %}
+            <li class="next">
+                <a href="?page={{ page_obj.previous_page_number }}">Nyere <span aria-hidden="true">&rarr;</span></a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock content %}

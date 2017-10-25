@@ -29,7 +29,7 @@
     {% render_block "css" %}
 
     <!-- Fav and touch icons, for screen and mobile -->
-    <link rel="shortcut icon" href="{% if options.favicon %}{{options.favicon}}{% else %}{% static "img/favicon.ico" %}{% endif %}">
+    <link rel="shortcut icon" href="{% static "img/favicon.ico" %}">
     <link rel="apple-touch-icon" href="{% static "img/apple-touch-icon.png" %}">
     <link rel="apple-touch-icon" sizes="72x72" href="{% static "img/apple-touch-icon-72x72.png" %}">
     <link rel="apple-touch-icon" sizes="114x114" href="{% static "img/apple-touch-icon-114x114.png" %}">
