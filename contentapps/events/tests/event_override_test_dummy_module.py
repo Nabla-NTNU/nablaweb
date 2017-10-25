@@ -1,2 +1,0 @@
-class TestGetter(object):
-    pass

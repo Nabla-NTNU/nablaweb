@@ -1,4 +1,0 @@
-{{ object.head_line }}
-{{ object.lead_paragraph }}
-{{ object.body }}
-{{ object.created_by }}

@@ -1,9 +1,0 @@
-{% extends "content/includes/sidebar-admin.html" %}
-
-{% block sidebar-admin %}
-
-{% if event.registration_required %}
-    <li><a href="{% url "event_admin" event.id %}"><span class="glyphicon glyphicon-user"></span>Administrer påmeldinger</a></li>
-    <li><a href="{% url "event_registrations" event.id %}"><span class="glyphicon glyphicon-list"></span> Påmeldingsliste</a></li>
-{% endif %}
-{% endblock %}
