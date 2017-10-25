@@ -8,7 +8,6 @@ from content import VERSION
 
 requirements = [
     'django>=1.8',
-    'django-braces',
     'django-image-cropping',
     'django-sekizai>=0.8.2',
     'easy-thumbnails',
