@@ -6,6 +6,9 @@ from .models import FrontPageNews
 
 @receiver(pre_delete)
 def callback(sender, instance, **kwargs):
+    if not hasattr(instance, "id"):
+        return
+
     FrontPageNews.objects.filter(
         object_id=instance.id,
         content_type=ContentType.objects.get_for_model(instance.__class__),
