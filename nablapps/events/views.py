@@ -202,7 +202,7 @@ class RegisterUserView(LoginRequiredMixin,
 def ical_event(request, event_id):
     """Returns a given event or bedpres as an iCal .ics file"""
 
-    event = Event.objects.get(event_id)
+    event = Event.objects.get(id=event_id)
 
     # Use the same template for both Event and BedPres.
     template = loader.get_template('events/event_icalendar.ics')

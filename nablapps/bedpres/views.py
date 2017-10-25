@@ -37,7 +37,7 @@ class BedPresDetailView(EventDetailView):
 def ical_event(request, event_id):
     """Returns a given event or bedpres as an iCal .ics file"""
 
-    event = BedPres.objects.get(event_id)
+    event = BedPres.objects.get(id=event_id)
 
     # Use the same template for both Event and BedPres.
     template = loader.get_template('events/event_icalendar.ics')
