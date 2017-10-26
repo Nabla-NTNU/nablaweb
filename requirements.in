@@ -18,6 +18,7 @@ django-contrib-comments
 django-filebrowser  # Filebrowser for mediafiles.
 django-grappelli    # Makes the django adminpage more fancy
 django-haystack     # Search functionality for django models. See also whoosh.
+django-hitcount
 django-image-cropping
 django-markdown-deux
 django-sekizai      # Templatetag library for extra block functionality
