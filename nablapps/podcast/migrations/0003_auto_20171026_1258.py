@@ -12,8 +12,6 @@ def forwards_func(apps, schema_editor):
     HitCount = apps.get_model("hitcount", "HitCount")
 
     ctype = ContentType.objects.get_for_model(Podcast)
-    # db_alias = schema_editor.connection.alias
-    ct_article, _ = ContentType.objects.get_or_create(app_label="news", model="newsarticle")
     podcasts = Podcast.objects.all()
     for p in podcasts:
         hit_count, created = HitCount.objects.get_or_create(
