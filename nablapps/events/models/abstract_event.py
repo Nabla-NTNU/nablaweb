@@ -1,6 +1,5 @@
 from content.models import (
     PublicationManagerMixin,
-    ViewCounterMixin,
     TimeStamped,
     WithPicture,
 )
@@ -12,7 +11,6 @@ class AbstractEvent(
     RegistrationInfoMixin,
     EventInfoMixin,
     PublicationManagerMixin,
-    ViewCounterMixin,
     TimeStamped,
     TextContent,
     WithPicture,
