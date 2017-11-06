@@ -2,6 +2,8 @@
 {% load markdown %}
 {% load listutil %}
 {% load easy_thumbnails %}
+{% load hitcount_tags %}
+
 {% block more_head %}
 <link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
 {% endblock %}
@@ -142,7 +144,7 @@
                 <img src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
             {% endif %}
         </a>
-        <p><i>Dato: {{ new_podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ new_podcast.view_counter }}</i></p>
+        <p><i>Dato: {{ new_podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {% get_hit_count for new_podcast %}</i></p>
     {% endif %}
 
 {% endblock sidebar %}
