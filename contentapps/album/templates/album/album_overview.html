@@ -12,8 +12,8 @@
 <div class="row">
     {% for image in row %}
     <div class="col-xs-6 col-md-3">
-        <a class="thumbnail" href="{{ image.get_absolute_url }}">
-        <img src="{% thumbnail image.file 770x250 quality=95 %}"/>
+        <a href="{{ image.get_absolute_url }}">
+        <img class="img-responsive" src="{% thumbnail image.file 350x350 crop="smart" %}"/>
         </a>
     </div>
     {% endfor %}

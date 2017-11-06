@@ -14,8 +14,8 @@
     {% for album in row %}
     <div class="col-xs-6 col-md-3">
         {% if album.visibility != 'u' %}
-        <a class="thumbnail" href="{{ album.get_absolute_url }}">
-        <img src="{% thumbnail album.first.file 770x250 quality=95 %}"/>
+        <a href="{{ album.get_absolute_url }}">
+        <img class="img-responsive" src="{% thumbnail album.first.file 350x350 crop="smart" %}"/>
         </a>
         {% endif %}
         <div class="caption">
