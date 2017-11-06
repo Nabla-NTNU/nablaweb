@@ -2,6 +2,7 @@
 {% load sekizai_tags %}
 {% load static %}
 {% load easy_thumbnails %}
+{% load hitcount_tags %}
 
 {% block title %}Skråttcast{% endblock %}
 {% block content %}
@@ -34,7 +35,7 @@
                                 {% if podcast.extra_markdown %}
                                 <span class="glyphicon glyphicon-film"></span>
                                 {% endif %}
-                            {{ podcast.view_counter }} visninger.
+                            {% get_hit_count for podcast %} visninger.
                             {{ podcast.pub_date | date:"d.m.Y" }}
                             </span>
                         </a>

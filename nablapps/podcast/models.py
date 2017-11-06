@@ -1,4 +1,4 @@
-from content.models import PublicationManagerMixin, ViewCounterMixin
+from content.models import PublicationManagerMixin
 from django.db import models
 from django.core.urlresolvers import reverse
 from image_cropping.fields import ImageRatioField
@@ -56,7 +56,7 @@ class Season(models.Model):
         verbose_name_plural = 'Sesonger'
 
 
-class Podcast(PublicationManagerMixin, ViewCounterMixin, models.Model):
+class Podcast(PublicationManagerMixin, models.Model):
 
     image = models.ImageField(
         upload_to="news_pictures",

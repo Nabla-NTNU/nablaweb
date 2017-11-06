@@ -124,6 +124,7 @@ INSTALLED_APPS = [
     'filebrowser',
     'grappelli',
     'haystack',
+    'hitcount',
     'markdown_deux',
     'sekizai', # http://django-sekizai.readthedocs.org/en/latest/#
 

@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView, DetailView
-from content.views import AdminLinksMixin, ViewAddMixin, PublishedMixin, update_published_state
+from hitcount.views import HitCountDetailView
+from content.views import AdminLinksMixin, PublishedMixin, update_published_state
 from utils.view_mixins import FlatPageMixin
 
 from .models import Podcast, Season, get_season_count
@@ -36,10 +37,11 @@ class SeasonView(FlatPageMixin, TemplateView):
         return data
 
 
-class PodcastDetailView(PublishedMixin, ViewAddMixin, AdminLinksMixin, DetailView):
+class PodcastDetailView(PublishedMixin, AdminLinksMixin, HitCountDetailView, DetailView):
     template_name = 'podcast/podcast_detail.html'
     model = Podcast
     context_object_name = "podcast"
+    count_hit = True
 
     def get_context_data(self, **kwargs):
         context = super(PodcastDetailView, self).get_context_data(**kwargs)

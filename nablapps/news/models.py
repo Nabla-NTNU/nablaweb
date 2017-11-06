@@ -9,7 +9,6 @@ from image_cropping.fields import ImageRatioField
 from content.models import (
     PublicationManagerMixin,
     TimeStamped,
-    ViewCounterMixin,
     WithPicture,
 )
 
@@ -48,7 +47,6 @@ class TextContent(models.Model):
 class NewsArticle(
     PublicationManagerMixin,
     TimeStamped,
-    ViewCounterMixin,
     WithPicture,
     TextContent
 ):

@@ -1,8 +1,8 @@
-from content.models import TimeStamped, ViewCounterMixin
+from content.models import TimeStamped
 from django.db import models
 
 
-class InteractiveElement(TimeStamped, ViewCounterMixin, models.Model):
+class InteractiveElement(TimeStamped, models.Model):
     """
     Model for an element requiring user interaction.
     """

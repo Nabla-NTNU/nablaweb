@@ -17,6 +17,7 @@ django-contrib-comments==1.8.0
 django-filebrowser==3.9.1
 django-grappelli==2.10.1
 django-haystack==2.6.1
+django-hitcount==1.2.3
 django-image-cropping==1.1.0
 django-markdown-deux==1.0.5
 django-mptt==0.8.7        # via wiki
@@ -30,15 +31,15 @@ faker==0.8.3
 first==2.0.1              # via pip-tools
 gunicorn==19.7.1
 html5lib==0.9999999       # via bleach
-idna==2.6                 # via email-validator
+idna==2.6                 # via email-validator, idna
 markdown2==2.3.4          # via django-markdown-deux
 markdown==2.6.9           # via wiki
 olefile==0.44             # via pillow
 pillow==4.2.1             # via easy-thumbnails, wiki
 pip-tools==1.9.0
-pymysql==0.7.11
-python-dateutil==2.6.1    # via faker
-pytz==2017.2              # via django
+pymysql==0.7.11           # via pymysql
+python-dateutil==2.6.1    # via faker, python-dateutil
+pytz==2017.2              # via django, pytz
 six==1.10.0               # via bleach, django-appconf, django-bower, django-image-cropping, django-nyt, faker, html5lib, pip-tools, python-dateutil, wiki
 sorl-thumbnail==12.3      # via wiki
 wand==0.4.4

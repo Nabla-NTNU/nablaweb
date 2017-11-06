@@ -1,11 +1,11 @@
-from content.views import AdminLinksMixin, ViewAddMixin
+from content.views import AdminLinksMixin
 from django.contrib.auth.views import redirect_to_login
 from django.views.generic import DetailView, ListView
 
 from nablapps.nabladet.models import Nablad
 
 
-class NabladDetailView(ViewAddMixin, AdminLinksMixin, DetailView):
+class NabladDetailView(AdminLinksMixin, DetailView):
     model = Nablad
     template_name = 'nabladet/nablad_detail.html'
     context_object_name = 'nablad'
