@@ -1,9 +1,5 @@
 import os
-from content.models import (
-    TimeStamped,
-    ViewCounterMixin,
-    WithPicture,
-)
+from content.models import TimeStamped, WithPicture
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -13,7 +9,6 @@ from .pdfthumbnailer import thumbnail_pdf
 
 class Nablad(
     TimeStamped,
-    ViewCounterMixin,
     WithPicture,
     TextContent,
 ):
