@@ -192,10 +192,12 @@
                                   <button class="submit btn btn-primary btn-block" type="submit">Logg inn</button>
                               </form>
                           </li>
-                      {% endif %}
+			  {% endif %}
+			  {% block flag %}
                       <li><a class="logo" href="/english/">
                         <img src="{% static "img/GB_flag.png" %}" alt="Eng">
                       </a></li>
+		      {% endblock %}
                   </ul>
               {% endblock navbar_container %}
             </div>
