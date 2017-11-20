@@ -25,8 +25,18 @@
 
 */
 
+@font-face {
+    font-family: 'Kaushanscript';
+    src:url("../fonts/KaushanScript-Regular.eot") format("eot"),
+        url("../fonts/KaushanScript-Regular.woff") format("woff"),
+	url("../fonts/KaushanScript-Regular.ttf") format("truetype"),
+	url("../fonts/KaushanScript-Regular.svg#KaushanScript-Regular") format("svg");
+    font-weight:normal;
+    font-style:normal;
+}
+
 h1 {
-    font-family: 'Script MT', Arial, sans-serif;
+    font-family: 'Script MT', 'Kaushanscript',  Arial, sans-serif;
     color: rgb(154,16,39);
     font-size: 60px;
     text-align: center;
@@ -78,7 +88,7 @@ h1 {
     z-index: 30;
     display: block;
     position: relative;
-    font-family: 'Script MT', Arial, sans-serif;
+    font-family: 'Script MT', 'Kaushanscript', Arial, sans-serif;
     color: rgb(154,16,39);
     cursor: pointer;
 }
