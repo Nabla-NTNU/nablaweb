@@ -128,6 +128,7 @@
 		   * 3: down
 		   **/
 		  if (0 <= code && code < 4 && code !== turn[0]) {
+			  e.preventDefault();
 			  turn.unshift(code);
 		  } else if (-5 == code) {
 			  if (interval) {
