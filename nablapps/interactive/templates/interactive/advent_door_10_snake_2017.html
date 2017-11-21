@@ -11,7 +11,7 @@
 <div class="alert alert-warning alert-dismissible">Dette er bare synlig fordi du har riktige rettigheter</div>
 {% endif %}
 
-<div class="text">
+<div class="text" id="snake-content">
   <p>{{ door.content|markdown:"unsafe" }}</p>
   <style type="text/css">
   body {
@@ -25,7 +25,7 @@
   }
   </style>
 
-  <script type="text/javascript">
+  <script type="text/javascript" defer>
   /**
    * @license HTML5 experiment Snake
    * http://www.xarg.org/project/html5-snake/
@@ -56,7 +56,7 @@
 	  canvas.setAttribute('width', 45 * 10);
 	  canvas.setAttribute('height', 30 * 10);
 	  ctx = canvas.getContext('2d');
-	  document.body.appendChild(canvas);
+	  document.getElementById("snake-content").appendChild(canvas);
 	  function placeFood() {
 		  var x, y;
 		  do {
@@ -145,7 +145,8 @@
 	  }
   }
 
-  alert("Start snake");				
+
+  alert("Start snake!");
   init();
   </script>
 </div>
