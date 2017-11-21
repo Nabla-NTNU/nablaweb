@@ -150,6 +150,8 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
         # TODO: gjør advent_base til advent_base_2015 og fiks default greien
         if year == 2015:
             context['base_template'] = "interactive/advent_base.html"
+        elif year == 2017:
+            context['base_template'] = "interactive/advent_base_2016.html" # Burde egentlig bare bruke html-en til kalenderen
         else:
             context['base_template'] = "interactive/advent_base_" + str(year) + ".html"
         return context
