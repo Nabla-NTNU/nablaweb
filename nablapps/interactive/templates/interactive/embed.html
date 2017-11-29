@@ -1,0 +1,231 @@
+{% extends "interactive/advent_base_2016.html" %}
+{% load markdown %}
+{% load like %}
+{% load sekizai_tags %}
+
+{% block title %}{{ door.number }}{% endblock %}
+
+{% block content %}
+<h1>{{ door.number }}</h1>
+{% if not door.is_published %}
+<div class="alert alert-warning alert-dismissible">Dette er bare synlig fordi du har riktige rettigheter</div>
+{% endif %}
+
+<html>
+#Styrets jul
+
+<style>
+.YTplayer {
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    display: block;
+    overflow: hidden;
+    transition: all 200ms ease-out;
+    cursor: pointer;
+    margin: 40px auto 0 auto;
+}
+
+iframe {
+  margin: 40px auto 0 auto;
+}
+
+.p {
+  margin-top: 60px;
+}
+</style>
+
+
+	<meta http-equiv="content-type" content="text/html" />
+
+	<title>Embed YouTube Videos</title>
+
+    <script type='text/javascript' src='//www.youtube.com/iframe_api?ver=4.3.1'></script>
+
+<script type="text/javascript">
+"use strict";                           /** DO NOT EDIT !!! */
+
+var defaultPlayerParameters = {
+    "vq" : "hd1080",                    /** DEFAULT VIDEO QUALITY. POSSIBLE OPTIONS: highres, hd1080, hd720, large, medium and small */
+    "loop" : "1",                       /** LOOP VIDEO */
+    "controls" : "1",                   /** SHOW PLAYER CONTROLS */
+    "showinfo" : "1",                   /** SHOW VIDEO DETAILS */
+    "autohide" : "1",                   /** AUTOHIDE PLAYER COMMANDS AND VIDEO DETAILS */
+    "modestbranding" : "1",             /** SHOW ONLY MINIMAL YOUTUBE BRANDING */
+    "rel" : "0",                        /** SHOW RELATED VIDEOS AT THE END OF PLAYED VIDEO */
+    "cc_load_policy" : "1",             /** Setting the parameter"s value to 1 causes closed captions to be shown by default, even if the user has turned captions off. */
+    "color" : "red",                    /** This parameter specifies the color that will be used in the player"s video progress bar to highlight the amount of the video that the viewer has already seen. Valid parameter values are red and white. */
+    "disablekb" : "1",                  /** Setting the parameter"s value to 1 causes the player to not respond to keyboard controls. */
+    "fs" : "1",                         /** Setting this parameter to 0 prevents the fullscreen button from displaying in the player. */
+    "hl" : "en",                        /** Sets the player"s interface language. See http://www.loc.gov/standards/iso639-2/php/code_list.php for full language code list. */
+    "iv_load_policy" : "1",             /** Setting the parameter"s value to 1 causes video annotations to be shown by default, whereas setting to 3 causes video annotations to not be shown by default. */
+    "playsinline" : "0"                 /** This parameter controls whether videos play inline or fullscreen in an HTML5 player on iOS. */
+    };
+
+var timeOutInterval = 5000;             /** IF YOU ENCOURTER "This video is unavailable" MESSAGE WHILE EMBEDING MORE THAN THREE VIDEOS ON ONE PAGE, CHANGE THIS TO A HIGHER VALUE */
+
+
+
+/** --------------------------------------------------------------------- DON NOT EDIT ANYTHING BELLOW ---------------------------------------------------------------------- */
+
+
+
+var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+var embedURL = 'https://api.embedprivatevideo.com/embed.php?video=%s&client=';
+
+var loadedURL = 'https://api.embedprivatevideo.com/loaded.php?video=%s';
+
+var loadedVideos = [];
+
+
+function r(f){/in/.test(document.readyState)?setTimeout('r('+f+')',9):f()}
+
+r(function(){
+    if(!document.getElementsByClassName) {
+        // IE8 support
+        var getElementsByClassName = function(node, classname) {
+            var a = [];
+            var re = new RegExp('(^| )'+classname+'( |$)');
+            var els = node.getElementsByTagName("*");
+            for(var i=0,j=els.length; i<j; i++)
+                if(re.test(els[i].className))a.push(els[i]);
+            return a;
+        }
+        var videos = getElementsByClassName(document.body,"YTplayer");
+    }
+    else {
+        var videos = document.getElementsByClassName("YTplayer");
+    }
+
+    var videosCount = videos.length;
+
+    var players = [];
+
+    var hardcodedPlayerParameters = {
+        "origin" : location.hostname,
+        "widget_referrer" : location.hostname,
+        "autoplay" : "1"
+    };
+
+    if(isMobile === true)    {
+        defaultPlayerParameters["vq"] = "small";
+    }
+
+
+    for (var i=0; i<videosCount; i++) {
+
+        var div = document.getElementById(videos[i].id);
+
+        var individualPlayerParameters = {};
+
+        if (div.getAttribute("data-params"))    {
+            individualPlayerParameters = stringToJSON(div.getAttribute("data-params"));
+        }
+
+        var playerParameters = jsonConcat(defaultPlayerParameters, individualPlayerParameters, hardcodedPlayerParameters);
+
+        var formatedEmbedURL = embedURL.replace("%s", videos[i].id) + location.hostname;
+
+        jQuery.get(formatedEmbedURL, '', null, 'jsonp');
+
+        players[videos[i].id] = new YT.Player(videos[i].id, {
+            videoId: videos[i].id,
+            playerVars: playerParameters,
+            events: {
+              'onReady': onPlayerReady,
+              'onStateChange': onPlayerStateChange
+            }
+        });
+
+        setTimeout('', timeOutInterval);
+    }
+});
+
+
+function onPlayerReady(event) {
+
+    if(isMobile == false)    {
+
+        var formatedLoadedURL = loadedURL.replace("%s", event.target.b.c.videoId);
+
+        jQuery.get(formatedLoadedURL, '', null, 'jsonp');
+    }
+}
+
+
+function onPlayerStateChange(event)   {
+
+    if(event.data == 1 && loadedVideos[event.target.b.c.videoId] != 1) {
+
+        event.target.pauseVideo();
+
+        loadedVideos[event.target.b.c.videoId] = 1;
+
+    }
+
+    if((event.data == 1 || event.data == 3) && isMobile == true) {
+
+        var formatedLoadedURL = loadedURL.replace("%s", event.target.b.c.videoId);
+
+        jQuery.get(formatedLoadedURL, '', null, 'jsonp');
+
+        loadedVideos[event.target.b.c.videoId] = 1;
+    }
+
+}
+
+
+function stringToJSON(stringData) {
+
+    var jsonObject = {};
+
+    var arrayData = stringData.split(',');
+
+    for(var i = 0; i < arrayData.length; i++)   {
+
+       var dataPairs = arrayData[i].split('=');
+
+       jsonObject[dataPairs[0]] = dataPairs[1];
+    }
+
+    return jsonObject;
+}
+
+
+function jsonConcat(defaultPlayerParameters, individualPlayerParameters, hardcodedPlayerParameters) {
+
+    /**
+     * Combine hardcoded, default and individual player parameters
+     */
+
+    var PlayerParameters = {};
+
+    for (var key in defaultPlayerParameters) {
+        PlayerParameters[key] = defaultPlayerParameters[key];
+    }
+
+    for (var key in individualPlayerParameters) {
+        PlayerParameters[key] = individualPlayerParameters[key];
+    }
+
+    for (var key in hardcodedPlayerParameters) {
+        PlayerParameters[key] = hardcodedPlayerParameters[key];
+    }
+
+    return PlayerParameters;
+}
+
+</script>
+
+<body>
+
+<div class="YTplayer" id="your_youtube_video_1_id" data-params="controls=1,rel=1" style="width:640px;height:360px;"></div>
+
+<div class="YTplayer" id="your_youtube_video_2_id" data-params="showinfo=0,modestbranding=0" style="width:640px;height:360px;"></div>
+
+<div class="YTplayer" id="your_youtube_video_n_id" data-params="rel=0" style="width:640px;height:360px;"></div>
+
+</body>
+</html>
+{% endblock %}
