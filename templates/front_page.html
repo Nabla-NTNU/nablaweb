@@ -130,7 +130,6 @@
 
 {% block sidebar %}
     {% if sidebarinfo %}
-        <h2>{{ sidebarinfo.title }}</h2>
         <p>
             {{ sidebarinfo.content | markdown:"unsafe" }}
         </p>
