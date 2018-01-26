@@ -11,8 +11,24 @@
 <style>
  .nablad-year-container {
      display: none;
+     text-align: center;
  }
 
+ .nablad-year-container ul {
+     list-style: none;
+     padding: 0;
+ }
+
+ .nablad-year-container li.current {
+     font-size: 18px;
+     color: gray;
+ }
+ 
+ .nablad-year-container button {
+     background: none;
+     border: none;
+ }
+ 
  .active {
      display: block;
  }
@@ -85,8 +101,12 @@
     {% endif %}
 	<h2><button class="older-year" onclick="changeYear(this.parentElement.parentElement, 1)"><</button>{{ year }}<button class="newer-year" onclick="changeYear(this.parentElement.parentElement, -1)">></button></h2>
 	<ul>
-	    {% for entry in entries %} 
-	    <li> {{ entry.pub_date|date:"F Y" }} </li> 
+	    {% for entry in entries %}
+	    {% if entry == nablad %}
+	    <li class="current" > {{ entry.pub_date|date:"F Y" }} </li>
+	    {% else %}
+	    <li><a href="{{ entry.get_absolute_url }}" >{{ entry.pub_date|date:"F Y" }} </a></li>
+	    {% endif %}
 	    {% endfor %} 
 	</ul>
     </div>
