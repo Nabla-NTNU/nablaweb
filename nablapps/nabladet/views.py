@@ -14,10 +14,7 @@ class NabladDetailView(AdminLinksMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(NabladDetailView, self).get_context_data(**kwargs)
 
-        # context['nablad_archive'] = Nablad.objects.order_by('-pub_date')
-
         nablad_archive = {}
-
         nablad_list = Nablad.objects.all()
         
         if not self.request.user.is_authenticated():
@@ -26,7 +23,6 @@ class NabladDetailView(AdminLinksMixin, DetailView):
         # Creates a dictionary with publication year as key and a list of all nablads from that year as value.
         for n in nablad_list:
             year = formats.date_format(n.pub_date, "Y")
-                
             nablad_archive[year] = nablad_archive.get(year,[]) + [n]
             
         context['nablad_archive'] = nablad_archive

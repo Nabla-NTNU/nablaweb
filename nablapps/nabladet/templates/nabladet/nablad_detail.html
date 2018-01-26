@@ -85,15 +85,9 @@
 
 <h3>Arkiv</h3>
 <table class="table table-striped">
+
+    {# nablad_archive is a directory with key year and value a list of publications from that year #}
     {% for year, entries in nablad_archive.items %}
-    <!-- <tr><td> -->
-    <!--     {% if n == nablad %} -->
-    <!--     {{ n.pub_date|date:"F Y" }} -->
-    <!--     {% else %} -->
-    <!--     <a href="{{ n.get_absolute_url }}"> {{ n.pub_date|date:"F Y" }} </a> -->
-    <!--     {% endif %} -->
-    <!-- </td></tr> -->
-    
     {% if year == nablad.pub_date|date:"Y" %}
     <div class="nablad-year-container active" id="nablad_container_year_{{ year }}">
     {% else %}
