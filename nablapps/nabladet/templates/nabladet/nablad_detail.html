@@ -1,12 +1,39 @@
 {% extends "base.html" %}
 
-{% block morehead %}
+{% block more_head %}
 
 <meta property="og:image" content="{{ nablad.get_picture_url }}" />
 <meta property="og:title" content="{{ nablad.headline|striptags }}" />
 <meta property="og:type"  content="article" />
 <meta property="og:description" content="{% spaceless %}{{ nablad.lead_paragraph|striptags }}{% endspaceless %}" />
 
+<!-- Style for archive -->
+<style>
+ .nablad-year-container {
+     display: none;
+ }
+
+ .active {
+     display: block;
+ }
+</style>
+
+<!-- Script for archive -->
+<script>
+ function changeYear(elem, step) {
+     if(step==1){
+	 next = elem.nextElementSibling;
+     } else {
+	 next = elem.previousElementSibling;
+     }
+     
+     if( next.id.includes("nablad_container_year_")) {
+	 elem.classList.remove("active");
+	 next.classList.add("active");
+     }
+ }
+</script>
+	 
 {% endblock %}
 
 {% block title %}{{ nablad.headline }}{% endblock %}
@@ -26,7 +53,7 @@
     <div style="overflow: hidden;">{{ nablad.body|markdown}}</div>
 </div>
 
-    {% include "content/includes/comments.html" with content=nablad %}
+{% include "content/includes/comments.html" with content=nablad %}
 {% endblock %}
 
 
@@ -35,22 +62,37 @@
 {% include "content/includes/meta.html" with content=nablad %}
 
 <a class="btn btn-primary btn-lg btn-block" href="{{ nablad.file.url }}">
-        Last ned Nabladet {{ nablad.pub_date|date:"F Y" }}
+    Last ned Nabladet {{ nablad.pub_date|date:"F Y" }}
 </a>
 
 <br>
 
 <h3>Arkiv</h3>
 <table class="table table-striped">
-{% for n in nablad_archive %}
-<tr><td>
-    {% if n == nablad %}
-    {{ n.pub_date|date:"F Y" }}
+    {% for year, entries in nablad_archive.items %}
+    <!-- <tr><td> -->
+    <!--     {% if n == nablad %} -->
+    <!--     {{ n.pub_date|date:"F Y" }} -->
+    <!--     {% else %} -->
+    <!--     <a href="{{ n.get_absolute_url }}"> {{ n.pub_date|date:"F Y" }} </a> -->
+    <!--     {% endif %} -->
+    <!-- </td></tr> -->
+    
+    {% if year == nablad.pub_date|date:"Y" %}
+    <div class="nablad-year-container active" id="nablad_container_year_{{ year }}">
     {% else %}
-    <a href="{{ n.get_absolute_url }}"> {{ n.pub_date|date:"F Y" }} </a>
+    <div class="nablad-year-container" id="nablad_container_year_{{ year }}">
     {% endif %}
-</td></tr>
-{% endfor %}
+	<h2><button class="older-year" onclick="changeYear(this.parentElement.parentElement, 1)"><</button>{{ year }}<button class="newer-year" onclick="changeYear(this.parentElement.parentElement, -1)">></button></h2>
+	<ul>
+	    {% for entry in entries %} 
+	    <li> {{ entry.pub_date|date:"F Y" }} </li> 
+	    {% endfor %} 
+	</ul>
+    </div>
+
+
+    {% endfor %}
 </table>
 
 {% include "nabladet/sidebar_admin_include.html" %}
