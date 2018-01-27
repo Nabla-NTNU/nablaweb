@@ -93,13 +93,13 @@
     {% else %}
     <div class="nablad-year-container" id="nablad_container_year_{{ year }}">
     {% endif %}
-	<h2><button class="older-year" onclick="changeYear(this.parentElement.parentElement, 1)"><</button>{{ year }}<button class="newer-year" onclick="changeYear(this.parentElement.parentElement, -1)">></button></h2>
+	<h2><button class="fa fa-arrow-left older-year" onclick="changeYear(this.parentElement.parentElement, 1)"></button>{{ year }}<button class="fa fa-arrow-right newer-year" onclick="changeYear(this.parentElement.parentElement, -1)"></button></h2>
 	<ul>
 	    {% for entry in entries %}
 	    {% if entry == nablad %}
-	    <li class="current" > {{ entry.pub_date|date:"F Y" }} </li>
+	    <li class="current" > {{ entry.pub_date|date:"F" }} </li>
 	    {% else %}
-	    <li><a href="{{ entry.get_absolute_url }}" >{{ entry.pub_date|date:"F Y" }} </a></li>
+	    <li><a href="{{ entry.get_absolute_url }}" >{{ entry.pub_date|date:"F" }} </a></li>
 	    {% endif %}
 	    {% endfor %} 
 	</ul>
