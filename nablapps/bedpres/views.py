@@ -13,7 +13,8 @@ class BedPresRegisterUserView(RegisterUserView):
         try:
             super().register_user(user)
         except InvalidCardNum:
-            return "Du ble ikke påmeldt fordi du mangler gyldig NTNU-kortnummer."
+            return "Du ble ikke påmeldt fordi brukeren din mangler gyldig NTNU-kortnummer. " \
+                   "Rediger profilen din og prøv igjen"
         except WrongClass as e:
             if e.user.get_class_number() == 0:
                 return (
