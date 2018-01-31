@@ -9,6 +9,7 @@ from django.views.generic import DetailView, ListView
 from nablapps.accounts.models import NablaUser
 from time import mktime
 from wsgiref.handlers import format_date_time
+from django.core.exceptions import PermissionDenied
 
 from ..models.advent import AdventCalendar, AdventDoor, AdventParticipation
 
@@ -76,6 +77,10 @@ class AdventCalendarView(ListView):
                                     + str((next - now).seconds)
         stamp = mktime(next.timetuple())
         response['Expires'] = format_date_time(stamp)  # legacy support
+        
+        if self.calendar.requires_login and not request.user.is_authenticated():
+            raise PermissionDenied
+        
         return response
 
 

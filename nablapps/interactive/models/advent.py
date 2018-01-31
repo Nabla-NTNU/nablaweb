@@ -120,12 +120,17 @@ class AdventCalendar(models.Model):
         unique=True
     )
 
+    requires_login = models.BooleanField(
+        default = False,
+        verbose_name = "Krever innlogging for å se side"
+    )
+
     template = models.CharField(
         max_length=100,
         verbose_name="Template",
         default="interactive/advent_base.html"
     )
-
+    
     @property
     def first(self):
         return datetime(year=self.year, day=1, month=12)
