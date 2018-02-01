@@ -47,6 +47,9 @@ urlpatterns = [
     url(r'^wiki/notifications/', django_nyt.urls.get_pattern()),
     url(r'^wiki/', wiki.urls.get_pattern()),
 
+    # For å ta i bruk robots.txt
+    url(r'^robots\.txt$', TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),
+
     # Del filer (Husk manage.py collectstatic for static filer når DEBUG=False)
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
