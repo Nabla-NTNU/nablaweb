@@ -2,8 +2,10 @@ from content.views import AdminLinksMixin
 from django.contrib.auth.views import redirect_to_login
 from django.views.generic import DetailView, ListView
 from django.utils import formats
+from django.shortcuts import get_object_or_404
 
 from nablapps.nabladet.models import Nablad
+from django.views.static import serve
 
 
 class NabladDetailView(AdminLinksMixin, DetailView):
@@ -48,3 +50,12 @@ class NabladListView(ListView):
         if not self.request.user.is_authenticated():
             queryset = queryset.exclude(is_public=False)
         return queryset
+
+
+def serve_nablad(request, path, document_root=None, show_indexes=False):
+    if not request.user.is_authenticated():
+        filename = 'nabladet/' + path
+        nablad = get_object_or_404(Nablad, filename=filename)
+        if not nablad.is_public:
+            return redirect_to_login(next=nablad.get_absolute_url())
+    return serve(request, path, document_root, show_indexes)
