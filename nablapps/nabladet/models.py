@@ -53,8 +53,10 @@ class Nablad(
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        if not self.filename and self.file:
-            self.filename = self.file.name
+        if self.file:
+            if self.filename != self.file.name:
+                self.filename = self.file.name
+                self.update_thumbnail()
         if not self.thumbnail and self.file:
             self.update_thumbnail()
         return super().save(*args, **kwargs)
