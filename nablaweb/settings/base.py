@@ -163,7 +163,7 @@ FILEBROWSER_DIRECTORY = ''
 BOWER_COMPONENTS_ROOT = VARIABLE_CONTENT
 BOWER_INSTALLED_APPS = (
     'jquery#1.9.x',
-    'bootstrap',
+    'bootstrap#3.3.7',
     'rangy',
     'font-awesome',
     'pixi.js',
