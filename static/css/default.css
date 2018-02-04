@@ -46,22 +46,31 @@ nav.navbar {
 }
 
 .row-same-height {
-  display: flex;
-  display: -webkit-flex;
-  flex-wrap: wrap;
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
 }
 .row-same-height [class*='col-'] {
     margin-bottom: 20px;
+    flex: 1  1 100%;
 }
 .row-same-height [class*='col-'] [class*='box']{
     height: 100%;
 }
 
 @media (min-width: 768px) {
-  .row-same-height {
-    display: flex;
-    flex-wrap: wrap;
-  }
+    .row-same-height {
+        display: flex;
+        display: -webkit-flex;
+        flex-wrap: wrap;
+    }
+    .row-same-height [class*='col-'] {
+        margin-bottom: 20px;
+        /*
+        * HAAAACK FOR Å FIKSE SAFARI < 11.0.1
+         */
+        flex: 1  1 49%;
+    }
 }
 
 
