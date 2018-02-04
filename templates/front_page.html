@@ -36,19 +36,16 @@
 <div class="well">
     {% include "includes/event_widget.html" %}
 </div>
-<div class="row">
+<div class="row row-same-height">
     {% for news in news_list_1 %}
         {% include "includes/article_widget.html" %}
     {% endfor %}
 </div>
-
-
-<div class="row">
+<div class="row row-same-height">
     {% for news in news_list_2 %}
         {% include "includes/article_widget.html" %}
     {% endfor %}
 </div>
-
 <style>
     .nav-tabs{
         display: flex;
@@ -120,7 +117,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row row-same-height">
     {% for news in news_list_3 %}
         {% include "includes/article_widget.html" %}
     {% endfor %}

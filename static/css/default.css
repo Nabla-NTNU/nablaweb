@@ -45,6 +45,26 @@ nav.navbar {
     padding-right: 7px;
 }
 
+.row-same-height {
+  display: flex;
+  display: -webkit-flex;
+  flex-wrap: wrap;
+}
+.row-same-height [class*='col-'] {
+    margin-bottom: 20px;
+}
+.row-same-height [class*='col-'] [class*='box']{
+    height: 100%;
+}
+
+@media (min-width: 768px) {
+  .row-same-height {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+
 .box p {
     padding-left:   7px;
     padding-right: 7px;
