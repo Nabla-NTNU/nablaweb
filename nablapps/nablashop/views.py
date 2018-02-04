@@ -4,7 +4,7 @@ from .models import Product, Category
 
 
 class IndexView(ListView):
-    model = Product
+    queryset = Product.objects.order_by('-pub_date')
     template_name = 'nablashop/index.html'
 
     def get_context_data(self, **kwargs):
@@ -30,4 +30,5 @@ class CategoryDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
+        context['products'] = self.object.product_set.order_by('-pub_date')
         return context

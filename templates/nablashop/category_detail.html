@@ -5,7 +5,7 @@
     <h1>{{ category.name }}</h1>
     <h2>{{ category.description }}</h2>
     <div class="row">
-        {% for product in category.product_set.all %}
+        {% for product in products %}
             <div class="col-xs-6 col-md-4">
                 <div class="thumbnail">
                     <a href="{% url 'nablashop:product_detail' product.id %}">
