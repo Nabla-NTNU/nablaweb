@@ -1,6 +1,6 @@
 from content.views import AdminLinksMixin
 from django.contrib.auth.views import redirect_to_login
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 from django.utils import formats
 
 from nablapps.nabladet.models import Nablad
@@ -48,3 +48,20 @@ class NabladListView(ListView):
         if not self.request.user.is_authenticated():
             queryset = queryset.exclude(is_public=False)
         return queryset
+
+class NabladList(TemplateView):
+    template_name = "nabladet/nablad_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        nablad_list = Nablad.objects.all()
+        if not self.request.user.is_authenticated():
+            nablad_list = nablad_list.exclude(is_public=False)
+            
+        nablad_archive = {}
+        for nablad in nablad_list:
+            nablad_archive.setdefault(formats.date_format(nablad.pub_date, "Y"), []).append(nablad)
+            
+        context['nablad_archive'] = nablad_archive
+        return context
+        

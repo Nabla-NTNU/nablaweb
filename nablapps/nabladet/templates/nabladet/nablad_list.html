@@ -16,29 +16,40 @@
     href="/komite/redaksjonen">redaksjonen</a> flere ganger i semesteret.</p>
 
 <table style="table-layout:fixed;" class="table table-striped">
-{% for n in nablad_list %}
-<tr>
-    <td style="width:140px;">
-        {% if n.thumbnail %}
-        <a href="{{ n.get_absolute_url }}"> <img src="{% thumbnail n.thumbnail 250x150 quality=95 %}"></a>
-        {% endif %}
-    </td>
-    <td style="width:20%">
-        <a href="{{ n.get_absolute_url }}"> {{ n.pub_date|date:"F Y" }} </a>
-    </td>
-    <td style="width:30%;">
-        {{ n.headline }}
-    </td>
-    <td>
-        {% show_like_button_for n %}
-    </td>
-    <td>
-        <a class="btn btn-lg" href="{{ n.file.url }}"><span class="glyphicon glyphicon-cloud-download"></span> Last ned</a>
-    </td>
-</tr>
-{% empty %}
-    <p>Ingen Nablad er blitt publisert på nettsiden hittil.</p>
-{% endfor %}
+  
+  {% for year,entries in nablad_archive.items %}
+  <h2>{{ year }}</h2>
+  {% for entry in entries %}
+  <div class="nablad">
+    {{ entry }}
+  </div>
+  
+  {% endfor %}
+  {% endfor %}
+
+<!-- {% for n in nablad_list %} -->
+<!-- <tr> -->
+<!--     <td style="width:140px;"> -->
+<!--         {% if n.thumbnail %} -->
+<!--         <a href="{{ n.get_absolute_url }}"> <img src="{% thumbnail n.thumbnail 250x150 quality=95 %}"></a> -->
+<!--         {% endif %} -->
+<!--     </td> -->
+<!--     <td style="width:20%"> -->
+<!--         <a href="{{ n.get_absolute_url }}"> {{ n.pub_date|date:"F Y" }} </a> -->
+<!--     </td> -->
+<!--     <td style="width:30%;"> -->
+<!--         {{ n.headline }} -->
+<!--     </td> -->
+<!--     <td> -->
+<!--         {% show_like_button_for n %} -->
+<!--     </td> -->
+<!--     <td> -->
+<!--         <a class="btn btn-lg" href="{{ n.file.url }}"><span class="glyphicon glyphicon-cloud-download"></span> Last ned</a> -->
+<!--     </td> -->
+<!-- </tr> -->
+<!-- {% empty %} -->
+<!--     <p>Ingen Nablad er blitt publisert på nettsiden hittil.</p> -->
+<!-- {% endfor %} -->
 </table>
 {% include "includes/pagination.html" %}
 
