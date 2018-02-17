@@ -13,6 +13,7 @@ from haystack.views import SearchView, search_view_factory
 from haystack.forms import SearchForm
 
 from nablapps.accounts.urls import login_urls
+from nablapps.nabladet.views import serve_nablad
 from .views import FrontPageView
 
 admin.autodiscover()
@@ -47,7 +48,11 @@ urlpatterns = [
     url(r'^wiki/notifications/', django_nyt.urls.get_pattern()),
     url(r'^wiki/', wiki.urls.get_pattern()),
 
+    # For å ta i bruk robots.txt
+    url(r'^robots\.txt$', TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),
+
     # Del filer (Husk manage.py collectstatic for static filer når DEBUG=False)
+    url(r'^media/nabladet/(?P<path>.*)$', serve_nablad, {'document_root': settings.MEDIA_ROOT + '/nabladet/'}),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 ]

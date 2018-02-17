@@ -36,6 +36,11 @@ class Nablad(
         verbose_name="Offentlig tilgjengelig"
     )
 
+    filename = models.TextField(
+        blank=True,
+        editable=False
+    )
+
     class Meta:
         verbose_name = 'nablad'
         verbose_name_plural = 'nablad'
@@ -48,6 +53,10 @@ class Nablad(
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        if self.file:
+            if self.filename != self.file.name:
+                self.filename = self.file.name
+                self.update_thumbnail()
         if not self.thumbnail and self.file:
             self.update_thumbnail()
         return super().save(*args, **kwargs)
