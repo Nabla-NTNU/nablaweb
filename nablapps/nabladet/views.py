@@ -59,9 +59,12 @@ class NabladList(TemplateView):
             nablad_list = nablad_list.exclude(is_public=False)
             
         nablad_archive = {}
+
+        # Place the nablads in a dictonary with key = publication year and value = a list of nablads from that year
         for nablad in nablad_list:
             nablad_archive.setdefault(formats.date_format(nablad.pub_date, "Y"), []).append(nablad)
             
         context['nablad_archive'] = nablad_archive
+        context['current_year'] = max(nablad_archive.keys())
         return context
         

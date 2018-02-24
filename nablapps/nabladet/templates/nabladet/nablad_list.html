@@ -11,47 +11,117 @@
 {% include "likes/like_js_config.html" %}
 {% endaddtoblock %}
 
+{% block more_head %}
+<!-- Style for archive -->
+<style>
+.nablad-year-container { /* Container for all Nablads of a given year */
+    display: none;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.active {
+    display: block; /* Normally hidden, active year visible */
+}
+
+.nablad-year-container button { /* Button for navigating years */
+     background: none;
+     border: none;
+}
+
+.nablad-year-container .grid {
+     justify-content: center;
+     display: grid;
+     grid-template-columns: repeat(auto-fit, 300px);
+     grid-gap: 15px 10px;
+}
+
+.nablad-year-container .nablad { 
+/*    border: 1px solid black;*/
+    position: relative;
+    height: 455px;
+}
+
+.nablad-year-container .nablad h3 {
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 90%;
+    margin: 20px auto 1px;
+}
+
+.nablad-year-container .nablad .img-box {
+    width: 100%;
+    max-height: 353px;
+    overflow: hidden;
+    box-shadow: 0 0 8px black;
+
+}
+
+.nablad-year-container .nablad .img-box img {
+    width: 100%;
+}
+
+.nablad-year-container p {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    text-transform: uppercase;
+    font-size: 18px;
+}
+
+
+
+</style>
+
+<!-- Script for archive -->
+<script>
+ function changeYear(elem, step) {
+     if(step==1){
+	 next = elem.nextElementSibling;
+     } else {
+	 next = elem.previousElementSibling;
+     }
+     
+     if( next.classList.toString().includes("nablad-year-container")) {
+	 elem.classList.remove("active");
+	 next.classList.add("active");
+     }
+ }
+</script>
+	 
+{% endblock %}
+
 <h2>Nabladet</h2>
 <p>Nabladet er vårt kjære tidsskrift, som blir publisert av <a
     href="/komite/redaksjonen">redaksjonen</a> flere ganger i semesteret.</p>
+{% for year,entries in nablad_archive.items %}
 
-<table style="table-layout:fixed;" class="table table-striped">
-  
-  {% for year,entries in nablad_archive.items %}
-  <h2>{{ year }}</h2>
-  {% for entry in entries %}
-  <div class="nablad">
-    {{ entry }}
+{% if year == current_year %}
+<div class="nablad-year-container active">
+{% else %}
+<div class="nablad-year-container">
+  {% endif %}
+  <h2><button class="fa fa-arrow-left older-year" onclick="changeYear(this.parentElement.parentElement, 1)"></button>{{ year }}<button class="fa fa-arrow-right newer-year" onclick="changeYear(this.parentElement.parentElement, -1)"></button></h2>
+  <div class="grid">
+    {% for nablad in entries %}
+
+    <div class="nablad">
+      <a href="{{ nablad.get_absolute_url }}"> 
+	<h3>{{ nablad.headline }}</h3>
+	{% if nablad.thumbnail %}
+	<div class="img-box">
+	  <img src="{% thumbnail nablad.thumbnail 250x150 quality=95 %}" alt="Nabladet {{ nablad.pub_date|date:'F Y' }}"></img>
+	</div>
+	{% endif %}
+	<p> {{ nablad.pub_date|date:"F Y" }} </p>
+      </a>
+    </div>
+    
+    {% endfor %}
   </div>
-  
-  {% endfor %}
-  {% endfor %}
-
-<!-- {% for n in nablad_list %} -->
-<!-- <tr> -->
-<!--     <td style="width:140px;"> -->
-<!--         {% if n.thumbnail %} -->
-<!--         <a href="{{ n.get_absolute_url }}"> <img src="{% thumbnail n.thumbnail 250x150 quality=95 %}"></a> -->
-<!--         {% endif %} -->
-<!--     </td> -->
-<!--     <td style="width:20%"> -->
-<!--         <a href="{{ n.get_absolute_url }}"> {{ n.pub_date|date:"F Y" }} </a> -->
-<!--     </td> -->
-<!--     <td style="width:30%;"> -->
-<!--         {{ n.headline }} -->
-<!--     </td> -->
-<!--     <td> -->
-<!--         {% show_like_button_for n %} -->
-<!--     </td> -->
-<!--     <td> -->
-<!--         <a class="btn btn-lg" href="{{ n.file.url }}"><span class="glyphicon glyphicon-cloud-download"></span> Last ned</a> -->
-<!--     </td> -->
-<!-- </tr> -->
-<!-- {% empty %} -->
-<!--     <p>Ingen Nablad er blitt publisert på nettsiden hittil.</p> -->
-<!-- {% endfor %} -->
-</table>
-{% include "includes/pagination.html" %}
-
+</div>
+{% endfor %}
 {% endblock main %}
 
