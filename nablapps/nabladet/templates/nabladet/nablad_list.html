@@ -14,6 +14,10 @@
 {% block more_head %}
 <!-- Style for archive -->
 <style>
+.container {
+    text-align: center;
+}
+
 .nablad-year-container { /* Container for all Nablads of a given year */
     display: none;
     text-align: center;
@@ -71,6 +75,10 @@
     font-size: 18px;
 }
 
+p.footer-info {
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-stretch: expanded;
+}
 
 
 </style>
@@ -93,9 +101,8 @@
 	 
 {% endblock %}
 
-<h2>Nabladet</h2>
-<p>Nabladet er vårt kjære tidsskrift, som blir publisert av <a
-    href="/komite/redaksjonen">redaksjonen</a> flere ganger i semesteret.</p>
+<h1>Nabladet</h1>
+
 {% for year,entries in nablad_archive.items %}
 
 {% if year == current_year %}
@@ -122,6 +129,8 @@
     {% endfor %}
   </div>
 </div>
-{% endfor %}
+  {% endfor %}
+
+<p class="footer-info">Nabladet er vårt kjære tidsskrift, som blir publisert av redaksjonen flere ganger i semesteret.</p> 
 {% endblock main %}
 
