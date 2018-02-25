@@ -165,7 +165,7 @@ BOWER_INSTALLED_APPS = (
     'jquery#1.9.x',
     'bootstrap#3.3.7',
     'rangy',
-    'font-awesome',
+    'font-awesome#4.7.0',
     'pixi.js',
     'PhysicsJS',
     'requirejs',
