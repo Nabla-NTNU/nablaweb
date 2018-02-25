@@ -119,7 +119,7 @@ p.footer-info {
 	<h3>{{ nablad.headline }}</h3>
 	{% if nablad.thumbnail %}
 	<div class="img-box">
-	  <img src="{% thumbnail nablad.thumbnail 250x150 quality=95 %}" alt="Nabladet {{ nablad.pub_date|date:'F Y' }}"></img>
+	  <img src="{% thumbnail nablad.thumbnail 300x353 quality=95 crop %}" alt="Nabladet {{ nablad.pub_date|date:'F Y' }}"></img>
 	</div>
 	{% endif %}
 	<p> {{ nablad.pub_date|date:"F Y" }} </p>
