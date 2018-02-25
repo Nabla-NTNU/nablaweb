@@ -18,13 +18,13 @@ class NabladDetailView(AdminLinksMixin, DetailView):
         nablad_list = Nablad.objects.all()
         
         if not self.request.user.is_authenticated():
-            nablad_list = nablad_list.exclude(is_public=False).order_by('-pub_date')
+            nablad_list = nablad_list.exclude(is_public=False)
 
         # Creates a dictionary with publication year as key and a list of all nablads from that year as value.
         for n in nablad_list:
             year = formats.date_format(n.pub_date, "Y")
-            nablad_archive[year] = nablad_archive.get(year,[]) + [n]
-            
+            nablad_archive[year] = nablad_archive.get(year,[]).append(n)
+
         context['nablad_archive'] = nablad_archive
         
         return context
