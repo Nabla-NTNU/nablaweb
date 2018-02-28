@@ -122,7 +122,6 @@ INSTALLED_APPS = [
     'easy_thumbnails',  # thumbnail-taggen i templates
     'image_cropping',  # gjør det mulig for staff å croppe opplastede bilder
     'filebrowser',
-    'grappelli',
     'haystack',
     'hitcount',
     'markdown_deux',

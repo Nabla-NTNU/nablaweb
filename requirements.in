@@ -16,7 +16,6 @@ django-bower        # Frontend/staticfiles packagemanager
 django-braces       # Extra mixinclasses for models and views
 django-contrib-comments
 django-filebrowser  # Filebrowser for mediafiles.
-django-grappelli    # Makes the django adminpage more fancy
 django-haystack     # Search functionality for django models. See also whoosh.
 django-hitcount
 django-image-cropping

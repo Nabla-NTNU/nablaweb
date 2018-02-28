@@ -31,7 +31,6 @@ urlpatterns = [
     url(r'^brukere/', include('nablapps.accounts.urls')),
     url(r'^favicon\.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'img/favicon.ico', permanent=True)),
     url(r'^feed/$', RecentNews()),
-    url(r'^grappelli/', include('grappelli.urls')),
     url(r'^komite/', include('nablapps.com.urls')),
     url(r'^kommentarer/', include('django_comments.urls')),
     url(r'^likes/', include('nablapps.likes.urls')),
