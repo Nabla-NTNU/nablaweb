@@ -6,7 +6,9 @@ from nablapps.news.admin import add_to_frontpage
 from .forms import EventForm
 from .models import Event, EventRegistration
 
-admin.site.register(EventRegistration)
+@admin.register(EventRegistration)
+class EventRegistrationAdmin(admin.ModelAdmin):
+    search_fields = ['user__username', 'user__first_name', 'user__last_name']
 
 
 @admin.register(Event)
