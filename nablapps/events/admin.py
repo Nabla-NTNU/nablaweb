@@ -8,7 +8,8 @@ from .models import Event, EventRegistration
 
 @admin.register(EventRegistration)
 class EventRegistrationAdmin(admin.ModelAdmin):
-    search_fields = ['user__username', 'user__first_name', 'user__last_name']
+    search_fields = ['user__username', 'user__first_name', 'user__last_name', 'event__headline']
+    ordering = ['-event__event_start']
 
 
 @admin.register(Event)
