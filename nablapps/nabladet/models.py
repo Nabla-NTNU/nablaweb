@@ -66,3 +66,6 @@ class Nablad(
 
     def get_absolute_url(self):
         return reverse("nablad_detail", kwargs={'pk': self.pk, 'slug': self.slug})
+
+    def get_model_name(self):
+        return self._meta.verbose_name

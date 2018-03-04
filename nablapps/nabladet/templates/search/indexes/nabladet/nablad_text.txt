@@ -1,0 +1,5 @@
+{{ object.headline }}
+{{ object.lead_paragraph }}
+{{ object.body }}
+{{ object.pub_date|date:"Y M F" }}
+{{ object.get_model_name }}
