@@ -45,3 +45,4 @@ sorl-thumbnail==12.3      # via wiki
 wand==0.4.4
 whoosh==2.7.4
 wiki==0.3b3
+pygments==2.2.0           # for wiki-markdown-codehilite
