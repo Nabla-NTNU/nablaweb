@@ -1,9 +1,5 @@
 /* MAIN */
 
-* {
-  border-radius: 0 !important;
-}
-
 body {
   margin-top: 80px;
 }
@@ -110,6 +106,11 @@ nav.navbar {
     }
 
     /* Typography */
+
+		.wiki-article h1, .wiki-article h2, .wiki-article h3 {
+			width: 100%;
+			border-bottom: 1px solid #ccc;
+		}
 
     h1 {
         margin-bottom: 8px;
