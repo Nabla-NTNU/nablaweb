@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 {% load easy_thumbnails %}
+{% load search_include %}
+{% load static %}
+
+{% block more_head %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "css/search.css" %}" />
+{% endblock %}
 
 {% block content %}
-
 <form method="get" action="" class="form-inline">
     <div class="form-group">
         <input type="text" name="q" id="id_q" class="form-control" style="" placeholder="Søk..." {% if query %}value="{{ query }}"{% endif %}/>
@@ -12,54 +18,18 @@
         </button>
     </div>
 </form>
+
+
 <h2>Søkeresultater</h2>
-
 {% if query %}
-<div>
-    {% for result in page.object_list %}
-        <div class="media">
-            {% if result.object.avatar %}
-            <div class="media-left">
-                 <img class="media-object" src="{% thumbnail result.object.avatar 150x150 %}">
-            </div>
-            {% elif result.object.image %}
-            <div class="media-left">
-                 <img class="media-object" src="{% thumbnail result.object.image 150x150 %}">
-            </div>
-            {% elif result.object.picture %}
-            <div class="media-left">
-                 <img class="media-object" src="{% thumbnail result.object.picture 150x150 %}">
-            </div>
-            {% endif %}
-            <div class="media-body">
-            <div class="media-heading">
-            {% if result.content_type == "news.news" %}
-            <a href="{{ result.object.get_absolute_url }}">{{ result.object.headline }}</a>
-            {% elif result.content_type == "com.compage" %}
-            <a href="{% url "show_com_page" result.object.get_canonical_name %}">{{ result.object.com.name }}</a>
-            {% elif result.content_type == "accounts.nablauser" %}
-            <a href="{% url "member_profile" result.object %}">{{ result.object }}</a> ({{ result.object.get_full_name }})
-            {% else %}
-                <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
-            {% endif %}
-            </div>
-            {% if result.content_type == "news.news" %}
-            {{ result.object.created_date }}
-            {% elif result.content_type == "com.compage" %}
-            {{ result.object.last_changed_date }}{% endif %}
-
-            {% if result.content_type == "news.news" %}
-            <p>{{ result.object.lead_paragraph|truncatewords_html:58 }}</p>
-            {% elif result.content_type == "com.compage" %}
-            <p>{{ result.object.description|truncatewords_html:58 }}</p>
-            {% elif result.content_type == "accounts.nablauser" %}
-            <p>{% if result.object.about %}{{ result.object.about|truncatewords_html:58 }}{% else %}Denne brukeren har dessverre ikke skrevet noe om seg selv.{% endif %}</p>
-            {% endif %}
-            </div>
-        </div>
-    {% empty %}
-        <p style="padding-top: 10px;">Ingen treff på "{{ query }}".</p>
-    {% endfor %}
+<div class="search_results">
+  {% for result in page.object_list %}
+     {% with result|search_include as element %}
+        {% include element %}
+  {% endwith %}
+  {% empty %}
+  <p style="padding-top: 10px;">Ingen treff på "{{ query }}".</p>
+  {% endfor %}
 </div>
 
 {% if page.has_previous or page.has_next %}

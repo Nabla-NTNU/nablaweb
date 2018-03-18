@@ -1,0 +1,11 @@
+.search_results {
+    padding-bottom: 40px;
+}
+
+.search_results .result {
+    box-shadow: 4px 4px 7px #000000AA;
+}
+
+.result img {
+    border: 1px solid black;
+}
