@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, DetailView
 from hitcount.views import HitCountDetailView
 from content.views import AdminLinksMixin, PublishedMixin, update_published_state
@@ -31,6 +32,37 @@ class SeasonView(FlatPageMixin, TemplateView):
             data['next'] = season.get_next()
             data['season_count'] = get_season_count()
             data['previous'] = season.get_previous()
+        except IndexError:
+            pass
+
+        return data
+
+
+class RssView(TemplateView):
+    template_name = 'podcast/podcast.rss'
+    content_type='application/xml'
+
+    def get_context_data(self, **kwargs):
+        data = super(RssView, self).get_context_data(**kwargs)
+
+        try:
+            if 'number' in kwargs:
+                number = kwargs['number']
+                season = Season.objects.get(number=number)
+            else:
+                season = Season.objects.order_by('-number')[0]
+
+            data['season'] = season
+            data['season_name'] = season.name()
+
+            update_published_state(Podcast)
+            published = Podcast.objects.filter(season=season, published=True).order_by('-pub_date')
+            data['podcast_list'] = published.filter(is_clip=False)
+            data['podcast_clips'] = published.filter(is_clip=True)
+            data['next'] = season.get_next()
+            data['season_count'] = get_season_count()
+            data['previous'] = season.get_previous()
+
         except IndexError:
             pass
 

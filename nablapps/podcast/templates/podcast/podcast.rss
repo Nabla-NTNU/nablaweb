@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+        <title>{{ season.name }}</title>
+        <link>{{ request.scheme }}://{{ request.get_host }}{{ request.get_full_path }}</link>
+        <description>Sesong nummer: {{ season.number }}</description>
+            {% for episode in podcast_list %}
+                <item>
+                    <title>{{ episode.title }}</title>
+                    <description>{{ episode.description }}</description>
+                    <enclosure url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" length="{{ episode.file.size }}" type="audio/mpeg" />
+                    <pubDate>{{ episode.pub_date|date:"D, d b Y H:i:s" }}</pubDate>
+                    <itunes:author>Skråttcast</itunes:author>
+                    <itunes:subtitle>Skråttcast</itunes:subtitle>
+                    <itunes:summary>{{ episode.description }}</itunes:summary>
+                    <itunes:keywords>Skråttcast</itunes:keywords>
+                </item>
+            {% endfor %}
+    </channel>
+</rss>
