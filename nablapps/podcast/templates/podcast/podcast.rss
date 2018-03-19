@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+{% load i18n %}
 <rss version="2.0">
     <channel>
         <title>Skråttcast</title>
@@ -20,7 +21,7 @@
                 <description>{{ episode.description }}</description>
                 <guid>{{ request.scheme }}://{{ request.get_host }}{% url 'season_view' %}{{ episode.id }}</guid>
                 <enclosure url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" length="{{ episode.file.size }}" type="audio/mpeg" />
-                <pubDate>{{ episode.pub_date|date:"r" }}</pubDate>
+                {% language 'en' %}<pubDate>{{ episode.pub_date|date:"r" }}</pubDate>{% endlanguage %}
             </item>
         {% endfor %}
     </channel>
