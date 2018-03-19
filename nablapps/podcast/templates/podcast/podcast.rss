@@ -20,7 +20,7 @@
                 <description>{{ episode.description }}</description>
                 <guid>{{ request.scheme }}://{{ request.get_host }}{% url 'season_view' %}{{ episode.id }}</guid>
                 <enclosure url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" length="{{ episode.file.size }}" type="audio/mpeg" />
-                <pubDate>{{ episode.pub_date|date:"m/d/Y H:i:s" }}</pubDate>
+                <pubDate>{{ episode.pub_date|date:"r" }}</pubDate>
             </item>
         {% endfor %}
     </channel>
