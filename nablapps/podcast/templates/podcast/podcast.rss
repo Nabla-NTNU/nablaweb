@@ -12,15 +12,15 @@
             <height>144</height>
         </image>
         <language>no</language>
+        <category>Humor</category>
         <copyright>{% now 'Y' %} Skråttcast. Alle rettigheter.</copyright>
         {% for episode in podcast_list %}
             <item>
-                <title>{{ episode.title }}</title>
+                <title>{{ episode.season.name }} - {{ episode.title }}</title>
                 <description>{{ episode.description }}</description>
                 <guid>{{ request.scheme }}://{{ request.get_host }}{% url 'season_view' %}{{ episode.id }}</guid>
                 <enclosure url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" length="{{ episode.file.size }}" type="audio/mpeg" />
                 <pubDate>{{ episode.pub_date|date:"D, d b Y H:i:s" }}</pubDate>
-                <category>{{ episode.season.name }}</category>
             </item>
         {% endfor %}
     </channel>
