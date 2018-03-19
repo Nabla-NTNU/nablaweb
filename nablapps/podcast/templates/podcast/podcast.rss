@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
     <channel>
-        <title>{{ season.name }}</title>
+        <title>Skråttcast</title>
         <link>{{ request.scheme }}://{{ request.get_host }}{{ request.get_full_path }}</link>
-        <description>Sesong nummer: {{ season.number }}</description>
-            {% for episode in podcast_list %}
-                <item>
-                    <title>{{ episode.title }}</title>
-                    <description>{{ episode.description }}</description>
-                    <enclosure url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" length="{{ episode.file.size }}" type="audio/mpeg" />
-                    <pubDate>{{ episode.pub_date|date:"D, d b Y H:i:s" }}</pubDate>
-                </item>
-            {% endfor %}
+        <description>Skråttcast er linjeforeningen Nabla sin podcast</description>
+        <image>
+            <title>Radioresepsjonen</title>
+            <url>https://nabla.no/media/podcast/images/logo_J3jWzh2.jpg</url>
+            <link>{{ request.scheme }}://{{ request.get_host }}/podcast</link>
+            <width>144</width>
+            <height>144</height>
+        </image>
+        <language>no</language>
+        <copyright>{% now 'Y' %} Skråttcast. Alle rettigheter.</copyright>
+        {% for episode in podcast_list %}
+            <item>
+                <title>{{ episode.title }}</title>
+                <description>{{ episode.description }}</description>
+                <guid>{{ request.scheme }}://{{ request.get_host }}{% url 'season_view' %}{{ episode.id }}</guid>
+                <enclosure url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" length="{{ episode.file.size }}" type="audio/mpeg" />
+                <pubDate>{{ episode.pub_date|date:"D, d b Y H:i:s" }}</pubDate>
+                <category>{{ episode.season.name }}</category>
+            </item>
+        {% endfor %}
     </channel>
 </rss>
