@@ -10,10 +10,6 @@
                     <description>{{ episode.description }}</description>
                     <enclosure url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" length="{{ episode.file.size }}" type="audio/mpeg" />
                     <pubDate>{{ episode.pub_date|date:"D, d b Y H:i:s" }}</pubDate>
-                    <itunes:author>Skråttcast</itunes:author>
-                    <itunes:subtitle>Skråttcast</itunes:subtitle>
-                    <itunes:summary>{{ episode.description }}</itunes:summary>
-                    <itunes:keywords>Skråttcast</itunes:keywords>
                 </item>
             {% endfor %}
     </channel>
