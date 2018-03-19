@@ -56,7 +56,7 @@ class RssView(TemplateView):
             data['season_name'] = season.name()
 
             update_published_state(Podcast)
-            published = Podcast.objects.filter(season=season, published=True).order_by('-pub_date')
+            published = Podcast.objects.exclude(file="").filter(season=season, published=True).order_by('-pub_date')
             data['podcast_list'] = published.filter(is_clip=False)
             data['podcast_clips'] = published.filter(is_clip=True)
             data['next'] = season.get_next()
