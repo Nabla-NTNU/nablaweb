@@ -26,7 +26,7 @@
   {% for result in page.object_list %}
      {% with result|search_include as element %}
         {% include element %}
-  {% endwith %}
+     {% endwith %}
   {% empty %}
   <p style="padding-top: 10px;">Ingen treff på "{{ query }}".</p>
   {% endfor %}
