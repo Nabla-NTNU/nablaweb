@@ -21,3 +21,8 @@
 .result .description {
     
 }
+
+.result .meta {
+    color: gray;
+    font-style: italic;
+}

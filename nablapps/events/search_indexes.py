@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from haystack import indexes
 from .models import Event
 
@@ -9,5 +9,5 @@ class EventIndex(indexes.SearchIndex, indexes.Indexable):
         return Event
 
     def index_queryset(self, using=None):
-        return self.get_model().objects.filter(publication_date__lte=datetime.datetime.now())
+        return self.get_model().objects.filter(publication_date__lte=datetime.now())
 
