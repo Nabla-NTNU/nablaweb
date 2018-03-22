@@ -2,10 +2,12 @@
 
 {% with result.object as podcast %}
 <div class="result podcast_podcast"><a href="{{ podcast.get_absolute_url }}">
-  <h3>{{ podcast.title }} - Sesong {{ podcast.season.number }}</h3>
-  {% if podcast.image %}
-      <img src="{% thumbnail podcast.image 150x150 box=podcast.cropping quality=95 %}"></img>
-  {% endif %}
+    <h3>{{ podcast.title }}</h3>
+    <span class="meta">Sesong {{ podcast.season.number }}</span><br />
+    <span class="meta">{{ podcast.pub_date }}</span>
+    {% if podcast.image %}
+        <img src="{% thumbnail podcast.image 150x150 box=podcast.cropping quality=95 %}"></img>
+    {% endif %}
   <p class="description">{{ podcast.description }}</p>
   </a>    
 </div>
