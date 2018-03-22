@@ -1,10 +1,12 @@
 {% load easy_thumbnails %}
 
 {% with result.object as nablad %}
-<div class="result nablad_nablad">
-  <h3><a href="{{ nablad.get_absolute_url }}">{{ nablad.headline }}</a></h3>
+<div class="result nablad_nablad"><a href="{{ nablad.get_absolute_url }}">
+  <h3>{{ nablad.headline }}</h3>
   {% if nablad.thumbnail %}
-      <img src="{% thumbnail nablad.thumbnail 150x150 quality=95 crop="smart" %}"></div>
+      <img src="{% thumbnail nablad.thumbnail 150x150 quality=95 crop="smart" %}"></img>
   {% endif %}
+  <p class="description">{{ nablad.lead_paragraph }}</p>
+  </a>    
 </div>
 {% endwith %}
