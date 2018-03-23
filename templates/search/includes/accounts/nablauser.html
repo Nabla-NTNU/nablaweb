@@ -4,7 +4,8 @@
 {% with result.object as user %}
 
 <div class="result account_user"> <a href="{{ user.get_absolute_url }}">
-  <h3>{{ user.get_full_name }}</h3>
+    <h3>{{ user.get_full_name }}</h3>
+    <p class="meta">{{ user.email }}</p>
 
   {% if user.avatar %}
   <img src="{% thumbnail user.avatar 150x150 %}"></img>
