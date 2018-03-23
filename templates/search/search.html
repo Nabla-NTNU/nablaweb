@@ -10,13 +10,14 @@
 
 {% block content %}
 <form method="get" action="" class="form-inline">
-    <div class="form-group">
-        <input type="text" name="q" id="id_q" class="form-control" style="" placeholder="Søk..." {% if query %}value="{{ query }}"{% endif %}/>
-        <button type="submit" class="btn btn-primary" value="Søk">
-            <span class="glyphicon glyphicon-search"></span>
-            Søk
-        </button>
-    </div>
+  <div class="form-group">
+    <input type="text" name="q" id="id_q" class="form-control" style="" placeholder="Søk..." {% if query %}value="{{ query }}"{% endif %}/>
+    <button type="submit" class="btn btn-primary" value="Søk">
+      <span class="glyphicon glyphicon-search"></span>
+      Søk
+    </button><br />
+    <label> Søk etter bruker: <input type="checkbox" name="models" value="accounts.nablauser" /></label>
+  </div>
 </form>
 
 
@@ -24,22 +25,22 @@
 {% if query %}
 <div class="search_results">
   {% for result in page.object_list %}
-     {% with result|search_include as element %}
-        {% include element %}
-     {% endwith %}
+      {% with result|search_include as element %}
+          {% include element %}
+      {% endwith %}
   {% empty %}
   <p style="padding-top: 10px;">Ingen treff på "{{ query }}".</p>
   {% endfor %}
 </div>
 
 {% if page.has_previous or page.has_next %}
-    <div>
-        {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Forrige{% if page.has_previous %}</a>{% endif %}
-        |
-        {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Neste &raquo;{% if page.has_next %}</a>{% endif %}
-    </div>
+<div>
+  {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Forrige{% if page.has_previous %}</a>{% endif %}
+  |
+  {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Neste &raquo;{% if page.has_next %}</a>{% endif %}
+</div>
 {% endif %}
 {% else %}
- <p style="padding-top: 10px;">Skriv inn noe i feltet over for å søke.</p>
+<p style="padding-top: 10px;">Skriv inn noe i feltet over for å søke.</p>
 {% endif %}
 {% endblock %}
