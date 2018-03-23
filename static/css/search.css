@@ -8,6 +8,14 @@
     height: 150px;
     padding: 3px;
     margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.result h3 {
+    width: 600px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .result img {
@@ -19,7 +27,7 @@
 }
 
 .result .description {
-    
+    width: 600px;
 }
 
 .result .meta {
