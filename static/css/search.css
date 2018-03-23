@@ -19,7 +19,7 @@
 }
 
 .result img {
-    border: 1px solid black;
+    box-shadow: -1px 0px 10px -4px black;
     position: absolute;
     right: 0;
     top: 0;
