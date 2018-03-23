@@ -1,0 +1,3 @@
+komite
+komité
+{{ object.name }}
