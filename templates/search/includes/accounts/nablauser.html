@@ -3,8 +3,8 @@
 
 {% with result.object as user %}
 
-<div class="result account_user">
-  <h3><a href"{{ user.get_absolute_url }}">{{ user.get_full_name }}</a></h3>
+<div class="result account_user"> <a href="{{ user.get_absolute_url }}">
+  <h3>{{ user.get_full_name }}</h3>
 
   {% if user.avatar %}
   <img src="{% thumbnail user.avatar 150x150 %}"></img>
@@ -12,6 +12,7 @@
   <img src="{% static 'img/default_avatar.png' %}"></img>
   {% endif %}
   <p class="description">{{ user.about }}</p>
+  </a>
 </div>
 
 {% endwith %}
