@@ -20,7 +20,7 @@
 }
 
 .result img {
-    box-shadow: -1px 0px 10px -4px black;
+    box-shadow: 3px 0px 10px -4px black;
     position: absolute;
     right: 0;
     top: 0;
