@@ -1,0 +1,18 @@
+{% load easy_thumbnails %}
+
+{% with result.object as item %}
+<div class="result generic_generic"><a href="{{ item.get_absolute_url }}">
+    {% if item.headline %}
+    <h3>{{ item.headline }}</h3>
+    {% elif  item.head_line %}
+    <h3>{{ item.head_line }}</h3>
+    {% endif %}
+
+    {% if item.lead_paragraph %}
+    <p class="description">{{ item.lead_paragraph }}</p>
+    {% elif item.description %}
+    <p class="description">{{ item.description }}</p>
+    {% endif %}
+  </a>    
+</div>
+{% endwith %}
