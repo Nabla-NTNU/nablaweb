@@ -1,0 +1,9 @@
+[Unit]
+Description=Update nablaweb DB daily
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantetBy=timers.target

@@ -1,0 +1,12 @@
+{% load easy_thumbnails %}
+
+{% with result.object as event %}
+<div class="result event_event"><a href="{{ event.get_absolute_url }}">
+  <h3>{{ event.headline }}</h3>
+  {% if event.thumbnail %}
+      <img src="{% thumbnail event.thumbnail 150x150 quality=95 crop="smart" %}"></img>
+  {% endif %}
+  <p class="description">{{ event.lead_paragraph }}</p>
+  </a>    
+</div>
+{% endwith %}

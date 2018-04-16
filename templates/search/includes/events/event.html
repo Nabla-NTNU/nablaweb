@@ -1,0 +1,11 @@
+{% load easy_thumbnails %}
+
+{% with result.object as event %}
+<div class="result event_event"><a href="{{ event.get_absolute_url }}">
+    <h3>{{ event.get_short_name }}</h3>
+    <span class="meta">{{ event.event_start|date:"D d F H:i" }} - {{ event.event_end|date:"D d F H:i" }}</span><br />
+    <span class="meta">Sted: {{ event.location }}</span>
+    <p class="description">{{ event.lead_paragraph }}</p>
+  </a>    
+</div>
+{% endwith %}

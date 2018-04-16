@@ -1,0 +1,9 @@
+{% load easy_thumbnails %}
+
+{% with result.object as com %}
+<div class="result com_compage"><a href="{{ com.get_absolute_url }}">
+  <h3>{{ com.com.name }}</h3>
+  <p class="description">{{ com.description }}</p>
+  </a>    
+</div>
+{% endwith %}

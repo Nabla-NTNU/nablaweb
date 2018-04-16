@@ -1,0 +1,37 @@
+.search_results {
+    padding-bottom: 40px;
+}
+
+.search_results .result {
+    box-shadow: 4px 4px 7px #000000AA;
+    position: relative;
+    height: 150px;
+    padding: 3px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.result h3 {
+    width: 600px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.result img {
+    box-shadow: 3px 0px 10px -4px black;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+}
+
+.result .description {
+    width: 600px;
+}
+
+.result .meta {
+    color: gray;
+    font-style: italic;
+}
