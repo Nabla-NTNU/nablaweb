@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-{% load i18n %}
-<rss version="2.0">
+<?xml version="1.0" encoding="UTF-8" ?>{% load i18n %}
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
     <channel>
         <title>Skråttcast</title>
         <link>{{ request.scheme }}://{{ request.get_host }}{{ request.get_full_path }}</link>
@@ -20,7 +19,9 @@
                 <title>{{ episode.season.name }} - {{ episode.title }}</title>
                 <description>{{ episode.description }}</description>
                 <guid>{{ request.scheme }}://{{ request.get_host }}{% url 'season_view' %}{{ episode.id }}</guid>
-                <enclosure url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" length="{{ episode.file.size }}" type="audio/mpeg" />
+                <media:content url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" fileSize="{{ episode.file.size }}" type="audio/mpeg" expression="full">
+                    {% if episode.image %}<media:thumbnail url="{{ request.scheme }}://{{ request.get_host }}{{ episode.image.url }}" width="300" height="300" type="image/jpg" />{% endif %}
+                </media:content>
                 {% language 'en' %}<pubDate>{{ episode.pub_date|date:"r" }}</pubDate>{% endlanguage %}
             </item>
         {% endfor %}
