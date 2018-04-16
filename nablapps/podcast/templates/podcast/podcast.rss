@@ -15,15 +15,19 @@
         <category>Humor</category>
         <copyright>{% now 'Y' %} Skråttcast. Alle rettigheter.</copyright>
         {% for episode in podcast_list %}
-            <item>
-                <title>{{ episode.season.name }} - {{ episode.title }}</title>
-                <description>{{ episode.description }}</description>
-                <guid>{{ request.scheme }}://{{ request.get_host }}{% url 'season_view' %}{{ episode.id }}</guid>
-                <media:content url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" fileSize="{{ episode.file.size }}" type="audio/mpeg" expression="full">
-                    {% if episode.image %}<media:thumbnail url="{{ request.scheme }}://{{ request.get_host }}{{ episode.image.url }}" width="300" height="300" type="image/jpg" />{% endif %}
-                </media:content>
-                {% language 'en' %}<pubDate>{{ episode.pub_date|date:"r" }}</pubDate>{% endlanguage %}
-            </item>
+        <item>
+            <title>{{ episode.season.name }} - {{ episode.title }}</title>
+            <link>{{ request.scheme }}://{{ request.get_host }}{% url 'season_view' %}{{ episode.id }}</link>
+            <description>{{ episode.description }}</description>
+            <guid>{{ request.scheme }}://{{ request.get_host }}{% url 'season_view' %}{{ episode.id }}</guid>
+            <media:content url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" fileSize="{{ episode.file.size }}" type="audio/mpeg">
+                <media:title>{{ episode.season.name }} - {{ episode.title }}</media:title>
+                <media:description>{{ episode.description }}</media:description>
+                {% if episode.image %}<media:thumbnail url="{{ request.scheme }}://{{ request.get_host }}{{ episode.image.url }}" width="300" height="300" type="image/jpg" />{% endif %}
+            </media:content>
+            {% language 'en' %}<pubDate>{{ episode.pub_date|date:"r" }}</pubDate>{% endlanguage %}
+        </item>
         {% endfor %}
     </channel>
 </rss>
+
