@@ -1,33 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" ?>{% load i18n %}
-<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+<?xml version="1.0" encoding="utf-8"?>{% load i18n %}
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:itunesu="http://www.itunesu.com/feed" version="2.0">
     <channel>
-        <title>Skråttcast</title>
-        <link>{{ request.scheme }}://{{ request.get_host }}{{ request.get_full_path }}</link>
-        <description>Skråttcast er linjeforeningen Nabla sin podcast</description>
-        <image>
-            <title>Radioresepsjonen</title>
-            <url>https://nabla.no/media/podcast/images/logo_J3jWzh2.jpg</url>
-            <link>{{ request.scheme }}://{{ request.get_host }}/podcast</link>
-            <width>144</width>
-            <height>144</height>
-        </image>
+        <link>{{ request.scheme }}://{{ request.get_host }}</link>
         <language>no</language>
-        <category>Humor</category>
-        <copyright>{% now 'Y' %} Skråttcast. Alle rettigheter.</copyright>
-        {% for episode in podcast_list %}
+        <copyright>Skråttcast</copyright>
+        <image>
+            <url>https://nabla.no/media/podcast/images/logo_J3jWzh2.jpg</url>
+            <title>Skråttcast</title>
+            <link>{{ request.scheme }}://{{ request.get_host }}</link>
+        </image>
+        <itunes:owner>
+            <itunes:name>Skråttcast</itunes:name>
+        </itunes:owner>
+        <itunes:category text="Humor" />
+        <itunes:keywords>humor, nabla, linjeforening</itunes:keywords>
+        <itunes:explicit>no</itunes:explicit>
+        <itunes:image href="https://nabla.no/media/podcast/images/logo_J3jWzh2.jpg" />
+        <atom:link href="{{ request.scheme }}://{{ request.get_host }}{{ request.get_full_path }}" rel="self" type="application/rss+xml" />
+        <title>Skråttcast</title>
+        <itunes:author>Skråttcast ved Linjeforeningen Nabla</itunes:author>
+        <description>Skråttcast er linjeforeningen Nabla sin podcast</description>
+        <itunes:summary>Skråttcast er linjeforeningen Nabla sin podcast</itunes:summary>
+        <itunes:subtitle>Skråttcast er linjeforeningen Nabla sin podcast</itunes:subtitle>
+	    {% for episode in podcast_list %}
         <item>
             <title>{{ episode.season.name }} - {{ episode.title }}</title>
-            <link>{{ request.scheme }}://{{ request.get_host }}{% url 'season_view' %}{{ episode.id }}</link>
             <description>{{ episode.description }}</description>
+            <itunes:summary>{{ episode.description }}</itunes:summary>
+            <itunes:subtitle>{{ episode.description|slice:"250" }}...</itunes:subtitle>
+            {% if episode.image %}<itunes:image href="{{ request.scheme }}://{{ request.get_host }}{{ episode.image.url }}" />{% endif %}
+            <enclosure url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" type="audio/mpeg" />
             <guid>{{ request.scheme }}://{{ request.get_host }}{% url 'season_view' %}{{ episode.id }}</guid>
-            <media:content url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" fileSize="{{ episode.file.size }}" type="audio/mpeg">
-                <media:title>{{ episode.season.name }} - {{ episode.title }}</media:title>
-                <media:description>{{ episode.description }}</media:description>
-                {% if episode.image %}<media:thumbnail url="{{ request.scheme }}://{{ request.get_host }}{{ episode.image.url }}" width="300" height="300" type="image/jpg" />{% endif %}
-            </media:content>
             {% language 'en' %}<pubDate>{{ episode.pub_date|date:"r" }}</pubDate>{% endlanguage %}
         </item>
         {% endfor %}
     </channel>
 </rss>
-
