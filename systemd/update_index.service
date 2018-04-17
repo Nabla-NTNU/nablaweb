@@ -5,4 +5,4 @@ Description=Updates nablaweb DB index
 User=nablaweb
 Group=webapps
 Type=oneshot
-ExecStart=/etc/websites/nablaweb/update_index.sh
+ExecStart=/srv/nablaweb/systemd/update_index.sh
