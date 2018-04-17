@@ -11,12 +11,21 @@
     overflow: hidden;
 }
 
+.search_results .result a {
+    color: black;
+    text-decoration: none;
+}
+
 .result h3 {
     width: 600px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     margin-bottom: 0;
+}
+
+.result:hover h3 {
+    text-decoration: underline;
 }
 
 .result img {
