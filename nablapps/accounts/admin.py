@@ -6,6 +6,7 @@ from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.utils.encoding import smart_text
 
 from .models import NablaUser, NablaGroup, FysmatClass, RegistrationRequest
 from .forms import NablaUserChangeForm, NablaUserCreationForm
@@ -16,11 +17,15 @@ admin.site.register(FysmatClass)
 admin.site.unregister(Group)
 
 
+## A subclass of ModelMultipleChoiceField that changes the label from the username to the full name of the user. This is taken from: https://stackoverflow.com/questions/3966483/django-show-get-full-name-instead-or-username-in-model-form
+class UserFullnameMultipleChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        return smart_text(obj.get_full_name() + " - " + obj.username)
+
 class GroupAdminForm(forms.ModelForm):
-    users = forms.ModelMultipleChoiceField(
-        queryset=User.objects.filter(is_active=True),
-        widget=FilteredSelectMultiple('Users', False),
-        required=False)
+    users = UserFullnameMultipleChoiceField(queryset=User.objects.filter( is_active=True ),
+                                            widget=FilteredSelectMultiple('Users', False),
+                                            required=False)
 
     class Meta:
         model = Group
