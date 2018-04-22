@@ -11,6 +11,12 @@
 </p>
 <a href="https://www.facebook.com/skraattkast" class="btn btn-info">Facebook</a>
 <a href="mailto:skrattcast@nabla.ntnu.no" class="btn btn-primary btn-large">Brevsprekken</a>
+<h2>Skråttcast RSS</h2>
+<p>
+    Unngå å gå glipp av en ny episode, abonner på Skråttcast med RSS.
+    <b>Legg til linken</b> i ditt favoritt podcast program og aldri gå glipp av en episode igjen!
+</p>
+<a href="{% url 'season_rss' %}" class="btn btn-success btn-large">Abonner med RSS</a>
 {% if podcast_clips %}
     <h2>Lydklipp</h2>
     <p>
