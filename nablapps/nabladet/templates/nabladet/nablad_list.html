@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load easy_thumbnails %}
-{% load like %}
 {% load sekizai_tags %}
 
 {% block title %}Nabladet{% endblock %}
@@ -8,7 +7,6 @@
 {% block main %}
 
 {% addtoblock "js" %}
-{% include "likes/like_js_config.html" %}
 {% endaddtoblock %}
 
 {% block more_head %}
