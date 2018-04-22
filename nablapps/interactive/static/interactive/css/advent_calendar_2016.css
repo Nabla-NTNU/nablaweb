@@ -137,14 +137,6 @@ body {
     background: rgba(0,0,0,0.5);
 }
 
-.likeButton {
-    color: #FFFFFF;
-}
-
-.likeButton:hover{
-    color: #c3bbbb;
-}
-
 .quiz-question {
     background: rgba(0,0,0,0.5);
     padding: 30px;
