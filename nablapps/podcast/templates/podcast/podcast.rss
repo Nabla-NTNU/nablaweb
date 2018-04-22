@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>{% load i18n %}
+<?xml version="1.0" encoding="utf-8"?>
+{% load i18n %}
+{% load easy_thumbnails %}
 <rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:itunesu="http://www.itunesu.com/feed" version="2.0">
     <channel>
         <link>{{ request.scheme }}://{{ request.get_host }}</link>
@@ -28,7 +30,7 @@
             <description>{{ episode.description }}</description>
             <itunes:summary>{{ episode.description }}</itunes:summary>
             <itunes:subtitle>{{ episode.description|slice:"250" }}...</itunes:subtitle>
-            {% if episode.image %}<itunes:image href="{{ request.scheme }}://{{ request.get_host }}{{ episode.cropping.url }}" />{% endif %}
+            {% if episode.image %}<itunes:image href="{% thumbnail episode.image 300x300 box=episode.cropping quality=95 %}" />{% endif %}
             <enclosure url="{{ request.scheme }}://{{ request.get_host }}{{ episode.file.url }}" type="audio/mpeg" />
             <guid>{{ request.scheme }}://{{ request.get_host }}{% url 'season_view' %}{{ episode.id }}</guid>
             {% language 'en' %}<pubDate>{{ episode.pub_date|date:"r" }}</pubDate>{% endlanguage %}
