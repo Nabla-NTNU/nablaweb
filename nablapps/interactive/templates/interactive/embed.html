@@ -1,6 +1,5 @@
 {% extends "interactive/advent_base_2016.html" %}
 {% load markdown %}
-{% load like %}
 {% load sekizai_tags %}
 
 {% block title %}{{ door.number }}{% endblock %}
@@ -15,7 +14,6 @@
 #Styrets jul
 
 <div class="text">
-    {% show_like_button_for door %}
     <p>
     {{ door.content|markdown:"unsafe" }}
     </p>
