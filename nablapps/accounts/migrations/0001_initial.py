@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('wants_email', models.BooleanField(verbose_name='Motta kullmail', default=True)),
                 ('about', models.TextField(blank=True, verbose_name='Biografi')),
                 ('avatar', models.ImageField(null=True, blank=True, upload_to='avatars', verbose_name='Avatar')),
-                ('ntnu_card_number', models.CharField(help_text='Dette er det 7-10 siffer lange nummeret <b>nede til venstre</b> på baksiden av NTNU-adgangskortet ditt. Det brukes blant annet for å komme inn på bedpresser.', blank=True, max_length=10, verbose_name='NTNU kortnr')),
+                ('ntnu_card_number', models.CharField(help_text="Dette er et 7-10 siffer lant nummeret på baksiden av kortet. På nye kort er dette siffrene etter EM. På gamle kort ert dette siffrene nede til venstre. Det brukes blant annet for å komme inn på bedpresser." , blank=True, max_length=10, verbose_name='NTNU kortnr')),
             ],
             options={
                 'verbose_name_plural': 'users',
