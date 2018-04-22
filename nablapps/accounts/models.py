@@ -56,8 +56,8 @@ class NablaUser(AbstractUser):
         blank=True,
         help_text=(
             "Dette er det 7-10 siffer lange nummeret <b>nede til venstre</b> "
-            "på baksiden av NTNU-adgangskortet ditt. "
-            "Det brukes blant annet for å komme inn på bedpresser.")
+            "på baksiden av NTNU-adgangskortet ditt som begynner med M. Ikke ta med M "
+            "Det brukes blant annet for å komme inn på bedpresser. ")
         )
 
     objects = NablaUserManager()
