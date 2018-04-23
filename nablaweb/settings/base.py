@@ -105,7 +105,6 @@ INSTALLED_APPS = [
     'nablapps.exchange',
     'nablapps.interactive',
     'nablapps.jobs',
-    'nablapps.likes',
     'nablapps.meeting_records',
     'nablapps.nabladet',
     'nablapps.nablashop',
