@@ -11,12 +11,17 @@ from django.views.generic import RedirectView, TemplateView
 
 from haystack.views import SearchView, search_view_factory
 from haystack.forms import ModelSearchForm
+from haystack.query import SearchQuerySet
 
 from nablapps.accounts.urls import login_urls
 from nablapps.nabladet.views import serve_nablad
 from .views import FrontPageView
 
 admin.autodiscover()
+
+
+## For search
+sqs = SearchQuerySet().order_by('-pub_date')
 
 urlpatterns = [
     url(r'^$', FrontPageView.as_view(), name='front_page'),
@@ -39,7 +44,8 @@ urlpatterns = [
     url(r'^poll/', include('nablapps.poll.urls')),
     url(r'^referater/', include('nablapps.meeting_records.urls')),
     url(r'^search/$', search_view_factory(view_class=SearchView,
-                                          form_class=ModelSearchForm), name='haystack_search'),
+                                          form_class=ModelSearchForm,
+                                          searchqueryset=sqs), name='haystack_search'),
     url(r'^shop/', include('nablapps.nablashop.urls', namespace='nablashop')),
     url(r'^stillinger/', include('nablapps.jobs.urls')),
     url(r'^utveksling/', include('nablapps.exchange.urls')),
