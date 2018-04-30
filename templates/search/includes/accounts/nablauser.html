@@ -3,6 +3,7 @@
 
 {% with result.object as user %}
 
+{% if request.user.is_authenticated %}
 <div class="result account_user"> <a href="{{ user.get_absolute_url }}">
     <h3>{{ user.get_full_name }}</h3>
     <p class="meta">{{ user.email }}</p>
@@ -16,4 +17,13 @@
   </a>
 </div>
 
+{% else %}
+<div class="result account_user"> <a href="#">
+    <h3>Nablakomponent</h3>
+
+    <img src="{% static 'img/default_avatar.png' %}"></img>
+    <p class="description">Du må være logget inn for å se navn og informasjon om brukere</p>
+  </a>
+</div>
+{% endif %}
 {% endwith %}
