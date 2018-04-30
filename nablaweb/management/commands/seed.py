@@ -2,6 +2,7 @@
 Custom seed script for nablaweb
 """
 import random
+import textwrap
 from datetime import datetime as dt, timedelta as td
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -13,13 +14,14 @@ from nablapps.news.models import NewsArticle, FrontPageNews
 
 fake = Factory.create('no_NO')
 
+random.seed()
 
 def g():
     return fake.text()
 
     
 def s():
-    return fake.sentence()
+    return textwrap.shorten(fake.sentence(), width=40)
 
 
 class Command(BaseCommand):
@@ -64,6 +66,18 @@ class Command(BaseCommand):
         )
 
         if delete:
+            NablaGroup.objects.all().delete()
+
+        count = random.randint(5, 10)
+        print("Creating %d NablaGroups" % count)
+        ngroups = [
+            NablaGroup.objects.create(
+                name=fake.word()+"-komitéen"
+            )
+            for _ in range(count)
+        ]
+
+        if delete:
             FysmatClass.objects.all().delete()
 
         count = random.randint(7, 10)
@@ -76,27 +90,12 @@ class Command(BaseCommand):
             )
             for i in range(count)
         ]
-        
-        if delete:
-            NablaGroup.objects.all().delete()
 
-        count = random.randint(5, 10)
-        print("Creating %d NablaGroups" % count)
-        ngroups = [
-            NablaGroup.objects.create(
-                name=fake.word()+"-komitéen"
-            )
-            for _ in range(count)
-        ]
-        
         count = random.randint(50, 100)
         print("Creating %d NablaUsers" % count)
         for i in range(count):
             username = "komponent%d" % i
-            groups = [
-                random.choice(ngroups),
-                random.choice(classes)
-            ]
+
             user = User.objects.create_user(
                 username=username,
                 first_name=fake.first_name(),
@@ -104,15 +103,20 @@ class Command(BaseCommand):
                 address=fake.address(),
                 password='password',
                 email=username+'@stud.ntnu.no',
+                ntnu_card_number=str(random.randint(int(1E7), int(1E10)-1)),
                 about=fake.text(),
                 birthday=fake.date_time_between_dates(
                     datetime_start=None,
                     datetime_end=None,
                     tzinfo=None),
             )
-            
-            user.groups.add(*groups)
-            user.save()
+
+            nabla_group = random.choice(ngroups)
+            nabla_group.user_set.add(user)
+
+            fysmat_class = random.choice(classes)
+            fysmat_class.user_set.add(user)
+
 
         if delete:
             NewsArticle.objects.all().delete()
