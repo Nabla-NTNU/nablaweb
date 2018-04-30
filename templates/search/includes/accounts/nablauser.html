@@ -9,7 +9,7 @@
     <p class="meta">{{ user.email }}</p>
 
   {% if user.avatar %}
-  <img src="{% thumbnail user.avatar 150x150 %}"></img>
+  <img src="{% thumbnail user.avatar 140x170 crop='smart' %}"></img>
   {% else %}
   <img src="{% static 'img/default_avatar.png' %}"></img>
   {% endif %}
