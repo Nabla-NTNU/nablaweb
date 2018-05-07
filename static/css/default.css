@@ -1,3 +1,33 @@
+/* New student popup */
+
+#new_student_info {
+    position: fixed;
+    top: 100px;
+    width: 80%;
+    min-width: 300px;
+    max-width: 1000px;
+    height: 400px;
+    border: 3px solid black;
+    padding: 10px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    background-color: white;
+    z-index: 100;
+    box-shadow: 0 0 10px black;
+}
+
+#new_student_info.hidden {
+    display: none;
+}
+
+#new_student_info .close_button {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    
+}
+
 /* MAIN */
 
 body {
