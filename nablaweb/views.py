@@ -45,4 +45,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
         context['poll'] = Poll.objects.exclude(is_user_poll=True).order_by('-publication_date').first()
         if self.request.user.is_authenticated() and context['poll'] is not None:
             context['poll_has_voted'] = context['poll'].user_has_voted(self.request.user)
+
+        context['newuser_popup'] = False if self.request.user.is_authenticated() else True
+        
         return context

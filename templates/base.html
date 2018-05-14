@@ -58,6 +58,7 @@
     <body>
 
         <!-- Pop up window displaying important information about the 'fadderperiode' -->
+	{% if newuser_popup %}
 	<div id="new_student_info">
 	  <h2>Ny student?</h2>
 	  <div class="close_button" onclick="this.parentNode.classList.add('hidden');">Lukk meg</div>
@@ -67,6 +68,7 @@
 	  
 	  Grunnet nye personvernsregler i EU, GDPR, kan ikke universitetet gi ut lister over nye studenter til Nabla. Derfor må du som ny student oppgi kontaktopplysninger selv.
 	</div>
+	{% endif %}
       
 
         <!-- Navigation -->
