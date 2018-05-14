@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.template import loader
 from django.views.generic import TemplateView, DetailView
 from django.contrib.auth import get_user_model
+from django.contrib import messages
 
 from django.utils.safestring import mark_safe
 
@@ -45,20 +46,29 @@ class AdministerRegistrationsView(StaticContextMixin,
     def register_user(self):
         """Melder på brukeren nevnt i POST['text'] på arrangementet."""
         username = self.request.POST.get('text')
+        if username == "":
+            messages.warning(self.request, "Ingen brukernavn skrevet inn.")
+            return
+            
         try:
             user = User.objects.get(username=username)
             self.get_object().add_to_attending_or_waiting_list(user)
-        except (User.DoesNotExist, UserRegistrationException):
+        except (User.DoesNotExist, UserRegistrationException) as e: 
+            messages.warning(self.request, f"Kunne ikke legge til {username} i påmeldingslisten. Returnert error var: {type(e).__name__}: {str(e)}. Ta kontakt med WebKom, og oppgi denne feilmeldingen dersom du tror dette er en feil.")
             pass
 
     def deregister_users(self):
         """Melder av brukerne nevnt i POST['user']."""
         user_list = self.request.POST.getlist('user')
+        if user_list == []:
+            messages.warning(self.request, "Ingen brukere krysset av!")
+            
         for username in user_list:
             try:
                 user = User.objects.get(username=username)
                 self.get_object().deregister_user(user)
-            except (User.DoesNotExist, UserRegistrationException):
+            except (User.DoesNotExist, UserRegistrationException) as e:
+                messages.warning(self.request, f"Kunne ikke fjerne {username} fra påmeldingslisten. Returnert error var: {type(e).__name__}: {str(e)}. Ta kontakt med WebKom, og oppgi denne feilmeldingen dersom du tror dette er en feil.")
                 pass
 
 
