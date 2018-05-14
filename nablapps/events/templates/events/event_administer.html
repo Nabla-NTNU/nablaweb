@@ -18,13 +18,17 @@
 
 <form action="" method="post" class="form">{% csrf_token %}
     <div class="form-inline">
-        <select name="action" class="form-control">
-            {% for int_name, ext_name in actions %}
-                <option value="{{ int_name }}">{{ ext_name }}</option>
-            {% endfor %}
-        </select>
-        <input class="form-control" type="text" name="text" size="10" maxlength="10" />
-        <input class="form-control" type="submit" name="commit_changes" value="Utfør" />
+        <label for="text">Legg til bruker: </label>
+        <input class="form-control" type="text" name="text" size="10" maxlength="10" placeholder="Brukernavn" />
+	<input type="hidden" name="action" value="add" />
+        <input class="form-control" type="submit" value="Legg til" />
+    </div>
+</form>
+<form action="" method="post" class="form">{% csrf_token %}
+    <div class="form-inline">
+        <label>Kryss av brukere som skal fjernes:</label>
+        <input type="hidden" name="action" value="del" />
+        <input class="form-control" type="submit" value="Fjern" />
     </div>
 
     {% if event.eventregistration_set %}
