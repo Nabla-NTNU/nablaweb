@@ -106,10 +106,11 @@ class Event(AbstractEvent):
         else:
             raise EventFullException(event=self, user=user)
 
-    def deregister_user(self, user):
-        """Melder brukeren av arrangementet."""
+    def deregister_user(self, user, respect_closed=True):
+        """Melder brukeren av arrangementet.
+        respect_closed gir mulighet til å avmelde brukere etter avmeldingsfrist, fra administrative verktøy"""
         regs = self.eventregistration_set
-        if self.deregistration_closed():
+        if self.deregistration_closed() and respect_closed:
             raise DeregistrationClosed(event=self, user=user)
         try:
             reg = regs.get(user=user)

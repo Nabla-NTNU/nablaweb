@@ -66,7 +66,7 @@ class AdministerRegistrationsView(StaticContextMixin,
         for username in user_list:
             try:
                 user = User.objects.get(username=username)
-                self.get_object().deregister_user(user)
+                self.get_object().deregister_user(user, respect_closed=False)
             except (User.DoesNotExist, UserRegistrationException) as e:
                 messages.warning(self.request, f"Kunne ikke fjerne {username} fra påmeldingslisten. Returnert error var: {type(e).__name__}: {str(e)}. Ta kontakt med WebKom, og oppgi denne feilmeldingen dersom du tror dette er en feil.")
                 pass
