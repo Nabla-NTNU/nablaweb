@@ -36,6 +36,7 @@ class EventAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
               "open_for",
               "facebook_url",
               )
+    filter_horizontal = ('open_for',)
     form = EventForm
     list_display = ['__str__', 'registration_required']
     date_hierarchy = 'event_start'
