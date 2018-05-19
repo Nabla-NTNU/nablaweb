@@ -28,6 +28,13 @@
     
 }
 
+@media (max-width: 350px) {
+    #new_student_info {
+	width: 100%;
+	text-align: center;
+    }
+}
+
 /* MAIN */
 
 body {
