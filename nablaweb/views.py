@@ -42,7 +42,11 @@ class FrontPageView(FlatPageMixin, TemplateView):
         bedpresArr = Event.objects.filter(event_start__gte=now, organizer='BN')
         bedpres = BedPres.objects.filter(event_start__gte=now)
         context['upcoming_bedpreses'] = sorted(chain(bedpresArr, bedpres), key=lambda x: x.event_start)[:6]
-        context['poll'] = Poll.objects.exclude(is_user_poll=True).order_by('-publication_date').first()
+        try:
+            context['poll'] = Poll.objects.current_poll()
+        except:
+            context['poll'] = Poll.objects.exclude(is_user_poll=True).order_by('-publication_date').first()
+            
         if self.request.user.is_authenticated() and context['poll'] is not None:
             context['poll_has_voted'] = context['poll'].user_has_voted(self.request.user)
         return context
