@@ -93,6 +93,7 @@ class NablaUserAdmin(UserAdmin):
         (('Important dates'), {'fields': ('last_login', 'date_joined')}),
         ('Adresse og telefon', {'fields': ('address', 'mail_number', 'telephone', 'cell_phone',)}),
         ('Diverse', {'fields': ('birthday', 'web_page', 'about', 'wants_email')}),
+        ('Avatar', {'fields': ('avatar', ) }),
     )
 
 
