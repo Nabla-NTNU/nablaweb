@@ -35,6 +35,11 @@
     }
 }
 
+.GDPRinfo {
+    position: absolute;
+    bottom: 10px;
+}
+
 /* MAIN */
 
 body {
