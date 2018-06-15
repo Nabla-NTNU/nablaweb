@@ -14,7 +14,7 @@
     right: 0;
     background-color: white;
     z-index: 100;
-    box-shadow: 0 0 10px black;
+    box-shadow: 0 0 1000px rgba(0.2, 0.2, 0.2, 0.7);
 }
 
 #new_student_info.hidden {
@@ -38,6 +38,7 @@
 .GDPRinfo {
     position: absolute;
     bottom: 10px;
+    text-align: center;
 }
 
 /* MAIN */
