@@ -28,10 +28,14 @@
     
 }
 
-@media (max-width: 350px) {
+@media (max-width: 668px) {
     #new_student_info {
 	width: 100%;
 	text-align: center;
+    }
+
+    .GDPRinfo {
+	display: none;
     }
 }
 
