@@ -5,6 +5,9 @@
 *.swp
 *.swo
 
+# Backup
+*~
+
 # Personlige settings
 nablaweb/settings/local.py
 
