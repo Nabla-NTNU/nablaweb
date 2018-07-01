@@ -28,6 +28,17 @@
     
 }
 
+#new_student_info h2 {
+    text-align: center;
+    border-bottom: 1px solid black;
+}
+
+#new_student_info .btn {
+    background: #535353;
+    border-radius: 0;
+    border: none;
+}
+
 @media (max-width: 668px) {
     #new_student_info {
 	width: 100%;
