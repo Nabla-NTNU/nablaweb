@@ -5,11 +5,24 @@
 {% block more_head %}
 {{ block.super }}
 <style>
-  .container img {
-      display: block;
-      margin: 10px auto;
-      border: 3px solid black;
-  }
+ .container img {
+     display: block;
+     margin: 10px auto;
+     border: 3px solid black;
+ }
+
+ .container .img_text {
+     text-align: center;
+     display: block;
+     margin-top: -8px; // Reverse img-margin
+ }
+
+ .infobox {
+     background: #e2e2ff;
+     border: 4px solid pink;
+     padding: 5px;
+     border-radius: 5px; 
+ }
 </style>
 {% endblock %}
 
