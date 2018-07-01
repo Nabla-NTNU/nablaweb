@@ -3,7 +3,12 @@
 {% load flatpages %}
 {% load sekizai_tags %}
 
+<<<<<<< HEAD
+{% block more_head %}
+{{ block.super }}
+=======
 {% addtoblock "css" %}
+>>>>>>> 8a87c0f8eeedc670b1f35ab39b28bd87d921bba8
 <style>
   .container img {
       display: block;
@@ -11,7 +16,11 @@
       border: 3px solid black;
   }
 </style>
+<<<<<<< HEAD
+{% endblock %}
+=======
 {% endaddtoblock %}
+>>>>>>> 8a87c0f8eeedc670b1f35ab39b28bd87d921bba8
 
 {% block title %}
     {{ block.super }} - {{ flatpage.title }}
