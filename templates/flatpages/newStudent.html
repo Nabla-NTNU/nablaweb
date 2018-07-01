@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load markdown %}
+{% load flatpages %}
+{% load sekizai_tags %}
+
+{% addtoblock "css" %}
+<style>
+  .container img {
+      display: block;
+      margin: 10px auto;
+      border: 3px solid black;
+  }
+</style>
+{% endaddtoblock %}
+
+{% block title %}
+    {{ block.super }} - {{ flatpage.title }}
+{% endblock %}
+
+{% block content %}
+    <h2>{{ flatpage.title }}</h2>
+    {{ flatpage.content|markdown:"unsafe"}}
+{% endblock %}
