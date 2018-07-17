@@ -37,6 +37,7 @@
     background: #535353;
     border-radius: 0;
     border: none;
+    white-space: normal;
 }
 
 @media (max-width: 668px) {
