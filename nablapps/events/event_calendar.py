@@ -104,7 +104,8 @@ def group_events_by_day(events, year, month):
     """
     day_dict = defaultdict(list)
     for e in events:
-        for day in day_range(e.event_start, e.event_end + timedelta(1)):
+        end = e.event_start if (e.event_end is None or e.event_end < e.event_start) else e.event_end
+        for day in day_range(e.event_start, end + timedelta(1)):
             if day.month == month:
                 day_dict[day.day].append(e)
     return day_dict
