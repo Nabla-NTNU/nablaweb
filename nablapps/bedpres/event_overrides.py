@@ -13,7 +13,10 @@ class BedPresAndEventGetter(EventGetter):
         # Get this months events and bedpreser separately
         events = Event.objects.filter(
             event_start__year=year,
-            event_start__month=month)
+            event_start__month=month) |\
+            Event.objects.filter(
+                event_end__year=year,
+                event_end__month=month)
         bedpress = BedPres.objects.filter(
             event_start__year=year,
             event_start__month=month)

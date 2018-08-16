@@ -1,6 +1,6 @@
 from calendar import HTMLCalendar
 from collections import defaultdict
-from datetime import date
+from datetime import date, timedelta
 
 from django.utils.html import conditional_escape as esc
 
@@ -14,9 +14,11 @@ class EventCalendar(HTMLCalendar):
     day_full = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag',
                 'Fredag', 'Lørdag', 'Søndag']
 
-    def __init__(self, events):
+    def __init__(self, events, year, month):
         super().__init__()
-        self.events_grouped_by_day = group_events_by_day(events)
+        self.year, self.month = year, month
+        self.events_grouped_by_day = group_events_by_day(events, year, month)
+
 
     def formatmonth(self, theyear, themonth, withyear=True):
         """
@@ -95,19 +97,21 @@ class EventCalendar(HTMLCalendar):
         )
 
 
-def group_events_by_day(events):
+def group_events_by_day(events, year, month):
     """Groups a list of models by day.
 
     Events spanning multiple days are grouped multiple times.
     """
     day_dict = defaultdict(list)
     for e in events:
-        for day in day_range(e.event_start, e.event_end):
-            day_dict[day].append(e)
+        for day in day_range(e.event_start, e.event_end + timedelta(1)):
+            if day.month == month:
+                day_dict[day.day].append(e)
     return day_dict
 
 
 def day_range(start, end):
-    """Returns a list of days (ints) between start and end (datetime)."""
     end = start if (end is None or end < start) else end
-    return range(start.day, end.day+1)
+    
+    for n in range(int ((end - start).days)):
+        yield start + timedelta(n)

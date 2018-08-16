@@ -85,7 +85,7 @@ def calendar(request, year=None, month=None):
         raise Http404
 
     events = EventGetter.get_current_events(year, month)
-    cal = EventCalendar(chain(events)).formatmonth(year, month)
+    cal = EventCalendar(chain(events), year, month).formatmonth(year, month)
 
     user = request.user
     future_attending_events = EventGetter.attending_events(user, today)
