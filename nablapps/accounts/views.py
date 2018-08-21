@@ -95,8 +95,17 @@ class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
         return HttpResponseForbidden()
 
     def form_valid(self, form):
+        from .models import FysmatClass
+        
         data = form.cleaned_data['data']
-        extract_usernames(data)
+        fysmat_class = form.cleaned_data['fysmat_class']
+        
+        if fysmat_class != '':
+            fysmat_class = FysmatClass.objects.get(name=fysmat_class)
+        else:
+            fysmat_class = None
+            
+        extract_usernames(data, fysmat_class)
         return super(InjectUsersFormView, self).form_valid(form)
 
 

@@ -23,7 +23,7 @@ def send_activation_email(user, password):
     user.email_user('Bruker på nabla.no', email_text)
 
 
-def extract_usernames(string):
+def extract_usernames(string, fysmat_class):
     from .models import NablaUser
 
     m = re.findall('([a-z]+)@', string, re.IGNORECASE)
@@ -31,5 +31,9 @@ def extract_usernames(string):
         new_user, was_created = NablaUser.objects.get_or_create(username=u)
         if not was_created:
             continue
+
+        if fysmat_class is not None:
+            fysmat_class.user_set.add(new_user)
+            
         new_user.is_active = False
         new_user.save()

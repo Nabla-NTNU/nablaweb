@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.forms.extras.widgets import SelectDateWidget
 
-from .models import NablaUser, RegistrationRequest
+from .models import NablaUser, RegistrationRequest, FysmatClass
 
 
 class UserForm(forms.ModelForm):
@@ -77,4 +77,10 @@ class InjectUsersForm(forms.Form):
     data = forms.CharField(
         widget=forms.Textarea,
         label="Data"
+    )
+
+    fysmat_class = forms.ChoiceField(
+        required = False,
+        choices = [('', "Ingen klasse")] + [ (m.name, m.name) for m in FysmatClass.objects.all() ],
+        label = "Klasse",
     )
