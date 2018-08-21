@@ -127,12 +127,12 @@
 {% endblock content %}
 
 {% block sidebar %}
+    {% include "poll/poll_include.html" %}
     {% if sidebarinfo %}
         <p>
             {{ sidebarinfo.content | markdown:"unsafe" }}
         </p>
     {% endif %}
-    {% include "poll/poll_include.html" %}
 
     <h2>Nyeste Skråttcast</h2>
     {% if new_podcast %}
