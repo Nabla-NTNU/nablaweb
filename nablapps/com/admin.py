@@ -10,12 +10,16 @@ class ComPageAdmin(admin.ModelAdmin):
 
 
 class ComMembershipAdmin(admin.ModelAdmin):
-    list_display = ("full_user_name", "user", "com", "joined_date")
+    list_display = ("full_user_name", "user", "com", "joined_date", "short_description")
     ordering = ['-com']
     list_filter = ["com"]
 
-    def full_user_name(self, obj):
-        return obj.user.get_full_name()
+
+    def short_description(self, com):
+        return (com.story[:23] + '...') if len(com.story) > 25 else com.story
+        
+    def full_user_name(self, com):
+        return com.user.get_full_name()
     
     class Meta:
         verbose_name = "Komitemedlem"
