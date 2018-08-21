@@ -10,10 +10,13 @@ class ComPageAdmin(admin.ModelAdmin):
 
 
 class ComMembershipAdmin(admin.ModelAdmin):
-    list_display = ("user", "com", "joined_date")
+    list_display = ("full_user_name", "user", "com", "joined_date")
     ordering = ['-com']
     list_filter = ["com"]
 
+    def full_user_name(self, obj):
+        return obj.user.get_full_name()
+    
     class Meta:
         verbose_name = "Komitemedlem"
         verbose_name_plural = "Komitemedlemmer"
