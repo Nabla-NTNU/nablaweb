@@ -1,5 +1,6 @@
 from django.contrib.auth.models import UserManager
 from django.template import loader
+
 import re
 
 
@@ -24,10 +25,18 @@ def send_activation_email(user, password):
 
 
 def extract_usernames(string, fysmat_class):
-    from .models import NablaUser
+    from .models import NablaUser, RegistrationRequest
 
     m = re.findall('([a-z]+)@', string, re.IGNORECASE)
     for u in m:
+        requests = RegistrationRequest.objects.filter(username=u)
+
+        if requests:
+            requests.last().approve_request()
+            for r in requests:
+                r.delete()
+            
+        
         new_user, was_created = NablaUser.objects.get_or_create(username=u)
         if not was_created:
             continue
