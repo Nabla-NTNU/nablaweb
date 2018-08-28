@@ -11,7 +11,7 @@ class ChoiceInline(admin.TabularInline):
 
 @admin.register(Poll)
 class PollAdmin(admin.ModelAdmin):
-    fields = ['publication_date', 'question', 'is_current', 'users_voted', ]
+    fields = ['publication_date', 'question', 'answer', 'is_current', 'users_voted', ]
     readonly_fields = ['users_voted', 'created_by']
     list_display = ('question', 'publication_date', 'is_current', 'created_by')
     list_filter = ['publication_date']

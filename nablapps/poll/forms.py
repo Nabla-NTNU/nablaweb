@@ -81,4 +81,7 @@ class PollForm(ChangedByMixin, forms.ModelForm):
 
     class Meta:
         model = Poll
-        fields = ('question', )
+        fields = ('question', 'answer',)
+        help_texts = {
+            'answer': 'Valgfritt',
+            }

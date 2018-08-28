@@ -18,6 +18,13 @@ class Poll(models.Model):
         max_length=1000
     )
 
+    answer = models.CharField(
+        'Svar',
+        max_length=1000,
+        default="",
+        blank=True
+    )
+    
     creation_date = models.DateTimeField(
         'Opprettet',
         auto_now_add=True
