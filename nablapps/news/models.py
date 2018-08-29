@@ -120,7 +120,7 @@ class FrontPageNews(models.Model):
         verbose_name="Bilde",
         help_text="Bilder som er større enn 770x300 px ser best ut. Du kan beskjære bildet etter opplasting.")
     cropping_override = ImageRatioField(
-        'picture',
+        'picture_override',
         '770x300',
         allow_fullsize=False,
         verbose_name="Beskjæring")
