@@ -73,14 +73,21 @@ class NablaUserCreationForm(UserCreationForm):
 
 
 class InjectUsersForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super(InjectUsersForm, self).__init__(*args, **kwargs)
+        self.fields['fysmat_class'] = forms.ChoiceField(
+            required = False,
+            choices = [('', "Ingen klasse")] + [ (m.name, m.name) for m in FysmatClass.objects.all() ],
+            label = "Klasse",
+        )
+
     title = "Putt brukernavn i databasen."
     data = forms.CharField(
         widget=forms.Textarea,
         label="Data"
     )
-
     fysmat_class = forms.ChoiceField(
-        required = False,
-        choices = [('', "Ingen klasse")] + [ (m.name, m.name) for m in FysmatClass.objects.all() ],
-        label = "Klasse",
+        required=False,
+        label='Klasse',
     )
