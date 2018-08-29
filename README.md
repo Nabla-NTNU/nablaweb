@@ -16,6 +16,19 @@ For å komme i gang med Nablaweb, sjekk wikien på: https://bitbucket.org/webkom
 
 ## Mappestruktur ##
 - nablapps -- Inneholder alle djangoappene
+    - accounts -- Brukere (grunnleggende ting som registrering og profil)
+    - bedpres -- Bedriftspresentasjoner, arver fra event
+    - com -- Komiteer
+    - exchange -- For info om utveksling (supergammel kode, pre 2014?)
+    - interactive -- Julekalender++
+    - jobs -- Stillingsannonser
+    - likes -- Likeknapp (ikke i bruk lenger, bør fjernes)
+    - meeting-records -- Styret sine møtereferater
+    - nabladet -- pdf-filer av Nabladet
+    - nablashop -- Oversikt over ting nabla selger (kompendium, pins, etc.)
+    - news -- Nyheter/forsideinnhold, hva som skal vises på forsiden
+    - podcast -- Scråttcast sine podcaster
+    - poll -- Avstemninger, bl.a. på forsiden
 - templates -- inneholder templates vi har laget, og templates som overskriver
              Django sine.
 - nablaweb -- inneholder settings og urls. Knutepunktet for prosjektet.
