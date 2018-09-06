@@ -9,7 +9,7 @@
         <li>
             <a href="{{ event.get_absolute_url }}">
                 <time class="label {{ class }}"
-                      datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"j.m" }}</time>
+                      datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"d.m" }}</time>
                 {{ event.headline }}
                 {% if event.registration_required %}
                     <span title="Ledige plasser / Totalt antall plasser">
