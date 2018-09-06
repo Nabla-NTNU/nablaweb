@@ -15,6 +15,9 @@ Brukeravstemninger
     <img class="thumbnail" alt="avatar"
          {% if user.avatar %}
          src="{% thumbnail user.avatar 150x150 %}"
+         {% elif not poll.is_user_poll %} <!-- Nablalogo if made by admin -->
+         src="{% static "img/nabla-black.svg" %}"
+         width=150
          {% else %}
          src="{% static "img/default_avatar.png" %}"
          {%endif %}>
