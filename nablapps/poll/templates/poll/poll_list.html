@@ -21,9 +21,14 @@ Brukeravstemninger
 </div>
 <div class="col-md-9">
 <h3>
+    {% if poll.is_user_poll %}
     {% firstof user.get_full_name user.username %}
+    {% else %}
+    Nabla
+    {%endif%}
 </h3>
 
+{% endwith%}
 <div class="poll well">
     <h4>{{ poll.question }}</h4>
     {% if poll.voted %}
@@ -33,7 +38,6 @@ Brukeravstemninger
     {% endif %}
 </div>
 </div>
-{% endwith %}
 {% empty %}
 Ingen brukeravstemninger her enda.
 {% endfor %}
