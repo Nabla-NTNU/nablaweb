@@ -19,10 +19,12 @@ random.seed()
 def g():
     return fake.text()
 
-    
+
 def s():
     return textwrap.shorten(fake.sentence(), width=40)
 
+def ss():
+    return textwrap.shorten(fake.sentence(), width=20)
 
 class Command(BaseCommand):
     help = 'Puts data into the database'
@@ -36,18 +38,18 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        
+
         if not settings.DEBUG:
             raise Exception("Trying to seed in production.")
-        
+
         delete = options['delete']
         print("Deleting old entries: " + str(delete))
         if delete:
             FrontPageNews.objects.all().delete()
-        
+
         if delete:
             User.objects.all().delete()
-        
+
         print("Creating superuser admin")
         User.objects.create_user(
             username='admin',
@@ -146,7 +148,7 @@ class Command(BaseCommand):
                 headline=s(),
                 body=g(),
                 lead_paragraph=g(),
-                short_name=s(),
+                short_name=ss(),
                 event_start=start,
                 event_end=start+td(hours=4),
                 organizer=fake.name(),
