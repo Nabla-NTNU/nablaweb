@@ -67,7 +67,7 @@ class ComPage(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = self.get_canonical_name()
-        super(ComPage, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class ComMembership(models.Model):
@@ -88,11 +88,11 @@ class ComMembership(models.Model):
         self.com.user_set.add(self.user)
         self.user.is_staff = True
         self.user.save()
-        super(ComMembership, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         self.com.user_set.remove(self.user)
-        super(ComMembership, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return self.user.username

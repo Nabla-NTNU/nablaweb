@@ -79,7 +79,7 @@ class RegistrationView(MessageMixin, FormView):
             self.messages.info("Denne brukeren er ikke registrert. "
                                "En forespørsel har blitt opprettet og "
                                "du vil få en epost hvis den blir godkjent.")
-        return super(RegistrationView, self).form_valid(form)
+        return super().form_valid(form)
 
 
 class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
@@ -91,7 +91,7 @@ class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.has_module_perms("django.contrib.auth"):
-            return super(InjectUsersFormView, self).dispatch(request, *args, **kwargs)
+            return super().dispatch(request, *args, **kwargs)
         return HttpResponseForbidden()
 
     def form_valid(self, form):
@@ -106,7 +106,7 @@ class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
             fysmat_class = None
             
         extract_usernames(data, fysmat_class)
-        return super(InjectUsersFormView, self).form_valid(form)
+        return super().form_valid(form)
 
 
 class BirthdayView(LoginRequiredMixin, ListView):

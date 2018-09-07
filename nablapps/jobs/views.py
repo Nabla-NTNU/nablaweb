@@ -83,7 +83,7 @@ class RelevantForLinjeList(GenericJobsList):
 class RelevantForYearList(GenericJobsList):
     """Stillingsannonser merket som relevante for et spesifikt årskull."""
     def get_queryset(self):
-        return super(RelevantForYearList, self).get_queryset()\
+        return super().get_queryset()\
             .filter(relevant_for_year__year__iexact=self.kwargs['year'])
 
 

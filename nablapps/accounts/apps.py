@@ -6,6 +6,6 @@ class AccountsConfig(AppConfig):
     verbose_name = 'Brukerkontoer'
 
     def ready(self):
-        super(AccountsConfig, self).ready()
+        super().ready()
         from .signals import register_signals
         register_signals()

@@ -39,10 +39,10 @@ class GroupAdminForm(forms.ModelForm):
             initial = kwargs.get('initial', {})
             initial['users'] = instance.user_set.all()
             kwargs['initial'] = initial
-        super(GroupAdminForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def save(self, commit=True):
-        group = super(forms.ModelForm, self).save(commit=commit)
+        group = super().save(commit=commit)
 
         if commit:
             group.user_set = self.cleaned_data['users']

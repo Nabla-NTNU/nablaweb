@@ -26,7 +26,7 @@ class BaseVoteViewTest(TestCase):
 class TestLoggedInVote(UserHasVotedMixin, BaseVoteViewTest):
 
     def setUp(self):
-        super(TestLoggedInVote, self).setUp()
+        super().setUp()
 
         self.username = "testuser"
         self.password = "mypass"
