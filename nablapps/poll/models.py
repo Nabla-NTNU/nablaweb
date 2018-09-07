@@ -128,8 +128,7 @@ class Choice(models.Model):
 
     def vote(self, user):
         if self.poll.user_has_voted(user):
-            raise UserHasVoted(
-                "{user} has already voted on {poll}.".format(user=user, poll=self.poll))
+            raise UserHasVoted(f"{user} has already voted on {self.poll}.")
         else:
             self.votes += 1
             self.save()

@@ -54,7 +54,7 @@ class QuizTests(BaseQuizTest):
         self.quiz.delete()
 
     def test_reply(self):
-        data = {'{id}_alternative'.format(id=q.id): int(random() * 4 + 1) for q in self.questions}
+        data = {f'{q.id}_alternative': int(random() * 4 + 1) for q in self.questions}
         self.client.post(reverse('quiz_reply', kwargs={'pk': self.quiz.id}), data=data)
 
 

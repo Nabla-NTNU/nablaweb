@@ -69,7 +69,7 @@ class RegistrationView(MessageMixin, FormView):
                 user.save()
                 password = activate_user_and_create_password(user)
                 send_activation_email(user, password)
-                self.messages.info("Registreringsepost sendt til {}".format(user.email))
+                self.messages.info(f"Registreringsepost sendt til {user.email}")
         except NablaUser.DoesNotExist:
             RegistrationRequest.objects.create(
                     username=username,

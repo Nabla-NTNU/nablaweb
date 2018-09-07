@@ -100,4 +100,4 @@ class DeleteUserPollView(UserPollCRUDMixin, CreatorRequiredMixin, DeleteView):
     form_invalid_message = "Noe gikk galt i slettingen."
 
     def get_form_valid_message(self):
-        return "Du har slettet {}".format(self.object.question)
+        return f"Du har slettet {self.object.question}"

@@ -60,8 +60,7 @@ def quiz_reply(request, pk):
         scoreboard=quiz.scoreboard
     ).order_by('-when')[0]
 
-    format_string = "{}_alternative"
-    answers = (request.POST.get(format_string.format(q.id)) for q in questions)
+    answers = (request.POST.get(f"{q.id}_alternative") for q in questions)
 
     q_and_a = [
         (q, int(answer))
@@ -74,7 +73,7 @@ def quiz_reply(request, pk):
         messages.info(request, "Beklager, tiden gikk ut")
         return redirect('/')
 
-    messages.info(request, "Du svarte på {} av {} spørsmål.".format(len(q_and_a), len(questions)))
+    messages.info(request, f"Du svarte på {len(q_and_a)} av {len(questions)} spørsmål.")
     return redirect(reply.get_absolute_url())
 
 

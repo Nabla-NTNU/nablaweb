@@ -39,17 +39,17 @@ class EventCalendar(HTMLCalendar):
         Return a header for a week as a table row.
         """
         s = ''.join(self.formatweekday(i) for i in self.iterweekdays())
-        return '<ul class="daynames">{}</ul>'.format(s)
+        return f'<ul class="daynames">{s}</ul>'
 
     def formatweekday(self, i):
-        return '<li class="dayname">{}</li>'.format(self.day_full[i])
+        return f'<li class="dayname">{self.day_full[i]}</li>'
 
     def formatweek(self, theweek):
         """
         Return a complete week as a table row.
         """
         s = ''.join(self.formatday(d, wd) for (d, wd) in theweek)
-        return '<ul class="week">{}</ul>'.format(s)
+        return f'<ul class="week">{s}</ul>'
 
     def formatday(self, day, weekday):
         """Returns the body of a single day formatted as a list"""
@@ -59,19 +59,13 @@ class EventCalendar(HTMLCalendar):
         if html_event_list:
             css_classes.append("filled")
 
-        day_format_string = '''
+        day_string = f'''
             <div class="date">
-                <span class="day">{weekday}</span>
+                <span class="day">{self.day_full[weekday]}</span>
                 <span class="num">{day}.</span>
-            </div>{body}\n'''
-        day_string = day_format_string.format(
-            weekday=self.day_full[weekday],
-            day=day,
-            body=html_event_list
-        )
-        return '<li class="cell {css_classes}">{day_string}</li>'.format(
-            css_classes=" ".join(css_classes),
-            day_string=day_string)
+            </div>{html_event_list}\n'''
+        joined_css_classes = " ".join(css_classes),
+        return f'<li class="cell {joined_css_classes}">{day_string}</li>'
 
     def get_css_day_classes(self, day, weekday):
         css_classes = self.cssclasses[weekday].split(" ")
@@ -91,10 +85,9 @@ class EventCalendar(HTMLCalendar):
 
     @staticmethod
     def format_event_list_item(event):
-        return '<li><a href="{url}">{name}</a></li>\n'.format(
-            url=event.get_absolute_url(),
-            name=esc(event.get_short_name())
-        )
+        url = event.get_absolute_url()
+        name = esc(event.get_short_name())
+        return f'<li><a href="{url}">{name}</a></li>\n'
 
 
 def group_events_by_day(events, year, month):

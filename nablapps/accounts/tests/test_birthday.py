@@ -7,7 +7,7 @@ from nablapps.accounts.models import NablaUser
 
 class BirthdayTest(TestCase):
     def setUp(self):
-        self.users = [NablaUser.objects.create(username="user{}".format(i)) for i in range(10)]
+        self.users = [NablaUser.objects.create(username=f"user{i}") for i in range(10)]
         self.birthday_today = self.users[::2]
         self.set_birthday_today(self.birthday_today)
 

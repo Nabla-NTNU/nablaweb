@@ -11,7 +11,7 @@ def get_bpc_user_dictionary(user):
     """
     card_no = user.ntnu_card_number
     if not card_no or not card_no.isdigit():
-        raise InvalidCardNum("User {} has an invalid cardnumber {}".format(user, card_no))
+        raise InvalidCardNum(f"User {user} has an invalid cardnumber {card_no}")
 
     return {"fullname": user.get_full_name(),
             "username": user.username,
