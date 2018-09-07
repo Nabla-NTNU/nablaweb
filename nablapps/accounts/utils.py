@@ -24,7 +24,7 @@ def send_activation_email(user, password):
     user.email_user('Bruker på nabla.no', email_text)
 
 
-def extract_usernames(string, fysmat_class):
+def extract_usernames(string, fysmat_class=None):
     from .models import NablaUser, RegistrationRequest
 
     m = re.findall('([a-z]+)@', string, re.IGNORECASE)
