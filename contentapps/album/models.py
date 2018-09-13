@@ -76,7 +76,7 @@ class Album(TimeStamped, ViewCounterMixin, models.Model):
     @property
     def first(self):
         try:
-            return self.images.get(num=0)
+            return self.images.order_by('num')[0]
         except AlbumImage.DoesNotExist:
             return None
 
