@@ -29,12 +29,12 @@ def vote(request, poll_id):
 
 class PollListView(LoginRequiredMixin, ListView):
     """
-    Shows user defined polls
+    Shows polls
     """
     model = Poll
     paginate_by = 10
     template_name = "poll/poll_list.html"
-    queryset = Poll.objects.order_by('-creation_date').filter(is_user_poll=True)
+    queryset = Poll.objects.order_by('-creation_date')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -15,15 +15,23 @@ Brukeravstemninger
     <img class="thumbnail" alt="avatar"
          {% if user.avatar %}
          src="{% thumbnail user.avatar 150x150 %}"
+         {% elif not poll.is_user_poll %} {#Nablalogo if made by admin#}
+         src="{% static "img/nabla-black.svg" %}"
+         width=150
          {% else %}
          src="{% static "img/default_avatar.png" %}"
          {%endif %}>
 </div>
 <div class="col-md-9">
 <h3>
+    {% if poll.is_user_poll %}
     {% firstof user.get_full_name user.username %}
+    {% else %}
+    Nabla
+    {%endif%}
 </h3>
 
+{% endwith%}
 <div class="poll well">
     <h4>{{ poll.question }}</h4>
     {% if poll.voted %}
@@ -33,7 +41,6 @@ Brukeravstemninger
     {% endif %}
 </div>
 </div>
-{% endwith %}
 {% empty %}
 Ingen brukeravstemninger her enda.
 {% endfor %}
