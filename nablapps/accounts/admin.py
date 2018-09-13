@@ -1,10 +1,9 @@
 from django import forms
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from django.contrib.auth.models import Group
-from django.contrib.admin import ModelAdmin
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.encoding import smart_text
@@ -18,10 +17,12 @@ admin.site.register(FysmatClass)
 admin.site.unregister(Group)
 
 
-## A subclass of ModelMultipleChoiceField that changes the label from the username to the full name of the user. This is taken from: https://stackoverflow.com/questions/3966483/django-show-get-full-name-instead-or-username-in-model-form
+# A subclass of ModelMultipleChoiceField that changes the label from the username to the full name of the user.
+# Taken from: https://stackoverflow.com/questions/3966483/django-show-get-full-name-instead-or-username-in-model-form
 class UserFullnameMultipleChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         return smart_text(obj.get_full_name() + " - " + obj.username)
+
 
 class GroupAdminForm(forms.ModelForm):
     users = UserFullnameMultipleChoiceField(queryset=User.objects.filter( is_active=True ),
@@ -62,36 +63,12 @@ class NablaGroupAdminForm(GroupAdminForm):
         fields = '__all__'
 
 
-def create_nablagroup_from_group(modeladmin, request, queryset):
-    """
-    Admin action for making NablaGroup objects for Groups with no child NablaGroup.
-    Part of an ongoing effort to deprecate Group
-    """
-    for obj in queryset:
-        if NablaGroup.objects.filter(name=obj.name).exists():
-            modeladmin.message_user(request, "NablaGroup med dette navnet eksisterer allerede: " + str(obj),
-                                    level=messages.ERROR)
-            continue
-        NablaGroup.objects.create(
-            pk=obj.pk,
-            group_ptr=obj,
-            name=obj.name
-        )
-
-
-create_nablagroup_from_group.short_description = "Lag tilhørende NablaGroup"
-
-
-@admin.register(Group)
-class ExtendedGroupAdmin(GroupAdmin):
-    form = GroupAdminForm
-    actions = [create_nablagroup_from_group]
-
-
 def maillist(modeladmin, request, queryset):
     s = '/'.join(str(g.id) for g in queryset)
     url = reverse('mail_list', kwargs={'groups': s})
     return HttpResponseRedirect(url)
+
+
 maillist.short_description = "Vis mailliste"
 
 
