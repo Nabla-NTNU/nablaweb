@@ -36,10 +36,11 @@ For å komme i gang med Nablaweb, sjekk wikien på: https://bitbucket.org/webkom
 - static -- inneholder js, css og noen bilder. 
 
 ## Standard mappestruktur i Django (de fleste Django-apps, f.eks. nablapps/accounts) ##
-Dette er en veldig overfladisk inføring, fint for rekrutter..
 - admin -- hvordan klasser i models og forms skal administreres f.eks. i nabla.no/admin
 - forms -- definerer utfyllingsskjema som kan brukes av view til å ta imot informasjon fra bruker, f.eks. brukerregistering
 - models -- definerer klasser for appen, f.eks. User som brukes i brukerregistrering (og andre steder...)
 - templates -- html som definerer struktur og utseende (baseres vanligvis på base.html), bruker variabler gitt fra viewet for dynamiske data
 - url -- nettaddressen de ulike viewene skal assosieres med
 - view -- bestemmer hva som skal vises på siden: henter info fra databasen, manipulerer det og kjører en template (context=info til html)
+
+Dette er en veldig overfladisk inføring, fint for rekrutter..
