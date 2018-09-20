@@ -27,6 +27,8 @@ content = {editable = true, ref = "1e451bfd956fcdbfa8df2d5bb834137e2819752a", gi
 bpc-client = {editable = true, ref = "556ede6bd15b4296b1f2a29730ad6e5f00b27428", git = "https://bitbucket.org/webkom/bpc_client.git"}
 
 [dev-packages]
+pylint = "*"
+pylint-django = "*"
 
 [requires]
 python_version = "3.6"
