@@ -8,7 +8,7 @@ class MeetingRecordDetailView(DetailView):
     template_name = "meeting_records/meeting_record_detail.html"
 
     def get_context_data(self, **kwargs):
-        context = super(MeetingRecordDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['meeting_record_list'] = MeetingRecord.objects.order_by('-pub_date')
         return context
 

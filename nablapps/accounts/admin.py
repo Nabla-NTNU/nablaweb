@@ -17,10 +17,12 @@ admin.site.register(FysmatClass)
 admin.site.unregister(Group)
 
 
-## A subclass of ModelMultipleChoiceField that changes the label from the username to the full name of the user. This is taken from: https://stackoverflow.com/questions/3966483/django-show-get-full-name-instead-or-username-in-model-form
+# A subclass of ModelMultipleChoiceField that changes the label from the username to the full name of the user.
+# Taken from: https://stackoverflow.com/questions/3966483/django-show-get-full-name-instead-or-username-in-model-form
 class UserFullnameMultipleChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         return smart_text(obj.get_full_name() + " - " + obj.username)
+
 
 class GroupAdminForm(forms.ModelForm):
     users = UserFullnameMultipleChoiceField(queryset=User.objects.filter( is_active=True ),
@@ -37,10 +39,10 @@ class GroupAdminForm(forms.ModelForm):
             initial = kwargs.get('initial', {})
             initial['users'] = instance.user_set.all()
             kwargs['initial'] = initial
-        super(GroupAdminForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def save(self, commit=True):
-        group = super(forms.ModelForm, self).save(commit=commit)
+        group = super().save(commit=commit)
 
         if commit:
             group.user_set = self.cleaned_data['users']
@@ -61,15 +63,12 @@ class NablaGroupAdminForm(GroupAdminForm):
         fields = '__all__'
 
 
-@admin.register(Group)
-class ExtendedGroupAdmin(GroupAdmin):
-    form = GroupAdminForm
-
-
 def maillist(modeladmin, request, queryset):
     s = '/'.join(str(g.id) for g in queryset)
     url = reverse('mail_list', kwargs={'groups': s})
     return HttpResponseRedirect(url)
+
+
 maillist.short_description = "Vis mailliste"
 
 

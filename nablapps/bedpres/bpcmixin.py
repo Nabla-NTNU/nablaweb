@@ -55,8 +55,8 @@ class BPCEventMixin(object):
             if e.bpc_error_code == '403' or e.bpc_error_code == '103':
                 event.data = self._dummy_data
                 logger = logging.getLogger(__name__)
-                logger.error("BPC doesn't have an event with id {}. "
-                             "Used dummy data instead.".format(self.bpcid))
+                logger.error("BPC doesn't have an event with id %d. "
+                             "Used dummy data instead.", self.bpcid)
             else:
                 raise e
         return event

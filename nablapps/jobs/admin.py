@@ -48,6 +48,6 @@ class CompanyAdmin(ImageCroppingMixin, admin.ModelAdmin):
 class StaticModelAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):
         if request.user.has_perm("jobs.can_see_static_models"):
-            return super(StaticModelAdmin, self).get_model_perms(request)
+            return super().get_model_perms(request)
         else:
             return {}

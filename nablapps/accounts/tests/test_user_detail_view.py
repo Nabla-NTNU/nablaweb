@@ -20,4 +20,4 @@ class TestUserDetail(TestCase):
     def test_anonymous_user_cannot_view_profile(self):
         url = reverse("member_profile", kwargs={"username": self.user1.username})
         response = self.client.get(url)
-        self.assertRedirects(response, "/login/?next={}".format(url))
+        self.assertRedirects(response, f"/login/?next={url}")

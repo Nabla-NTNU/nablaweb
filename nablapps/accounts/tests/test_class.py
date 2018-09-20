@@ -10,7 +10,7 @@ class ClassesTest(TestCase):
         years = [now.year - y for y in range(7)]
         self.classes = [
             FysmatClass.objects.create(
-                name="kull{}".format(year),
+                name=f"kull{year}",
                 starting_year=year
             ) for year in years
         ]
@@ -18,9 +18,8 @@ class ClassesTest(TestCase):
 
         for j, cls in enumerate(self.classes):
             users = [
-                NablaUser.objects.create(
-                    username="user{}".format(j*10+i)
-                ) for i in range(4)
+                NablaUser.objects.create(username=f"user{j*10+i}")
+                for i in range(4)
             ]
 
             for u in users:

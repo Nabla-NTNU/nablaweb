@@ -12,7 +12,7 @@ class SeasonView(FlatPageMixin, TemplateView):
     flatpages = [("info", "/skraattcast/")]
 
     def get_context_data(self, **kwargs):
-        data = super(SeasonView, self).get_context_data(**kwargs)
+        data = super().get_context_data(**kwargs)
 
         try:
             if 'number' in kwargs:
@@ -52,7 +52,7 @@ class PodcastDetailView(PublishedMixin, AdminLinksMixin, HitCountDetailView, Det
     count_hit = True
 
     def get_context_data(self, **kwargs):
-        context = super(PodcastDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['season'] = season = self.object.season
         context['season_name'] = season.name()
         published = Podcast.objects.filter(season=season, published=True).order_by('-pub_date')

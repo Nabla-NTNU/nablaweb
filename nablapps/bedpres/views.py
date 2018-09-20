@@ -23,10 +23,9 @@ class BedPresRegisterUserView(RegisterUserView):
             else:
                 return (
                     "Du ble ikke påmeldt fordi du går i feil klasse for dette arrangementet.\n"
-                    "I følge våre systemer går du i {klasse}. klasse og arrangementet "
-                    "er kun åpent for {event.bpc_event.min_year}. "
-                    "til {event.bpc_event.max_year}. klasse."
-                ).format(klasse=e.user.get_class_number(), event=e.event)
+                    f"I følge våre systemer går du i {e.user.get_class_number()}. klasse og arrangementet "
+                    f"er kun åpent for {e.event.bpc_event.min_year}. "
+                    f"til {e.event.bpc_event.max_year}. klasse.")
 
 
 class BedPresDetailView(EventDetailView):

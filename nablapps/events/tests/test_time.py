@@ -42,7 +42,7 @@ class TimeTest(GeneralEventTest):
             self.event.registration_start = now + a*an_hour
             self.event.registration_deadline = now + b*an_hour
             self.event.save()
-            self.assertEqual(self.event.registration_open(), is_open, msg="{a},{b}".format(**locals()))
+            self.assertEqual(self.event.registration_open(), is_open, msg=f"{a},{b}")
 
     def test_registration_open_when_not_registration_required(self):
         self.event.registration_required = False

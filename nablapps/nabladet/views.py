@@ -14,7 +14,7 @@ class NabladDetailView(AdminLinksMixin, DetailView):
     context_object_name = 'nablad'
 
     def get_context_data(self, **kwargs):
-        context = super(NabladDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         nablad_archive = {}
         nablad_list = Nablad.objects.all()

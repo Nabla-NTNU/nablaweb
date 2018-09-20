@@ -29,12 +29,12 @@ class NorwegianCommasTest(TestCase):
 
     def test_queryset_contains_two_elements(self):
         queryset = TagChoices.objects.all()[:2]
-        self.assertEqual("{} og {}".format(queryset[0], queryset[1]), commas_no(queryset))
+        self.assertEqual(f"{queryset[0]} og {queryset[1]}", commas_no(queryset))
 
     def test_queryset_contains_three_elements(self):
         queryset = TagChoices.objects.all()[:3]
         strings = [str(x) for x in queryset]
-        self.assertEqual("{}, {} og {}".format(*strings), commas_no(queryset))
+        self.assertEqual(f"{strings[0]}, {strings[1]} og {strings[2]}", commas_no(queryset))
 
     def test_queryset_contains_five_elements(self):
         queryset = TagChoices.objects.all()[:5]

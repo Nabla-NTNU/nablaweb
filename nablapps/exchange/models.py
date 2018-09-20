@@ -75,7 +75,7 @@ class Exchange(models.Model):
         ordering = ['student']
 
     def __str__(self):
-        return "{} - {}".format(self.student, self.univ)
+        return f"{self.student} - {self.univ}"
 
 
 def validate_file_extension(value):

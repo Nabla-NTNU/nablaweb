@@ -8,7 +8,7 @@ class UserHasVoted(Exception):
 
 class PollManager(models.Manager):
     def current_poll(self):
-        queryset = super(PollManager, self).get_queryset()
+        queryset = super().get_queryset()
         return queryset.get(is_current=True)
 
 
@@ -75,7 +75,7 @@ class Poll(models.Model):
             Poll.objects.filter(is_current=True)\
                 .exclude(pk=self.pk)\
                 .update(is_current=False)
-        super(Poll, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def get_total_votes(self):
         return sum([x.votes for x in self.choices.all()])
@@ -128,8 +128,7 @@ class Choice(models.Model):
 
     def vote(self, user):
         if self.poll.user_has_voted(user):
-            raise UserHasVoted(
-                "{user} has already voted on {poll}.".format(user=user, poll=self.poll))
+            raise UserHasVoted(f"{user} has already voted on {self.poll}.")
         else:
             self.votes += 1
             self.save()
