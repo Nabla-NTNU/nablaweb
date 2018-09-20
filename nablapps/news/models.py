@@ -1,3 +1,14 @@
+"""
+Models for news
+
+This file contains both the model for things on the front page
+and a model for a news article.
+
+# Historic information
+In a previous version of nablaweb those two models was a single model called News.
+Models that was to appear on the front page had to inherit from the News model.
+This inheritance coupled different parts of nablaweb too much and made it hard to change.
+"""
 from django.utils import timezone
 from django.db import models
 from django.utils.text import slugify
@@ -6,11 +17,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from image_cropping.fields import ImageRatioField
 
-from content.models import (
-    PublicationManagerMixin,
-    TimeStamped,
-    WithPicture,
-)
+from content.models import PublicationManagerMixin, TimeStamped, WithPicture
 
 
 class TextContent(models.Model):
@@ -38,18 +45,13 @@ class TextContent(models.Model):
     class Meta:
         abstract = True
 
-    def save(self, *args, **kwargs):
+    def save(self, **kwargs): # pylint: disable=W0221
         if not self.slug:
             self.slug = slugify(self.headline)
-        return super().save(*args, **kwargs)
+        return super().save(**kwargs)
 
 
-class NewsArticle(
-    PublicationManagerMixin,
-    TimeStamped,
-    WithPicture,
-    TextContent
-):
+class NewsArticle(PublicationManagerMixin, TimeStamped, WithPicture, TextContent):
     """
     Simple article model
 
@@ -64,6 +66,7 @@ class NewsArticle(
         return self.headline
 
     def get_absolute_url(self):
+        """Get the url of the news-article"""
         return reverse("news_detail", kwargs={"pk": self.pk, "slug": self.slug})
 
 
@@ -118,7 +121,8 @@ class FrontPageNews(models.Model):
         null=True,
         blank=True,
         verbose_name="Bilde",
-        help_text="Bilder som er større enn 770x300 px ser best ut. Du kan beskjære bildet etter opplasting.")
+        help_text="Bilder som er større enn 770x300 px ser best ut. "
+                  "Du kan beskjære bildet etter opplasting.")
     cropping_override = ImageRatioField(
         'picture_override',
         '770x300',
@@ -141,30 +145,36 @@ class FrontPageNews(models.Model):
         return self.content_object or DummyContentObject()
 
     def get_absolute_url(self):
+        """Get the url of the related object"""
         return self.obj.get_absolute_url()
 
     @property
     def headline(self):
+        """Get overridden headline or the object's headline"""
         return self.title_override or self.obj.headline
 
     @property
     def lead_paragraph(self):
+        """Get overridden lead paragraph or the object's lead paragraph"""
         return self.text_override or self.obj.lead_paragraph
 
     @property
     def picture(self):
+        """Get overridden picture or the objcet's picture"""
         return self.picture_override or self.obj.picture
 
     @property
     def cropping(self):
+        """Get cropping corresponding to the picture"""
         return self.cropping_override or self.obj.cropping
 
     def bump(self):
+        """Make the news item climb to the top of list"""
         self.bump_time = timezone.now()
         self.save(update_fields=["bump_time"])
 
 
-class DummyContentObject(object):
+class DummyContentObject:
     """
     Class used to make dummy objects
     """
@@ -175,4 +185,5 @@ class DummyContentObject(object):
 
     @staticmethod
     def get_absolute_url():
+        """Dummy objects don't really have any url"""
         return "/"
