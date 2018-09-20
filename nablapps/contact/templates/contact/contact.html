@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Tilbakemelding{% endblock %}
+
+{% block content %}
+
+<h1>Tilbakemelding</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ contact_form.as_p }}
+    <button type="submit">Send</button>
+</form>
+
+{% endblock %}

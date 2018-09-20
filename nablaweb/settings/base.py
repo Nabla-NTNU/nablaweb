@@ -110,6 +110,7 @@ INSTALLED_APPS = [
     'nablapps.nablashop',
     'nablapps.podcast',
     'nablapps.poll',
+    'nablapps.contact',
     'nablaweb',
 
     ###########################
