@@ -1,13 +1,16 @@
+"""
+Views for album app
+"""
 from django.views.generic import TemplateView, ListView, DetailView
-from django.shortcuts import redirect
-from django.contrib.auth.decorators import permission_required
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http.response import JsonResponse
-from django.http import Http404
+from django.shortcuts import redirect, get_object_or_404
+from django.core.paginator import Paginator
 from .models import Album
 
 
 class AlbumList(ListView):
+    """
+    List of publically visible albums
+    """
     model = Album
     context_object_name = "albums"
     template_name = "album/album_list.html"
@@ -15,74 +18,49 @@ class AlbumList(ListView):
     queryset = Album.objects.exclude(visibility='h').order_by('-created_date')
 
 
-class AlbumOverview(DetailView):
+class PermissionToSeeAlbumMixin:
+    """
+    Mixin for checking if the user is allowed to view the album
+
+    Assumes that the public key of the album
+    is supplied as a keyword argument called 'pk' from the urlpatterns.
+
+    Redirect to login if user is not allowed to view the album.
+    """
+    def dispatch(self, request, *args, **kwargs):
+        """View dispatch"""
+        album = Album.objects.get(pk=kwargs['pk'])
+        allowed_to_view_album = album.is_visible(request.user)
+        if not allowed_to_view_album:
+            return redirect('auth_login')
+        return super().dispatch(request, *args, **kwargs)
+
+
+class AlbumOverview(PermissionToSeeAlbumMixin, DetailView):
+    """
+    Show an album with all images in the album if the user is allowed to view them.
+    """
     model = Album
     context_object_name = "album"
     template_name = "album/album_overview.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        result = super().dispatch(request, *args, **kwargs)
-        pk = int(kwargs['pk'])
-        album = Album.objects.get(pk=pk)
-        visible = album.is_visible(request.user)
-        if visible or request.user.has_perm('content.change_album'):
-            return result
-        else:
-            return redirect('auth_login')
 
-
-class AlbumImageView(TemplateView):
+class AlbumImageView(PermissionToSeeAlbumMixin, TemplateView):
+    """
+    View a single album image with links to next and previous image in the album.
+    """
 
     template_name = "album/album_image.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        result = super().dispatch(request, *args, **kwargs)
-        pk = int(kwargs['pk'])
-        album = Album.objects.get(pk=pk)
-        if album.is_visible(request.user) or request.user.has_perm('content.change_album'):
-            return result
-        else:
-            return redirect('auth_login')
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        num = int(kwargs['num'])
-        pk = int(kwargs['pk'])
-        try:
-            album = Album.objects.get(pk=pk)
-        except Album.DoesNotExist:
-            raise Http404("Albumet finnes ikke.")
-        context['album'] = album
+        context['album'] = get_object_or_404(Album, pk=kwargs['pk'])
 
-        images = album.images.order_by('num').all()
+        images = context['album'].images.order_by('num').all()
         paginator = Paginator(images, 1)
-        try:
-            page_obj = paginator.page(num)
-        except (EmptyPage, PageNotAnInteger):
-            page_obj = paginator.page(1)
+        context['page_obj'] = paginator.page(kwargs['num'])
 
-        context['page_obj'] = page_obj
-        try:
-            context['image'] = page_obj.object_list[0]
-        except IndexError:
-            # There are no images
-            pass
+        if context['page_obj'].object_list:
+            context['image'] = context['page_obj'].object_list[0]
 
         return context
-
-
-@permission_required("album.create_album")
-def multiple_file_upload(request):
-    files = []
-
-    for field, file in request.FILES:
-        files.append({
-            "name": file.name,
-            "size": file.size,
-            "url": file.url,
-            "thumbnailUrl": file.url,
-            "deleteUrl": file.url,
-            "deleteType": "DELETE"
-        })
-
-    return JsonResponse({"files": files})

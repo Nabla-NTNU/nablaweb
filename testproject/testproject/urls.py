@@ -1,3 +1,6 @@
+"""
+Urls for testproject for content
+"""
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
@@ -11,7 +14,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^album/', include('contentapps.album.urls')),
     url(r'^blogg/', include('contentapps.blog.urls')),
-    url(r'^login/$', login, {'template_name': 'admin/login.html'}),
+    url(r'^login/$', login, {'template_name': 'admin/login.html'}, name="auth_login"),
     url(r'^logout/$', logout),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
