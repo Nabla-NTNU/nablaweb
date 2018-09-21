@@ -1,13 +1,18 @@
+"""
+Models for blog app
+"""
 
+from datetime import date
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.text import slugify
-from datetime import date
-
 from content.models import TimeStamped, ViewCounterMixin
 
 
 class Blog(models.Model):
+    """
+    Represents a blog which can have multiple blog entries/posts.
+    """
     name = models.CharField(
         max_length=80,
         verbose_name="Navn"
@@ -30,7 +35,7 @@ class Blog(models.Model):
         verbose_name_plural = "Blogger"
         db_table = "content_blog"
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs): # pylint: disable=W0221
         if not self.id:
             self.created = date.today()
         self.slug = slugify(self.name)
@@ -40,10 +45,14 @@ class Blog(models.Model):
         return self.name
 
     def get_absolute_url(self):
+        """Return canonical url for the blog"""
         return reverse('blog', kwargs={'blog': self.slug})
 
 
 class BlogPost(TimeStamped, ViewCounterMixin, models.Model):
+    """
+    A single blog post belonging to a specific blog
+    """
     blog = models.ForeignKey(
         Blog,
         related_name="posts",
@@ -79,7 +88,7 @@ class BlogPost(TimeStamped, ViewCounterMixin, models.Model):
         verbose_name_plural = "Poster"
         db_table = "content_blogpost"
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs): # pylint: disable=W0221
         self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
 
@@ -87,4 +96,5 @@ class BlogPost(TimeStamped, ViewCounterMixin, models.Model):
         return self.title
 
     def get_absolute_url(self):
+        """Return canonical url for the blog post"""
         return reverse('blog_post', kwargs={'blog': self.blog.slug, 'slug': self.slug})

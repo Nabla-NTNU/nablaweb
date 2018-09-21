@@ -1,3 +1,6 @@
+"""
+Urls for blog app
+"""
 from django.conf.urls import url
 from .views import (
     BlogListView,
