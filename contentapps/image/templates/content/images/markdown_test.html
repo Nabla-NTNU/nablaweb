@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load markdown %}
+
+
+{% block content %}
+<form action="" method="post">
+
+    <textarea name="markdown_text">{{ markdown_text }}</textarea>
+    {% csrf_token %}
+    <input type="submit" value="Test markdown">
+</form>
+{{ markdown_text|markdown }}
+
+{% endblock content %}

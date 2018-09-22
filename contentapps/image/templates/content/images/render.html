@@ -1,5 +1,6 @@
 {% spaceless %}
-<div class="thumbnail {% if align %} pull-{{ align }}{% endif %}" style="width: {% if size == 'full' %}100%{% elif size == 'large' %}500px{% else %}350px{% endif %};max-width: 100%">
+<div class="thumbnail {% if align %} pull-{{ align }}{% endif %}"
+     style="width: {% if size == 'full' %}100%{% elif size == 'large' %}500px{% else %}350px{% endif %};max-width: 100%">
     <a href="{{ image.file.url }}">
       <img class="img-responsive" src="{{ image.file.url }}" alt="{{ revision.get_filename }}" />
     </a>

@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.contrib.auth.views import login, logout
 from django.views.static import serve
 from django.views.generic import TemplateView
+from contentapps.image.views import view_markdown
 
 
 urlpatterns = [
@@ -17,4 +18,5 @@ urlpatterns = [
     url(r'^login/$', login, {'template_name': 'admin/login.html'}, name="auth_login"),
     url(r'^logout/$', logout),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    url(r'^markdowntest/$', view_markdown),
 ]
