@@ -109,7 +109,8 @@ class TimeStamped(models.Model):
         related_name="%(class)s_created",
         editable=False,
         blank=True,
-        null=True
+        null=True,
+        on_delete=models.CASCADE,
     )
 
     last_changed_date = models.DateTimeField(
@@ -124,7 +125,8 @@ class TimeStamped(models.Model):
         related_name="%(class)s_edited",
         editable=False,
         blank=True,
-        null=True
+        null=True,
+        on_delete=models.CASCADE,
     )
 
     class Meta:

@@ -2,7 +2,7 @@
 Models for album app
 """
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.models import AnonymousUser
 
 from content.models import TimeStamped, ViewCounterMixin, BaseImageModel
@@ -25,7 +25,8 @@ class AlbumImage(BaseImageModel):
         'album.Album',
         verbose_name="Album",
         related_name="images",
-        null=True
+        null=True,
+        on_delete=models.CASCADE
     )
 
     num = models.PositiveIntegerField(
@@ -87,7 +88,7 @@ class Album(TimeStamped, ViewCounterMixin, models.Model):
         All logged in users with the permission to change albums can see the album.
         """
         return (self.visibility == 'p'
-                or self.visibility == 'u' and user.is_authenticated()
+                or self.visibility == 'u' and user.is_authenticated
                 or user.has_perm('content.change_album'))
 
     @property

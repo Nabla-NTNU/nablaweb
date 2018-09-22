@@ -12,7 +12,7 @@ from contentapps.image.views import view_markdown
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='index.html')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^album/', include('contentapps.album.urls')),
     url(r'^blogg/', include('contentapps.blog.urls')),
     url(r'^login/$', login, {'template_name': 'admin/login.html'}, name="auth_login"),

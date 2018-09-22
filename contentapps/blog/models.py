@@ -4,7 +4,7 @@ Models for blog app
 
 from datetime import date
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.text import slugify
 from content.models import TimeStamped, ViewCounterMixin
 
@@ -26,7 +26,7 @@ class Blog(models.Model):
     )
 
     created = models.DateField(
-        editable=False,
+        auto_now_add=True,
         verbose_name="Opprettet"
     )
 
@@ -56,7 +56,8 @@ class BlogPost(TimeStamped, ViewCounterMixin, models.Model):
     blog = models.ForeignKey(
         Blog,
         related_name="posts",
-        verbose_name="Blogg"
+        verbose_name="Blogg",
+        on_delete=models.CASCADE
     )
 
     title = models.CharField(

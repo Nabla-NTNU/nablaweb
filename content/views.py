@@ -2,7 +2,7 @@
 """
 Mixin classes for views
 """
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseForbidden
 
 
