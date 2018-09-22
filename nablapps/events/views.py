@@ -1,26 +1,30 @@
+"""
+Views for events app
+"""
+import datetime
+from itertools import chain
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template import loader
 from django.views.generic import TemplateView, DetailView
 from django.contrib.auth import get_user_model
-from django.contrib import messages
 
 from django.utils.safestring import mark_safe
 
-import datetime
-from itertools import chain
 from braces.views import (PermissionRequiredMixin,
                           LoginRequiredMixin,
                           StaticContextMixin,
                           MessageMixin)
 
+from content.views import AdminLinksMixin
 from .event_overrides import get_eventgetter
 
 from .models import Event
-from .exceptions import *
+from .exceptions import (EventException, UserRegistrationException, EventFullException,
+                         RegistrationNotAllowed, RegistrationNotOpen, RegistrationAlreadyExists,
+                         RegistrationNotRequiredException, DeregistrationClosed)
 from .event_calendar import EventCalendar
-from content.views import AdminLinksMixin
 
 User = get_user_model()
 EventGetter = get_eventgetter()
@@ -28,6 +32,7 @@ EventGetter = get_eventgetter()
 
 class AdministerRegistrationsView(StaticContextMixin,
                                   PermissionRequiredMixin,
+                                  MessageMixin,
                                   DetailView):
     """Viser påmeldingslisten til et Event med mulighet for å melde folk på og av."""
     model = Event
@@ -38,38 +43,45 @@ class AdministerRegistrationsView(StaticContextMixin,
     static_context = {'actions': [(key, name) for key, (name, _) in actions.items()]}
 
     def post(self, request, pk):
+        """Handle http post request"""
         action_key = request.POST.get('action')
-        name, method = self.actions[action_key]
+        _, method = self.actions[action_key]
         getattr(self, method)()
         return HttpResponseRedirect(reverse('event_admin', kwargs={'pk': pk}))
 
     def register_user(self):
         """Melder på brukeren nevnt i POST['text'] på arrangementet."""
         username = self.request.POST.get('text')
-        if username == "":
-            messages.warning(self.request, "Ingen brukernavn skrevet inn.")
+        if not username:
+            self.messages.warning("Ingen brukernavn skrevet inn.")
             return
-            
+
         try:
             user = User.objects.get(username=username)
             self.get_object().add_to_attending_or_waiting_list(user)
-        except (User.DoesNotExist, UserRegistrationException) as e: 
-            messages.warning(self.request, f"Kunne ikke legge til {username} i påmeldingslisten. Returnert error var: {type(e).__name__}: {str(e)}. Ta kontakt med WebKom, og oppgi denne feilmeldingen dersom du tror dette er en feil.")
-            pass
+        except (User.DoesNotExist, UserRegistrationException) as ex:
+            self.messages.warning(
+                f"Kunne ikke legge til {username} i påmeldingslisten. "
+                f"Returnert error var: {type(ex).__name__}: {str(ex)}. "
+                "Ta kontakt med WebKom, og oppgi denne feilmeldingen "
+                "dersom du tror dette er en feil.")
 
     def deregister_users(self):
         """Melder av brukerne nevnt i POST['user']."""
         user_list = self.request.POST.getlist('user')
-        if user_list == []:
-            messages.warning(self.request, "Ingen brukere krysset av!")
-            
+        if not user_list:
+            self.messages.warning("Ingen brukere krysset av!")
+
         for username in user_list:
             try:
                 user = User.objects.get(username=username)
                 self.get_object().deregister_user(user, respect_closed=False)
-            except (User.DoesNotExist, UserRegistrationException) as e:
-                messages.warning(self.request, f"Kunne ikke fjerne {username} fra påmeldingslisten. Returnert error var: {type(e).__name__}: {str(e)}. Ta kontakt med WebKom, og oppgi denne feilmeldingen dersom du tror dette er en feil.")
-                pass
+            except (User.DoesNotExist, UserRegistrationException) as ex:
+                self.messages.warning(
+                    f"Kunne ikke fjerne {username} fra påmeldingslisten. "
+                    f"Returnert error var: {type(ex).__name__}: {str(ex)}. "
+                    "Ta kontakt med WebKom, og oppgi denne feilmeldingen "
+                    "dersom du tror dette er en feil.")
 
 
 def calendar(request, year=None, month=None):
@@ -114,7 +126,8 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         event = self.object
-        context['eventregistrations'] = event.eventregistration_set.order_by('-attending', 'user__last_name')
+        regs = event.eventregistration_set
+        context['eventregistrations'] = regs.order_by('-attending', 'user__last_name')
         return context
 
 
@@ -141,6 +154,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
 
 
 class UserEventView(LoginRequiredMixin, TemplateView):
+    """Show list of events the logged in user is registered to"""
     template_name = 'events/event_showuser.html'
 
     def get_context_data(self, **kwargs):
@@ -163,7 +177,8 @@ class RegisterUserView(LoginRequiredMixin,
     model = Event
     template_name = 'events/event_detail.html'
 
-    def post(self, *args, **kwargs):
+    def post(self, *args, **kwargs): # pylint: disable=W0613
+        """Handle http post request"""
         reg_type = self.request.POST['registration_type']
         user = self.request.user
 
@@ -205,8 +220,7 @@ class RegisterUserView(LoginRequiredMixin,
             self.get_object().deregister_user(user)
         except DeregistrationClosed:
             return "Avmeldingsfristen er ute."
-        else:
-            return "Du er meldt av arrangementet."
+        return "Du er meldt av arrangementet."
 
 
 def ical_event(request, event_id):

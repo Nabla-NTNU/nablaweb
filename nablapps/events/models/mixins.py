@@ -1,10 +1,16 @@
-from datetime import datetime
+"""
+Mixins to be inherited by AbstractEvent
 
+They are split up in order make them easier to read,
+and because there was (once upon a time) an idea to split up the information
+about an event and the registration info into different models.
+"""
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import Group
-
 from six.moves.urllib.parse import urlparse
-from ..exceptions import RegistrationNotRequiredException, RegistrationNotAllowed, RegistrationNotOpen
+from ..exceptions import (RegistrationNotRequiredException,
+                          RegistrationNotAllowed, RegistrationNotOpen)
 
 
 class EventInfoMixin(models.Model):
@@ -14,7 +20,8 @@ class EventInfoMixin(models.Model):
         max_length=20,
         blank=True,
         null=True,
-        help_text="Brukes på steder hvor det ikke er plass til å skrive hele overskriften, for eksempel kalenderen.")
+        help_text="Brukes på steder hvor det ikke er plass til å skrive hele overskriften, "
+                  "for eksempel kalenderen.")
     organizer = models.CharField(
         verbose_name="organisert av",
         max_length=100,
@@ -42,9 +49,11 @@ class EventInfoMixin(models.Model):
         abstract = True
 
     def has_started(self):
+        """Has the event started?"""
         return self.event_start < datetime.now()
 
     def has_finished(self):
+        """Is the event finished?"""
         return self.event_end and self.event_end < datetime.now()
 
     def clean(self):
@@ -91,8 +100,10 @@ class RegistrationInfoMixin(models.Model):
         verbose_name="har venteliste",
         null=True,
         blank=True,
-        help_text=("Om ventelisten er på, vil det være mulig å melde seg på selv om arrangementet er fullt. "
-                   "De som er i ventelisten vil automatisk bli påmeldt etter hvert som plasser blir ledige.")
+        help_text=("Om ventelisten er på, vil det være mulig å melde seg på "
+                   "selv om arrangementet er fullt. "
+                   "De som er i ventelisten vil automatisk bli påmeldt "
+                   "etter hvert som plasser blir ledige.")
     )
     open_for = models.ManyToManyField(
         Group,
@@ -110,12 +121,15 @@ class RegistrationInfoMixin(models.Model):
         return (not self.open_for.exists()) or self.open_for.filter(user=user).exists()
 
     def registration_has_started(self):
+        """Return whether registration has started"""
         return self.registration_required and self.registration_start < datetime.now()
 
     def registration_open(self):
+        """Return whether it is possible to register for the event"""
         return self.registration_has_started() and datetime.now() < self.registration_deadline
 
     def deregistration_closed(self):
+        """Return whether the event is closed for deregistration."""
         return self.deregistration_deadline and (self.deregistration_deadline < datetime.now())
 
     def _assert_user_allowed_to_register(self, user):

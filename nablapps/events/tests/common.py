@@ -1,3 +1,7 @@
+"""
+This module contains things that are in common
+for the different event tests.
+"""
 from datetime import datetime
 
 from django.test import TestCase
@@ -8,6 +12,9 @@ User = get_user_model()
 
 
 class GeneralEventTest(TestCase):
+    """
+    Sets up some events and users to be used in other tests.
+    """
     def setUp(self):
         # Lag en bruker som kan "lage" arrangementet
         self.user = User.objects.create(

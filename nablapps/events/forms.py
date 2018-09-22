@@ -1,3 +1,6 @@
+"""
+Forms for events
+"""
 import operator
 
 from django.forms import BooleanField, ValidationError, ModelForm
@@ -7,15 +10,20 @@ from .models import Event
 
 
 class EventForm(ModelForm):
+    """
+    Form to validate creation and editing of Event-instances in the admin interface
+    """
     has_queue = BooleanField(
         required=False,
         label="Har venteliste",
-        help_text=("Hvis arrangementet har venteliste, går det ann å melde seg på selv etter at det er fullt. "
+        help_text=("Hvis arrangementet har venteliste, "
+                   "går det ann å melde seg på selv etter at det er fullt. "
                    "Man havner da på venteliste, og blir automatisk meldt på om det blir ledig."))
 
     # Fields required when registration_required is set
     required_registration_fields = ("places", "registration_deadline", "has_queue")
-    registration_fields = required_registration_fields + ("deregistration_deadline", "registration_start")
+    registration_fields = required_registration_fields + ("deregistration_deadline",
+                                                          "registration_start")
 
     # Restrict order of the DateTimeFields
     datetime_restrictions = (
@@ -64,9 +72,10 @@ class EventForm(ModelForm):
     def _assert_required_registration_fields_supplied(self):
         for field in self.required_registration_fields:
             if self.cleaned_data.get(field) is None and (field not in self._errors):
-                error = ValidationError('Feltet "%(field)s" er påkrevd når %(field2)s er valgt.',
-                                        params={"field": self.fields[field].label,
-                                                "field2": self.fields["registration_required"].label})
+                error = ValidationError(
+                    'Feltet "%(field)s" er påkrevd når %(field2)s er valgt.',
+                    params={"field": self.fields[field].label,
+                            "field2": self.fields["registration_required"].label})
                 self.add_error(field, error)
 
     def _ignore_registration_fields(self):
