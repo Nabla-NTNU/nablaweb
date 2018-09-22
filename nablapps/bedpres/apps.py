@@ -1,7 +1,13 @@
+"""Config for BedpresApp"""
 from django.apps import AppConfig
 
 
 class BedpresConfig(AppConfig):
+    """
+    Config for BedpresApp
+
+    Makes sure the api-keys to BPC is supplied.
+    """
     name = 'nablapps.bedpres'
     verbose_name = 'Bedriftspresentasjoner'
 

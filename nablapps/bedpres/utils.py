@@ -1,7 +1,10 @@
+"""
+Utilities for Bedpres
+"""
 
 
 class InvalidCardNum(Exception):
-    pass
+    """Exception to be raised if a user doesn't have a valid NTNU-cardnumber"""
 
 
 def get_bpc_user_dictionary(user):
