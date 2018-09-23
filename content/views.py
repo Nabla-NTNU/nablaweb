@@ -1,8 +1,12 @@
-from django.core.urlresolvers import reverse
+# pylint: disable=C0111
+"""
+Mixin classes for views
+"""
+from django.urls import reverse
 from django.http import HttpResponseForbidden
 
 
-class AdminLinksMixin(object):
+class AdminLinksMixin:
     """
     Adds links to the admin page for an object to the context.
 
@@ -10,34 +14,37 @@ class AdminLinksMixin(object):
     """
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # pylint: disable=protected-access
         app_label = self.model._meta.app_label
         model_name = self.model._meta.model_name
-        view_name = "admin:{app_label}_{model_name}_{action}"
-        context["change_url"] = reverse(view_name.format(action="change", **locals()), args=[self.object.id])
-        context["delete_url"] = reverse(view_name.format(action="delete", **locals()), args=[self.object.id])
+        context["change_url"] = reverse(f"admin:{app_label}_{model_name}_change",
+                                        args=[self.object.id])
+        context["delete_url"] = reverse(f"admin:{app_label}_{model_name}_delete",
+                                        args=[self.object.id])
         return context
 
 
-class ViewAddMixin(object):
+class ViewAddMixin:
     """
     Adds one view to the object each time the object is dispatched
     """
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, **kwargs):
         self.object.add_view()
-        return super().get_context_data(*args, **kwargs)
+        return super().get_context_data(**kwargs)
 
 
-class PublishedMixin(object):
+class PublishedMixin:
     """
     Fails to load unpublished objects.
     """
 
     def dispatch(self, request, *args, **kwargs):
         user = request.user
+        # pylint: disable=protected-access
         app_label = self.model._meta.app_label
         model_name = self.model._meta.model_name
-        perm = "{}.change_{}".format(app_label, model_name)
+        perm = f"{app_label}.change_{model_name}"
         if self.get_object().is_published or user.has_perm(perm):
             return super().dispatch(request, *args, **kwargs)
 
@@ -54,7 +61,7 @@ def update_published_state(model):
             m.save()
 
 
-class PublishedListMixin(object):
+class PublishedListMixin:
     """
     Excludes unpublished objects from the queryset.
     """
@@ -63,4 +70,3 @@ class PublishedListMixin(object):
         update_published_state(self.model)
         queryset = super().get_queryset()
         return queryset.exclude(published=False)
-

@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 
 from setuptools import setup, find_packages
 
-from content import VERSION
-
 requirements = [
     'django>=1.8',
     'django-image-cropping',
@@ -16,7 +14,7 @@ requirements = [
 
 setup(
     name="content",
-    version=VERSION,
+    version="0.3",
     author="Webkom",
     description="A common functionality app for django.",
     keywords="django content",

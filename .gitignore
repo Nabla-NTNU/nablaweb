@@ -20,3 +20,4 @@ bower_components
 content.egg-info
 
 *.log
+.vscode

@@ -1,3 +1,6 @@
+"""
+Contains a single model called ContentImage
+"""
 from content.models import BaseImageModel
 
 

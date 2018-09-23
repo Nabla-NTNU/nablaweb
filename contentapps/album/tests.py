@@ -9,16 +9,16 @@ UserModel = get_user_model()
 class AlbumTest(TestCase):
 
     def test_album_creation(self):
-        self.album = Album()
-        self.album.title = "Some album"
-        self.album.visibility = 'p'
-        self.album.save()
+        album = Album()
+        album.title = "Some album"
+        album.visibility = 'p'
+        album.save()
 
-        self.response = self.client.get(
-            self.album.get_absolute_url()
+        response = self.client.get(
+            album.get_absolute_url()
         )
 
-        self.assertIn(self.album.title.encode(), self.response.content)
+        self.assertIn(album.title.encode(), response.content)
 
 
 class AlbumVisibilityTest(TestCase):

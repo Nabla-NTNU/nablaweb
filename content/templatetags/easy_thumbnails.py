@@ -1,3 +1,4 @@
+# pylint: disable=W0614,wildcard-import
 """
 A hack to be able to load easy_thumbnails templatetags using
 {% load easy_thumbnails %}
