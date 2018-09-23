@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "17d27190b346716709c952db3762c88967f2e060de601ddc84696364f3319c11"
+            "sha256": "3630027a82532c234968330f9ed53d0c818e8c9a3481e95ad7926195f5460a12"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -75,7 +75,7 @@
         "content": {
             "editable": true,
             "git": "https://bitbucket.org/webkom/content-app.git",
-            "ref": "1e451bfd956fcdbfa8df2d5bb834137e2819752a"
+            "ref": "a510e617279c8ef457c2643ff1151df52dbc278f"
         },
         "cryptography": {
             "hashes": [
@@ -206,10 +206,10 @@
         },
         "django-nyt": {
             "hashes": [
-                "sha256:7e81a7a48186c86f4ab235cd27ab46e950fdd8bef52b952c9cb9ed9e67cd3830",
-                "sha256:cf52ebc854edc2ed2e4224f27027be4900917820c83eae6239dca9b28697732e"
+                "sha256:02c828e483606addbaeea8c08d4c7301be6fdba5e00f03b7a984b4cbae353e21",
+                "sha256:bf65e3d7e138b3c00879b6a7420c1f4f897e6bd6a9d2f09d7cd7ac5f623d8448"
             ],
-            "version": "==1.1.1"
+            "version": "==1.1.2"
         },
         "django-sekizai": {
             "hashes": [
@@ -333,9 +333,9 @@
         },
         "pycparser": {
             "hashes": [
-                "sha256:99a8ca03e29851d96616ad0404b4aad7d9ee16f25c9f9708a11faf2810f7b226"
+                "sha256:a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3"
             ],
-            "version": "==2.18"
+            "version": "==2.19"
         },
         "pymysql": {
             "hashes": [
@@ -368,10 +368,10 @@
         },
         "sorl-thumbnail": {
             "hashes": [
-                "sha256:1cc6d913fe4f1224e479f25a23ec2ad3ca71c3154919a2c9463b07e7fbe11ac2",
-                "sha256:c5ef989da07d31925754922ce95783fd2b1f8735124c0510884633eb32a4cd3e"
+                "sha256:8dfe5fda91a5047d1d35a0b9effe7b000764a01d648e15ca076f44e9c34b6dbd",
+                "sha256:d9e3f018d19293824803e4ffead96b19dfcd44fa7987cea392f50436817bef34"
             ],
-            "version": "==12.4.1"
+            "version": "==12.5.0"
         },
         "text-unidecode": {
             "hashes": [
