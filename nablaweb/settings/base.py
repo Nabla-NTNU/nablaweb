@@ -162,12 +162,8 @@ BOWER_COMPONENTS_ROOT = VARIABLE_CONTENT
 BOWER_INSTALLED_APPS = (
     'jquery#1.9.x',
     'bootstrap#3.3.7',
-    'rangy',
     'font-awesome#4.7.0',
-    'pixi.js',
-    'PhysicsJS',
     'requirejs',
-    'jquery-file-upload'
 )
 
 
