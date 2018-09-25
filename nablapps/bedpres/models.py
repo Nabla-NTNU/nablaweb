@@ -1,7 +1,7 @@
 """
 BPC-bedpres as a django model
 """
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 
 from nablapps.events.models.abstract_event import AbstractEvent

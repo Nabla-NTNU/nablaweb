@@ -6,7 +6,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.template.defaultfilters import slugify
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from nablapps.accounts.models import NablaGroup
 

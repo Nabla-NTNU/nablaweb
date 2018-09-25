@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from content.models import WithPicture, TimeStamped
 from nablapps.news.models import FrontPageNews, TextContent

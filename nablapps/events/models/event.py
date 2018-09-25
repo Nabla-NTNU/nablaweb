@@ -2,7 +2,7 @@
 The Event model
 """
 import logging
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from ..exceptions import RegistrationAlreadyExists, EventFullException, DeregistrationClosed
 from .abstract_event import AbstractEvent

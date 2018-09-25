@@ -1,5 +1,5 @@
 from content.models import PublicationManagerMixin
-from django.core import urlresolvers
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.safestring import mark_safe
@@ -23,7 +23,7 @@ class Test(PublicationManagerMixin, InteractiveElement):
         verbose_name_plural = "brukertester"
 
     def get_absolute_url(self):
-        return urlresolvers.reverse('user_test', kwargs={'pk': self.id})
+        return reverse('user_test', kwargs={'pk': self.id})
 
     def __str__(self):
         return str(self.title)
@@ -45,7 +45,7 @@ class TestQuestion(models.Model):
 
     def changeform_link(self):
         if self.id:
-            changeform_url = urlresolvers.reverse(
+            changeform_url = reverse(
                 'admin:interactive_testquestion_change', args=(self.id,)
             )
             liste = "<ul>"
