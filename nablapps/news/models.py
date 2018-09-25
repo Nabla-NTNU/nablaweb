@@ -84,7 +84,7 @@ class FrontPageNews(models.Model):
     # Fields for referencing objects of different contenttype
     # See https://docs.djangoproject.com/en/1.11/ref/contrib/contenttypes/#generic-relations
     object_id = models.PositiveIntegerField(blank=True, null=True)
-    content_type = models.ForeignKey(ContentType, null=True)
+    content_type = models.ForeignKey(ContentType, null=True, on_delete=models.CASCADE)
     content_object = GenericForeignKey('content_type', 'object_id')
 
     # Fields for sorting and prioritizing on the frontpage

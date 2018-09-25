@@ -40,6 +40,7 @@ class Poll(models.Model):
         verbose_name='Lagt til av',
         editable=False,
         null=True,
+        on_delete=models.CASCADE,
     )
 
     edit_date = models.DateTimeField(
@@ -91,6 +92,7 @@ class Poll(models.Model):
 class Choice(models.Model):
     poll = models.ForeignKey(
         Poll,
+        on_delete=models.CASCADE,
         related_name="choices"
     )
 
@@ -116,6 +118,7 @@ class Choice(models.Model):
         verbose_name='Lagt til av',
         editable=False,
         help_text="Hvem som la til valget i avstemningen",
+        on_delete=models.CASCADE,
         null=True
     )
 

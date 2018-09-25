@@ -85,6 +85,7 @@ class Advert(TimeStamped, TextContent):
     company = models.ForeignKey(
         'Company',
         verbose_name="Bedrift",
+        on_delete=models.CASCADE,
         help_text="Hvilken bedrift stillingen er hos")
 
     relevant_for_group = models.ManyToManyField(

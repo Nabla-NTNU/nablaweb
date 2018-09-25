@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('favicon', models.ImageField(upload_to='', blank=True)),
-                ('site', models.OneToOneField(to='sites.Site')),
+                ('site', models.OneToOneField(to='sites.Site', on_delete=models.CASCADE)),
             ],
         ),
     ]

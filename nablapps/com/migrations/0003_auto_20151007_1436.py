@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='committee',
             name='leader',
-            field=models.ForeignKey(blank=True, verbose_name='Leder', to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(blank=True, verbose_name='Leder', to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
         ),
     ]

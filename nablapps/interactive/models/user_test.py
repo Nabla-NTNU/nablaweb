@@ -40,6 +40,7 @@ class TestQuestion(models.Model):
     test = models.ForeignKey(
         "Test",
         null=True,
+        on_delete=models.CASCADE,
         related_name="questions"
     )
 
@@ -91,6 +92,7 @@ class TestQuestionAlternative(models.Model):
     question = models.ForeignKey(
         'TestQuestion',
         null=True,
+        on_delete=models.CASCADE,
         related_name="alternatives")
 
     target = models.ManyToManyField(
@@ -148,6 +150,7 @@ class TestResult(models.Model):
     test = models.ForeignKey(
         "Test",
         null=True,
+        on_delete=models.CASCADE,
         related_name="results"
     )
 

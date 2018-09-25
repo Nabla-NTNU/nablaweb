@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='generaloptions',
             name='main_story_content_type',
-            field=models.ForeignKey(null=True, to='contenttypes.ContentType'),
+            field=models.ForeignKey(null=True, to='contenttypes.ContentType', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='generaloptions',

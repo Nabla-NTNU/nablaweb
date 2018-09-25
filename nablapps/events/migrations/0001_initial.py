@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('date', models.DateTimeField(auto_now_add=True, verbose_name='Påmeldingsdato', null=True)),
                 ('number', models.PositiveIntegerField(blank=True, help_text='Kønummer som tilsvarer plass på ventelisten/påmeldingsrekkefølge.', verbose_name='kønummer', null=True)),
                 ('attending', models.BooleanField(help_text='Hvis denne er satt til sann har man en plass på arrangementet ellers er det en ventelisteplass.', verbose_name='har plass', default=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, verbose_name='bruker', null=True)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, verbose_name='bruker', null=True, on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'påmelding',
@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Event',
             fields=[
-                ('news_ptr', models.OneToOneField(parent_link=True, serialize=False, auto_created=True, primary_key=True, to='news.News')),
+                ('news_ptr', models.OneToOneField(parent_link=True, serialize=False, auto_created=True, primary_key=True, to='news.News', on_delete=models.CASCADE)),
                 ('short_name', models.CharField(blank=True, help_text='Brukes på steder hvor det ikke er plass til å skrive hele overskriften, for eksempel kalenderen.', max_length=20, null=True, verbose_name='kort navn')),
                 ('organizer', models.CharField(blank=True, help_text='Den som står bak arrangementet', max_length=100, verbose_name='organisert av')),
                 ('location', models.CharField(max_length=100, verbose_name='sted')),
@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='eventregistration',
             name='event',
-            field=models.ForeignKey(null=True, to='events.Event'),
+            field=models.ForeignKey(null=True, to='events.Event', on_delete=models.CASCADE),
         ),
         migrations.AlterUniqueTogether(
             name='eventregistration',

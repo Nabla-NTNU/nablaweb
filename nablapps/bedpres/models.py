@@ -28,6 +28,7 @@ class BedPres(BPCEventMixin, AbstractEvent):
         Company,
         verbose_name="Bedrift",
         blank=False,
+        on_delete=models.CASCADE,
         help_text="Hvilken bedrift som står bak bedriftspresentasjonen")
 
     class Meta:

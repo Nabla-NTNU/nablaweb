@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='poll',
             name='content_type',
-            field=models.ForeignKey(to='contenttypes.ContentType', editable=False, null=True),
+            field=models.ForeignKey(to='contenttypes.ContentType', editable=False, null=True, on_delete=models.CASCADE),
         ),
     ]

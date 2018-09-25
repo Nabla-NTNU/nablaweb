@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='NablaGroup',
             fields=[
-                ('group_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, parent_link=True, to='auth.Group')),
+                ('group_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, parent_link=True, to='auth.Group', on_delete=models.CASCADE)),
                 ('description', models.TextField(blank=True, verbose_name='Beskrivelse')),
                 ('mail_list', models.EmailField(blank=True, max_length=254, verbose_name='Epostliste')),
                 ('group_type', models.CharField(blank=True, max_length=10, choices=[('komite', 'Komité'), ('kull', 'Kull'), ('studprog', 'Studieprogram'), ('komleder', 'Komitéleder'), ('styremedlm', 'Styremedlem'), ('stilling', 'Stilling')])),
@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FysmatClass',
             fields=[
-                ('nablagroup_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, parent_link=True, to='accounts.NablaGroup')),
+                ('nablagroup_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, parent_link=True, to='accounts.NablaGroup', on_delete=models.CASCADE)),
                 ('starting_year', models.CharField(unique=True, max_length=4, verbose_name='År startet')),
             ],
             options={

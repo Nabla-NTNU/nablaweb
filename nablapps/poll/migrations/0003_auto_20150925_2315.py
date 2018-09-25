@@ -24,11 +24,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='choice',
             name='created_by',
-            field=models.ForeignKey(editable=False, verbose_name='Lagt til av', null=True, related_name='choice_created_by', help_text='Hvem som la til valget i avstemningen', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(editable=False, verbose_name='Lagt til av', null=True, related_name='choice_created_by', help_text='Hvem som la til valget i avstemningen', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='poll',
             name='created_by',
-            field=models.ForeignKey(editable=False, verbose_name='Lagt til av', null=True, related_name='poll_created_by', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(editable=False, verbose_name='Lagt til av', null=True, related_name='poll_created_by', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
     ]

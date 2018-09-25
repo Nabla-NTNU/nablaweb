@@ -115,6 +115,7 @@ class Podcast(PublicationManagerMixin, models.Model):
     season = models.ForeignKey(
         'Season',
         verbose_name="Sesong",
+        on_delete=models.CASCADE,
         null=True,
         blank=True
     )
