@@ -1,7 +1,7 @@
 from datetime import datetime as dt
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.forms.extras.widgets import SelectDateWidget
+from django.forms.widgets import SelectDateWidget
 
 from .models import NablaUser, RegistrationRequest, FysmatClass
 

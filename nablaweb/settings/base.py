@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
-# Django instillinger som er felles for alle instanser av nablaweb
-# Ikke bruk denne til å kjøre django med
-# Bruk heller devel.py eller production.py
-
-
+"""
+Django instillinger som er felles for alle instanser av nablaweb
+Ikke bruk denne til å kjøre django med
+Bruk heller devel.py eller production.py
+"""
 import os
 from easy_thumbnails.conf import Settings as EasyThumbnailSettings
 
@@ -77,7 +76,7 @@ TEMPLATES = [
     }
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
