@@ -8,9 +8,8 @@ class ContactForm(forms.Form):
 
     def process(self):
         cd = self.cleaned_data
-        #Gjør noe lurt med dataen her
         subject = cd['subject']
-        message = cd['message']
+        message = cd['message']+'-\n'+ cd['your_name']
         email = cd['email']
         return subject, message, email
 
