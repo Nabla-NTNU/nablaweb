@@ -1,6 +1,6 @@
 from datetime import datetime, date
 from django.contrib.auth.models import Group, AbstractUser, UserManager
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from hashlib import sha1
 from .utils import activate_user_and_create_password, send_activation_email

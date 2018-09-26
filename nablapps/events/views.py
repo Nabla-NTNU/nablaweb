@@ -3,7 +3,7 @@ Views for events app
 """
 import datetime
 from itertools import chain
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template import loader

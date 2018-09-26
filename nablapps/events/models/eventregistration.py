@@ -17,11 +17,13 @@ class EventRegistration(models.Model):
 
     event = models.ForeignKey(
         'Event',
+        on_delete=models.CASCADE,
         blank=False,
         null=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name='bruker',
+        on_delete=models.CASCADE,
         blank=False,
         null=True)
     date = models.DateTimeField(

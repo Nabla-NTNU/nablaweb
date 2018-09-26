@@ -1,7 +1,7 @@
 from collections import Counter
 from itertools import chain
 from django.views.generic import DetailView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, redirect
 from django.http import Http404
 from django.template.response import TemplateResponse

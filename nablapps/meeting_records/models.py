@@ -1,10 +1,18 @@
-from content.models import TimeStamped
+"""
+Models for meeting_records app
+"""
 from datetime import date
+from content.models import TimeStamped
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 class MeetingRecord(TimeStamped):
+    """
+    Model for a meeting record.
+
+    Assumes the meeting record is in the format of a pdf-file.
+    """
 
     title = models.CharField(
         verbose_name="tittel",
@@ -44,4 +52,5 @@ class MeetingRecord(TimeStamped):
         return self.title
 
     def get_absolute_url(self):
+        """Return the canonical url for the record"""
         return reverse("meetingrecord_detail", kwargs={'pk': self.pk, 'slug': self.slug})

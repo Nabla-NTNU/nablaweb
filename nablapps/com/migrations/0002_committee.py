@@ -17,11 +17,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Committee',
             fields=[
-                ('group', models.OneToOneField(primary_key=True, serialize=False, to='auth.Group', verbose_name='Gruppe')),
+                ('group', models.OneToOneField(primary_key=True, serialize=False, to='auth.Group', verbose_name='Gruppe', on_delete=models.CASCADE)),
                 ('mail_list', models.EmailField(blank=True, max_length=254, verbose_name='Epostliste')),
                 ('name', models.CharField(unique=True, max_length=80, verbose_name='name')),
-                ('leader', models.ForeignKey(to=settings.AUTH_USER_MODEL, blank=True, verbose_name='Leder')),
-                ('page', models.OneToOneField(to='com.ComPage', blank=True, verbose_name='Komitéside')),
+                ('leader', models.ForeignKey(to=settings.AUTH_USER_MODEL, blank=True, verbose_name='Leder', on_delete=models.CASCADE)),
+                ('page', models.OneToOneField(to='com.ComPage', blank=True, verbose_name='Komitéside', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'Komité',

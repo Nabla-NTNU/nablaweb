@@ -1,3 +1,6 @@
+"""
+Urls for jobs app
+"""
 from django.conf.urls import url
 from .views import (
     EverythingList,

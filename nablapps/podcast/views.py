@@ -2,7 +2,7 @@ from django.http import Http404
 from django.views.generic import TemplateView, DetailView, ListView
 from hitcount.views import HitCountDetailView
 from content.views import AdminLinksMixin, PublishedMixin, update_published_state
-from utils.view_mixins import FlatPageMixin
+from nablapps.core.view_mixins import FlatPageMixin
 
 from .models import Podcast, Season, get_season_count
 

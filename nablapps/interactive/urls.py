@@ -2,7 +2,6 @@ from django.conf.urls import url
 from .views import AdventCalendarView, AdventDoorView, QuizListView, QuizView, QuizResultView
 from .views.quiz import quiz_reply, QuizScoreboardView, QuizResultDeleteView
 from .views.user_test import test_result, TestView
-from .views.game import GameView
 from .views.advent import participate_in_competition, AdventDoorAdminView, reset_door
 
 urlpatterns = [
@@ -47,8 +46,4 @@ urlpatterns = [
     url(r'^brukertest/(?P<pk>[0-9]+)/resultat$',
         test_result,
         name="test_result"),
-
-    url(r'^spill/$',
-        GameView.as_view(),
-        name="game")
 ]

@@ -20,8 +20,8 @@ class Migration(migrations.Migration):
                 ('story', models.TextField(help_text='Ansvarsområde eller lignende', verbose_name='Beskrivelse', blank=True)),
                 ('joined_date', models.DateField(help_text='Dato personen ble med i komiteen', null=True, verbose_name='Ble med', blank=True)),
                 ('is_active', models.BooleanField(default=True, verbose_name='Aktiv?')),
-                ('com', models.ForeignKey(verbose_name='Komité', to='auth.Group')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('com', models.ForeignKey(verbose_name='Komité', to='auth.Group', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'komitemedlem',
@@ -36,8 +36,8 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(help_text='Teksten på komitésiden', verbose_name='Beskrivelse', blank=True)),
                 ('slug', models.CharField(verbose_name='Slug til URL-er', unique=True, max_length=50, editable=False)),
                 ('last_changed_date', models.DateTimeField(auto_now=True, verbose_name='Sist redigert', null=True)),
-                ('com', models.ForeignKey(to='auth.Group')),
-                ('last_changed_by', models.ForeignKey(related_name='compage_edited', blank=True, editable=False, to=settings.AUTH_USER_MODEL, null=True, verbose_name='Sist endret av')),
+                ('com', models.ForeignKey(to='auth.Group', on_delete=models.CASCADE)),
+                ('last_changed_by', models.ForeignKey(related_name='compage_edited', blank=True, editable=False, to=settings.AUTH_USER_MODEL, null=True, verbose_name='Sist endret av', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'komiteside',

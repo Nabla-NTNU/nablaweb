@@ -1,6 +1,6 @@
 from content.models import PublicationManagerMixin
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from image_cropping.fields import ImageRatioField
 
 
@@ -115,6 +115,7 @@ class Podcast(PublicationManagerMixin, models.Model):
     season = models.ForeignKey(
         'Season',
         verbose_name="Sesong",
+        on_delete=models.CASCADE,
         null=True,
         blank=True
     )

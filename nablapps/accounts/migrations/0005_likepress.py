@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
                 ('reference_id', models.IntegerField(null=True)),
                 ('model_name', models.CharField(null=True, max_length=100)),
-                ('user', models.ForeignKey(related_name='likes', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(related_name='likes', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
     ]

@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('pub_date', models.DateTimeField(auto_now_add=True)),
                 ('photo', models.ImageField(verbose_name='bilde', upload_to='product_photo')),
                 ('price', models.DecimalField(max_digits=5, verbose_name='pris', default='123', decimal_places=2)),
-                ('category', models.ForeignKey(null=True, blank=True, to='nablashop.Category')),
+                ('category', models.ForeignKey(null=True, blank=True, to='nablashop.Category', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'Produkt',

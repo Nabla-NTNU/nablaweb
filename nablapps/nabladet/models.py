@@ -1,7 +1,7 @@
 import os
 from content.models import TimeStamped, WithPicture
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from nablapps.news.models import TextContent
 from .pdfthumbnailer import thumbnail_pdf

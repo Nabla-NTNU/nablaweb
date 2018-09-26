@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
-# Django instillinger som er felles for alle instanser av nablaweb
-# Ikke bruk denne til å kjøre django med
-# Bruk heller devel.py eller production.py
-
-
+"""
+Django instillinger som er felles for alle instanser av nablaweb
+Ikke bruk denne til å kjøre django med
+Bruk heller devel.py eller production.py
+"""
 import os
 from easy_thumbnails.conf import Settings as EasyThumbnailSettings
 
@@ -71,13 +70,13 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'sekizai.context_processors.sekizai',
-                'nablaweb.context_processors.get_primary_dir',
+                'nablapps.core.context_processors.get_primary_dir',
             ],
         },
     }
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -102,6 +101,7 @@ INSTALLED_APPS = [
     'nablapps.accounts',
     'nablapps.bedpres',
     'nablapps.com',
+    'nablapps.core',
     'nablapps.exchange',
     'nablapps.interactive',
     'nablapps.jobs',
@@ -110,7 +110,6 @@ INSTALLED_APPS = [
     'nablapps.nablashop',
     'nablapps.podcast',
     'nablapps.poll',
-    'nablaweb',
 
     ###########################
     # Eksternt utviklede apps #
@@ -162,12 +161,8 @@ BOWER_COMPONENTS_ROOT = VARIABLE_CONTENT
 BOWER_INSTALLED_APPS = (
     'jquery#1.9.x',
     'bootstrap#3.3.7',
-    'rangy',
     'font-awesome#4.7.0',
-    'pixi.js',
-    'PhysicsJS',
     'requirejs',
-    'jquery-file-upload'
 )
 
 
