@@ -1,17 +1,17 @@
+"""
+Models for nabladet app
+"""
 import os
-from content.models import TimeStamped, WithPicture
 from django.conf import settings
 from django.urls import reverse
 from django.db import models
+from content.models import TimeStamped, WithPicture
 from nablapps.news.models import TextContent
 from .pdfthumbnailer import thumbnail_pdf
 
 
-class Nablad(
-    TimeStamped,
-    WithPicture,
-    TextContent,
-):
+class Nablad(TimeStamped, WithPicture, TextContent):
+    """Model representing a nablad"""
     pub_date = models.DateField(
         verbose_name='publisert',
         blank=False,
@@ -47,6 +47,7 @@ class Nablad(
         ordering = ("-pub_date",)
 
     def update_thumbnail(self):
+        """Create a thumbnail of the first page of the pdf of the nablad."""
         absolute_pdfpath = os.path.join(settings.MEDIA_ROOT, self.file.name)
         absolute_thumbpath = thumbnail_pdf(absolute_pdfpath)
         self.thumbnail.name = os.path.relpath(absolute_thumbpath, start=settings.MEDIA_ROOT)
@@ -65,6 +66,7 @@ class Nablad(
         return self.headline
 
     def get_absolute_url(self):
+        """Get canonical url for nablad"""
         return reverse("nablad_detail", kwargs={'pk': self.pk, 'slug': self.slug})
 
     def get_model_name(self):

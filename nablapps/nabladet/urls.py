@@ -1,5 +1,8 @@
+"""
+Urls for nabladet app
+"""
 from django.conf.urls import url
-from .views import NabladListView, NabladDetailView, NabladList
+from .views import NabladDetailView, NabladList
 
 urlpatterns = [
     url(r'^$',
