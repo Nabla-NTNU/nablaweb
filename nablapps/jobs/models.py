@@ -1,8 +1,13 @@
+"""
+Models for jobs app
+
+Defines mainly the Advert and Company models.
+"""
 from datetime import datetime
 from django.urls import reverse
 from django.db import models
 from content.models import WithPicture, TimeStamped
-from nablapps.news.models import FrontPageNews, TextContent
+from nablapps.news.models import TextContent
 
 
 # Det er litt stygt å bruke modeller for YearChoices og RelevantForChoices, men
@@ -10,6 +15,10 @@ from nablapps.news.models import FrontPageNews, TextContent
 
 
 class YearChoices(models.Model):
+    """
+    Model for each choice for study year in adverts.
+    This should really not be a model, because this is static content.
+    """
     year = models.IntegerField(
         blank=False,
         verbose_name="Klasse",
@@ -23,14 +32,14 @@ class YearChoices(models.Model):
             ("can_see_static_models", "Can see static models"),
         )
 
-    def long_name(self):
-        return u'%s. klasse' % str(self.year)
-
     def __str__(self):
-        return u'%s' % str(self.year)
+        return f'{self.year}. klasse'
 
 
 class RelevantForChoices(models.Model):
+    """
+    Model for choices for who an advert is relevant for.
+    """
     studieretning = models.CharField(
         max_length=50,
         verbose_name="Valg",
@@ -41,10 +50,11 @@ class RelevantForChoices(models.Model):
         verbose_name_plural = 'Mulige valg for "relevant for"'
 
     def __str__(self):
-        return u'%s' % self.studieretning
+        return self.studieretning
 
 
 class TagChoices(models.Model):
+    """Tags for adverts"""
     tag = models.CharField(
         max_length=100,
         verbose_name="Tags",
@@ -58,10 +68,13 @@ class TagChoices(models.Model):
         ordering = ("tag",)
 
     def __str__(self):
-        return u'%s' % self.tag
+        return self.tag
 
 
 class Company(WithPicture):
+    """
+    Model representing a company which has an advert out for a job.
+    """
     website = models.URLField(max_length=200, blank=True, verbose_name="Nettside")
     name = models.CharField(verbose_name="navn", max_length=200, blank=False)
     description = models.TextField(verbose_name="beskrivelse", blank=True)
@@ -77,11 +90,16 @@ class Company(WithPicture):
 
 
 class AdvertManager(models.Manager):
+    """Model manager for Advert model"""
     def active(self):
+        """Get only active adverts"""
         return self.exclude(removal_date__lte=datetime.now())
 
 
 class Advert(TimeStamped, TextContent):
+    """
+    Model representing an advert for a job.
+    """
     company = models.ForeignKey(
         'Company',
         verbose_name="Bedrift",
@@ -138,11 +156,20 @@ class Advert(TimeStamped, TextContent):
 
     @property
     def picture(self):
+        """
+        Get picture for the advert
+        This is here mostly for making adverts compatible with the front page.
+        """
         return self.company.picture
 
     @property
     def cropping(self):
+        """
+        Get cropping corresponding to the picture.
+        This is here mostly for making adverts compatible with the front page.
+        """
         return self.company.cropping
 
     def get_absolute_url(self):
+        """Get the canonical url for the advert."""
         return reverse("advert_detail", kwargs={'pk': self.pk, 'slug': self.slug})
