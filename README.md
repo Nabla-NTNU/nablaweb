@@ -10,8 +10,8 @@ For å komme i gang med Nablaweb, sjekk wikien på: https://bitbucket.org/webkom
 
 ## Systemavhengigheter (ufullstendig)
 
-* libmagickwand-dev (ImageMagick)
-* python 3.4 (eller nyere)
+* libmagickwand-dev (ImageMagick) (trenges kun dersom du lager et nablad-objekt)
+* python 3.6 (eller nyere)
 * bower
 
 ## Mappestruktur ##
@@ -19,10 +19,9 @@ For å komme i gang med Nablaweb, sjekk wikien på: https://bitbucket.org/webkom
     - accounts -- Brukere (grunnleggende ting som registrering og profil)
     - bedpres -- Bedriftspresentasjoner, arver fra event
     - com -- Komiteer
-    - exchange -- For info om utveksling (supergammel kode, pre 2014?)
+    - exchange -- For info om utveksling
     - interactive -- Julekalender++
     - jobs -- Stillingsannonser
-    - likes -- Likeknapp (ikke i bruk lenger, bør fjernes)
     - meeting-records -- Styret sine møtereferater
     - nabladet -- pdf-filer av Nabladet
     - nablashop -- Oversikt over ting nabla selger (kompendium, pins, etc.)
@@ -36,7 +35,7 @@ For å komme i gang med Nablaweb, sjekk wikien på: https://bitbucket.org/webkom
 - static -- inneholder js, css og noen bilder. 
 
 ## Standard mappestruktur i Django (de fleste Django-apps, f.eks. nablapps/accounts) ##
-- migrations/ -- lages når man kjører python manage.py makemigrations, ikke gjør manuelle endringer her
+- migrations/ -- lages når man kjører python manage.py makemigrations, ikke gjør manuelle endringer her (med mindre du vet hva du gjør)
 - templates/ -- html som definerer struktur og utseende (baseres vanligvis på base.html), bruker variabler gitt fra viewet for dynamiske data
 - admin.py -- hvordan klasser i models og forms skal administreres f.eks. i nabla.no/admin
 - forms.py -- definerer utfyllingsskjema som kan brukes av view til å ta imot informasjon fra bruker, f.eks. brukerregistering
