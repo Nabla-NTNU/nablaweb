@@ -1,8 +1,12 @@
-from content.admin import ChangedByMixin
+"""
+Forms for poll app
+"""
 from datetime import datetime
+from itertools import takewhile, count
+
+from content.admin import ChangedByMixin
 from django import forms
 from django.forms.models import inlineformset_factory
-from itertools import takewhile, count
 from .models import Poll, Choice
 
 ChoiceFormSet = inlineformset_factory(Poll, Choice, fields=('choice',))
@@ -14,6 +18,7 @@ def get_choice_field_iter():
 
 
 class PollForm(ChangedByMixin, forms.ModelForm):
+    """Form for creating and updating a poll"""
     choice_1 = forms.CharField(
         max_length=80,
         label='Alternativ 1',
