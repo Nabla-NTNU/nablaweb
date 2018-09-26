@@ -22,6 +22,6 @@ def contact(request):
 
 
 def success(request):
-    return HttpResponse('Yes da')
+    return render(request, 'contact/success.html')
 # Create your views here.
 
