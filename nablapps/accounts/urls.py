@@ -1,3 +1,9 @@
+"""
+Urls for accounts app.
+
+Also adds urls from contrib.auth for login, logout,
+password change and password reset.
+"""
 import django.contrib.auth.views as auth_views
 from django.conf.urls import url, include
 from django.views.generic import RedirectView
@@ -13,25 +19,25 @@ from .views import (
 
 password_change_patterns = [
     url(r'^$',
-        auth_views.password_change,
+        auth_views.PasswordChangeView.as_view(),
         name='password_change'),
     url(r'^done$',
-        auth_views.password_change_done,
+        auth_views.PasswordChangeDoneView.as_view(),
         name='password_change_done'),
 ]
 
 password_reset_patterns = [
     url(r'^$',
-        auth_views.password_reset,
+        auth_views.PasswordResetView.as_view(),
         name='password_reset'),
     url(r'^done/$',
-        auth_views.password_reset_done,
+        auth_views.PasswordResetDoneView.as_view(),
         name='password_reset_done'),
     url(r'^confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
-        auth_views.password_reset_confirm,
+        auth_views.PasswordResetConfirmView.as_view(),
         name='password_reset_confirm'),
     url(r'^complete/$',
-        auth_views.password_reset_complete,
+        auth_views.PasswordResetCompleteView.as_view(),
         name='password_reset_complete'),
 ]
 
@@ -66,11 +72,9 @@ urlpatterns = [
 # To be imported in the main urls.py
 login_urls = [
     url(r'^login/$',
-        auth_views.login,
-        {'template_name': 'accounts/login.html'},
+        auth_views.LoginView.as_view(template_name='accounts/login.html'),
         name='auth_login'),
     url(r'^logout/$',
-        auth_views.logout,
-        {'next_page': '/'},
+        auth_views.LogoutView.as_view(next_page='/'),
         name='auth_logout'),
 ]
