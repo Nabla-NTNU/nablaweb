@@ -1,9 +1,0 @@
-#!/bin/bash
-# Written by Anders
-# Updates haystack index.
-# Uses crontab:
-# * * * * * /srv/nabla_no/utils/update_index
-cd /srv/nabla_no
-source venv/bin/activate
-python manage.py update_index
-

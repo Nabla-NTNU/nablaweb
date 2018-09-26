@@ -70,7 +70,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'sekizai.context_processors.sekizai',
-                'nablaweb.context_processors.get_primary_dir',
+                'nablapps.core.context_processors.get_primary_dir',
             ],
         },
     }
@@ -101,6 +101,7 @@ INSTALLED_APPS = [
     'nablapps.accounts',
     'nablapps.bedpres',
     'nablapps.com',
+    'nablapps.core',
     'nablapps.exchange',
     'nablapps.interactive',
     'nablapps.jobs',
@@ -109,7 +110,6 @@ INSTALLED_APPS = [
     'nablapps.nablashop',
     'nablapps.podcast',
     'nablapps.poll',
-    'nablaweb',
 
     ###########################
     # Eksternt utviklede apps #

@@ -15,7 +15,7 @@ from haystack.query import SearchQuerySet
 
 from nablapps.accounts.urls import login_urls
 from nablapps.nabladet.views import serve_nablad
-from .views import FrontPageView
+from nablapps.core.views import FrontPageView
 
 admin.autodiscover()
 

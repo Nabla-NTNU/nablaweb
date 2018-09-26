@@ -11,7 +11,7 @@ from nablapps.bedpres.models import BedPres
 from nablapps.nabladet.models import Nablad
 from nablapps.podcast.models import Podcast
 from nablapps.poll.models import Poll
-from utils.view_mixins import FlatPageMixin
+from nablapps.core.view_mixins import FlatPageMixin
 
 
 class FrontPageView(FlatPageMixin, TemplateView):
