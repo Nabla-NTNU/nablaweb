@@ -10,9 +10,10 @@ For å komme i gang med Nablaweb, sjekk wikien på: https://bitbucket.org/webkom
 
 ## Systemavhengigheter (ufullstendig)
 
-* libmagickwand-dev (ImageMagick) (trenges kun dersom du lager et nablad-objekt)
 * python 3.6 (eller nyere)
-* bower
+* pipenv
+* npm (nodejs)
+* libmagickwand-dev (ImageMagick) (trenges kun dersom du lager et nablad-objekt)
 
 ## Mappestruktur ##
 - nablapps -- Inneholder alle djangoappene

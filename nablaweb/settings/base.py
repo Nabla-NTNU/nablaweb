@@ -53,7 +53,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    'djangobower.finders.BowerFinder'
+    'django_node_assets.finders.NodeModulesFinder',
 )
 
 TEMPLATES = [
@@ -116,7 +116,7 @@ INSTALLED_APPS = [
     ###########################
     'bootstrap3',
     'django_comments',
-    'djangobower',
+    'django_node_assets',
     'easy_thumbnails',  # thumbnail-taggen i templates
     'image_cropping',  # gjør det mulig for staff å croppe opplastede bilder
     'filebrowser',
@@ -157,14 +157,6 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 
 FILEBROWSER_DIRECTORY = ''
-BOWER_COMPONENTS_ROOT = VARIABLE_CONTENT
-BOWER_INSTALLED_APPS = (
-    'jquery#1.9.x',
-    'bootstrap#3.3.7',
-    'font-awesome#4.7.0',
-    'requirejs',
-)
-
 
 # django.contrib.auth
 LOGIN_URL = '/login/'
@@ -219,3 +211,6 @@ WIKI_REVISIONS_PER_HOUR_ANONYMOUS = 0
 WIKI_REVISIONS_PER_MINUTES_ANONYMOUS = 0
 WIKI_ACCOUNT_HANDLING = False
 WIKI_ACCOUNT_SIGNUP_ALLOWED = False
+
+NODE_PACKAGE_JSON = os.path.join(PROJECT_ROOT, 'package.json')
+NODE_MODULES_ROOT = os.path.join(VARIABLE_CONTENT, 'node_modules')
