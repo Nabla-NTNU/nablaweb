@@ -16,9 +16,15 @@ def contact(request):
             return HttpResponseRedirect('/contact/success/')
 
     else:
-        contact_form = ContactForm
-        context = {'contact_form': contact_form,}
-        return render(request, 'contact/contact.html', context)
+        if request.user.is_authenticated:
+            #last in skjema uten navn og e-post
+            contact_form = ContactForm(initial={'your_name': request.user.get_full_name(), 'email': request.user.email})
+            context = {'contact_form': contact_form}
+            return render(request, 'contact/contact.html', context)
+        else:
+            contact_form = ContactForm
+            context = {'contact_form': contact_form,}
+            return render(request, 'contact/contact.html', context)
 
 
 def success(request):
