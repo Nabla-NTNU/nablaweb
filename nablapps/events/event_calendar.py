@@ -66,7 +66,7 @@ class EventCalendar(HTMLCalendar):
                 <span class="day">{self.day_full[weekday]}</span>
                 <span class="num">{day}.</span>
             </div>{html_event_list}\n'''
-        joined_css_classes = (" ".join(css_classes),)
+        joined_css_classes = " ".join(css_classes)
         return f'<li class="cell {joined_css_classes}">{day_string}</li>'
 
     def get_css_day_classes(self, day, weekday):
