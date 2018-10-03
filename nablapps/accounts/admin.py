@@ -4,7 +4,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from django.contrib.auth.models import Group
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.utils.encoding import smart_text
 
@@ -39,10 +39,10 @@ class GroupAdminForm(forms.ModelForm):
             initial = kwargs.get('initial', {})
             initial['users'] = instance.user_set.all()
             kwargs['initial'] = initial
-        super(GroupAdminForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def save(self, commit=True):
-        group = super(forms.ModelForm, self).save(commit=commit)
+        group = super().save(commit=commit)
 
         if commit:
             group.user_set = self.cleaned_data['users']

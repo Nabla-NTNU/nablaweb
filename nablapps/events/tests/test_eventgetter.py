@@ -1,3 +1,7 @@
+"""
+Tests for the EventGetter hack
+"""
+# pylint: disable=C0111,C0301
 from datetime import datetime, timedelta
 from django.test import TestCase, override_settings
 from django.conf import settings

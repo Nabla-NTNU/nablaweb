@@ -1,3 +1,6 @@
+"""
+Urls for meeting_records app
+"""
 from django.conf.urls import url
 from .views import MeetingRecordListView, MeetingRecordDetailView
 

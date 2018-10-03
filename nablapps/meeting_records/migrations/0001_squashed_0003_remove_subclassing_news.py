@@ -25,8 +25,8 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(verbose_name='Beskrivelse', blank=True)),
                 ('pub_date', models.DateField(help_text='Publikasjonsdato', default=datetime.date.today, null=True, verbose_name='publisert')),
                 ('file', models.FileField(help_text='Filnavn', upload_to='meeting_records', null=True, verbose_name='PDF-fil')),
-                ('created_by', models.ForeignKey(related_name='meetingrecord_created', verbose_name='Opprettet av', to=settings.AUTH_USER_MODEL, editable=False, null=True, blank=True)),
-                ('last_changed_by', models.ForeignKey(related_name='meetingrecord_edited', verbose_name='Endret av', to=settings.AUTH_USER_MODEL, editable=False, null=True, blank=True)),
+                ('created_by', models.ForeignKey(related_name='meetingrecord_created', verbose_name='Opprettet av', to=settings.AUTH_USER_MODEL, editable=False, null=True, blank=True, on_delete=models.CASCADE)),
+                ('last_changed_by', models.ForeignKey(related_name='meetingrecord_edited', verbose_name='Endret av', to=settings.AUTH_USER_MODEL, editable=False, null=True, blank=True, on_delete=models.CASCADE)),
                 ('slug', models.SlugField(help_text='Denne teksten vises i adressen til siden, og trengs vanligvis ikke å endres', null=True, blank=True)),
             ],
             options={

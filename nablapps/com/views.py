@@ -8,7 +8,7 @@ class ShowPage(DetailView):
     context_object_name = 'com'
 
     def get_context_data(self, **kwargs):
-        context = super(ShowPage, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         com = self.get_object().com
         context['members'] = ComMembership.objects.filter(
                 com=com, is_active=True).order_by('joined_date')
@@ -24,5 +24,5 @@ class CommitteeOverview(ListView):
     queryset = ComPage.objects.order_by('com__name')
 
     def get_context_data(self, **kwargs):
-        context = super(CommitteeOverview, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         return context

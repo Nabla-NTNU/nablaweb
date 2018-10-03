@@ -1,7 +1,7 @@
 from collections import Counter
 from itertools import chain
 from django.views.generic import DetailView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, redirect
 from django.http import Http404
 from django.template.response import TemplateResponse
@@ -31,7 +31,7 @@ def test_result(request, pk):
     test = get_object_or_404(Test, id=pk)
     questions = test.questions.all()
     format_string = "{}_alternative"
-    answers = (request.POST.get(format_string.format(q.id)) for q in questions)
+    answers = (request.POST.get(f"{q.id}_alternative") for q in questions)
     answered_alternatives = (
         q.alternatives.get(id=answer)
         for q, answer in zip(questions, answers)

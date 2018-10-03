@@ -1,3 +1,6 @@
+"""
+Module for creation of a calendar of events.
+"""
 from calendar import HTMLCalendar
 from collections import defaultdict
 from datetime import date, timedelta
@@ -17,8 +20,7 @@ class EventCalendar(HTMLCalendar):
     def __init__(self, events, year, month):
         super().__init__()
         self.year, self.month = year, month
-        self.events_grouped_by_day = group_events_by_day(events, year, month)
-
+        self.events_grouped_by_day = group_events_by_day(events, month)
 
     def formatmonth(self, theyear, themonth, withyear=True):
         """
@@ -39,41 +41,36 @@ class EventCalendar(HTMLCalendar):
         Return a header for a week as a table row.
         """
         s = ''.join(self.formatweekday(i) for i in self.iterweekdays())
-        return '<ul class="daynames">{}</ul>'.format(s)
+        return f'<ul class="daynames">{s}</ul>'
 
-    def formatweekday(self, i):
-        return '<li class="dayname">{}</li>'.format(self.day_full[i])
+    def formatweekday(self, day):
+        """Return html list element for the given day"""
+        return f'<li class="dayname">{self.day_full[day]}</li>'
 
     def formatweek(self, theweek):
         """
         Return a complete week as a table row.
         """
         s = ''.join(self.formatday(d, wd) for (d, wd) in theweek)
-        return '<ul class="week">{}</ul>'.format(s)
+        return f'<ul class="week">{s}</ul>'
 
     def formatday(self, day, weekday):
         """Returns the body of a single day formatted as a list"""
-
         html_event_list = self.format_event_list(day)
         css_classes = self.get_css_day_classes(day, weekday)
         if html_event_list:
             css_classes.append("filled")
 
-        day_format_string = '''
+        day_string = f'''
             <div class="date">
-                <span class="day">{weekday}</span>
+                <span class="day">{self.day_full[weekday]}</span>
                 <span class="num">{day}.</span>
-            </div>{body}\n'''
-        day_string = day_format_string.format(
-            weekday=self.day_full[weekday],
-            day=day,
-            body=html_event_list
-        )
-        return '<li class="cell {css_classes}">{day_string}</li>'.format(
-            css_classes=" ".join(css_classes),
-            day_string=day_string)
+            </div>{html_event_list}\n'''
+        joined_css_classes = " ".join(css_classes)
+        return f'<li class="cell {joined_css_classes}">{day_string}</li>'
 
     def get_css_day_classes(self, day, weekday):
+        """Get css class for the given day"""
         css_classes = self.cssclasses[weekday].split(" ")
         if day == 0:
             css_classes.append("noday")
@@ -82,22 +79,20 @@ class EventCalendar(HTMLCalendar):
         return css_classes
 
     def format_event_list(self, day):
+        """Return html list of events on the given day"""
         events_list = self.events_grouped_by_day.get(day, [])
         list_items = list(map(self.format_event_list_item, events_list))
-        if list_items:
-            return "".join(['<ul>'] + list_items + ['</ul>'])
-        else:
-            return ""
+        return "".join(['<ul>'] + list_items + ['</ul>']) if list_items else ""
 
     @staticmethod
     def format_event_list_item(event):
-        return '<li><a href="{url}">{name}</a></li>\n'.format(
-            url=event.get_absolute_url(),
-            name=esc(event.get_short_name())
-        )
+        """Return html list element for the given event"""
+        url = event.get_absolute_url()
+        name = esc(event.get_short_name())
+        return f'<li><a href="{url}">{name}</a></li>\n'
 
 
-def group_events_by_day(events, year, month):
+def group_events_by_day(events, month):
     """Groups a list of models by day.
 
     Events spanning multiple days are grouped multiple times.
@@ -112,7 +107,7 @@ def group_events_by_day(events, year, month):
 
 
 def day_range(start, end):
+    """Return iterator of datetimes for each day between start and end"""
     end = start if (end is None or end < start) else end
-    
-    for n in range(int ((end - start).days)):
-        yield start + timedelta(n)
+    for n in range(int((end - start).days)):
+        yield start + timedelta(days=n)

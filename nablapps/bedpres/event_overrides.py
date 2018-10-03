@@ -1,12 +1,19 @@
-from bpc_client.event import get_events as get_bpc_events
-from nablapps.events.event_overrides import EventGetter
-from nablapps.events.models import Event
+"""
+This is a hack
+"""
 from datetime import datetime, time
 from itertools import chain
+from bpc_client.event import get_events as get_bpc_events
+
+from nablapps.events.event_overrides import EventGetter
+from nablapps.events.models import Event
 from .models import BedPres
 
 
 class BedPresAndEventGetter(EventGetter):
+    """
+    Class without instance variables
+    """
 
     @staticmethod
     def get_current_events(year, month):

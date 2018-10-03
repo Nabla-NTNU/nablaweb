@@ -1,3 +1,6 @@
+"""
+Model representing a registration to an event.
+"""
 from django.db import models
 from django.conf import settings
 from django.template import loader
@@ -14,11 +17,13 @@ class EventRegistration(models.Model):
 
     event = models.ForeignKey(
         'Event',
+        on_delete=models.CASCADE,
         blank=False,
         null=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name='bruker',
+        on_delete=models.CASCADE,
         blank=False,
         null=True)
     date = models.DateTimeField(
@@ -35,7 +40,8 @@ class EventRegistration(models.Model):
         default=True,
         blank=False,
         null=False,
-        help_text="Hvis denne er satt til sann har man en plass på arrangementet ellers er det en ventelisteplass.")
+        help_text="Hvis denne er satt til sann har man en plass "
+                  "på arrangementet ellers er det en ventelisteplass.")
 
     class Meta:
         verbose_name = 'påmelding'
@@ -46,10 +52,9 @@ class EventRegistration(models.Model):
     objects = EventRegistrationManager()
 
     def __str__(self):
-        return '%s, %s is %s, place: %s' % (self.event,
-                                             self.user,
-                                             "Attending" if self.attending else "Waiting",
-                                             self.number)
+        return (f'{self.event}, '
+                f'{self.user} is {"Attending" if self.attending else "Waiting"}, '
+                f'place: {self.number}')
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -77,6 +82,7 @@ class EventRegistration(models.Model):
             self.save()
 
     def set_attending_and_send_email(self):
+        """Change the registration to be attending and send an email to the user."""
         self.set_attending_if_waiting()
         self._send_moved_to_attending_email()
 
@@ -86,4 +92,3 @@ class EventRegistration(models.Model):
             template = loader.get_template("events/moved_to_attending_email.txt")
             message = template.render({'event': self.event, 'name': self.user.get_full_name()})
             self.user.email_user(subject, message)
-

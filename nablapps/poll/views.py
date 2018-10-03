@@ -1,10 +1,13 @@
-from django.core.urlresolvers import reverse
+"""
+Views for poll app
+"""
+from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
-from braces.views import LoginRequiredMixin, FormMessagesMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from braces.views import LoginRequiredMixin, FormMessagesMixin
 
 from .forms import PollForm
 from .models import Poll, Choice, UserHasVoted
@@ -12,6 +15,9 @@ from .models import Poll, Choice, UserHasVoted
 
 @login_required
 def vote(request, poll_id):
+    """
+    View for registering a vote for the logged in user.
+    """
     poll = get_object_or_404(Poll, pk=poll_id)
     try:
         choice = poll.choices.get(pk=request.POST['choice'])
@@ -21,7 +27,7 @@ def vote(request, poll_id):
     except UserHasVoted:
         messages.error(request, 'Du har allerede stemt i denne avstemningen!')
     else:
-        messages.success(request, u'Du har svart på "%s"' % poll.question)
+        messages.success(request, f'Du har svart på "{poll.question}"')
 
     redirect_to = request.POST.get('next', request.META.get('HTTP_REFERER', '/'))
     return redirect(redirect_to)
@@ -66,38 +72,63 @@ class UserPollsView(LoginRequiredMixin, ListView):
 
 
 class UserPollCRUDMixin(LoginRequiredMixin, FormMessagesMixin):
+    """
+    View mixin to set the common attributes and methods of
+    Create-, Update- and DeleteViews for user polls.
+
+    The commonality is most evident in Create and UpdateView,
+    and the DeleteView doesn't actually use any of the form processing.
+    """
     form_class = PollForm
     model = Poll
     form_invalid_message = "Ikke riktig utfylt."
     template_name = 'form.html'
 
     def get_form_kwargs(self):
+        """
+        Returns the keyword arguments for instantiating the form.
+
+        Extends method from ModelFormMixin in django.
+        """
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
 
     def get_success_url(self):
+        """The url to redirect to after successfully creating, updating or deleting."""
         return reverse('poll_user')
 
 
-class CreatorRequiredMixin(object):
-
+class CreatorRequiredMixin:
+    """
+    View mixin for making sure only the creator can use the view.
+    """
     def dispatch(self, request, *args, **kwargs):
+        """Extends dispatch method in views"""
         if self.get_object().created_by != request.user:
             return HttpResponseForbidden()
         return super().dispatch(request, *args, **kwargs)
 
 
-class CreateUserPollView(UserPollCRUDMixin, CreateView):
+class CreateUserPollView(UserPollCRUDMixin, CreateView): # pylint: disable=R0901
+    """
+    View allowing users to create a poll.
+    """
     form_valid_message = "Avstemning publisert."
 
 
-class UpdateUserPollView(UserPollCRUDMixin, CreatorRequiredMixin, UpdateView):
+class UpdateUserPollView(UserPollCRUDMixin, CreatorRequiredMixin, UpdateView): # pylint: disable=R0901
+    """
+    View allowing users to edit their created polls.
+    """
     form_valid_message = "Avstemning oppdatert."
 
 
 class DeleteUserPollView(UserPollCRUDMixin, CreatorRequiredMixin, DeleteView):
+    """
+    View allowing users to delete their created polls.
+    """
     form_invalid_message = "Noe gikk galt i slettingen."
 
     def get_form_valid_message(self):
-        return "Du har slettet {}".format(self.object.question)
+        return f"Du har slettet {self.object.question}"

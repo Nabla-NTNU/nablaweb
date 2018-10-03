@@ -1,18 +1,39 @@
+"""
+Models for poll app
+
+
+Some design info for the models
+==================================
+
+- A poll has multiple choices.
+- A user can only answer once and can only pick a single choice.
+- When a user has voted, it is not possible to see what they have voted for.
+- A poll can either be created be created by staff or by a user. When it
+  is created by a user it is called a user_poll and is listed along other user polls.
+- A single poll can be set to be the current poll,
+  which means it is the one to be shown on the front page.
+
+"""
 from django.conf import settings
 from django.db import models
 
 
 class UserHasVoted(Exception):
-    pass
+    """Raised if the user has already voted on a poll"""
 
 
 class PollManager(models.Manager):
+    """Django manager for Poll model"""
     def current_poll(self):
-        queryset = super(PollManager, self).get_queryset()
+        """Gets the current poll"""
+        queryset = super().get_queryset()
         return queryset.get(is_current=True)
 
 
 class Poll(models.Model):
+    """
+    Model representing a poll.
+    """
     question = models.CharField(
         'Spørsmål',
         max_length=1000
@@ -24,7 +45,7 @@ class Poll(models.Model):
         default="",
         blank=True
     )
-    
+
     creation_date = models.DateTimeField(
         'Opprettet',
         auto_now_add=True
@@ -40,6 +61,7 @@ class Poll(models.Model):
         verbose_name='Lagt til av',
         editable=False,
         null=True,
+        on_delete=models.CASCADE,
     )
 
     edit_date = models.DateTimeField(
@@ -70,17 +92,19 @@ class Poll(models.Model):
     def __str__(self):
         return self.question
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs): # pylint: disable=W0221
         if self.is_current:
             Poll.objects.filter(is_current=True)\
                 .exclude(pk=self.pk)\
                 .update(is_current=False)
-        super(Poll, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def get_total_votes(self):
+        """Return the sum of all votes for all choices"""
         return sum([x.votes for x in self.choices.all()])
 
     def user_has_voted(self, user):
+        """Return whether the given user has voted on the poll"""
         return user in self.users_voted.all()
 
     class Meta:
@@ -89,8 +113,12 @@ class Poll(models.Model):
 
 
 class Choice(models.Model):
+    """
+    Model representing a single choice for a single Poll instance
+    """
     poll = models.ForeignKey(
         Poll,
+        on_delete=models.CASCADE,
         related_name="choices"
     )
 
@@ -116,6 +144,7 @@ class Choice(models.Model):
         verbose_name='Lagt til av',
         editable=False,
         help_text="Hvem som la til valget i avstemningen",
+        on_delete=models.CASCADE,
         null=True
     )
 
@@ -127,9 +156,12 @@ class Choice(models.Model):
         verbose_name_plural = "valg"
 
     def vote(self, user):
+        """
+        Add a vote to the choice from the given user.
+        An exception is raised if the user has already voted.
+        """
         if self.poll.user_has_voted(user):
-            raise UserHasVoted(
-                "{user} has already voted on {poll}.".format(user=user, poll=self.poll))
+            raise UserHasVoted(f"{user} has already voted on {self.poll}.")
         else:
             self.votes += 1
             self.save()

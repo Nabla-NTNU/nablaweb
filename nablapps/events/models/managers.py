@@ -1,3 +1,10 @@
+"""
+Managers for the event app
+
+This was written by Øystein Hiåsen, and even he doesn't
+understand or remember why there are two managers.
+Somebody should perhaps simplify this.
+"""
 from django.db import models
 
 

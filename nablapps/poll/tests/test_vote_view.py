@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase, override_settings
 from django.test.client import Client
 
@@ -26,7 +26,7 @@ class BaseVoteViewTest(TestCase):
 class TestLoggedInVote(UserHasVotedMixin, BaseVoteViewTest):
 
     def setUp(self):
-        super(TestLoggedInVote, self).setUp()
+        super().setUp()
 
         self.username = "testuser"
         self.password = "mypass"

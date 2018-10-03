@@ -31,7 +31,7 @@ class AdventDoorView(PublishedMixin, DetailView):
         return self.object.template
 
     def get_context_data(self, **kwargs):
-        context = super(AdventDoorView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         door = self.object
         context['calendar'] = door.calendar
         try:

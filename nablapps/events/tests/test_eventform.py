@@ -1,14 +1,16 @@
+"""
+Tests for the EventForm
+"""
+# pylint: disable=C0111,C0301
 from collections import ChainMap
-
 from django.test import TestCase
-
 from nablapps.events.forms import EventForm
 
 
 class EventFormTestCase(TestCase):
 
     def assertFormValid(self, form):
-        self.assertTrue(form.is_valid(), "Form should be valid but has these errors: {}".format(form.errors))
+        self.assertTrue(form.is_valid(), f"Form should be valid but has these errors: {form.errors}")
 
     def assertFormInValid(self, form):
         self.assertFalse(form.is_valid(), "Form should be invalid but isn't")

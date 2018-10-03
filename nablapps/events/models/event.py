@@ -1,5 +1,8 @@
+"""
+The Event model
+"""
 import logging
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from ..exceptions import RegistrationAlreadyExists, EventFullException, DeregistrationClosed
 from .abstract_event import AbstractEvent
@@ -49,6 +52,7 @@ class Event(AbstractEvent):
             return 0
 
     def is_full(self):
+        """Return whether all places in the event are occupied"""
         return self.free_places() == 0
 
     def users_attending(self):
@@ -101,14 +105,16 @@ class Event(AbstractEvent):
 
         if not self.is_full():
             return EventRegistration.objects.create_attending_registration(event=self, user=user)
-        elif self.has_queue:
+        if self.has_queue:
             return EventRegistration.objects.create_waiting_registration(event=self, user=user)
-        else:
-            raise EventFullException(event=self, user=user)
+        raise EventFullException(event=self, user=user)
 
     def deregister_user(self, user, respect_closed=True):
-        """Melder brukeren av arrangementet.
-        respect_closed gir mulighet til å avmelde brukere etter avmeldingsfrist, fra administrative verktøy"""
+        """
+        Melder brukeren av arrangementet.
+        respect_closed gir mulighet til å avmelde brukere etter avmeldingsfrist,
+        fra administrative verktøy
+        """
         regs = self.eventregistration_set
         if self.deregistration_closed() and respect_closed:
             raise DeregistrationClosed(event=self, user=user)

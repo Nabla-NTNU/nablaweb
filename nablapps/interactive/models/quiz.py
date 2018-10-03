@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from datetime import timedelta, datetime
 
@@ -16,6 +16,7 @@ class QuizQuestion(models.Model):
     quiz = models.ForeignKey(
         to='Quiz',
         related_name="questions",
+        on_delete=models.CASCADE,
         unique=False
     )
 
@@ -84,6 +85,7 @@ class Quiz(PublicationManagerMixin, InteractiveElement):
     scoreboard = models.OneToOneField(
         to='QuizScoreboard',
         related_name="quiz",
+        on_delete=models.CASCADE,
         null=True
     )
 
@@ -116,6 +118,7 @@ class QuestionReply(models.Model):
 
     question = models.ForeignKey(
         'QuizQuestion',
+        on_delete=models.CASCADE,
     )
 
     alternative = models.PositiveIntegerField(
@@ -125,6 +128,7 @@ class QuestionReply(models.Model):
     quiz_reply = models.ForeignKey(
         to='QuizReply',
         related_name="questions",
+        on_delete=models.CASCADE,
         null=True
     )
 
@@ -144,6 +148,7 @@ class QuizReply(InteractionResult):
 
     scoreboard = models.ForeignKey(
         to='QuizScoreboard',
+        on_delete=models.CASCADE,
         related_name="replies"
     )
 
@@ -159,6 +164,7 @@ class QuizReply(InteractionResult):
 
     user = models.ForeignKey(
         'accounts.NablaUser',
+        on_delete=models.CASCADE,
         related_name="interaction_results"
     )
 

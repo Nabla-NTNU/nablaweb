@@ -1,3 +1,6 @@
+"""
+Admin interface for bedpres app
+"""
 from django.contrib import admin
 from image_cropping import ImageCroppingMixin
 from nablapps.news.admin import add_to_frontpage
@@ -6,6 +9,7 @@ from .models import BedPres
 
 @admin.register(BedPres)
 class BedPresAdmin(ImageCroppingMixin, admin.ModelAdmin):
+    """Admin for BedPres model"""
     fields = (
         "picture",
         "cropping",

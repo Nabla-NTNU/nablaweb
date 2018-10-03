@@ -1,6 +1,6 @@
 from datetime import datetime, date
 from django.contrib.auth.models import Group, AbstractUser, UserManager
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from hashlib import sha1
 from .utils import activate_user_and_create_password, send_activation_email
@@ -84,7 +84,7 @@ class NablaUser(AbstractUser):
         if not self.last_login:
             self.last_login = datetime.today()
 
-        return super(NablaUser, self).save(force_insert, force_update, using, update_fields)
+        return super().save(force_insert, force_update, using, update_fields)
 
     @property
     def nablagroups(self):
@@ -163,7 +163,7 @@ class RegistrationRequest(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             self.created = datetime.today()
-        return super(RegistrationRequest, self).save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
     def approve_request(self):
         user, created_user = NablaUser.objects.get_or_create(username=self.username)

@@ -2,7 +2,7 @@ from django.http import Http404
 from django.views.generic import TemplateView, DetailView, ListView
 from hitcount.views import HitCountDetailView
 from content.views import AdminLinksMixin, PublishedMixin, update_published_state
-from utils.view_mixins import FlatPageMixin
+from nablapps.core.view_mixins import FlatPageMixin
 
 from .models import Podcast, Season, get_season_count
 
@@ -12,7 +12,7 @@ class SeasonView(FlatPageMixin, TemplateView):
     flatpages = [("info", "/skraattcast/")]
 
     def get_context_data(self, **kwargs):
-        data = super(SeasonView, self).get_context_data(**kwargs)
+        data = super().get_context_data(**kwargs)
 
         try:
             if 'number' in kwargs:
@@ -52,7 +52,7 @@ class PodcastDetailView(PublishedMixin, AdminLinksMixin, HitCountDetailView, Det
     count_hit = True
 
     def get_context_data(self, **kwargs):
-        context = super(PodcastDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['season'] = season = self.object.season
         context['season_name'] = season.name()
         published = Podcast.objects.filter(season=season, published=True).order_by('-pub_date')

@@ -1,3 +1,4 @@
+# pylint: disable=missing-docstring
 from django.test import TestCase
 from nablapps.bedpres.bpcmixin import BedpresNoModel
 from bpc_client.client import BPCClient

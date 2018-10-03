@@ -1,7 +1,7 @@
 from datetime import datetime as dt
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.forms.extras.widgets import SelectDateWidget
+from django.forms.widgets import SelectDateWidget
 
 from .models import NablaUser, RegistrationRequest, FysmatClass
 
@@ -75,7 +75,7 @@ class NablaUserCreationForm(UserCreationForm):
 class InjectUsersForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
-        super(InjectUsersForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['fysmat_class'] = forms.ChoiceField(
             required = False,
             choices = [('', "Ingen klasse")] + [ (m.name, m.name) for m in FysmatClass.objects.all() ],

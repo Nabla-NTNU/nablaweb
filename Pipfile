@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 django = "==1.11.5"
 django-bootstrap3 = "*"   # Templatetags for bootstrap3
-django-bower = "*"        # Frontend/staticfiles packagemanager
 django-braces = "*"       # Extra mixinclasses for models and views
 django-contrib-comments = "*"
 django-filebrowser = "*"  # Filebrowser for mediafiles.
@@ -22,11 +21,14 @@ gunicorn = "*"              # Web-server used to run django
 pymysql = "*"               # Database bindings for mysql
 wand = "*"                  # Python bindings for ImageMagick. Needs ImageMagick installed
 whoosh = "*"                # Backend for django-haystack
-wiki = "==0.3b3"
-content = {editable = true, ref = "1e451bfd956fcdbfa8df2d5bb834137e2819752a", git = "https://bitbucket.org/webkom/content-app.git"}
+wiki = "~=0.3.0"
+content = {editable = true, ref = "a510e617279c8ef457c2643ff1151df52dbc278f", git = "https://bitbucket.org/webkom/content-app.git"}
 bpc-client = {editable = true, ref = "556ede6bd15b4296b1f2a29730ad6e5f00b27428", git = "https://bitbucket.org/webkom/bpc_client.git"}
+django-node-assets = "*"
 
 [dev-packages]
+pylint = "*"
+pylint-django = "*"
 
 [requires]
 python_version = "3.6"

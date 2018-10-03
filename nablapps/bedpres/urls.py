@@ -1,9 +1,8 @@
+"""Url patterns for Bedpres-app"""
 from django.conf.urls import url
 from django.views.generic import RedirectView
 
-from .views import ical_event
-
-from .views import BedPresDetailView, BedPresRegisterUserView
+from .views import BedPresDetailView, BedPresRegisterUserView, ical_event
 
 urlpatterns = [
 

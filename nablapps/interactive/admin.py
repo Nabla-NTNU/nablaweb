@@ -72,7 +72,7 @@ class TestQuestionAlternativeForm(forms.ModelForm):
         fields = ['target']
 
     def __init__(self, *args, **kwargs):
-        super(TestQuestionAlternativeForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if self.instance.id:
             self.fields['target'].queryset = TestResult.objects.filter(
                                         test=self.instance.question.test)

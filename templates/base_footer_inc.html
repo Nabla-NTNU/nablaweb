@@ -1,0 +1,41 @@
+{% comment %}
+The footer of nabla.no.
+It is meant to be included in base.html
+{% endcomment %}}
+{% load static %}
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 kontakt">
+                <h2>Kontakt</h2>
+                <p>Du kan nå oss på <a class="email" href="mailto:nabla@nabla.ntnu.no">nabla@nabla.ntnu.no</a></p>
+                <p>Bedrift? Kontakt Bedriftskontakten Nabla på <a class="email" href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no</a></p>
+                <address>
+                    Nabla <br>
+                    Kjemiblokk 2 <br>
+                    Sem Sælands vei 10, NTNU <br>
+                    7034 Trondheim <br>
+                    Norway
+                </address>
+            </div>
+            <div class="col-md-4">
+                <h2>Informasjon</h2>
+                <p>
+                    Organisasjonsnr.: <span class="pull-right">992168544</span><br /><br />
+                    Hovedkonto: <span class="pull-right">15031357338</span><br />
+                    Arrkomkonto: <span class="pull-right">15031357400</span><br />
+                    Gravitoneskonto: <span class="pull-right">15036597965</span><br />
+                </p>
+                <h2>Tilbakemelding</h2>
+                <p>
+                    Har du funnet en feil, får du ikke logget på, eller er det noe som burde forbedres? Fyll ut <a href="/contact/">kontaktskjema</a> eller kontakt webkom:<br>
+                    <a class="email" href="mailto:webkom@nabla.ntnu.no">webkom@nabla.ntnu.no</a>
+                </p>
+            </div>
+            <div class="col-md-4 center" id="nablafooter">
+                <br><br>
+                <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo">
+            </div>
+        </div>
+    </div>
+</footer>

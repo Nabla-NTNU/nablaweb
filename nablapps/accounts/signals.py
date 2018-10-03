@@ -8,13 +8,13 @@ from django.utils.safestring import mark_safe
 
 def login_message(sender, request, user, **kwargs):
     with suppress(MessageFailure):
-        msg = 'Velkommen inn <strong>{}</strong>'.format(escape(user.username))
+        msg = f'Velkommen inn <strong>{escape(user.username)}</strong>'
         messages.info(request, mark_safe(msg))
 
 
 def logout_message(sender, request, user, **kwargs):
     with suppress(MessageFailure):
-        msg = '<strong>{} </strong> ble logget ut'.format(escape(user.username))
+        msg = f'<strong>{escape(user.username)} </strong> ble logget ut'
         messages.info(request, mark_safe(msg))
 
 

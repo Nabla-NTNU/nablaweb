@@ -1,3 +1,6 @@
+"""
+Abstract model for events
+"""
 from content.models import (
     PublicationManagerMixin,
     TimeStamped,
@@ -7,14 +10,9 @@ from nablapps.news.models import TextContent
 from .mixins import RegistrationInfoMixin, EventInfoMixin
 
 
-class AbstractEvent(
-    RegistrationInfoMixin,
-    EventInfoMixin,
-    PublicationManagerMixin,
-    TimeStamped,
-    TextContent,
-    WithPicture,
-):
+class AbstractEvent(RegistrationInfoMixin, EventInfoMixin,
+                    PublicationManagerMixin, TimeStamped,
+                    TextContent, WithPicture):
     """
     Abstract model with the things that are common between Event and Bedpres.
     """

@@ -1,3 +1,6 @@
+"""
+Admin for front-page-news and news-articles
+"""
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.utils.html import format_html
@@ -10,6 +13,7 @@ from .models import FrontPageNews, NewsArticle
 
 @admin.register(FrontPageNews)
 class NewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
+    """Admin interface for FrontPageNews"""
     date_hierarchy = "bump_time"
     list_display = (
         "headline",
@@ -36,6 +40,7 @@ class NewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
     ]
 
     def content_object_with_link(self, news):
+        """List display for displaying the link to the corresponding object to the news"""
         url = news.get_absolute_url()
         return format_html(
             '{content_type}: <a href="{url}">{news}</a>',
@@ -44,19 +49,24 @@ class NewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
         )
 
     def bump(self, request, queryset):
+        """Action to bump the selected news-items"""
         for news in queryset:
             news.bump()
 
     def stick(self, request, queryset):
+        """Action to make sticky the selected news-items"""
         queryset.update(sticky=True)
 
     def unstick(self, request, queryset):
+        """Action to make not sticky the selected news-items"""
         queryset.update(sticky=False)
 
     def hide(self, request, queryset):
+        """Action to hide the selected news-items"""
         queryset.update(visible=False)
 
     def reveal(self, request, queryset):
+        """Action to reveal the selected news-items"""
         queryset.update(visible=True)
 
 
@@ -73,5 +83,6 @@ def add_to_frontpage(modeladmin, request, queryset):
 
 @admin.register(NewsArticle)
 class NewsArticleAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
+    """Admin interface for NewsArticle"""
     prepopulated_fields = {"slug": ("headline", )}
     actions = [add_to_frontpage]

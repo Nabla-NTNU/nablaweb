@@ -1,11 +1,12 @@
+# pylint: disable=missing-docstring
 from datetime import datetime, timedelta
 
-from nablapps.events.models import Event
 from django.test import TestCase
 
 from nablapps.bedpres.event_overrides import BedPresAndEventGetter
 from nablapps.bedpres.models import BedPres
 from nablapps.jobs.models import Company
+from nablapps.events.models import Event
 
 
 class EventGetterTest(TestCase):
