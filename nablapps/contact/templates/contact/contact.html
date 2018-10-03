@@ -14,7 +14,7 @@
     {% csrf_token %}
     {% for field in contact_form %}
         {% if forloop.counter <= 4 %}
-            <p>{{field.label}} {{field}}</p>
+            <p style="width: 100px;" >{{field.label}} {{field}}</p>
         {% endif %}
     {% endfor %}
     
