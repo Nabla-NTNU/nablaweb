@@ -213,4 +213,4 @@ WIKI_ACCOUNT_HANDLING = False
 WIKI_ACCOUNT_SIGNUP_ALLOWED = False
 
 NODE_PACKAGE_JSON = os.path.join(PROJECT_ROOT, 'package.json')
-NODE_MODULES_ROOT = os.path.join(VARIABLE_CONTENT, 'node_modules')
+NODE_MODULES_ROOT = os.path.join(PROJECT_ROOT, 'node_modules')
