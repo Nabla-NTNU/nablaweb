@@ -25,3 +25,4 @@ node_modules
 .idea
 requirements/build
 sqlite.db
+.vscode

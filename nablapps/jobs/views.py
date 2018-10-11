@@ -1,11 +1,12 @@
+"""
+Views for jobs app
+"""
 from content.templatetags.listutil import row_split
-from django.core.paginator import EmptyPage
-from django.core.paginator import PageNotAnInteger
-from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 
-from nablapps.jobs.models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
+from .models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
 
 
 def split_into_rows(jobs):

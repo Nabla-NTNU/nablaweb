@@ -1,3 +1,7 @@
+"""
+Tests things that has to do with time and deadlines
+"""
+# pylint: disable=C0111
 from datetime import datetime, timedelta
 
 from .common import GeneralEventTest

@@ -1,3 +1,6 @@
+"""
+Tests for news app
+"""
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
@@ -7,6 +10,7 @@ User = get_user_model()
 
 
 class NewsDetailViewTest(TestCase):
+    """Testing the detail view of news-articles"""
 
     def setUp(self):
         # Lager en ny nyhet som brukes i testing
@@ -27,13 +31,17 @@ class NewsDetailViewTest(TestCase):
         )
 
     def test_headline_is_on_page(self):
+        """Make sure the headline can be seen in the response content"""
         self.assertIn(self.news.headline.encode(), self.response.content)
 
     def test_lead_paragraph_is_on_page(self):
+        """Make sure the lead paragraph can be seen in the response content"""
         self.assertIn(self.news.lead_paragraph.encode(), self.response.content)
 
     def test_body_is_on_page(self):
+        """Body is on page"""
         self.assertIn(self.news.body.encode(), self.response.content)
 
     def test_publisher_is_on_page(self):
+        """The full name of the publisher should be on the page"""
         self.assertIn(self.user.get_full_name().encode(), self.response.content)

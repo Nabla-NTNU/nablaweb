@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "17d27190b346716709c952db3762c88967f2e060de601ddc84696364f3319c11"
+            "sha256": "232a9428070919dd6bdaf5333d5d252d5681b17c7eeb56a45a1b5941f54d6253"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -75,7 +75,7 @@
         "content": {
             "editable": true,
             "git": "https://bitbucket.org/webkom/content-app.git",
-            "ref": "1e451bfd956fcdbfa8df2d5bb834137e2819752a"
+            "ref": "a510e617279c8ef457c2643ff1151df52dbc278f"
         },
         "cryptography": {
             "hashes": [
@@ -122,14 +122,6 @@
             ],
             "index": "pypi",
             "version": "==11.0.0"
-        },
-        "django-bower": {
-            "hashes": [
-                "sha256:3ab5699b782d63d1aa8e5d61f9bdcdb8d29137e7ba6f19d094d566241afee0f2",
-                "sha256:f1cf649842c0cb28f8aa28617e99fc7fb7773bac4e8886ee4e36962a38c99a6e"
-            ],
-            "index": "pypi",
-            "version": "==5.2.0"
         },
         "django-braces": {
             "hashes": [
@@ -204,12 +196,20 @@
             ],
             "version": "==0.8.7"
         },
+        "django-node-assets": {
+            "hashes": [
+                "sha256:4af03b08d94597218af2471af7681c2a470e1cebffafbbd89dc016c2b25ec65d",
+                "sha256:6fcd5c067066acc40b02288747bbd8b143a1069da3e0c79c2a75bbf5dc8bc6f1"
+            ],
+            "index": "pypi",
+            "version": "==0.9.2"
+        },
         "django-nyt": {
             "hashes": [
-                "sha256:7e81a7a48186c86f4ab235cd27ab46e950fdd8bef52b952c9cb9ed9e67cd3830",
-                "sha256:cf52ebc854edc2ed2e4224f27027be4900917820c83eae6239dca9b28697732e"
+                "sha256:77a5da416e0fd678be82052cdbd3771949fcfbb1e85c5bff946448d232b2add3",
+                "sha256:f976553424c0950b859a9c5a493155598a19745ebeb876a9b61934b57d960fed"
             ],
-            "version": "==1.1.1"
+            "version": "==1.0"
         },
         "django-sekizai": {
             "hashes": [
@@ -272,9 +272,9 @@
         },
         "markdown2": {
             "hashes": [
-                "sha256:8bb9a24eb2aa02f1427aabe46483f0f0215ab18c8a345315ae8e2ee3c3a09c03"
+                "sha256:08a124043aa0ad36ba2136239547d5011a2b770278abb11a5609611e0040ea05"
             ],
-            "version": "==2.3.5"
+            "version": "==2.3.6"
         },
         "pillow": {
             "hashes": [
@@ -333,9 +333,9 @@
         },
         "pycparser": {
             "hashes": [
-                "sha256:99a8ca03e29851d96616ad0404b4aad7d9ee16f25c9f9708a11faf2810f7b226"
+                "sha256:a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3"
             ],
-            "version": "==2.18"
+            "version": "==2.19"
         },
         "pymysql": {
             "hashes": [
@@ -368,10 +368,10 @@
         },
         "sorl-thumbnail": {
             "hashes": [
-                "sha256:1cc6d913fe4f1224e479f25a23ec2ad3ca71c3154919a2c9463b07e7fbe11ac2",
-                "sha256:c5ef989da07d31925754922ce95783fd2b1f8735124c0510884633eb32a4cd3e"
+                "sha256:8dfe5fda91a5047d1d35a0b9effe7b000764a01d648e15ca076f44e9c34b6dbd",
+                "sha256:d9e3f018d19293824803e4ffead96b19dfcd44fa7987cea392f50436817bef34"
             ],
-            "version": "==12.4.1"
+            "version": "==12.5.0"
         },
         "text-unidecode": {
             "hashes": [
@@ -399,11 +399,11 @@
         },
         "wiki": {
             "hashes": [
-                "sha256:0961083d2d4b541697260a63f0aad865919fdbf5659f4adfe0fa09d980bdf807",
-                "sha256:b82accdaad19ac33bd50d143b3b0d2dcff75a4db8bd63689e38b91c57e4c37b1"
+                "sha256:11dbff30fd86dd4942256188813d786adacff02a26efacfacc2ca80fd7e56eca",
+                "sha256:a68efcba05c68883361606519d763314790e2c5aa9f308d7a314ac3ab5fbdc3e"
             ],
             "index": "pypi",
-            "version": "==0.3b3"
+            "version": "==0.3.1"
         }
     },
     "develop": {

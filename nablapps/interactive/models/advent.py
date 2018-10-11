@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from nablapps.accounts.models import NablaUser
 from nablapps.com.models import Committee
@@ -27,6 +27,7 @@ class AdventDoor(InteractiveElement):
         Committee,
         blank=True,
         verbose_name="Komité",
+        on_delete=models.CASCADE,
         null=True
     )
 
@@ -35,11 +36,13 @@ class AdventDoor(InteractiveElement):
         verbose_name="Vinner",
         blank=True,
         null=True,
+        on_delete=models.CASCADE,
         related_name="advent_doors_won"
     )
 
     calendar = models.ForeignKey(
         'interactive.AdventCalendar',
+        on_delete=models.CASCADE,
         verbose_name="Kalender"
     )
 
@@ -69,6 +72,7 @@ class AdventDoor(InteractiveElement):
     quiz = models.ForeignKey(
         'interactive.Quiz',
         verbose_name="Lenket quiz",
+        on_delete=models.CASCADE,
         null=True,
         blank=True
     )
@@ -76,6 +80,7 @@ class AdventDoor(InteractiveElement):
     user_test = models.ForeignKey(
         'interactive.Test',
         verbose_name="Lenket brukertest",
+        on_delete=models.CASCADE,
         null=True,
         blank=True
     )
@@ -154,9 +159,11 @@ class AdventParticipation(InteractionResult):
 
     door = models.ForeignKey(
         AdventDoor,
+        on_delete=models.CASCADE,
         related_name="participation"
     )
 
     user = models.ForeignKey(
-        NablaUser
+        NablaUser,
+        on_delete=models.CASCADE,
     )

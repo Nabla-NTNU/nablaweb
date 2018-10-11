@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('retning', models.CharField(max_length=6, help_text='Retning', choices=[('biofys', 'Biofysikk og medisinteknologi'), ('indmat', 'Industriell matematikk'), ('tekfys', 'Teknisk fysikk')])),
                 ('start', models.DateField(help_text='Dato utveksling startet')),
                 ('end', models.DateField(help_text='Dato utveksling sluttet')),
-                ('student', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('student', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ['student'],
@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
                 ('title', models.CharField(default='', max_length=50, help_text='Tittelen til innholdet', verbose_name='tittel')),
                 ('body', models.TextField(blank=True, help_text='Man kan her bruke <a href="http://en.wikipedia.org/wiki/Markdown" target="_blank">markdown</a> for å formatere teksten.', verbose_name='brødtekst')),
-                ('ex', models.ForeignKey(to='exchange.Exchange')),
+                ('ex', models.ForeignKey(to='exchange.Exchange', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name_plural': 'info',
@@ -57,6 +57,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='exchange',
             name='univ',
-            field=models.ForeignKey(to='exchange.University'),
+            field=models.ForeignKey(to='exchange.University', on_delete=models.CASCADE),
         ),
     ]

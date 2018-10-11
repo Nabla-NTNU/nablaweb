@@ -21,7 +21,7 @@ class Product(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     photo = models.ImageField(upload_to='product_photo', blank=False, verbose_name='bilde')
     price = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='pris', default='123')
-    category = models.ForeignKey(Category, blank=True, null=True)
+    category = models.ForeignKey(Category, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

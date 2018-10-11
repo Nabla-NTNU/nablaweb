@@ -1,7 +1,9 @@
+"""
+Tests for the EventForm
+"""
+# pylint: disable=C0111,C0301
 from collections import ChainMap
-
 from django.test import TestCase
-
 from nablapps.events.forms import EventForm
 
 

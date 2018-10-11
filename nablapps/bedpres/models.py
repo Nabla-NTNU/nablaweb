@@ -1,14 +1,20 @@
-from nablapps.events.models.abstract_event import AbstractEvent
-from django.core.urlresolvers import reverse
+"""
+BPC-bedpres as a django model
+"""
+from django.urls import reverse
 from django.db import models
 
+from nablapps.events.models.abstract_event import AbstractEvent
 from nablapps.jobs.models import Company
 from .bpcmixin import BPCEventMixin
 
 
 class BedPres(BPCEventMixin, AbstractEvent):
     """
-    Modell som lagrer informasjon om en bedpress fra BPC.
+    Model representing a bedpress at BPC.
+
+    It implements the same "interface" as the Event model in the events app.
+    It also adds the connection to BPC and a connection to a company in the jobs app.
     """
 
     bpcid = models.CharField(
@@ -22,6 +28,7 @@ class BedPres(BPCEventMixin, AbstractEvent):
         Company,
         verbose_name="Bedrift",
         blank=False,
+        on_delete=models.CASCADE,
         help_text="Hvilken bedrift som står bak bedriftspresentasjonen")
 
     class Meta:
@@ -29,7 +36,9 @@ class BedPres(BPCEventMixin, AbstractEvent):
         verbose_name_plural = "bedriftspresentasjoner"
 
     def get_registration_url(self):
+        """Get the url used for registering for the event"""
         return reverse('bedpres_registration', kwargs={'pk': self.pk})
 
     def get_absolute_url(self):
+        """Get canonical url of object (used by django)"""
         return reverse("bedpres_detail", kwargs={'pk': self.pk, 'slug': self.slug})

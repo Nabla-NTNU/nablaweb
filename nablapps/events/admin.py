@@ -1,3 +1,4 @@
+"""Admin for events app"""
 from django.contrib import admin
 from image_cropping import ImageCroppingMixin
 from content.admin import ChangedByMixin
@@ -8,12 +9,14 @@ from .models import Event, EventRegistration
 
 @admin.register(EventRegistration)
 class EventRegistrationAdmin(admin.ModelAdmin):
+    """Admin interface for eventregistration model"""
     search_fields = ['user__username', 'user__first_name', 'user__last_name', 'event__headline']
     ordering = ['-event__event_start']
 
 
 @admin.register(Event)
 class EventAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
+    """Admin interface for Event model"""
     fields = ("publication_date",
               "published",
               "picture",

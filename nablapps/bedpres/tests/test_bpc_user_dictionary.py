@@ -1,3 +1,4 @@
+# pylint: disable=missing-docstring
 from django.test import TestCase
 
 from nablapps.accounts.models import NablaUser, FysmatClass
@@ -16,8 +17,8 @@ class BpcUserDictionaryTest(TestCase):
         c = FysmatClass.objects.create(starting_year=2012)
         c.user_set.add(self.user)
 
-    def assert_bpc_dict_contains_all(self, dict):
-        self.assertEqual(dict.keys(), {"fullname", "username", "card_no", "year"})
+    def assert_bpc_dict_contains_all(self, dictionary):
+        self.assertEqual(dictionary.keys(), {"fullname", "username", "card_no", "year"})
 
     def test_valid_user(self):
         bpc_dict = get_bpc_user_dictionary(self.user)

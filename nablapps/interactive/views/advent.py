@@ -51,7 +51,7 @@ class AdventCalendarView(ListView):
     context_object_name = "doors"
 
     def dispatch(self, request, *args, **kwargs):
-        self.calendar = AdventCalendar.objects.get(year=kwargs['year'])
+        self.calendar = get_object_or_404(AdventCalendar, year=kwargs['year'])
         return super().dispatch(request, *args, **kwargs)
 
     def get_template_names(self):
@@ -151,12 +151,6 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        year = context['door'].calendar.year
-        # TODO: gjør advent_base til advent_base_2015 og fiks default greien
-        if year == 2015:
-            context['base_template'] = "interactive/advent_base.html"
-        elif year == 2017:
-            context['base_template'] = "interactive/advent_base_2016.html" # Burde egentlig bare bruke html-en til kalenderen
-        else:
-            context['base_template'] = "interactive/advent_base_" + str(year) + ".html"
+        context['base_template'] = self.object.calendar.template
+
         return context

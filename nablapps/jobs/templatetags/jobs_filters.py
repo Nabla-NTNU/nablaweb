@@ -1,3 +1,6 @@
+"""
+Templatetags used in jobs app
+"""
 from django import template
 
 register = template.Library()
@@ -9,5 +12,4 @@ def commas_no(qset):
     string_list = list(map(str, qset))
     if len(string_list) < 2:
         return "".join(string_list)
-    else:
-        return ", ".join(string_list[:-1]) + " og " + string_list[-1]
+    return f"{', '.join(string_list[:-1])} og {string_list[-1]}"

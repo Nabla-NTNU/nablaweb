@@ -1,7 +1,7 @@
 {% load humanize %}
 
 {% if years%}
-<p>Se stillingsannonser relevant for {% for year in years %}<a href="{% url "relevant_for_year_list" year=year.year %}">{{ year.long_name }}</a>, {% endfor %}
+<p>Se stillingsannonser relevant for {% for year in years %}<a href="{% url "relevant_for_year_list" year=year.year %}">{{ year }}</a>, {% endfor %}
 {% for choice in choices %}<a href="{% url "relevant_for_linje_list" linje=choice.studieretning %}">{{ choice.studieretning|lower }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
 {% endif %}
 

@@ -1,36 +1,41 @@
+"""
+Exceptions for events app
+
+To have so many exception types might be a little over the top, but ...
+"""
 
 
 class EventException(Exception):
-    pass
+    """Base exception type for events app"""
 
 
 class UserRegistrationException(EventException):
-    token = None
-
+    """Base class for exceptions that can be raised when a user trys to register for an event"""
     def __init__(self, event=None, user=None):
+        super().__init__()
         self.event = event
         self.user = user
 
 
 class RegistrationNotRequiredException(UserRegistrationException):
-    pass
+    """Raised when a user tries to register to an event without registration"""
 
 
 class RegistrationNotOpen(UserRegistrationException):
-    pass
+    """Raised when a user tries to register to and that is not open for registration"""
 
 
 class RegistrationAlreadyExists(UserRegistrationException):
-    pass
+    """Raised if user already registered to the event"""
 
 
 class RegistrationNotAllowed(UserRegistrationException):
-    pass
+    """Raised if the user is not allowed to register to an event"""
 
 
 class EventFullException(UserRegistrationException):
-    pass
+    """Raised if all places are taken on an event"""
 
 
 class DeregistrationClosed(UserRegistrationException):
-    pass
+    """Raised when a user tries to deregister from an event after the deregistration deadline"""

@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.http import HttpRequest
 
-from nablaweb.context_processors import get_primary_dir
+from nablapps.core.context_processors import get_primary_dir
 
 
 class TestPrimaryDir(TestCase):

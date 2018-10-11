@@ -84,7 +84,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='news',
             name='content_type',
-            field=models.ForeignKey(to='contenttypes.ContentType', null=True),
+            field=models.ForeignKey(to='contenttypes.ContentType', null=True, on_delete=models.CASCADE),
         ),
         migrations.RunPython(forwards_func, reverse_func),
     ]

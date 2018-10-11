@@ -1,18 +1,22 @@
+"""
+Tests for registration to an event
+"""
+# pylint: disable=C0111,C0301
 import random
 from datetime import datetime
 
 from django.core import mail
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
-
 from nablapps.events.exceptions import RegistrationAlreadyExists, EventException
-
 from .common import GeneralEventTest
 
+User = get_user_model()
 
 class RegistrationTest(GeneralEventTest):
-
+    """
+    Tests for registration
+    """
     def test_register_and_deregister(self):
         self.event.register_user(self.user)
         self.assertTrue(self.event.is_registered(self.user))
@@ -69,6 +73,9 @@ class RegistrationTest(GeneralEventTest):
 
 
 class WaitingListTest(GeneralEventTest):
+    """
+    Tests everything concerning the waiting list
+    """
     def setUp(self):
         super().setUp()
 
