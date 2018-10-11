@@ -26,7 +26,7 @@ def contact(request):
                 return HttpResponseRedirect('/contact/success/')
             else:
                 spam_check = True
-                test_val = ContactForm.test_val = random.randint(0,20)
+                test_val = request.session['test_val'] = random.randint(0,20)
                 context = make_context(request, spam_check, test_val)
                 return render(request, 'contact/contact.html', context)
  
