@@ -5,12 +5,10 @@ from .forms import ContactForm
 
 import random
 
-import random
-
 def contact(request):
     spam_check = False
     if request.method != 'POST':
-        test_val = ContactForm.test_val = random.randint(0,20)
+        test_val = request.session['test_val'] = random.randint(0,20)
         context = make_context(request, spam_check, test_val)
         return render(request, 'contact/contact.html', context)
     
@@ -18,8 +16,8 @@ def contact(request):
         contact_form = ContactForm(request.POST)
         if contact_form.is_valid():
             #spam check
-            if contact_form.get_test_val() == contact_form.get_answer():
-                #Sende mail
+            if request.session['test_val'] == contact_form.get_answer():
+                #Sends mail
                 subject, message, email = contact_form.process()
                 try:
                     send_mail(subject, message, email, ['webkom@nabla.ntnu.no'], fail_silently=False)
@@ -52,7 +50,4 @@ def make_context(request, spam_check, test_val):
         contact_form = ContactForm
         context = {'contact_form': contact_form, 'spam_check': spam_check, 'test_val': test_val}
         return context
-
-
-
 

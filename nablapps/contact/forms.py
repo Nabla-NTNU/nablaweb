@@ -7,13 +7,6 @@ class ContactForm(forms.Form):
     message = forms.CharField(label='Melding:', widget=forms.Textarea, required=True)
     spam_check = forms.FloatField(max_value=20, required=True)
 
-    test_val = 0
-
-    your_name_val = ''
-    email_val = ''
-    subject_val = ''
-    message_val = ''
-
     def process(self):
         cd = self.cleaned_data
         subject = cd['subject']
