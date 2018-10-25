@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Tilbakemelding{% endblock %}
+
+{% block content %}
+
+<h1>Tilbakemelding</h1>
+
+{% if spam_check == True %}
+    <p style="color:red;"> Forsøk å regne kontrollspørsmål på nytt</p>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    {% for field in contact_form %}
+        {% if forloop.counter <= 4 %}
+            <p style="width: 100px;" >{{field.label}} {{field}}</p>
+        {% endif %}
+    {% endfor %}
+    
+    <p>Hva er kvadratroten av {{ test_val }} ganget med kvadratroten av {{ test_val }}?</p>
+    <p>{{ contact_form.spam_check }}</p>
+
+    <button type="submit">Send</button>
+
+{{ contact_form.right_answer }}
+</form>
+
+{% endblock %}

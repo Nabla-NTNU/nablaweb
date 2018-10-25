@@ -49,6 +49,7 @@ urlpatterns = [
     url(r'^shop/', include('nablapps.nablashop.urls', namespace='nablashop')),
     url(r'^stillinger/', include('nablapps.jobs.urls')),
     url(r'^utveksling/', include('nablapps.exchange.urls')),
+    url(r'^contact/', include('nablapps.contact.urls')),
     url(r'^wiki/notifications/', django_nyt.urls.get_pattern()),
     url(r'^wiki/', wiki.urls.get_pattern()),
 
