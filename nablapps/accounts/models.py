@@ -54,11 +54,12 @@ class NablaUser(AbstractUser):
         verbose_name="NTNU kortnr",
         max_length=10,
         blank=True,
-        help_text=(
-            "Dette er et 7-10 siffer lant nummeret på baksiden av kortet. På nye kort er dette siffrene etter EM. "
-            "På gamle kort ert dette siffrene nede til venstre. "
-            "Det brukes blant annet for å komme inn på bedpresser.")
-        )
+        help_text=' '.join((
+            "Dette er et 7-10-sifret nummer på baksiden av kortet.",
+            "På nye kort er dette sifrene etter EM.",
+            "På gamle kort er dette sifrene nede til venstre.",
+            "Det brukes blant annet for å komme inn på bedpresser.",
+        ))
 
     objects = NablaUserManager()
 
