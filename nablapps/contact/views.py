@@ -8,7 +8,7 @@ import random
 def contact(request):
     spam_check = False
     if request.method != 'POST':
-        test_val = request.session['test_val'] = random.randint(0,20)
+        test_val = random.randint(0,20)
         context = make_context(request, spam_check, test_val)
         return render(request, 'contact/contact.html', context)
     
@@ -16,7 +16,7 @@ def contact(request):
         contact_form = ContactForm(request.POST)
         if contact_form.is_valid():
             #spam check
-            if request.session['test_val'] == contact_form.get_answer():
+            if contact_form.get_right_answer() == contact_form.get_answer():
                 #Sends mail
                 subject, message, email = contact_form.process()
                 try:
@@ -26,7 +26,7 @@ def contact(request):
                 return HttpResponseRedirect('/contact/success/')
             else:
                 spam_check = True
-                test_val = request.session['test_val'] = random.randint(0,20)
+                test_val = random.randint(0,20)
                 context = make_context(request, spam_check, test_val)
                 return render(request, 'contact/contact.html', context)
  
@@ -34,7 +34,6 @@ def contact(request):
 
 def success(request):
     return render(request, 'contact/success.html')
-# Create your views here.
 
 #######################################################################
 
@@ -42,12 +41,13 @@ def success(request):
 def make_context(request, spam_check, test_val):
     if request.user.is_authenticated:
         #skjema uten navn og e-post
-        contact_form = ContactForm(initial={'your_name': request.user.get_full_name(), 'email': request.user.email})
+        contact_form = ContactForm(initial={'your_name': request.user.get_full_name(), 'email': request.user.email, 
+'right_answer': test_val})
         context = {'contact_form': contact_form, 'spam_check': spam_check, 'test_val': test_val}
         return context
     else:
         #tomt skjema
-        contact_form = ContactForm
+        contact_form = ContactForm(initial={'right_answer': test_val})
         context = {'contact_form': contact_form, 'spam_check': spam_check, 'test_val': test_val}
         return context
 
