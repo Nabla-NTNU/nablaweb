@@ -59,7 +59,8 @@ class NablaUser(AbstractUser):
             "På nye kort er dette sifrene etter EM."
             "På gamle kort er dette sifrene nede til venstre."
             "Det brukes blant annet for å komme inn på bedpresser."
-        ))
+        )
+    )
 
     objects = NablaUserManager()
 
