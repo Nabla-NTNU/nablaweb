@@ -39,6 +39,11 @@ class AlbumImage(BaseImageModel):
         return reverse('album_image',
                        kwargs={"pk": self.album.id, "num": self.num+1})
 
+    @property
+    def is_published(self):
+        """Check is parent album is hidden (meaning unpublished)"""
+        return self.album.visibility != 'h'
+
     class Meta:
         verbose_name = "Albumbilde"
         verbose_name_plural = "Albumbilder"

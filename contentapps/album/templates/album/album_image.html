@@ -35,7 +35,8 @@
 
 {% block sidebar %}
 
-
-{% include "content/includes/album_sidebar_admin.html" %}
+{% with object=image %}
+    {% include "content/includes/album_sidebar_admin.html" %}
+{% endwith %}
 
 {% endblock %}
