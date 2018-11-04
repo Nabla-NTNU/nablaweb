@@ -24,9 +24,45 @@
     <li>
         <a href="{% url "event_list" prev.year prev.month %}">&laquo;</a>
     </li>
-    <li class="inactive">
-        <a>{{ this|date:"F"|capfirst }}</a>
+    <li>
+        <div class = opt>
+            <select onchange="if (this.value) window.location.href=this.value">
+                <option value="" selected>{{ this|date:"F"|capfirst }}</option>
+                <option value="{% url "event_list" this.year 1 %}">Januar</option>
+                <option value="{% url "event_list" this.year 2 %}">Februar</option>
+                <option value="{% url "event_list" this.year 3 %}">Mars</option>
+                <option value="{% url "event_list" this.year 4 %}">April</option>
+                <option value="{% url "event_list" this.year 5 %}">Mai</option>
+                <option value="{% url "event_list" this.year 6 %}">Juni</option>
+                <option value="{% url "event_list" this.year 7 %}">Juli</option>
+                <option value="{% url "event_list" this.year 8 %}">August</option>
+                <option value="{% url "event_list" this.year 9 %}">September</option>
+                <option value="{% url "event_list" this.year 10 %}">Oktober</option>
+                <option value="{% url "event_list" this.year 11 %}">November</option>
+                <option value="{% url "event_list" this.year 12 %}">{{this.month}}</option>
+
+            </select>
+        </div>
     </li>
+
+<!--
+    <script>
+        function dateURL(){
+            for (month = 1; month < 13; month++){
+
+        }
+        for månedtall i range(1,13):
+            if månedtall < faktiskmåned:
+                value {(this.year+1) månedtall}
+            else:
+                value {(this.year månedtall}
+    </script>
+-->
+
+    <!--<li class="inactive">-->
+        <!--<a>{{ this|date:"F"|capfirst }}</a>-->
+    <!--</li>-->
+
     <li>
         <a href="{% url "event_list" next.year next.month %}">&raquo;</a>
     </li>
