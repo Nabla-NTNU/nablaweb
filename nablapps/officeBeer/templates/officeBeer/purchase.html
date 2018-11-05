@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Skan kort</h1>
+<form action="" method="post">
+  {% csrf_token %}
+  <!-- {% for radio in form.price %} -->
+
+  <!-- {{ radio.tag }} -->
+  <!-- <label for="{{ radio.id_for_label }}" class="beer"> -->
+  <!--   {{ radio.choice_label }} -->
+  <!-- </label> -->
+  <!-- {% endfor %} -->
+  {{ form }}
+  <input type="submit" value="Submit">
+</form>
+{% endblock %}
