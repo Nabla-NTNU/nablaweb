@@ -1,17 +1,40 @@
 {% extends "base.html" %}
 
+{% block more_head %}
+<style>
+  ul {
+      list-style: none;
+  }
+
+  #id_product li {
+      display: inline-block;
+  }
+
+  #id_product input[type="radio"] {
+      display: none;
+  }
+
+  #id_product label {
+      padding: 10px 5px;
+      border: 1px solid black;
+      box-shadow: 0 0 7px -3px black;
+      transition: 0.1s;
+  }
+  
+  #id_product input:checked + label {
+      border-bottom: 2px solid red;
+      box-shadow: 0 0 7px -3px red;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <h1>Skan kort</h1>
 <form action="" method="post">
   {% csrf_token %}
-  <!-- {% for radio in form.price %} -->
-
-  <!-- {{ radio.tag }} -->
-  <!-- <label for="{{ radio.id_for_label }}" class="beer"> -->
-  <!--   {{ radio.choice_label }} -->
-  <!-- </label> -->
-  <!-- {% endfor %} -->
-  {{ form }}
+  {% for field in form %}
+  {{ field }}
+  {% endfor %}
   <input type="submit" value="Submit">
 </form>
 {% endblock %}

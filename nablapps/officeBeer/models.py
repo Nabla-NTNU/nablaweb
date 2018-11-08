@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils.timezone import now
 
 class Account(models.Model):
     """
@@ -38,9 +39,34 @@ class Transaction(models.Model):
         )
 
     date = models.DateTimeField(
-        'Dato'
+        'Dato',
+        default = now
         )
 
+class DepositRequest(models.Model):
+    """
+    Todo: write docstring
+    """
+
+    amount = models.IntegerField(
+        'Beløp'
+        )
+
+    account = models.ForeignKey(
+        Account
+        )
+
+    def approve(self):
+        # Approve request and create a positive transaction
+        self.account.balance += self.amount
+        self.account.save()
+        Transaction(description="Deposit", amount=self.amount, account=self.account).save()
+        self.delete()
+
+    def __str__(self):
+        return f"{self.account.user.get_full_name()}'s deposit request of kr {self.amount}"
+        
+    
 class Product(models.Model):
     """
     Products one can buy

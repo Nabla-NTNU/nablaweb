@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Account, Product
+from .models import Account, Product, DepositRequest
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
@@ -14,3 +14,14 @@ class ProductAdmin(admin.ModelAdmin):
     Admin interface for Product
     """
     
+@admin.register(DepositRequest)
+class DepositRequestAdmin(admin.ModelAdmin):
+    """
+    Admin interface for DepositRequest
+    """
+    def approve(self, request, queryset):
+        for request in queryset:
+            request.approve()
+
+    actions = [approve]
+

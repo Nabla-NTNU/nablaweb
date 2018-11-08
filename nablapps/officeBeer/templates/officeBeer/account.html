@@ -10,4 +10,11 @@ Balance: {{ account.balance }}
   <li>{{ transaction.date }} - {{ transaction.description }} - {{ transaction.amount }}NOK
   {% endfor %}
 </ul>
+
+<h2>Innskudd:</h2>
+<ul>
+  {% for deposit in deposit_list %}
+  <li>{{ deposit.date }} - {{ deposit.description }} - {{ deposit.amount }}NOK
+  {% endfor %}  
+</ul>
 {% endblock %}
