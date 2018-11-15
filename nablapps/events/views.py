@@ -101,19 +101,32 @@ def calendar(request, year=None, month=None):
 
     user = request.user
     future_attending_events = EventGetter.attending_events(user, today)
+    chosen_month=today
+
+    month_list= [chosen_month]
+
+    for n in range(5):
+        month_list.insert(0,datetime.date(month_list[0].year,month_list[0].month,1)-datetime.timedelta(27))
+    for n in range(6):
+        month_list.append(datetime.date(month_list[-1].year,month_list[-1].month,1)+datetime.timedelta(32))
 
     # Get some random dates in the current, next, and previous month.
     # These dates are used load the calendar for that month.
     # * prev is some day in the previous month
     # * this is some day in this month
     # * next is some day in the next month
-    return render(request, 'events/event_list.html', {
+    #
+
+    context = {
         'calendar': mark_safe(cal),
         'prev': first_of_month - datetime.timedelta(27),
         'this': first_of_month,
         'next': first_of_month + datetime.timedelta(32),
         'future_attending_events': future_attending_events,
-    })
+        'month_list': month_list
+    }
+
+    return render(request, 'events/event_list.html', context)
 
 
 class EventRegistrationsView(PermissionRequiredMixin, DetailView):
