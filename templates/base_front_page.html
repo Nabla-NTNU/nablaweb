@@ -55,12 +55,15 @@ For readability the template includes the navbar and the footer from other templ
         <div class="container">
             {% bootstrap_messages %}
             {% block main %}
-            <div class="row">
-                <div class="col-md-12">
+                <div class="row">
                     {% block content %}
                     {% endblock content %}
                 </div>
-            </div>
+
+                <div class = "row">
+                  {% block sidebar %}
+                  {% endblock sidebar %}
+                </div>
             {% endblock main %}
         </div>
         {% include "base_footer_inc.html" %}
