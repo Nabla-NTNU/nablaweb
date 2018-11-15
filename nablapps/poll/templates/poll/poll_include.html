@@ -15,9 +15,7 @@
     <h4>{{ poll.question }}</h4>
 
     {% if poll_has_voted %}
-        {% cache 900 poll_results poll.id poll_total_votes %}
-            {% include "poll/includes/poll_result.html" %}
-        {% endcache %}
+        {% include "poll/includes/poll_result.html" %}
     {% else %}
         {% include "poll/includes/vote_form.html" %}
     {% endif %}
