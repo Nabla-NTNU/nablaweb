@@ -102,7 +102,7 @@ def calendar(request, year=None, month=None):
     user = request.user
     future_attending_events = EventGetter.attending_events(user, today)
 
-    chosen_month=today
+    chosen_month=datetime.date(first_of_month)
     month_list= [chosen_month]
 
     for n in range(5):
