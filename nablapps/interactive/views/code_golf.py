@@ -42,7 +42,7 @@ class code_golf(View):
                 return render(request, 'interactive/code_golf_error.html', context)
 
         else:
-            return HttpResponse('Oi, noe gikk galt. Husk å trykke "run" før du trykker send!')
+            return HttpResponse('Oi, noe gikk galt. Husk å trykke "run", og sjekk at koden skriver ut noe før du trykker send!')
             
 
 def code_golf_score(request, task_id):
