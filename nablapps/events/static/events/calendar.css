@@ -16,7 +16,8 @@
     select {
         border: 0px;
         background: transparent;
-
+        -moz-appearance: none;
+        text-align: center;
     }
     .month {
         display: table;
@@ -52,6 +53,23 @@
 
 /* Mobile calendar */
 @media (max-width: 600px) {
+    .opt{
+        border-radius: 15px;
+        color: #337ab7;
+        background-color: #fff;
+        border: 1px solid rgb(221,221,221);
+        padding: 7px;
+        text-align: center;
+        align-items: center;
+        display: inline;
+        margin-right: 0.28em
+    }
+    select {
+        border: 0px;
+        background: transparent;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
     .month { display: block; }
     .daynames { display: none; }
     .week { list-style: none; margin: 0;}

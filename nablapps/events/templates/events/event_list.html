@@ -26,7 +26,7 @@
     </li>
     <li>
         <div class = opt>
-            <select onchange="if (this.value) window.location.href=this.value">
+            <select onchange="if (this.value) window.location.href=this.value" onmouseover="" style="cursor: pointer;">
                 {% for i in month_list %}
                     <option value="{% url "event_list" i.year i.month %}" {% if i == month_list.5 %} selected {% endif %} >{{ i|date:"F"|capfirst }}</option>
                 {% endfor %}
