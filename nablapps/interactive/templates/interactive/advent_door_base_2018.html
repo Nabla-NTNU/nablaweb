@@ -8,7 +8,7 @@
 {% addtoblock "js" %}
 {% endaddtoblock %}
 
-<h1>{{ door.number }}</h1>
+<h1 style="text-shadow: none;">{{ door.number }}</h1>
 {% if not door.is_published %}
 <div class="alert alert-warning alert-dismissible">Dette er bare synlig fordi du har riktige rettigheter</div>
 {% endif %}
