@@ -32,3 +32,6 @@ pylint-django = "*"
 
 [requires]
 python_version = "3.6"
+
+[scripts]
+production = "gunicorn --config /etc/websites/nablaweb/gunicorn.conf nablaweb.wsgi:application"
