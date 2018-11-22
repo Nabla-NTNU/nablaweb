@@ -1,0 +1,118 @@
+{% load listutil %}
+{% load sekizai_tags %}
+{% load bootstrap3 %}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>
+        Nabla - Julekalender {{ calendar.year}}
+    </title>
+    <meta name="description"
+          content="Hjemmesiden til linjeforeningen Nabla, for studentene på
+                   fysikk og matematikk-masterprogrammet på NTNU.">
+    <meta name="author" content="Nabla">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:image" content="https://nabla.no/media/jul_2016_meta.jpg">
+    <link href="https://fonts.googleapis.com/css?family=Playball&amp;subset=latin-ext" rel="stylesheet"> 
+
+    {% addtoblock "css" %}
+        <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}"/>
+        <link rel="stylesheet" href="{% static "interactive/css/advent_calendar_2018.css" %}"/>
+    {% endaddtoblock %}
+
+    {% addtoblock "css" %}
+    <style>
+
+    </style>
+    {% endaddtoblock %}
+
+    {% addtoblock "js" %}
+        <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "js/base.js" %}"></script>
+    {% endaddtoblock %}
+    {% render_block "css" %}
+
+    <!-- Fav and touch icons, for screen and mobile -->
+    <link rel="shortcut icon" href="{% static "img/favicon.ico" %}">
+    <link rel="apple-touch-icon" href="{% static "img/apple-touch-icon.png" %}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static "img/apple-touch-icon-72x72.png" %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static "img/apple-touch-icon-114x114.png" %}">
+    {% addtoblock "js" %}
+    <script src="{% static "wiki/js/core.js" %}"></script>
+    {% endaddtoblock %}
+
+    {% addtoblock "js-head" %}
+        <script src="{% static "jquery/dist/jquery.min.js" %}"></script>
+        <script src="{% static "requirejs/require.js" %}"></script>
+    {% endaddtoblock %}
+
+    {% render_block "js-head" %}
+
+    {% block more_head %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+
+<div class="container content">
+<div class="row">
+    <div class="col-md-2 corner-right"></div>
+<div class="col-md-8">
+    {% bootstrap_messages %}
+{% block content %}
+    {% addtoblock "js" %}
+    <script src="{% static "interactive/js/advent_calendar.js" %}"></script>
+    {% endaddtoblock %}
+
+    <h1 class="hidden-xs" style="text-shadow: none;">Nablas julekalender {{ calendar.year }}</h1>
+    <h1 class="visible-xs-block" style="font-size: 50px; text-shadow: none;">Nablas julekalender {{ calendar.year }}</h1>
+    <div class="advent-table">
+        {% for row in doors|row_split:4 %}
+            {% for door in row %}
+                <div class="advent-door" data-open="{{ door.is_published }}">
+                <div class="advent-before"></div>
+                {% if door.is_published %}
+
+                <a href="{{ door.get_absolute_url }}">
+                    <img src="
+                    {% if door.image %}
+                        {{ door.image.url }}
+                    {% else %}
+                        {% cycle "/media/advent/tree.ico" "/media/advent/snowman.png" "/media/advent/lue.png" "/media/advent/fjosnisse.png" "/media/advent/reindeer.png" "/media/advent/gift.png" "/media/advent/bells.png" %}
+                    {% endif %}
+                    " />
+                <p class="door-desc">
+                    {{ door.short_description }}
+                </p>
+                </a>
+
+                {% endif %}
+                <div class="advent-number">{{ door.number }}</div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+{% endblock %}
+</div>
+
+{% if door %}
+<div class="col-md-2 corner-right">
+<a href="{{ calendar.get_absolute_url }}"><span class="glyphicon glyphicon-share-alt" style="color: rgb(154,16,39)"></span></a>
+</div>
+{% endif %}
+</div>
+</div>
+
+{% render_block "js" %}
+
+</body>
+</html>
