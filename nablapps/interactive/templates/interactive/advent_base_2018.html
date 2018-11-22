@@ -72,7 +72,7 @@
     <script src="{% static "interactive/js/advent_calendar.js" %}"></script>
     {% endaddtoblock %}
 
-    <h1 class="hidden-xs" style="font-size: 50px; text-shadow: none;">Nablas julekalender {{ calendar.year }}</h1>
+    <h1 class="hidden-xs" style="text-shadow: none;">Nablas julekalender {{ calendar.year }}</h1>
     <h1 class="visible-xs-block" style="font-size: 50px; text-shadow: none;">Nablas julekalender {{ calendar.year }}</h1>
     <div class="advent-table">
         {% for row in doors|row_split:4 %}
