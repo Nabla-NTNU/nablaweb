@@ -2,8 +2,18 @@
 
 {% block more_head %}
 <style>
-  ul {
+  .purchase {
+      text-align: center;
+      min-height: 400px;
+  }
+  
+  #id_product {
       list-style: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, 250px);
+      grid-gap: 15px 10px;
+      justify-content: center;
   }
 
   #id_product li {
@@ -15,10 +25,14 @@
   }
 
   #id_product label {
-      padding: 10px 5px;
       border: 1px solid black;
+      border-bottom-width: 2px;
       box-shadow: 0 0 7px -3px black;
       transition: 0.1s;
+      height: 100px;
+      width: 250px;
+      line-height: 100px;
+      text-align: center;
   }
   
   #id_product input:checked + label {
@@ -26,15 +40,30 @@
       box-shadow: 0 0 7px -3px red;
   }
 </style>
+
+<script>
+  $(document).ready( function()  {
+  products = document.getElementById("id_product").children;
+  cardField = document.getElementById("id_user_card_key");
+  for( var i = 0; i < products.length; i++) {
+		      products[i].addEventListener("click", function(){
+		      cardField.focus(); cardField.select();
+		      });
+		      }
+  })
+</script>
 {% endblock %}
 
-{% block content %}
-<h1>Skan kort</h1>
+{% block main %}
+<div class="purchase">
+<h1>Velg produkt</h1>
 <form action="" method="post">
   {% csrf_token %}
   {% for field in form %}
+  {{ field.errors }}
   {{ field }}
   {% endfor %}
   <input type="submit" value="Submit">
 </form>
+</div>
 {% endblock %}

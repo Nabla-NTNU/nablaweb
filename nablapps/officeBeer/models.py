@@ -43,6 +43,14 @@ class Transaction(models.Model):
         default = now
         )
 
+    def __str__(self):
+        return f"{self.account.user.get_full_name()} - {self.amount}kr"
+        
+    class Meta:
+        permissions = (
+            ("sell_product", "Can administer the purchase view"),
+            )
+
 class DepositRequest(models.Model):
     """
     Todo: write docstring
@@ -74,7 +82,7 @@ class Product(models.Model):
     name = models.CharField(
         'Navn på produkt',
         max_length = 30)
-    price = models.IntegerField(
+    price = models.PositiveIntegerField(
         'Pris'
         )
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Account, Product, DepositRequest
+from .models import Account, Product, DepositRequest, Transaction
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
@@ -24,4 +24,3 @@ class DepositRequestAdmin(admin.ModelAdmin):
             request.approve()
 
     actions = [approve]
-

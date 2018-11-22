@@ -3,7 +3,9 @@
 {% block content %}
 
 <h1>{{ request.user.get_full_name }} office beer account </h1>
-Balance: {{ account.balance }}
+<p>Beløp på konto: {{ account.balance }}</p>
+<p>For å sette inn mer: <a href="{% url 'officebeer_deposit' %}">gå til innskuddside.</a></p>
+
 <h2>Transaksjoner:</h2>
 <ul>
   {% for transaction in transaction_list %}
