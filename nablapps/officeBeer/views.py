@@ -71,7 +71,7 @@ class PurchaseView(PermissionRequiredMixin, TemplateView):
         
         if purchase_form.is_valid():
             user = NablaUser.objects.get_from_rfid(purchase_form.cleaned_data['user_card_key'])
-            account = Account.objects.get(user=user)
+            account = Account.objects.get_or_create(user=user)[0]
             product_id = purchase_form.cleaned_data['product']
             product = Product.objects.get(id=product_id)
             price = product.price
