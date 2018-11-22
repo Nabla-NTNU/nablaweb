@@ -5,6 +5,7 @@
 h1 {
     font-family: 'Playball',  Arial, sans-serif;
     color: rgb(154,16,39);
+    text-shadow: 0px 0px 10px #000000;
     font-size: 60px;
     text-align: center;
 }
@@ -82,6 +83,7 @@ body {
 
 a, a:hover {
     color: rgb(154,16,39);
+    text-shadow: 0px 0px 10px #000000;
 }
 
 .corner-left {
@@ -125,7 +127,7 @@ body {
 }
 
 .text, .well {
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.7);
     padding: 30px;
     font-size: 20px;
     border-radius: 15px;
