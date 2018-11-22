@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
+from django.core.exceptions import ValidationError
 
 from ..models.code_golf import CodeTask, Result
 from ..forms.code_golf import Code_golf_form
@@ -39,6 +40,9 @@ class code_golf(View):
                 output = 'Beklager, feil output. Riktig svar er: ' + str(correct_output) + '. Ditt svar: ' + output
                 context = {'output': output, 'task_id': task_id}
                 return render(request, 'interactive/code_golf_error.html', context)
+
+        else:
+            return HttpResponse('Oi, noe gikk galt. Husk å trykke "run" før du trykker send!')
             
 
 def code_golf_score(request, task_id):
