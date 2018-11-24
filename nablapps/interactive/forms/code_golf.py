@@ -1,7 +1,7 @@
 from django import forms
 from ..models.code_golf import CodeTask
 
-class Code_golf_form(forms.Form):
+class CodeGolfForm(forms.Form):
     submitted_code = forms.CharField(widget=forms.HiddenInput, required=True)
     submitted_output = forms.CharField(widget=forms.HiddenInput, required=True)
 

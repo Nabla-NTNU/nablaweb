@@ -5,13 +5,13 @@
     <h1>Resultat:</h1>
     <h3>Din kode: </h3>
     <p> {{ code }}</p>
-    <p><b>Antall ord: </b> {{ length }} </p>
+    <p><b>Antall tegn: </b> {{ length }} </p>
     <h3>ditt output</h3>
     <p> {{ output }} </p>
     <h3>Resultatsliste:</h3>
 
     <table style="width:100%">
-        <tr><th>Bruker</th><th>Resultat(antall ord)</th></tr>
+        <tr><th>Bruker</th><th>Resultat(antall tegn)</th></tr>
         {% for t in result_list %}
             <tr>
                 <td>{{ t.user }}</td>
