@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Kodegolf resultat{% endblock %}
+
+{% block content %}
+    <h1>Resultat:</h1>
+    <h3>Din kode: </h3>
+    <p> {{ code }}</p>
+    <p><b>Antall ord: </b> {{ length }} </p>
+    <h3>ditt output</h3>
+    <p> {{ output }} </p>
+    <h3>Resultatsliste:</h3>
+
+    <table style="width:100%">
+        <tr><th>Bruker</th><th>Resultat(antall ord)</th></tr>
+        {% for t in result_list %}
+            <tr>
+                <td>{{ t.user }}</td>
+                <td>{{ t.length }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
+
