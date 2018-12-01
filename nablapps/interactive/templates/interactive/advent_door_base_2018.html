@@ -42,7 +42,11 @@
             </div>
             {% endif %}
             <button type="submit" class="btn btn-large btn-primary">
-                Delta i trekningen
+	      {% if part %}
+	      Endre svar
+	      {% else %}
+	      Delta i trekningen
+	      {% endif %}
             </button>
         </form>
     {% endif %}
