@@ -12,11 +12,19 @@ h1 {
 
 .advent-table {
     width: 100%;
+    margin: 0 auto;
     text-align: center;
     display: grid;
     grid-template-columns: repeat(auto-fit, 100px);
     grid-gap: 10px;
     justify-content: center;
+}
+
+/* Prevent doors from being on top of the side-decoration of the background, which can be distracting */
+@media (max-width: 1000px ) {
+    .advent-table {
+	width: 70%;
+    }
 }
 
 .advent-door {
