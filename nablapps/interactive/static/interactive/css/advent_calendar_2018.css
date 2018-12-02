@@ -13,6 +13,10 @@ h1 {
 .advent-table {
     width: 100%;
     text-align: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 100px);
+    grid-gap: 10px;
+    justify-content: center;
 }
 
 .advent-door {
