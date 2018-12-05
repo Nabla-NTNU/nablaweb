@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.db import models
 from django.forms import TextInput, Textarea
 
-from .models.code_golf import CodeTask
+from .models.code_golf import CodeTask, Result
 from .models import (
     AdventCalendar,
     AdventDoor,
@@ -146,3 +146,4 @@ admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Test, TestAdmin)
 admin.site.register(TestQuestion, TestQuestionAdmin)
 admin.site.register(CodeTask)
+admin.site.register(Result)

@@ -1,24 +1,27 @@
 {% extends "base.html" %}
+{% load markdown %}
+
 {% block title %}Kodegolf resultat{% endblock %}
 
 {% block content %}
-    <h1>Resultat:</h1>
-    <h3>Din kode: </h3>
-    <p> {{ code }}</p>
-    <p><b>Antall tegn: </b> {{ length }} </p>
-    <h3>ditt output</h3>
-    <p> {{ output }} </p>
-    <h3>Resultatsliste:</h3>
+{% if has_solution %}
+<h1>Din kode: </h1>
+{{ code|markdown }}
+<p><b>Antall tegn: </b> {{ length }} </p>
+<h1>Output:</h1>
+<p> {{ output|markdown }} </p>
+{% endif %}
 
-    <table style="width:100%">
-        <tr><th>Bruker</th><th>Resultat(antall tegn)</th></tr>
-        {% for t in result_list %}
-            <tr>
-                <td>{{ t.user }}</td>
-                <td>{{ t.length }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+<h1>Resultatsliste:</h1>
+
+<table style="width:100%">
+  <tr><th>Bruker</th><th>Resultat(antall tegn)</th></tr>
+  {% for t in result_list %}
+  <tr>
+    <td>{{ t.user.get_full_name }}</td>
+    <td>{{ t.length }}</td>
+  </tr>
+  {% endfor %}
+</table>
 
 {% endblock %}
-
