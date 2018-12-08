@@ -113,6 +113,11 @@ class AdventDoor(InteractiveElement):
     def is_today(self):
         return datetime.now() >= self.date and datetime.now() <= self.date + timedelta(days=1)
 
+    @property
+    def is_previous(self):
+        """ Returns True if the door is published but is not todays door"""
+        return self.is_published and not self.is_today
+    
     def choose_winner(self):
         if self.is_lottery and self.is_published:
             self.winner = choice(self.participation.all()).user

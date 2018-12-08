@@ -77,7 +77,11 @@
     <div class="advent-table">
         {% for row in doors|row_split:4 %}
             {% for door in row %}
-                <div class="advent-door" data-open="{{ door.is_published }}">
+	    {% if door.is_previous %}
+	    <div class="advent-door advent-door-open" data-open="{{ door.is_published }}">
+	    {% else %}
+	    <div class="advent-door" data-open="{{ door.is_published }}">
+	    {% endif %}
                 <div class="advent-before"></div>
                 {% if door.is_published %}
 
