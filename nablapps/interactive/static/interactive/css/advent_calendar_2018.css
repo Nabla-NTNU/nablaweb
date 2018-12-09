@@ -82,6 +82,10 @@ h1 {
     background-size: 100% 100%;
 }
 
+.advent-door-today {
+    box-shadow: 0px 0px 10px 0px #f2fcb0
+}
+
 .advent-door-open .advent-before {
     opacity: 0;
     transition: opacity 1s ease-in;
