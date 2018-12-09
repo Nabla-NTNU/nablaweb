@@ -1,4 +1,5 @@
 {% extends quiz.template %}
+{% load markdown %}
 
 {% block title %}{{ quiz.title }}{% endblock %}
 
@@ -27,7 +28,7 @@ jQuery(function ($) {
 <form action="{{ view.get_form_url }}" method="post">
     {% csrf_token %}
 {% for question in quiz.questions.all %}
-    <h2 class="quiz-question">{{ forloop.counter }}. {{ question.question | safe}}</h2>
+    <h2 class="quiz-question">{{ forloop.counter }}. {{ question.question|markdown:"unsafe" }}</h2>
     <ul class="list-group">
         <li class="list-group-item">
             <label>{{ question.alternative_1 }}</label>
