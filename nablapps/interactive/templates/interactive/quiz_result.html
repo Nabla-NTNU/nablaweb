@@ -22,19 +22,31 @@ Du fikk {{ result.get_correct_count }} av {{ result.get_question_count }} riktig
     <ul class="list-group">
         <li class="list-group-item">
             {{ reply.question.alternative_1 }}
-            {% if reply.question.correct_alternative == 1 %}<span class="glyphicon glyphicon-ok"></span>{% endif %}
+            {% if reply.question.correct_alternative == 1 %}<span class="glyphicon glyphicon-ok"></span>
+	    {% else %}
+	    {% if reply.alternative == 1 %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
+	    {% endif %}
         </li>
         <li class="list-group-item">
             {{ reply.question.alternative_2 }}
-            {% if reply.question.correct_alternative == 2 %}<span class="glyphicon glyphicon-ok"></span>{% endif %}
+            {% if reply.question.correct_alternative == 2 %}<span class="glyphicon glyphicon-ok"></span>
+	    {% else %}
+	    {% if reply.alternative == 2 %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
+	    {% endif %}
         </li>
         <li class="list-group-item">
             {{ reply.question.alternative_3 }}
-            {% if reply.question.correct_alternative == 3 %}<span class="glyphicon glyphicon-ok"></span>{% endif %}
+            {% if reply.question.correct_alternative == 3 %}<span class="glyphicon glyphicon-ok"></span>
+	    {% else %}
+	    {% if reply.alternative == 3 %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
+	    {% endif %}
         </li>
         <li class="list-group-item">
             {{ reply.question.alternative_4 }}
-            {% if reply.question.correct_alternative == 4 %}<span class="glyphicon glyphicon-ok"></span>{% endif %}
+            {% if reply.question.correct_alternative == 4 %}<span class="glyphicon glyphicon-ok"></span>
+	    {% else %}
+	    {% if reply.alternative == 4 %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
+	    {% endif %}
         </li>
     </ul>
 {% endfor %}
