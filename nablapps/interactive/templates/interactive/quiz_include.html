@@ -1,0 +1,48 @@
+{% load markdown %}
+
+<h1>{{ quiz.title }}</h1>
+    {% if not quiz.is_published %}
+<div class="alert alert-warning alert-dismissible">Dette er bare synlig fordi du har riktige rettigheter</div>
+{% endif %}
+{% if quiz.is_timed %}
+<div class="float-left well">
+    <h2>Tid igjen</h2>
+    <div class="countdown"></div>
+    <script>
+jQuery(function ($) {
+    var time = {{ quiz.duration }},
+        display = $('.countdown');
+    startTimer(time, display);
+});
+</script>
+
+</div>
+{% endif %}
+
+<form action="{{ view.get_form_url }}" method="post">
+    {% csrf_token %}
+{% for question in quiz.questions.all %}
+    <h2 class="quiz-question">{{ forloop.counter }}. {{ question.question|markdown:"unsafe" }}</h2>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <label>{{ question.alternative_1 }}</label>
+            <input type="radio" name="{{ question.id }}_alternative" value="1"/>
+        </li>
+        <li class="list-group-item">
+            <label>{{ question.alternative_2 }}</label>
+            <input type="radio" name="{{ question.id }}_alternative" value="2"/>
+        </li>
+        <li class="list-group-item">
+            <label>{{ question.alternative_3 }}</label>
+            <input type="radio" name="{{ question.id }}_alternative" value="3"/>
+        </li>
+        <li class="list-group-item">
+            <label>{{ question.alternative_4 }}</label>
+            <input type="radio" name="{{ question.id }}_alternative" value="4"/>
+        </li>
+    </ul>
+{% endfor %}
+    <button type="submit" class="btn btn-primary">
+        Send inn
+    </button>
+</form>
