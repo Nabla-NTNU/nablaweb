@@ -19,7 +19,7 @@ jQuery(function ($) {
 </div>
 {% endif %}
 
-<form action="{{ view.get_form_url }}" method="post">
+<form action="{% url 'quiz_reply' quiz.pk %}" method="post">
     {% csrf_token %}
 {% for question in quiz.questions.all %}
     <h2 class="quiz-question">{{ forloop.counter }}. {{ question.question|markdown:"unsafe" }}</h2>
