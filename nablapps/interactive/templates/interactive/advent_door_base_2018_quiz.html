@@ -18,7 +18,6 @@
 	{{ door.content|markdown:"unsafe" }}
     </p>
     {% if door.quiz %}
-    <p><a href="{{ door.quiz.get_absolute_url }}" class="btn btn-large btn-wide btn-primary">Gå til quiz!</a></p>
     {% include "interactive/quiz_include.html" with quiz=door.quiz %}
     {% endif %}
     {% if door.user_test %}
