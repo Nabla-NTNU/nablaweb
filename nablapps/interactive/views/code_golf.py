@@ -34,8 +34,8 @@ class CodeGolf(LoginRequiredMixin ,View):
         say that they got. The best we can do is to verify the output sent in the request.
         """
         if output != correct_output:
-            output = 'Beklager, feil output. Riktig svar er: ' + str(correct_output) + '. Ditt svar: ' + output
-            context = {'output': output, 'task_id': task_id}
+            correct = str(correct_output) 
+            context = {'correct': correct, 'output': output, 'task_id': task_id}
             return render(request, 'interactive/code_golf_error.html', context)
             
         
