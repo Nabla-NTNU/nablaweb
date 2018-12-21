@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load markdown %}
 
 {% block title %}Kodegolf{% endblock %}
 
@@ -53,7 +54,7 @@ function runit() {
 
 <h3>{{ task }}</h3> 
 
-<p>{{ task_text }}</p>
+<p>{{ task_text|markdown }}</p>
 
 <form> 
 <textarea id="yourcode" cols="40" rows="10">
