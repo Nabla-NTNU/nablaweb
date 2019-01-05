@@ -2,6 +2,7 @@
 from django.db import models
 from datetime import timedelta, datetime
 from django.conf import settings
+from nablapps.accounts.models import NablaUser
 
 
 class CodeTask(models.Model):
@@ -21,13 +22,13 @@ class Result(models.Model):
     """
     
     task = models.ForeignKey(CodeTask, on_delete=models.CASCADE,)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(NablaUser, on_delete=models.CASCADE,)
 
     solution = models.TextField(default="") # Users code
 
     @property
     def length(self):
-        return len(self.solution.strip()) # Do not count whitespace
+        return len(self.solution.strip())
 
     def __str__(self):
         return f"{self.user}'s solution to CodeTask #{self.task.id}"

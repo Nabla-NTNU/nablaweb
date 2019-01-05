@@ -38,13 +38,13 @@ class CodeGolf(LoginRequiredMixin ,View):
             context = {'correct': correct, 'output': output, 'task_id': task_id}
             return render(request, 'interactive/code_golf_error.html', context)
             
-        
         # Only one result per user
         Result.objects.update_or_create(
             user = request.user,
-            defaults = {'task': task, 'solution': code},
+            task = task,
+            defaults = {'solution': code,},
         )
-        
+
         return redirect('/kodegolf/score/'+str(task_id))
         
 def markdownify_code(code):
