@@ -1,4 +1,4 @@
-{% extends "base_no_sidebar.html" %}
+{% extends "base.html" %}
 {% load markdown %}
 {% load listutil %}
 {% load easy_thumbnails %}
@@ -63,7 +63,6 @@
   <li class="active"><a data-toggle="tab" href="#Nablad">Nablad</a></li>
   <li><a data-toggle="tab" href="#Album">Album</a></li>
   <li><a data-toggle="tab" href="#Blogg">Blogg</a></li>
-  <li><a data-toggle="tab" href="#Podcast">Skråttkast</a></li>
 </ul>
 
 <div height=300px class="well">
@@ -120,19 +119,6 @@
                 {% endfor %}
             </div>
         </div>
-        <div id="Podcast" class="tab-pane fade">
-            <h3><a href="{% url "blog" %}">Nyeste skråttkast</a></h3>
-            <div class="row">
-                {% if new_podcast %}
-                    <a href="{{ new_podcast.get_absolute_url }}">
-                        {% if new_podcast.image %}
-                            <img src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
-                        {% endif %}
-                    </a>
-                    <p><i>Dato: {{ new_podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {% get_hit_count for new_podcast %}</i></p>
-                {% endif %}
-            </div>
-        </div>
     </div>
 </div>
 <div class="row row-same-height">
@@ -140,9 +126,10 @@
         {% include "includes/article_widget.html" %}
     {% endfor %}
 </div>
-
 {# <a href="{% url "news_list" %}" class="btn">Flere nyheter</a> #}
+{% endblock content %}
 
+{% block sidebar %}
     {% include "poll/poll_include.html" %}
     {% if sidebarinfo %}
         <p>
@@ -150,7 +137,15 @@
         </p>
     {% endif %}
 
-{% endblock content %}
+    <h2>Nyeste Skråttcast</h2>
+    {% if new_podcast %}
+        <a href="{{ new_podcast.get_absolute_url }}">
+            {% if new_podcast.image %}
+                <img src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
+            {% endif %}
+        </a>
+        <p><i>Dato: {{ new_podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {% get_hit_count for new_podcast %}</i></p>
+    {% endif %}
 
-
+{% endblock sidebar %}
 
