@@ -3,6 +3,7 @@ The Event model
 """
 import logging
 from django.urls import reverse
+from django.db import IntegrityError
 
 from ..exceptions import RegistrationAlreadyExists, EventFullException, DeregistrationClosed
 from .abstract_event import AbstractEvent
@@ -24,16 +25,15 @@ class Event(AbstractEvent):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self._prune_queue()
-        EventRegistration.objects.update_lists(self)
+        self.move_waiting_to_attending()
 
     @property
     def waiting_registrations(self):
-        return self.eventregistration_set.filter(attending=False).order_by('id')
+        return self.eventregistration_set.filter(attending=False)
 
     @property
     def attending_registrations(self):
-        return self.eventregistration_set.filter(attending=True).order_by('id')
+        return self.eventregistration_set.filter(attending=True)
 
     def free_places(self):
         """Returnerer antall ledige plasser.
@@ -90,20 +90,31 @@ class Event(AbstractEvent):
     def get_waiting_list(self):
         return [e.user for e in self.waiting_registrations]
 
-    def register_user(self, user):
-        """Forsøker å melde brukeren på arrangementet."""
-        self._assert_user_allowed_to_register(user)
-        return self.add_to_attending_or_waiting_list(user)
+    def register_user(self, user, ignore_restrictions=False):
+        """
+        Tries to register a user for an event.
 
-    def add_to_attending_or_waiting_list(self, user):
-        if self.eventregistration_set.filter(user=user).exists():
+        If the user is not allowed to attend, an exception will be thrown.
+        Set ignore_restrictions to True to register a user anyways.
+        """
+        if not ignore_restrictions:
+            self._assert_user_allowed_to_register(user)
+
+        registration = EventRegistration(
+            event=self,
+            user=user,
+        )
+        if not self.is_full() or ignore_restrictions:
+            registration.attending = True
+        elif self.has_queue:
+            registration.attending = False
+        else:
+            raise EventFullException(event=self, user=user)
+        try:
+            registration.save()
+        except IntegrityError:
             raise RegistrationAlreadyExists(event=self, user=user)
-
-        if not self.is_full():
-            return EventRegistration.objects.create_attending_registration(event=self, user=user)
-        if self.has_queue:
-            return EventRegistration.objects.create_waiting_registration(event=self, user=user)
-        raise EventFullException(event=self, user=user)
+        return registration
 
     def deregister_user(self, user, respect_closed=True):
         """
@@ -121,12 +132,14 @@ class Event(AbstractEvent):
             logger = logging.getLogger(__name__)
             logger.info('Attempt to deregister user from non-existent event.')
 
-    def _prune_queue(self):
-        """Sletter overflødige registreringer."""
-        if not self.registration_required:
-            self.eventregistration_set.all().delete()
-        elif not self.has_queue:
-            self.waiting_registrations.delete()
+    def move_waiting_to_attending(self):
+        """
+        Moves as many as there are free places left on the event.
+        """
+        free_places = self.free_places()
+        waiting_regs = self.waiting_registrations[:free_places]
+        for reg in waiting_regs:
+            reg.set_attending_and_send_email()
 
     def get_registration_url(self):
         return reverse('registration', kwargs={'pk': self.pk})
