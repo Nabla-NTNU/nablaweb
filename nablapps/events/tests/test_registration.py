@@ -112,7 +112,7 @@ class WaitingListTest(GeneralEventTest):
 
     def test_set_attending_and_send_email(self):
         # Finner førstemann på ventelista
-        waiting_reg = self.event.registrations_manager.first_on_waiting_list()
+        waiting_reg = self.event.waiting_registrations[0]
         u = waiting_reg.user
 
         self.assertFalse(self.event.is_attending(u))
@@ -130,4 +130,4 @@ class WaitingListTest(GeneralEventTest):
         self.event.save()
         self.assertTrue(self.event.is_full())
         self.assertEqual(w_0 - 5, self.event.users_waiting())
-        self.assertEqual(u, self.event.registrations_manager.first_on_waiting_list().user)
+        self.assertEqual(u, self.event.waiting_registrations[0].user)

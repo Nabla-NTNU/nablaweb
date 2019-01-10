@@ -5,7 +5,7 @@ from django.db import models
 from django.conf import settings
 from django.template import loader
 
-from .managers import RelatedEventRegistrationManager, EventRegistrationManager
+from .managers import EventRegistrationManager
 
 
 class EventRegistration(models.Model):
@@ -59,11 +59,6 @@ class EventRegistration(models.Model):
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         EventRegistration.objects.update_lists(self.event)
-
-    @classmethod
-    def get_manager_for(cls, event):
-        """Henter en manager for en gitt event."""
-        return RelatedEventRegistrationManager(event)
 
     @property
     def waiting(self):

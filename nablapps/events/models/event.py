@@ -28,16 +28,12 @@ class Event(AbstractEvent):
         EventRegistration.objects.update_lists(self)
 
     @property
-    def registrations_manager(self):
-        return EventRegistration.get_manager_for(self)
-
-    @property
     def waiting_registrations(self):
-        return self.registrations_manager.waiting_ordered()
+        return self.eventregistration_set.filter(attending=False).order_by('id')
 
     @property
     def attending_registrations(self):
-        return self.registrations_manager.attending_ordered()
+        return self.eventregistration_set.filter(attending=True).order_by('id')
 
     def free_places(self):
         """Returnerer antall ledige plasser.
