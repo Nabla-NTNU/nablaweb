@@ -23,6 +23,7 @@ class UserForm(forms.ModelForm):
             'telephone',
             'cell_phone',
             'address',
+            'mail_number',
             'wants_email',
             'web_page',
             'birthday',
