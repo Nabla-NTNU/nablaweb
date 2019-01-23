@@ -108,8 +108,11 @@ INSTALLED_APPS = [
     'nablapps.meeting_records',
     'nablapps.nabladet',
     'nablapps.nablashop',
+    'nablapps.officeBeer',
     'nablapps.podcast',
     'nablapps.poll',
+    'nablapps.contact',
+    'nablaweb',
 
     ###########################
     # Eksternt utviklede apps #

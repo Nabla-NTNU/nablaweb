@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Sett inn penger</h2>
+<p>Her kan du skrive inn hvor mye du har satt inn via Vipps. Kjellerstyret vil så godkjenne innskuddet når de ser at pengene har gått igjennom.</p>
+<form action="" method="post">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" name="submit" value="Send inn"/>
+</form>
+{% endblock %}

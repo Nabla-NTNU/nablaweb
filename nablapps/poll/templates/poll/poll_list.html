@@ -33,6 +33,7 @@ Brukeravstemninger
 
 {% endwith%}
 <div class="poll well">
+    <span id="{{ poll.id }}"></span>
     <h4>{{ poll.question }}</h4>
     {% if poll.voted %}
         {% include "poll/includes/poll_result.html" %}

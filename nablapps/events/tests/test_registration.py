@@ -17,16 +17,16 @@ class RegistrationTest(GeneralEventTest):
     """
     Tests for registration
     """
+
+    def test_non_registered_users_are_not_registered(self):
+        for user in self.users:
+            self.assertFalse(self.event.is_registered(user))
+
     def test_register_and_deregister(self):
-        self.event.register_user(self.user)
-        self.assertTrue(self.event.is_registered(self.user))
 
         for user in self.users:
             self.event.register_user(user)
             self.assertTrue(self.event.is_registered(user))
-
-        self.event.deregister_user(self.user)
-        self.assertFalse(self.event.is_registered(self.user))
 
         for user in self.users:
             self.event.deregister_user(user)
@@ -43,7 +43,6 @@ class RegistrationTest(GeneralEventTest):
 
     def test_register_if_already_registered(self):
         self.event.register_user(self.user)
-        self.assertTrue(self.event.is_registered(self.user))
         self.assertRaises(RegistrationAlreadyExists, self.event.register_user, self.user)
 
     def test_raises_exception_on_registration_required_false(self):
@@ -57,12 +56,10 @@ class RegistrationTest(GeneralEventTest):
         self.assertRaises(EventException, self.event.register_user, self.user)
 
     def test_event_full(self):
-        u = User.objects.create(username="anotheruser")
-        u.save()
         self.event.places = 1
         self.event.has_queue = False
         self.event.save()
-        self.event.register_user(u)
+        self.event.register_user(self.users[0])
         self.assertRaises(EventException, self.event.register_user, self.user)
 
     def test_deregistration_closed(self):
@@ -87,32 +84,20 @@ class WaitingListTest(GeneralEventTest):
         registered = len(self.users) + 1
         for i in range(registered, 2*self.event.places):
             u = User.objects.create(
-                username="user%d" % i,
-                password="user%d" % i,
-                email="user%d@localhost" % i)
+                username=f"user{i}",
+                password=f"user{i}",
+                email=f"user{i}@localhost")
             self.event.register_user(u)
-
-    def test_attending_ordering(self):
-        attending = self.event.attending_registrations
-        for i, reg in enumerate(attending, start=1):
-            self.assertEqual(reg.number, i)
-
-    def test_waiting_ordering(self):
-        waiting = self.event.waiting_registrations
-        for i, reg in enumerate(waiting, start=1):
-            self.assertEqual(reg.number, i)
 
     def test_deregister_user(self):
         while self.event.eventregistration_set.all():
             reg = random.choice(self.event.eventregistration_set.all())
             user = reg.user
             self.event.deregister_user(user)
-            self.test_attending_ordering()
-            self.test_waiting_ordering()
 
     def test_set_attending_and_send_email(self):
         # Finner førstemann på ventelista
-        waiting_reg = self.event.registrations_manager.first_on_waiting_list()
+        waiting_reg = self.event.waiting_registrations[0]
         u = waiting_reg.user
 
         self.assertFalse(self.event.is_attending(u))
@@ -130,4 +115,33 @@ class WaitingListTest(GeneralEventTest):
         self.event.save()
         self.assertTrue(self.event.is_full())
         self.assertEqual(w_0 - 5, self.event.users_waiting())
-        self.assertEqual(u, self.event.registrations_manager.first_on_waiting_list().user)
+        self.assertEqual(u, self.event.waiting_registrations[0].user)
+
+
+class WaitingListTest2(GeneralEventTest):
+
+    def test_correct_order_from_waiting_list(self):
+        self.event.places = 5
+        self.event.save()
+
+        registrations = [
+            self.event.register_user(user)
+            for user in self.users
+        ]
+
+        self.assertTrue(self.event.is_attending(self.users[0]))
+        self.assertTrue(self.event.is_waiting(self.users[5]))
+        self.assertFalse(self.event.is_attending(self.users[5]))
+        self.assertEqual(registrations[5].waiting_list_place(), 1)
+
+        self.event.deregister_user(self.users[0])
+        self.assertTrue(self.event.is_attending(self.users[5]))
+
+        self.event.deregister_user(self.users[6])
+        self.event.deregister_user(self.users[2])
+        self.assertTrue(self.event.is_attending(self.users[7]))
+
+        self.event.deregister_user(self.users[4])
+        self.assertTrue(self.event.is_attending(self.users[8]))
+
+        self.event.deregister_user(self.users[1])

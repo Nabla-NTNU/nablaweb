@@ -113,6 +113,30 @@ class AdventDoor(InteractiveElement):
     def is_today(self):
         return datetime.now() >= self.date and datetime.now() <= self.date + timedelta(days=1)
 
+    @property
+    def is_previous(self):
+        """ Returns True if the door is published but is not todays door"""
+        return self.is_published and not self.is_today
+
+    @property
+    def class_list(self):
+        """
+        Get class list to be used in template.
+        Returns advent-door-today if today, advent-door-open if is_previous.
+        """
+
+        class_list = []
+        
+        if self.is_today:
+            class_list.append("advent-door-today")
+        if self.is_previous:
+            class_list.append("advent-door-open")
+
+        # Yes, we could return inside each if-statement, but this way makes it
+        # easier and cleaner to add multiple classes
+        return " ".join(class_list)
+        
+    
     def choose_winner(self):
         if self.is_lottery and self.is_published:
             self.winner = choice(self.participation.all()).user

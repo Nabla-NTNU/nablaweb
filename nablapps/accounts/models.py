@@ -14,6 +14,31 @@ class NablaUserManager(UserManager):
                            birthday__month=today.month,
                            is_active=True)
 
+    def get_from_rfid(self, rfid):
+        # Assumes only one result
+        return self.filter(ntnu_card_number = self.rfid_to_em(rfid)).first()
+
+    @staticmethod
+    def rfid_to_em(rfid):
+        # Converts number from RFID on NTNU card to EM number written on card.
+        # Also works the other way
+
+        # Convert to binary and strip the prefix "0b"
+        binary = bin(int(rfid))[2:]
+
+        # Pad with zeros, so it is divisable by 8
+        binary = '0' * (8 - len(binary) % 8)  + binary
+
+        # Split into 8 bit chuncks
+        chunked = [binary[i: i+8] for i in range(0, len(binary), 8)]
+
+        # Reverse each chuk
+        reversed = ''.join([chunk[::-1] for chunk in chunked])
+
+        # Convert back to decimal
+        return int(reversed, 2)
+
+        
 
 class NablaUser(AbstractUser):
     telephone = models.CharField(
@@ -66,10 +91,12 @@ class NablaUser(AbstractUser):
         max_length=10,
         blank=True,
         help_text=(
-            "Dette er et 7-10 siffer lant nummeret på baksiden av kortet. På nye kort er dette siffrene etter EM. "
-            "På gamle kort ert dette siffrene nede til venstre. "
-            "Det brukes blant annet for å komme inn på bedpresser.")
+            "Dette er et 7-10-sifret nummer på baksiden av kortet."
+            "På nye kort er dette sifrene etter EM."
+            "På gamle kort er dette sifrene nede til venstre."
+            "Det brukes blant annet for å komme inn på bedpresser."
         )
+    )
 
     objects = NablaUserManager()
 

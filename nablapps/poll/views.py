@@ -45,6 +45,8 @@ class PollListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
+        context['next'] = self.request.path + "?page=" + self.request.GET.get('page', '1')
+        
         for poll in context['poll_list']:
             poll.voted = poll.user_has_voted(user)
         return context
