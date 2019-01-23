@@ -11,7 +11,7 @@
 {% for row in album.images.all|row_split:4 %}
 <div class="row">
     {% for image in row %}
-    <div class="col-xs-6 col-md-3">
+    <div class="col-xs-6 col-md-3" style="margin-bottom: 10px">
         <a href="{{ image.get_absolute_url }}">
         <img class="img-responsive" src="{% thumbnail image.file 350x350 crop="smart" %}"/>
         </a>

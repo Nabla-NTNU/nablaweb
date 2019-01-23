@@ -31,7 +31,9 @@ class AlbumImage(BaseImageModel):
 
     num = models.PositiveIntegerField(
         verbose_name="Nummer",
-        null=True
+        blank=True,
+        null=True,
+        editable=False
     )
 
     def get_absolute_url(self):
