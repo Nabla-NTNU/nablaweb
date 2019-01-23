@@ -33,7 +33,7 @@ class AlbumAdmin(ChangedByMixin, admin.ModelAdmin):
 
         images = AlbumImage.objects.filter(album=obj.pk)
 
-        i = 1
+        i = 0
         for img in images:
             img.num = i
             img.save()
