@@ -11,7 +11,7 @@
 
     <img class="col-xs-2 thumbnail img-responsive" alt="avatar" width="150" height="150" src=
         {% if comment.user.avatar %}
-            "{% thumbnail comment.user.avatar 150x150 %}"
+            "{% thumbnail comment.user.avatar 150x150 box=comment.user.cropping %}"
         {% else %}
             "{% static "img/default_avatar.png" %}"
         {%endif %}>

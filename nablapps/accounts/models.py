@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.db import models
 from hashlib import sha1
 from .utils import activate_user_and_create_password, send_activation_email
+from image_cropping.fields import ImageRatioField, ImageCropField
 
 
 class NablaUserManager(UserManager):
@@ -70,11 +71,21 @@ class NablaUser(AbstractUser):
     about = models.TextField(
         verbose_name="Biografi",
         blank=True)
-    avatar = models.ImageField(
+    avatar = ImageCropField(
         verbose_name='Avatar',
         blank=True,
         null=True,
         upload_to='avatars')
+    cropping = ImageRatioField(
+        #assosiated ImageField:
+        'avatar',
+        #Ratio and Minimum size
+        #(width, height):
+        '140x170',
+        allow_fullsize=True,
+        verbose_name='Beskjæring',
+        size_warning=True,
+        )
     ntnu_card_number = models.CharField(
         verbose_name="NTNU kortnr",
         max_length=10,
