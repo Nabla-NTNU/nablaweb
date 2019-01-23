@@ -18,9 +18,9 @@ class GeneralEventTest(TestCase):
     def setUp(self):
         # Lag en bruker som kan "lage" arrangementet
         self.user = User.objects.create(
-            username='oyvinlek',
-            password='oyvinlek',
-            email='oyvinlek@localhost'
+            username='admin',
+            password='admin',
+            email='admin@localhost'
         )
 
         # Opprett et arrangement
@@ -40,8 +40,8 @@ class GeneralEventTest(TestCase):
 
         self.users = [
             User.objects.create(
-                username="user%d" % i,
-                password="user%d" % i,
-                email="user%d@localhost" % i)
+                username=f"user{i}",
+                password=f"user{i}",
+                email=f"user{i}@localhost")
             for i in range(1, 10)
         ]
