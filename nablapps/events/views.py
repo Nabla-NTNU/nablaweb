@@ -57,7 +57,7 @@ class AdministerRegistrationsView(StaticContextMixin,
 
         try:
             user = User.objects.get(username=username)
-            self.get_object().add_to_attending_or_waiting_list(user)
+            self.get_object().register_user(user)
         except (User.DoesNotExist, UserRegistrationException) as ex:
             self.messages.warning(
                 f"Kunne ikke legge til {username} i påmeldingslisten. "
