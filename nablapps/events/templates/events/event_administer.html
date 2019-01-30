@@ -46,7 +46,7 @@
                 {% with regs=event.attending_registrations %}
                 {% for reg in regs %}
                     <tr class="success">
-                        <td>{{ reg.number }}</td>
+                        <td>{{ forloop.counter  }}</td>
                         <td>{{ reg.user.get_full_name }}</td>
                         <td>{{ reg.user.get_class_number }}</td>
                         <td><input type="checkbox" name="user" value="{{ reg.user.username }}" /></td>
@@ -57,7 +57,7 @@
                 {% with regs=event.waiting_registrations %}
                 {% for reg in regs %}
                     <tr class="warning">
-                        <td>{{ reg.number }}</td>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ reg.user.get_full_name }}</td>
                         <td>{{ reg.user.get_class_number }}</td>
                         <td><input type="checkbox" name="user" value="{{ reg.user.username }}" /></td>
