@@ -33,7 +33,7 @@ class BedPresAndEventGetter(EventGetter):
 
     @staticmethod
     def attending_events(user, today):
-        if user.is_anonymous():
+        if user.is_anonymous:
             return []
         events = EventGetter.attending_events(user, today)
         bpc_events = get_bpc_events(
