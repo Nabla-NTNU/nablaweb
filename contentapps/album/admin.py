@@ -5,12 +5,14 @@ from django.contrib import admin
 from content.admin import ChangedByMixin
 from .models import Album, AlbumImage
 
+from mptt.admin import DraggableMPTTAdmin
+
 
 class AlbumImageInline(admin.TabularInline):
     """Inline album image"""
     model = AlbumImage
     fk_name = "album"
-    fields = ('num', 'file', 'description', 'image_thumb')
+    fields = ('num', 'file', 'description', 'image_thumb', 'is_display_image')
     readonly_fields = ('num', 'image_thumb',)
     ordering = ('num',)
 
@@ -18,7 +20,7 @@ class AlbumImageInline(admin.TabularInline):
 @admin.register(Album)
 class AlbumAdmin(ChangedByMixin, admin.ModelAdmin):
     """Admin interface for Album model"""
-    list_display = ['__str__', 'visibility', 'created_by', 'created_date', 'image_thumb']
+    list_display = ['__str__', 'visibility', 'created_by', 'created_date', 'image_thumb', 'parent']
     inlines = [AlbumImageInline]
 
     def response_add(self, request, new_object):

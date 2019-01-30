@@ -7,20 +7,21 @@
 {% endblock %}
 
 {% block content %}
-<h1>Bilder</h1>
+<h1>Bildealbum</h1>
 
 {% for row in albums|row_split:4 %}
 <div class="row">
     {% for album in row %}
     <div class="col-xs-6 col-md-3">
-        {% if album.visibility != 'u' %}
+        <a href="{{ album.get_absolute_url }}">
+        {% if album.visibility != 'u' or is_user %}
         <a href="{{ album.get_absolute_url }}">
         <img class="img-responsive" src="{% thumbnail album.first.file 350x350 crop="smart" %}"/>
-        </a>
         {% endif %}
         <div class="caption" style="word-wrap: break-word; hyphens: auto;">
             <h3>{{ album.title }}</h3>
         </div>
+        </a>
     </div>
     {% endfor %}
 </div>

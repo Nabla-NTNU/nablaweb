@@ -4,6 +4,7 @@ Views for album app
 from django.views.generic import TemplateView, ListView, DetailView
 from django.shortcuts import redirect, get_object_or_404
 from django.core.paginator import Paginator
+from django.urls import reverse
 from .models import Album
 
 
@@ -15,7 +16,12 @@ class AlbumList(ListView):
     context_object_name = "albums"
     template_name = "album/album_list.html"
     paginate_by = 10
-    queryset = Album.objects.exclude(visibility='h').order_by('-created_date')
+    queryset = Album.objects.filter(level=0).exclude(visibility='h').order_by('-created_date')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_user'] = self.request.user.is_authenticated
+        return context
 
 
 class PermissionToSeeAlbumMixin:
@@ -43,6 +49,24 @@ class AlbumOverview(PermissionToSeeAlbumMixin, DetailView):
     model = Album
     context_object_name = "album"
     template_name = "album/album_overview.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['children'] = self.object.get_children().exclude(visibility='h')
+        else:
+            context['children'] = self.object.get_children().exclude(visibility='h')
+        context['is_user'] = self.request.user.is_authenticated
+        parent = self.object.get_ancestors(ascending=False, include_self=False).first()
+        if parent is None:
+            parent_url = reverse('albums')
+            parent_name = 'Til oversikt'
+        else:
+            parent_url = parent.get_absolute_url()
+            parent_name = parent.title
+        context['parent_url'] = parent_url
+        context['parent_name'] = parent_name
+        return context
 
 
 class AlbumImageView(PermissionToSeeAlbumMixin, TemplateView):

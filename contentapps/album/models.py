@@ -5,6 +5,8 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import AnonymousUser
 
+from mptt.models import MPTTModel, TreeForeignKey
+
 from content.models import TimeStamped, ViewCounterMixin, BaseImageModel
 
 
@@ -36,6 +38,12 @@ class AlbumImage(BaseImageModel):
         editable=False
     )
 
+    is_display_image = models.BooleanField(
+        verbose_name="Er visningbilde",
+        help_text="Bildet som vises i listen over album",
+        default=False,
+    )
+
     def get_absolute_url(self):
         """Get canonical url for image"""
         return reverse('album_image',
@@ -52,7 +60,7 @@ class AlbumImage(BaseImageModel):
         db_table = "content_albumimage"
 
 
-class Album(TimeStamped, ViewCounterMixin, models.Model):
+class Album(MPTTModel, TimeStamped, ViewCounterMixin):
     """
     Model representing an album which is a collection of images.
     """
@@ -76,6 +84,8 @@ class Album(TimeStamped, ViewCounterMixin, models.Model):
         default='h',
         blank=False
     )
+
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
     class Meta:
         verbose_name = "Album"
@@ -101,7 +111,7 @@ class Album(TimeStamped, ViewCounterMixin, models.Model):
     @property
     def first(self):
         """Get the image which is considered to be the first in the album"""
-        return self.images.order_by('num').first()
+        return self.images.order_by('-is_display_image', 'num').first()
 
     def __str__(self):
         return self.title
