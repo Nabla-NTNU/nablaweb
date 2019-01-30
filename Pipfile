@@ -22,7 +22,7 @@ pymysql = "*"               # Database bindings for mysql
 wand = "*"                  # Python bindings for ImageMagick. Needs ImageMagick installed
 whoosh = "*"                # Backend for django-haystack
 wiki = "~=0.4.0"
-content = {editable = true, ref = "fc3460aea046e8af5d9ce2fe76bfbaa7529d9f53", git = "https://bitbucket.org/webkom/content-app.git"}
+content = {editable = true, ref = "cd77fadb4d2faf6ca901bbf517f8c2cd0b9fbdce", git = "https://bitbucket.org/webkom/content-app.git"}
 bpc-client = {editable = true, ref = "556ede6bd15b4296b1f2a29730ad6e5f00b27428", git = "https://bitbucket.org/webkom/bpc_client.git"}
 django-node-assets = "*"
 
