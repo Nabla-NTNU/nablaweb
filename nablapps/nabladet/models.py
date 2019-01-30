@@ -25,6 +25,14 @@ class Nablad(TimeStamped, WithPicture, TextContent):
         help_text="Filnavn"
     )
 
+    file_nsfw = models.FileField(
+        upload_to='nabladet',
+        verbose_name='PDF-fil NSFW',
+        help_text="Filnavn",
+        blank=True,
+        null=True
+    )
+
     thumbnail = models.FileField(
         editable=False,
         null=True

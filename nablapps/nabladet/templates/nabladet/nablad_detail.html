@@ -77,9 +77,15 @@
 
 {% include "content/includes/meta.html" with content=nablad %}
 
-<a class="btn btn-primary btn-lg btn-block" href="{{ nablad.file.url }}">
+{% if user.is_authenticated and nablad.file_nsfw %}
+<a class="btn btn-primary btn-lg btn-block" href="{{ nablad.file_nsfw.url }}">
     Last ned Nabladet {{ nablad.pub_date|date:"F Y" }}
 </a>
+{% else %}
+<a class="btn btn-primary btn-lg btn-block" href="{{ nablad.file.url }}">
+    Last ned Nabladet (offentlig) {{ nablad.pub_date|date:"F Y" }}
+</a>
+{% endif %}
 
 <br>
 

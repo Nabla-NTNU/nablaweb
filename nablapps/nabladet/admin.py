@@ -21,6 +21,7 @@ class NabladAdmin(ImageCroppingMixin, admin.ModelAdmin):
         "body",
         "pub_date",
         "file",
+        "file_nsfw",
     )
     prepopulated_fields = {"slug": ("headline",)}
     actions = [add_to_frontpage]
