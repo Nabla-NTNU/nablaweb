@@ -78,7 +78,7 @@ class AdventCalendarView(ListView):
         stamp = mktime(next.timetuple())
         response['Expires'] = format_date_time(stamp)  # legacy support
         
-        if self.calendar.requires_login and not request.user.is_authenticated():
+        if self.calendar.requires_login and not request.user.is_authenticated:
             raise PermissionDenied
         
         return response

@@ -147,7 +147,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
         event = self.object
         user = self.request.user
 
-        if user.is_authenticated():
+        if user.is_authenticated:
             # Innlogget, så sjekk om de er påmeldt
             try:
                 context['is_registered'] = event.is_registered(user)
@@ -166,7 +166,7 @@ class UserEventView(LoginRequiredMixin, TemplateView):
         context_data = super().get_context_data(**kwargs)
         user = self.request.user
         context_data['user'] = user
-        if user.is_authenticated():
+        if user.is_authenticated:
             regs = user.eventregistration_set.all().order_by('event__event_start')
             context_data['eventregistration_list'] = regs
             context_data['is_on_a_waiting_list'] = regs.filter(attending=False).exists()
