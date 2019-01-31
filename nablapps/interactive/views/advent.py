@@ -36,7 +36,7 @@ class AdventDoorView(PublishedMixin, DetailView):
         context['calendar'] = door.calendar
         try:
             user = self.request.user
-            if not user.is_anonymous():
+            if not user.is_anonymous:
                 context['part'] = AdventParticipation.objects.get(
                     user=user,
                     door=door.id
@@ -78,7 +78,7 @@ class AdventCalendarView(ListView):
         stamp = mktime(next.timetuple())
         response['Expires'] = format_date_time(stamp)  # legacy support
         
-        if self.calendar.requires_login and not request.user.is_authenticated():
+        if self.calendar.requires_login and not request.user.is_authenticated:
             raise PermissionDenied
         
         return response

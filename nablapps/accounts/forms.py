@@ -2,7 +2,7 @@ from datetime import datetime as dt
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.forms.widgets import SelectDateWidget
-
+from image_cropping import ImageCropWidget
 from .models import NablaUser, RegistrationRequest, FysmatClass
 
 
@@ -19,6 +19,7 @@ class UserForm(forms.ModelForm):
             'email',
             'ntnu_card_number',
             'avatar',
+            'cropping',
             'telephone',
             'cell_phone',
             'address',

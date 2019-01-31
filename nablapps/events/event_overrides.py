@@ -26,7 +26,7 @@ class EventGetter:
     @staticmethod
     def attending_events(user, today):
         """Get the future events attended by a user"""
-        if user.is_anonymous():
+        if user.is_anonymous:
             return []
         regs = user.eventregistration_set.filter(event__event_start__gte=today)
         events = []

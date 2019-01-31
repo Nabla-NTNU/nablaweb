@@ -35,7 +35,8 @@ class Transaction(models.Model):
         )
 
     account = models.ForeignKey(
-        Account
+        Account,
+        on_delete=models.CASCADE,
         )
 
     date = models.DateTimeField(
@@ -61,7 +62,8 @@ class DepositRequest(models.Model):
         )
 
     account = models.ForeignKey(
-        Account
+        Account,
+        on_delete=models.CASCADE,
         )
 
     def approve(self):

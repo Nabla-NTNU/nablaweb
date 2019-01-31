@@ -18,6 +18,9 @@
         <meta name="author" content="Nabla">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+	<!-- Used by Google to verify that we own the domain. --> 
+	<meta name="google-site-verification" content="lfXfxPU7wQGV0Sd87zCnA_3v0rQlDVQdth3kH_1fzIM" />
+
         <!-- Bootstrap Core CSS -->
         {% addtoblock "css" %}
         <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">
@@ -106,7 +109,7 @@
                                     <li><a href="{% url "nablad_list" %}">Nabladet</a></li>
                                     <li><a href="{% url "season_view" %}">Skråttcast</a></li>
                                     <li><a href="{% url "meeting_record_list" %}">Styremøtereferater</a></li>
-                                    <li><a href="{% url "albums" %}">Bilder</a></li>
+                                    <li><a href="{% url "albums" %}">Bildealbum</a></li>
                                     <li><a href="{% url "blog" %}">Blogg</a></li>
                                     <li><a href="{% url "advent_calendar" "2018" %}">Julekalender 2018</a></li>
                                 </ul>
@@ -126,7 +129,10 @@
                                     <li><a href="{% url 'show_com_page' slug="styret"%}">Styret</a></li>
                                     {# url for /nablashop/ #}
                                     <li><a href="{% url 'nablashop:index' %}" >Nablashop</a></li>
-
+				    <li><a href="{% url 'wiki:get' 'diverse/nablas_lover/' %}">Nablas Lover</a></li>
+				    <li><a href="{% url 'wiki:get' 'diverse/nablas_forskrifter/' %}">Nablas Forskrifter</a></li>
+				
+				      
                                     {# Hent alle sider som starter på /om/ #}
                                     {% get_flatpages '/om/' as about_pages %}
                                     {% for page in about_pages %}

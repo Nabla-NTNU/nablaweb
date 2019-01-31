@@ -3,7 +3,7 @@
 <a href="{{ user.get_absolute_url }}">
             <img class="thumbnail user-pic" alt="avatar"
                     {% if user.avatar %}
-                        src="{% thumbnail user.avatar 50x50 %}"
+                        src="{% thumbnail user.avatar 50x50 box=user.cropping %}"
                     {% else %}
                         src="{% static "img/default_avatar.png" %}"
                     {% endif %} height="50" width="50" title="{% firstof user.get_full_name user.username %}">

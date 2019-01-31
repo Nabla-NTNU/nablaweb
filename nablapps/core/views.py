@@ -48,7 +48,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
 
     def _add_nablad(self, context):
         context['new_nablad'] = Nablad.objects.order_by('-pub_date')[:4]
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             context['new_nablad'] = Nablad.objects.exclude(is_public=False).order_by('-pub_date')[:4]
 
     def _add_events_and_bedpres(self, context):
@@ -65,5 +65,5 @@ class FrontPageView(FlatPageMixin, TemplateView):
         except:
             context['poll'] = Poll.objects.exclude(is_user_poll=True).order_by('-publication_date').first()
 
-        if self.request.user.is_authenticated() and context['poll'] is not None:
+        if self.request.user.is_authenticated and context['poll'] is not None:
             context['poll_has_voted'] = context['poll'].user_has_voted(self.request.user)

@@ -12,7 +12,7 @@
     <div class="col-md-3">
         <img class="thumbnail" alt="avatar"
             {% if member.avatar %}
-                src="{% thumbnail member.avatar 150x150 %}"
+                src="{% thumbnail member.avatar 150x150 box=member.cropping%}"
             {% else %}
                 src="{% static "img/default_avatar.png" %}"
             {%endif %}>

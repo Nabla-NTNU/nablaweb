@@ -23,7 +23,7 @@
         <div class="avatar">
           <img class="thumbnail" alt="avatar"
               {% if membership.user.avatar %}
-                  src="{% thumbnail membership.user.avatar 150x150 %}"
+                  src="{% thumbnail membership.user.avatar 150x150 box=membership.user.cropping %}"
               {% else %}
                   src="{% static "img/default_avatar.png" %}"
               {%endif %}>

@@ -2,7 +2,6 @@
 Views for events app
 """
 import datetime
-from itertools import chain
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
@@ -58,7 +57,7 @@ class AdministerRegistrationsView(StaticContextMixin,
 
         try:
             user = User.objects.get(username=username)
-            self.get_object().add_to_attending_or_waiting_list(user)
+            self.get_object().register_user(user)
         except (User.DoesNotExist, UserRegistrationException) as ex:
             self.messages.warning(
                 f"Kunne ikke legge til {username} i påmeldingslisten. "
@@ -97,25 +96,19 @@ def calendar(request, year=None, month=None):
         raise Http404
 
     events = EventGetter.get_current_events(year, month)
-    cal = EventCalendar(chain(events), year, month).formatmonth(year, month)
+    cal = EventCalendar(events, year, month).formatmonth(year, month)
 
     user = request.user
     future_attending_events = EventGetter.attending_events(user, today)
 
-    month_list= [first_of_month]
-
-    for n in range(5):
-        month_list.insert(0,datetime.date(month_list[0].year,month_list[0].month,1)-datetime.timedelta(27))
-    for n in range(6):
-        month_list.append(datetime.date(month_list[-1].year,month_list[-1].month,1)+datetime.timedelta(32))
+    months = year*12 + month - 1 # months since epoch (Christ)
+    month_list = [datetime.date(m//12, m%12+1, 1) for m in range(months-5, months+7)]
 
     # Get some random dates in the current, next, and previous month.
     # These dates are used load the calendar for that month.
     # * prev is some day in the previous month
     # * this is some day in this month
     # * next is some day in the next month
-    #
-
     context = {
         'calendar': mark_safe(cal),
         'prev': first_of_month - datetime.timedelta(27),
@@ -154,7 +147,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
         event = self.object
         user = self.request.user
 
-        if user.is_authenticated():
+        if user.is_authenticated:
             # Innlogget, så sjekk om de er påmeldt
             try:
                 context['is_registered'] = event.is_registered(user)
@@ -173,7 +166,7 @@ class UserEventView(LoginRequiredMixin, TemplateView):
         context_data = super().get_context_data(**kwargs)
         user = self.request.user
         context_data['user'] = user
-        if user.is_authenticated():
+        if user.is_authenticated:
             regs = user.eventregistration_set.all().order_by('event__event_start')
             context_data['eventregistration_list'] = regs
             context_data['is_on_a_waiting_list'] = regs.filter(attending=False).exists()

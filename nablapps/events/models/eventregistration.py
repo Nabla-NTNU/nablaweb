@@ -5,14 +5,13 @@ from django.db import models
 from django.conf import settings
 from django.template import loader
 
-from .managers import RelatedEventRegistrationManager, EventRegistrationManager
-
 
 class EventRegistration(models.Model):
     """Modell for påmelding på arrangementer.
 
     Inneholder både påmeldinger og venteliste.
-    For ventelistepåmelding er attending satt til False og førstmann på ventelista har number=1.
+    For ventelistepåmelding er attending satt til False.
+    Førstmann på ventelista er den påmeldingen med lavest id.
     """
 
     event = models.ForeignKey(
@@ -30,11 +29,6 @@ class EventRegistration(models.Model):
         verbose_name="Påmeldingsdato",
         auto_now_add=True,
         null=True)
-    number = models.PositiveIntegerField(
-        verbose_name='kønummer',
-        blank=True,
-        null=True,
-        help_text='Kønummer som tilsvarer plass på ventelisten/påmeldingsrekkefølge.')
     attending = models.BooleanField(
         verbose_name='har plass',
         default=True,
@@ -46,24 +40,19 @@ class EventRegistration(models.Model):
     class Meta:
         verbose_name = 'påmelding'
         verbose_name_plural = 'påmeldte'
-        unique_together = (("event", "user"), ("number", "attending"))
+        unique_together = (("event", "user"),)
         db_table = "content_eventregistration"
 
-    objects = EventRegistrationManager()
+        # This is the order the waiting list will be consulted.
+        # So don't change this without thinking.
+        ordering = ("id", )
 
     def __str__(self):
-        return (f'{self.event}, '
-                f'{self.user} is {"Attending" if self.attending else "Waiting"}, '
-                f'place: {self.number}')
+        return f'{self.event}, {self.user} is {"Attending" if self.attending else "Waiting"}'
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
-        EventRegistration.objects.update_lists(self.event)
-
-    @classmethod
-    def get_manager_for(cls, event):
-        """Henter en manager for en gitt event."""
-        return RelatedEventRegistrationManager(event)
+        self.event.move_waiting_to_attending()
 
     @property
     def waiting(self):
@@ -72,23 +61,19 @@ class EventRegistration(models.Model):
 
     def waiting_list_place(self):
         """Returnerer hvilken plass man har på ventelisten gitt at man er på ventelisten."""
-        return self.number if self.waiting else None
-
-    def set_attending_if_waiting(self):
-        """Flytter en bruker fra ventelisten til påmeldte hvis ikke allerede påmeldt."""
-        if not self.attending:
-            self.number = self.event.users_attending()+1
-            self.attending = True
-            self.save()
+        regs = self.event.waiting_registrations
+        return next(i+1 for i, reg in enumerate(regs) if reg == self) if self.waiting else None
 
     def set_attending_and_send_email(self):
         """Change the registration to be attending and send an email to the user."""
-        self.set_attending_if_waiting()
-        self._send_moved_to_attending_email()
+        if not self.attending:
+            self.attending = True
+            self.save()
+            self._send_moved_to_attending_email()
 
     def _send_moved_to_attending_email(self):
         if self.user.email:
-            subject = 'Påmeldt %s' % self.event.headline
+            subject = f'Påmeldt {self.event.headline}'
             template = loader.get_template("events/moved_to_attending_email.txt")
             message = template.render({'event': self.event, 'name': self.user.get_full_name()})
             self.user.email_user(subject, message)
