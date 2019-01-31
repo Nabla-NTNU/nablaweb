@@ -35,7 +35,7 @@ class PermissionToSeeAlbumMixin:
     """
     def dispatch(self, request, *args, **kwargs):
         """View dispatch"""
-        album = Album.objects.get(pk=kwargs['pk'])
+        album = get_object_or_404(Album, pk=kwargs['pk'])
         allowed_to_view_album = album.is_visible(request.user)
         if not allowed_to_view_album:
             return redirect('auth_login')
