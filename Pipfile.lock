@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3f9b20482501ec9e86f4e7cbddb255ae4ee04a7c86b133c36294298209442cfe"
+            "sha256": "0339c766a4d3e74a4898d4b859515d79f62af78a0948af7decd44864933bc12d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,7 +31,7 @@
         "content": {
             "editable": true,
             "git": "https://bitbucket.org/webkom/content-app.git",
-            "ref": "cd77fadb4d2faf6ca901bbf517f8c2cd0b9fbdce"
+            "ref": "37bdd05a6523bddf3a1dec8bff807420f49f8b82"
         },
         "django": {
             "hashes": [
@@ -336,7 +336,7 @@
                 "sha256:05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d",
                 "sha256:f8ac84de7840f5b9c4e3347b3c1eaa50f7e49c2b07596221daec5edaabbd7c48"
             ],
-            "markers": "python_version != '3.0.*' and python_version != '3.2.*' and python_version != '3.1.*' and python_version >= '2.7' and python_version != '3.3.*'",
+            "markers": "sys_platform == 'win32'",
             "version": "==0.4.1"
         },
         "isort": {
