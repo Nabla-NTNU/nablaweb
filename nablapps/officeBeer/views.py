@@ -100,6 +100,7 @@ class PurchaseView(PermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = PurchaseForm()
+        context['last_transactions'] = Transaction.objects.filter(amount__lt=0).order_by('-date')[:3]
         return context
 
 class DepositRequestView(LoginRequiredMixin, TemplateView):

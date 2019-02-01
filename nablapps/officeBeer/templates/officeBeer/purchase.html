@@ -65,5 +65,10 @@
   {% endfor %}
   <input type="submit" value="Submit">
 </form>
+<div id="last_transactions">
+{% for trans in last_transactions %}
+<p>{{ trans.description }}</p>
+{% endfor %}
+</div>
 </div>
 {% endblock %}
