@@ -104,6 +104,8 @@ class PurchaseView(PermissionRequiredMixin, TemplateView):
         return context
 
 class DepositRequestView(LoginRequiredMixin, TemplateView):
+    """View for the user to create a depositRequest.
+    """
     template_name = "officeBeer/deposit.html"
 
     def post(self, request, *args, **kwargs):
@@ -116,12 +118,7 @@ class DepositRequestView(LoginRequiredMixin, TemplateView):
             DepositRequest(account=account, amount = deposit_form.cleaned_data['amount']).save()
 
             return redirect(self.request.resolver_match.view_name)
-            
-    # def form_valid(self, form):
-    #     account = Account.objects.get(user=form.cleaned_data['user'])
-    #     DepositRequest(account=account, amount=form.cleaned_data['amount']).save()
-    #     super().form_valid(form)
-
+        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = DepositRequestForm(user=self.request.user)

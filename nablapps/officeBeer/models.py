@@ -4,7 +4,7 @@ from django.utils.timezone import now
 
 class Account(models.Model):
     """
-    A users balance in the office beer system
+    A users account in the office beer system
     """
 
     balance = models.IntegerField(
@@ -24,6 +24,8 @@ class Account(models.Model):
 class Transaction(models.Model):
     """
     Represents a transaction, either in or out
+
+    A positive amount is a deposit a negative amount is a purchase.
     """
 
     description = models.CharField(
@@ -53,8 +55,10 @@ class Transaction(models.Model):
             )
 
 class DepositRequest(models.Model):
-    """
-    Todo: write docstring
+    """User generated request to be approved by an officebeer admin.
+    When a user has transferred money to kjellerstyret,
+    he can create a deposit request where he writes how much he transferred.
+    If kjellerstyret approves the request, the money is added to the users account.
     """
 
     amount = models.IntegerField(
