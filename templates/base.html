@@ -84,7 +84,6 @@
                         {% block navbar_container %}
                         {# navigasjonslenker #}
                         <ul class="nav navbar-nav">
-                            <li><a href="/">Hjem</a></li>
                             <li><a href="{% url "event_list" %}">Arrangementer</a></li>
                             <li><a href="{% url "jobs_list" %}">Karriere</a></li>
                             <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -121,17 +120,16 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" >
-                                    <li>
-                                        <a href="{% url "committee_overview" %}" >
-					  Undergrupper
-                                        </a>
-                                    </li>
+                                    <li><a href="{% url "committee_overview" %}" >Undergrupper</a></li>
                                     <li><a href="{% url 'show_com_page' slug="styret"%}">Styret</a></li>
                                     {# url for /nablashop/ #}
+                                    <li><a href="{% url 'show_com_page' slug="styret"%}">Kontortider og info</a></li>
                                     <li><a href="{% url 'nablashop:index' %}" >Nablashop</a></li>
-				    <li><a href="{% url 'wiki:get' 'diverse/nablas_lover/' %}">Nablas Lover</a></li>
-				    <li><a href="{% url 'wiki:get' 'diverse/nablas_forskrifter/' %}">Nablas Forskrifter</a></li>
-				
+				                    <li><a href="{% url 'wiki:get' 'diverse/nablas_lover/' %}">Nablas Lover</a></li>
+				                    <li><a href="{% url 'wiki:get' 'diverse/nablas_forskrifter/' %}">Nablas Forskrifter</a></li>
+                                    <li><a href="{% url 'show_com_page' slug="styret"%}">Bokskap</a></li>
+                                    <li><a href="https://www.facebook.com/nablantnu/">Facebookside</a></li>
+				                    <li><a href="https://www.facebook.com/nablantnu/">Sponsorlenker</a></li>
 				      
                                     {# Hent alle sider som starter på /om/ #}
                                     {% get_flatpages '/om/' as about_pages %}

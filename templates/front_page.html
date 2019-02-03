@@ -1,4 +1,4 @@
-{% extends "base_front_page.html" %}
+{% extends "base_no_sidebar.html" %}
 {% load markdown %}
 {% load listutil %}
 {% load easy_thumbnails %}
@@ -121,9 +121,8 @@
             </div>
         </div>
         <div id="Podcast" class="tab-pane fade">
-            <h3><a href="{% url "blog" %}">Nyeste Skråttkast</a></h3>
+            <h3><a href="{% url "season_view" %}">Nyeste Skråttkast</a></h3>
             <div class="row">
-
                 {% if new_podcast %}
                     <a href="{{ new_podcast.get_absolute_url }}">
                         {% if new_podcast.image %}
@@ -132,10 +131,8 @@
                     </a>
                     <p><i>Dato: {{ new_podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {% get_hit_count for new_podcast %}</i></p>
                 {% endif %}
-
             </div>
         </div>
-
     </div>
 </div>
 <div class="row row-same-height">
@@ -143,18 +140,12 @@
         {% include "includes/article_widget.html" %}
     {% endfor %}
 </div>
-{# <a href="{% url "news_list" %}" class="btn">Flere nyheter</a> #}
-{% endblock content %}
 
-{% block sidebar %}
     {% include "poll/poll_include.html" %}
     {% if sidebarinfo %}
         <p>
             {{ sidebarinfo.content | markdown:"unsafe" }}
         </p>
     {% endif %}
-
-
-
-{% endblock sidebar %}
-
+{# <a href="{% url "news_list" %}" class="btn">Flere nyheter</a> #}
+{% endblock content %}
