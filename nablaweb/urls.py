@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^kommentarer/', include('django_comments.urls')),
     url(r'^nabladet/', include('nablapps.nabladet.urls')),
     url(r'^nyheter/', include('nablapps.news.urls')),
+    url(r'^officebeer/', include('nablapps.officeBeer.urls')),
     url(r'^podcast/', include('nablapps.podcast.urls')),
     url(r'^poll/', include('nablapps.poll.urls')),
     url(r'^referater/', include('nablapps.meeting_records.urls')),

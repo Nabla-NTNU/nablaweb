@@ -1,0 +1,70 @@
+{% extends "interactive/advent_base_2018.html" %}
+{% load markdown %}
+{% load sekizai_tags %}
+
+{% block title %}{{ door.number }}{% endblock %}
+
+{% block content %}
+{% addtoblock "js" %}
+{% endaddtoblock %}
+
+<h1 style="text-shadow: none;">{{ door.number }}</h1>
+{% if not door.is_published %}
+<div class="alert alert-warning alert-dismissible">Dette er bare synlig fordi du har riktige rettigheter</div>
+{% endif %}
+
+<div class="text">
+    <p>
+	{{ door.content|markdown:"unsafe" }}
+    </p>
+    {% if door.quiz %}
+    <p><a href="{{ door.quiz.get_absolute_url }}" class="btn btn-large btn-wide btn-primary">Gå til quiz!</a></p>
+    {% endif %}
+    {% if door.user_test %}
+    <p><a href="{{ door.user_test.get_absolute_url }}" class="btn btn-large btn-wide btn-primary">Gå til brukertest!</a></p>
+    {% endif %}
+    {% if door.is_lottery %}
+    {% if door.winner %}
+    <h1>Gratulerer med seieren!</h1>
+    {% include "accounts/includes/user_large.html" with user=door.winner %}
+    {% else %}
+    
+    {# Do not show if user is not logged in. Causes errer in the redirect in participate_in_competition-view #}
+    {% if user.is_authenticated %}
+    <form action="{% url "advent_participate" door.calendar.year door.number %}" method="post">
+        {% csrf_token %}
+        {% if door.is_text_response %}
+        <div class="form-group">
+            {% if part %}
+            <label>Endre svar:</label>
+            <textarea class="form-control" name="text" rows="3">{{ part.text }}</textarea>
+            {% else %}
+            <label>Ditt svar:</label>
+            <textarea class="form-control" name="text" rows="3"></textarea>
+            {% endif %}
+        </div>
+        {% endif %}
+        <button type="submit" class="btn btn-large btn-primary">
+	    {% if part %}
+	    Endre svar
+	    {% else %}
+	    Delta i trekningen
+	    {% endif %}
+        </button>
+    </form>
+    {% else %} {# User is not authenticated #}
+    Logg inn for å delta i trekningen.
+    {% endif %}
+    
+    {% endif %}
+    <h2>Med i trekningen:</h2>
+    <div>
+        {% for part in door.participation.all %}
+        {% include "accounts/includes/user_small.html" with user=part.user %}
+        {% endfor %}
+    </div>
+
+    {% endif %}
+</div>
+
+{% endblock %}

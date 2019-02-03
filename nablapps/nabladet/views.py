@@ -22,7 +22,7 @@ class NabladDetailView(AdminLinksMixin, DetailView):
         nablad_archive = {}
         nablad_list = Nablad.objects.all()
 
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             nablad_list = nablad_list.exclude(is_public=False)
 
         # Creates a dictionary with publication year as key and
@@ -36,7 +36,7 @@ class NabladDetailView(AdminLinksMixin, DetailView):
         return context
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             nablad = self.get_object()
             if not nablad.is_public:
                 return redirect_to_login(next=nablad.get_absolute_url())
@@ -47,7 +47,7 @@ def serve_nablad(request, path, document_root=None, show_indexes=False):
     """
     View for serving nablad-pdfs if they are public or if the user is logged in.
     """
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         filename = 'nabladet/' + path
         nablad = get_object_or_404(Nablad, filename=filename)
         if not nablad.is_public:
@@ -62,7 +62,7 @@ class NabladList(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         nablad_list = Nablad.objects.all()
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             nablad_list = nablad_list.exclude(is_public=False)
 
         nablad_archive = {}

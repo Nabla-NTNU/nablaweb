@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.db import models
 from hashlib import sha1
 from .utils import activate_user_and_create_password, send_activation_email
+from image_cropping.fields import ImageRatioField, ImageCropField
 
 
 class NablaUserManager(UserManager):
@@ -13,6 +14,31 @@ class NablaUserManager(UserManager):
                            birthday__month=today.month,
                            is_active=True)
 
+    def get_from_rfid(self, rfid):
+        # Assumes only one result
+        return self.filter(ntnu_card_number = self.rfid_to_em(rfid)).first()
+
+    @staticmethod
+    def rfid_to_em(rfid):
+        # Converts number from RFID on NTNU card to EM number written on card.
+        # Also works the other way
+
+        # Convert to binary and strip the prefix "0b"
+        binary = bin(int(rfid))[2:]
+
+        # Pad with zeros, so it is divisable by 8
+        binary = '0' * (8 - len(binary) % 8)  + binary
+
+        # Split into 8 bit chuncks
+        chunked = [binary[i: i+8] for i in range(0, len(binary), 8)]
+
+        # Reverse each chuk
+        reversed = ''.join([chunk[::-1] for chunk in chunked])
+
+        # Convert back to decimal
+        return int(reversed, 2)
+
+        
 
 class NablaUser(AbstractUser):
     telephone = models.CharField(
@@ -45,11 +71,21 @@ class NablaUser(AbstractUser):
     about = models.TextField(
         verbose_name="Biografi",
         blank=True)
-    avatar = models.ImageField(
+    avatar = ImageCropField(
         verbose_name='Avatar',
         blank=True,
         null=True,
         upload_to='avatars')
+    cropping = ImageRatioField(
+        #assosiated ImageField:
+        'avatar',
+        #Ratio and Minimum size
+        #(width, height):
+        '140x170',
+        allow_fullsize=True,
+        verbose_name='Beskjæring',
+        size_warning=True,
+        )
     ntnu_card_number = models.CharField(
         verbose_name="NTNU kortnr",
         max_length=10,

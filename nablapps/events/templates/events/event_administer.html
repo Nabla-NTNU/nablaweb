@@ -12,7 +12,7 @@
     {% if event.has_queue %}
         Ventende: {{ event.users_waiting }}<br />
     {% endif %}
-    Epostliste:
+    Epostliste: <br />
     <textarea>{% for email in event.users_attending_emails %}{{ email }}; {% endfor %}</textarea>
 </p>
 
@@ -46,7 +46,7 @@
                 {% with regs=event.attending_registrations %}
                 {% for reg in regs %}
                     <tr class="success">
-                        <td>{{ reg.number }}</td>
+                        <td>{{ forloop.counter  }}</td>
                         <td>{{ reg.user.get_full_name }}</td>
                         <td>{{ reg.user.get_class_number }}</td>
                         <td><input type="checkbox" name="user" value="{{ reg.user.username }}" /></td>
@@ -57,7 +57,7 @@
                 {% with regs=event.waiting_registrations %}
                 {% for reg in regs %}
                     <tr class="warning">
-                        <td>{{ reg.number }}</td>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ reg.user.get_full_name }}</td>
                         <td>{{ reg.user.get_class_number }}</td>
                         <td><input type="checkbox" name="user" value="{{ reg.user.username }}" /></td>

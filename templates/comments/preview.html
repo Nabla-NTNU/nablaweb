@@ -27,8 +27,8 @@
 
         <div class="row comment" id="c{{ comment.id }}">
             <img class="col-xs-2 thumbnail img-responsive" alt="avatar" width="150" height="150" src=
-                {% if comment.user.avatar %}
-                    "{% thumbnail user.avatar 150x150 %}"
+                {% if user.avatar %}
+                    "{% thumbnail user.avatar 150x150 box=user.cropping %}"
                 {% else %}
                     "{% static "img/default_avatar.png" %}"
                 {%endif %}>
