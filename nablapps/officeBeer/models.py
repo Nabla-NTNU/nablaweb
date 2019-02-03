@@ -70,6 +70,8 @@ class DepositRequest(models.Model):
         on_delete=models.CASCADE,
         )
 
+    created = models.DateTimeField(auto_now_add = True)
+
     def approve(self):
         # Approve request and create a positive transaction
         self.account.balance += self.amount
@@ -78,7 +80,7 @@ class DepositRequest(models.Model):
         self.delete()
 
     def __str__(self):
-        return f"{self.account.user.get_full_name()}'s deposit request of kr {self.amount}"
+        return f"{self.account.user.get_full_name()}'s deposit request of kr {self.amount} from {self.created.strftime('%d %b %Y')}"
         
     
 class Product(models.Model):

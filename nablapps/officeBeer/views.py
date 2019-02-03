@@ -116,10 +116,12 @@ class DepositRequestView(LoginRequiredMixin, TemplateView):
             account = Account.objects.get_or_create(user=request.user)[0]
 
             DepositRequest(account=account, amount = deposit_form.cleaned_data['amount']).save()
-
+            messages.info(request, "Innskudd lagt til, pengene havner på kontoen din når kjellerstyret godkjenner den.")
+            
             return redirect(self.request.resolver_match.view_name)
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = DepositRequestForm(user=self.request.user)
+        context['deposit_requests'] = DepositRequest.objects.filter(account__user = self.request.user) # Deposit requests awaiting approval
         return context
