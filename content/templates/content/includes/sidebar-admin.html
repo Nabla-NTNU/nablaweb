@@ -1,0 +1,21 @@
+{% if user.is_staff %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Admin
+    </div>
+    <ul class="nav">
+        {% block sidebar-admin %}
+        {% endblock %}
+        {% if change_url %}
+        <li><a href="{{ change_url }}">
+            <span class="glyphicon glyphicon-pencil"></span>
+            Endre
+        </a></li>
+        <li><a href="{{ delete_url }}">
+            <span class="glyphicon glyphicon-trash"></span>
+            Slett
+        </a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}

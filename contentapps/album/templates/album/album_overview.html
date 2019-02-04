@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load listutil %}
+{% load easy_thumbnails %}
+{% block title %}Bilder{% endblock %}
+
+{% block more_head %}
+{% endblock %}
+
+{% block content %}
+<h1>{{ album.title }}</h1>
+
+{% if children %}
+<div class="well">
+{% for row in children|row_split:4 %}
+<div class="row">
+    {% for album in row %}
+    <div class="col-xs-6 col-md-3">
+        <a href="{{ album.get_absolute_url }}">
+        {% if album.visibility != 'u' or is_user%}
+        <a href="{{ album.get_absolute_url }}">
+            {% if album.first.file %}
+            <img class="img-responsive" src="{% thumbnail album.first.file 350x350 crop="smart" %}"/>
+            {% endif %}
+        {% endif %}
+        <div class="caption" style="word-wrap: break-word; hyphens: auto;">
+            <h3>{{ album.title }}</h3>
+        </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+</div>
+{% endif %}
+
+{% for row in album.images.all|row_split:4 %}
+<div class="row">
+    {% for image in row %}
+    <div class="col-xs-6 col-md-3" style="margin-bottom: 10px">
+        <a href="{{ image.get_absolute_url }}">
+        <img class="img-responsive" src="{% thumbnail image.file 350x350 crop="smart" %}"/>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+    <ul class="pager">
+          <li class="previous">
+              <a href="{{ parent_url }}"><span aria-hidden="true">&larr;</span> {{parent_name}}</a>
+          </li>
+    </ul>
+
+{% endblock content %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load markdown %}
+{% load static %}
+{% load easy_thumbnails %}
+{% load sekizai_tags %}
+{% block title %}Blogger{% endblock %}
+
+
+{% block content %}
+    {% addtoblock "css" %}
+        <link href="{% static "blog/blog.css" %}" rel="stylesheet"/>
+    {% endaddtoblock %}
+<div class="">
+    <h1>Nyeste blogginnlegg</h1>
+
+    <div class="list-group">
+
+        {% for post in post_list %}
+            <div class="list-group-item row">
+                <div class="row">
+                    <div class="col-md-8">
+                        <a href="{{ post.get_absolute_url }}">
+                        <h2>{{ post.title }}</h2>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="blog-move-right">{{ post.blog.name }}</div>
+                        <br>
+                        <i class="blog-move-right">Publisert {{ post.created_date|date:"d.m.y"}}</i>
+                    </div>
+                </div>
+
+                {% if post.list_image %}
+                    <div class="col-lg-7">
+                {% else %}
+                    <div class="col-lg-12">
+                {% endif %}
+                        <p>
+                            {{ post.content|markdown:"unsafe"|truncatechars_html:300}}
+                        </p>
+                    </div>
+                <div class="col-lg-5">
+                    {% if post.list_image %}
+                        <img src="{% thumbnail post.list_image 300x200 %}" class="rounded align-bottom blog-floating-image" />
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            Ingen posts her enda.
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block sidebar %}
+
+<div class="list-group">
+    {% for blog in blog_list %}
+    <a class="list-group-item" href="{{ blog.get_absolute_url }}">
+        <h2>{{ blog.name }}</h2>
+    </a>
+    {% empty %}
+    Ingen blogger her enda.
+    {% endfor %}
+</div>
+
+{% endblock %}

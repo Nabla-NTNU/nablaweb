@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load listutil %}
+{% load easy_thumbnails %}
+{% block title %}Bilder{% endblock %}
+
+{% block more_head %}
+{% endblock %}
+
+{% block content %}
+<h1>Bildealbum</h1>
+
+{% for row in albums|row_split:4 %}
+<div class="row">
+    {% for album in row %}
+    <div class="col-xs-6 col-md-3">
+        <a href="{{ album.get_absolute_url }}">
+        {% if album.visibility != 'u' or is_user %}
+        <a href="{{ album.get_absolute_url }}">
+            {% if album.first.file %}
+            <img class="img-responsive" src="{% thumbnail album.first.file 350x350 crop="smart" %}"/>
+            {% endif %}
+        {% endif %}
+        <div class="caption" style="word-wrap: break-word; hyphens: auto;">
+            <h3>{{ album.title }}</h3>
+        </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+<nav>
+    <ul class="pager">
+      {% if page_obj.has_previous %}
+          <li class="previous">
+              <a href="{{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> forrige</a>
+          </li>
+      {% endif %}
+
+        <li class="disabled pager-counter">
+            Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
+        </li>
+
+        {% if page_obj.has_next %}
+            <li class="next">
+                <a href="{{ page_obj.next_page_number }}">neste  <span aria-hidden="true">&rarr;</span></a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endblock content %}

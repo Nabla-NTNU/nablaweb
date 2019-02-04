@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load markdown %}
+{% load static %}
+{% load sekizai_tags %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block more_head %}
+{% endblock %}
+
+{% block content %}
+<div class="panel panel-default panel-body">
+        <h1>{{ post.title }}</h1>
+        {{ post.content|markdown:"unsafe"}}
+        <i>{{ post.created_date|date:"d.m.y"}}</i>
+</div>
+{% endblock content %}
+
+{% block sidebar %}
+    {% addtoblock "css" %}
+        <link href="{% static "blog/blog.css" %}" rel="stylesheet"/>
+    {% endaddtoblock %}
+<ul class="list-group list-without-bullets">
+    <a href="{{ blog.get_absolute_url }}" class="list-group-item list-group-item-info"><li><b>{{ blog.name }}</b></li></a>
+    {% for post in post_list %}
+    <a class="list-group-item" href="{{ post.get_absolute_url }}">
+        <li>{{ post.title }}</li>
+    </a>
+    {% empty %}
+    Ingen blogger her enda.
+    {% endfor %}
+</ul>
+
+{% include "content/includes/blog_sidebar_admin.html" %}
+
+{% endblock %}
