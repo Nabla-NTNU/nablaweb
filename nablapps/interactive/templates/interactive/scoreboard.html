@@ -10,7 +10,7 @@ Highscore
 <ol class="list-group">
 {% for result in replies %}
 
-{% with user=result.user %}
+{% with user=result.user score=result.score question_count=result.get_question_count %}
 <li class="list-group-item">
     {{ forloop.counter }}.
 
@@ -24,12 +24,12 @@ Highscore
 
     <a href="{{ result.get_absolute_url }}">{{ quiz.title }}</a>
 
-    {{ result.get_correct_count }} av {{ result.get_question_count }} riktig.
+    {{ score }} av {{ question_count }} riktig.
 
     <div class="progress">
-    <div class="progress-bar" style="width:{% widthratio result.get_correct_count result.get_question_count 100 %}%">
-        <span class="percent{% if result.get_correct_count == 0 %} zero{% endif %}">
-            {% widthratio result.get_correct_count result.get_question_count 100 %}%
+    <div class="progress-bar" style="width:{% widthratio score question_count 100 %}%">
+        <span class="percent{% if score == 0 %} zero{% endif %}">
+            {% widthratio score question_count 100 %}%
         </span>
     </div>
 </div>
