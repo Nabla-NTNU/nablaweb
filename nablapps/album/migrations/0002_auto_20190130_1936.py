@@ -6,7 +6,7 @@ from django.db import migrations, models
 import django.db.models.deletion
 import mptt.fields
 
-from contentapps.album.models import Album
+from nablapps.album.models import Album
 
 
 def rebuild_album_tree(apps, schema_editor):

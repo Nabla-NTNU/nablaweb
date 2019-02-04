@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from contentapps.album.models import Album
+from nablapps.album.models import Album
 
 
 UserModel = get_user_model()

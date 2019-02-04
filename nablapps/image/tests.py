@@ -3,8 +3,8 @@ Tests for image app
 """
 # pylint: disable=C0111
 from django.test import TestCase
-from contentapps.image.models import ContentImage
-from contentapps.image.markdownprocessing import content_markdown
+from nablapps.image.models import ContentImage
+from nablapps.image.markdownprocessing import content_markdown
 
 class BaseContentImageTest(TestCase):
     def setUp(self):

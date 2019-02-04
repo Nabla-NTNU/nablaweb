@@ -6,5 +6,5 @@ from django.apps import AppConfig
 
 class BlogConfig(AppConfig):
     """Default blog config"""
-    name = 'contentapps.blog'
+    name = 'nablapps.blog'
     verbose_name = 'Blogg'

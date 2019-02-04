@@ -6,8 +6,8 @@ from itertools import chain
 
 from django.views.generic import TemplateView
 
-from contentapps.album.models import Album
-from contentapps.blog.models import BlogPost
+from nablapps.album.models import Album
+from nablapps.blog.models import BlogPost
 
 from ..bedpres.models import BedPres
 from ..events.models import Event
