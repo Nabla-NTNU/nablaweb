@@ -71,6 +71,8 @@ def quiz_reply(request, pk):
     except QuizReplyTimeout:
         messages.info(request, "Beklager, tiden gikk ut")
         return redirect('/')
+    else:
+        reply.save()
 
     messages.info(request, f"Du svarte på {len(q_and_a)} av {len(questions)} spørsmål.")
     return redirect(reply.get_absolute_url())
