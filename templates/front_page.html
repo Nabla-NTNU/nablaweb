@@ -85,7 +85,7 @@
                 {% for album in album_list %}
                     <div class="col-md-3 {% if not forloop.first %} hidden-xs{% endif %}">
                         <a href="{{ album.get_absolute_url }}">
-                            {% if album.visibility != 'u' %}
+                            {% if album.visibility != 'u' and album.first %}
                                 <div class="thumbnail">
                                     <img src="{% thumbnail album.first.file 730x200 quality=95 %}"/>
                                 </div>
