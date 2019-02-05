@@ -1,11 +1,11 @@
 """
 Views for jobs app
 """
-from content.templatetags.listutil import row_split
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 
+from ..core.templatetags.listutil import row_split
 from .models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
 
 
