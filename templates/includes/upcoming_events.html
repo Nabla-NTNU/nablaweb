@@ -5,7 +5,6 @@
 
 <ul class="nav">
 {% for event in upcoming %}
-    {% if event.published %}
         <li>
             <a href="{{ event.get_absolute_url }}">
                 <time class="label {{ class }}"
@@ -18,7 +17,6 @@
                 {% endif %}
             </a>
         </li>
-    {% endif %}
 {% empty %}
     <li>Ingen arrangementer</li>
 {% endfor %}
