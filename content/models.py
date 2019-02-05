@@ -68,25 +68,6 @@ class WithPicture(models.Model):
         return f'http://{domain}{media_url}{filename}'
 
 
-class ViewCounterMixin(models.Model):
-    """
-    Adds view counting functionality. The corresponding view mixin needs to also be added.
-    """
-    view_counter = models.IntegerField(
-        editable=False,
-        default=0,
-        verbose_name="Visninger"
-    )
-
-    def add_view(self):
-        """Increase view count by one"""
-        self.view_counter += 1
-        self.save(update_fields=["view_counter"])
-
-    class Meta:
-        abstract = True
-
-
 class TimeStamped(models.Model):
     """
     Abstract model which adds datetime fields indicating

@@ -24,16 +24,6 @@ class AdminLinksMixin:
         return context
 
 
-class ViewAddMixin:
-    """
-    Adds one view to the object each time the object is dispatched
-    """
-
-    def get_context_data(self, **kwargs):
-        self.object.add_view()
-        return super().get_context_data(**kwargs)
-
-
 class PublishedMixin:
     """
     Fails to load unpublished objects.
