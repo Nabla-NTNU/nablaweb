@@ -6,7 +6,7 @@ from datetime import date
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-from content.models import TimeStamped, ViewCounterMixin
+from content.models import TimeStamped
 
 
 class Blog(models.Model):
@@ -49,7 +49,7 @@ class Blog(models.Model):
         return reverse('blog', kwargs={'blog': self.slug})
 
 
-class BlogPost(TimeStamped, ViewCounterMixin, models.Model):
+class BlogPost(TimeStamped, models.Model):
     """
     A single blog post belonging to a specific blog
     """
