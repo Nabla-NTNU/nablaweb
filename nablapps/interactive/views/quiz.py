@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.contrib.auth.views import login_required
 from django.http import Http404
 
-from content.views import PublishedListMixin
 from datetime import datetime
 from braces.views import FormMessagesMixin, LoginRequiredMixin
 
@@ -13,7 +12,7 @@ from ..models.quiz import Quiz, QuizReply, QuizScoreboard, QuizReplyTimeout
 from .mixins import ObjectOwnerMixin
 
 
-class QuizListView(PublishedListMixin, LoginRequiredMixin, ListView):
+class QuizListView(LoginRequiredMixin, ListView):
     model = Quiz
     paginate_by = 10
     template_name = "interactive/quiz_list.html"
@@ -29,7 +28,7 @@ class QuizView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=None)
-        if obj.is_published or self.request.user.has_perm("interactive.change_quiz"):
+        if obj.published or self.request.user.has_perm("interactive.change_quiz"):
             return obj
         else:
             raise Http404("Ikke publisert")

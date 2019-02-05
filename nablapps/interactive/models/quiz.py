@@ -3,7 +3,6 @@ from django.urls import reverse
 
 from datetime import timedelta, datetime
 
-from content.models import PublicationManagerMixin
 from .base import InteractiveElement, Scoreboard, InteractionResult
 
 
@@ -58,7 +57,7 @@ class QuizQuestion(models.Model):
         return str(self.question)
 
 
-class Quiz(PublicationManagerMixin, InteractiveElement):
+class Quiz(InteractiveElement):
     """
     Represents a quiz.
     """
@@ -87,6 +86,11 @@ class Quiz(PublicationManagerMixin, InteractiveElement):
         related_name="quiz",
         on_delete=models.CASCADE,
         null=True
+    )
+
+    published = models.NullBooleanField(
+        default=True,
+        verbose_name="Publisert",
     )
 
     class Meta:
