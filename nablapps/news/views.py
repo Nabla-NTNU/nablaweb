@@ -2,11 +2,11 @@
 Views for the news app
 """
 from django.views.generic import DetailView, ListView
-from content.views import AdminLinksMixin, PublishedListMixin, PublishedMixin
+from content.views import AdminLinksMixin
 from .models import NewsArticle
 
 
-class NewsListView(PublishedListMixin, ListView):
+class NewsListView(ListView):
     """List of news-articles"""
     model = NewsArticle
     context_object_name = 'news_list'
@@ -15,7 +15,7 @@ class NewsListView(PublishedListMixin, ListView):
     queryset = NewsArticle.objects.order_by('-pk')
 
 
-class NewsDetailView(PublishedMixin, AdminLinksMixin, DetailView):
+class NewsDetailView(AdminLinksMixin, DetailView):
     """Show a single news-article"""
     model = NewsArticle
     context_object_name = 'news'

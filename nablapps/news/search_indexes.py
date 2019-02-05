@@ -16,4 +16,4 @@ class NewsIndex(indexes.SearchIndex, indexes.Indexable):
         return NewsArticle
 
     def index_queryset(self, using=None):
-        return self.get_model().objects.exclude(published=False)
+        return self.get_model().objects.all()
