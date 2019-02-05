@@ -1,4 +1,3 @@
-from content.models import PublicationManagerMixin
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -6,7 +5,7 @@ from django.utils.safestring import mark_safe
 from .base import InteractiveElement
 
 
-class Test(PublicationManagerMixin, InteractiveElement):
+class Test(InteractiveElement):
     """
     Represents a user-made test
     """
@@ -18,6 +17,10 @@ class Test(PublicationManagerMixin, InteractiveElement):
         help_text="Tittel på brukertesten"
     )
 
+    published = models.NullBooleanField(
+        default=True,
+        verbose_name="Publisert",
+    )
     class Meta:
         verbose_name = "brukertest"
         verbose_name_plural = "brukertester"

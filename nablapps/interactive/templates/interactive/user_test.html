@@ -5,7 +5,7 @@
 {% block content %}
 
 <h1>{{ test.title }}</h1>
-    {% if not test.is_published %}
+    {% if not test.published %}
 <div class="alert alert-warning alert-dismissible">Dette er bare synlig fordi du har riktige rettigheter</div>
 {% endif %}
 
