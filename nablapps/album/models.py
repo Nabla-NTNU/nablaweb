@@ -7,7 +7,7 @@ from django.contrib.auth.models import AnonymousUser
 
 from mptt.models import MPTTModel, TreeForeignKey
 
-from content.models import TimeStamped, ViewCounterMixin, BaseImageModel
+from content.models import TimeStamped, BaseImageModel
 
 
 class AlbumImage(BaseImageModel):
@@ -60,7 +60,7 @@ class AlbumImage(BaseImageModel):
         db_table = "content_albumimage"
 
 
-class Album(MPTTModel, TimeStamped, ViewCounterMixin):
+class Album(MPTTModel, TimeStamped):
     """
     Model representing an album which is a collection of images.
     """
