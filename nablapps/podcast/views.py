@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.views.generic import TemplateView, DetailView, ListView
 from hitcount.views import HitCountDetailView
-from content.views import AdminLinksMixin, PublishedMixin, update_published_state
+from content.views import AdminLinksMixin
 from nablapps.core.view_mixins import FlatPageMixin
 
 from .models import Podcast, Season, get_season_count
@@ -24,8 +24,7 @@ class SeasonView(FlatPageMixin, TemplateView):
             data['season'] = season
             data['season_name'] = season.name()
 
-            update_published_state(Podcast)
-            published = Podcast.objects.filter(season=season, published=True).order_by('-pub_date')
+            published = Podcast.objects.filter(season=season).order_by('-pub_date')
             data['podcast_list'] = published.filter(is_clip=False)
             data['podcast_clips'] = published.filter(is_clip=True)
 
@@ -42,10 +41,10 @@ class RssView(ListView):
     template_name = 'podcast/podcast.rss'
     content_type = 'application/xml'
     model = Podcast
-    queryset = Podcast.objects.exclude(file='').filter(published=True, is_clip=False).order_by('-pub_date')
+    queryset = Podcast.objects.exclude(file='').filter(is_clip=False).order_by('-pub_date')
 
 
-class PodcastDetailView(PublishedMixin, AdminLinksMixin, HitCountDetailView, DetailView):
+class PodcastDetailView(AdminLinksMixin, HitCountDetailView, DetailView):
     template_name = 'podcast/podcast_detail.html'
     model = Podcast
     context_object_name = "podcast"
@@ -55,6 +54,6 @@ class PodcastDetailView(PublishedMixin, AdminLinksMixin, HitCountDetailView, Det
         context = super().get_context_data(**kwargs)
         context['season'] = season = self.object.season
         context['season_name'] = season.name()
-        published = Podcast.objects.filter(season=season, published=True).order_by('-pub_date')
+        published = Podcast.objects.filter(season=season).order_by('-pub_date')
         context['podcast_clips'] = published.filter(is_clip=True)
         return context
