@@ -3,7 +3,7 @@ Admin interface definitions for blog app
 """
 from django.contrib import admin
 
-from content.admin import ChangedByMixin
+from nablapps.core.admin import ChangedByMixin
 from .models import Blog, BlogPost
 
 

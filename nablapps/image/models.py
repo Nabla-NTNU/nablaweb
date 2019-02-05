@@ -1,7 +1,7 @@
 """
 Contains a single model called ContentImage
 """
-from content.models import BaseImageModel
+from nablapps.core.models import BaseImageModel
 
 
 class ContentImage(BaseImageModel):

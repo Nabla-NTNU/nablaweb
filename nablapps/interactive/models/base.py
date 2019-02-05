@@ -1,4 +1,4 @@
-from content.models import TimeStamped
+from nablapps.core.models import TimeStamped
 from django.db import models
 
 

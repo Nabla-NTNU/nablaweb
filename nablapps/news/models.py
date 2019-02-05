@@ -17,7 +17,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from image_cropping.fields import ImageRatioField
 
-from content.models import TimeStamped, WithPicture
+from nablapps.core.models import TimeStamped, WithPicture
 
 
 class TextContent(models.Model):

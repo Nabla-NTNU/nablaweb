@@ -2,7 +2,7 @@
 Admin interface for album app
 """
 from django.contrib import admin
-from content.admin import ChangedByMixin
+from nablapps.core.admin import ChangedByMixin
 from .models import Album, AlbumImage
 
 from mptt.admin import DraggableMPTTAdmin

@@ -1,7 +1,7 @@
 """
 Admin interface for jobs app
 """
-from content.admin import ChangedByMixin
+from nablapps.core.admin import ChangedByMixin
 from django.contrib import admin
 from image_cropping import ImageCroppingMixin
 from nablapps.news.admin import add_to_frontpage

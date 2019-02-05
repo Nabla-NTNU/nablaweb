@@ -5,7 +5,7 @@ import os
 from django.conf import settings
 from django.urls import reverse
 from django.db import models
-from content.models import TimeStamped, WithPicture
+from nablapps.core.models import TimeStamped, WithPicture
 from nablapps.news.models import TextContent
 from .pdfthumbnailer import thumbnail_pdf
 

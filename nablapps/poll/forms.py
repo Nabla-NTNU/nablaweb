@@ -4,7 +4,7 @@ Forms for poll app
 from datetime import datetime
 from itertools import takewhile, count
 
-from content.admin import ChangedByMixin
+from nablapps.core.admin import ChangedByMixin
 from django import forms
 from django.forms.models import inlineformset_factory
 from .models import Poll, Choice

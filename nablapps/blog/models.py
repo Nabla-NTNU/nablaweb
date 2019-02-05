@@ -6,7 +6,7 @@ from datetime import date
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-from content.models import TimeStamped
+from nablapps.core.models import TimeStamped
 
 
 class Blog(models.Model):

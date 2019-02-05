@@ -7,7 +7,7 @@ from django.contrib.auth.models import AnonymousUser
 
 from mptt.models import MPTTModel, TreeForeignKey
 
-from content.models import TimeStamped, BaseImageModel
+from nablapps.core.models import TimeStamped, BaseImageModel
 
 
 class AlbumImage(BaseImageModel):

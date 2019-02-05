@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.html import format_html
 
 from image_cropping import ImageCroppingMixin
-from content.admin import ChangedByMixin
+from nablapps.core.admin import ChangedByMixin
 
 from .models import FrontPageNews, NewsArticle
 

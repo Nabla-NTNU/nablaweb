@@ -6,7 +6,7 @@ Defines mainly the Advert and Company models.
 from datetime import datetime
 from django.urls import reverse
 from django.db import models
-from content.models import WithPicture, TimeStamped
+from nablapps.core.models import WithPicture, TimeStamped
 from nablapps.news.models import TextContent
 
 

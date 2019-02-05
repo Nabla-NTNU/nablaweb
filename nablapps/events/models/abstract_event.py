@@ -1,7 +1,7 @@
 """
 Abstract model for events
 """
-from content.models import (
+from nablapps.core.models import (
     TimeStamped,
     WithPicture,
 )
