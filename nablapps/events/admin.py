@@ -17,8 +17,7 @@ class EventRegistrationAdmin(admin.ModelAdmin):
 @admin.register(Event)
 class EventAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
     """Admin interface for Event model"""
-    fields = ("publication_date",
-              "published",
+    fields = (
               "picture",
               "cropping",
               "headline",

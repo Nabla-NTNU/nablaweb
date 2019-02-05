@@ -2,7 +2,6 @@
 Abstract model for events
 """
 from content.models import (
-    PublicationManagerMixin,
     TimeStamped,
     WithPicture,
 )
@@ -11,8 +10,7 @@ from .mixins import RegistrationInfoMixin, EventInfoMixin
 
 
 class AbstractEvent(RegistrationInfoMixin, EventInfoMixin,
-                    PublicationManagerMixin, TimeStamped,
-                    TextContent, WithPicture):
+                    TimeStamped, TextContent, WithPicture):
     """
     Abstract model with the things that are common between Event and Bedpres.
     """
