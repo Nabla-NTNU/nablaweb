@@ -1,8 +1,7 @@
 from django.http import Http404
 from django.views.generic import TemplateView, DetailView, ListView
 from hitcount.views import HitCountDetailView
-from content.views import AdminLinksMixin
-from nablapps.core.view_mixins import FlatPageMixin
+from nablapps.core.view_mixins import FlatPageMixin, AdminLinksMixin
 
 from .models import Podcast, Season, get_season_count
 

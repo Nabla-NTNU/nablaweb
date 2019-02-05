@@ -16,7 +16,7 @@ from braces.views import (PermissionRequiredMixin,
                           StaticContextMixin,
                           MessageMixin)
 
-from content.views import AdminLinksMixin
+from nablapps.core.view_mixins import AdminLinksMixin
 from .event_overrides import get_eventgetter
 
 from .models import Event

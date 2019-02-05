@@ -2,7 +2,7 @@
 Views for the news app
 """
 from django.views.generic import DetailView, ListView
-from content.views import AdminLinksMixin
+from nablapps.core.view_mixins import AdminLinksMixin
 from .models import NewsArticle
 
 

@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import formats
 from django.views.static import serve
 from django.views.generic import DetailView, TemplateView
-from content.views import AdminLinksMixin
+from nablapps.core.view_mixins import AdminLinksMixin
 from .models import Nablad
 
 
