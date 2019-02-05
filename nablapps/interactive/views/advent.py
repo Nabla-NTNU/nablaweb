@@ -1,5 +1,4 @@
 from braces.views import PermissionRequiredMixin
-from content.views import PublishedMixin
 from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
@@ -14,7 +13,7 @@ from django.core.exceptions import PermissionDenied
 from ..models.advent import AdventCalendar, AdventDoor, AdventParticipation
 
 
-class AdventDoorView(PublishedMixin, DetailView):
+class AdventDoorView(DetailView):
     model = AdventDoor
     pk_url_kwarg = "number"
     context_object_name = "door"
