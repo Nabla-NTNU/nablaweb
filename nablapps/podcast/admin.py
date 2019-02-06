@@ -5,8 +5,6 @@ from .models import Podcast, Season
 
 class PodcastAdmin(ImageCroppingMixin, admin.ModelAdmin):
     fields = (
-        "publication_date",
-        "published",
         'image',
         'cropping',
         'title',
