@@ -3,8 +3,9 @@ Views for album app
 """
 from django.views.generic import TemplateView, ListView, DetailView
 from django.shortcuts import redirect, get_object_or_404
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.urls import reverse
+from django.http import Http404
 from .models import Album
 
 
@@ -82,7 +83,10 @@ class AlbumImageView(PermissionToSeeAlbumMixin, TemplateView):
 
         images = context['album'].images.order_by('num').all()
         paginator = Paginator(images, 1)
-        context['page_obj'] = paginator.page(kwargs['num'])
+        try:
+            context['page_obj'] = paginator.page(kwargs['num'])
+        except EmptyPage:
+            raise Http404('Bildet finnes ikke')
 
         if context['page_obj'].object_list:
             context['image'] = context['page_obj'].object_list[0]
