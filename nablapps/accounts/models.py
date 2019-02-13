@@ -39,7 +39,7 @@ class NablaUserManager(UserManager):
         decimal = str(int(reversed, 2))
 
         # Pad with zeros, so it is 10 long
-        decimal = '0' * (10 - len(decimal) % 10) + decimal
+        decimal = decimal.zfill(10)
 
         return decimal
 
