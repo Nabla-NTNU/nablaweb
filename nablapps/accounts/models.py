@@ -36,7 +36,12 @@ class NablaUserManager(UserManager):
         reversed = ''.join([chunk[::-1] for chunk in chunked])
 
         # Convert back to decimal
-        return int(reversed, 2)
+        decimal = str(int(reversed, 2))
+
+        # Pad with zeros, so it is 10 long
+        decimal = decimal.zfill(10)
+
+        return decimal
 
         
 
