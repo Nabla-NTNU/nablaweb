@@ -15,5 +15,9 @@ urlpatterns = [
         BedPresRegisterUserView.as_view(),
         name='bedpres_registration'),
 
-    url(r'^(?P<bedpres_id>\d{1,8})/eksporter$', ical_event),
+    #url(r'^(?P<bedpres_id>\d{1,8})/eksporter$', ical_event, name='bedpres_ical_event'),
+
+    url(r'^(?P<event_id>\d{1,8}).ics$',
+        ical_event,
+        name="bedpres_ical_event"),
 ]

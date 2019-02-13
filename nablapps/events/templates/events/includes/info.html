@@ -155,7 +155,12 @@
 {% endif %}
 
 <div class="center">
-    {% if not event.bpcid %}
+    {% if event.bpcid %}
+    <a class="btn btn-default btn-xs" href="{% url "bedpres_ical_event" event.pk %}">
+        <span class="glyphicon glyphicon-calendar"></span>
+        iCal
+    </a>
+    {% else %}
     <a class="btn btn-default btn-xs" href="{% url "ical_event" event.pk %}">
         <span class="glyphicon glyphicon-calendar"></span>
         iCal
