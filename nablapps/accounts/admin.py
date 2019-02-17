@@ -51,7 +51,7 @@ class GroupAdminForm(forms.ModelForm):
 
             def new_save_m2m():
                 old_save_m2m()
-                group.user_set = self.cleaned_data['users']
+                group.user_set.set(self.cleaned_data['users'])
 
             self.save_m2m = new_save_m2m
         return group
