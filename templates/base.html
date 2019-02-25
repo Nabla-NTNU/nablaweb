@@ -114,9 +114,8 @@
                                     <li><a href="{% url 'show_com_page' slug="styret"%}">Styret</a></li>
                                     {# url for /nablashop/ #}
                                     <li><a href="{% url 'nablashop:index' %}" >Nablashop</a></li>
-				                    <li><a href="{% url 'wiki:get' 'diverse/nablas_lover/' %}">Nablas Lover</a></li>
-				                    <li><a href="{% url 'wiki:get' 'diverse/nablas_forskrifter/' %}">Nablas Forskrifter</a></li>
-
+                                    <li><a href="{% url 'wiki:get' 'lovverk/nablas-lover/' %}">Nablas Lover</a></li>
+                                    <li><a href="{% url 'wiki:get' 'lovverk/nablas-forskrifter/' %}">Nablas Forskrifter</a></li>
                                     {# Hent alle sider som starter på /om/ #}
                                     {% get_flatpages '/om/' as about_pages %}
                                     {% for page in about_pages %}
