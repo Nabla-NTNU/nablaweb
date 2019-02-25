@@ -34,6 +34,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
         self._add_events_and_bedpres(context)
         self._add_poll(context)
         self._add_nablad(context)
+        self._add_podcast(context)
         context['new_podcast'] = Podcast.objects.exclude(is_clip=True).first()
         context['album_list'] = Album.objects.exclude(visibility='h').order_by('-last_changed_date')[:4]
         context['new_blog'] = BlogPost.objects.exclude(list_image=None).order_by('-created_date')[:4]
@@ -50,6 +51,9 @@ class FrontPageView(FlatPageMixin, TemplateView):
         context['new_nablad'] = Nablad.objects.order_by('-pub_date')[:4]
         if not self.request.user.is_authenticated:
             context['new_nablad'] = Nablad.objects.exclude(is_public=False).order_by('-pub_date')[:4]
+
+    def _add_podcast(self, context):
+        context['new_podcast_list'] = Podcast.objects.order_by('-pub_date')[:4]
 
     def _add_events_and_bedpres(self, context):
         now = datetime.now() - timedelta(hours=6)

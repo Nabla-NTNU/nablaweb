@@ -85,14 +85,15 @@
         <div id="Podcast" class="tab-pane fade">
             <h3><a href="{% url "season_view" %}">Nyeste Skråttkast</a></h3>
             <div class="row">
-                {% if new_podcast %}
-                    <a href="{{ new_podcast.get_absolute_url }}">
-                        {% if new_podcast.image %}
-                            <img src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
-                        {% endif %}
-                    </a>
-                    <p><i>Dato: {{ new_podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {% get_hit_count for new_podcast %}</i></p>
-                {% endif %}
+                {% for podcast in new_podcast_list %}
+                    <div class="col-md-3{% if not forloop.first %} hidden-xs{% endif %}">
+                        <a class="thumbnail" href="{{ podcast.get_absolute_url }}">
+                            {% if podcast.image %}
+                                <img src="{{ podcast.image.url }}" alt="{{ podcast.title }}" width = 160, height = 100/>
+                            {% endif %}
+                        </a>
+                    </div >
+                {% endfor %}
             </div>
         </div>
     </div>
