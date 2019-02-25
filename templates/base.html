@@ -86,16 +86,6 @@
                         <ul class="nav navbar-nav">
                             <li><a href="{% url "event_list" %}">Arrangementer</a></li>
                             <li><a href="{% url "jobs_list" %}">Karriere</a></li>
-                            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Wiki
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" >
-
-                                <li><a href="{% url "wiki:root" %}">Internwiki</a></li>
-                                <li><a href="{% url "ex_list" %}">Utveksling</a></li>                          
-                            </ul>
-                            </li>
 
                             <li class="dropdown">
                                 <a href="#ting" class="dropdown-toggle" data-toggle="dropdown">
@@ -123,19 +113,32 @@
                                     <li><a href="{% url "committee_overview" %}" >Undergrupper</a></li>
                                     <li><a href="{% url 'show_com_page' slug="styret"%}">Styret</a></li>
                                     {# url for /nablashop/ #}
-                                    <li><a href="{% url 'show_com_page' slug="styret"%}">Kontortider og info</a></li>
                                     <li><a href="{% url 'nablashop:index' %}" >Nablashop</a></li>
 				                    <li><a href="{% url 'wiki:get' 'diverse/nablas_lover/' %}">Nablas Lover</a></li>
 				                    <li><a href="{% url 'wiki:get' 'diverse/nablas_forskrifter/' %}">Nablas Forskrifter</a></li>
-                                    <li><a href="{% url 'show_com_page' slug="styret"%}">Bokskap</a></li>
-                                    <li><a href="https://www.facebook.com/nablantnu/">Facebookside</a></li>
-				                    <li><a href="https://www.facebook.com/nablantnu/">Sponsorlenker</a></li>
-				      
+
                                     {# Hent alle sider som starter på /om/ #}
                                     {% get_flatpages '/om/' as about_pages %}
                                     {% for page in about_pages %}
                                     <li><a href="{{ page.url }}">{{ page.title }}</a></li>
                                     {% endfor %}
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
+                                <a href="#om" class="dropdown-toggle" data-toggle="dropdown">
+                                    Diverse
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" >
+
+                                    <li><a href="/nystudent/">For nye studenter</a></li>
+                                    <li><a href="https://www.facebook.com/nablantnu/">Facebookside</a></li>
+                                    <li><a href="http://bokskap.nabla.no/">Bokskap</a></li>
+                                    <li><a href="{% url "wiki:root" %}">Internwiki</a></li>
+                                    <li><a href="{% url "ex_list" %}">Utveksling</a></li>
+                                    <li><a href="https://nablantnu.slack.com">Nablaslack</a></li>
+
                                 </ul>
                             </li>
                         </ul>

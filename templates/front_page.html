@@ -1,4 +1,4 @@
-{% extends "base_no_sidebar.html" %}
+{% extends "base.html" %}
 {% load markdown %}
 {% load listutil %}
 {% load easy_thumbnails %}
@@ -15,12 +15,12 @@
         {% if news.cropping and news.picture %}
             <a href="{{ news.get_absolute_url }}">
                 <img alt="" class="img-responsive"
-                     src="{% thumbnail news.picture 760x300 box=news.cropping upscale=True quality=95 detail=True %}">
+                     src="{% thumbnail news.picture 760x300 box=news.cropping upscale=True quality=95 detail=True %}" height="100%" width="100%">
             </a>
         {% elif news.picture %}
             <a href="{{ news.get_absolute_url }}">
                 <img alt="" class="img-responsive"
-                     src="{% thumbnail news.picture 760x300 quality=95 upscale=True crop="smart" detail=True %}">
+                     src="{% thumbnail news.picture 760x300 quality=95 upscale=True crop="smart" detail=True %}" height="100%" width="100%">
             </a>
         {% endif %}
         <header>
@@ -36,16 +36,20 @@
 <div class="well">
     {% include "includes/event_widget.html" %}
 </div>
+
+
 <div class="row row-same-height">
     {% for news in news_list_1 %}
         {% include "includes/article_widget.html" %}
     {% endfor %}
 </div>
+
 <div class="row row-same-height">
     {% for news in news_list_2 %}
         {% include "includes/article_widget.html" %}
     {% endfor %}
 </div>
+
 <style>
     .nav-tabs{
         display: flex;
@@ -61,8 +65,6 @@
 
  <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#Nablad">Nablad</a></li>
-  <li><a data-toggle="tab" href="#Album">Album</a></li>
-  <li><a data-toggle="tab" href="#Blogg">Blogg</a></li>
   <li><a data-toggle="tab" href="#Podcast">Skråttkast</a></li>
 </ul>
 
@@ -77,46 +79,6 @@
                             <img src="{% thumbnail nablad.thumbnail 730x200 %}", width = 160, height = 100>
                         </a>
                     </div >
-                {% endfor %}
-            </div>
-        </div>
-        <div id="Album" class="tab-pane fade">
-            <h3><a href="{% url "albums" %}">Album</a></h3>
-            <div class="row">
-                {% for album in album_list %}
-                    <div class="col-md-3 {% if not forloop.first %} hidden-xs{% endif %}">
-                        <a href="{{ album.get_absolute_url }}">
-                            {% if album.visibility != 'u' %}
-                                <div class="thumbnail">
-                                    <img src="{% thumbnail album.first.file 730x200 quality=95 %}"/>
-                                </div>
-                            {% endif %}
-                            <div class="caption" style="word-wrap: break-word; hyphens: auto;">
-                                <h4>{{ album.title }}</h4>
-                            </div>
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div id="Blogg" class="tab-pane fade">
-            <h3><a href="{% url "blog" %}">Siste Blogginnlegg</a></h3>
-            <div class="row">
-                {% for blog in new_blog %}
-                    
-                    <div class="col-md-3 {% if not forloop.first %} hidden-xs{% endif %}">
-                        <a href="{{ blog.get_absolute_url }}">
-                            {% if blog.list_image %}
-                            <div class="thumbnail">
-                                <img src="{% thumbnail blog.list_image 730x200 quality=95 %}"/>
-                            </div>
-                            {% endif %}
-
-                            <div class="caption" style="word-wrap: break-word; hyphens: auto;">
-                                <h4>{{ blog.title }}</h4>
-                            </div>
-                        </a>
-                    </div>
                 {% endfor %}
             </div>
         </div>
@@ -135,17 +97,25 @@
         </div>
     </div>
 </div>
-<div class="row row-same-height">
+
+
+
+<div class= "row row-same-height">
     {% for news in news_list_3 %}
         {% include "includes/article_widget.html" %}
     {% endfor %}
 </div>
 
+{# <a href="{% url "news_list" %}" class="btn">Flere nyheter</a> #}
+{% endblock content %}
+{% block sidebar %}
     {% include "poll/poll_include.html" %}
     {% if sidebarinfo %}
         <p>
             {{ sidebarinfo.content | markdown:"unsafe" }}
         </p>
     {% endif %}
-{# <a href="{% url "news_list" %}" class="btn">Flere nyheter</a> #}
-{% endblock content %}
+
+
+{% endblock sidebar %}
+

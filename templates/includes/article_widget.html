@@ -5,13 +5,13 @@
         <a href="{{ news.get_absolute_url }}">
             <img alt=""
                  class="news-picture img-responsive"
-                 src="{% thumbnail news.picture 360x200 box=news.cropping upscale quality=95 detail %}">
+                 src="{% thumbnail news.picture 570x200 box=news.cropping upscale crop="smart" quality=95 detail %}"height="100%" width="100%">
         </a>
     {% elif news.picture %}
         <a href="{{ news.get_absolute_url }}">
             <img alt=""
                  class="news-picture img-responsive"
-                 src="{% thumbnail news.picture 360x200 quality=95 upscale crop="smart" detail %}">
+                 src="{% thumbnail news.picture 570x200 quality=95 upscale crop="smart" detail %}" height="100%" width="100%">
         </a>
     {% endif %}
     <header>
