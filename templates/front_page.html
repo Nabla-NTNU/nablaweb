@@ -76,7 +76,7 @@
                 {% for nablad in new_nablad %}
                     <div class="col-md-3{% if not forloop.first %} hidden-xs{% endif %}">
                         <a class="thumbnail" href="{{ nablad.get_absolute_url }}">
-                            <img src="{% thumbnail nablad.thumbnail 730x200 %}", width = 160, height = 100>
+                            <img src="{% thumbnail nablad.thumbnail 730x200 %}">
                         </a>
                     </div >
                 {% endfor %}
@@ -89,7 +89,7 @@
                     <div class="col-md-3{% if not forloop.first %} hidden-xs{% endif %}">
                         <a class="thumbnail" href="{{ podcast.get_absolute_url }}">
                             {% if podcast.image %}
-                                <img src="{{ podcast.image.url }}" alt="{{ podcast.title }}" width = 160, height = 100/>
+                                <img src="{{ podcast.image.url }}" alt="{{ podcast.title }}">
                             {% endif %}
                         </a>
                     </div >

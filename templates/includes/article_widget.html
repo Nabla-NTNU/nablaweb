@@ -5,7 +5,7 @@
         <a href="{{ news.get_absolute_url }}">
             <img alt=""
                  class="news-picture img-responsive"
-                 src="{% thumbnail news.picture 570x200 box=news.cropping upscale crop="smart" quality=95 detail %}"height="100%" width="100%">
+                 src="{% thumbnail news.picture 570x200 box=news.cropping upscale crop="smart" quality=95 detail %}" height="100%" width="100%">
         </a>
     {% elif news.picture %}
         <a href="{{ news.get_absolute_url }}">
