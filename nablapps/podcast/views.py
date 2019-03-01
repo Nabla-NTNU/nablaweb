@@ -30,6 +30,9 @@ class SeasonView(FlatPageMixin, TemplateView):
             data['next'] = season.get_next()
             data['season_count'] = get_season_count()
             data['previous'] = season.get_previous()
+
+            data['season_list'] = Season.objects.order_by('-number')
+
         except Exception:
             raise Http404
 

@@ -63,3 +63,22 @@
     bottom: 15px;
     float: right;
 }
+
+.opt{
+    border-radius: 15px;
+    color: #337ab7;
+    background-color: #fff;
+    border: 1px solid rgb(221,221,221);
+    padding: 8px;
+    text-align: center;
+    align-items: center;
+    display: inline;
+    margin-right: 0.28em
+}
+
+select{
+    border:0px;
+    outline:0px;
+    padding: 5px 14px;
+    margin-top: 3px;
+}

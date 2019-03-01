@@ -26,7 +26,7 @@ class Season(models.Model):
         null=True,
         blank=True,
         verbose_name="Logo",
-        help_text="Podcastlogo."
+        help_text="Podcastlogo. (Bruker fra forrige sesong hvis dette feltet er tomt)"
     )
 
     def name(self):
@@ -46,6 +46,17 @@ class Season(models.Model):
             return Season.objects.get(number=int(self.number) - 1)
         except Season.DoesNotExist:
             return None
+
+    @property
+    def smart_logo(self):
+        if self.logo:
+            return self.logo
+        else:
+            last = Season.objects.filter(number__lt=self.number).exclude(logo=self.logo).order_by('number').last()
+            if last is None:
+                return None
+            else:
+                return last.logo
 
     def __str__(self):
         return str(self.number)
@@ -109,6 +120,12 @@ class Podcast(models.Model):
         default=False,
         verbose_name="Er lydklipp",
         help_text="Lydklipp blir ikke vist sammen med episodene."
+    )
+
+    has_video = models.BooleanField(
+        default=False,
+        verbose_name="Har video",
+        help_text="For å få video-ikon i oversikten."
     )
 
     season = models.ForeignKey(
