@@ -50,18 +50,18 @@
 <nav>
     <ul class="pager">
         {% if previous %}
-            <li>
+            <li class="previous">
                 <a href="{{ previous.get_absolute_url }}"><span aria-hidden="true">&larr;</span> Forrige
                     sesong</a>
             </li>
         {% else %}
-             <li style="visibility: hidden">
+             <li class="previous" style="visibility: hidden">
                 <a><span aria-hidden="true">&larr;</span> Forrige
                     sesong</a>
             </li>
         {% endif %}
 
-        <li>
+        <li class="disabled pager-counter">
             <div class = "opt">
                 <select onchange="if (this.value) window.location.href=this.value" onmouseover="" style="cursor: pointer;">
                     {% for i in season_list %}
@@ -72,12 +72,12 @@
         </li>
 
         {% if next %}
-            <li>
+            <li class="next">
                 <a href="{{ next.get_absolute_url }}">Neste sesong <span
                         aria-hidden="true">&rarr;</span></a>
             </li>
         {% else %}
-            <li style="visibility: hidden">
+            <li class="next" style="visibility: hidden">
                 <a>Neste sesong <span
                         aria-hidden="true">&rarr;</span></a>
             </li>

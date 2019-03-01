@@ -65,18 +65,23 @@
 }
 
 .opt{
-        border-radius: 15px;
-        color: #337ab7;
-        background-color: #fff;
-        border: 1px solid rgb(221,221,221);
-        padding: 7px;
-        text-align: center;
-        align-items: center;
-        display: inline;
-        margin-right: 0.28em
-    }
+    border-radius: 15px;
+    color: #337ab7;
+    background-color: #fff;
+    border: 1px solid rgb(221,221,221);
+    padding: 7px;
+    text-align: center;
+    align-items: center;
+    display: inline;
+    margin-right: 0.28em
+}
 
 select{
-   border:0px;
-   outline:0px;
+    border:0px;
+    outline:0px;
+    padding: 5px 14px;
+}
+
+select-items{
+
 }
