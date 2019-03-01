@@ -51,13 +51,11 @@
     <ul class="pager">
         {% if previous %}
             <li class="previous">
-                <a href="{{ previous.get_absolute_url }}"><span aria-hidden="true">&larr;</span> Forrige
-                    sesong</a>
+                <a href="{{ previous.get_absolute_url }}"><span aria-hidden="true">&larr;</span><span class="hidden-xs"> Forrige sesong</span></a>
             </li>
         {% else %}
              <li class="previous" style="visibility: hidden">
-                <a><span aria-hidden="true">&larr;</span> Forrige
-                    sesong</a>
+                <a><span aria-hidden="true">&larr;</span><span class="hidden-xs"> Forrige sesong</span></a>
             </li>
         {% endif %}
 
@@ -73,13 +71,11 @@
 
         {% if next %}
             <li class="next">
-                <a href="{{ next.get_absolute_url }}">Neste sesong <span
-                        aria-hidden="true">&rarr;</span></a>
+                <a href="{{ next.get_absolute_url }}"><span class="hidden-xs">Neste sesong </span><span aria-hidden="true">&rarr;</span></a>
             </li>
         {% else %}
             <li class="next" style="visibility: hidden">
-                <a>Neste sesong <span
-                        aria-hidden="true">&rarr;</span></a>
+                <a><span class="hidden-xs">Neste sesong </span><span aria-hidden="true">&rarr;</span></a>
             </li>
         {% endif %}
     </ul>
