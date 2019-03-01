@@ -11,11 +11,12 @@ class PodcastAdmin(ImageCroppingMixin, admin.ModelAdmin):
         'season',
         'description',
         'extra_markdown',
+        'has_video',
         'is_clip',
         'file',
         'pub_date',
     )
-    list_display = ('title', 'pub_date', 'season', 'is_clip')
+    list_display = ('title', 'pub_date', 'season', 'is_clip', 'has_video')
     list_filter = ['pub_date']
 
 

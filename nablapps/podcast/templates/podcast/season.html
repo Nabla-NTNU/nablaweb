@@ -32,7 +32,7 @@
                             <h2>{{ podcast.title }}</h2>
                             <p>{{ podcast.get_short_description }}</p>
                             <span class="date-text">
-                                {% if podcast.extra_markdown %}
+                                {% if podcast.has_video %}
                                 <span class="glyphicon glyphicon-film"></span>
                                 {% endif %}
                             {% get_hit_count for podcast %} visninger.

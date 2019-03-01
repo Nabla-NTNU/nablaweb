@@ -122,6 +122,12 @@ class Podcast(models.Model):
         help_text="Lydklipp blir ikke vist sammen med episodene."
     )
 
+    has_video = models.BooleanField(
+        default=False,
+        verbose_name="Har video",
+        help_text="For å få video-ikon i oversikten."
+    )
+
     season = models.ForeignKey(
         'Season',
         verbose_name="Sesong",
