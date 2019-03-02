@@ -2,6 +2,7 @@
 Views for blog app
 """
 from django.http import HttpResponseNotFound
+from django.urls import reverse
 from django.views.generic import DetailView, ListView
 from nablapps.core.view_mixins import AdminLinksMixin
 from .models import Blog, BlogPost
@@ -22,8 +23,18 @@ class BlogPostView(AdminLinksMixin, DetailView):
         context['post_list'] = BlogPost.objects.filter(blog=post.blog).order_by('-created_date')
         return context
 
+    def get_admin_links(self):
+        return [
+            {
+                "name": "Bloggadmin",
+                "glyphicon_symbol": "cog",
+                "url": reverse("admin:blog_blog_change", args=[self.object.blog.id]),
+            },
+            *super().get_admin_links()
+        ]
 
-class BlogView(ListView):
+
+class BlogView(AdminLinksMixin, ListView):
     """
     View for a blog also lists the posts in the blog
     """
@@ -50,6 +61,15 @@ class BlogView(ListView):
         context['blog'] = self.blog
         context['full_list'] = BlogPost.objects.filter(blog=self.blog).order_by('-created_date')
         return context
+
+    def get_admin_links(self):
+        return [
+            {
+                "name": "Bloggadmin",
+                "glyphicon_symbol": "cog",
+                "url": reverse("admin:blog_blog_change", args=[self.blog.id]),
+            },
+        ]
 
 
 class BlogListView(ListView):

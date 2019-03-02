@@ -91,4 +91,12 @@ class AlbumImageView(PermissionToSeeAlbumMixin, TemplateView):
         if context['page_obj'].object_list:
             context['image'] = context['page_obj'].object_list[0]
 
+        context['admin_links'] = [
+            {
+                "name": "Endre Album",
+                "glyphicon_symbol": "cog",
+                "url": reverse("admin:album_album_change", args=[context["album"].id])
+            }
+        ]
+
         return context

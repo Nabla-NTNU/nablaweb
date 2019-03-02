@@ -157,6 +157,24 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
                 self.messages.error(e)
         return context
 
+    def get_admin_links(self):
+        if not self.object.registration_required:
+            return super().get_admin_links()
+        return [
+            {
+                "name": "Administrer påmeldinger",
+                "glyphicon_symbol": "user",
+                "url": reverse("event_admin", args=[self.object.id]),
+            },
+            {
+                "name": "Påmeldingsliste",
+                "glyphicon_symbol": "list",
+                "url": reverse("event_registrations", args=[self.object.id]),
+            },
+            *super().get_admin_links()
+        ]
+
+
 
 class UserEventView(LoginRequiredMixin, TemplateView):
     """Show list of events the logged in user is registered to"""

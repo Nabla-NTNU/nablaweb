@@ -1,7 +1,9 @@
+"""
+Generic view mixins
+"""
 import logging
 
 from django.contrib.flatpages.models import FlatPage
-from django.http import HttpResponseForbidden
 from django.urls import reverse
 from django.views.generic.base import ContextMixin
 
@@ -22,19 +24,36 @@ class FlatPageMixin(ContextMixin):
         return context
 
 
-class AdminLinksMixin:
+class AdminLinksMixin(ContextMixin):
     """
     Adds links to the admin page for an object to the context.
 
     Meant to be used together with DetailView.
     """
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["admin_links"] = self.get_admin_links()
+        return context
+
+    def get_admin_links(self):
+        """
+        Return list of dictionaries containing links.
+
+        Override this to add more links.
+        """
         # pylint: disable=protected-access
         app_label = self.model._meta.app_label
         model_name = self.model._meta.model_name
-        context["change_url"] = reverse(f"admin:{app_label}_{model_name}_change",
-                                        args=[self.object.id])
-        context["delete_url"] = reverse(f"admin:{app_label}_{model_name}_delete",
-                                        args=[self.object.id])
-        return context
+        return [
+            {
+                "name": "Endre",
+                "glyphicon_symbol": "pencil",
+                "url": reverse(f"admin:{app_label}_{model_name}_change", args=[self.object.id]),
+            },
+            {
+                "name": "Slett",
+                "glyphicon_symbol": "trash",
+                "url": reverse(f"admin:{app_label}_{model_name}_delete", args=[self.object.id]),
+            }
+        ]

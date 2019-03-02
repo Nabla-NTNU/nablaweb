@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 
 from ..core.templatetags.listutil import row_split
+from ..core.view_mixins import AdminLinksMixin
 from .models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
 
 
@@ -88,7 +89,7 @@ class RelevantForYearList(GenericJobsList):
             .filter(relevant_for_year__year__iexact=self.kwargs['year'])
 
 
-class ShowJob(DetailView):
+class ShowJob(AdminLinksMixin, DetailView):
     """Detaljviewet for en spesifikk stillingsannonse."""
     model = Advert
     context_object_name = 'job'
