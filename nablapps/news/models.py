@@ -18,7 +18,7 @@ from django.urls import reverse
 from image_cropping.fields import ImageRatioField
 
 from nablapps.core.models import TimeStamped, WithPicture
-
+from ckeditor.fields import RichTextField
 
 class TextContent(models.Model):
     """
@@ -28,11 +28,11 @@ class TextContent(models.Model):
         verbose_name="tittel",
         max_length=100,
         blank=True)
-    lead_paragraph = models.TextField(
+    lead_paragraph = RichTextField(
         verbose_name="ingress",
         blank=True,
         help_text="Vises på forsiden og i artikkelen")
-    body = models.TextField(
+    body = RichTextField(
         verbose_name="brødtekst",
         blank=True,
         help_text=(
