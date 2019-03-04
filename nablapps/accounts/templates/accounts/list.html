@@ -29,7 +29,7 @@
                 {{ user.last_name }}
             </td>
 
-            <td class="cell_groups"> 
+            <td class="cell_groups">
             {# Grupper brukeren er med i #}
                 {% for group in user.nablagroups %}
                     {% if group.logo %}
@@ -44,6 +44,23 @@
 {% else %}
     <p>Vi fant ingen brukere som matchet søket ditt :(</p>
 {% endif %}
+<nav>
+    <ul class="pager">
+        {% if page_obj.has_previous %}
+        <li class="previous">
+            <a href="?side={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span><span class="hidden-xs"> Forrige</span></a>
+        </li>
+        {% endif %}
+        <li class="disabled pager-counter">
+            Side {{ page_obj.number }} av {{ paginator.num_pages }}
+        </li>
+        {% if page_obj.has_next %}
+        <li class="next">
+            <a href="?side={{ page_obj.next_page_number }}"><span class="hidden-xs">Neste </span><span aria-hidden="true">&rarr;</span></a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
 {% endcache %}
 
 {%endblock%}
