@@ -1,3 +1,6 @@
+"""
+Admin for accounts app
+"""
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
@@ -17,69 +20,69 @@ admin.site.register(FysmatClass)
 admin.site.unregister(Group)
 
 
-# A subclass of ModelMultipleChoiceField that changes the label from the username to the full name of the user.
-# Taken from: https://stackoverflow.com/questions/3966483/django-show-get-full-name-instead-or-username-in-model-form
 class UserFullnameMultipleChoiceField(forms.ModelMultipleChoiceField):
+    """
+    Show both username and full name of the user
+
+    Taken from:
+    https://stackoverflow.com/questions/3966483/django-show-get-full-name-instead-or-username-in-model-form
+    """
     def label_from_instance(self, obj):
-        return smart_text(obj.get_full_name() + " - " + obj.username)
+        return smart_text(f"{obj.get_full_name()} - {obj.username}")
 
 
 class GroupAdminForm(forms.ModelForm):
-    users = UserFullnameMultipleChoiceField(queryset=User.objects.filter( is_active=True ),
-                                            widget=FilteredSelectMultiple('Users', False),
-                                            required=False)
+    """
+    Custom form for Groups in admin.
+
+    Adds a widget to add multiple users to a single group.
+    This simplifies group membership administration.
+
+    See also:
+    https://djangosnippets.org/snippets/2452/
+    """
+    users = UserFullnameMultipleChoiceField(
+        queryset=User.objects.filter(is_active=True),
+        widget=FilteredSelectMultiple('Users', False),
+        required=False)
 
     class Meta:
-        model = Group
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.get('instance', None)
         if instance is not None:
-            initial = kwargs.get('initial', {})
+            initial = kwargs.setdefault('initial', {})
             initial['users'] = instance.user_set.all()
-            kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
 
-    def save(self, commit=True):
-        group = super().save(commit=commit)
-
-        if commit:
-            group.user_set = self.cleaned_data['users']
-        else:
-            old_save_m2m = self.save_m2m
-
-            def new_save_m2m():
-                old_save_m2m()
-                group.user_set.set(self.cleaned_data['users'])
-
-            self.save_m2m = new_save_m2m
-        return group
-
-
-class NablaGroupAdminForm(GroupAdminForm):
-    class Meta:
-        model = NablaGroup
-        fields = '__all__'
+    def _save_m2m(self):
+        super()._save_m2m()
+        self.instance.user_set.set(self.cleaned_data['users'])
 
 
 def maillist(modeladmin, request, queryset):
+    """
+    Admin action for showing a list of email addresses for all users in selected groups
+    """
     s = '/'.join(str(g.id) for g in queryset)
     url = reverse('mail_list', kwargs={'groups': s})
     return HttpResponseRedirect(url)
 
 
-maillist.short_description = "Vis mailliste"
+maillist.short_description = "Vis epostliste"
 
 
 @admin.register(NablaGroup)
 class ExtendedNablaGroupAdmin(GroupAdmin):
-    form = NablaGroupAdminForm
+    """Admin for NablaGroup"""
+    form = GroupAdminForm
     actions = [maillist]
 
 
 @admin.register(NablaUser)
 class NablaUserAdmin(UserAdmin):
+    """Admin for NablaUser"""
     form = NablaUserChangeForm
     add_form = NablaUserCreationForm
 
@@ -92,25 +95,28 @@ class NablaUserAdmin(UserAdmin):
         (('Important dates'), {'fields': ('last_login', 'date_joined')}),
         ('Adresse og telefon', {'fields': ('address', 'mail_number', 'telephone', 'cell_phone',)}),
         ('Diverse', {'fields': ('birthday', 'web_page', 'about', 'wants_email')}),
-        ('Avatar', {'fields': ('avatar', ) }),
+        ('Avatar', {'fields': ('avatar', )}),
     )
 
 
 @admin.register(RegistrationRequest)
 class RegistrationRequestAdmin(admin.ModelAdmin):
+    """
+    Admin interface for RegistrationRequest
+
+    Meant to be used only to approve or decline the requests.
+    """
     actions = ["approve", "decline"]
     list_display = ['username', 'first_name', 'last_name', 'created']
     ordering = ['-created']
 
-    class Meta:
-        model = RegistrationRequest
-        fields = '__all__'
-
     def approve(self, request, queryset):
+        """Approve selected requests"""
         for req in queryset:
             req.approve_request()
             req.delete()
 
     def decline(self, request, queryset):
+        """Decline selected requests"""
         for req in queryset:
             req.delete()
