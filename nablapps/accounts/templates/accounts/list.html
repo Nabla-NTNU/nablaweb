@@ -1,12 +1,9 @@
 {% extends "base.html" %}
-{% load cache %}
 
 {% block content %}
 
 <h2>Komponenter og nullvektorer</h2>
 <br />
-
-{% cache 900 userlist %}
 
 {% if users %}
     <table id="user_list" class="table table-condensed table-striped table-bordered" width="100%">
@@ -61,6 +58,5 @@
         {% endif %}
     </ul>
 </nav>
-{% endcache %}
 
 {%endblock%}
