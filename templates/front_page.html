@@ -117,6 +117,15 @@
         </p>
     {% endif %}
 
+    <h2>Nyeste Scråttcast</h2>
+    {% if new_podcast %}
+        <a href="{{ new_podcast.get_absolute_url }}">
+            {% if new_podcast.image %}
+                <img src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
+            {% endif %}
+        </a>
+       <p><i>Dato: {{ new_podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {% get_hit_count for new_podcast %}</i></p> 
+    {% endif %}
 
 {% endblock sidebar %}
 
