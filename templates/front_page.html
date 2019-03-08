@@ -83,7 +83,7 @@
             </div>
         </div>
         <div id="Podcast" class="tab-pane fade">
-            <h3><a href="{% url "season_view" %}">Nyeste Skråttkast</a></h3>
+            <h3><a href="{% url "season_view" %}">Nyeste Skråttcast</a></h3>
             <div class="row">
                 {% for podcast in new_podcast_list %}
                     <div class="col-md-3{% if not forloop.first %} hidden-xs{% endif %}">
