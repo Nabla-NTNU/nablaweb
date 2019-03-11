@@ -25,7 +25,6 @@ wiki = "~=0.4.0"
 bpc-client = {editable = true, ref = "556ede6bd15b4296b1f2a29730ad6e5f00b27428", git = "https://bitbucket.org/webkom/bpc_client.git"}
 django-node-assets = "*"
 markdown = "*"
-django-ckeditor = "*"
 
 [dev-packages]
 pylint = "*"

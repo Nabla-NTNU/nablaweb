@@ -112,7 +112,6 @@ INSTALLED_APPS = [
     'nablapps.poll',
     'nablapps.contact',
     'nablaweb',
-    'ckeditor',
 
     ###########################
     # Eksternt utviklede apps #
