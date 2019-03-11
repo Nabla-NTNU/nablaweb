@@ -46,6 +46,8 @@ class UserList(LoginRequiredMixin, ListView):
                         .order_by('username')
     context_object_name = 'users'
     template_name = 'accounts/list.html'
+    paginate_by = 20
+    page_kwarg = 'side'
 
 
 class RegistrationView(MessageMixin, FormView):
@@ -96,15 +98,15 @@ class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
 
     def form_valid(self, form):
         from .models import FysmatClass
-        
+
         data = form.cleaned_data['data']
         fysmat_class = form.cleaned_data['fysmat_class']
-        
+
         if fysmat_class != '':
             fysmat_class = FysmatClass.objects.get(name=fysmat_class)
         else:
             fysmat_class = None
-            
+
         extract_usernames(data, fysmat_class)
         return super().form_valid(form)
 
