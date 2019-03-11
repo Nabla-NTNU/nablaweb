@@ -28,9 +28,9 @@ class Transaction(models.Model):
     A positive amount is a deposit a negative amount is a purchase.
     """
 
-    description = models.CharField(
-        'Forklaring av transaksjon',
-        max_length = 30)
+    description = models.TextField(
+        'Forklaring av transaksjon')
+
         
     amount = models.IntegerField(
         'Penger'
