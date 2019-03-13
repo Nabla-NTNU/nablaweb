@@ -111,13 +111,12 @@
 {% endblock content %}
 {% block sidebar %}
     {% include "poll/poll_include.html" %}
+	<a class="btn btn-large btn-success" href="/utleie/">Leie filmutstyr til en billig penge?</a> 
     {% if sidebarinfo %}
         <p>
             {{ sidebarinfo.content | markdown:"unsafe" }}
         </p>
     {% endif %}
-
-	<a class="btn btn-large btn-success" href="/utleie/">Leie filmutstyr til en billig penge?</a> 
 
     <h2>Nyeste Skråttcast</h2>
     {% if new_podcast %}
