@@ -4,7 +4,6 @@
     "bootstrap": "^3.3.7",
     "font-awesome": "^4.7.0",
     "jquery": "^1.12.4",
-    "npm": "^6.4.1",
     "requirejs": "^2.3.6"
   }
 }
