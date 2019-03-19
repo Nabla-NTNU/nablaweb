@@ -78,7 +78,7 @@ def add_to_frontpage(modeladmin, request, queryset):
         FrontPageNews.objects.get_or_create(
             object_id=obj.id,
             content_type=ContentType.objects.get_for_model(obj.__class__),
-        )
+        )[0].bump()
 
 
 @admin.register(NewsArticle)
