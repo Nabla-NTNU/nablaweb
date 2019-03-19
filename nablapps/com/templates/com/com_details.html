@@ -39,7 +39,7 @@
 
             {# Beskrivelse av stillingen #}
             {% if membership.story %}
-                <p class="story">{{ membership.story }}</p>
+                <p class="story">{{ membership.story|markdown }}</p>
             {% endif %}
         </div>
 </div>
