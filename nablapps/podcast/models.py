@@ -132,8 +132,7 @@ class Podcast(models.Model):
         'Season',
         verbose_name="Sesong",
         on_delete=models.CASCADE,
-        null=True,
-        blank=True
+        blank=False
     )
 
     def get_absolute_url(self):
