@@ -111,8 +111,12 @@
 {% endblock content %}
 {% block sidebar %}
     {% include "poll/poll_include.html" %}
-	<a class="btn btn-large btn-success" href="/utleie/">Leie filmutstyr til en billig penge?</a> 
-    {% if sidebarinfo %}
+<a class="btn btn-large btn-success" href="/utleie/">Leie filmutstyr til en billig penge?</a>
+<br />
+<br />
+{% include "officeCalendar/includes/list.html" %}
+
+{% if sidebarinfo %}
         <p>
             {{ sidebarinfo.content | markdown:"unsafe" }}
         </p>

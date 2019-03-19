@@ -15,8 +15,11 @@ from ..nabladet.models import Nablad
 from ..news.models import FrontPageNews
 from ..podcast.models import Podcast
 from ..poll.models import Poll
+from ..officeCalendar.models import OfficeEvent
 from .view_mixins import FlatPageMixin
 
+from datetime import datetime, timedelta
+from collections import defaultdict
 
 class FrontPageView(FlatPageMixin, TemplateView):
     """
@@ -35,6 +38,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
         self._add_poll(context)
         self._add_nablad(context)
         self._add_podcast(context)
+        context['office_events'] = OfficeEvent.get_office_event_week().items()
         context['new_podcast'] = Podcast.objects.exclude(is_clip=True).first()
         context['album_list'] = Album.objects.exclude(visibility='h').order_by('-last_changed_date')[:4]
         context['new_blog'] = BlogPost.objects.exclude(list_image=None).order_by('-created_date')[:4]

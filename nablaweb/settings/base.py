@@ -111,6 +111,7 @@ INSTALLED_APPS = [
     'nablapps.podcast',
     'nablapps.poll',
     'nablapps.contact',
+    'nablapps.officeCalendar',
     'nablaweb',
 
     ###########################

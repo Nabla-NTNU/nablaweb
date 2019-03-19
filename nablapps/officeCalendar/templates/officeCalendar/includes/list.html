@@ -1,0 +1,47 @@
+{% comment %}
+Includes as list of OfficeEvents
+office_events is a dictionary with weekday as key and a list of events as value
+{% endcomment %}
+{% load sekizai_tags %}
+
+{% addtoblock "css" %}
+<style>
+ /* Office calendar */
+ 
+ th {
+     border-bottom: 1px solid grey;
+     color: grey;
+ }
+
+ td {
+     padding: 2px 4px;
+ }
+
+ tr.event.has_description {
+     cursor: help;
+ }
+</style>
+{% endaddtoblock %}
+
+{% if office_events %}
+<p style="margin: 0"><b>Kontoret denne uka:</b></p>
+
+<table>
+    {% for day,events in office_events %}
+    <tr>
+        <th colspan="3">{{ day }}</th>
+    </tr>
+    {% for event in events %}
+    {% if event.description %}
+    <tr title="{{ event.description }}" class="event has_description">
+    {% else %}
+    <tr class="event">
+    {% endif %}
+        <td>{{ event.start_time|date:"H:i"}}</td>
+        <td>{{ event.title }}</td>
+        <td>{{ event.duration_natural  }}</td>
+    </tr>
+    {% endfor %}
+    {% endfor %}
+</table>
+{% endif %}
