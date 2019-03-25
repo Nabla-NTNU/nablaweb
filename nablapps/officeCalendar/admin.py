@@ -8,5 +8,5 @@ from django import forms
 class OfiiceEventAdmin(admin.ModelAdmin):
     """Admin interface for OfficeEvent"""
     formfield_overrides = {
-        models.DurationField: {'widget': forms.TimeInput(attrs={ 'type': 'time' }) }
+        models.TimeField: {'widget': forms.TimeInput(attrs={ 'type': 'time' }) }
     }
