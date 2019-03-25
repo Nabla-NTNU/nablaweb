@@ -51,13 +51,21 @@ class AdministerRegistrationsView(StaticContextMixin,
     def register_user(self):
         """Melder på brukeren nevnt i POST['text'] på arrangementet."""
         username = self.request.POST.get('text')
+
+        #Tar inn verdien True fra checkboksen hvis den er markert
+        if self.request.POST.get("Regelboks") == "True":
+            regelbryting = True
+        else:
+            regelbryting = False
+
         if not username:
             self.messages.warning("Ingen brukernavn skrevet inn.")
             return
-
         try:
             user = User.objects.get(username=username)
-            self.get_object().register_user(user)
+
+            #Legger brukeren i listen.
+            self.get_object().register_user(user, ignore_restrictions = regelbryting)
         except (User.DoesNotExist, UserRegistrationException) as ex:
             self.messages.warning(
                 f"Kunne ikke legge til {username} i påmeldingslisten. "

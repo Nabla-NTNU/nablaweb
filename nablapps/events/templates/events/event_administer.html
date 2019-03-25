@@ -3,33 +3,71 @@
 {% block title %}{{ event.headline }}{% endblock %}
 
 {% block content %}
-<h2>{{ event.headline }}</h2>
 
+<h2> {{ event.headline }} </h2>
 {% if event.registration_required %}
-<p>
-    Plasser: {{ event.places }}<br />
-    Påmeldte: {{ event.users_attending }}<br />
-    {% if event.has_queue %}
-        Ventende: {{ event.users_waiting }}<br />
-    {% endif %}
-    Epostliste: <br />
-    <textarea>{% for email in event.users_attending_emails %}{{ email }}; {% endfor %}</textarea>
-</p>
 
-<form action="" method="post" class="form">{% csrf_token %}
-    <div class="form-inline">
-        <label for="text">Legg til bruker: </label>
-        <input class="form-control" type="text" name="text" size="10" maxlength="10" placeholder="Brukernavn" />
-	<input type="hidden" name="action" value="add" />
-        <input class="form-control" type="submit" value="Legg til" />
+<div class="row">
+    <div class="col-sm-6">
+        <ul class="list-group list-group-flush " >
+            <li class="list-group-item">
+                <span class="badge"> {{ event.places }} </span>
+                Plasser:
+            </li>
+            <li class="list-group-item">
+                <span class="badge"> {{ event.users_attending }} </span>
+                Påmeldte:
+            </li>
+            <li class="list-group-item">
+                <span class="badge"> {{ event.users_waiting }} </span>
+                Ventende:
+            </li>
+        </ul>
     </div>
-</form>
-<form action="" method="post" class="form">{% csrf_token %}
-    <div class="form-inline">
-        <label>Kryss av brukere som skal fjernes:</label>
-        <input type="hidden" name="action" value="del" />
-        <input class="form-control" type="submit" value="Fjern" />
+    <div class="col-sm-6 ">
+        <label >Epostliste:</label>
+        <textarea class="form-control rounded-0"; rows = "4">{% for email in event.users_attending_emails %}{{ email }}; {% endfor %}</textarea>
     </div>
+
+</div>
+<br>
+
+
+<div class="row">
+
+    <div class="col-sm-6 ">
+
+        <form action="" method="post" class="form">{% csrf_token %}
+            <label for="text">Legg til bruker: </label>
+            <div class="form-inline">
+                <input class="form-control" type="text" name="text" maxlength="10" placeholder="Brukernavn" />
+                <input type="hidden" name="action" value="add" />
+                <button class="btn btn-primary" type="submit" value="Legg til" >Legg til </button>
+            </div>
+            <input class="form-check-input" type="checkbox" name = "Regelboks" value="True" id="">
+            Ignorer påmeldingsregler &emsp;
+        </form>
+    </div>
+    <span class="border">
+
+    <div class="col-sm-6">
+        <form action="" method="post" class="form">{% csrf_token %}
+            <div class="form-inline pull-right">
+                <label>Kryss av brukere som skal fjernes:</label>
+                &emsp;
+                <input type="hidden" name="action" value="del" />
+                <button class="btn btn-primary "  type="submit" value="Fjern"> Fjern </button>
+            </div>
+        </form>
+    </div>
+</span>
+</div>
+
+<br>
+
+
+
+
 
     {% if event.eventregistration_set %}
         <table class="table">
