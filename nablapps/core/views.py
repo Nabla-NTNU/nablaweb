@@ -41,6 +41,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
         return context
 
     def _add_news(self, context):
+		# TODO: use gte lookup to get only news with bumptime in the past
         news_list = FrontPageNews.objects.filter(visible=True)
         context['main_news'] = news_list.first()
         context['news_list_1'] = news_list[1:3]
