@@ -30,43 +30,25 @@
     </div>
 
 </div>
-<br>
 
-
-<div class="row">
-
-    <div class="col-sm-6 ">
-
-        <form action="" method="post" class="form">{% csrf_token %}
-            <label for="text">Legg til bruker: </label>
-            <div class="form-inline">
-                <input class="form-control" type="text" name="text" maxlength="10" placeholder="Brukernavn" />
-                <input type="hidden" name="action" value="add" />
-                <button class="btn btn-primary" type="submit" value="Legg til" >Legg til </button>
-            </div>
-            <input class="form-check-input" type="checkbox" name = "Regelboks" value="True" id="">
-            Ignorer påmeldingsregler &emsp;
-        </form>
+<form action="" method="post" class="form">{% csrf_token %}
+    <label for="text">Legg til bruker: </label>
+    <div class="form-inline">
+        <input class="form-control" type="text" name="text" maxlength="10" placeholder="Brukernavn" />
+        <input type="hidden" name="action" value="add" />
+        <button class="btn btn-primary" type="submit" value="Legg til" >Legg til </button>
     </div>
-    <span class="border">
+    <input class="form-check-input" type="checkbox" name = "Regelboks" value="True" id="">
+    Ignorer påmeldingsregler &emsp;
+</form>
 
-    <div class="col-sm-6">
-        <form action="" method="post" class="form">{% csrf_token %}
-            <div class="form-inline pull-right">
-                <label>Kryss av brukere som skal fjernes:</label>
-                &emsp;
-                <input type="hidden" name="action" value="del" />
-                <button class="btn btn-primary "  type="submit" value="Fjern"> Fjern </button>
-            </div>
-        </form>
+ <form action="" method="post" class="form">{% csrf_token %}
+    <div class="form-inline pull-right">
+        <label>Kryss av brukere som skal fjernes:</label>
+        &emsp;
+        <input type="hidden" name="action" value="del" />
+        <button class="btn btn-primary "  type="submit" value="Fjern"> Fjern </button>
     </div>
-</span>
-</div>
-
-<br>
-
-
-
 
 
     {% if event.eventregistration_set %}
