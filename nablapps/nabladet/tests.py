@@ -9,7 +9,7 @@ import os
 class ThumbnailerTestCase(TestCase):
 
     def setUp(self):
-        self.test_pdf = os.path.join(settings.STATIC_ROOT, 'nabladet/test_nabla.pdf')
+        self.test_pdf = os.path.join(os.path.dirname(__file__), 'test_static/test_nabla.pdf')
 
     def test_thumbnailer(self):
         self.test_thumbnail = thumbnail_pdf(self.test_pdf)
