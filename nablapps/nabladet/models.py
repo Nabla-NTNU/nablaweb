@@ -22,7 +22,7 @@ class Nablad(TimeStamped, WithPicture, TextContent):
     file = models.FileField(
         upload_to='nabladet',
         verbose_name='PDF-fil',
-        help_text="Filnavn"
+        help_text="Filnavn. OBS: opplasting kan ta rundt ett minutt, så bare trykk 'Lagre' én gang."
     )
 
     file_nsfw = models.FileField(
