@@ -38,8 +38,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
         self._add_poll(context)
         self._add_nablad(context)
         self._add_podcast(context)
-        if self.request.user.is_authenticated:
-            context['office_events'] = OfficeEvent.get_office_event_week().items()
+        context['office_events'] = OfficeEvent.get_office_event_week(only_public = not self.request.user.is_authenticated)
         context['new_podcast'] = Podcast.objects.exclude(is_clip=True).first()
         context['album_list'] = Album.objects.exclude(visibility='h').order_by('-last_changed_date')[:4]
         context['new_blog'] = BlogPost.objects.exclude(list_image=None).order_by('-created_date')[:4]
