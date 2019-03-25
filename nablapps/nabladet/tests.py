@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.conf import settings
 
 from .pdfthumbnailer import thumbnail_pdf
 
