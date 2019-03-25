@@ -24,7 +24,7 @@ class AdvertAdmin(ChangedByMixin, admin.ModelAdmin):
         "info_website",
         "deadline_date",
         "removal_date",
-        "relevant_for_group",
+        #"relevant_for_group",
         "relevant_for_year",
         "info_file",
         "tags"
@@ -41,6 +41,7 @@ class CompanyAdmin(ImageCroppingMixin, admin.ModelAdmin):
     fields = (
         "name",
         "picture",
+        "ignoreCrop",
         "cropping",
         "slug",
         "website",
