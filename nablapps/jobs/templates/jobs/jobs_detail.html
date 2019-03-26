@@ -16,7 +16,7 @@
          {% if job.company.ignoreCrop %}
          src="{% thumbnail job.company.picture 770x300 upscale=True detail=True quality=95 %}"
          {% else %}
-         src="{% thumbnail job.company.picture 770x300 box=job.company.cropping upscale=True detail=True quality=96 %}"
+         src="{% thumbnail job.company.picture 770x300 box=job.company.cropping upscale=True detail=True quality=95 %}"
         {% endif %}
          >
     {% endif %}

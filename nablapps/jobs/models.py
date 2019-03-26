@@ -8,7 +8,6 @@ from django.urls import reverse
 from django.db import models
 from nablapps.core.models import WithPicture, TimeStamped
 from nablapps.news.models import TextContent
-from image_cropping.fields import ImageRatioField
 
 # Det er litt stygt å bruke modeller for YearChoices og RelevantForChoices, men
 # det var den enkle måten å få riktige forms i admin på.
@@ -80,24 +79,11 @@ class Company(WithPicture):
     description = models.TextField(verbose_name="beskrivelse", blank=True)
     slug = models.SlugField(null=True, blank=True)
     ignoreCrop = models.BooleanField(
-            verbose_name="Vis i full størrelse",
-            null=False,
-            default=False,
-            blank=True,
-            help_text = ("Beskjæringen vil bli ignorert og bildet vises i originalt format, med hvit bakgrunn"))
-    picture = models.ImageField(
-        upload_to="uploads/news_pictures",
-        null=True,
+        verbose_name="Vis i full størrelse",
+        null=False,
+        default=False,
         blank=True,
-        verbose_name="Bilde",
-        help_text=("Bilder som er større enn 770x300 px ser best ut. "
-                   "Du kan beskjære bildet etter opplasting."),
-    )
-    cropping = ImageRatioField(
-        'picture',
-        '770x300',
-        verbose_name="Beskjæring"
-    )
+        help_text=("Beskjæringen vil bli ignorert og bildet vises i originalt format, med hvit bakgrunn"))
 
     class Meta:
         verbose_name = "bedrift"
