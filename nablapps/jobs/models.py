@@ -83,7 +83,9 @@ class Company(WithPicture):
         null=False,
         default=False,
         blank=True,
-        help_text=("Beskjæringen vil bli ignorert og bildet vises i originalt format, med hvit bakgrunn"))
+        help_text=("Beskjæringen vil bli ignorert og bildet vises "
+                   "i originalt format, med hvit bakgrunn")
+    )
 
     class Meta:
         verbose_name = "bedrift"
