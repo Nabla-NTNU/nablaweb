@@ -5,6 +5,7 @@ import os
 from django.conf import settings
 from django.urls import reverse
 from django.db import models
+from django.core.files.storage import FileSystemStorage
 from nablapps.core.models import TimeStamped, WithPicture
 from nablapps.news.models import TextContent
 from .pdfthumbnailer import thumbnail_pdf
@@ -22,7 +23,8 @@ class Nablad(TimeStamped, WithPicture, TextContent):
     file = models.FileField(
         upload_to='nabladet',
         verbose_name='PDF-fil',
-        help_text="Filnavn. OBS: opplasting kan ta rundt ett minutt, så bare trykk 'Lagre' én gang."
+        help_text="Filnavn. OBS: opplasting kan ta rundt ett minutt, så bare trykk 'Lagre' én gang.",
+        storage=FileSystemStorage(location=settings.PROTECTED_MEDIA_ROOT)
     )
 
     file_nsfw = models.FileField(
@@ -30,7 +32,8 @@ class Nablad(TimeStamped, WithPicture, TextContent):
         verbose_name='PDF-fil NSFW',
         help_text="Filnavn",
         blank=True,
-        null=True
+        null=True,
+        storage=FileSystemStorage(location=settings.PROTECTED_MEDIA_ROOT)
     )
 
     thumbnail = models.FileField(
@@ -56,7 +59,7 @@ class Nablad(TimeStamped, WithPicture, TextContent):
 
     def update_thumbnail(self):
         """Create a thumbnail of the first page of the pdf of the nablad."""
-        absolute_pdfpath = os.path.join(settings.MEDIA_ROOT, self.file.name)
+        absolute_pdfpath = os.path.join(settings.PROTECTED_MEDIA_ROOT, self.file.name)
         absolute_thumbpath = thumbnail_pdf(absolute_pdfpath)
         self.thumbnail.name = os.path.relpath(absolute_thumbpath, start=settings.MEDIA_ROOT)
 

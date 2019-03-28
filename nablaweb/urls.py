@@ -1,3 +1,5 @@
+import os
+
 import django_nyt.urls
 import filebrowser.sites
 import wiki.urls
@@ -58,7 +60,7 @@ urlpatterns = [
     url(r'^robots\.txt$', TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),
 
     # Del filer (Husk manage.py collectstatic for static filer når DEBUG=False)
-    url(r'^media/nabladet/(?P<path>.*)$', serve_nablad, {'document_root': settings.MEDIA_ROOT + '/nabladet/'}),
+    url(r'^media/nabladet/(?P<path>.*)$', serve_nablad),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 ]
@@ -66,6 +68,8 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += [
-         url(r'^500.html/$', TemplateView.as_view(template_name='500.html')),
-         url(r'^404.html/$', TemplateView.as_view(template_name='404.html')),
+        url(r'^500.html/$', TemplateView.as_view(template_name='500.html')),
+        url(r'^404.html/$', TemplateView.as_view(template_name='404.html')),
+        url(r'^protected_media/(?P<path>.*)$', serve,
+            {'document_root': os.path.join(settings.PROTECTED_MEDIA_ROOT, 'nabladet')}, name='serve_nablad_debug'),
     ]

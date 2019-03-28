@@ -39,6 +39,8 @@ VARIABLE_CONTENT = os.environ.get("VARIABLE_CONTENT", os.path.join(PROJECT_ROOT,
 
 # Absolute path to the directory that holds media.
 MEDIA_ROOT = os.path.join(VARIABLE_CONTENT, 'media')
+PROTECTED_MEDIA_FOLDER = 'protected_media'
+PROTECTED_MEDIA_ROOT = os.path.join(VARIABLE_CONTENT, PROTECTED_MEDIA_FOLDER)
 MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
