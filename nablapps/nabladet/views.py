@@ -55,8 +55,8 @@ def serve_nablad(request, path):
         if not nablad.is_public:
             return redirect_to_login(next=nablad.get_absolute_url())
 
-    #if settings.DEBUG:
-    #    return HttpResponseRedirect(reverse('serve_nablad_debug', kwargs={'path': path}))
+    if settings.DEBUG:
+        return HttpResponseRedirect(reverse('serve_nablad_debug', kwargs={'path': path}))
 
     response = HttpResponse()
     response['Content-Type'] = "application/pdf"

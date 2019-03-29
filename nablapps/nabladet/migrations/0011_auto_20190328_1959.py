@@ -6,6 +6,7 @@ from shutil import move
 import django.core.files.storage
 from django.db import migrations, models
 from django.conf import settings
+from nablapps.nabladet.models import Nablad
 
 
 def move_to_protected(apps, schema_editor):
@@ -30,12 +31,18 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='nablad',
             name='file',
-            field=models.FileField(help_text="Filnavn. OBS: opplasting kan ta rundt ett minutt, så bare trykk 'Lagre' én gang.", storage=django.core.files.storage.FileSystemStorage(location='C:\\Users\\gliff\\web\\nablaweb\\nablaweb\\settings\\..\\..\\var\\protected_media'), upload_to='nabladet', verbose_name='PDF-fil'),
+            field=models.FileField(help_text="Filnavn. OBS: opplasting kan ta rundt ett minutt, så bare trykk 'Lagre' én gang.", storage=django.core.files.storage.FileSystemStorage(location=settings.PROTECTED_MEDIA_ROOT), upload_to='nabladet', verbose_name='PDF-fil'),
         ),
         migrations.AlterField(
             model_name='nablad',
             name='file_nsfw',
-            field=models.FileField(blank=True, help_text='Filnavn', null=True, storage=django.core.files.storage.FileSystemStorage(location='C:\\Users\\gliff\\web\\nablaweb\\nablaweb\\settings\\..\\..\\var\\protected_media'), upload_to='nabladet', verbose_name='PDF-fil NSFW'),
+            field=models.FileField(blank=True, help_text='Filnavn', null=True, storage=django.core.files.storage.FileSystemStorage(location=settings.PROTECTED_MEDIA_ROOT), upload_to='nabladet', verbose_name='PDF-fil NSFW'),
+        ),
+
+        migrations.AlterField(
+            model_name='nablad',
+            name='thumbnail',
+            field=models.FileField(editable=False, null=True, storage=django.core.files.storage.FileSystemStorage(location=settings.PROTECTED_MEDIA_ROOT), upload_to=''),
         ),
 
         migrations.RunPython(move_to_protected, undo_move_to_protected)
