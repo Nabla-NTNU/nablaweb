@@ -38,7 +38,8 @@ class Nablad(TimeStamped, WithPicture, TextContent):
 
     thumbnail = models.FileField(
         editable=False,
-        null=True
+        null=True,
+        storage=FileSystemStorage(location=settings.PROTECTED_MEDIA_ROOT)
     )
 
     is_public = models.BooleanField(
@@ -61,7 +62,7 @@ class Nablad(TimeStamped, WithPicture, TextContent):
         """Create a thumbnail of the first page of the pdf of the nablad."""
         absolute_pdfpath = os.path.join(settings.PROTECTED_MEDIA_ROOT, self.file.name)
         absolute_thumbpath = thumbnail_pdf(absolute_pdfpath)
-        self.thumbnail.name = os.path.relpath(absolute_thumbpath, start=settings.MEDIA_ROOT)
+        self.thumbnail.name = os.path.relpath(absolute_thumbpath, start=settings.PROTECTED_MEDIA_ROOT)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
