@@ -5,12 +5,13 @@ from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 
 class OfficeEvent(models.Model):
-    """Event in the office. Used as an internal calendar for office use."""
+    """Event in the office. Used as an internal calendar for office use.
+    Events can only span one day."""
 
     start_time = models.DateTimeField(blank = False, help_text = "Reservasjoner mellom 11:00 og 13:00 krever styrets godkjenning.")
-    end_time   = models.TimeField(blank = False)
+    end_time   = models.TimeField(blank = False) # Since events can only span one day, it is implicit that the date for end_time is the same as start_time
     repeating  = models.BooleanField(blank = False, default = False)
-    contact_person = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+    contact_person = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, verbose_name = "Person of contact")
 
     public     = models.BooleanField(blank = False, default = False, help_text = "Synlig for alle, uten å logge inn")
 
@@ -18,9 +19,13 @@ class OfficeEvent(models.Model):
     description = models.TextField(blank = True)
 
     @property
+    def end_datetime(self):
+        return datetime.combine(self.start_time.date(), self.end_time)
+
+    @property
     def duration(self):
         """Returns duration of event in seconds"""
-        return datetime.combine(self.start_time.date(), self.end_time) - self.start_time # Hacky way of getting timedelta
+        return self.end_datetime - self.start_time # Hacky way of getting timedelta
 
     def duration_natural(self):
         """Return a natural language string with length of duration"""
@@ -37,6 +42,26 @@ class OfficeEvent(models.Model):
         if self.start_time.time() >  self.end_time:
             raise ValidationError("start_time must be before end_time!")
 
+    def check_overlap(self):
+        """Check if event overlap with other events"""
+
+        # Find events where either start_time is within event interval
+        # or end_time is within event interval.
+        # Since end_time does not have any date, we also check
+        # that start_time.date is the same in the second Q-query
+        events = OfficeEvent.objects.filter(
+            models.Q(
+                start_time__gte = self.start_time,
+                start_time__lte = self.end_datetime
+            ) | models.Q(
+                end_time__gte   = self.start_time.time(),
+                end_time__lte   = self.end_time,
+                start_time__date= self.start_time.date()
+            )
+        )
+
+        return events
+
     def get_office_event_week(only_public = False):
         """Returns a list officeEvents this weeks officeEvents
         Requires datetime"""
@@ -48,7 +73,9 @@ class OfficeEvent(models.Model):
 
         # Find events this week, but ignore those that have happened
         # Also include all repeating events
-        office_events = OfficeEvent.objects.filter(models.Q(start_time__date__gte = now, start_time__date__lte = end_of_week)  | models.Q(repeating = True))
+        office_events = OfficeEvent.objects.filter(\
+                                                   models.Q(start_time__date__gte = now, start_time__date__lte = end_of_week)  |\
+                                                   models.Q(repeating = True))
 
         if only_public:
             office_events = office_events.exclude(public = False)
