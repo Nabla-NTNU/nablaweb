@@ -30,6 +30,7 @@ class NewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
         "cropping_override",
         "sticky",
         "visible",
+        "bump_time",
         "content_type",
         "object_id",
     )
