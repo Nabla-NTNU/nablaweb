@@ -12,7 +12,7 @@ from nablapps.nabladet.models import Nablad
 def move_to_protected(apps, schema_editor):
     src = os.path.join(settings.MEDIA_ROOT, 'nabladet')
     if not os.path.exists(src):
-        os.mkdirs(src)
+        os.makedirs(src)
     dst = os.path.join(settings.PROTECTED_MEDIA_ROOT, 'nabladet')
     move(src, dst)
 
