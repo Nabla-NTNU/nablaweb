@@ -44,7 +44,7 @@ LOGGING = {
     },
 }
 
-SESSION_COOKIE_DOMAIN = '.nabla.no'
+SESSION_COOKIE_DOMAIN = 'nabla.no'
 
 BPC_TESTING = False
 
