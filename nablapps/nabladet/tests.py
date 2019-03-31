@@ -17,7 +17,7 @@ class ThumbnailerTestCase(TestCase):
 
     def setUp(self):
         source = os.path.join(os.path.dirname(__file__), 'test_static/test_nabla.pdf')
-        self.test_dir = os.path.join(settings.MEDIA_ROOT, 'thumbnails/nabladet/test')
+        self.test_dir = os.path.join(settings.PROTECTED_MEDIA_ROOT, 'thumbnails/nabladet/test')
         os.makedirs(self.test_dir)
         self.test_pdf = os.path.join(self.test_dir, 'test_nabla.pdf')
         copyfile(source, self.test_pdf)
