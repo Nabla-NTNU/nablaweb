@@ -44,8 +44,6 @@ LOGGING = {
     },
 }
 
-SESSION_COOKIE_DOMAIN = 'nabla.no'
-
 BPC_TESTING = False
 
 FILE_UPLOAD_PERMISSIONS = 0o644
