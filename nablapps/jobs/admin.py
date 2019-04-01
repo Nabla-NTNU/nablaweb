@@ -41,6 +41,7 @@ class CompanyAdmin(ImageCroppingMixin, admin.ModelAdmin):
     fields = (
         "name",
         "picture",
+        "ignoreCrop",
         "cropping",
         "slug",
         "website",

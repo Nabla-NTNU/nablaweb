@@ -12,7 +12,13 @@
     {% if job.company.picture %}
     <img alt="header"
          class="img-responsive"
-         src="{% thumbnail job.company.picture 760x300 box=job.company.cropping upscale=True detail=True quality=95 %}">
+         style="display:block; margin-right:auto;margin-left:auto"
+         {% if job.company.ignoreCrop %}
+         src="{% thumbnail job.company.picture 770x300 upscale=True detail=True quality=95 %}"
+         {% else %}
+         src="{% thumbnail job.company.picture 770x300 box=job.company.cropping upscale=True detail=True quality=95 %}"
+        {% endif %}
+         >
     {% endif %}
 
     <header><h2>{{ job.headline }}</h2></header>

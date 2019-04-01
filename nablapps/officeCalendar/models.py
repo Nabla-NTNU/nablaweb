@@ -47,17 +47,19 @@ class OfficeEvent(models.Model):
 
         # Find events where either start_time is within event interval
         # or end_time is within event interval.
-        # Since end_time does not have any date, we also check
-        # that start_time.date is the same in the second Q-query
+
         events = OfficeEvent.objects.filter(
             models.Q(
-                start_time__gte = self.start_time,
-                start_time__lte = self.end_datetime
+                start_time__date = self.start_time.date()
             ) | models.Q(
-                end_time__gte   = self.start_time.time(),
-                end_time__lte   = self.end_time,
-                start_time__date= self.start_time.date()
+                repeating = True,
+                # django's week_day query indexes sunday as 1, saturday as 7, while isoweekday indexes monday as 0, sunday as 6...
+                # Realy stupid, I know...
+                start_time__week_day = self.start_time.isoweekday() + 1
             )
+        ).filter(
+            start_time__time__lte = self.end_time,
+            end_time__gte   = self.start_time.time()
         )
 
         return events
