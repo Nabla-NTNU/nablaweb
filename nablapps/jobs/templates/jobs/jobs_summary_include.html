@@ -6,7 +6,15 @@
 <div class="col-md-6 news_item advert">
     {% if job.company.picture %}
         <a href="{{ job.get_absolute_url }}">
-            <img class="news-picture" alt="" width="100%" src="{% thumbnail job.company.picture 370x123 box=job.company.cropping quality=95 %}">
+            <img class="news-picture" 
+            alt="" 
+            style="display:block; margin-right:auto; margin-left:auto" 
+         {% if job.company.ignoreCrop %}
+         src="{% thumbnail job.company.picture 370x144 upscale=True detail=True quality=95 %}"
+         {% else %}
+         src="{% thumbnail job.company.picture 370x144 box=job.company.cropping upscale=True detail=True quality=95 %}"
+        {% endif %}
+        >
         </a>
     {% endif %}
 	<h3>{{ job.headline }}</h3>
