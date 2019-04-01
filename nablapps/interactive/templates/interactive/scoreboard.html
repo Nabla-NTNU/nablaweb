@@ -4,13 +4,13 @@
 Highscore
 {% endblock %}
 {% block content %}
-{% with quiz=scoreboard.quiz %}
+{% with quiz=scoreboard.quiz question_count=scoreboard.quiz.total_questions %}
 
 <h1>Highscore - {{ quiz.title }}</h1>
 <ol class="list-group">
 {% for result in replies %}
 
-{% with user=result.user score=result.score question_count=result.get_question_count %}
+{% with user=result.user score=result.score %}
 <li class="list-group-item">
     {{ forloop.counter }}.
 
