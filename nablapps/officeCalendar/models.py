@@ -55,7 +55,7 @@ class OfficeEvent(models.Model):
                 repeating = True,
                 # django's week_day query indexes sunday as 1, saturday as 7, while isoweekday indexes monday as 0, sunday as 6...
                 # Realy stupid, I know...
-                start_time__week_day = [1,2,3,4,5,6,7][self.start_time.isoweekday()]
+                start_time__week_day = self.start_time.isoweekday() + 1
             )
         ).filter(
             start_time__time__lte = self.end_time,
