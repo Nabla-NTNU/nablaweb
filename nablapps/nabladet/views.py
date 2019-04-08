@@ -2,10 +2,11 @@
 Views for nablad apps
 """
 from django.contrib.auth.views import redirect_to_login
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, HttpResponseRedirect, reverse
 from django.utils import formats
-from django.views.static import serve
 from django.views.generic import DetailView, TemplateView
+from django.http import HttpResponse
+from django.conf import settings
 from nablapps.core.view_mixins import AdminLinksMixin
 from .models import Nablad
 
@@ -43,16 +44,25 @@ class NabladDetailView(AdminLinksMixin, DetailView):
         return super().get(request, *args, **kwargs)
 
 
-def serve_nablad(request, path, document_root=None, show_indexes=False):
+def serve_nablad(request, path):
     """
     View for serving nablad-pdfs if they are public or if the user is logged in.
+    Uses nginx X-accel to serve the files when DEBUG=False.
     """
     if not request.user.is_authenticated:
         filename = 'nabladet/' + path
         nablad = get_object_or_404(Nablad, filename=filename)
         if not nablad.is_public:
             return redirect_to_login(next=nablad.get_absolute_url())
-    return serve(request, path, document_root, show_indexes)
+
+    if settings.DEBUG:
+        return HttpResponseRedirect(reverse('serve_nablad_debug', kwargs={'path': path}))
+
+    response = HttpResponse()
+    response['Content-Type'] = "application/pdf"
+    response['X-Accel-Redirect'] = "/{0}/nabladet/{1}".format(settings.PROTECTED_MEDIA_FOLDER, path)
+
+    return response
 
 
 class NabladList(TemplateView):
