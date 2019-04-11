@@ -2,6 +2,7 @@ from django.http import Http404
 from django.views.generic import TemplateView, DetailView, ListView
 from hitcount.views import HitCountDetailView
 from nablapps.core.view_mixins import FlatPageMixin, AdminLinksMixin
+from datetime import datetime
 
 from .models import Podcast, Season, get_season_count
 
@@ -23,7 +24,7 @@ class SeasonView(FlatPageMixin, TemplateView):
             data['season'] = season
             data['season_name'] = season.name()
 
-            published = Podcast.objects.filter(season=season).order_by('-pub_date')
+            published = Podcast.objects.filter(season=season).filter(pub_date__lte=datetime.now()).order_by('-pub_date')
             data['podcast_list'] = published.filter(is_clip=False)
             data['podcast_clips'] = published.filter(is_clip=True)
 
