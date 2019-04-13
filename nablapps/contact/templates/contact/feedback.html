@@ -1,16 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Nablas forslagskasse{% endblock %}
+{% block title %}Tilbakemelding{% endblock %}
 
 {% block content %}
 
-<h1>Kontakt</h1>
-
-<p>Her kommer kontaktinfo til masse folk i nabla.</p>
-
-<h1>Nablas forslagskasse</h1>
-
-<p>En forklaring av Nablas forslagskasse.</p>
+<h1>Tilbakemelding</h1>
 
 {% if spam_check == True %}
     <p style="color:red;"> Forsøk å regne kontrollspørsmål på nytt</p>
@@ -18,14 +12,14 @@
 
 <form method="POST">
     {% csrf_token %}
-    {% for field in contact_form %}
+    {% for field in feedback_form %}
         {% if forloop.counter <= 4 %}
             <p style="width: 100px;" >{{field.label}} {{field}}</p>
         {% endif %}
     {% endfor %}
     
     <p>Hva er kvadratroten av {{ test_val }} ganget med kvadratroten av {{ test_val }}?</p>
-    <p>{{ contact_form.spam_check }}</p>
+    <p>{{ feedback_form.spam_check }}</p>
 
     <button type="submit">Send</button>
 
