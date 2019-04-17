@@ -10,7 +10,6 @@ The two views contact and feedback are almost identical, and one should probably
 using some class based magic. Added the second view on the train with unreliable internet, and I
 just wanted to get it working.
 '''
-
 def contact(request):
     spam_check = False
     if request.method != 'POST':
@@ -50,6 +49,7 @@ def feedback(request):
     if request.method != 'POST':
         test_val = random.randint(0,20)
         context = make_feedback_context(request, spam_check, test_val)
+        #return HttpResponse('Halla ta kontakt med nabla her')
         return render(request, 'contact/feedback.html', context)
     
     else:
@@ -59,17 +59,24 @@ def feedback(request):
             if feedback_form.get_right_answer() == feedback_form.get_answer():
                 #Sends mail
                 subject, message, email = feedback_form.process()
+                if not email:
+                    email = 'forslagskasse@anonym.no'
                 try:
-                    send_mail(subject, message, email, ['webkom@nabla.ntnu.no'], fail_silently=False)
+                    if feedback_form.get_reciever == 'postkom':
+                        mailadress = 'forslagskasse.postkom@nabla.ntnu.no'
+                    else:
+                        mailadress = 'forslagskasse.styret@nabla.ntnu.no'
+                    send_mail(subject, message, email, [mailadress], fail_silently=False)
                 except BadHeaderError:
                     return HttpResponse('Invalid header found')
-                return HttpResponseRedirect('/contact/feedback/success/')
+                return HttpResponseRedirect('/contact/success/')
             else:
                 spam_check = True
                 test_val = random.randint(0,20)
                 context = make_feedback_context(request, spam_check, test_val)
+                #return HttpResponse('Halla ta kontakt med nabla her')
                 return render(request, 'contact/feedback.html', context)
- 
+
 
 def success(request):
     return render(request, 'contact/success.html')
@@ -79,20 +86,6 @@ def success(request):
 
 
 #Not a view, returns appropriate context for feedback view
-def make_feedback_context(request, spam_check, test_val):
-    if request.user.is_authenticated:
-        #skjema uten navn og e-post
-        feedback_form = FeedbackForm(initial={'your_name': request.user.get_full_name(), 'email': request.user.email, 
-'right_answer': test_val})
-        context = {'feedback_form': feedback_form, 'spam_check': spam_check, 'test_val': test_val}
-        return context
-    else:
-        #tomt skjema
-        feedback_form = FeedbackForm(initial={'right_answer': test_val})
-        context = {'feedback_form': feedback_form, 'spam_check': spam_check, 'test_val': test_val}
-        return context
-
-
 def make_contact_context(request, spam_check, test_val):
     if request.user.is_authenticated:
         #skjema uten navn og e-post
@@ -106,4 +99,17 @@ def make_contact_context(request, spam_check, test_val):
         context = {'contact_form': contact_form, 'spam_check': spam_check, 'test_val': test_val}
         return context
 
+
+def make_feedback_context(request, spam_check, test_val):
+    if request.user.is_authenticated:
+        #skjema uten navn og e-post
+        feedback_form = FeedbackForm(initial={'your_name': request.user.get_full_name(), 'email': request.user.email, 
+'right_answer': test_val})
+        context = {'feedback_form': feedback_form, 'spam_check': spam_check, 'test_val': test_val}
+        return context
+    else:
+        #tomt skjema
+        feedback_form = FeedbackForm(initial={'right_answer': test_val})
+        context = {'feedback_form': feedback_form, 'spam_check': spam_check, 'test_val': test_val}
+        return context
 
