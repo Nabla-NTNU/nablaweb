@@ -58,7 +58,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
             context['new_nablad'] = Nablad.objects.exclude(is_public=False).order_by('-pub_date')[:4]
 
     def _add_podcast(self, context):
-        context['new_podcast_list'] = Podcast.objects.filter(pub_date__lte=datetime.now()).order_by('-pub_date')[:4]
+        context['new_podcast_list'] = Podcast.objects.exclude(is_clip=True).filter(pub_date__lte=datetime.now()).order_by('-pub_date')[:4]
 
     def _add_events_and_bedpres(self, context):
         now = datetime.now() - timedelta(hours=6)
