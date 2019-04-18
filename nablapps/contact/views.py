@@ -15,7 +15,6 @@ def contact(request):
     if request.method != 'POST':
         test_val = random.randint(0,20)
         context = make_contact_context(request, spam_check, test_val)
-        #return HttpResponse('Halla ta kontakt med nabla her')
         return render(request, 'contact/contact.html', context)
     
     else:
@@ -26,9 +25,9 @@ def contact(request):
                 #Sends mail
                 subject, message, email = contact_form.process()
                 if not email:
-                    email = 'forslagskasse@anonym.no'
+                    email = 'forslagskasse@nabla.anonym.no'
                 try:
-                    if contact_form.get_reciever == 'postkom':
+                    if contact_form.get_reciever() == 'Postkom':
                         mailadress = 'forslagskasse.postkom@nabla.ntnu.no'
                     else:
                         mailadress = 'forslagskasse.styret@nabla.ntnu.no'
@@ -40,7 +39,6 @@ def contact(request):
                 spam_check = True
                 test_val = random.randint(0,20)
                 context = make_contact_context(request, spam_check, test_val)
-                #return HttpResponse('Halla ta kontakt med nabla her')
                 return render(request, 'contact/contact.html', context)
 
 
@@ -49,7 +47,6 @@ def feedback(request):
     if request.method != 'POST':
         test_val = random.randint(0,20)
         context = make_feedback_context(request, spam_check, test_val)
-        #return HttpResponse('Halla ta kontakt med nabla her')
         return render(request, 'contact/feedback.html', context)
     
     else:
@@ -59,13 +56,7 @@ def feedback(request):
             if feedback_form.get_right_answer() == feedback_form.get_answer():
                 #Sends mail
                 subject, message, email = feedback_form.process()
-                if not email:
-                    email = 'forslagskasse@anonym.no'
                 try:
-                    if feedback_form.get_reciever == 'postkom':
-                        mailadress = 'forslagskasse.postkom@nabla.ntnu.no'
-                    else:
-                        mailadress = 'forslagskasse.styret@nabla.ntnu.no'
                     send_mail(subject, message, email, [mailadress], fail_silently=False)
                 except BadHeaderError:
                     return HttpResponse('Invalid header found')
@@ -74,7 +65,6 @@ def feedback(request):
                 spam_check = True
                 test_val = random.randint(0,20)
                 context = make_feedback_context(request, spam_check, test_val)
-                #return HttpResponse('Halla ta kontakt med nabla her')
                 return render(request, 'contact/feedback.html', context)
 
 
