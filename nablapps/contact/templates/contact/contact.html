@@ -1,10 +1,27 @@
 {% extends "base.html" %}
 
-{% block title %}Tilbakemelding{% endblock %}
+{% block title %}Nablas forslagskasse{% endblock %}
 
 {% block content %}
 
-<h1>Tilbakemelding</h1>
+<h1>Kontakt</h1>
+
+<table class="table table-striped table-bordered" style="width:100%">
+    {% for element in mail_list %}
+        <tr>
+            <th>{{ element.0 }}</th>
+            <td><a href="mailto:{{ element.1 }}@nabla.ntnu.no">{{ element.1 }}@nabla.ntnu.no</a></td>
+        </tr>
+    {% endfor %}
+</table>
+
+<h1>Nablas forslagskasse</h1>
+
+<p>Har du en superkul idé til noe nytt vi kan gjøre i Nabla? Savner du noe, eller har du en tilbakemelding til oss som drifter linjeforeningen?
+Styret ønsker gjerne hjelp fra dere alle til å gjøre Nabla til en best mulig linjeforening. Vi ønsker derfor alle mulige tilbakemeldinger dersom du har noe på hjertet, enten det er ris eller ros. Det kan være alt fra et ønskearrangement for Arrkom til eventuelle problem eller forbedringer i Nabla.  Du velger selv om du ønsker å være anonym eller gi oss ditt navn. Alle tilbakemeldinger og forslag vil gjennomgås på styremøter og behandles av Styret.  Dersom saken angår noen i Styret, kan du gjerne benytte deg av PostKom som et mellomledd for klager til Styret. <br>
+
+<b>For å være anonym lar du feltene "Ditt navn" og "Din e-post" stå tomme.</b></p>
+
 
 {% if spam_check == True %}
     <p style="color:red;"> Forsøk å regne kontrollspørsmål på nytt</p>
@@ -13,7 +30,7 @@
 <form method="POST">
     {% csrf_token %}
     {% for field in contact_form %}
-        {% if forloop.counter <= 4 %}
+        {% if forloop.counter <= 5 %}
             <p style="width: 100px;" >{{field.label}} {{field}}</p>
         {% endif %}
     {% endfor %}
