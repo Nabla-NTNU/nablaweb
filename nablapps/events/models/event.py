@@ -4,6 +4,7 @@ The Event model
 import logging
 from django.urls import reverse
 from django.db import IntegrityError, models
+from django.core.exceptions import ValidationError
 
 from ..exceptions import RegistrationAlreadyExists, EventFullException, DeregistrationClosed
 from .eventregistration import EventRegistration
@@ -25,12 +26,20 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
 
     is_bedpres = models.BooleanField(default=False)
 
+    # Company is required if is_bedpres is True, see clean()
     company = models.ForeignKey(
         Company,
         verbose_name="Bedrift",
-        blank=False,
+        blank=True,
+        null=True, 
         on_delete=models.CASCADE,
         help_text="Kun relevant for bedriftspresentasjoner.")
+
+    def clean(self):
+        if self.is_bedpres and self.company is None:
+            raise ValidationError("Company must be set when 'is_bedpres' is True!")
+        if not self.is_bedpres and self.company is not None:
+            raise ValidationError("Company should only be set for bedpres!")
 
     class Meta:
         verbose_name = "arrangement"

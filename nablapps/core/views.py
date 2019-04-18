@@ -65,11 +65,10 @@ class FrontPageView(FlatPageMixin, TemplateView):
 
     def _add_events_and_bedpres(self, context):
         now = datetime.now() - timedelta(hours=6)
-        context['upcoming_events'] = Event.objects.filter(event_start__gte=now).exclude(organizer='BN').order_by('event_start')[:6]
-        # denne løsningen er litt stygg, men jeg tror det er den letteste
-        bedpresArr = Event.objects.filter(event_start__gte=now, organizer='BN')
-        bedpres = BedPres.objects.filter(event_start__gte=now)
-        context['upcoming_bedpreses'] = sorted(chain(bedpresArr, bedpres), key=lambda x: x.event_start)[:6]
+        context['upcoming_events'] = Event.objects.filter(event_start__gte=now).\
+            exclude(is_bedpres=True).order_by('event_start')[:6]
+        context['upcoming_bedpreses'] = Event.objects.filter(event_start__gte=now, is_bedpres=True).\
+            order_by('event_start')[:6]
 
     def _add_poll(self, context):
         try:
