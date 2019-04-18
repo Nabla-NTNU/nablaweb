@@ -3,17 +3,34 @@ The Event model
 """
 import logging
 from django.urls import reverse
-from django.db import IntegrityError
+from django.db import IntegrityError, models
 
 from ..exceptions import RegistrationAlreadyExists, EventFullException, DeregistrationClosed
-from .abstract_event import AbstractEvent
 from .eventregistration import EventRegistration
 
+from nablapps.core.models import (
+    TimeStamped,
+    WithPicture,
+)
+from nablapps.news.models import TextContent
+from .mixins import RegistrationInfoMixin, EventInfoMixin
+from nablapps.jobs.models import Company
 
-class Event(AbstractEvent):
+
+class Event(RegistrationInfoMixin, EventInfoMixin,
+            TimeStamped, TextContent, WithPicture):
     """Arrangementer både med og uten påmelding.
     Dukker opp som nyheter på forsiden.
     """
+
+    is_bedpres = models.BooleanField(default=False)
+
+    company = models.ForeignKey(
+        Company,
+        verbose_name="Bedrift",
+        blank=False,
+        on_delete=models.CASCADE,
+        help_text="Kun relevant for bedriftspresentasjoner.")
 
     class Meta:
         verbose_name = "arrangement"
@@ -21,7 +38,14 @@ class Event(AbstractEvent):
         permissions = (
             ("administer", "Can administer models"),
         )
-        db_table = "content_event"
+        db_table = "content_event" # Todo: hvorfor ha det slik?
+
+    def __str__(self):
+        return '%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
+
+    def get_short_name(self):
+        """Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke."""
+        return self.short_name if self.short_name else (self.headline[0:18].capitalize() + '...')
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
