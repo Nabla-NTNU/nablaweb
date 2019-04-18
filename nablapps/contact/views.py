@@ -55,7 +55,7 @@ def feedback(request):
                 #Sends mail
                 subject, message, email = feedback_form.process()
                 try:
-                    send_mail(subject, message, email, [mailadress], fail_silently=False)
+                    send_mail(subject, message, email, ["webkom@nabla.ntnu.no"], fail_silently=False)
                 except BadHeaderError:
                     return HttpResponse('Invalid header found')
                 return HttpResponseRedirect('/contact/success/')
