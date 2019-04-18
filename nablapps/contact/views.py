@@ -16,7 +16,6 @@ def contact(request):
         test_val = random.randint(0,20)
         context = make_contact_context(request, spam_check, test_val)
         return render(request, 'contact/contact.html', context)
-    
     else:
         contact_form = ContactForm(request.POST)
         if contact_form.is_valid():
@@ -25,7 +24,7 @@ def contact(request):
                 #Sends mail
                 subject, message, email = contact_form.process()
                 if not email:
-                    email = 'forslagskasse@nabla.anonym.no'
+                    email = 'noreply@anonym.nabla.no'
                 try:
                     if contact_form.get_reciever() == 'Postkom':
                         mailadress = 'forslagskasse.postkom@nabla.ntnu.no'
@@ -48,7 +47,6 @@ def feedback(request):
         test_val = random.randint(0,20)
         context = make_feedback_context(request, spam_check, test_val)
         return render(request, 'contact/feedback.html', context)
-    
     else:
         feedback_form = FeedbackForm(request.POST)
         if feedback_form.is_valid():
@@ -75,31 +73,59 @@ def success(request):
 #######################################################################
 
 
-#Not a view, returns appropriate context for feedback view
+# The two functions below are not views, they return appropriate context for feedback and contact view
 def make_contact_context(request, spam_check, test_val):
+    email_list = (
+                    ('Styret', 'nabla'),
+                    ('Leder', 'leder'),
+                    ('Nestleder', 'nestleder'),
+                    ('Faddersjef/sekretær', 'sekretaer'),
+                    ('Kasserer', 'kasserer'),
+                    ('Bedkomsjef', 'bedkom'),
+                    ('Arrangementsjef', 'arrsjef'),
+                    ('Kjellersjef', 'kjellersjef'),
+                    ('Ambassadør', 'ambassador'),
+                    ('Websjef', 'websjef'),
+                    ('Redaktør', 'redaktor'),
+                )
     if request.user.is_authenticated:
         #skjema uten navn og e-post
-        contact_form = ContactForm(initial={'your_name': request.user.get_full_name(), 'email': request.user.email, 
-'right_answer': test_val})
-        context = {'contact_form': contact_form, 'spam_check': spam_check, 'test_val': test_val}
+        contact_form = ContactForm(
+                    initial={
+                    'your_name': request.user.get_full_name(), 
+                    'email': request.user.email, 
+                    'right_answer': test_val})
+        context = {'contact_form': contact_form, 
+                    'spam_check': spam_check, 
+                    'test_val': test_val}
+        context['mail_list'] = email_list
         return context
     else:
         #tomt skjema
         contact_form = ContactForm(initial={'right_answer': test_val})
-        context = {'contact_form': contact_form, 'spam_check': spam_check, 'test_val': test_val}
+        context = {'contact_form': contact_form, 
+                    'spam_check': spam_check, 
+                    'test_val': test_val}
+        context['mail_list'] = email_list
         return context
 
 
 def make_feedback_context(request, spam_check, test_val):
     if request.user.is_authenticated:
         #skjema uten navn og e-post
-        feedback_form = FeedbackForm(initial={'your_name': request.user.get_full_name(), 'email': request.user.email, 
-'right_answer': test_val})
-        context = {'feedback_form': feedback_form, 'spam_check': spam_check, 'test_val': test_val}
+        feedback_form = FeedbackForm(initial={
+                    'your_name': request.user.get_full_name(), 
+                    'email': request.user.email, 
+                    'right_answer': test_val})
+        context = {'feedback_form': feedback_form, 
+                    'spam_check': spam_check, 
+                    'test_val': test_val}
         return context
     else:
         #tomt skjema
         feedback_form = FeedbackForm(initial={'right_answer': test_val})
-        context = {'feedback_form': feedback_form, 'spam_check': spam_check, 'test_val': test_val}
+        context = {'feedback_form': feedback_form, 
+                    'spam_check': spam_check, 
+                    'test_val': test_val}
         return context
 
