@@ -26,7 +26,7 @@ def contact(request):
                 if not email:
                     email = 'noreply@anonym.nabla.no'
                 try:
-                    if contact_form.get_reciever() == 'Postkom':
+                    if contact_form.get_reciever() == 'PostKom':
                         mailadress = 'forslagskasse.postkom@nabla.ntnu.no'
                     else:
                         mailadress = 'forslagskasse.styret@nabla.ntnu.no'
@@ -81,7 +81,7 @@ def make_contact_context(request, spam_check, test_val):
                     ('Nestleder', 'nestleder'),
                     ('Faddersjef/sekretær', 'sekretaer'),
                     ('Kasserer', 'kasserer'),
-                    ('Bedkomsjef', 'bedkom'),
+                    ('Bedkomsjef', 'bedriftskontakt'),
                     ('Arrangementsjef', 'arrsjef'),
                     ('Kjellersjef', 'kjellersjef'),
                     ('Ambassadør', 'ambassador'),

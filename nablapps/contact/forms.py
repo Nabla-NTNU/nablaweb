@@ -34,14 +34,14 @@ class FeedbackForm(forms.Form):
 class ContactForm(forms.Form):
     reciever_choices = (
         ('Styret', 'Styret'),
-        ('Postkom', 'Postkom'),
+        ('PostKom', 'PostKom'),
     )
 
-    your_name = forms.CharField(label='Ditt navn:', max_length=100, required=False)# set default value, help text
+    your_name = forms.CharField(label='Ditt navn:', max_length=100, required=False)
     reciever = forms.ChoiceField(choices=reciever_choices, label='mottaker')
     subject = forms.CharField(label='Emne:', max_length=100, required=True)
     message = forms.CharField(label='Melding:', widget=forms.Textarea, required=True)
-    email = forms.EmailField(label='Din e-post:', max_length=100, required=False)# add help text
+    email = forms.EmailField(label='Din e-post:', max_length=100, required=False)
     spam_check = forms.FloatField(max_value=20, required=True)
     right_answer = forms.FloatField(max_value=20, required=True, widget=forms.HiddenInput())
 
