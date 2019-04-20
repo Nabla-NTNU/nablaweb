@@ -17,16 +17,14 @@ from braces.views import (PermissionRequiredMixin,
                           MessageMixin)
 
 from nablapps.core.view_mixins import AdminLinksMixin
-from .event_overrides import get_eventgetter
 
-from .models import Event
+from .models.event import Event, attending_events
 from .exceptions import (EventException, UserRegistrationException, EventFullException,
                          RegistrationNotAllowed, RegistrationNotOpen, RegistrationAlreadyExists,
                          RegistrationNotRequiredException, DeregistrationClosed)
 from .event_calendar import EventCalendar
 
 User = get_user_model()
-EventGetter = get_eventgetter()
 
 
 class AdministerRegistrationsView(StaticContextMixin,
@@ -90,7 +88,6 @@ class AdministerRegistrationsView(StaticContextMixin,
                     "Ta kontakt med WebKom, og oppgi denne feilmeldingen "
                     "dersom du tror dette er en feil.")
 
-
 def calendar(request, year=None, month=None):
     """
     Renders a calendar with models from the chosen month
@@ -103,11 +100,13 @@ def calendar(request, year=None, month=None):
     except ValueError:  # Not a valid year and month
         raise Http404
 
-    events = EventGetter.get_current_events(year, month)
+    events = Event.objects.filter(
+        event_start__year = year,
+        event_start__month = month)
     cal = EventCalendar(events, year, month).formatmonth(year, month)
 
     user = request.user
-    future_attending_events = EventGetter.attending_events(user, today)
+    future_attending_events = attending_events(user, today)
 
     months = year*12 + month - 1 # months since epoch (Christ)
     month_list = [datetime.date(m//12, m%12+1, 1) for m in range(months-5, months+7)]

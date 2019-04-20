@@ -179,3 +179,16 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
 
     def get_absolute_url(self):
         return reverse("event_detail", kwargs={'pk': self.pk, 'slug': self.slug})
+
+def attending_events(user, today):
+    """Get the future events attended by a user"""
+    if user.is_anonymous:
+        return []
+    regs = user.eventregistration_set.filter(event__event_start__gte=today)
+    events = []
+    for reg in regs:
+        event = reg.event
+        event.attending = reg.attending
+        event.waiting = not reg.attending
+        events.append(event)
+    return events
