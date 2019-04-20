@@ -180,6 +180,15 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
     def get_absolute_url(self):
         return reverse("event_detail", kwargs={'pk': self.pk, 'slug': self.slug})
 
+    def open_for_classes(self):
+        """Returns a string with the classes that the event is open for
+        Ignores all other open_for-rules, ie. other groups"""
+        classes = self.open_for.filter(nablagroup__group_type='kull').order_by('name')
+        max_class = classes.first().name
+        min_class = classes.last().name
+
+        return max_class + " - " + min_class
+
 def attending_events(user, today):
     """Get the future events attended by a user"""
     if user.is_anonymous:
