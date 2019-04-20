@@ -163,6 +163,8 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
                 context['is_waiting'] = event.is_waiting(user)
             except EventException as e:
                 self.messages.error(e)
+
+        context['type'] = "bedpres" if event.is_bedpres else "event" # Used to include correct template
         return context
 
     def get_admin_links(self):

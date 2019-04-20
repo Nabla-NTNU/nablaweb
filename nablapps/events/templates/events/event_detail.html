@@ -27,29 +27,31 @@
         {% for registration in event.eventregistration_set.all %}
         {% with user=registration.user %}
         <span class="label label-default
-            {% if registration.waiting %} 
-                waiting-place
-            {% endif %}" style="display: inline-block;">
+                     {% if registration.waiting %} 
+                     waiting-place
+                     {% endif %}" style="display: inline-block;">
 
             {% if user.get_full_name %}
-                 {{ user.get_full_name }}
+            {{ user.get_full_name }}
             {% else %}
-                {{ user.username }}
+            {{ user.username }}
             {% endif %}
         </span>
         {% endwith %}
         {% endfor %}
     </div>
-{% endif %}
+    {% endif %}
 
-{% include "content/includes/comments.html" with content=event %}
+    {% include "content/includes/comments.html" with content=event %}
 
-{% endblock %}
+    {% endblock %}
 
 
-{% block sidebar %}
+    {% block sidebar %}
 
-{% include "events/includes/info.html" with event=event %}
+{% with "events/includes/info_"|add:type|add:".html" as info_template %}
+    {% include info_template %}
+{% endwith %}
 {% include "content/includes/meta.html" with content=event %}
 {% include "content/includes/sidebar-admin.html" %}
 

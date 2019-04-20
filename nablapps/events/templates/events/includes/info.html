@@ -41,6 +41,9 @@
     <tr><td>Sted</td><td>{{ event.location }}</td></tr>
 
 
+    {% block more_info %}
+    {% endblock %} 
+
 {% if event.registration_required %}
     <!-- Registrering åpner -->
     {% if event.registration_start %}
