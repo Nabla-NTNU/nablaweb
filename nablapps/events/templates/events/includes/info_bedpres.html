@@ -2,7 +2,8 @@
 
 {% block more_info %}
 <tr>
-    <td>Bedrift</td><td>{{ event.company }}</td>
+    <td>Bedrift</td>
+    <td><a href="{{ event.company.website }}">{{ event.company }}</a></td>
 </tr>
 {% endblock %}
 
