@@ -89,8 +89,12 @@
                     <div class="col-md-3{% if not forloop.first %} hidden-xs{% endif %}">
                         <a class="thumbnail" href="{{ podcast.get_absolute_url }}">
                             {% if podcast.image %}
-                                <img src="{% thumbnail podcast.image 730x200 %}" alt="{{ podcast.title }}">
+                                <img src="{% thumbnail podcast.image 350x350 crop="square" %}" alt="{{ podcast.title }}">
                             {% endif %}
+                            {% if podcast.short_title %}
+                                {{ podcast.short_title }}
+                            {% endif %}
+
                         </a>
                     </div >
                 {% endfor %}

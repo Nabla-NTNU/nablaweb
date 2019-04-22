@@ -10,6 +10,7 @@ class PodcastAdmin(ImageCroppingMixin, admin.ModelAdmin):
         'title',
         'season',
         'description',
+        'short_title',
         'extra_markdown',
         'has_video',
         'is_clip',

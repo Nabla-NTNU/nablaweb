@@ -96,6 +96,13 @@ class Podcast(models.Model):
         blank=True
     )
 
+    short_title = models.CharField(
+        verbose_name='kort tittel',
+        help_text='kort tittel som vises i boksen på forsiden med de fire siste sendingene.',
+        max_length=50,
+        blank=True
+    )
+
     extra_markdown = models.TextField(
         verbose_name='Ekstra markdown',
         blank=True,
