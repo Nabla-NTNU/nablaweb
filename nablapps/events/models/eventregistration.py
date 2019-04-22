@@ -77,3 +77,15 @@ class EventRegistration(models.Model):
             template = loader.get_template("events/moved_to_attending_email.txt")
             message = template.render({'event': self.event, 'name': self.user.get_full_name()})
             self.user.email_user(subject, message)
+
+class Penalty(models.Model):
+    """Penalty point for failing to meet at events"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name='bruker',
+        on_delete=models.CASCADE,
+        blank=False)
+    event = models.ForeignKey(
+        'Event',
+        on_delete=models.CASCADE,
+        blank=False)
