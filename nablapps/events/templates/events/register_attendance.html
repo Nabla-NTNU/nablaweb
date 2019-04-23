@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post">{% csrf_token %}
+    <input type="hidden" name="activate_penalties">
+    <label>Gir alle påmeldte en prikk: </label><button type="submit">Aktiver prikker!</button>
+</form>
+<form method="post">{% csrf_token %}
+{{ form }}
+<ul>
+    {% for registration in registrations %}
+    <li>
+        <label>
+            <input type="checkbox" name="user_penalty_{{registration.pk}}" value="{{ registration.pk }}"  {% if registration.penalty %}checked{% endif %}>
+            {{ registration.user.get_full_name }}
+        </label>
+    </li>
+    {% endfor %}
+</ul>
+<button type="submit">Send inn</button>
+</form>
+{% endblock %} {# block "content" #}

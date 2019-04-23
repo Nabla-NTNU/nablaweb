@@ -3,10 +3,11 @@ Forms for events
 """
 import operator
 
-from django.forms import BooleanField, ValidationError, ModelForm
+from django.forms import BooleanField, ValidationError, ModelForm, Form, IntegerField, TextInput
 from django.forms.models import fields_for_model
 
-from .models import Event
+from .models import Event, EventRegistration
+from nablapps.accounts.models import NablaUser
 
 
 class EventForm(ModelForm):
@@ -84,3 +85,26 @@ class EventForm(ModelForm):
             # Ignorer feil relatert til feltet.
             if name in self._errors:
                 del self._errors[name]
+
+class RegisterAttendanceForm(Form):
+    user_card_key = IntegerField(label="Kortnummer", required=False,
+                                    widget=TextInput(attrs={'placeholder': 'Scan kort', 'autofocus':'true'}))
+
+    def clean_user_card_key(self):
+        data = self.cleaned_data['user_card_key']
+
+        if data == None:
+            raise ValidationError('No number given')
+
+        # Check that the rfid is positive
+        if int(data) < 0:
+            raise ValidationError('The number must be a positive integer')
+        
+        # Check that there is an account with the given card key
+        user = NablaUser.objects.get_from_rfid(data)
+        if not user:
+            raise ValidationError('There are no registered accounts with that card key')
+        if not EventRegistration.objects.filter(user=user, attending=True).exists():
+            raise ValidationError(f'{user.get_full_name()} is not registered for this event!')
+
+        return data

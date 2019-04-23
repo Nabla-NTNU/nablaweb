@@ -4,7 +4,7 @@ Views for events app
 import datetime
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import loader
 from django.views.generic import TemplateView, DetailView
 from django.contrib.auth import get_user_model
@@ -19,10 +19,14 @@ from braces.views import (PermissionRequiredMixin,
 from nablapps.core.view_mixins import AdminLinksMixin
 
 from .models.event import Event, attending_events
+from .models.eventregistration import EventRegistration
 from .exceptions import (EventException, UserRegistrationException, EventFullException,
                          RegistrationNotAllowed, RegistrationNotOpen, RegistrationAlreadyExists,
                          RegistrationNotRequiredException, DeregistrationClosed)
 from .event_calendar import EventCalendar
+from .forms import RegisterAttendanceForm
+
+from nablapps.accounts.models import NablaUser
 
 User = get_user_model()
 
@@ -253,6 +257,55 @@ class RegisterUserView(LoginRequiredMixin,
         except DeregistrationClosed:
             return "Avmeldingsfristen er ute."
         return "Du er meldt av arrangementet."
+
+class RegisterAttendanceView(DetailView):
+    """Used by event admins to register attendance
+    Usage:
+     1. User is asked if penalties should be registered for the event.
+        This creates penalties for all registered users.
+     2. As users are registered, their penalties are deletd."""
+    model = Event
+    template_name = "events/register_attendance.html"
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        attending = EventRegistration.objects.filter(event=self.object, attending=True)
+        redirection = redirect(self.request.resolver_match.view_name, kwargs.pop('pk', 1))
+
+        # Give all attending penalty and return
+        if 'activate_penalties' in request.POST:
+            attending.update(penalty=True)
+            return redirection
+
+        # Register given list
+        user_penalty_list = []
+        for q in request.POST: # Generate list over users to get a penalty
+            if q.startswith('user_penalty'):
+                user_penalty_list.append(request.POST[q])
+        attending.update(penalty=False)
+        attending.filter(pk__in=user_penalty_list).update(penalty=True)
+
+        # Register given card key
+        attendance_form = RegisterAttendanceForm(request.POST)
+        if not attendance_form.is_valid():
+            context = self.get_context_data(**kwargs)
+            context['form'] = attendance_form
+            return render(request,self.template_name, context)
+        user = NablaUser.objects.get_from_rfid(attendance_form.cleaned_data['user_card_key'])
+        reg = EventRegistration.objects.get(user=user, event=self.object)
+        reg.penalty = False
+        reg.save()
+
+        return redirection
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        event = self.object
+        registrations = event.eventregistration_set.filter(attending=True)
+        context['registrations'] = registrations.order_by('user__first_name')
+        context['form'] = RegisterAttendanceForm()
+        return context
 
 
 def ical_event(request, event_id):

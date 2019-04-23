@@ -9,6 +9,7 @@ from .views import (
     RegisterUserView,
     EventDetailView,
     EventRegistrationsView,
+    RegisterAttendanceView,
     ical_event,
 )
 from .feeds import RecentEvents
@@ -17,6 +18,10 @@ urlpatterns = [
     url(r'^(?P<pk>\d{1,8})/admin2$',
         AdministerRegistrationsView.as_view(),
         name='event_admin'),
+
+    url(r'^(?P<pk>\d{1,8})/attendance$',
+        RegisterAttendanceView.as_view(),
+        name='event_register_attendance'),
 
     url(r'^$',
         calendar,
