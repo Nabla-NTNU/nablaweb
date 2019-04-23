@@ -93,8 +93,8 @@ class RegisterAttendanceForm(Form):
     def clean_user_card_key(self):
         data = self.cleaned_data['user_card_key']
 
-        if data == None:
-            raise ValidationError('No number given')
+        if data is None:
+            return None
 
         # Check that the rfid is positive
         if int(data) < 0:

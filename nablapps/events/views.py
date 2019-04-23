@@ -291,10 +291,12 @@ class RegisterAttendanceView(DetailView):
             context = self.get_context_data(**kwargs)
             context['form'] = attendance_form
             return render(request,self.template_name, context)
-        user = NablaUser.objects.get_from_rfid(attendance_form.cleaned_data['user_card_key'])
-        reg = EventRegistration.objects.get(user=user, event=self.object)
-        reg.penalty = False
-        reg.save()
+        card_key = attendance_form.cleaned_data['user_card_key']
+        if card_key is not None:
+            user = NablaUser.objects.get_from_rfid(card_key)
+            reg = EventRegistration.objects.get(user=user, event=self.object)
+            reg.penalty = False
+            reg.save()
 
         return redirection
 
