@@ -2,8 +2,8 @@
 
 {% block more_head %}
 <style>
- #attending_list {
-     list-style: none;
+ #attending_list label {
+     font-weight: normal;
  }
 </style>
 {% endblock %}
@@ -30,16 +30,18 @@
 
 <form method="post">{% csrf_token %}
 {{ form }}
-<ul id="attending_list">
+<table id="attending_list">
+    <tr>
+        <th>Bruker</th>
+        <th>Prikk?</th>
+    </tr>
     {% for registration in registrations %}
-    <li>
-        <label>
-            <input type="checkbox" name="user_penalty_{{registration.pk}}" value="{{ registration.pk }}"  {% if registration.penalty %}checked{% endif %}>
-            {{ registration.user.get_full_name }}
-        </label>
-    </li>
+    <tr>
+        <td><label for="user_penalty_{{registration.pk}}">{{ registration.user.get_full_name }}</label></td>
+        <td><input type="checkbox" id="user_penalty_{{registration.pk}}" name="user_penalty_{{registration.pk}}" value="{{ registration.pk }}"  {% if registration.penalty %}checked{% endif %}></td>
+    </tr>
     {% endfor %}
-</ul>
+</table>
 <button type="submit">Send inn</button>
 </form>
 {% endblock %} {# block "content" #}
