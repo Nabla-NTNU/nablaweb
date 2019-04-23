@@ -1,13 +1,36 @@
 {% extends 'base.html' %}
 
+{% block more_head %}
+<style>
+ #attending_list {
+     list-style: none;
+ }
+</style>
+{% endblock %}
+
 {% block content %}
+<h1>Oppmøteregistrering for {{ event.headline }}</h1>
+<hr />
+
+<!-- Button giving all users a penalty -->
 <form method="post">{% csrf_token %}
     <input type="hidden" name="activate_penalties">
-    <label>Gir alle påmeldte en prikk: </label><button type="submit">Aktiver prikker!</button>
+    <button type="button" id="activate">Aktiver prikker</button>
+    <button type="submit" id="activate_confirm">Sikker?</button><!-- Hidden, see script below -->
+    <label>Gir alle påmeldte en prikk. </label>
+    <script>
+     $("#activate_confirm").hide();
+     $("#activate").on("click", function(event) {
+         $("#activate_confirm").slideToggle();
+     });
+    </script>
 </form>
+<br />
+
+
 <form method="post">{% csrf_token %}
 {{ form }}
-<ul>
+<ul id="attending_list">
     {% for registration in registrations %}
     <li>
         <label>
