@@ -47,7 +47,7 @@
     }
     .cell { background-color: #f9f9f9; }
     .cell .date .day { display: none; }
-    .today { background-color: #f7f7ff; }
+    .today { background-color: #f99027;
     .noday { visibility: hidden; }
 }
 
