@@ -75,8 +75,8 @@ def success(request):
 
 # The two functions below are not views, they return appropriate context for feedback and contact view
 def make_contact_context(request, spam_check, test_val):
-    email_list = (
-                    ('Styret', 'nabla'),
+    board_emails = (
+                    ('Hele styret', 'nabla'),
                     ('Leder', 'leder'),
                     ('Nestleder', 'nestleder'),
                     ('Faddersjef/sekretær', 'sekretaer'),
@@ -88,6 +88,39 @@ def make_contact_context(request, spam_check, test_val):
                     ('Websjef', 'websjef'),
                     ('Redaktør', 'redaktor'),
                 )
+    nabla_pos_emails = (
+                    ('Alle gruppeledere', 'gruppeledere'),
+                    ('Leder av ProKom', 'leder.prokom'),
+                    ('Leder av QuizKom', 'quizkom'),
+                    ('Leder av Koreolis', 'koreolis.kraften'),
+                    ('Leder av Reka', 'reka'),
+                    ('Leder av Reven', 'reven'),
+                    ('Leder av Skråttcast', 'skraattcast'),
+                    ('Leder av Gravitones', 'leder.gravitones'),
+                    ('Leder av the Stokes', 'lederstokes'),
+                    ('Økonomiansvarlig i bedriftskontakten', 'bnokonomi'),
+                    ('Revysjef', 'revy'),
+                    ('Bryggemester', 'bryggemester'),
+                )
+    group_emails = (
+                    ('PostKom', 'postkom'),
+                    ('Arrkom', 'arrkom'),
+                    ('BN - Bedriftkontakten Nabla', 'bedkom'),
+                    ('Educom', 'educom'),
+                    ('Nablakjelleren', 'nablakjelleren'),
+                    ('ProKom', 'prokom'),
+                    ('Redaksjonen', 'nabladet'),
+                    ('WebKom', 'webkom'),
+                    ('Excom16', 'ekskom2018'),
+                    ('Excom17', 'ekskom2019'),
+                    ('Koreolis', 'koreolis'),
+                    ('nablarevyen', 'revy-alle'),
+                    ('the Gravitones', 'gravitones'),
+                    ('the Stokes', 'thestokes'),
+                    ('utfluks', 'utfluks'),
+                )
+
+
     if request.user.is_authenticated:
         #skjema uten navn og e-post
         contact_form = ContactForm(
@@ -98,7 +131,9 @@ def make_contact_context(request, spam_check, test_val):
         context = {'contact_form': contact_form, 
                     'spam_check': spam_check, 
                     'test_val': test_val}
-        context['mail_list'] = email_list
+        context['board_emails'] = board_emails
+        context['nabla_pos_emails'] = nabla_pos_emails
+        context['group_emails'] = group_emails
         return context
     else:
         #tomt skjema
@@ -106,7 +141,9 @@ def make_contact_context(request, spam_check, test_val):
         context = {'contact_form': contact_form, 
                     'spam_check': spam_check, 
                     'test_val': test_val}
-        context['mail_list'] = email_list
+        context['board_emails'] = board_emails
+        context['nabla_pos_emails'] = nabla_pos_emails
+        context['group_emails'] = group_emails
         return context
 
 
