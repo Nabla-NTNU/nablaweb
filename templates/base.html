@@ -55,15 +55,16 @@
         {% endblock %}
     </head>
 
-    <body>    
+    <body>
+    <div id = "content">
         <!-- Navigation -->
         <header>
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-	        <a class="logo pull-left" href="/">
+            <a class="logo pull-left" href="/">
                     {% block header_logo %}
                     <img src="{% static "img/nabla_logo_white.png" %}" alt="Nabla">
                     {% endblock header_logo %}
-	        </a>
+            </a>
 
                 <div class="container">
                     <!-- Brand and toggle get grouped for better mobile display -->
@@ -100,7 +101,7 @@
                                     <li><a href="{% url "advent_calendar" "2018" %}">Julekalender 2018</a></li>
                                 </ul>
                             </li>
-                            
+
                             <li class="dropdown">
                                 <a href="#om" class="dropdown-toggle" data-toggle="dropdown">
                                     Om Nabla
@@ -195,12 +196,12 @@
                                     <button class="submit btn btn-primary btn-block" type="submit">Logg inn</button>
                                 </form>
                             </li>
-	                    {% endif %}
-	                    {% block flag %}
+                        {% endif %}
+                        {% block flag %}
                             <li><a class="logo" href="/english/">
                                 <img src="{% static "img/GB_flag.png" %}" alt="Eng">
                             </a></li>
-	                    {% endblock %}
+                        {% endblock %}
                         </ul>
                         {% endblock navbar_container %}
                     </div>
@@ -211,21 +212,21 @@
         </header>
 
         <!-- Page Content -->
-        <div class="container">
+        <div class="container" id = "mainContent">
 
             {% bootstrap_messages %}
             {% block main %}
             <div class="row">
-	        <!-- Blog Entries Column -->
-	        <div class="col-md-8">
-	            {% block content %}{% endblock content %}
-	        </div>
+            <!-- Blog Entries Column -->
+            <div class="col-md-8">
+                {% block content %}{% endblock content %}
+            </div>
 
-	        <!-- Blog Sidebar Widgets Column -->
-	        <div class="col-md-4">
+            <!-- Blog Sidebar Widgets Column -->
+            <div class="col-md-4">
                     {% block sidebar %}
                     {% endblock sidebar %}
-	        </div>
+            </div>
 
             </div>
             <!-- /.row -->
@@ -236,7 +237,7 @@
         <footer>
 
             <div class="container">
-	        <div class="row">
+            <div class="row">
 
                     {# kontakt #}
                     <div class="col-md-4 kontakt">
@@ -263,20 +264,20 @@
 
                     {# om nabla #}
                     <div class="col-md-4">
-	                <h2>Informasjon</h2>
-	                <p>
-	                    Organisasjonsnr.: <span class="pull-right">992168544</span><br /><br />
-	                    Hovedkonto: <span class="pull-right">1503.13.57338</span><br />
-	                    Arrkomkonto: <span class="pull-right">1503.13.57400</span><br />
-                      ProKom-konto: <span class="pull-right">1506.19.24172</span><br />
-	                    Gravitoneskonto: <span class="pull-right">1503.65.97965</span><br />
-	                </p>
-	                <h2>Tilbakemelding</h2>
+                    <h2>Informasjon</h2>
+                    <p>
+                        Organisasjonsnr.: <span class="pull-right">992168544</span><br /><br />
+                        Hovedkonto: <span class="pull-right">1503.13.57338</span><br />
+                        Arrkomkonto: <span class="pull-right">1503.13.57400</span><br />
+                        ProKom-konto: <span class="pull-right">1506.19.24172</span><br />
+                        Gravitoneskonto: <span class="pull-right">1503.65.97965</span><br />
+                    </p>
+                    <h2>Tilbakemelding</h2>
                         <p>
-			  Har du funnet en feil, får du ikke logget på, eller er det noe som burde forbedres? Fyll ut <a href="/contact/feedback/">tilbakemeldingskjema</a> eller kontakt webkom:<br>
-			  <a class="email" href="mailto:webkom@nabla.ntnu.no">webkom@nabla.ntnu.no</a>
+                        Har du funnet en feil, får du ikke logget på, eller er det noe som burde forbedres? Fyll ut <a href="/contact/feedback/">tilbakemeldingskjema</a> eller kontakt webkom:<br>
+                        <a class="email" href="mailto:webkom@nabla.ntnu.no">webkom@nabla.ntnu.no</a>
                         </p>
-	            </div>
+                    </div>
                     {# end om nabla #}
 
                     {# nablalogo #}
@@ -285,15 +286,14 @@
                         <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo">
                     </div>
 
-	        </div>
+            </div>
             </div>
         </footer>
 
 
         <!-- /.container -->
-
         {% render_block "js" %}
-
+    </div>
     </body>
 
 </html>

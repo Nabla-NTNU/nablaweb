@@ -371,3 +371,14 @@ Overflow-x: hidden;
     }
 }
 
+
+#content {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+#mainContent {
+  flex: 1;
+}
+
