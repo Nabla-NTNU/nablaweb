@@ -107,7 +107,7 @@ def make_contact_context(request, spam_check, test_val):
                     ('Arrkom', 'arrkom'),
                     ('BN - Bedriftkontakten Nabla', 'bedkom'),
                     ('Educom', 'educom'),
-                    ('Nablakjelleren', 'nablakjelleren'),
+                    ('Kjellerstyret', 'kjellern.hk18'),#Nablas kjellerstyre?
                     ('ProKom', 'prokom'),
                     ('Redaksjonen', 'nabladet'),
                     ('WebKom', 'webkom'),
