@@ -107,7 +107,6 @@ def make_contact_context(request, spam_check, test_val):
                     ('Arrkom', 'arrkom'),
                     ('BN - Bedriftkontakten Nabla', 'bedkom'),
                     ('Educom', 'educom'),
-                    ('Kjellerstyret', 'kjellern.hk18'),#Nablas kjellerstyre?
                     ('ProKom', 'prokom'),
                     ('Redaksjonen', 'nabladet'),
                     ('WebKom', 'webkom'),
@@ -118,6 +117,7 @@ def make_contact_context(request, spam_check, test_val):
                     ('the Gravitones', 'gravitones'),
                     ('the Stokes', 'thestokes'),
                     ('utfluks', 'utfluks'),
+                    ('Kjellersamarbeidet (Nabla, HC, Janus)', 'kjellern.hk18'),
                 )
 
 
