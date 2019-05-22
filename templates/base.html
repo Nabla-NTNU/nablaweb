@@ -56,6 +56,25 @@
     </head>
 
     <body>
+    <!-- Pop up window displaying important information about the 'fadderperiode' -->
+	{% if newuser_popup %}
+	<div id="new_student_info">
+	  <h2>Ny student?</h2>
+	  <div class="close_button" onclick="this.parentNode.classList.add('hidden');">Lukk meg</div>
+	  <p>
+	    Nabla er linjeforeningen for alle studenter ved sivilingeniørprogrammet i fysikk og matematikk. Vi har et heidundranes fadderopplegg som vi håper du vil ta del i! Det er derfor veldig viktig at du trykker på knappen under og registrerer deg!
+	    <br />
+	    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ9L6WnlyGTlfl3tauTFs0QGlUa20qwq4_aPgELNmmtA-8TQ/viewform?usp=sf_link" target="_blank" target="_blank" class="btn btn-primary center-block btn-lg">Trykk her for påmelding til fadderperioden - <u>viktig!</u></a>
+	    Registreringen tar 10 sekunder, og vi understreker igjen at det er viktig at du gjør dette! Gjør dette nå, og så kan du lese resten av informasjonen senere.
+	    <br />
+	    <br />
+	    Mer informasjon om fadderopplegget finnes <a href="nystudent">her.</a>
+	  </p>
+	  <span class="GDPRinfo">Grunnet nye personvernsregler i EU, GDPR, kan ikke universitetet gi ut lister over nye studenter til Nabla. Derfor må du som ny student oppgi kontaktopplysninger selv.</span>
+	</div>
+	{% endif %}
+
+
     <div id = "content">
         <!-- Navigation -->
         <header>

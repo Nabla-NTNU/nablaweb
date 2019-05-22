@@ -42,6 +42,9 @@ class FrontPageView(FlatPageMixin, TemplateView):
         context['new_podcast'] = Podcast.objects.exclude(is_clip=True).filter(pub_date__lte=datetime.now()).first()
         context['album_list'] = Album.objects.exclude(visibility='h').order_by('-last_changed_date')[:4]
         context['new_blog'] = BlogPost.objects.exclude(list_image=None).order_by('-created_date')[:4]
+
+        context['newuser_popup'] = False if self.request.user.is_authenticated else True
+
         return context
 
     def _add_news(self, context):
@@ -75,3 +78,4 @@ class FrontPageView(FlatPageMixin, TemplateView):
 
         if self.request.user.is_authenticated and context['poll'] is not None:
             context['poll_has_voted'] = context['poll'].user_has_voted(self.request.user)
+
