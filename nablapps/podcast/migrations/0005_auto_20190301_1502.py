@@ -4,7 +4,7 @@ from django.db import migrations, models
 
 from nablapps.podcast.models import Podcast
 
-
+'''
 def set_has_video(apps, schema_editor):
     podcasts = Podcast.objects.all()
 
@@ -12,6 +12,7 @@ def set_has_video(apps, schema_editor):
         if pod.extra_markdown:
             pod.has_video = True
             pod.save()
+'''
 
 
 class Migration(migrations.Migration):
@@ -31,5 +32,5 @@ class Migration(migrations.Migration):
             name='logo',
             field=models.ImageField(blank=True, help_text='Podcastlogo. (Bruker fra forrige sesong hvis dette feltet er tomt)', null=True, upload_to='podcast/images', verbose_name='Logo'),
         ),
-        migrations.RunPython(set_has_video)
+        #migrations.RunPython(set_has_video)
     ]

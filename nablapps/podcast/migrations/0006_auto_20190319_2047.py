@@ -5,7 +5,7 @@ import django.db.models.deletion
 
 from nablapps.podcast.models import Podcast, Season
 
-
+'''
 def fix_missing_season(apps, schema_editor):
     podcasts = Podcast.objects.all()
     latest_season = Season.objects.last()
@@ -16,6 +16,7 @@ def fix_missing_season(apps, schema_editor):
         except Season.DoesNotExist:
             pod.season = latest_season
             pod.save()
+'''
 
 
 class Migration(migrations.Migration):
@@ -25,7 +26,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(fix_missing_season),
+        #migrations.RunPython(fix_missing_season),
 
         migrations.AlterField(
             model_name='podcast',
