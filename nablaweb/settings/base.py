@@ -129,6 +129,7 @@ INSTALLED_APPS = [
     'hitcount',
     'markdown_deux',
     'sekizai', # http://django-sekizai.readthedocs.org/en/latest/#
+    'qr_code',
 
     # Djangoting
     'django.contrib.admin',
