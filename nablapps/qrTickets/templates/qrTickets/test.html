@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load qr_code %}
+
+{% block content %}
+<h1> QR-kodetest </h1>
+
+
+{% qr_from_text "nabla.no" size="T" image_format="png" %}
+{% endblock %}
+
+

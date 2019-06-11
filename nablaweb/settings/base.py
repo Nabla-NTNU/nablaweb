@@ -114,6 +114,7 @@ INSTALLED_APPS = [
     'nablapps.poll',
     'nablapps.contact',
     'nablapps.officeCalendar',
+    'nablapps.qrTickets',
     'nablaweb',
 
     ###########################
@@ -130,6 +131,7 @@ INSTALLED_APPS = [
     'markdown_deux',
     'sekizai', # http://django-sekizai.readthedocs.org/en/latest/#
     'qr_code',
+    'multi_email_field',
 
     # Djangoting
     'django.contrib.admin',

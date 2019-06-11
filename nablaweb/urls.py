@@ -46,6 +46,7 @@ urlpatterns = [
     url(r'^podcast/', include('nablapps.podcast.urls')),
     url(r'^poll/', include('nablapps.poll.urls')),
     url(r'^referater/', include('nablapps.meeting_records.urls')),
+    url(r'^qrTickets/', include('nablapps.qrTickets.urls')),
     url(r'^search/$', search_view_factory(view_class=SearchView,
                                           form_class=ModelSearchForm,
                                           searchqueryset=sqs), name='haystack_search'),

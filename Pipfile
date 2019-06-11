@@ -26,6 +26,7 @@ bpc-client = {editable = true,ref = "556ede6bd15b4296b1f2a29730ad6e5f00b27428",g
 django-node-assets = "*"
 markdown = "*"
 django-qr-code = "*"
+django-multi-email-field = "*"
 
 [dev-packages]
 pylint = "*"

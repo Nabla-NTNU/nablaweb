@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a9f62620b6f2c7e6a612241d45bd1bd6077d843893107eb784a469fe88c1448f"
+            "sha256": "a87c2fe1f59202307c4fa4e217012f761696f35bf619d0354a067eac041909e9"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -122,6 +122,14 @@
                 "sha256:689a04cce0981671d6061a9928c33a16b47abb0d4cd43cf7dec31ae284fdae9d"
             ],
             "version": "==0.9.1"
+        },
+        "django-multi-email-field": {
+            "hashes": [
+                "sha256:4a00cdfe924e572ca2df8bec71da777d04d83c73a3204a7fdf095e13afb4f0b4",
+                "sha256:7d4bc22c1c47d0a321f2068bbb1dc1f29bd91dfb3754a2609e2016b401b781ca"
+            ],
+            "index": "pypi",
+            "version": "==0.5.1"
         },
         "django-node-assets": {
             "hashes": [
