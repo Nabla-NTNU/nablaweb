@@ -30,7 +30,14 @@ def generate_tickets(request):
 
 
 def register_tickets(request, qr_event_id, qr_ticket_id):
-    context = {'heh': 2}
-    return render(request, 'qrTickets/register.html', context)
+    if request.method == 'GET':
+        context = {'event_id': qr_event_id, 'ticket_id': qr_ticket_id,}
+        return render(request, 'qrTickets/register.html', context)
+    else:
+        qr_event = QrEvent.objects.get(pk=qr_event_id)
+        qr_ticket = qr_event.ticket_set.get(pk=qr_ticket_id)
+        qr_ticket.register()
+        qr_ticket.save()
+        return HttpResponse('Billett registrert!')
 
 

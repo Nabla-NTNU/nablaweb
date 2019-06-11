@@ -15,11 +15,18 @@ class QrEvent(models.Model):
 
 
 class QrTicket(models.Model):
-    event = models.ForeignKey(QrEvent, on_delete=models.CASCADE)
+    event = models.ForeignKey(QrEvent, on_delete=models.CASCADE, related_name='ticket_set')
     email = models.EmailField(blank=False)
-    
-    def get_email(self):
-        return self.email
+    registered = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.email
+    
+
+    def get_email(self):
+        return self.email
+
+
+    def register(self):
+        self.registered = True
