@@ -184,10 +184,21 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
         """Returns a string with the classes that the event is open for
         Ignores all other open_for-rules, ie. other groups"""
         classes = self.open_for.filter(nablagroup__group_type='kull').order_by('name')
+        if not classes:
+            return "Alle"
+
         max_class = classes.first().name
         min_class = classes.last().name
 
-        return max_class + " - " + min_class
+        # Edge-case, but check if the sequence of open-for classes has 'gaps'
+        # All classes are end with their starting year, ie. kull17
+        class_span = int(min_class[-2:]) - int(max_class[-2:])
+        no_gaps = len(classes) == class_span + 1
+
+        if no_gaps:
+            return max_class + " - " + min_class
+        else:
+            return ", ".join([c.name for c in classes])
 
 def attending_events(user, today):
     """Get the future events attended by a user"""
