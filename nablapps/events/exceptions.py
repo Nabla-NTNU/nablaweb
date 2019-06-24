@@ -11,8 +11,8 @@ class EventException(Exception):
 
 class UserRegistrationException(EventException):
     """Base class for exceptions that can be raised when a user trys to register for an event"""
-    def __init__(self, event=None, user=None):
-        super().__init__()
+    def __init__(self, *args, event=None, user=None):
+        super().__init__(*args)
         self.event = event
         self.user = user
 

@@ -35,6 +35,10 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
         on_delete=models.CASCADE,
         help_text="Kun relevant for bedriftspresentasjoner.")
 
+    # Panalty system:
+#    penalty_limit = models.IntegerField(help_text="Maks antall prikker før en bruker ikke får melde seg på", default=True)
+#    penalty_time_limit = models.IntegerField(help_text="Antall dager bak i tid man skal lete etter prikker", default=100)
+
     def clean(self):
         if self.is_bedpres and self.company is None:
             raise ValidationError("Company must be set when 'is_bedpres' is True!")

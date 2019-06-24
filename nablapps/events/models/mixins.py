@@ -11,6 +11,7 @@ from django.contrib.auth.models import Group
 from six.moves.urllib.parse import urlparse
 from ..exceptions import (RegistrationNotRequiredException,
                           RegistrationNotAllowed, RegistrationNotOpen)
+from .eventregistration import EventRegistration
 
 
 class EventInfoMixin(models.Model):
@@ -139,3 +140,5 @@ class RegistrationInfoMixin(models.Model):
             raise RegistrationNotOpen(event=self, user=user)
         elif not self.allowed_to_attend(user):
             raise RegistrationNotAllowed(event=self, user=user)
+        elif EventRegistration.objects.filter(penalty=True, user=user).exists():
+            raise RegistrationNotAllowed("Du har prikk!", event=self, user=user)

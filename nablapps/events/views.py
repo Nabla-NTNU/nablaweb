@@ -237,8 +237,9 @@ class RegisterUserView(LoginRequiredMixin,
             reg = self.get_object().register_user(user)
         except EventFullException:
             return "Arrangementet er fullt"
-        except RegistrationNotAllowed:
-            return 'Du har ikke lov til å melde deg på dette arrangementet.'
+        except RegistrationNotAllowed as e:
+            # Include e to allow more precise reason for NotAllowed
+            return 'Du har ikke lov til å melde deg på dette arrangementet. ' + str(e)
         except RegistrationNotOpen:
             return 'Påmeldingen er ikke åpen.'
         except RegistrationAlreadyExists:
