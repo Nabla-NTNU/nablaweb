@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load qr_code %}
+
+{% block content %}
+<h1> Din billett: </h1>
+
+{% qr_from_text '{{ ticket_url }}' size="M" image_format="png" %}
+<h1>{{ ticket_url }}</h1>
+{% endblock %}
+
+
