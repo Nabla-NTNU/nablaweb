@@ -43,7 +43,8 @@ class FrontPageView(FlatPageMixin, TemplateView):
         context['album_list'] = Album.objects.exclude(visibility='h').order_by('-last_changed_date')[:4]
         context['new_blog'] = BlogPost.objects.exclude(list_image=None).order_by('-created_date')[:4]
 
-        context['newuser_popup'] = False if self.request.user.is_authenticated else True
+        # Uncomment when fadderperiode to display new student popup.
+        #context['newuser_popup'] = False if self.request.user.is_authenticated else True
 
         return context
 
