@@ -56,31 +56,71 @@
     </head>
 
     <body>
+
 <!-- Pop up window displaying important information about the 'fadderperiode' -->
-	{% if newuser_popup %}
-	<div id="new_student_info">
-	  <h2>Ny student?</h2>
-	  <div class="close_button" onclick="this.parentNode.classList.add('hidden');">Lukk meg</div>
-	  <p>
-	    Nabla er linjeforeningen for alle studenter ved sivilingeniørprogrammet i fysikk og matematikk. Vi har et heidundranes fadderopplegg som vi håper du vil ta del i! Det er derfor veldig viktig at du trykker på knappen under og registrerer deg!
-	    <br />
-	    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ9L6WnlyGTlfl3tauTFs0QGlUa20qwq4_aPgELNmmtA-8TQ/viewform?usp=sf_link" target="_blank" target="_blank" class="btn btn-primary center-block btn-lg">Trykk her for påmelding til fadderperioden - <u>viktig!</u></a>
-	    Registreringen tar 10 sekunder, og vi understreker igjen at det er viktig at du gjør dette! Gjør dette nå, og så kan du lese resten av informasjonen senere.
-	    <br />
-	    <br />
-	    Mer informasjon om fadderopplegget finnes <a href="nystudent">her.</a><br>
-        Meld deg også inn i facebook-gruppen for fadderperioden 2019 <a href="https://www.facebook.com/groups/2050067498621475/"> her.</a><br>
-        <b>New international student?</b> Read more about Nabla on our english pages <a href="english">here.</a>
-        </p>
-        <img src="https://nabla.no/media/uploads/news_pictures/56478616_305187903480871_3493708702748246016_n.jpg" style="width: 100%;" height="400">
-        <br>
-        <br>
-	  <span class="GDPRinfo">Grunnet nye personvernsregler i EU, GDPR, kan ikke universitetet gi ut lister over nye studenter til Nabla. Derfor må du som ny student oppgi kontaktopplysninger selv.</span>
-	</div>
+    {% if newuser_popup %}
+        <!-- Show the modal on page load-->
+        <script type="text/javascript">
+            $(window).on('load',function(){
+                $('#exampleModalLong').modal('show');
+            });
+        </script>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLongTitle">Ny student?
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Nabla er linjeforeningen for alle studenter ved sivilingeniørprogrammet i fysikk og matematikk.
+                            Vi har et heidundranes fadderopplegg som vi håper du vil ta del i!
+                            Det er derfor veldig viktig at du trykker på knappen under og registrerer deg!
+                        </p>
+                        <br>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ9L6WnlyGTlfl3tauTFs0QGlUa20qwq4_aPgELNmmtA-8TQ/viewform?usp=sf_link"
+                           class="btn btn-primary center-block btn-lg"
+                           style="white-space:normal">
+                            Trykk her for påmelding til fadderperioden - <b>viktig!</b>
+                        </a>
+                        <br>
+                        <p>
+                            Registreringen tar 10 sekunder, og vi understreker igjen at det er viktig at du gjør dette!
+                            Gjør dette nå, og så kan du lese resten av informasjonen senere.
+                        </p>
+                        <br>
+                        <div class="list-group-flush">
+                            <a href="nystudent" class="list-group-item list-group-item-action" style="color:black">
+                                Mer informasjon om fadderopplegget finner du ved å trykke her.
+                            </a>
+                            <a href="https://www.facebook.com/groups/2050067498621475/" class="list-group-item list-group-item-action"style="color:black">
+                                Meld deg også inn i facebook-gruppen for fadderperioden 2019 ved å trykke her.
+                            </a>
+                            <a href="english" class="list-group-item list-group-item-action"style="color:black">
+                                <b>New international student?</b> Read more about Nabla on our english pages by cliking here.
+                            </a>
+                        </div>
+                        <br>
+                        <img src="https://nabla.no/media/uploads/news_pictures/56478616_305187903480871_3493708702748246016_n.jpg" style="width: 100%;">
+                        <small>
+                            Grunnet nye personvernsregler i EU, GDPR, kan ikke universitetet gi ut lister over nye studenter til Nabla.
+                            Derfor må du som ny student oppgi kontaktopplysninger selv.
+                        </small>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 	{% endif %}
-
-<!-- New student pop-up end -->
-
 
     <div id = "content">
         <!-- Navigation -->
