@@ -43,7 +43,7 @@ class GenerateTicketsView(PermissionRequiredMixin, View):
                 ticket.save()
 
                 subject = 'din nablabillett' #noe mer spes etterhvert
-                message = 'Din billett til ' + str(ticket.event) + 'finner du her:\n'
+                message = 'Din billett til ' + str(ticket.event) + ' finner du her:\n'
                 link = 'localhost:8000/qrTickets/render/' + str(qr_event.id) + '/' + ticket.ticket_id
                 message += link
                 
