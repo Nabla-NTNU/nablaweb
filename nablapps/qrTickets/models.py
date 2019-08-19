@@ -35,3 +35,9 @@ class QrTicket(models.Model):
 
     def get_ticket_id(self):
         return self.ticket_id
+
+    class Meta:
+        permissions = [
+            ("generate_tickets", "can generate qr tickets"),
+            ("register_tickets", "can register qr tickets"),
+            ]

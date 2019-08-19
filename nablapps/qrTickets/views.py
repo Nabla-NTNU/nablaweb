@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.mail import send_mail, BadHeaderError
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.views import View
 
 from .models import QrTicket, QrEvent
 from .forms import EmailForm
@@ -19,13 +21,15 @@ def render_ticket(request, qr_event_id, qr_ticket_id):
     return render(request, 'qrTickets/render.html', context)
 
 
-def generate_tickets(request):
-    # Make login reuired
-    if request.method == 'GET':
+class GenerateTicketsView(PermissionRequiredMixin, View):
+    permission_required = "qrTickets.generate_tickets"
+    def get(self, request):
         email_form = EmailForm()
         context = {'email_form': email_form}
         return render(request, 'qrTickets/generate.html', context)
-    else:
+
+
+    def post(self, request):
         email_form = EmailForm(request.POST)
         if email_form.is_valid():
             emails = email_form.get_emails()
@@ -50,12 +54,13 @@ def generate_tickets(request):
             return HttpResponse("Billetter generert og send på epost!")
 
 
-def register_tickets(request, qr_event_id, qr_ticket_id):
-    #make login required
-    if request.method == 'GET':
+class RegisterTicketsView(PermissionRequiredMixin, View):
+    permission_required = "qrTickets.register_tickets"
+    def get(self, request, qr_event_id, qr_ticket_id):
         context = {'event_id': qr_event_id, 'ticket_id': qr_ticket_id,}
         return render(request, 'qrTickets/register.html', context)
-    else:
+ 
+    def post(self, request, qr_event_id, qr_ticket_id):
         qr_event = QrEvent.objects.get(pk=qr_event_id)
         try:
             qr_ticket = qr_event.ticket_set.get(ticket_id=qr_ticket_id)
