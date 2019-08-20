@@ -16,7 +16,7 @@ def test(request):
 
 
 def render_ticket(request, qr_event_id, qr_ticket_id):
-    ticket_url = 'localhost:8000/qrTickets/register/' + str(qr_event_id) + '/' + str(qr_ticket_id)
+    ticket_url = 'nabla.no/qrTickets/register/' + str(qr_event_id) + '/' + str(qr_ticket_id)
     context = {'ticket_url': ticket_url}
     return render(request, 'qrTickets/render.html', context)
 
@@ -44,7 +44,7 @@ class GenerateTicketsView(PermissionRequiredMixin, View):
 
                 subject = 'din nablabillett' #noe mer spes etterhvert
                 message = 'Din billett til ' + str(ticket.event) + ' finner du her:\n'
-                link = 'localhost:8000/qrTickets/render/' + str(qr_event.id) + '/' + ticket.ticket_id
+                link = 'nabla.no/qrTickets/render/' + str(qr_event.id) + '/' + ticket.ticket_id
                 message += link
                 
                 try:
@@ -64,10 +64,11 @@ class RegisterTicketsView(PermissionRequiredMixin, View):
         qr_event = QrEvent.objects.get(pk=qr_event_id)
         try:
             qr_ticket = qr_event.ticket_set.get(ticket_id=qr_ticket_id)
+            if qr_ticket.registered:
+                return HttpResponse('Allerede registrert. Billetten er oppbrukt.')
             qr_ticket.register()
             qr_ticket.save()
         except QrTicket.DoesNotExist:
             return HttpResponse('Ikke en gyldig billett!')
         return HttpResponse('Billett registrert!')
-
 
