@@ -11,13 +11,15 @@ import random, string
 
 
 def test(request):
-    context = {'hehe': 3}
+    string_list = ['aaa', 'bbb', 'ccc']
+    context = {'hehe': 3, 'string_list': string_list}
     return render(request, 'qrTickets/test.html', context)
 
 
 def render_ticket(request, qr_event_id, qr_ticket_id):
     ticket_url = 'nabla.no/qrTickets/register/' + str(qr_event_id) + '/' + str(qr_ticket_id)
-    context = {'ticket_url': ticket_url}
+    url_list = [ticket_url]
+    context = {'ticket_url': ticket_url, 'url_list': url_list}
     return render(request, 'qrTickets/render.html', context)
 
 

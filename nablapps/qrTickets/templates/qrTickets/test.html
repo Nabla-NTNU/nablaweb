@@ -4,6 +4,10 @@
 {% block content %}
 <h1> QR-kodetest </h1>
 
+{% for string in string_list %}
+    {% qr_from_text string size="T" image_format="png" %}
+{% endfor %}
+
 
 {% qr_from_text "nabla.no" size="T" image_format="png" %}
 {% endblock %}

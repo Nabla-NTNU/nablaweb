@@ -5,7 +5,9 @@
 <h1> Din billett: </h1>
 
 <h2> Scan QR-koden: </h2>
-{% qr_from_text '{{ ticket_url }}' size="M" image_format="png" %}
+{% for url in url_list %}
+    {% qr_from_text url size="M" image_format="png" %}
+{% endfor %}
 
 <h2> Eller følg denne url-en: </h2>
 <h3>{{ ticket_url }}</h3>
