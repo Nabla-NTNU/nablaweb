@@ -33,9 +33,10 @@ class OfficeEvent(models.Model):
         hours, minutes = self.duration.seconds/3600, (self.duration.seconds//60)%60
 
         if hours < 1:
-            return f"{minutes} minutter"
+            plural_suffix_minute = '' if minutes == 1 else 'er'
+            return f"{minutes} minutt{plural_suffix_minute}"
 
-        plural_suffix = '' if hours == 1 else 'r'
+        plural_suffix = '' if round(hours) == 1 else 'r'
         return f"{hours:.1g} time{plural_suffix}"
 
     def clean(self):
