@@ -1,5 +1,4 @@
 /* MAIN */
-
 body {
   margin-top: 80px;
 }
@@ -249,6 +248,22 @@ h3 a, h3 a:hover, h3 a:active, h3 a:focus{
         footer .kontakt table td:first-child {
             color: white;
         }
+
+
+/* Social icons in footer */
+.social-icon {
+    margin-right: 8px;
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+.social-icon:last-child {
+    margin-right: 0px;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+}
 
 /* COMMENTS */
     .comments-header {
