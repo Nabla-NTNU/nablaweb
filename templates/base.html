@@ -181,6 +181,7 @@
                                     <li><a href="{% url 'wiki:get' 'lovverk/nablas-lover/' %}">Nablas Lover</a></li>
                                     <li><a href="{% url 'wiki:get' 'lovverk/nablas-forskrifter/' %}">Nablas Forskrifter</a></li>
                                     <li><a href="{% url 'contact' %}">Kontakt</a></li>
+                                    <li><a href="{% url 'contact' %}">Varslingsskjema</a></li>
                                     {# Hent alle sider som starter på /om/ #}
                                     {% get_flatpages '/om/' as about_pages %}
                                     {% for page in about_pages %}
@@ -310,6 +311,8 @@
                         <h2>Kontakt</h2>
 
                         <p>Du kan nå oss på <a class="email" href="mailto:nabla@nabla.ntnu.no">nabla@nabla.ntnu.no</a></p>
+
+                        <p> Varslingsskjema finner du <a href="/contact/"> her.</a></p>
 
                         <p>Bedrift? Kontakt Bedriftskontakten Nabla på <a class="email" href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no</a></p>
 
