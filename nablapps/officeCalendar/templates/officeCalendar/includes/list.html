@@ -10,7 +10,8 @@ office_events is a dictionary with weekday as key and a list of events as value
  /* Office calendar */
  #office_calendar th {
      border-bottom: 1px solid lightgray;
-     padding: 0px 10px;
+     padding-left: 10px;
+     padding-top: 2px;
  }
 
  #office_calendar th.no_border {
@@ -18,7 +19,10 @@ office_events is a dictionary with weekday as key and a list of events as value
  }
 
  #office_calendar td {
-    padding: 0px 15px 4px;
+    padding-top: 2px;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 2px;
  }
 
  #office_calendar tr.event.has_description {
@@ -28,22 +32,20 @@ office_events is a dictionary with weekday as key and a list of events as value
  #office_calendar {
      table-layout: fixed;
      width: 100%;
-     border-bottom: 5px solid black;
-     border-top: 5px solid black;
+     border-top: 4px solid black;
+     border-bottom: 1px solid #D0D0D0;
      border-left: 1px solid #D0D0D0;
      border-right: 1px solid #D0D0D0;
      box-shadow:  0 0 2px rgba(0, 0, 0, 0.24);
-     word-break: break-all;
  }
-
 
 </style>
 {% endaddtoblock %}
 
 <table id="office_calendar">
     <col width="20%">
-    <col width="50%">
-    <col width="30%">
+    <col width="55%">
+    <col width="25%">
     <tr >
         <th colspan="3" class="no_border"> <h4><b>Kontoret denne uka:</b></h4> </th>
     </tr>
