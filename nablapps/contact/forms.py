@@ -4,10 +4,10 @@ from django import forms
 
 
 class FeedbackForm(forms.Form):
-    your_name = forms.CharField(label='Ditt navn:', max_length=100, required=True)
-    subject = forms.CharField(label='Emne:', max_length=100, required=True)
+    your_name = forms.CharField(label='Ditt navn:', max_length=100, required=False)
+    subject = forms.CharField(label='Emne:', max_length=100, required=False)
     message = forms.CharField(label='Melding:', widget=forms.Textarea, required=True)
-    email = forms.EmailField(label='Din e-post:', max_length=100, required=True)
+    email = forms.EmailField(label='Din e-post:', max_length=100, required=False)
     spam_check = forms.FloatField(max_value=20, required=True)
     right_answer = forms.FloatField(max_value=20, required=True, widget=forms.HiddenInput())
 

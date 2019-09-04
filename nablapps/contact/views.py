@@ -18,6 +18,7 @@ def contact(request):
         return render(request, 'contact/contact.html', context)
     else:
         contact_form = ContactForm(request.POST)
+        
         if contact_form.is_valid():
             #spam check
             if contact_form.get_right_answer() == contact_form.get_answer():
@@ -40,13 +41,12 @@ def contact(request):
                 context = make_contact_context(request, spam_check, test_val)
                 return render(request, 'contact/contact.html', context)
 
-
-def feedback(request):
+def feedback(request, template = 'feedback.html', send_to="webkom@nabla.ntnu.no"):
     spam_check = False
     if request.method != 'POST':
         test_val = random.randint(0,20)
         context = make_feedback_context(request, spam_check, test_val)
-        return render(request, 'contact/feedback.html', context)
+        return render(request, 'contact/' + template, context)
     else:
         feedback_form = FeedbackForm(request.POST)
         if feedback_form.is_valid():
@@ -55,7 +55,7 @@ def feedback(request):
                 #Sends mail
                 subject, message, email = feedback_form.process()
                 try:
-                    send_mail(subject, message, email, ["webkom@nabla.ntnu.no"], fail_silently=False)
+                    send_mail(subject, message, email, [send_to], fail_silently=False)
                 except BadHeaderError:
                     return HttpResponse('Invalid header found')
                 return HttpResponseRedirect('/contact/success/')
@@ -63,7 +63,7 @@ def feedback(request):
                 spam_check = True
                 test_val = random.randint(0,20)
                 context = make_feedback_context(request, spam_check, test_val)
-                return render(request, 'contact/feedback.html', context)
+                return render(request, 'contact/' + template, context)
 
 
 def success(request):
