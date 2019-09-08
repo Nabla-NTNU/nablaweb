@@ -6,10 +6,17 @@ from django.contrib.auth.views import login_required
 from django.http import Http404
 
 from datetime import datetime
+from uuid import uuid4
 from braces.views import FormMessagesMixin, LoginRequiredMixin
 
 from ..models.quiz import Quiz, QuizReply, QuizScoreboard, QuizReplyTimeout
 from .mixins import ObjectOwnerMixin
+
+
+# Key in the user' session used to store start-times for quizes
+QUIZREPLIES_SESSIONKEY = "quizreplies_timestamps"
+# Date format used to store datetimes in the users' session
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 
 class QuizListView(LoginRequiredMixin, ListView):
@@ -41,23 +48,64 @@ class QuizView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        QuizReply.objects.create(
-            user=self.request.user,
-            scoreboard=self.object.scoreboard,
-            start=datetime.now(),
-            when=datetime.now()
-        )
+
+        # Generate a unique id for the quizreply and store it on the view
+        # This is later sent with the user's POST request as a hidden value
+        self.quiz_reply_id = uuid4().hex
+
+        # Create the dict for id, start-time pairs if it does not exist yet
+        if QUIZREPLIES_SESSIONKEY not in self.request.session:
+            self.request.session[QUIZREPLIES_SESSIONKEY] = {}
+
+        # Store the quizreply id in the users session along with
+        # its corresponding start-time
+        # The time is converted to a string because a datetime object isn't
+        # JSON-serializable, and can't be stored in the session
+        self.request.session[QUIZREPLIES_SESSIONKEY][self.quiz_reply_id] = \
+            datetime.strftime(datetime.now(), DATE_FORMAT)
+
+        # Mark the session as modified, because we are modifying a nested object
+        self.request.session.modified = True
+
         return context
 
 
 @login_required
 def quiz_reply(request, pk):
+    if QUIZREPLIES_SESSIONKEY not in request.session:
+        # This entry in the session is created when the user starts the quiz.
+        # Could be missing if the users session is invalidated while they are
+        # taking the quiz, or there is foul play.
+        messages.info(request, "Beklager, det har oppstått en feil. (Brukte du for lang tid?)")
+        return redirect('/quiz')
+
+    quiz_reply_id = request.POST.get("quiz_reply_id")
+
+    if quiz_reply_id not in request.session[QUIZREPLIES_SESSIONKEY]:
+        # The quiz reply id submitted with the POST request is invalid.
+        # Most likely foul play.
+        messages.info(request, "Beklager, det har oppstått en feil.")
+        return redirect('/quiz')
+
+    # Get the start-time of the submitted quizreply
+    starttimestring = request.session[QUIZREPLIES_SESSIONKEY][quiz_reply_id]
+    # Converted to a datetime
+    startdatetime = datetime.strptime(starttimestring, DATE_FORMAT)
+
+    # Remove the id and mark the session as modified
+    del request.session[QUIZREPLIES_SESSIONKEY][quiz_reply_id]
+    request.session.modified = True
+
     quiz = get_object_or_404(Quiz, id=pk)
     questions = quiz.questions.all()
-    reply = QuizReply.objects.filter(
+
+    # Create the reply
+    reply = QuizReply.objects.create(
         user=request.user,
-        scoreboard=quiz.scoreboard
-    ).order_by('-when')[0]
+        scoreboard=quiz.scoreboard,
+        start=startdatetime,
+        when=startdatetime
+    )
 
     answers = (request.POST.get(f"{q.id}_alternative") for q in questions)
 
