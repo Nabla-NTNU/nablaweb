@@ -99,6 +99,19 @@ def quiz_reply(request, pk):
     quiz = get_object_or_404(Quiz, id=pk)
     questions = quiz.questions.all()
 
+    answers = (request.POST.get(f"{q.id}_alternative") for q in questions)
+
+    q_and_a = [
+        (q, int(answer))
+        for q, answer in zip(questions, answers)
+        if answer is not None
+    ]
+
+    if len(q_and_a) == 0:
+        # User didn't answer any questions -> deny the reply
+        messages.info(request, "Du må svare på minst ett spørsmål!")
+        return redirect('/quiz')
+
     # Create the reply
     reply = QuizReply.objects.create(
         user=request.user,
@@ -107,13 +120,6 @@ def quiz_reply(request, pk):
         when=startdatetime
     )
 
-    answers = (request.POST.get(f"{q.id}_alternative") for q in questions)
-
-    q_and_a = [
-        (q, int(answer))
-        for q, answer in zip(questions, answers)
-        if answer is not None
-    ]
     try:
         reply.add_question_replies(q_and_a)
     except QuizReplyTimeout:
