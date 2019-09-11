@@ -1,5 +1,12 @@
 """
 Custom seed script for nablaweb
+Currently creates (11.09.2019):
+    SuperUser (u: admin, p: admin)
+    NablaGroup
+    FysmatClass
+    NablaUser
+    News
+    Events
 """
 import random
 import textwrap
@@ -12,18 +19,21 @@ from nablapps.events.models import Event
 from nablapps.news.models import NewsArticle, FrontPageNews
 
 
-fake = Factory.create('no_NO')
+fake = Factory.create('no_NO') # Norwegian sentences
 
-random.seed()
+random.seed() # Initialize random seed generator
 
 def g():
+    """ A lot of random text """
     return fake.text()
 
 
 def s():
+    """ Short random string """
     return textwrap.shorten(fake.sentence(), width=40)
 
 def ss():
+    """ Longer random string """
     return textwrap.shorten(fake.sentence(), width=20)
 
 class Command(BaseCommand):
