@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from braces.views import LoginRequiredMixin, FormMessagesMixin
 
-from .forms import PollForm
+from .forms import PollForm, ChoiceFormSet
 from .models import Poll, Choice, UserHasVoted
 
 
@@ -66,7 +66,6 @@ class UserPollsView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = PollForm()
         user = self.request.user
         for poll in context['poll_list']:
             poll.voted = poll.user_has_voted(user)

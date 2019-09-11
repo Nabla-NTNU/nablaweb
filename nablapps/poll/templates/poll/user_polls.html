@@ -11,6 +11,8 @@ Mine avstemninger
 
 {% block content %}
 
+<h3><a class="btn btn-primary" href="{% url "poll_user_create" %}">Lag en ny avstemning</a></h3>
+
 <h1>Mine avstemninger</h1>
 
 {% for poll in poll_list %}
@@ -43,27 +45,8 @@ Ingen brukeravstemninger her enda.
 
 {% include "includes/pagination.html" %}
 
-<h3>Lag en ny poll.</h3>
-<form id="create" method="post" action="{% url "poll_user_create" %}" >
-{% csrf_token %}
-{% bootstrap_form form %}
-<button id="add-alternative" class="btn btn-lg" type="button">Legg til alternativ</button>
-<button class="btn btn-lg btn-primary" type="submit">Publiser</button>
-</form>
-
-<script>
-    $('#add-alternative').on("click", function () {
-    var i = $('#create input:last').attr("id");
-    i = parseInt(i.substring(10, i.length))+1;
-    $('<div class="form-group"><label class="control-label" for="id_choice_'+i+'">Alternativ '+
-    i+'</label><input class="form-control" id="id_choice_'+i
-    +'" maxlength="80" name="choice_'+i+'" placeholder="Alternativ '+i
-    +'" title="" type="text"></div>'
-    ).insertBefore(this);
-    });
-</script>
 
 {% endblock %}
-{% block sidebar %}
 
+{% block sidebar %}
 {% endblock %}
