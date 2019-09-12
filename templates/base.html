@@ -180,8 +180,6 @@
                                     <li><a href="{% url 'nablashop:index' %}" >Nablashop</a></li>
                                     <li><a href="{% url 'wiki:get' 'lovverk/nablas-lover/' %}">Nablas Lover</a></li>
                                     <li><a href="{% url 'wiki:get' 'lovverk/nablas-forskrifter/' %}">Nablas Forskrifter</a></li>
-                                    <li><a href="{% url 'contact' %}">Kontakt</a></li>
-                                    <li><a href="{% url 'contact' %}">Varslingsskjema</a></li>
                                     {# Hent alle sider som starter på /om/ #}
                                     {% get_flatpages '/om/' as about_pages %}
                                     {% for page in about_pages %}
@@ -206,6 +204,7 @@
 
                                 </ul>
                             </li>
+                            <li><a href="/contact/">Kontakt og varsling</a></li>
                         </ul>
                         {# end navigasjonslenker #}
                         <form class="form-inline" id="searchtop" method="get" action="{% url "haystack_search" %}">
