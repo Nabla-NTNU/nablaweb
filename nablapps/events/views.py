@@ -268,23 +268,32 @@ class RegisterAttendanceView(DetailView):
     model = Event
     template_name = "events/register_attendance.html"
 
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         attending = EventRegistration.objects.filter(event=self.object, attending=True)
         redirection = redirect(self.request.resolver_match.view_name, kwargs.pop('pk', 1))
 
         # Give all attending penalty and return
-        if 'activate_penalties' in request.POST:
-            attending.update(penalty=True)
-            return redirection
+        # if 'activate_penalties' in request.POST:
+        #    attending.update(penalty=1)
+        #    return redirection
 
-        # Register given list
-        user_penalty_list = []
-        for q in request.POST: # Generate list over users to get a penalty
-            if q.startswith('user_penalty'):
-                user_penalty_list.append(request.POST[q])
-        attending.update(penalty=False)
-        attending.filter(pk__in=user_penalty_list).update(penalty=True)
+        # # Register given list
+        # user_penalty_list = []
+        # for q in request.POST: # Generate list over users to get a penalty
+        #     if q.startswith('user_penalty'):
+        #         user_penalty_list.append(request.POST[q])
+#        attending.update(penalty=0)
+        # attending.filter(pk__in=user_penalty_list).update(penalty=True)
+
+        for q in request.POST:
+            if q.startswith('user_penalty_'):
+                pk = q.split('_')[-1]
+                penalty_value = request.POST[q]
+                reg_req = attending.get(pk=pk)
+                reg_req.penalty = penalty_value
+                reg_req.save()
 
         # Register given card key
         attendance_form = RegisterAttendanceForm(request.POST)
@@ -296,7 +305,7 @@ class RegisterAttendanceView(DetailView):
         if card_key is not None:
             user = NablaUser.objects.get_from_rfid(card_key)
             reg = EventRegistration.objects.get(user=user, event=self.object)
-            reg.penalty = False
+            reg.penalty = 0
             reg.save()
 
         return redirection
@@ -308,6 +317,16 @@ class RegisterAttendanceView(DetailView):
         registrations = event.eventregistration_set.filter(attending=True)
         context['registrations'] = registrations.order_by('user__first_name')
         context['form'] = RegisterAttendanceForm()
+
+        # Penalty rules represents the different options for penalties
+        # It is a dict with the following signature:
+        # {rule_name(string): rule(dict)}, where rule is
+        # {option_name(string), option_penalty_count(int)}
+
+        penalty_rules = {'bedpres': {'Oppmøte': 0, 'Oppmøte for seint': 1, 'Ikke møtt opp': 2},
+                         'arr_med_betaling' : {'Betalt': 0, 'Betalt etter purring': 1, 'Ikke betalt': 4},
+                         'arr_uten_betaling': {'Møtt opp': 0, 'Ikke møtt opp': 1}}
+        context['rules'] = list(penalty_rules.values())[2]
         return context
 
 

@@ -36,9 +36,9 @@ class EventRegistration(models.Model):
         null=False,
         help_text="Hvis denne er satt til sann har man en plass "
                   "på arrangementet ellers er det en ventelisteplass.")
-    penalty = models.BooleanField(
-        verbose_name="Prikk for å ikke møte opp",
-        default=False,
+    penalty = models.IntegerField(
+        verbose_name="Prikk",
+        default=0,
         blank=True)
     class Meta:
         verbose_name = 'påmelding'

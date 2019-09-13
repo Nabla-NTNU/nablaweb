@@ -13,32 +13,36 @@
 <hr />
 
 <!-- Button giving all users a penalty -->
-<form method="post">{% csrf_token %}
-    <input type="hidden" name="activate_penalties">
-    <button type="button" id="activate">Aktiver prikker</button>
-    <button type="submit" id="activate_confirm">Sikker?</button><!-- Hidden, see script below -->
-    <label>Gir alle påmeldte en prikk. </label>
-    <script>
+<!-- <form method="post">{% csrf_token %}
+     <input type="hidden" name="activate_penalties">
+     <button type="button" id="activate">Aktiver prikker</button>
+     <button type="submit" id="activate_confirm">Sikker?</button>
+     <label>Gir alle påmeldte en prikk. </label>
+     <script>
      $("#activate_confirm").hide();
      $("#activate").on("click", function(event) {
-         $("#activate_confirm").slideToggle();
+     $("#activate_confirm").slideToggle();
      });
-    </script>
-</form>
-<br />
-
+     </script>
+     </form>
+     <br />
+-->
 
 <form method="post">{% csrf_token %}
 {{ form }}
 <table id="attending_list">
     <tr>
         <th>Bruker</th>
-        <th>Prikk?</th>
+        {% for rule in rules %}
+        <th>{{ rule }}</th>
+        {% endfor %}
     </tr>
     {% for registration in registrations %}
     <tr>
         <td><label for="user_penalty_{{registration.pk}}">{{ registration.user.get_full_name }}</label></td>
-        <td><input type="checkbox" id="user_penalty_{{registration.pk}}" name="user_penalty_{{registration.pk}}" value="{{ registration.pk }}"  {% if registration.penalty %}checked{% endif %}></td>
+        {% for penalty in rules.values %}
+        <td><input type="radio" name="user_penalty_{{registration.pk}}" value="{{ penalty }}" {% ifequal registration.penalty penalty %}checked{% endifequal %}></td>
+        {% endfor %}
     </tr>
     {% endfor %}
 </table>
