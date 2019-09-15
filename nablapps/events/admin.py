@@ -32,6 +32,7 @@ class EventAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
               "event_start",
               "event_end",
               "registration_required",
+              "penalty",
               "registration_deadline",
               "registration_start",
               "deregistration_deadline",

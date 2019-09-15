@@ -323,10 +323,7 @@ class RegisterAttendanceView(DetailView):
         # {rule_name(string): rule(dict)}, where rule is
         # {option_name(string), option_penalty_count(int)}
 
-        penalty_rules = {'bedpres': {'Oppmøte': 0, 'Oppmøte for seint': 1, 'Ikke møtt opp': 2},
-                         'arr_med_betaling' : {'Betalt': 0, 'Betalt etter purring': 1, 'Ikke betalt': 4},
-                         'arr_uten_betaling': {'Møtt opp': 0, 'Ikke møtt opp': 1}}
-        context['rules'] = list(penalty_rules.values())[2]
+        context['rules'] = event.penalty_rules[event.penalty]
         return context
 
 

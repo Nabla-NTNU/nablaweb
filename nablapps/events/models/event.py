@@ -7,7 +7,7 @@ from django.db import IntegrityError, models
 from django.core.exceptions import ValidationError
 
 from ..exceptions import RegistrationAlreadyExists, EventFullException, DeregistrationClosed
-from .eventregistration import EventRegistration
+from  .eventregistration import EventRegistration
 
 from nablapps.core.models import (
     TimeStamped,
@@ -24,6 +24,15 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
     Dukker opp som nyheter på forsiden.
     """
 
+    penalty_rules = {'Bedpres': {'Oppmøte': 0, 'Oppmøte for seint': 1, 'Ikke møtt opp': 2},
+                     'Arrangement med betaling': {'Betalt': 0, 'Betalt etter purring': 1, 'Ikke betalt': 4},
+                     'Arrangement uten betaling': {'Møtt opp': 0, 'Ikke møtt opp': 1}}
+
+    penalty = models.CharField(
+        max_length=40,
+        choices=zip(penalty_rules.keys(), penalty_rules.keys())
+    )
+
     is_bedpres = models.BooleanField(default=False)
 
     # Company is required if is_bedpres is True, see clean()
@@ -34,10 +43,6 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
         null=True, 
         on_delete=models.CASCADE,
         help_text="Kun relevant for bedriftspresentasjoner.")
-
-    # Panalty system:
-#    penalty_limit = models.IntegerField(help_text="Maks antall prikker før en bruker ikke får melde seg på", default=True)
-#    penalty_time_limit = models.IntegerField(help_text="Antall dager bak i tid man skal lete etter prikker", default=100)
 
     def clean(self):
         if self.is_bedpres and self.company is None:
