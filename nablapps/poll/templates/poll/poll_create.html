@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load cache %}
+{% load markdown_deux_tags %}
+{% load sekizai_tags %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block title %}
+Ny avstemning
+{% endblock %}
+
+{% block content %}
+
+<legend><h1>Ny avstemning</h1></legend>
+
+<form action="" method="post">
+	{% csrf_token %}
+	<fieldset>
+		{{form.non_field_errors }}
+		{% for field in form %}
+			<div class="row">
+				<div class="col-md-3">{% bootstrap_label field.label %}</div>
+				<div class="col-md-8">{% bootstrap_field field show_label=False %}</div>
+			</div>
+		{% endfor %}
+	</fieldset>
+	<fieldset>
+		<legend>Valgalternativ</legend>
+		{{ choice_form.management_form }}
+		{{ choice_form.non_form_errors }}
+		{% for form in choice_form %}
+			<div class="inline {{ choice_form.prefix }}">
+				{% for field in form.visible_fields %}
+					<div class="row">
+						<div class="col-md-3">{% bootstrap_label field.label %}</div>
+						<div class="col-md-8">{% bootstrap_field field show_label=False %}</div>
+					</div>
+				{% endfor %}
+			</div>
+			<br>
+		{% endfor %}
+	</fieldset>
+	<div class="text-center">
+		<input type="submit" class="btn btn-block btn-primary bordered" value="Lagre avstemning"/>
+	</div>
+	<br>
+	<br>
+</form>
+
+
+{% block bottom_scripts %}
+<script src="{% static "poll/jquery.formset.js" %}"></script>
+<script type="text/javascript">
+		$(function() {
+				$(".inline.{{ choice_form.prefix }}").formset({
+						prefix: "{{ choice_form.prefix }}", // The form prefix for your django formset
+						addCssClass: "btn btn-block btn-info bordered inline-form-add", // CSS class applied to the add link
+						deleteCssClass: "btn btn-block btn-link bordered", // CSS class applied to the delete link
+						addText: 'Legg til valg', // Text for the add link
+						deleteText: 'Slett valg', // Text for the delete link
+				})
+		});
+</script>
+
+{% endblock %}
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
