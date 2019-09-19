@@ -5,8 +5,9 @@ They are split up in order make them easier to read,
 and because there was (once upon a time) an idea to split up the information
 about an event and the registration info into different models.
 """
-from datetime import datetime
+from datetime import datetime, date
 from django.db import models
+from django.db.models import Count
 from django.contrib.auth.models import Group
 from six.moves.urllib.parse import urlparse
 from ..exceptions import (RegistrationNotRequiredException,
@@ -133,6 +134,29 @@ class RegistrationInfoMixin(models.Model):
         """Return whether the event is closed for deregistration."""
         return self.deregistration_deadline and (self.deregistration_deadline < datetime.now())
 
+    def _user_penalty_limit(self, user):
+        """Counts the users penalties this term, used in _asser_user_allowed_to_register"""
+
+        MAX_PENALTY = 4 # This is the limit at which one is not allowed to register
+        # Find out if we are in first or second term
+        today = date.today()
+        first_term = date(today.year, 1, 1)
+        second_term = date(today.year, 6, 1)
+
+        if second_term <= today:
+            term_start = second_term
+        else:
+            term_start = first_term
+
+        # Find number of penalties from this term. PS. aggreagate returns a dict, so get the value we want
+        penalty_count = EventRegistration.objects.\
+            filter(user=user, date__gte=term_start).aggregate(Count('penalty'))['penalty__count']
+        print("P.C.:", penalty_count)
+        if penalty_count >= MAX_PENALTY:
+            return False
+        else:
+            return True
+
     def _assert_user_allowed_to_register(self, user):
         if not self.registration_required:
             raise RegistrationNotRequiredException(event=self, user=user)
@@ -140,5 +164,5 @@ class RegistrationInfoMixin(models.Model):
             raise RegistrationNotOpen(event=self, user=user)
         elif not self.allowed_to_attend(user):
             raise RegistrationNotAllowed(event=self, user=user)
-        elif EventRegistration.objects.filter(penalty=True, user=user).exists():
-            raise RegistrationNotAllowed("Du har prikk!", event=self, user=user)
+        elif not self._user_penalty_limit(user):
+            raise RegistrationNotAllowed("Du har for mange prikker!", event=self, user=user)

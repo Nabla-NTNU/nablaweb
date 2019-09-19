@@ -30,7 +30,7 @@
 
 <form method="post">{% csrf_token %}
 {{ form }}
-<table id="attending_list">
+<table id="attending_list" class="table">
     <tr>
         <th>Bruker</th>
         {% for rule in rules %}
@@ -41,7 +41,7 @@
     <tr>
         <td><label for="user_penalty_{{registration.pk}}">{{ registration.user.get_full_name }}</label></td>
         {% for penalty in rules.values %}
-        <td><input type="radio" name="user_penalty_{{registration.pk}}" value="{{ penalty }}" {% ifequal registration.penalty penalty %}checked{% endifequal %}></td>
+        <td><label style="width: 100%"><input type="radio" name="user_penalty_{{registration.pk}}" value="{{ penalty }}" {% ifequal registration.penalty penalty %}checked{% endifequal %}></label></td>
         {% endfor %}
     </tr>
     {% endfor %}

@@ -24,12 +24,14 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
     Dukker opp som nyheter på forsiden.
     """
 
-    penalty_rules = {'Bedpres': {'Oppmøte': 0, 'Oppmøte for seint': 1, 'Ikke møtt opp': 2},
+    penalty_rules = {'Ingen prikker': {},
+                     'Bedpres': {'Oppmøte': 0, 'Oppmøte for seint': 1, 'Ikke møtt opp': 2},
                      'Arrangement med betaling': {'Betalt': 0, 'Betalt etter purring': 1, 'Ikke betalt': 4},
                      'Arrangement uten betaling': {'Møtt opp': 0, 'Ikke møtt opp': 1}}
 
     penalty = models.CharField(
         max_length=40,
+        default='Ingen prikker',
         choices=zip(penalty_rules.keys(), penalty_rules.keys())
     )
 
