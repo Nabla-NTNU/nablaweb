@@ -4,13 +4,15 @@ Views for poll app
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from braces.views import LoginRequiredMixin, FormMessagesMixin
 
 from .forms import PollForm, ChoiceFormSet
 from .models import Poll, Choice, UserHasVoted
+
+from datetime import datetime
 
 
 @login_required
@@ -46,7 +48,7 @@ class PollListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context['next'] = self.request.path + "?page=" + self.request.GET.get('page', '1')
-        
+
         for poll in context['poll_list']:
             poll.voted = poll.user_has_voted(user)
         return context
@@ -80,20 +82,9 @@ class UserPollCRUDMixin(LoginRequiredMixin, FormMessagesMixin):
     The commonality is most evident in Create and UpdateView,
     and the DeleteView doesn't actually use any of the form processing.
     """
-    form_class = PollForm
     model = Poll
     form_invalid_message = "Ikke riktig utfylt."
-    template_name = 'form.html'
-
-    def get_form_kwargs(self):
-        """
-        Returns the keyword arguments for instantiating the form.
-
-        Extends method from ModelFormMixin in django.
-        """
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
+    form_class = PollForm
 
     def get_success_url(self):
         """The url to redirect to after successfully creating, updating or deleting."""
@@ -115,14 +106,74 @@ class CreateUserPollView(UserPollCRUDMixin, CreateView): # pylint: disable=R0901
     """
     View allowing users to create a poll.
     """
+
     form_valid_message = "Avstemning publisert."
+    template_name = "poll/poll_create.html"
 
+    def get(self, request, *args, **kwargs):
+        """ Handles GET requests and instantiates blank versions of the form and its inline formsets. """
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        choice_form = ChoiceFormSet()
+        return self.render_to_response(
+            self.get_context_data( form=form, choice_form = choice_form,) )
 
-class UpdateUserPollView(UserPollCRUDMixin, CreatorRequiredMixin, UpdateView): # pylint: disable=R0901
-    """
-    View allowing users to edit their created polls.
-    """
-    form_valid_message = "Avstemning oppdatert."
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for validity.
+        """
+        self.object = None
+        self.user = request.user
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        choice_form = ChoiceFormSet(self.request.POST)
+        if form.is_valid() and choice_form.is_valid():
+            return self.form_valid(form, choice_form)
+        else:
+            return self.form_invalid(form, assignment_question_form)
+
+    def form_valid(self, form, choice_form):
+        """
+        Called if all forms are valid, Creates Poll instance along with the associated Choice
+        instances, then redirects to success url.
+
+        Args:
+            form: Poll Form
+            choice_form: Choice Form
+
+        Returns: an HttpResponse to success url
+        """
+        # Save poll object from form and assign it to self.object
+        self.object = form.save(commit=False) 
+        # Pre-processing for Poll instance here ...
+        self.object.publication_date = datetime.now()
+        self.object.is_user_poll = True
+        self.object.is_current = False
+        if not self.object.created_by and self.user is not None:
+            self.object.created_by = self.user
+        self.object.save()
+
+        # Saving Choice instances
+        choices = choice_form.save(commit=False)
+        for ch in choices:
+            ch.poll = self.object
+            ch.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form, choice_form):
+        """
+        Called if a form is invalid. Re-renders the context data with the data-filled
+        forms and errors.
+
+        Args:
+            form: Poll Form
+            choice_form: Choice Form
+        """
+        return self.render_to_response(
+            self.get_context_data(form=form, choice_form=choice_form) )
 
 
 class DeleteUserPollView(UserPollCRUDMixin, CreatorRequiredMixin, DeleteView):
