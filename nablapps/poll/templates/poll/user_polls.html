@@ -17,10 +17,6 @@ Mine avstemninger
 
 {% for poll in poll_list %}
 <div class="btn-group">
-    <a class="btn btn-default" href="{% url "poll_user_update" poll.id %}">
-        <span class="glyphicon glyphicon-pencil"></span>
-        Endre
-    </a>
     <form style="display: inline" method="POST" action="{% url "poll_user_delete" poll.id %}">
         <button class="btn btn-danger" type="submit">
             <span class="glyphicon glyphicon-trash"></span>
