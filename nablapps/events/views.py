@@ -171,10 +171,9 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
         return context
 
     def get_admin_links(self):
-        if not self.object.registration_required:
-            return super().get_admin_links()
-        return [
-            {
+        admin_list = []
+        if self.object.registration_required:
+            admin_list += [{
                 "name": "Administrer påmeldinger",
                 "glyphicon_symbol": "user",
                 "url": reverse("event_admin", args=[self.object.id]),
@@ -183,9 +182,16 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
                 "name": "Påmeldingsliste",
                 "glyphicon_symbol": "list",
                 "url": reverse("event_registrations", args=[self.object.id]),
-            },
-            *super().get_admin_links()
-        ]
+            }]
+            if not self.object.penalty == 'Ingen prikker':
+                admin_list.append({
+                    "name": "Registrer oppmøte",
+                    "glyphicon_symbol": "check",
+                    "url": reverse("event_register_attendance", args=[self.object.id]),
+                })
+
+        return admin_list + super().get_admin_links()
+
 
 
 
