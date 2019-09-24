@@ -166,7 +166,7 @@
         iCal
     </a>
     {% endif %}
-<a class="btn btn-default btn-xs" href="https://calendar.google.com/calendar/r/eventedit?text={{ event.headline }}&dates={{event.event_start|date:'Ymd\THis' }}/{{event.event_end|date:'Ymd\THis' }}&details=&location={{ event.location }}&sf=true&output=xml&pli=1" target ="_blank">
+    <a class="btn btn-default btn-xs" href="https://calendar.google.com/calendar/r/eventedit?text={{ event.headline }}&dates={{event.event_start|date:'Ymd\THis' }}/{{event.event_end|date:'Ymd\THis' }}&details={{ request.build_absolute_uri }}&location={{ event.location }}&sf=true&output=xml&pli=1" target ="_blank">
     <span class="fa fa-calendar"></span>
     Google kalender
 </a>
