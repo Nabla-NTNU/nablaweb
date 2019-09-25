@@ -10,10 +10,15 @@ from nablapps.nabladet.models import Nablad
 
 
 def move_to_protected(apps, schema_editor):
+    """Move existing nablads from MEDIA_ROOT/nabladet to PROTECTED_MEDIA_ROOT/nabladet
+    This is really a one-off, because we move existing nablads to protect """
+
     src = os.path.join(settings.MEDIA_ROOT, 'nabladet')
-    if not os.path.exists(src):
-        os.makedirs(src)
     dst = os.path.join(settings.PROTECTED_MEDIA_ROOT, 'nabladet')
+
+    if not os.path.exists(src) or os.path.exists(dst):
+        # Nothing to to
+        return
     move(src, dst)
 
 
