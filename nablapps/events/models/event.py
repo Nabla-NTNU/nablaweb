@@ -32,7 +32,9 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
     penalty = models.CharField(
         max_length=40,
         default='Ingen prikker',
-        choices=zip(penalty_rules.keys(), penalty_rules.keys())
+        choices=zip(penalty_rules.keys(), penalty_rules.keys()),
+        blank=True,
+        null=True
     )
 
     is_bedpres = models.BooleanField(default=False)
@@ -51,6 +53,9 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
             raise ValidationError("Company must be set when 'is_bedpres' is True!")
         if not self.is_bedpres and self.company is not None:
             raise ValidationError("Company should only be set for bedpres!")
+        if self.registration_required:
+            if self.penalty is None:
+                raise ValidationError("penalty must be set when registration is True")
 
     class Meta:
         verbose_name = "arrangement"

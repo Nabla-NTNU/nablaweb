@@ -19,7 +19,7 @@ class EventFormTestCase(TestCase):
         return {
             "headline": "Headline",
             "event_start": "2015-10-01",
-            "location": "Here"
+            "location": "Here",
         }
 
     def get_valid_registration_form_dict(self):
@@ -27,7 +27,8 @@ class EventFormTestCase(TestCase):
             "registration_required": "1",
             "places": "20",
             "registration_deadline": "2015-09-01",
-            "has_queue": "0"
+            "has_queue": "0",
+            "penalty": 'Ingen prikker'
         }, self.get_smallest_valid_form())
 
     def test_empty_form(self):
