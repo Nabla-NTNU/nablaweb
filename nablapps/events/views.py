@@ -17,6 +17,7 @@ from braces.views import (PermissionRequiredMixin,
                           MessageMixin)
 
 from nablapps.core.view_mixins import AdminLinksMixin
+from django.core.exceptions import ValidationError
 
 from .models.event import Event, attending_events
 from .models.eventregistration import EventRegistration
@@ -24,7 +25,6 @@ from .exceptions import (EventException, UserRegistrationException, EventFullExc
                          RegistrationNotAllowed, RegistrationNotOpen, RegistrationAlreadyExists,
                          RegistrationNotRequiredException, DeregistrationClosed)
 from .event_calendar import EventCalendar
-from .forms import RegisterAttendanceForm
 
 from nablapps.accounts.models import NablaUser
 
@@ -265,13 +265,9 @@ class RegisterUserView(LoginRequiredMixin,
             return "Avmeldingsfristen er ute."
         return "Du er meldt av arrangementet."
 
-class RegisterAttendanceView(DetailView):
-    """Used by event admins to register attendance
-    TODO: update docstring
-    Usage:
-     1. User is asked if penalties should be registered for the event.
-        This creates penalties for all registered users.
-     2. As users are registered, their penalties are deleted."""
+class RegisterAttendanceView(DetailView, MessageMixin):
+    """Used by event admins to register attendance"""
+
     model = Event
     template_name = "events/register_attendance.html"
 
@@ -281,41 +277,17 @@ class RegisterAttendanceView(DetailView):
         attending = EventRegistration.objects.filter(event=self.object, attending=True)
         redirection = redirect(self.request.resolver_match.view_name, kwargs.pop('pk', 1))
 
-        # TODO: remove unused code
-        # Give all attending penalty and return
-        # if 'activate_penalties' in request.POST:
-        #    attending.update(penalty=1)
-        #    return redirection
-
-        # # Register given list
-        # user_penalty_list = []
-        # for q in request.POST: # Generate list over users to get a penalty
-        #     if q.startswith('user_penalty'):
-        #         user_penalty_list.append(request.POST[q])
-#        attending.update(penalty=0)
-        # attending.filter(pk__in=user_penalty_list).update(penalty=True)
-
         for q in request.POST:
             if q.startswith('user_penalty_'):
                 pk = q.split('_')[-1]
                 penalty_value = request.POST[q]
                 reg_req = attending.get(pk=pk)
                 reg_req.penalty = penalty_value
-                reg_req.save()
-
-        # Register given card key
-        attendance_form = RegisterAttendanceForm(request.POST)
-        if not attendance_form.is_valid():
-            context = self.get_context_data(**kwargs)
-            context['form'] = attendance_form
-            return render(request,self.template_name, context)
-        card_key = attendance_form.cleaned_data['user_card_key']
-        if card_key is not None:
-            user = NablaUser.objects.get_from_rfid(card_key)
-            reg = EventRegistration.objects.get(user=user, event=self.object)
-            reg.penalty = 0
-            reg.save()
-
+                try:
+                    reg_req.full_clean()
+                    reg_req.save()
+                except ValidationError:
+                    self.messages.warning(f"Invalid penalty value for {reg_req.user}.")
         return redirection
 
 
@@ -324,13 +296,6 @@ class RegisterAttendanceView(DetailView):
         event = self.object
         registrations = event.eventregistration_set.filter(attending=True)
         context['registrations'] = registrations.order_by('user__first_name')
-        context['form'] = RegisterAttendanceForm()
-
-        # Penalty rules represents the different options for penalties
-        # It is a dict with the following signature:
-        # {rule_name(string): rule(dict)}, where rule is
-        # {option_name(string), option_penalty_count(int)}
-
         return context
 
 

@@ -4,7 +4,7 @@ Model representing a registration to an event.
 from django.db import models
 from django.conf import settings
 from django.template import loader
-
+from django.core.exceptions import ValidationError
 
 class EventRegistration(models.Model):
     """Modell for påmelding på arrangementer.
@@ -40,6 +40,7 @@ class EventRegistration(models.Model):
         verbose_name="Prikk",
         default=0,
         blank=True)
+
     class Meta:
         verbose_name = 'påmelding'
         verbose_name_plural = 'påmeldte'
@@ -52,6 +53,11 @@ class EventRegistration(models.Model):
 
     def __str__(self):
         return f'{self.event}, {self.user} is {"Attending" if self.attending else "Waiting"}'
+
+    def clean(self):
+        valid_penalties = self.event.get_penalty_rule_dict().values()
+        if self.penalty not in valid_penalties:
+            raise ValidationError("Penalty value is not valid for this event")
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)

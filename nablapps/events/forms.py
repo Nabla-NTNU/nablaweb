@@ -85,26 +85,3 @@ class EventForm(ModelForm):
             # Ignorer feil relatert til feltet.
             if name in self._errors:
                 del self._errors[name]
-
-class RegisterAttendanceForm(Form):
-    user_card_key = IntegerField(label="Kortnummer", required=False,
-                                    widget=TextInput(attrs={'placeholder': 'Scan kort', 'autofocus':'true'}))
-
-    def clean_user_card_key(self):
-        data = self.cleaned_data['user_card_key']
-
-        if data is None:
-            return None
-
-        # Check that the rfid is positive
-        if int(data) < 0:
-            raise ValidationError('The number must be a positive integer')
-        
-        # Check that there is an account with the given card key
-        user = NablaUser.objects.get_from_rfid(data)
-        if not user:
-            raise ValidationError('There are no registered accounts with that card key')
-        if not EventRegistration.objects.filter(user=user, attending=True).exists():
-            raise ValidationError(f'{user.get_full_name()} is not registered for this event!')
-
-        return data
