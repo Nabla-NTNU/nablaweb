@@ -24,15 +24,24 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
     Dukker opp som nyheter på forsiden.
     """
 
-    penalty_rules = {'Ingen prikker': {},
-                     'Bedpres': {'Oppmøte': 0, 'Oppmøte for seint': 1, 'Ikke møtt opp': 2},
-                     'Arrangement med betaling': {'Betalt': 0, 'Betalt etter purring': 1, 'Ikke betalt': 4},
-                     'Arrangement uten betaling': {'Møtt opp': 0, 'Ikke møtt opp': 1}}
+    # Penalty_rules is a dict where key is an integer and value is
+    # a tuple with the name of the rule as first element and
+    # a dictionary with the rules as second element.
+    # The dict with rules has name of action as key, for example 'Did not meet',
+    # and number of penalty-points that action gives as value
+    #
+    # The reason for not using a dict, where the key obviously would be the index,
+    # is to make it easier to add/remove rules.
+    penalty_rules = {
+        0 : ('Ingen prikker', {}),
+        1 : ('Bedpres', {'Oppmøte': 0, 'Oppmøte for seint': 1, 'Ikke møtt opp': 2}),
+        2 : ('Arrangement med betaling', {'Betalt': 0, 'Betalt etter purring': 1, 'Ikke betalt': 4}),
+        3 : ('Arrangement uten betaling', {'Møtt opp': 0, 'Ikke møtt opp': 1})
+    }
 
-    penalty = models.CharField(
-        max_length=40,
-        default='Ingen prikker',
-        choices=zip(penalty_rules.keys(), penalty_rules.keys()),
+    penalty = models.IntegerField(
+        default=0,
+        choices=zip(penalty_rules.keys(), [rule[0] for rule in penalty_rules.values()]),
         blank=True,
         null=True
     )
@@ -55,7 +64,7 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
             raise ValidationError("Company should only be set for bedpres!")
         if self.registration_required:
             if self.penalty is None:
-                raise ValidationError("penalty must be set when registration is True")
+                raise ValidationError("Penalty must be set when registration is True")
 
     class Meta:
         verbose_name = "arrangement"
@@ -67,6 +76,14 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
 
     def __str__(self):
         return '%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
+
+    def get_penalty_rule_name(self):
+        """Returns the name of the penalty rule for the event"""
+        return self.penalty_rules[self.penalty][0]
+
+    def get_penalty_rule_dict(self):
+        """Returns the penalty rule dict for the event"""
+        return self.penalty_rules[self.penalty][1]
 
     def get_short_name(self):
         """Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke."""

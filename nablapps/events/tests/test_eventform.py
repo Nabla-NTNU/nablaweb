@@ -28,7 +28,7 @@ class EventFormTestCase(TestCase):
             "places": "20",
             "registration_deadline": "2015-09-01",
             "has_queue": "0",
-            "penalty": 'Ingen prikker'
+            "penalty": 0
         }, self.get_smallest_valid_form())
 
     def test_empty_form(self):

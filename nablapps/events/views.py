@@ -267,10 +267,11 @@ class RegisterUserView(LoginRequiredMixin,
 
 class RegisterAttendanceView(DetailView):
     """Used by event admins to register attendance
+    TODO: update docstring
     Usage:
      1. User is asked if penalties should be registered for the event.
         This creates penalties for all registered users.
-     2. As users are registered, their penalties are deletd."""
+     2. As users are registered, their penalties are deleted."""
     model = Event
     template_name = "events/register_attendance.html"
 
@@ -280,6 +281,7 @@ class RegisterAttendanceView(DetailView):
         attending = EventRegistration.objects.filter(event=self.object, attending=True)
         redirection = redirect(self.request.resolver_match.view_name, kwargs.pop('pk', 1))
 
+        # TODO: remove unused code
         # Give all attending penalty and return
         # if 'activate_penalties' in request.POST:
         #    attending.update(penalty=1)
@@ -329,7 +331,6 @@ class RegisterAttendanceView(DetailView):
         # {rule_name(string): rule(dict)}, where rule is
         # {option_name(string), option_penalty_count(int)}
 
-        context['rules'] = event.penalty_rules[event.penalty]
         return context
 
 
