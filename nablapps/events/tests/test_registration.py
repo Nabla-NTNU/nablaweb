@@ -9,6 +9,7 @@ from django.core import mail
 from django.contrib.auth import get_user_model
 
 from nablapps.events.exceptions import RegistrationAlreadyExists, EventException
+from django.core.exceptions import ValidationError
 from .common import GeneralEventTest
 
 User = get_user_model()
@@ -68,6 +69,26 @@ class RegistrationTest(GeneralEventTest):
         self.event.register_user(self.user)
         self.assertRaises(EventException, self.event.deregister_user, self.user)
 
+class PenaltyTest(GeneralEventTest):
+    """Tests for the penalty system"""
+
+    def test_invalid_penalty_rule(self):
+        """Tries setting the penalty rule of event to invalid value"""
+        self.event.penalty = -1
+        self.assertRaises(ValidationError, self.event.clean_fields)
+
+    def test_penalty_none_on_registration_required(self):
+        """Setting penalty rule to None when registration is required"""
+        self.event.penalty = None
+        self.event.registration_required = True
+        self.assertRaises(ValidationError, self.event.clean)
+
+    def test_setting_invalid_penalty_value_in_registration(self):
+        """Tries setting penalty in registration request to some thing not valid for the event"""
+        self.event.register_user(self.user)
+        event_reg = self.event.eventregistration_set.first()
+        event_reg.penalty = -1 # Invalid penalty
+        self.assertRaises(ValidationError, event_reg.clean)
 
 class WaitingListTest(GeneralEventTest):
     """
@@ -88,7 +109,6 @@ class WaitingListTest(GeneralEventTest):
                 password=f"user{i}",
                 email=f"user{i}@localhost")
             self.event.register_user(u)
-
     def test_deregister_user(self):
         while self.event.eventregistration_set.all():
             reg = random.choice(self.event.eventregistration_set.all())
