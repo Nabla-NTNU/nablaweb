@@ -7,7 +7,11 @@ Brukeravstemninger
 {% endblock %}
 
 {% block content %}
-
+<br>
+<h3><a class="btn btn-primary" href="{% url "poll_user" %}">
+Mine avstemninger
+</a></h3>
+<br>
 {% for poll in poll_list %}
 
 {% with user=poll.created_by %}
@@ -50,8 +54,5 @@ Ingen brukeravstemninger her enda.
 
 {% endblock %}
 {% block sidebar %}
-<a class="btn btn-primary btn-lg btn-block" href="{% url "poll_user" %}">
-Mine avstemninger
-</a>
 {% endblock %}
 

@@ -7,7 +7,6 @@ from .views import (
     CreateUserPollView,
     DeleteUserPollView,
     PollListView,
-    UpdateUserPollView,
     UserPollsView,
 )
 
@@ -24,9 +23,6 @@ urlpatterns = [
     url(r'^bruker/ny/$',
         CreateUserPollView.as_view(),
         name="poll_user_create"),
-    url(r'^bruker/endre/(?P<pk>[\d]+)$',
-        UpdateUserPollView.as_view(),
-        name="poll_user_update"),
     url(r'^bruker/slett/(?P<pk>[\d]+)$',
         DeleteUserPollView.as_view(),
         name="poll_user_delete"),
