@@ -1,6 +1,18 @@
-from django.views.generic import ListView, DetailView
-from .models import University, Exchange, Info, RETNINGER
+from django.views.generic import ListView, DetailView, TemplateView
+from .models import University, Exchange, Info, RETNINGER, ExchangeNewsArticle
 from django.db.models import Q
+
+class ExchangeFrontpageView(TemplateView):
+    template_name = 'exchange/exchange_frontpage.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        exchange_news_query = ExchangeNewsArticle.objects.all()
+        exchange_news = []
+        for ex_news in exchange_news_query:
+            exchange_news.append(ex_news)
+        context['news_list'] = exchange_news
+        return context
 
 
 class ExchangeListView(ListView):

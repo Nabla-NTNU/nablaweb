@@ -2,6 +2,8 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 
+from nablapps.news.models import NewsArticle
+
 
 class University(models.Model):
     univ_navn = models.CharField(
@@ -120,3 +122,9 @@ class Info(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ExchangeNewsArticle(NewsArticle):
+    pass
+
+

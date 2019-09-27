@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load easy_thumbnails %}
+
+{% block content %}
+<h1>Utveksling</h1>
+
+{% for news in news_list %}
+    <div class="row">
+        {% with newsurl=news.get_absolute_url %}
+    <div class="col-md-12 box">
+    {% if news.picture %}
+        <a href="{{ newsurl }}">
+            <img alt=""
+                 class="news-picture"
+                 src="{% thumbnail news.picture 760x300 box=news.cropping upscale quality=95 detail %}">
+        </a>
+    {% endif %}
+
+    <header>
+        <h3>
+            <a href="{{ newsurl }}">{{ news.headline }}</a>
+        </h3>
+    </header>
+    <p> 
+    {{ news.lead_paragraph}}
+    </p>
+</div>
+{% endwith %}
+    </div>
+{% endfor %}
+
+{% endblock content %}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import University, Exchange, Info
+from .models import University, Exchange, Info, ExchangeNewsArticle
 
 
 class ExchangeAdmin(admin.ModelAdmin):
@@ -31,5 +31,6 @@ class InfoAdmin(admin.ModelAdmin):
 admin.site.register(Exchange, ExchangeAdmin)
 admin.site.register(University, UniversityAdmin)
 admin.site.register(Info, InfoAdmin)
+admin.site.register(ExchangeNewsArticle)
 
 # Register your models here.
