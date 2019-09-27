@@ -5,25 +5,25 @@
 
 {% block content %}
 
-<div class="col-md-12 box row" id="leftbox1" >
-    <h1>Nablas "internasjonale seksjon"</h1>
-    <p>
-    Velkommen til Nablas "internasjonale seksjon"! Her finner du informasjon som
-    er relevant for utveksling i form av nyhetsartikler med informasjon fra 
-    internasjonal sekjson ved NTNU, samt en oversikt over universiteter hvor
-    FysMat-ere har utvekslet til før med tilhørende informasjon.
-    </p>
-    
-</div>
-
 <div class="col-md-12 box row">
-    <h1>Siste nyheter</h1>
+    <h1>Internasjonale nyheter</h1>
         {% for news in news_list %}
             {% with newsurl=news.get_absolute_url %}
             <a href="{{ newsurl}}" style="color: black" >
+                {% if news.picture %}
+                    <a href="{{ newsurl }}">
+                        <img alt=""
+                             class="news-picture"
+                             src="{% thumbnail news.picture 760x300 box=news.cropping upscale quality=95 detail %}">
+                    </a>
+                {% endif %}
                 <header>
                     <h3>
-                        {{ news.headline }}
+                        {% if news.picture %}
+                            <a href="{{ newsurl }}">{{ news.headline }}</a>
+                        {% else %}
+                            {{ news.headline }}
+                        {% endif %}
                     </h3>
                 </header>
                 <p> 
@@ -33,7 +33,6 @@
             {% endwith %}
         {% endfor %}
 </div>
-
 {% endblock content %}
 
 
@@ -41,14 +40,13 @@
 <div class="col-md-12 box" id="rightbox1" >
     <h1>Navigasjon</h1>
     <ul>
-        <li><a href="{{ ex_news_url }}">Alle internasjonale nyheter</a> </li>
+        <li><a href="{{ ex_frontpage_url }}">Tilbake til forside for utveksling</a> </li>
         <li><a href="{{ ex_list_url }}">Liste over universiteter</a> </li>
-    </ulid=">
+    </ul">
 </div>
 
 <div class="col-md-12 box">
     <h1>Nyttige lenker</h1>
-    <p style="color: blue">Denne seksjonen er ny og om du har noen tips til hva som bør lenkes til her, si gjerne ifra til WebKom!</p>
     <ul>
         <li>elem</li>
         <li>elem</li>
@@ -57,5 +55,4 @@
 </div>
 
 {% endblock %}
-
 

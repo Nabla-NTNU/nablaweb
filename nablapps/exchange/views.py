@@ -11,11 +11,30 @@ class ExchangeFrontpageView(TemplateView):
         context = super().get_context_data(**kwargs)
         exchange_news_query = ExchangeNewsArticle.objects.all()
         exchange_news = []
-        for ex_news in exchange_news_query:
-            exchange_news.append(ex_news)
+        for news in exchange_news_query[len(exchange_news_query)-3:]:
+            exchange_news.insert(0, news)
+        ex_list_url = reverse('ex_list')
+        ex_news_url = reverse('ex_news')
+        context['news_list'] = exchange_news
+        context['ex_list_url'] = ex_list_url
+        context['ex_news_url'] = ex_news_url
+        return context
 
+
+class ExchangeNewsView(TemplateView):
+    template_name = 'exchange/exchange_news.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        exchange_news_query = ExchangeNewsArticle.objects.all()
+        exchange_news = []
+        for ex_news in exchange_news_query:
+            exchange_news.insert(0, ex_news)
+        ex_frontpage_url = reverse('ex_frontpage')
         ex_list_url = reverse('ex_list')
         context['news_list'] = exchange_news
+        context['ex_frontpage_url'] = ex_frontpage_url
         context['ex_list_url'] = ex_list_url
         return context
 
