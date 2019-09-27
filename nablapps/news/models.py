@@ -1,7 +1,7 @@
 """
 Models for news
 
-This file contains both the model for things on the front page
+nhis file contains both the model for things on the front page
 and a model for a news article.
 
 # Historic information
@@ -58,6 +58,8 @@ class NewsArticle(TimeStamped, WithPicture, TextContent):
     Used mostly for small news announcements.
     Is possible to add to the front page.
     """
+    is_ex_news = models.BooleanField(blank=True, null=True)
+    
     class Meta:
         verbose_name = "Nyhetsartikkel"
         verbose_name_plural = "Nyhetsartikler"

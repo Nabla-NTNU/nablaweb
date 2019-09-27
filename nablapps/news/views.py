@@ -12,7 +12,7 @@ class NewsListView(ListView):
     context_object_name = 'news_list'
     template_name = 'news/news_list.html'
     paginate_by = 8
-    queryset = NewsArticle.objects.order_by('-pk')
+    queryset = NewsArticle.objects.filter(is_ex_news=None).order_by('-pk')
 
 
 class NewsDetailView(AdminLinksMixin, DetailView):

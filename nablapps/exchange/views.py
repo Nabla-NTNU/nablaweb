@@ -2,6 +2,8 @@ from django.views.generic import ListView, DetailView, TemplateView
 from .models import University, Exchange, Info, RETNINGER, ExchangeNewsArticle
 from django.db.models import Q
 
+from django.urls import reverse
+
 class ExchangeFrontpageView(TemplateView):
     template_name = 'exchange/exchange_frontpage.html'
     
@@ -11,7 +13,10 @@ class ExchangeFrontpageView(TemplateView):
         exchange_news = []
         for ex_news in exchange_news_query:
             exchange_news.append(ex_news)
+
+        ex_list_url = reverse('ex_list')
         context['news_list'] = exchange_news
+        context['ex_list_url'] = ex_list_url
         return context
 
 

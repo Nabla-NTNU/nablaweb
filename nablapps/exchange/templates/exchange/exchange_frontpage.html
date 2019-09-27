@@ -1,32 +1,81 @@
 {% extends "base.html" %}
 {% load easy_thumbnails %}
 
+
 {% block content %}
-<h1>Utveksling</h1>
 
-{% for news in news_list %}
-    <div class="row">
-        {% with newsurl=news.get_absolute_url %}
-    <div class="col-md-12 box">
-    {% if news.picture %}
-        <a href="{{ newsurl }}">
-            <img alt=""
-                 class="news-picture"
-                 src="{% thumbnail news.picture 760x300 box=news.cropping upscale quality=95 detail %}">
-        </a>
-    {% endif %}
 
-    <header>
-        <h3>
-            <a href="{{ newsurl }}">{{ news.headline }}</a>
-        </h3>
-    </header>
-    <p> 
-    {{ news.lead_paragraph}}
+<div class="col-md-12 box row" id="leftbox1" style="height: auto;">
+    <h1>Nablas "internasjonale seksjon"</h1>
+    <p>Velkommen til Nablas "internasjonale seksjon"! Her finner du informasjon som
+    er relevant for utveksling i form av nyhetsartikler med informasjon fra 
+    internasjonal sekjson ved NTNU, samt en oversikt over universiteter hvor
+    FysMat-ere har utvekslet til før med tilhørende informasjon. <b>Ellerno.</b>
     </p>
+    
 </div>
-{% endwith %}
-    </div>
-{% endfor %}
+
+<div class="col-md-12 box row">
+    <h1>Siste nyheter</h1>
+        {% for news in news_list %}
+            {% with newsurl=news.get_absolute_url %}
+            <a href="{{ newsurl}}" style="color: black" >
+                <!---
+                {% if news.picture %}
+                    <a href="{{ newsurl }}">
+                        <img alt=""
+                             class="news-picture"
+                             src="{% thumbnail news.picture 760x300 box=news.cropping upscale quality=95 detail %}">
+                    </a>
+                {% endif %}
+                --->
+                <header>
+                    <h3>
+                        {{ news.headline }}
+                    </h3>
+                </header>
+                <p> 
+                    {{ news.lead_paragraph}}
+                </p>
+            </a>
+            {% endwith %}
+        {% endfor %}
+</div>
 
 {% endblock content %}
+
+
+{% block sidebar %}
+<div class="col-md-12 box" id="rightbox1" style="height: auto;">
+    <h1>Navigasjon</h1>
+    <ul>
+        <li><a href="{{ ex_list_url }}">Liste over universiteter</a> </li>
+        <li><a href="{{ ex_list_url }}">Alle internasjonale nyheter</a> </li>
+    </ulid=">
+</div>
+
+<div class="col-md-12 box">
+    <h1>Nyttige lenker</h1>
+    <ul>
+        <li>elem</li>
+        <li>elem</li>
+        <li>elem</li>
+        <li>elem</li>
+    </ul>
+</div>
+
+{% endblock %}
+
+<script>
+    var left=document.getElementById('leftbox1').style.height;
+    var right=document.getElementById('rightbox1').style.height;
+        if(left>right)
+        {
+            document.getElementById('rightbox1').style.height=left;
+        }
+        else
+        {
+            document.getElementById('leftbox1').style.height=right;
+        }
+</script>
+
