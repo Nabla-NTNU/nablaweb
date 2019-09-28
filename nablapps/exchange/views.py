@@ -4,18 +4,18 @@ from django.db.models import Q
 
 from django.urls import reverse
 
-class ExchangeFrontpageView(TemplateView):
+class ExchangeFrontpageView(ListView):
     template_name = 'exchange/exchange_frontpage.html'
+    model = ExchangeNewsArticle
+    context_object_name = 'news_list'
+    paginate_by = 5
+    queryset = ExchangeNewsArticle.objects.order_by('-pk')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        exchange_news_query = ExchangeNewsArticle.objects.all()
-        exchange_news = []
-        for news in exchange_news_query[len(exchange_news_query)-3:]:
-            exchange_news.insert(0, news)
         ex_list_url = reverse('ex_list')
         ex_news_url = reverse('ex_news')
-        context['news_list'] = exchange_news
+        #context['news_list'] = exchange_news
         context['ex_list_url'] = ex_list_url
         context['ex_news_url'] = ex_news_url
         return context
