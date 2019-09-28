@@ -21,19 +21,17 @@ class ExchangeFrontpageView(TemplateView):
         return context
 
 
-class ExchangeNewsView(TemplateView):
+class ExchangeNewsView(ListView):
     template_name = 'exchange/exchange_news.html'
+    model = ExchangeNewsArticle
+    context_object_name = 'news_list'
+    paginate_by = 8 
+    queryset = ExchangeNewsArticle.objects.order_by('-pk')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        exchange_news_query = ExchangeNewsArticle.objects.all()
-        exchange_news = []
-        for ex_news in exchange_news_query:
-            exchange_news.insert(0, ex_news)
         ex_frontpage_url = reverse('ex_frontpage')
         ex_list_url = reverse('ex_list')
-        context['news_list'] = exchange_news
         context['ex_frontpage_url'] = ex_frontpage_url
         context['ex_list_url'] = ex_list_url
         return context
@@ -53,6 +51,8 @@ class ExchangeListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        ex_frontpage_url = reverse('ex_frontpage')
+        context['ex_frontpage_url'] = ex_frontpage_url
         context['retninger'] = [long_name.capitalize() for _, long_name in RETNINGER]
         return context
 
