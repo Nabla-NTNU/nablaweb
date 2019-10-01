@@ -7,9 +7,8 @@ from django import forms
 @admin.register(OfficeEvent)
 class OfiiceEventAdmin(admin.ModelAdmin):
     """Admin interface for OfficeEvent"""
-    formfield_overrides = {
-        models.TimeField: {'widget': forms.TimeInput(attrs={ 'type': 'time' }) }
-    }
+    def get_changeform_initial_data(self, request):
+        return {'contact_person': request.user.pk}
 
     def save_model(self, request, obj, form, change):
         if obj.check_overlap().exists():

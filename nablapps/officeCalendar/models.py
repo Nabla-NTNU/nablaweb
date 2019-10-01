@@ -40,8 +40,21 @@ class OfficeEvent(models.Model):
         return f"{hours:.1g} time{plural_suffix}"
 
     def clean(self):
-        if self.start_time.time() >  self.end_time:
+        # Since clean will be called even if clean_fields failed, we have to
+        # check if the times exists before comparing them
+        end_time = self.end_time
+        try:
+            start_time = self.start_time.time
+        except AttributeError:
+            # Start time not set
+            return
+
+        if start_time is None or end_time is None:
+            return
+
+        if self.start_time.time() > self.end_time:
             raise ValidationError("start_time must be before end_time!")
+
 
     def check_overlap(self):
         """Check if event overlap with other events"""
