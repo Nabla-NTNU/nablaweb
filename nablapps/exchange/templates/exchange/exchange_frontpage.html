@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 {% load easy_thumbnails %}
 {% load sekizai_tags %}
+{% load static %}
 
 
 {% block content %}
 
-<div class="col-md-12 box row" id="leftbox1" >
+{% addtoblock "css" %}
+    <link rel="stylesheet" href="{% static "exchange/exchange.css" %}">
+{% endaddtoblock %}
+
+
+
+<div class="row" style="margin-left: 2px; margin-right: 5px">
     <h1>Nablas "internasjonale seksjon"</h1>
     <p>
     Velkommen til Nablas "internasjonale seksjon"! Her finner du informasjon som
@@ -16,8 +23,8 @@
     
 </div>
 
-<div class="col-md-12 box row">
-    <h1>Siste nyheter</h1>
+<h1 class="row" style="margin-left: 2px">Siste nyheter</h1>
+<div class="col-md-12 box row" style="margin-left: 2px">
         {% for news in news_list %}
             {% with newsurl=news.get_absolute_url %}
             <a href="{{ newsurl}}" style="color: black" >
@@ -38,22 +45,24 @@
 
 
 {% block sidebar %}
-<div class="col-md-12 box" id="rightbox1" >
-    <h1>Navigasjon</h1>
+<div class="col-md-12 box sidebar_box">
+    <h1 >Navigasjon</h1>
     <ul>
         <li><a href="{{ ex_news_url }}">Alle internasjonale nyheter</a> </li>
         <li><a href="{{ ex_list_url }}">Liste over universiteter</a> </li>
     </ulid=">
 </div>
 
-<div class="col-md-12 box">
-    <h1>Nyttige lenker</h1>
-    <p style="color: blue">Denne seksjonen er ny og om du har noen tips til hva som bør lenkes til her, si gjerne ifra til WebKom!</p>
-    <ul>
-        <li>elem</li>
-        <li>elem</li>
-        <li>elem</li>
-    </ul>
+<div class="col-md-12 box sidebar_box">
+    <div>
+        <h1>Nyttige lenker</h1>
+        <p style="color: blue">Denne seksjonen er ny og om du har noen tips til hva som bør lenkes til her, si gjerne ifra til WebKom!</p>
+        <ul>
+            <li>elem</li>
+            <li>elem</li>
+            <li>elem</li>
+        </ul>
+    </div>
 </div>
 
 {% endblock %}
