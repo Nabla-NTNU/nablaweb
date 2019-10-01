@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 {% load easy_thumbnails %}
 {% load sekizai_tags %}
+{% load static %}
 
 
 {% block content %}
 
+{% addtoblock "css" %}
+    <link rel="stylesheet" href="{% static "exchange/exchange.css" %}">
+{% endaddtoblock %}
+
+<h1>Internasjonale nyheter</h1>
 <div class="col-md-12 box row">
-    <h1>Internasjonale nyheter</h1>
         {% for news in news_list %}
             {% with newsurl=news.get_absolute_url %}
             <a href="{{ newsurl}}" style="color: black" >
@@ -60,7 +65,7 @@
 
 
 {% block sidebar %}
-<div class="col-md-12 box" id="rightbox1" >
+<div class="col-md-12 box sidebar_box">
     <h1>Navigasjon</h1>
     <ul>
         <li><a href="{{ ex_frontpage_url }}">Tilbake til forside for utveksling</a> </li>
@@ -68,7 +73,7 @@
     </ul">
 </div>
 
-<div class="col-md-12 box">
+<div class="col-md-12 box sidebar_box">
     <h1>Nyttige lenker</h1>
     <ul>
         <li>elem</li>
