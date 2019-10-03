@@ -31,13 +31,20 @@
 
 .com-tile{
     width: 33%;
+    text-align: center;
 }
 
 .com-link{
     color: black;
-    text-align: center;
 }
 
 .headline{
     text-align: center;
+}
+
+.com-img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
 }

@@ -10,8 +10,10 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from nablapps.accounts.models import NablaGroup
 
+from nablapps.core.models import WithPicture
 
-class ComPage(models.Model):
+
+class ComPage(WithPicture):
     """Model til en komiteside"""
     com = models.ForeignKey(Group, on_delete=models.CASCADE)
 
