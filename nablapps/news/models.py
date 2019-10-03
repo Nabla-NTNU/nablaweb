@@ -51,7 +51,7 @@ class TextContent(models.Model):
         return super().save(**kwargs)
 
 
-class NewsArticle(TimeStamped, WithPicture, TextContent):
+class AbstractNewsArticle(TimeStamped, WithPicture, TextContent):
     """
     Simple article model
 
@@ -60,6 +60,7 @@ class NewsArticle(TimeStamped, WithPicture, TextContent):
     """
     
     class Meta:
+        abstract = True
         verbose_name = "Nyhetsartikkel"
         verbose_name_plural = "Nyhetsartikler"
 
@@ -69,6 +70,10 @@ class NewsArticle(TimeStamped, WithPicture, TextContent):
     def get_absolute_url(self):
         """Get the url of the news-article"""
         return reverse("news_detail", kwargs={"pk": self.pk, "slug": self.slug})
+
+
+class NewsArticle(AbstractNewsArticle):
+    pass
 
 
 class FrontPageNews(models.Model):
