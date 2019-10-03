@@ -4,12 +4,16 @@ from django.db.models import Q
 
 from django.urls import reverse
 
+
+# temporary
+from ..news.models import NewsArticle
+
 class ExchangeFrontpageView(ListView):
     template_name = 'exchange/exchange_frontpage.html'
-    model = ExchangeNewsArticle
+    model = NewsArticle
     context_object_name = 'news_list'
     paginate_by = 5
-    queryset = ExchangeNewsArticle.objects.order_by('-pk')
+    queryset = NewsArticle.objects.order_by('-pk')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -23,10 +27,10 @@ class ExchangeFrontpageView(ListView):
 
 class ExchangeNewsView(ListView):
     template_name = 'exchange/exchange_news.html'
-    model = ExchangeNewsArticle
+    model = NewsArticle
     context_object_name = 'news_list'
     paginate_by = 8 
-    queryset = ExchangeNewsArticle.objects.order_by('-pk')
+    queryset = NewsArticle.objects.order_by('-pk')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

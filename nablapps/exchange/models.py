@@ -124,7 +124,7 @@ class Info(models.Model):
         return self.title
 
 
-class ExchangeNewsArticle(NewsArticle):
+class ExchangeNewsArticle():
     pass
 
 
