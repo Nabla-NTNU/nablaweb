@@ -21,8 +21,14 @@ class CommitteeOverview(ListView):
 
     model = ComPage
 
-    queryset = ComPage.objects.order_by('com__name')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        committees = ComPage.objects.filter(is_interest_group=False).order_by('com__name')
+        interest_groups = ComPage.objects.filter(is_interest_group=True).order_by('com__name')
+
+        context['committees'] = committees
+        context['interest_groups'] = interest_groups
+
         return context

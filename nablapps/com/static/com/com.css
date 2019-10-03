@@ -28,3 +28,16 @@
 .com-member .info {
     padding: 5px;
 }
+
+.com-tile{
+    width: 33%;
+}
+
+.com-link{
+    color: black;
+    text-align: center;
+}
+
+.headline{
+    text-align: center;
+}

@@ -1,25 +1,30 @@
 {% extends "base.html" %}
 {% load static %}
+{% load listutil %}
 {% load sekizai_tags %}
 
 {% block title %}Komitéer{% endblock %}
 
-{% block content %}
+{% block main %}
     {% addtoblock "css" %}
         <link href="{% static "com/com.css" %}" rel="stylesheet">
     {% endaddtoblock %}
+
 <h3>Komiteer</h3>
 <ul class="nav nav-pills nav-stacked">
-{% for c in compage_list %}
-    {% if not c.is_interest_group %}
-    <li class="panel-title"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
-    {% endif %}
+{% for row in committees|row_split:3 %}
+    <li>
+        <ul class="nav nav-pills nav-stacked">
+            {% for c in row %}
+                <li class="com-tile" style="display: inline-table"><a class="com-link" href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </li>
 {% endfor %}
+
 <h3>Interessegrupper</h3>
-{% for c in compage_list %}
-    {% if c.is_interest_group %}
+{% for c in interest_groups %}
     <li class="panel-title"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
-    {% endif %}
 {% endfor %}
 </ul>
 
