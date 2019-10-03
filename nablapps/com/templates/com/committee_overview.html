@@ -2,6 +2,7 @@
 {% load static %}
 {% load listutil %}
 {% load sekizai_tags %}
+{% load easy_thumbnails %}
 
 {% block title %}Komitéer{% endblock %}
 
@@ -10,23 +11,50 @@
         <link href="{% static "com/com.css" %}" rel="stylesheet">
     {% endaddtoblock %}
 
-<h3>Komiteer</h3>
-<ul class="nav nav-pills nav-stacked">
+<h3 class="headline">Komiteer</h3>
 {% for row in committees|row_split:3 %}
-    <li>
-        <ul class="nav nav-pills nav-stacked">
-            {% for c in row %}
-                <li class="com-tile" style="display: inline-table"><a class="com-link" href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
+    <div class="row">
+        {% for c in row %}
+            <div class="col-xs-6 col-md-3 com-tile">
+                <h4>
+                    
+                    <a class="com-link" href="{{ c.get_absolute_url }}">
+                        <img class="img-responsive com-img"
+                        {% if c.picture %}
+                            src="{% thumbnail c.picture 250x250 crop="smart" %}"
+                        {% else %}
+                            src="{% static "img/nabla-black.svg" 250x250 crop="smart" %}"
+                        {% endif %}>
+                    {{ c.com.name }}</a>
+                </h2>
+           </div> 
+        {% endfor %}
+    </div>
 {% endfor %}
 
-<h3>Interessegrupper</h3>
-{% for c in interest_groups %}
-    <li class="panel-title"><a href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
+<br>
+
+<h3 class="headline">Interessegrupper</h3>
+
+{% for row in interest_groups|row_split:3 %}
+    <div class="row">
+        {% for c in row %}
+            <div class="col-xs-6 col-md-3 com-tile">
+                <h4>
+                    
+                    <a class="com-link" href="{{ c.get_absolute_url }}">
+                        <img class="img-responsive com-img"
+                        {% if c.picture %}
+                            src="{% thumbnail c.picture 250x250 crop="smart" %}"
+                        {% else %}
+                            src="{% static "img/nabla_logo_black.png" 250x250 crop="smart" %}"
+                        {% endif %}>
+                    {{ c.com.name }}</a>
+                </h2>
+           </div> 
+        {% endfor %}
+    </div>
 {% endfor %}
-</ul>
 
 {% endblock %}
 
