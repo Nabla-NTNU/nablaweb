@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import UnivDetailView, ExchangeListView, InfoDetailView, ExchangeFrontpageView, ExchangeNewsView
+from .views import UnivDetailView, ExchangeListView, InfoDetailView, ExchangeFrontpageView, ExchangeNewsView, ExchangeNewsDetailView
 
 
 urlpatterns = [
@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/$', UnivDetailView.as_view(), name="ex_detail_list"),
     url(r'^exchange-list$', ExchangeListView.as_view(), name="ex_list"),
     url(r'^exchange-news$', ExchangeNewsView.as_view(), name="ex_news"),
+    url(r'^exchange-news/detail/(?P<pk>\d+)/(?P<slug>[-\w]*)$', ExchangeNewsDetailView.as_view(), name="ex_news_detail"),
 ]

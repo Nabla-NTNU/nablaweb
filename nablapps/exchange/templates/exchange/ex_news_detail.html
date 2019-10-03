@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block morehead %}
+
+<meta property="og:image" content="{{ news.get_picture_url }}" />
+<meta property="og:title" content="{{ news.headline|striptags }}" />
+<meta property="og:type"  content="article" />
+<meta property="og:description" content="{% spaceless %}{{ news.lead_paragraph|striptags }}{% endspaceless %}" />
+
+{% endblock %}
+
+
+{% block title %}{{ news.headline }}{% endblock %}
+
+
+{% block content %}
+    {% load markdown %}
+{% load easy_thumbnails %}
+
+
+<div class="box">
+    {% if news.picture %}
+    <img alt="header" class="img-responsive" src="{% thumbnail news.picture 760x300 box=news.cropping upscale=True detail=True quality=95 %}">
+    {% endif %}
+
+    <header><h2>{{ news.headline }}</h2></header>
+    <p><strong>{{ news.lead_paragraph}}</strong></p>
+    <div style="overflow: hidden;">{{ news.body|markdown}}</div>
+</div>  
+
+{% include "content/includes/comments.html" with content=news %}
+{% endblock %}
+
+
+{% block sidebar %}
+
+{% include "content/includes/meta.html" with content=news %}
+{% include "content/includes/sidebar-admin.html" %}
+
+{% endblock %}
+

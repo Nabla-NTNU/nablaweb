@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.urls import reverse
 
 from nablapps.core.models import TimeStamped, WithPicture
-
 from nablapps.news.models import AbstractNewsArticle
 
 
@@ -128,4 +128,7 @@ class Info(models.Model):
 
 
 class ExchangeNewsArticle(AbstractNewsArticle):
-    pass
+    def get_absolute_url(self):
+        """Get the url of the news-article"""
+        return reverse("ex_news_detail", kwargs={"pk": self.pk, "slug": self.slug})
+
