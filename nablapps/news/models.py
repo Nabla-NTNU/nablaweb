@@ -58,7 +58,6 @@ class NewsArticle(TimeStamped, WithPicture, TextContent):
     Used mostly for small news announcements.
     Is possible to add to the front page.
     """
-    is_ex_news = models.BooleanField(blank=True, null=True)
     
     class Meta:
         verbose_name = "Nyhetsartikkel"
