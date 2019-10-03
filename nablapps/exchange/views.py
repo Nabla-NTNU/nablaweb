@@ -1,8 +1,10 @@
 from django.views.generic import ListView, DetailView, TemplateView
 from .models import University, Exchange, Info, RETNINGER, ExchangeNewsArticle
 from django.db.models import Q
-
 from django.urls import reverse
+
+from nablapps.core.view_mixins import AdminLinksMixin
+
 
 
 # temporary
@@ -38,6 +40,14 @@ class ExchangeNewsView(ListView):
         context['ex_frontpage_url'] = ex_frontpage_url
         context['ex_list_url'] = ex_list_url
         return context
+
+
+class ExchangeNewsDetailView(AdminLinksMixin, DetailView):
+    """Show a single news-article"""
+    model = ExchangeNewsArticle
+    context_object_name = 'news'
+    template_name = 'exchange/ex_news_detail.html'
+
 
 
 class ExchangeListView(ListView):
