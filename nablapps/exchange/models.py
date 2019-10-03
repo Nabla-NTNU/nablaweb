@@ -2,7 +2,10 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from nablapps.news.models import NewsArticle
+from nablapps.core.models import TimeStamped, WithPicture
+
+from nablapps.news.models import AbstractNewsArticle
+
 
 
 class University(models.Model):
@@ -124,7 +127,5 @@ class Info(models.Model):
         return self.title
 
 
-class ExchangeNewsArticle():
+class ExchangeNewsArticle(AbstractNewsArticle):
     pass
-
-
