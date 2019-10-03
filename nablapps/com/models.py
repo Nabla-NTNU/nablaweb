@@ -10,12 +10,18 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from nablapps.accounts.models import NablaGroup
 
-from nablapps.core.models import WithPicture
 
-
-class ComPage(WithPicture):
+class ComPage(models.Model):
     """Model til en komiteside"""
     com = models.ForeignKey(Group, on_delete=models.CASCADE)
+
+    picture = models.ImageField(
+        upload_to="uploads/com_pictures",
+        null=True,
+        blank=True,
+        verbose_name="Bilde",
+        help_text=("Last opp din undergruppes logo."),
+)   
 
     is_interest_group = models.BooleanField(
         verbose_name="Interessegruppe",
@@ -71,6 +77,14 @@ class ComPage(WithPicture):
     def save(self, *args, **kwargs):
         self.slug = self.get_canonical_name()
         super().save(*args, **kwargs)
+
+    def get_picture_url(self):
+        """Return the absolute url of the main picture"""
+        domain = Site.objects.get_current().domain
+        media_url = settings.MEDIA_URL
+        filename = self.picture.name
+        return f'http://{domain}{media_url}{filename}'
+
 
 
 class ComMembership(models.Model):
