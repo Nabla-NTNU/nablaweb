@@ -72,7 +72,7 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
         permissions = (
             ("administer", "Can administer models"),
         )
-        db_table = "content_event" # Todo: hvorfor ha det slik?
+        db_table = "content_event"
 
     def __str__(self):
         return '%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
