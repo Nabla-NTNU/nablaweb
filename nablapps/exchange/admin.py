@@ -31,6 +31,6 @@ class InfoAdmin(admin.ModelAdmin):
 admin.site.register(Exchange, ExchangeAdmin)
 admin.site.register(University, UniversityAdmin)
 admin.site.register(Info, InfoAdmin)
-#admin.site.register(ExchangeNewsArticle)
+admin.site.register(ExchangeNewsArticle)
 
 # Register your models here.
