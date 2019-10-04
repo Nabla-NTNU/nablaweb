@@ -9,7 +9,6 @@ from django.views.generic import TemplateView
 from nablapps.album.models import Album
 from nablapps.blog.models import BlogPost
 
-from ..bedpres.models import BedPres
 from ..events.models import Event
 from ..nabladet.models import Nablad
 from ..news.models import FrontPageNews

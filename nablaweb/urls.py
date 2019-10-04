@@ -33,7 +33,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^album/', include('nablapps.album.urls')),
     url(r'^arrangement/', include('nablapps.events.urls')),
-    url(r'^bedpres/', include('nablapps.bedpres.urls')),
     url(r'^blogg/', include('nablapps.blog.urls')),
     url(r'^brukere/', include('nablapps.accounts.urls')),
     url(r'^favicon\.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'img/favicon.ico', permanent=True)),

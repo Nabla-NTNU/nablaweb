@@ -25,6 +25,8 @@ class EventAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
               "short_name",
               "lead_paragraph",
               "body",
+              "is_bedpres",
+              "company",
               "organizer",
               "location",
               "event_start",
