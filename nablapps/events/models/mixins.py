@@ -7,7 +7,7 @@ about an event and the registration info into different models.
 """
 from datetime import datetime, date
 from django.db import models
-from django.db.models import Count
+from django.db.models import Sum
 from django.contrib.auth.models import Group
 from six.moves.urllib.parse import urlparse
 from ..exceptions import (RegistrationNotRequiredException,
@@ -150,8 +150,7 @@ class RegistrationInfoMixin(models.Model):
 
         # Find number of penalties from this term. PS. aggreagate returns a dict, so get the value we want
         penalty_count = EventRegistration.objects.\
-            filter(user=user, date__gte=term_start).aggregate(Count('penalty'))['penalty__count']
-        print("P.C.:", penalty_count)
+            filter(user=user, date__gte=term_start).aggregate(Sum('penalty'))['penalty__sum']
         if penalty_count >= MAX_PENALTY:
             return False
         else:
