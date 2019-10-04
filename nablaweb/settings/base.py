@@ -100,7 +100,6 @@ INSTALLED_APPS = [
     'nablapps.image',
     'nablapps.news',
     'nablapps.accounts',
-    'nablapps.bedpres',
     'nablapps.com',
     'nablapps.core',
     'nablapps.exchange',
@@ -204,13 +203,6 @@ MARKDOWN_DEUX_STYLES = {
         "safe_mode": False,
     }
 }
-
-# BPC - api keys
-BPC_FORENING = '3'
-BPC_KEY = 'a88fb706bc435dba835b89ddb2ba4debacc3afe4'
-BPC_TESTING = True
-
-EVENT_GETTER_CLASS = 'nablapps.bedpres.event_overrides.BedPresAndEventGetter'
 
 # wiki
 WIKI_REVISIONS_PER_HOUR = 500
