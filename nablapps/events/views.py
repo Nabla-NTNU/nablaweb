@@ -183,7 +183,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
                 "glyphicon_symbol": "list",
                 "url": reverse("event_registrations", args=[self.object.id]),
             }]
-            if not self.object.penalty == 'Ingen prikker':
+            if self.object.penalty != 0:
                 admin_list.append({
                     "name": "Registrer oppmøte",
                     "glyphicon_symbol": "check",
