@@ -24,7 +24,7 @@
                 </a>
             </span>
             <span class="date">{{ comment.submit_date|naturalday }}</span>
-            {% if user.is_staff %}
+            {% if perms.django_comments.can_moderate %}
                 (<a href="{% url "comments-delete" comment.id %}">fjern</a>)
             {% endif %}
         </div>
