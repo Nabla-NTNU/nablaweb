@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<style>
+ #event_list {
+     display: flex;
+     flex-wrap: wrap;
+ }
+
+ #event_list .event {
+     flex: 0 0 45%;
+     border: 1px solid black;
+ }
+</style>
+<div id="event_list">
+{% for event in object_list %}
+    <div class="event">
+        <img src="{{ event.get_picture_url }}">
+        <h3>{{ event.headline }}</h3>
+        <p>{{ event.lead_paragraph }}</p>
+        {{ event.event_start }}
+    </div>
+{% endfor %}
+</div>
+{% endblock %}

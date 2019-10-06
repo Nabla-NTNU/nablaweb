@@ -11,6 +11,7 @@ from .views import (
     EventRegistrationsView,
     RegisterAttendanceView,
     ical_event,
+    EventMainPage
 )
 from .feeds import RecentEvents
 
@@ -30,6 +31,8 @@ urlpatterns = [
     url(r'^(\d{4})/(\d{1,2})/$',
         calendar,
         name='event_list'),
+
+    url(r'^fremover/$', EventMainPage.as_view(), name="event_main_page"),
 
     url(r'^mine/$',
         UserEventView.as_view(),

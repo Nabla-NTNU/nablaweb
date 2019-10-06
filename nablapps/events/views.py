@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from django.template import loader
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 from django.contrib.auth import get_user_model
 
 from django.utils.safestring import mark_safe
@@ -130,6 +130,13 @@ def calendar(request, year=None, month=None):
     }
 
     return render(request, 'events/event_list.html', context)
+
+class EventMainPage(ListView):
+    model = Event
+    template_name = "events/event_main_page.html"
+    
+    def get_queryset(self):
+        return Event.objects.filter(event_start__gte=datetime.date.today()).order_by('event_start')[:4]
 
 
 class EventRegistrationsView(PermissionRequiredMixin, DetailView):
