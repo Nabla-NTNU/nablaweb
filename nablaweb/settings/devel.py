@@ -4,6 +4,7 @@ import os
 
 DEBUG = True
 
+SECRET_KEY = "my_not_so_secret_development_key"
 
 DATABASES = {
     'default': {

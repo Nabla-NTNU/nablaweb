@@ -10,6 +10,8 @@ DEBUG = bool(get_env('DEBUG', False))
 ADMINS = [("Django-logging", "django-log@abel.nabla.no")]
 TEMPLATE_DEBUG=False
 
+SECRET_KEY = get_env('SECRET_KEY')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

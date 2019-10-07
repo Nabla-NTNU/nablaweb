@@ -11,9 +11,6 @@ DEBUG = True
 SITE_ID = 1
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "nabla.no"]
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'a()j2kxbwejl0y^jsk1*f#!=6na3pln6@fn!1ef6xra6(r3(%p'
-
 TIME_ZONE = 'Europe/Oslo'
 LANGUAGE_CODE = 'nb'
 USE_L10N = False  # don't use the locale of the server
