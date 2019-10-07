@@ -2,5 +2,5 @@
 
 Denne mappen inneholder templates som ikke tilhører noen spesiell app. Viktige templates å merke seg er:
 
-### base_site.html ###
+### base.html ###
 Dette er hoveddesignet, med navbar, innholdsbokser og footer.
