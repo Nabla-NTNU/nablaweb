@@ -6,7 +6,7 @@ All python-kode, html, css, javascript og andre statiske filer som har med http:
 
 Backenddelen av Nablas nettside er skrevet i [django](http://djangoproject.org).
 
-For å komme i gang med Nablaweb, sjekk wikien på: https://bitbucket.org/webkom/nablaweb/wiki/Home
+For å komme i gang med Nablaweb, sjekk [wikien.](https://github.com/NablaWebkom/nablaweb/wiki)
 
 ## Systemavhengigheter (ufullstendig)
 
