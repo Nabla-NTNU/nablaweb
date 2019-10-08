@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "about.html" %}
 {% load static %}
 {% load listutil %}
 {% load sekizai_tags %}
@@ -6,7 +6,7 @@
 
 {% block title %}Komitéer{% endblock %}
 
-{% block main %}
+{% block content %}
     {% addtoblock "css" %}
         <link href="{% static "com/com.css" %}" rel="stylesheet">
     {% endaddtoblock %}
