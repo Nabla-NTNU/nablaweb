@@ -13,7 +13,7 @@
 {% endblock %}
 
 
-{% block main %}
+{% block content %}
 <script type="text/javascript"> 
 // output functions are configurable.  This one just appends some text
 // to a pre element.
@@ -77,3 +77,17 @@ function runit() {
 </form >
 
  {% endblock %}
+
+{% block sidebar %}
+    <h1>Resultatliste:</h1>
+    <table style="width:100%">
+      <tr><th>Bruker</th><th>Resultat(antall tegn)</th></tr>
+      {% for t in result_list %}
+      <tr>
+        <td>{{ t.user.get_full_name }}</td>
+        <td>{{ t.length }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+{% endblock  %}
+

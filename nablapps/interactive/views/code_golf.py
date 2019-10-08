@@ -14,7 +14,13 @@ class CodeGolf(LoginRequiredMixin ,View):
         task = get_object_or_404(CodeTask, pk=task_id)
         task_text = task.task
         code_golf_form = CodeGolfForm()
-        context = {'task': task, 'code_golf_form': code_golf_form, 'task_text': task_text}
+        result_list = task.result_set.all()
+        # Cannot use .sorted_by since length is a property, not a db field
+        sorted_result_list = sorted(result_list, key=lambda x: x.length) 
+        context = {'task': task,
+                    'code_golf_form': code_golf_form,
+                    'task_text': task_text,
+                    'result_list': sorted_result_list,}
         return render(request, 'interactive/code_golf.html', context)
 
     def post(self, request, task_id):
