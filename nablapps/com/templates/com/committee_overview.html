@@ -11,50 +11,44 @@
         <link href="{% static "com/com.css" %}" rel="stylesheet">
     {% endaddtoblock %}
 
-<h3 class="headline">Komiteer</h3>
-{% for row in committees|row_split:3 %}
-    <div class="row">
-        {% for c in row %}
-            <div class="col-xs-6 col-md-3 com-tile">
-                <h4>
-                    
-                    <a class="com-link" href="{{ c.get_absolute_url }}">
-                        <img class="img-responsive com-img"
-                        {% if c.picture %}
-                            src="{% thumbnail c.picture 250x250 crop="smart" %}"
-                        {% else %}
-                            src="{% static "img/nabla-black.svg" 250x250 crop="smart" %}"
-                        {% endif %}>
-                    {{ c.com.name }}</a>
-                </h2>
-           </div> 
+<div>
+    <h3 class="headline">Komiteer</h3>
+    <div class="grid-container">
+        {% for c in committees %}
+            <div class="grid-element">
+                <a class="com-link" href="{{ c.get_absolute_url }}">
+                    <img class="img-responsive com-img"
+                    {% if c.picture %}
+                        src="{% thumbnail c.picture 250x250 crop="smart" %}"
+                    {% else %}
+                        src="{% static "img/nabla-black.svg" 250x250 crop="smart" %}"
+                    {% endif %}>
+                {{ c.com.name }}</a>
+            </div>
         {% endfor %}
     </div>
-{% endfor %}
+</div>
 
 <br>
 
-<h3 class="headline">Interessegrupper</h3>
-
-{% for row in interest_groups|row_split:3 %}
-    <div class="row">
-        {% for c in row %}
-            <div class="col-xs-6 col-md-3 com-tile">
-                <h4>
-                    
-                    <a class="com-link" href="{{ c.get_absolute_url }}">
-                        <img class="img-responsive com-img"
-                        {% if c.picture %}
-                            src="{% thumbnail c.picture 250x250 crop="smart" %}"
-                        {% else %}
-                            src="{% static "img/nabla-black.svg" 250x250 crop="smart" %}"
-                        {% endif %}>
-                    {{ c.com.name }}</a>
-                </h2>
-           </div> 
+<div>
+    <h3 class="headline">Interessegrupper</h3>
+    <div class="grid-container">
+        {% for c in interest_groups %}
+            <div class="grid-element">
+                <a class="com-link" href="{{ c.get_absolute_url }}">
+                    <img class="img-responsive com-img"
+                    {% if c.picture %}
+                        src="{% thumbnail c.picture 250x250 crop="smart" %}"
+                    {% else %}
+                        src="{% static "img/nabla-black.svg" 250x250 crop="smart" %}"
+                    {% endif %}>
+                {{ c.com.name }}</a>
+            </div>
         {% endfor %}
     </div>
-{% endfor %}
+</div>
+
 
 {% endblock %}
 
