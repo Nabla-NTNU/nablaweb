@@ -17,7 +17,7 @@
             <h1 style="text-align: center">Om Nabla</h1>
             <ul class="nav-list">
                 <a href="{% url "om-nabla" %}"><li>Generelt om Nabla</li></a>
-                <a><li>Styret</li></a>
+                <a href="{% url "show-board-page" slug="styret" %}"><li>Styret</li></a>
                 <a href="{% url "committee_overview" %}"><li>Undergrupper</li></a>
                 <a href="{% url 'wiki:get' 'lovverk/nablas-lover/' %}"><li>Nablas Lover</li></a>
                 <a href="{% url 'wiki:get' 'lovverk/nablas-forskrifter/' %}"><li>Nablas Forskrifter</li></a>
