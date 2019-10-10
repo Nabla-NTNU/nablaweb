@@ -25,7 +25,7 @@
                 {# Hent alle sider som starter på /om/ #}
                 {% get_flatpages '/om/' as about_pages %}
                 {% for page in about_pages %}
-                <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+                <a href="{{ page.url }}"><li>{{ page.title }}</li></a>
                 {% endfor %}
             </ul>
             <h3 style="text-align: center">Diverse</h3>
