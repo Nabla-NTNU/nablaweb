@@ -12,7 +12,9 @@
 
 .navbar-container{
     margin-right: 10px;
-    min-width: 150px;
+}
+
+.content-container{
 }
 
 .nav-list li{
@@ -32,8 +34,8 @@
 }
 
 
-@media (max-width: 700px){
+@media (max-width: 600px){
     .main-grid-container{
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))
+        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr))
     }
 }
