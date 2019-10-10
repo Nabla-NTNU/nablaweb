@@ -1,0 +1,41 @@
+.main-grid-container{
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-template-areas:
+    "navbar content"
+    grid-gap: 1rem;
+}
+
+.nav-list{
+    list-style: none;
+}
+
+.navbar-container{
+    margin-right: 10px;
+}
+
+.content-container{
+}
+
+.nav-list li{
+    display: block;
+    padding: 5px;
+    background-color: #F2F2F2;
+    border-radius: 5px;
+    margin: 1%;
+}
+
+.nav-list a{
+    color: black;
+}
+
+.nav-list li:hover{
+    background-color: grey;
+}
+
+
+@media (max-width: 600px){
+    .main-grid-container{
+        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr))
+    }
+}

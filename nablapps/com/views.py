@@ -2,10 +2,13 @@ from django.views.generic import DetailView, ListView
 from .models import ComPage, ComMembership
 
 
-class ShowPage(DetailView):
+class AbstractShowPage(DetailView):
     template_name = 'com/com_details.html'
     model = ComPage
     context_object_name = 'com'
+
+    class Meta:
+        abtract = True
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -14,6 +17,14 @@ class ShowPage(DetailView):
                 com=com, is_active=True).order_by('joined_date')
         context['compages'] = ComPage.objects.order_by('com__name')
         return context
+
+
+class ShowPage(AbstractShowPage):
+    pass
+
+
+class ShowBoard(AbstractShowPage):
+    template_name = 'com/board_details.html'
 
 
 class CommitteeOverview(ListView):

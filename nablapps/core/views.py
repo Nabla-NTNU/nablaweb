@@ -78,3 +78,13 @@ class FrontPageView(FlatPageMixin, TemplateView):
         if self.request.user.is_authenticated and context['poll'] is not None:
             context['poll_has_voted'] = context['poll'].user_has_voted(self.request.user)
 
+
+class AboutView(TemplateView):
+
+    template_name = 'core/general_about.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+

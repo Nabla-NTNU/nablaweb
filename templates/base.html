@@ -27,6 +27,8 @@
         <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap-theme.min.css" %}">
         <link rel="stylesheet" href="{% static "font-awesome/css/font-awesome.min.css" %}">
         <link href="{% static "css/default.css" %}" rel="stylesheet">
+        <!-- would like to add this in about.html, but cannot currently get it to work -->
+        <link href="{% static "css/about.css" %}" rel="stylesheet">
         {% endaddtoblock %}
         <!-- css-block -->
         {% render_block "css" %}
@@ -167,46 +169,7 @@
                                     <li><a href="{% url "advent_calendar" "2018" %}">Julekalender 2018</a></li>
                                 </ul>
                             </li>
-
-                            <li class="dropdown">
-                                <a href="#om" class="dropdown-toggle" data-toggle="dropdown">
-                                    Om Nabla
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" >
-                                    <li><a href="{% url "committee_overview" %}" >Undergrupper</a></li>
-                                    <li><a href="{% url 'show_com_page' slug="styret"%}">Styret</a></li>
-                                    {# url for /nablashop/ #}
-                                    <li><a href="{% url 'nablashop:index' %}" >Nablashop</a></li>
-                                    <li><a href="{% url 'wiki:get' 'lovverk/nablas-lover/' %}">Nablas Lover</a></li>
-                                    <li><a href="{% url 'wiki:get' 'lovverk/nablas-forskrifter/' %}">Nablas Forskrifter</a></li>
-                                    {# Hent alle sider som starter på /om/ #}
-                                    {% get_flatpages '/om/' as about_pages %}
-                                    {% for page in about_pages %}
-                                    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-
-                            <li class="dropdown">
-                                <a href="#om" class="dropdown-toggle" data-toggle="dropdown">
-                                    Diverse
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" >
-
-                                    <li><a href="/nystudent/">For nye studenter</a></li>
-                                    <li><a href="https://nabla.no/nyheter">Nyhetsartikler</a></li>
-                                    <li><a href="https://www.facebook.com/nablantnu/">Facebookside</a></li>
-                                    <li><a href="http://bokskap.nabla.no/">Bokskap</a></li>
-                                    <li><a href="{% url "wiki:root" %}">Internwiki</a></li>
-                                    <li><a href="{% url "ex_frontpage" %}">Utveksling</a></li>
-                                    <li><a href="https://nablantnu.slack.com">Nablaslack</a></li>
-
-                                </ul>
-                            </li>
-
-
+                            <li><a href="{% url "om-nabla" %}">Om Nabla</a></li>
                             <li class="dropdown">
                                 <a href="#Om" class="dropdown-toggle" data-toggle="dropdown">
                                     Kontakt og varsling

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+{% load flatpages %}
+{% load sekizai_tags %}
+
+
+{% addtoblock "css" %}
+    <link href="{% static "css/about.css" %}" rel="stylesheet">
+{% endaddtoblock %}
+
+
+{% block main %}
+
+<div class="main-grid-container">
+    <div class="navbar navbar-container">
+        {% block navbar %}
+            <h1 style="text-align: center">Om Nabla</h1>
+            <ul class="nav-list">
+                <a href="{% url "om-nabla" %}"><li>Generelt om Nabla</li></a>
+                <a href="{% url "show-board-page" slug="styret" %}"><li>Styret</li></a>
+                <a href="{% url "committee_overview" %}"><li>Undergrupper</li></a>
+                <a href="{% url 'wiki:get' 'lovverk/nablas-lover/' %}"><li>Nablas Lover</li></a>
+                <a href="{% url 'wiki:get' 'lovverk/nablas-forskrifter/' %}"><li>Nablas Forskrifter</li></a>
+
+                {# Hent alle sider som starter på /om/ #}
+                {% get_flatpages '/om/' as about_pages %}
+                {% for page in about_pages %}
+                <a href="{{ page.url }}"><li>{{ page.title }}</li></a>
+                {% endfor %}
+            </ul>
+            <h3 style="text-align: center">Diverse</h3>
+            <ul class="nav-list">
+                <a href="{% url 'nablashop:index' %}"><li>Nablashop</li></a>
+                <a href="/nystudent/"><li>For nye studenter</li></a>
+                <a href="{% url "news_list" %}"><li>Nyhetsartikler</li></a>
+                <a href="http://bokskap.nabla.no/"><li>Bokskap</li></a>
+                <a href="{% url "wiki:root" %}"><li>Internwiki</li></a>
+                <a href="{% url "ex_frontpage" %}"><li>Utveksling</li></a>
+
+
+            </ul>
+        {% endblock navbar %}
+    </div>
+    <div class="content content-container">
+        {% block content %}
+        {% endblock content %}
+    </div>
+</div>
+
+{% endblock main %}
+
+
