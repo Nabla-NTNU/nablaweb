@@ -55,6 +55,7 @@ urlpatterns = [
     url(r'^contact/', include('nablapps.contact.urls')),
     url(r'^wiki/notifications/', django_nyt.urls.get_pattern()),
     url(r'^wiki/', wiki.urls.get_pattern()),
+    url(r'^om-nabla/', include('nablapps.core.urls')),
 
     # For å ta i bruk robots.txt
     url(r'^robots\.txt$', TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),
