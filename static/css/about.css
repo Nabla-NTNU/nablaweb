@@ -36,6 +36,7 @@
 
 @media (max-width: 600px){
     .main-grid-container{
-        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr))
+        display: flex;
+        flex-direction: column-reverse;
     }
 }
