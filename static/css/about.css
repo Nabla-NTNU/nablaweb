@@ -10,6 +10,10 @@
     list-style: none;
 }
 
+.navbar-container{
+    margin-right: 10px;
+}
+
 .nav-list li{
     display: block;
     padding: 5px;
