@@ -51,6 +51,24 @@
 </div>
 
 <style>
+    .button{
+        display: block;
+        text-align: center;
+        border-radius: 5px;
+        background-color: #f0f0f0;
+        color: black;
+        margin: 10px;
+    }
+
+    .button:hover{
+        background-color: #cfcfcf;
+        color: black;
+    }
+</style>
+
+<a href="{% url "news_list" %}" class="button">Flere nyheter</a>
+
+<style>
     .nav-tabs{
         display: flex;
     }
@@ -103,27 +121,25 @@
     </div>
 </div>
 
-
-
-<div class= "row row-same-height">
-    {% for news in news_list_3 %}
-        {% include "includes/article_widget.html" %}
-    {% endfor %}
-</div>
-
-{# <a href="{% url "news_list" %}" class="btn">Flere nyheter</a> #}
+{% if frontpageinfo %}
+        <p>
+            {{ frontpageinfo.content | markdown:"unsafe" }}
+        </p>
+    {% endif %}
 {% endblock content %}
+
+
 {% block sidebar %}
     {% include "poll/poll_include.html" %}
 <br />
 <br />
 {% include "officeCalendar/includes/list.html" %}
 
-{% if sidebarinfo %}
-        <p>
-            {{ sidebarinfo.content | markdown:"unsafe" }}
-        </p>
-    {% endif %}
+    {% if sidebarinfo %}
+            <p>
+                {{ sidebarinfo.content | markdown:"unsafe" }}
+            </p>
+        {% endif %}
 
     <h2>Nyeste Skråttcast</h2>
     {% if new_podcast %}

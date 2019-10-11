@@ -25,7 +25,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
     The view for showing the front page of nablaweb
     """
     template_name = 'front_page.html'
-    flatpages = [("sidebarinfo", "/forsideinfo/")]
+    flatpages = [("frontpageinfo", "/forsideinfo/"), ("sidebarinfo", "/sidebarinfo/")]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
