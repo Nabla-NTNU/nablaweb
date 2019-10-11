@@ -1,16 +1,14 @@
 {% extends "base.html" %}
 
 {% block main %}
-
 <style>
- #event_list {
-     display: flex;
-     flex-wrap: wrap;
- }
+#event_list .month {
+    border: 1px solid black;
+    margin-bottom: 5px;
+}
 
- #event_list .event {
-     flex: 0 0 45%;
-     border: 1px solid black;
+#event_list .day {
+text-decoration: underline;
  }
 </style>
 
@@ -30,12 +28,15 @@
 
 <div id="event_list">
 {% for event in object_list %}
-    <div class="event">
-        <img src="{{ event.get_picture_url }}">
-        <h3>{{ event.headline }}</h3>
-        <p>{{ event.lead_paragraph }}</p>
-        {{ event.event_start }}
-    </div>
+        {% ifchanged event.event_start.month %}{% if forloop.counter0 %}</div>{% endif %}{% endifchanged %}
+        {% ifchanged event.event_start.month %}
+        <div class="month"> 
+        <h2>
+            {{ event.event_start|date:"F" }}
+        </h2>
+    {% endifchanged %}
+    {% ifchanged %}<h3 class="day">{{ event.event_start|date:"d - l" }}</h3>{% endifchanged %}
+    <li>{{ event.headline }}</li>
 {% endfor %}
 </div>
 {% endblock %}
