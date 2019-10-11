@@ -27,16 +27,15 @@ text-decoration: underline;
 </div>
 
 <div id="event_list">
-{% for event in object_list %}
-        {% ifchanged event.event_start.month %}{% if forloop.counter0 %}</div>{% endif %}{% endifchanged %}
-        {% ifchanged event.event_start.month %}
-        <div class="month"> 
-        <h2>
-            {{ event.event_start|date:"F" }}
-        </h2>
-    {% endifchanged %}
-    {% ifchanged %}<h3 class="day">{{ event.event_start|date:"d - l" }}</h3>{% endifchanged %}
-    <li>{{ event.headline }}</li>
+    {% regroup object_list by event_start.date|date:"F" as month_list %}
+    {% for month in month_list %}
+        <div class="month">
+            <h2>{{ month.grouper }}</h2>
+            {% for event in month.list %}
+            {% ifchanged %}<h3 class="day">{{ event.event_start|date:"d - l" }}</h3>{% endifchanged %}
+            <p>{{ event.headline }}</p>
+            {% endfor %}
+       </div>
 {% endfor %}
 </div>
 {% endblock %}
