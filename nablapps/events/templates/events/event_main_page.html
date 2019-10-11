@@ -1,41 +1,74 @@
 {% extends "base.html" %}
 
 {% block main %}
-<style>
-#event_list .month {
-    border: 1px solid black;
-    margin-bottom: 5px;
-}
+    <style>
+     #event_list .month {
+         /*     border: 1px solid black;
+            margin-bottom: 5px;*/
+     }
 
-#event_list .day {
-text-decoration: underline;
- }
-</style>
+     #event_list .day {
+         text-decoration: underline;
+     }
 
-<div id="penalties">
-{% if penalties %}<h2>Prikker:</h2>{% endif %}
-{% for penalty in penalties %}
-    <span class="fa fa-times"></span> {{ penalty.event.headline }} - {{ penalty.penalty }} prikk{% if penalty.penalty > 1 %}er{% endif %}
-{% endfor %}
-</div>
+     #dash {
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+         grid-template-areas:
+             "user_events penalty"
+             "event_list event_list";
+         justify-items: stretch;
+         grid-column-gap: 40px;
+     }
 
-<div id="user_events">
-    {% if user_events %}<h2>Påmeldte arrangementer:</h2>{% endif %}
-    {% for reg in user_events %}
-        {{ reg.event.event_start|date:"F d." }} - {{ reg.event.headline }}
-    {% endfor %}
-</div>
+     .dash-panel {
+         background-color: pink;
+         box-shadow: 0px 0px 10px 0px black;
+         padding: 2px 8px;
+     }
 
-<div id="event_list">
-    {% regroup object_list by event_start.date|date:"F" as month_list %}
-    {% for month in month_list %}
-        <div class="month">
-            <h2>{{ month.grouper }}</h2>
-            {% for event in month.list %}
-            {% ifchanged %}<h3 class="day">{{ event.event_start|date:"d - l" }}</h3>{% endifchanged %}
-            <p>{{ event.headline }}</p>
+     .dash-panel h2 {
+         text-align: center;
+     }
+
+     #penalties {
+         grid-area: penalty;
+     }
+     #user_events {
+         grid-area: user_events;
+     }
+     #event_list {
+         grid-area: event_list;
+     }
+    </style>
+
+    <div id="dash">
+        <div id="user_events" class="dash-panel">
+            {% if user_events %}<h2>Påmeldte arrangementer:</h2>{% endif %}
+            {% for reg in user_events %}
+                {{ reg.event.event_start|date:"F d." }} - {{ reg.event.headline }}
             {% endfor %}
-       </div>
-{% endfor %}
-</div>
+        </div>
+
+        {% if penalties %}
+            <div id="penalties" class="dash-panel">
+                <h2>Prikker:</h2>
+                {% for penalty in penalties %}
+                    <span class="fa fa-times"></span> {{ penalty.event.headline }} - {{ penalty.penalty }} prikk{% if penalty.penalty > 1 %}er{% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div id="event_list">
+            {% regroup object_list by event_start.date|date:"F" as month_list %}
+            {% for month in month_list %}
+                <div class="month">
+                    <h2>{{ month.grouper }}</h2>
+                    {% for event in month.list %}
+                        {% ifchanged %}<h3 class="day">{{ event.event_start|date:"d - l" }}</h3>{% endifchanged %}
+                        <p>{{ event.headline }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
