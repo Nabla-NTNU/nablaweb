@@ -1,6 +1,6 @@
 /* MAIN */
-body {
-  margin-top: 80px;
+html, body {
+    height: 100%;
 }
 
 ul.nav.nav-list>li {
@@ -230,6 +230,9 @@ h3 a, h3 a:hover, h3 a:active, h3 a:focus{
         border-top:1px solid #666;
         color: #ccc;
         padding-top: 30px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
     }
 
     /* h2 is black, so make it white */
@@ -386,14 +389,18 @@ Overflow-x: hidden;
     }
 }
 
-
 #content {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
+    position: relative;
+    min-width: 460px;
 }
 
 #mainContent {
-  flex: 1;
+    padding-top: 80px;
+    padding-bottom: 391px; /* footer height */
 }
 
+@media(max-width: 992px){
+    #mainContent {
+        padding-bottom: 918px; /* footer height */
+    }
+}
