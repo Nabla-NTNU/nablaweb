@@ -136,7 +136,16 @@ class EventMainPage(ListView):
     template_name = "events/event_main_page.html"
     
     def get_queryset(self):
-        return Event.objects.filter(event_start__gte=datetime.date.today()).order_by('event_start')[:4]
+        return Event.objects.filter(event_start__gte=datetime.date.today()).order_by('event_start')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['penalties'] = user.get_penalties()
+        context['user_events'] = user.eventregistration_set.\
+            filter(event__event_start__gte=datetime.date.today()).\
+            order_by('event__event_start')
+        return context
 
 
 class EventRegistrationsView(PermissionRequiredMixin, DetailView):

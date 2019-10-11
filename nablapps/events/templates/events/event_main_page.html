@@ -13,6 +13,21 @@
      border: 1px solid black;
  }
 </style>
+
+<div id="penalties">
+{% if penalties %}<h2>Prikker:</h2>{% endif %}
+{% for penalty in penalties %}
+    <span class="fa fa-times"></span> {{ penalty.event.headline }} - {{ penalty.penalty }} prikk{% if penalty.penalty > 1 %}er{% endif %}
+{% endfor %}
+</div>
+
+<div id="user_events">
+    {% if user_events %}<h2>Påmeldte arrangementer:</h2>{% endif %}
+    {% for reg in user_events %}
+        {{ reg.event.event_start|date:"F d." }} - {{ reg.event.headline }}
+    {% endfor %}
+</div>
+
 <div id="event_list">
 {% for event in object_list %}
     <div class="event">
