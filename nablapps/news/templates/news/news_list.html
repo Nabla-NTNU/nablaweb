@@ -9,7 +9,7 @@
 <link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
 {% endblock %}
 
-{% block content %}
+{% block main %}
 {% for news in news_list %}
     <div class="row">
         {% with newsurl=news.get_absolute_url %}
@@ -56,4 +56,4 @@
     </ul>
 </nav>
 {% endif %}
-{% endblock content %}
+{% endblock main %}
