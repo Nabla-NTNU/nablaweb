@@ -5,6 +5,7 @@ from django.db import models
 from hashlib import sha1
 from .utils import activate_user_and_create_password, send_activation_email
 from image_cropping.fields import ImageRatioField, ImageCropField
+from nablapps.events.models import EventRegistration
 
 
 class NablaUserManager(UserManager):
@@ -133,6 +134,21 @@ class NablaUser(AbstractUser):
     def nablagroups(self):
         groups = self.groups.all()
         return [NablaGroup.objects.filter(id=group.id).first() for group in groups]
+
+    def get_penalties(self):
+        """Returns the EventRegistrations for which the user has penalties this semester"""
+
+        # Find out if we are in first or second term
+        today = date.today()
+        first_semester = date(today.year, 1, 1)  # First semester starts 1. jan
+        second_semester = date(today.year, 6, 1)  # Second semester starts 6. jun
+
+        semester_start = second_semester if second_semester <= today else first_semester
+
+        penalties = EventRegistration.objects.\
+            filter(user=self, date__gte=semester_start)
+        return penalties
+
 
 
 class NablaGroup(Group):

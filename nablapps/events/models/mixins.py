@@ -138,23 +138,8 @@ class RegistrationInfoMixin(models.Model):
         """Counts the users penalties this term, used in _asser_user_allowed_to_register"""
 
         MAX_PENALTY = 4 # This is the limit at which one is not allowed to register
-        # Find out if we are in first or second term
-        today = date.today()
-        first_term = date(today.year, 1, 1)
-        second_term = date(today.year, 6, 1)
-
-        if second_term <= today:
-            term_start = second_term
-        else:
-            term_start = first_term
-
-        # Find number of penalties from this term. PS. aggreagate returns a dict, so get the value we want
-        penalty_count = EventRegistration.objects.\
-            filter(user=user, date__gte=term_start).aggregate(Sum('penalty'))['penalty__sum']
-        if penalty_count >= MAX_PENALTY:
-            return False
-        else:
-            return True
+        penalty_count = user.get_penalties().aggregate(Sum('penalty'))['penalty__sum']
+        return False if penalty_count >= MAX_PENALTY else True
 
     def _assert_user_allowed_to_register(self, user):
         if not self.registration_required:
