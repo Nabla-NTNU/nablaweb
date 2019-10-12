@@ -134,9 +134,14 @@ def calendar(request, year=None, month=None):
 class EventMainPage(ListView):
     model = Event
     template_name = "events/event_main_page.html"
-    
+    NUMBER_OF_EVENTS = 10  # Number of events to list
+
     def get_queryset(self):
-        return Event.objects.filter(event_start__gte=datetime.date.today()).order_by('event_start')
+
+        future_events = Event.objects.filter(event_start__gte=datetime.date.today())\
+                                      .order_by('event_start')[:self.NUMBER_OF_EVENTS]
+        return future_events
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -63,12 +63,16 @@
             {% for month in month_list %}
                 <div class="month">
                     <h2>{{ month.grouper }}</h2>
-                    {% for event in month.list %}
-                        {% ifchanged %}<h3 class="day">{{ event.event_start|date:"d - l" }}</h3>{% endifchanged %}
-                        <p>{{ event.headline }}</p>
+                    {% regroup month.list by event_start.date|date:"d -l" as day_list %}
+                    {% for day in day_list %}
+                    <div class="day">
+                    <h3>{{ day.grouper }}</h3>
+                    {% for event in day.list %}
+                    {{ event }}
+                    {% endfor %}
+                    </div>
                     {% endfor %}
                 </div>
             {% endfor %}
         </div>
-    </div>
 {% endblock %}
