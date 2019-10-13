@@ -18,6 +18,7 @@ For å komme i gang med Nablaweb, sjekk [wikien.](https://github.com/NablaWebkom
 ## Mappestruktur ##
 - nablapps -- Inneholder alle djangoappene
     - accounts -- Brukere (grunnleggende ting som registrering og profil)
+    - album -- For bilder til visning i album
     - blog -- Bloggsystemet
     - bedpres -- Bedriftspresentasjoner, arver fra event
     - com -- Komitesider
@@ -25,7 +26,7 @@ For å komme i gang med Nablaweb, sjekk [wikien.](https://github.com/NablaWebkom
     - core -- For sentrale funksjoner som ikke hører hjemme i egen app (se egen README)
     - events -- Arrangementer
     - exchange -- For info om utveksling
-    - image -- For bilder
+    - image -- For bilder til bruk i Markdown
     - interactive -- Julekalender, quizer, brukertester og kodegolf
     - jobs -- Stillingsannonser
     - meeting-records -- Styret sine møtereferater
