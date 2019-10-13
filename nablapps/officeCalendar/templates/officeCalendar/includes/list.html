@@ -7,6 +7,10 @@ office_events is a dictionary with weekday as key and a list of events as value
 {% if office_events %}
 {% addtoblock "css" %}
 <style>
+
+#office_calendar {
+}
+
  /* Office calendar */
  #office_calendar th {
      border-bottom: 1px solid lightgray;
@@ -30,18 +34,23 @@ office_events is a dictionary with weekday as key and a list of events as value
  }
 
  #office_calendar {
-     table-layout: fixed;
-     width: 100%;
-     border-top: 4px solid black;
-     border-bottom: 1px solid #D0D0D0;
-     border-left: 1px solid #D0D0D0;
-     border-right: 1px solid #D0D0D0;
-     box-shadow:  0 0 2px rgba(0, 0, 0, 0.24);
+    table-layout: fixed;
+    width: 100%;
  }
 
+#office-cal-container{
+    height: 100%;
+    box-shadow:  0 0 2px rgba(0, 0, 0, 0.24);
+    border-top: 4px solid black;
+    border-bottom: 1px solid #D0D0D0;
+    border-left: 1px solid #D0D0D0;
+    border-right: 1px solid #D0D0D0;
+
+}
 </style>
 {% endaddtoblock %}
 
+<div id=office-cal-container>
 <table id="office_calendar">
     <col width="20%">
     <col width="55%">
@@ -67,5 +76,6 @@ office_events is a dictionary with weekday as key and a list of events as value
     </tr>
     {% endfor %}
 </table>
+</div>
 
 {% endif %}
