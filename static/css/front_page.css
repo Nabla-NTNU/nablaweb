@@ -3,9 +3,9 @@
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: repeat(6, auto);
     grid-gap: 20px;
-    align-items: strech;
+    align-items: stretch;
     grid-template-areas:
-        "main-article    main-aticle     welcome"
+        "main-article    main-article    welcome"
         "upcoming-events upcoming-events office"
         ".               .               poll"
         ".               .               latest-podcast"
@@ -25,8 +25,6 @@
 
 }
 
-
-
 .well{
     margin-bottom: 0px;
 }
@@ -34,6 +32,7 @@
 .main-article{
     align-self: stretch;
     margin: 0;
+    grid-area: main-article;
 }
 .more-news-row1{
     grid-column: 1 / span 2;
@@ -44,4 +43,32 @@
     grid-column: 1 / span 2;
     grid-row: 4 / span 1;
     flex-direction: column;
+}
+
+.welcome {
+    grid-area: welcome;
+}
+
+.upcoming-events {
+    grid-area: upcoming-events;
+}
+
+.office {
+    gird-area: office;
+}
+
+.poll {
+    grid-area: poll;
+}
+
+.latest-podcast {
+    grid-area: latest-podcast;
+}
+
+.sponsors {
+    grid-area: sponsors;
+}
+
+.suggestions {
+    grid-area: suggestions;
 }
