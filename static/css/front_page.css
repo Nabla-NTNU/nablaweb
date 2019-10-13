@@ -4,6 +4,12 @@
     grid-template-rows: repeat(6, auto);
     grid-gap: 20px;
     align-items: strech;
+    grid-template-areas:
+        "main-article    main-aticle     welcome"
+        "upcoming-events upcoming-events office"
+        ".               .               poll"
+        ".               .               latest-podcast"
+        "sponsors        sponsors        suggestions";
 }
 
 @media (max-width: 1000px){
@@ -26,17 +32,9 @@
 }
 
 .main-article{
-    grid-column: 1 / span 2;
-    grid-row: 1 / span 1;
     align-self: stretch;
     margin: 0;
 }
-
-.upcomming-events{
-    grid-column: 1 / span 2;
-    grid-row: 2 / span 1;
-}
-
 .more-news-row1{
     grid-column: 1 / span 2;
     grid-row: 3 / span 1;
@@ -47,54 +45,3 @@
     grid-row: 4 / span 1;
     flex-direction: column;
 }
-
-.latest-nablad{
-    grid-column: 1 / span 2;
-    grid-row: 5 / span 1;
-}
-
-.sponsors{
-    grid-column: 1 / span 2;
-    grid-row: 6 / span 1;
-}
-
-
-
-
-.welcome{
-    grid-column: 3 / span 1;
-    grid-row: 1 / span 1;
-}
-
-.office{
-    grid-column: 3 / span 1;
-    grid-row: 2 / span 1;
-}
-
-.poll{
-    grid-column: 3 / span 1;
-    grid-row: 3 / span 1;
-}
-
-.latest-podcast{
-    grid-column: 3 / span 1;
-    grid-row: 4 / span 1;
-}
-
-.suggestions{
-    grid-column: 3 / span 1;
-    grid-row: 5 / span 1;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
