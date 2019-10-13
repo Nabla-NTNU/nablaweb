@@ -4,7 +4,7 @@ Velkommen til nablaweb!
 
 All python-kode, html, css, javascript og andre statiske filer som har med http://nabla.no skal ligge her.
 
-Backenddelen av Nablas nettside er skrevet i [django](http://djangoproject.org).
+Backenddelen av Nablas nettside er skrevet i [django](http://djangoproject.com).
 
 For å komme i gang med Nablaweb, sjekk [wikien.](https://github.com/NablaWebkom/nablaweb/wiki)
 
