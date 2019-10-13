@@ -28,7 +28,8 @@
 .main-article{
     grid-column: 1 / span 2;
     grid-row: 1 / span 1;
-    height: 1fr;
+    align-self: stretch;
+    margin: 0;
 }
 
 .upcomming-events{
