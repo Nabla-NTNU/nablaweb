@@ -26,7 +26,7 @@ For å komme i gang med Nablaweb, sjekk [wikien.](https://github.com/NablaWebkom
     - events -- Arrangementer
     - exchange -- For info om utveksling
     - image -- For bilder
-    - interactive -- Julekalender++
+    - interactive -- Julekalender, quizer, brukertester og kodegolf
     - jobs -- Stillingsannonser
     - meeting-records -- Styret sine møtereferater
     - nabladet -- pdf-filer av Nabladet
