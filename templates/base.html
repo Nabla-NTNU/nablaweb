@@ -260,21 +260,20 @@
             {% bootstrap_messages %}
             {% block main %}
             <div class="row">
-            <!-- Blog Entries Column -->
-            <div class="col-md-8">
+                <!-- Blog Entries Column -->
+                <div class="col-md-8">
                 {% block content %}{% endblock content %}
-            </div>
+                </div>
 
-            <!-- Blog Sidebar Widgets Column -->
-            <div class="col-md-4">
-                    {% block sidebar %}
-                    {% endblock sidebar %}
-            </div>
-
+                <!-- Blog Sidebar Widgets Column -->
+                <div class="col-md-4">
+                {% block sidebar %}
+                {% endblock sidebar %}
+                </div>
             </div>
             <!-- /.row -->
             {% endblock main %}
-        </div>
+        </div> <!-- id="mainContent" -->
 
         <!-- Footer -->
         <footer>
