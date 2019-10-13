@@ -9,7 +9,8 @@
         "upcoming-events upcoming-events office"
         ".               .               poll"
         ".               .               latest-podcast"
-        "sponsors        sponsors        suggestions";
+        "latest-nablad   latest-nablad   suggestions"
+        "sponsors        sponsors        .";
 }
 
 @media (max-width: 1000px){
@@ -63,6 +64,10 @@
 
 .latest-podcast {
     grid-area: latest-podcast;
+}
+
+.latest-nablad {
+    grid-area: latest-nablad;
 }
 
 .sponsors {
