@@ -59,7 +59,7 @@
         {% endblock %}
     </head>
 
-    <body>
+    <body style="background-color: #fafafa; margin-top: 0px;">
 
 <!-- Pop up window displaying important information about the 'fadderperiode' -->
     {% if newuser_popup %}
@@ -255,7 +255,7 @@
         </header>
 
         <!-- Page Content -->
-        <div class="container" id = "mainContent">
+        <div class="container box" id = "mainContent" style="padding: 100px 20px 10px 20px; background-color: white; margin-bottom: 0px;">
 
             {% bootstrap_messages %}
             {% block main %}
