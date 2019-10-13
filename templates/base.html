@@ -29,6 +29,8 @@
         <link href="{% static "css/default.css" %}" rel="stylesheet">
         <!-- would like to add this in about.html, but cannot currently get it to work -->
         <link href="{% static "css/about.css" %}" rel="stylesheet">
+        <!-- would like to add this in frontpage(2).html, but cannot currently get it to work -->
+        <link href="{% static "css/front_page.css" %}" rel="stylesheet">
         {% endaddtoblock %}
         <!-- css-block -->
         {% render_block "css" %}
@@ -253,7 +255,7 @@
         </header>
 
         <!-- Page Content -->
-        <div class="container" id = "mainContent">
+        <div class="container box" id = "mainContent">
 
             {% bootstrap_messages %}
             {% block main %}
