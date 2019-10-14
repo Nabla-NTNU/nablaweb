@@ -8,16 +8,13 @@
 
 {% block more_head %}
 <link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
-
-{% addtoblock "css" %}
-    <!--
-    <link href="{% static "css/frontpage.css" %}" rel="stylesheet">
-    -->
-{% endaddtoblock %}
 {% endblock %}
 
-
 {% block main %}
+{% addtoblock "css" %}
+    <link  rel="stylesheet" href="{% static "css/front_page.css" %}">
+{% endaddtoblock %}
+
 <div class="maingrid-container"><!--main grid container open tag-->
 <!--main content begin-->
 
