@@ -2,6 +2,7 @@
 {% load markdown %}
 {% load listutil %}
 {% load easy_thumbnails %}
+{% load sekizai_tags %}
 
 {% block title %}Nyheter{% endblock %}
 
@@ -10,31 +11,22 @@
 {% endblock %}
 
 {% block main %}
+{% addtoblock "css" %}
+<!-- Style for news list -->
+<style>
+ .news-list {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     grid-column-gap: 15px;
+ }
+</style>
+{% endaddtoblock %}
+
+<div class="news-list">
 {% for news in news_list %}
-    <div class="row">
-        {% with newsurl=news.get_absolute_url %}
-    <div class="col-md-12 box">
-    {% if news.picture %}
-        <a href="{{ newsurl }}">
-            <img alt=""
-                 class="news-picture"
-                 src="{% thumbnail news.picture 760x300 box=news.cropping upscale quality=95 detail %}">
-        </a>
-    {% endif %}
-
-    <header>
-        <h3>
-            <a href="{{ newsurl }}">{{ news.headline }}</a>
-        </h3>
-    </header>
-    <p>
-    {{ news.lead_paragraph}}
-    </p>
-</div>
-{% endwith %}
-    </div>
+{% include "includes/article_widget.html" %}
 {% endfor %}
-
+</div>
 {% if is_paginated %}
 <nav>
     <ul class="pager">
