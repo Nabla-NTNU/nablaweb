@@ -17,14 +17,37 @@
  .news-list {
      display: grid;
      grid-template-columns: 1fr 1fr;
+     grid-template-rows: repeat(auto-fit, 15px auto);
      grid-column-gap: 15px;
+     grid-template-areas:
+         "more-news-1 ."
+         "more-news-1 more-news-2"
+         ".           more-news-2";
+ }
+
+ @-moz-document url-prefix() { /* Firefox does not support the auto-fit */
+     .news-list {
+         grid-template-rows: repeat(4, 15px auto); /* 4 because we show 8 items in two columns */
+     }
+ }
+
+ .news {
+     grid-row: span 2;
+ }
+
+ .more-news-1 {
+     grid-area: more-news-1;
+ }
+
+ .more-news-2 {
+     grid-area: more-news-2;
  }
 </style>
 {% endaddtoblock %}
 
 <div class="news-list">
 {% for news in news_list %}
-{% include "includes/article_widget.html" %}
+{% include "includes/article_widget.html" with number=forloop.counter%}
 {% endfor %}
 </div>
 {% if is_paginated %}

@@ -1,5 +1,5 @@
 {% load easy_thumbnails %}
-<div class="box {{ news.content_type.model }} more-news-{{ number }}">
+<div class="box {{ news.content_type.model }} news more-news-{{ number }}">
     {% if news.cropping and news.picture %}
     <a href="{{ news.get_absolute_url }}">
         <img alt=""
