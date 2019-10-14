@@ -49,33 +49,12 @@
         {% include "includes/event_widget.html" %}
     </div>
 
-    <div class="more-news-row1">
-        <!--nyheter21-->
-        {% for news in news_list_1 %}
-            {% include "includes/article_widget.html" %}
-        {% endfor %}
-    </div>
+    <!-- Front page news -->
+    {% for news in news_list %}
+    {% include "includes/article_widget.html" with number=forloop.counter %}
+    {% endfor %}{# news_list #}
 
-    <div class="more-news-row2">
-        <!--nyheter21-->
-        <style>
-            .news-row{
-                display: flex;
-            }
-            .button{
-                width: 100%;
-                padding: 5px;
-            }
-        </style>
-
-        <div class="news-row">
-        {% for news in news_list_2 %}
-            {% include "includes/article_widget.html" %}
-        {% endfor %}
-        </div>
-
-        <button onclick="location.href='{% url "news_list" %}'" type="button" class="button">Flere nyheter</button>
-    </div>
+    <button onclick="location.href='{% url "news_list" %}'" type="button" class="more-news-btn button">Flere nyheter</button>
 
     <div class="latest-nablad well">
         <!--Siste Nablad-->

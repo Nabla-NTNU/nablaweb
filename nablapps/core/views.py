@@ -50,9 +50,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
     def _add_news(self, context):
         news_list = FrontPageNews.objects.filter(visible=True).filter(bump_time__lte=datetime.now())
         context['main_news'] = news_list.first()
-        context['news_list_1'] = news_list[1:3]
-        context['news_list_2'] = news_list[3:5]
-        context['news_list_3'] = news_list[5:7]
+        context['news_list'] = news_list[1:5]
 
     def _add_nablad(self, context):
         context['new_nablad'] = Nablad.objects.order_by('-pub_date')[:4]
