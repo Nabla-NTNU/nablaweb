@@ -139,6 +139,8 @@ class RegistrationInfoMixin(models.Model):
 
         MAX_PENALTY = 4 # This is the limit at which one is not allowed to register
         penalty_count = user.get_penalties().aggregate(Sum('penalty'))['penalty__sum']
+        if penalty_count is None:
+            penalty_count = 0
         return False if penalty_count >= MAX_PENALTY else True
 
     def _assert_user_allowed_to_register(self, user):
