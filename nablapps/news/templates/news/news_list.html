@@ -36,6 +36,18 @@
  .more-news-2 {
      grid-area: more-news-2;
  }
+
+ @media(max-width: 992px) {
+     .news-list {
+         grid-template-columns: 1fr;
+         grid-template-rows: auto;
+         grid-template-areas: unset;
+     }
+
+     .more-news-1, .more-news-2 {
+         grid-area: unset;
+     }
+ }
 </style>
 {% endaddtoblock %}
 
