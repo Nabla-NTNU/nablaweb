@@ -3,13 +3,10 @@
 {% load flatpages %}
 {% load sekizai_tags %}
 
-
-{% addtoblock "css" %}
-    <link href="{% static "css/about.css" %}" rel="stylesheet">
-{% endaddtoblock %}
-
-
 {% block main %}
+{% addtoblock "css" %}
+<link rel="stylesheet" href="{% static "css/about.css" %}">
+{% endaddtoblock %}
 
 <div class="main-grid-container">
     <div class="navbar navbar-container">
