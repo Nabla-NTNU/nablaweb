@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+
+{% block main %}
+
+<style>
+    .thread{
+        list-style: none;
+        padding: 10px;
+    }
+</style>
+
+
+<h1>Tittel: {{ thread }}</h1>
+
+<h4>TS-melding:</h4>
+<p>{{ thread.text_body }}</p>
+
+{% for message in messages %}
+    <div class="well">
+        <h4>{{ message.user }} svarte:</h4>
+        <p>{{ message.message }}</p>
+    </div>
+{% endfor %}
+
+{% endblock main %}

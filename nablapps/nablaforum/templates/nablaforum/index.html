@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+
+{% block main %}
+
+<style>
+    .thread{
+        list-style: none;
+        padding: 10px;
+    }
+</style>
+
+
+<h1>Her kommer alle channels en er med i!</h1>
+
+<ul>
+{% for channel in object_list %}
+    <a href="{% url "channel-index" channel_id=channel.pk %}"><li class="thread box"><h4>{{ channel }}</h4></li></a>
+{% endfor %}
+</ul>
+
+{% endblock main %}

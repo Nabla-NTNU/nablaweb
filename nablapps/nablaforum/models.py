@@ -1,12 +1,13 @@
 from django.db import models
-from nablapps.accounts.models import NablaGroup, NablaUser
-
+from nablapps.accounts.models import NablaUser
 
 class Channel(models.Model):
     ''' Represents a channel in the forum '''
-    nabla_group = models.ForeignKey(NablaGroup, on_delete=models.CASCADE)
-    name = nabla_group.name
+    name = models.CharField(max_length=100)
     description = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 
 class Thread(models.Model):
@@ -16,11 +17,18 @@ class Thread(models.Model):
     title = models.CharField(max_length=200)
     text_body = models.TextField()
 
+    def __str__(self):
+        return self.title
+
 
 class Message(models.Model):
     ''' Represents a message in a thread '''
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
-    user = models.ForeignKey(NablaUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(NablaUser, on_delete=models.CASCADE,)
+    message = models.TextField()
+
+    def __str__(self):
+        return self.user.username
 
 
 #Suggestion: make abstract message class and make thread and message extend it
