@@ -4,6 +4,8 @@ import django_nyt.urls
 import filebrowser.sites
 import wiki.urls
 
+from  django.urls import path
+
 from nablapps.news.feeds import RecentNews
 from django.conf import settings
 from django.conf.urls import include, url
@@ -56,7 +58,7 @@ urlpatterns = [
     url(r'^wiki/notifications/', django_nyt.urls.get_pattern()),
     url(r'^wiki/', wiki.urls.get_pattern()),
     url(r'^om-nabla/', include('nablapps.core.urls')),
-    url(r'^forum/', include('nablapps.nablaforum.urls')),
+    path('forum/', include('nablapps.nablaforum.urls')),
 
     # For å ta i bruk robots.txt
     url(r'^robots\.txt$', TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),
