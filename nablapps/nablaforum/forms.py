@@ -2,9 +2,20 @@
 # Channels will be created in admin
 from django import forms
 
-class ChannelForm(forms.Form):
-    name_field = forms.CharField()
-    description_field = forms.CharField(widget=forms.Textarea)
+from .models import Channel
+
+class ChannelForm(forms.ModelForm):
+    #name_field = forms.CharField()
+    #description_field = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = Channel
+        fields = ['group', 'name', 'description']
+    def __init__(self, groups=None, **kwargs):
+        super().__init__(**kwargs)
+        if groups:
+            self.fields['group'].queryset = groups
+
 
 
 class ThreadForm(forms.Form):

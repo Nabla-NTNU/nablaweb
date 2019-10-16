@@ -3,20 +3,37 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView, ListView, FormView
 
 from .models import Channel, Thread, Message
-from .forms import ThreadForm, MessageForm
-
-def index(request):
-    return HttpResponse("Index yo")
-
+from .forms import ThreadForm, MessageForm, ChannelForm
+from nablapps.accounts.models import NablaGroup
 
 # View for displaying Channels
-class IndexView(ListView):
+class IndexView(FormView):
     model = Channel
-    #paginate_by = 10
     template_name = "nablaforum/index.html"
+    form_class = ChannelForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['groups'] = NablaGroup.objects.filter(pk__in=self.request.user.groups.all().values_list('pk'))
+        return kwargs
     
+    def form_valid(self, form):
+        form_data = form.cleaned_data
+        try:
+            new_channel = self.model.objects.create(
+                                            group = form_data['group'],
+                                            name = form_data['name'],
+                                            description = form_data['description'],)
+        except:
+            print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
+        return self.render_to_response(self.get_context_data(form=form))
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
+        channels = Channel.objects.filter(group__in=user.groups.all())
+        context['channels'] = channels
         return context
 
 
@@ -31,18 +48,21 @@ class ChannelIndexView(FormView):
         form_data = form.cleaned_data
         channel_id = self.kwargs['channel_id']
         channel = Channel.objects.get(pk=channel_id)
-        new_thread = self.model.objects.create(
-                                        channel = channel,
-                                        threadstarter = self.request.user,
-                                        title = form_data['title_field'],
-                                        text = form_data['text_field'],)
+        try:
+            new_thread = self.model.objects.create(
+                                            channel = channel,
+                                            threadstarter = self.request.user,
+                                            title = form_data['title_field'],
+                                            text = form_data['text_field'],)
+        except:
+            print('Ops! Kunne ikke opprette tråd, ugyldig verdi i feltene!')
         return self.render_to_response(self.get_context_data(form=form))
 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         channel_id = self.kwargs['channel_id']
-        channel = Channel.objects.get(pk=channel_id)
+        channel = Channel.objects.get_or_404(pk=channel_id)
         query_set = self.model.objects.filter(channel__id=channel_id)
 
         context['threads'] = query_set
@@ -59,13 +79,16 @@ class ThreadView(FormView):
 
     
     def form_valid(self, form):
-        form_data = form.get_data()
+        form_data = form.cleaned_data
         thread_id = self.kwargs['thread_id']
-        thread = Thread.objects.get(pk=thread_id)
-        new_message = self.model.objects.create(
-                                        thread = thread,
-                                        user = self.request.user,
-                                        message = form_data['message_field'],)
+        thread = Thread.objects.get_or_404(pk=thread_id)
+        try:
+            new_message = self.model.objects.create(
+                                            thread = thread,
+                                            user = self.request.user,
+                                            message = form_data['message_field'],)
+        except:
+            print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
         return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -74,7 +97,7 @@ class ThreadView(FormView):
         channel_id = self.kwargs['channel_id']
         thread_id = self.kwargs['thread_id']
         messages = self.model.objects.filter(thread__id=thread_id)
-        thread = Thread.objects.get(pk=thread_id)
+        thread = Thread.objects.get_or_404(pk=thread_id)
         context['thread_messages'] = messages
         context['thread'] = thread
         context['channel_id'] = channel_id

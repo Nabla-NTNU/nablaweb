@@ -14,9 +14,16 @@
 <h1>Dine kanaler:</h1>
 
 <ul>
-{% for channel in object_list %}
-    <a href="{% url "channel-index" channel_id=channel.pk %}"><li class="thread box"><h4>{{ channel }}</h4></li></a>
+{% for channel in channels %}
+    <a href="{% url "channel-index" channel_id=channel.pk %}"><li class="thread box"><h4>{{ channel.name }}</h4></li></a>
 {% endfor %}
 </ul>
+
+<h4>Opprett en ny kanal:</h4>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Opprett ny kanal</button>
+</form>
 
 {% endblock main %}

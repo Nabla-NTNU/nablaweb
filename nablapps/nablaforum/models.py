@@ -3,8 +3,8 @@ from nablapps.accounts.models import NablaUser, NablaGroup
 
 class Channel(models.Model):
     ''' Represents a channel in the forum '''
-    #group = models.ForeignKey(NablaGroup, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    group = models.ForeignKey(NablaGroup, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
 
     def __str__(self):
@@ -32,6 +32,5 @@ class Message(models.Model):
         return self.user.username
 
 
-#Suggestion: make abstract message class and make thread and message extend it
 
 
