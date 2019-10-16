@@ -12,15 +12,23 @@
 
 
 <h1>Tittel: {{ thread }}</h1>
+<a href={% url "channel-index" channel_id=channel_id %}>Tilbake til kanal</a>
 
-<h4>TS-melding:</h4>
-<p>{{ thread.text_body }}</p>
+<h4>{{ thread.threadstarter }} skriver:</h4>
+<p>{{ thread.text }}</p>
 
-{% for message in messages %}
+{% for message in thread_messages %}
     <div class="well">
-        <h4>{{ message.user }} svarte:</h4>
+        <h4>{{ message.user }}</h4>
         <p>{{ message.message }}</p>
     </div>
 {% endfor %}
+
+<h4>Ny medling:</h4>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">send</button>
+</form>
 
 {% endblock main %}

@@ -11,12 +11,21 @@
 </style>
 
 
-<h1>Her kommer alle threads i en channel {{ channel }}</h1>
+<h1>Tråder i kanalen: {{ channel }}</h1>
+<a href="{% url "forum-index" %}">Tilbake til alle kanaler</a>
 
 <ul>
 {% for thread in threads %}
-    <a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}"><li class="thread box"><h4>Thread: {{ thread }}, channel: {{ channel }}</h4></li></a>
+    <a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}"><li class="thread box"><h4>{{ thread }}</h4></li></a>
 {% endfor %}
 </ul>
+
+<form method="POST">
+    {% csrf_token %}
+    <h4>Ny tråd:</h4>
+
+    {{ form.as_p }}
+    <button type="submit">Opprett en ny tråd</button>
+</form>
 
 {% endblock main %}

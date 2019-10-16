@@ -1,8 +1,9 @@
 from django.db import models
-from nablapps.accounts.models import NablaUser
+from nablapps.accounts.models import NablaUser, NablaGroup
 
 class Channel(models.Model):
     ''' Represents a channel in the forum '''
+    #group = models.ForeignKey(NablaGroup, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField()
 
@@ -15,7 +16,7 @@ class Thread(models.Model):
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE) #which channel it belongs to
     threadstarter = models.ForeignKey(NablaUser, on_delete=models.CASCADE) # lurt med CASCADE her eller?
     title = models.CharField(max_length=200)
-    text_body = models.TextField()
+    text = models.TextField()
 
     def __str__(self):
         return self.title
