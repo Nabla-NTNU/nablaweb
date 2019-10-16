@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, FormView
 
 from .models import Channel, Thread, Message
@@ -7,7 +8,7 @@ from .forms import ThreadForm, MessageForm, ChannelForm
 from nablapps.accounts.models import NablaGroup
 
 # View for displaying Channels
-class IndexView(FormView):
+class IndexView(LoginRequiredMixin, FormView):
     model = Channel
     template_name = "nablaforum/index.html"
     form_class = ChannelForm
@@ -38,7 +39,7 @@ class IndexView(FormView):
 
 
 # View for displaying Threads in a channel
-class ChannelIndexView(FormView):
+class ChannelIndexView(LoginRequiredMixin, FormView):
     model = Thread
     template_name = "nablaforum/channel.html"
     form_class = ThreadForm
@@ -62,7 +63,7 @@ class ChannelIndexView(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         channel_id = self.kwargs['channel_id']
-        channel = Channel.objects.get_or_404(pk=channel_id)
+        channel = get_object_or_404(Channel, pk=channel_id)
         query_set = self.model.objects.filter(channel__id=channel_id)
 
         context['threads'] = query_set
@@ -72,7 +73,7 @@ class ChannelIndexView(FormView):
 
 
 # View for displaying messages in a thread
-class ThreadView(FormView):
+class ThreadView(LoginRequiredMixin, FormView):
     model = Message
     template_name = "nablaforum/thread.html"
     form_class = MessageForm
@@ -81,7 +82,7 @@ class ThreadView(FormView):
     def form_valid(self, form):
         form_data = form.cleaned_data
         thread_id = self.kwargs['thread_id']
-        thread = Thread.objects.get_or_404(pk=thread_id)
+        thread = get_object_or_404(Thread, pk=thread_id)
         try:
             new_message = self.model.objects.create(
                                             thread = thread,
@@ -97,7 +98,7 @@ class ThreadView(FormView):
         channel_id = self.kwargs['channel_id']
         thread_id = self.kwargs['thread_id']
         messages = self.model.objects.filter(thread__id=thread_id)
-        thread = Thread.objects.get_or_404(pk=thread_id)
+        thread = get_object_or_404(Thread, pk=thread_id)
         context['thread_messages'] = messages
         context['thread'] = thread
         context['channel_id'] = channel_id
