@@ -57,11 +57,13 @@ office_events is a dictionary with weekday as key and a list of events as value
     <col width="25%">
     <tr >
         <th colspan="3" class="no_border"> <h4><b>Kontoret denne uka:</b></h4> </th>
+
     </tr>
     {% for event in office_events %}
     {% ifchanged event.start_time.date|date:"w" %}
     <tr>
-        <th colspan="3">{{ event.start_time|date:"l"|capfirst }}</th>
+        <th colspan="2">{{ event.start_time|date:"l"|capfirst }}</th>
+        <th colspan="1">Varighet</th>
     </tr>
     {% endifchanged %}
 
