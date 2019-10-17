@@ -47,6 +47,18 @@
               tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
             });
         </script>
+
+
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-pink.min.css" />
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+
+
+
+
+
         {% endaddtoblock %}
 
         {% render_block "js-head" %}
@@ -121,9 +133,149 @@
             </div>
         </div>
 	{% endif %}
+<!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <!-- Title -->
+            <a class="logo pull-left" href="/">
+                {% block header_logo %}
+                <img width="125" src="{% static "img/nabla_logo_white.svg" %}" alt="Nabla">
+                {% endblock header_logo %}
+            </a>
+          <!-- Add spacer, to align navigation to the right -->
+          <!-- Navigation. We hide it in small screens. -->
+          <nav class="mdl-navigation mdl-layout--large-screen-only">
+            <a class="mdl-navigation__link" href="{% url "event_list" %}">Arrangementer</a>
+            <a class="mdl-navigation__link" href="{% url "jobs_list" %}">Karriere</a>
+            <a class="mdl-navigation__link" href="">Nablamedia</a>
+            <a class="mdl-navigation__link" href="{% url "om-nabla" %}">Om Nabla</a>
+          </nav>
+          <div class="mdl-layout-spacer"></div>
 
-    <div id = "content">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                  mdl-textfield--floating-label mdl-textfield--align-right">
+        <label class="mdl-button mdl-js-button mdl-button--icon"
+               for="fixed-header-drawer-exp">
+          <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+          <input class="mdl-textfield__input" type="text" name="sample"
+                 id="fixed-header-drawer-exp">
+        </div>
+      </div>
+
+
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Title</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="{% url "event_list" %}">Arrangementer</a>
+          <a class="mdl-navigation__link" href="{% url "jobs_list" %}">Karriere/a>
+          <a class="mdl-navigation__link" href="{% url "nablad_list" %}">Nablade</a>
+          <a class="mdl-navigation__link" href="{% url "season_view" %}">Skråttcast</a>
+        </nav>
+      </div>
+      <main class="mdl-layout__content">
+        <div class="page-content">
+            <div id = "content">
         <!-- Navigation -->
+
+        <!-- Page Content -->
+                <div class="container box" id = "mainContent">
+
+            {% bootstrap_messages %}
+            {% block main %}
+            <div class="row">
+                <!-- Blog Entries Column -->
+                <div class="col-md-8">
+                {% block content %}{% endblock content %}
+                </div>
+
+                <!-- Blog Sidebar Widgets Column -->
+                <div class="col-md-4">
+                {% block sidebar %}
+                {% endblock sidebar %}
+                </div>
+            </div>
+            <!-- /.row -->
+            {% endblock main %}
+        </div> <!-- id="mainContent" -->
+
+        <!-- Footer -->
+                <footer>
+
+            <div class="container">
+            <div class="row">
+
+                    {# kontakt #}
+                    <div class="col-md-4 kontakt">
+                        <h2>Kontakt</h2>
+
+                        <p>Du kan nå oss på <a class="email" href="mailto:nabla@nabla.ntnu.no">nabla@nabla.ntnu.no</a></p>
+
+                        <p> Varslingsskjema finner du <a href="/contact/"> her.</a></p>
+
+                        <p>Bedrift? Kontakt Bedriftskontakten Nabla på <a class="email" href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no</a></p>
+
+                        <p>Gruppeledere: <a class="email" href="mailto:gruppeledere@nabla.ntnu.no">gruppeledere@nabla.ntnu.no</a></p>
+
+                        Øvrig kontaktinformasjon: <a href="/contact/">kontaktside.</a>
+
+                        <address>
+                            <br>
+                            Nabla <br>
+                            Kjemiblokk 2 <br>
+                            Sem Sælands vei 10, NTNU <br>
+                            7034 Trondheim <br>
+                            Norway
+                        </address>
+                    </div>
+                    {# end kontakt #}
+
+                    {# om nabla #}
+                    <div class="col-md-4">
+                    <h2>Informasjon</h2>
+                    <p>
+                        Organisasjonsnr.: <span class="pull-right">992168544</span><br /><br />
+                        Hovedkonto: <span class="pull-right">1503.13.57338</span><br />
+                        Arrkomkonto: <span class="pull-right">1503.13.57400</span><br />
+                        ProKom-konto: <span class="pull-right">1506.19.24172</span><br />
+                        Gravitoneskonto: <span class="pull-right">1503.65.97965</span><br />
+                    </p>
+                    <h2>Tilbakemelding</h2>
+                        <p>
+                        Har du funnet en feil, får du ikke logget på, eller er det noe som burde forbedres? Fyll ut <a href="/contact/feedback/">tilbakemeldingskjema</a> eller kontakt webkom:<br>
+                        <a class="email" href="mailto:webkom@nabla.ntnu.no">webkom@nabla.ntnu.no</a>
+                        </p>
+                    </div>
+                    {# end om nabla #}
+
+                    {# nablalogo #}
+                    <div class="col-md-4 center" id="nablafooter">
+                        <br><br>
+                        <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo">
+                        <br />
+                        <br />
+                        <a href="https://www.facebook.com/nablantnu/" class="fa fa-facebook fa-4x social-icon"></a>
+                        <a href="https://www.instagram.com/nablalinjeforening/" class="fa fa-instagram fa-4x social-icon"></a>
+                        <a href="https://nablantnu.slack.com/" class="fa fa-slack fa-4x social-icon"></a>
+                        <a href="https://github.com/Nabla-NTNU/nablaweb" class="fa fa-github fa-4x social-icon"></a>
+                    </div>
+            </div>
+            </div>
+        </footer>
+
+
+        <!-- /.container -->
+                {% render_block "js" %}
+            </div>
+        </div>
+      </main>
+    </div>
+    </body>
+{% comment %}
         <header>
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <a class="logo pull-left" href="/">
@@ -249,97 +401,7 @@
                 <!-- /.container -->
             </nav>
         </header>
-
-        <!-- Page Content -->
-        <div class="container box" id = "mainContent">
-
-            {% bootstrap_messages %}
-            {% block main %}
-            <div class="row">
-                <!-- Blog Entries Column -->
-                <div class="col-md-8">
-                {% block content %}{% endblock content %}
-                </div>
-
-                <!-- Blog Sidebar Widgets Column -->
-                <div class="col-md-4">
-                {% block sidebar %}
-                {% endblock sidebar %}
-                </div>
-            </div>
-            <!-- /.row -->
-            {% endblock main %}
-        </div> <!-- id="mainContent" -->
-
-        <!-- Footer -->
-        <footer>
-
-            <div class="container">
-            <div class="row">
-
-                    {# kontakt #}
-                    <div class="col-md-4 kontakt">
-                        <h2>Kontakt</h2>
-
-                        <p>Du kan nå oss på <a class="email" href="mailto:nabla@nabla.ntnu.no">nabla@nabla.ntnu.no</a></p>
-
-                        <p> Varslingsskjema finner du <a href="/contact/"> her.</a></p>
-
-                        <p>Bedrift? Kontakt Bedriftskontakten Nabla på <a class="email" href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no</a></p>
-
-                        <p>Gruppeledere: <a class="email" href="mailto:gruppeledere@nabla.ntnu.no">gruppeledere@nabla.ntnu.no</a></p>
-
-                        Øvrig kontaktinformasjon: <a href="/contact/">kontaktside.</a>
-
-                        <address>
-                            <br>
-                            Nabla <br>
-                            Kjemiblokk 2 <br>
-                            Sem Sælands vei 10, NTNU <br>
-                            7034 Trondheim <br>
-                            Norway
-                        </address>
-                    </div>
-                    {# end kontakt #}
-
-                    {# om nabla #}
-                    <div class="col-md-4">
-                    <h2>Informasjon</h2>
-                    <p>
-                        Organisasjonsnr.: <span class="pull-right">992168544</span><br /><br />
-                        Hovedkonto: <span class="pull-right">1503.13.57338</span><br />
-                        Arrkomkonto: <span class="pull-right">1503.13.57400</span><br />
-                        ProKom-konto: <span class="pull-right">1506.19.24172</span><br />
-                        Gravitoneskonto: <span class="pull-right">1503.65.97965</span><br />
-                    </p>
-                    <h2>Tilbakemelding</h2>
-                        <p>
-                        Har du funnet en feil, får du ikke logget på, eller er det noe som burde forbedres? Fyll ut <a href="/contact/feedback/">tilbakemeldingskjema</a> eller kontakt webkom:<br>
-                        <a class="email" href="mailto:webkom@nabla.ntnu.no">webkom@nabla.ntnu.no</a>
-                        </p>
-                    </div>
-                    {# end om nabla #}
-
-                    {# nablalogo #}
-                    <div class="col-md-4 center" id="nablafooter">
-                        <br><br>
-                        <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo">
-                        <br />
-                        <br />
-                        <a href="https://www.facebook.com/nablantnu/" class="fa fa-facebook fa-4x social-icon"></a>
-                        <a href="https://www.instagram.com/nablalinjeforening/" class="fa fa-instagram fa-4x social-icon"></a>
-                        <a href="https://nablantnu.slack.com/" class="fa fa-slack fa-4x social-icon"></a>
-                        <a href="https://github.com/Nabla-NTNU/nablaweb" class="fa fa-github fa-4x social-icon"></a>
-                    </div>
-            </div>
-            </div>
-        </footer>
-
-
-        <!-- /.container -->
-        {% render_block "js" %}
-    </div>
-    </body>
+{% endcomment %}
 
 </html>
 
