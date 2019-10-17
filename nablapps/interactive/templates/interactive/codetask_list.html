@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block main %}
+
+<h1>So you think you can code</h1>
+<ul>
+{% for Task in object_list %}
+	<a href="{% url 'code_golf' Task.id %}">{{ Task.title }}</a>
+{% endfor %}
+</ul>
+
+{% endblock %}

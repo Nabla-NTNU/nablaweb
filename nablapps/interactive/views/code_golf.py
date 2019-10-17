@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.core.exceptions import ValidationError
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.list import ListView
 
 from ..models.code_golf import CodeTask, Result
 from ..forms.code_golf import CodeGolfForm
@@ -99,3 +100,5 @@ def code_golf_score(request, task_id):
         
     return render(request, 'interactive/code_golf_score.html', context)
 
+class CodeTaskListView(ListView):
+    model = CodeTask
