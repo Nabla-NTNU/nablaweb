@@ -27,14 +27,26 @@
         </div>
         </div>
 
+<!--
+<form method="POST">
+    {% csrf_token %}
+    <p id="submitted_code"></p>
+    <button type="submit">Send</button>
+</form >
+-->
 
+<form action="/your-name/" method="post">
+    <label for="your_name">Ditt fulle navn </label>
+    <input id="your_name" type="text" name="your_name" value="{{ current_name }}">
+    <input type="submit" value="OK">
+</form>
 
+<!--
 <form>
     Har du noen allergier? I så fall, hvilke? <br>
     <input type="textarea" name="allergies"><br>
     Annet: <br>
     <input type="textarea" name="remarks" <br>base
 </form>
-
-
+-->
 {% endblock %}

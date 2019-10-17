@@ -3,7 +3,7 @@ Forms for events
 """
 import operator
 
-from django.forms import BooleanField, ValidationError, ModelForm, Form, IntegerField, TextInput
+from django.forms import BooleanField, ValidationError, ModelForm, Form, IntegerField, TextInput, CharField
 from django.forms.models import fields_for_model
 
 from .models import Event, EventRegistration
@@ -85,3 +85,7 @@ class EventForm(ModelForm):
             # Ignorer feil relatert til feltet.
             if name in self._errors:
                 del self._errors[name]
+
+class RegistrationEventMoreInfoForm(Form):
+    name = CharField(label="Your name", max_length=75)
+    allergies = TextInput(label="Your allergies", max_length=300, required=False)
