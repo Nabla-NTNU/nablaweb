@@ -2,6 +2,7 @@
 {% load markdown %}
 {% load listutil %}
 {% load easy_thumbnails %}
+{% load sekizai_tags %}
 
 {% block title %}Nyheter{% endblock %}
 
@@ -9,32 +10,52 @@
 <link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
 {% endblock %}
 
-{% block content %}
+{% block main %}
+{% addtoblock "css" %}
+<!-- Style for news list -->
+<style>
+ .news-list {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     grid-template-rows: repeat(4, 15px auto);
+     grid-column-gap: 15px;
+     grid-template-areas:
+         "more-news-1 ."
+         "more-news-1 more-news-2"
+         ".           more-news-2";
+ }
+
+ .news {
+     grid-row: span 2;
+ }
+
+ .more-news-1 {
+     grid-area: more-news-1;
+ }
+
+ .more-news-2 {
+     grid-area: more-news-2;
+ }
+
+ @media(max-width: 992px) {
+     .news-list {
+         grid-template-columns: 1fr;
+         grid-template-rows: auto;
+         grid-template-areas: unset;
+     }
+
+     .more-news-1, .more-news-2 {
+         grid-area: unset;
+     }
+ }
+</style>
+{% endaddtoblock %}
+
+<div class="news-list">
 {% for news in news_list %}
-    <div class="row">
-        {% with newsurl=news.get_absolute_url %}
-    <div class="col-md-12 box">
-    {% if news.picture %}
-        <a href="{{ newsurl }}">
-            <img alt=""
-                 class="news-picture"
-                 src="{% thumbnail news.picture 760x300 box=news.cropping upscale quality=95 detail %}">
-        </a>
-    {% endif %}
-
-    <header>
-        <h3>
-            <a href="{{ newsurl }}">{{ news.headline }}</a>
-        </h3>
-    </header>
-    <p>
-    {{ news.lead_paragraph}}
-    </p>
-</div>
-{% endwith %}
-    </div>
+{% include "includes/article_widget.html" with number=forloop.counter%}
 {% endfor %}
-
+</div>
 {% if is_paginated %}
 <nav>
     <ul class="pager">
@@ -56,4 +77,4 @@
     </ul>
 </nav>
 {% endif %}
-{% endblock content %}
+{% endblock main %}

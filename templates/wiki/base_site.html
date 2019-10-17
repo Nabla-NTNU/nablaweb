@@ -1,90 +1,88 @@
 {% extends "base.html" %}
 {% load sekizai_tags i18n wiki_tags %}
-    {% block wiki_body %}
+{% block wiki_body %}
 
-    {% block wiki_navbar %}
-    <div class="navbar navbar-fixed-top navbar-inverse">
-      <div class="container">
+{% block wiki_navbar %}
+<div class="navbar navbar-fixed-top navbar-inverse">
+    <div class="container">
         <div class="navbar-header">
-          <!-- .navbar-toggle is used as the toggle for collapsed navbar content -->
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          {% block wiki_header_branding %}
-          <a class="navbar-brand" href="{% url 'wiki:root' %}">Internwiki</a>
-          {% endblock %}
+            <!-- .navbar-toggle is used as the toggle for collapsed navbar content -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            {% block wiki_header_branding %}
+            <a class="navbar-brand" href="{% url 'wiki:root' %}">Internwiki</a>
+            {% endblock %}
         </div>
         <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" id="wiki-search-form" method="GET" action="{% url 'wiki:search' %}">
-            <div class="input-group">
-              <input type="search" class="form-control search-query" name="q" placeholder="{% trans "Søk..." %}" />
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="button">
-                      <span class="fa fa-search"></span>
-                </button>
-              </span>
-            </div><!-- /input-group -->
-          </form>
-          <div class="navbar-right">
-            {% if user.is_authenticated %}
-            <ul class="nav navbar-nav">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <span class="badge notification-cnt">0</span>
-                  {{ user }}
-                  <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a href="{% url 'wiki:logout' %}">
-                      <i class="fa fa-power-off"></i>
-                      {% trans "Log out" %}
-                    </a>
-                  </li>
-                  {% include "wiki/plugins/notifications/menubaritem.html" %}
+            <form class="navbar-form navbar-right" id="wiki-search-form" method="GET" action="{% url 'wiki:search' %}">
+                <div class="input-group">
+                    <input type="search" class="form-control search-query" name="q" placeholder="{% trans "Søk..." %}" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">
+                            <span class="fa fa-search"></span>
+                        </button>
+                    </span>
+                </div><!-- /input-group -->
+            </form>
+            <div class="navbar-right">
+                {% if user.is_authenticated %}
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="badge notification-cnt">0</span>
+                            {{ user }}
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{% url 'wiki:logout' %}">
+                                    <i class="fa fa-power-off"></i>
+                                    {% trans "Log out" %}
+                                </a>
+                            </li>
+                            {% include "wiki/plugins/notifications/menubaritem.html" %}
+                        </ul>
+                    </li>
                 </ul>
-              </li>
-            </ul>
-            {% else %}
+                {% else %}
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="{% login_url as wiki_login_url %}{{ wiki_login_url }}">{% trans "Log in" %}</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+            {% block wiki_header_navlinks %}
             <ul class="nav navbar-nav">
-              <li>
-                <a href="{% login_url as wiki_login_url %}{{ wiki_login_url }}">{% trans "Log in" %}</a>
-              </li>
+                <li class="active"><a href="/">{% trans "Heim" %}</a></li>
             </ul>
-            {% endif %}
-          </div>
-          {% block wiki_header_navlinks %}
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="/">{% trans "Heim" %}</a></li>
-          </ul>
-          {% endblock %}
+            {% endblock %}
         </div>
-      </div>
     </div>
-    {% endblock %}
-    {% block main %}
+</div>
+{% endblock %}
+{% block main %}
 
-      {% if messages %}
-        <!-- Messages for this instance -->
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags }}">
-            <a class="close" data-dismiss="alert" href="#">&times;</a>
-            {{ message }}
-          </div>
-        {% endfor %}
-      {% endif %}
+{% if messages %}
+<!-- Messages for this instance -->
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">
+    <a class="close" data-dismiss="alert" href="#">&times;</a>
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
 
-      <!-- Reserved for breadcrumbs -->
-      {% block wiki_breadcrumbs %}{% endblock %}
+<!-- Reserved for breadcrumbs -->
+{% block wiki_breadcrumbs %}{% endblock %}
 
-      <!-- Main page contents go here -->
-      {% block content %}
-      {% block wiki_contents %}{% endblock %}
-      {% endblock content %}
+<!-- Main page contents go here -->
+{% block content %}
+{% block wiki_contents %}{% endblock %}
+{% endblock content %}
+{% endblock main %}
 
-      </div>
-      {% endblock main %}
-
-    {% endblock %}
+{% endblock %}

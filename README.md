@@ -4,7 +4,7 @@ Velkommen til nablaweb!
 
 All python-kode, html, css, javascript og andre statiske filer som har med http://nabla.no skal ligge her.
 
-Backenddelen av Nablas nettside er skrevet i [django](http://djangoproject.org).
+Backenddelen av Nablas nettside er skrevet i [django](http://djangoproject.com).
 
 For å komme i gang med Nablaweb, sjekk [wikien.](https://github.com/NablaWebkom/nablaweb/wiki)
 
@@ -18,6 +18,7 @@ For å komme i gang med Nablaweb, sjekk [wikien.](https://github.com/NablaWebkom
 ## Mappestruktur ##
 - nablapps -- Inneholder alle djangoappene
     - accounts -- Brukere (grunnleggende ting som registrering og profil)
+    - album -- For bilder til visning i album
     - blog -- Bloggsystemet
     - bedpres -- Bedriftspresentasjoner, arver fra event
     - com -- Komitesider
@@ -25,8 +26,8 @@ For å komme i gang med Nablaweb, sjekk [wikien.](https://github.com/NablaWebkom
     - core -- For sentrale funksjoner som ikke hører hjemme i egen app (se egen README)
     - events -- Arrangementer
     - exchange -- For info om utveksling
-    - image -- For bilder
-    - interactive -- Julekalender++
+    - image -- For bilder til bruk i Markdown
+    - interactive -- Julekalender, quizer, brukertester og kodegolf
     - jobs -- Stillingsannonser
     - meeting-records -- Styret sine møtereferater
     - nabladet -- pdf-filer av Nabladet
