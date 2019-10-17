@@ -6,6 +6,9 @@ class Channel(models.Model):
     group = models.ForeignKey(NablaGroup, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
+    is_pinned = models.BooleanField(default=False)
+    is_common = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.name

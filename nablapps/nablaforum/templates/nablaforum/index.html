@@ -8,16 +8,36 @@
         list-style: none;
         padding: 10px;
     }
+
+    .title{
+        float: left;
+    }
+
+    .group{
+        float: right;
+    }
 </style>
 
+<h1>Nablaforum</h1>
 
-<h1>Dine kanaler:</h1>
 
-<ul>
-{% for channel in channels %}
-    <a href="{% url "channel-index" channel_id=channel.pk %}"><li class="thread box"><h4>{{ channel.name }}</h4></li></a>
+<h4>Felleskanaler</h4>
+{% for channel in common_channels %}
+    <a href="{% url "channel-index" channel_id=channel.pk %}"><li class="thread box"><h4 class="title">{{ channel.name }}</h4><h4 class="group"></h4></li></a>
 {% endfor %}
-</ul>
+
+
+<h4>Festede kanaler</h4>
+{% for channel in pinned_channels %}
+    <a href="{% url "channel-index" channel_id=channel.pk %}"><li class="thread box"><h4 class="title">{{ channel.name }}</h4><h4 class="group">{{ channel.group.name }}</h4></li></a>
+{% endfor %}
+
+
+<h4>Dine gruppers kanaler</h4>
+{% for channel in channels %}
+    <a href="{% url "channel-index" channel_id=channel.pk %}"><li class="thread box"><h4 class="title">{{ channel.name }}</h4><h4 class="group">{{ channel.group.name }}</h4></li></a>
+{% endfor %}
+
 
 <h4>Opprett en ny kanal:</h4>
 <form method="POST">
@@ -26,21 +46,20 @@
     <button type="submit">Opprett ny kanal</button>
 </form>
 
+
 {% if is_paginated %}
     <span class="step-links">
         {% if channels.has_previous %}
             <a href="?page={{ channels.previous_page_number }}">previous</a>
         {% endif %}
-
         <span class="current">
             Page {{ channels.number }} of {{ channels.paginator.num_pages }}.
         </span>
-
         {% if channels.has_next %}
             <a href="?page={{ channels.next_page_number }}">next</a>
         {% endif %}
     </span>
-
 {% endif %}
+
 
 {% endblock main %}

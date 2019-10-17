@@ -35,11 +35,15 @@ class IndexView(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        query_set = Channel.objects.filter(group__in=user.groups.all()).order_by('-pk')
+        query_set = Channel.objects.filter(group__in=user.groups.all()).order_by('-pk') # All channels belonging to users group
+        pinned_channels = query_set.filter(is_pinned=True) # pinned channels
+        common_channels = self.model.objects.filter(is_common=True) # channels common to all NablaUsers
         paginator = Paginator(query_set, self.paginate_by)
         page = self.request.GET.get('page')
         channels = paginator.get_page(page)
         context['channels'] = channels
+        context['common_channels'] = common_channels
+        context['pinned_channels'] = pinned_channels
         context['is_paginated'] = paginator.num_pages > 1
         return context
 
