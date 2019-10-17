@@ -392,7 +392,7 @@ Overflow-x: hidden;
 
 #content {
     position: relative;
-    min-width: 460px;
+    min-width: 360px;
     min-height: 100%;
     overflow: hidden;
 }
