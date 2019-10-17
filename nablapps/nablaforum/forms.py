@@ -15,7 +15,9 @@ class ChannelForm(forms.ModelForm):
         super().__init__(**kwargs)
         if groups:
             self.fields['group'].queryset = groups
-
+        else:
+            # Just want to set an empty query set, so uses Channel just because it's already imported
+            self.fields['group'].queryset = Channel.objects.none() 
 
 
 class ThreadForm(forms.Form):
