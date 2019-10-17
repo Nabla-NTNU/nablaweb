@@ -26,4 +26,21 @@
     <button type="submit">Opprett ny kanal</button>
 </form>
 
+{% if is_paginated %}
+    <span class="step-links">
+        {% if channels.has_previous %}
+            <a href="?page={{ channels.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ channels.number }} of {{ channels.paginator.num_pages }}.
+        </span>
+
+        {% if channels.has_next %}
+            <a href="?page={{ channels.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+
+{% endif %}
+
 {% endblock main %}

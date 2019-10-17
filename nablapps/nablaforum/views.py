@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, FormView
+from django.core.paginator import Paginator
 
 from .models import Channel, Thread, Message
 from .forms import ThreadForm, MessageForm, ChannelForm
@@ -12,6 +13,7 @@ class IndexView(LoginRequiredMixin, FormView):
     model = Channel
     template_name = "nablaforum/index.html"
     form_class = ChannelForm
+    paginate_by = 10
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -33,8 +35,12 @@ class IndexView(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        channels = Channel.objects.filter(group__in=user.groups.all())
+        query_set = Channel.objects.filter(group__in=user.groups.all())
+        paginator = Paginator(query_set, self.paginate_by)
+        page = self.request.GET.get('page')
+        channels = paginator.get_page(page)
         context['channels'] = channels
+        context['is_paginated'] = paginator.num_pages > 1
         return context
 
 
@@ -43,6 +49,7 @@ class ChannelIndexView(LoginRequiredMixin, FormView):
     model = Thread
     template_name = "nablaforum/channel.html"
     form_class = ThreadForm
+    paginate_by = 10
 
 
     def form_valid(self, form):
@@ -65,10 +72,13 @@ class ChannelIndexView(LoginRequiredMixin, FormView):
         channel_id = self.kwargs['channel_id']
         channel = get_object_or_404(Channel, pk=channel_id)
         query_set = self.model.objects.filter(channel__id=channel_id)
-
-        context['threads'] = query_set
+        paginator = Paginator(query_set, self.paginate_by)
+        page = self.request.GET.get('page')
+        threads = paginator.get_page(page)
+        context['threads'] = threads
         context['channel_id'] = channel_id
         context['channel'] = channel
+        context['is_paginated'] = paginator.num_pages > 1
         return context
 
 
@@ -77,6 +87,7 @@ class ThreadView(LoginRequiredMixin, FormView):
     model = Message
     template_name = "nablaforum/thread.html"
     form_class = MessageForm
+    paginate_by = 10
 
     
     def form_valid(self, form):
@@ -97,10 +108,13 @@ class ThreadView(LoginRequiredMixin, FormView):
         context = super().get_context_data(**kwargs)
         channel_id = self.kwargs['channel_id']
         thread_id = self.kwargs['thread_id']
-        messages = self.model.objects.filter(thread__id=thread_id)
         thread = get_object_or_404(Thread, pk=thread_id)
+        query_set = self.model.objects.filter(thread__id=thread_id)
+        paginator = Paginator(query_set, self.paginate_by)
+        page = self.request.GET.get('page')
+        messages = paginator.get_page(page)
         context['thread_messages'] = messages
         context['thread'] = thread
         context['channel_id'] = channel_id
-        print(context)
+        context['is_paginated'] = paginator.num_pages > 1
         return context

@@ -31,4 +31,23 @@
     <button type="submit">send</button>
 </form>
 
+
+{% if is_paginated %}
+    <span class="step-links">
+        {% if thread_messages.has_previous %}
+            <a href="?page={{ thread_messages.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ thread_messages.number }} of {{ thread_messages.paginator.num_pages }}.
+        </span>
+
+        {% if thread_messages.has_next %}
+            <a href="?page={{ thread_messages.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+
+{% endif %}
+
+
 {% endblock main %}
