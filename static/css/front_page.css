@@ -1,7 +1,6 @@
 .maingrid-container{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: repeat(6, auto);
     grid-gap: 20px;
     align-items: stretch;
     grid-template-areas:
@@ -16,15 +15,25 @@
 
 @media (max-width: 1000px){
     .maingrid-container{
-        display: flex;
-        flex-direction: column;
+        grid-template-columns: 1fr ;
+        grid-template-areas:
+        "main-article   "
+        "upcoming-events "
+        "welcome"
+        "more-news-1"
+        "more-news-2"
+        "more-news-3"
+        "office"
+        "latest-nablad"
+        "latest-podcast"
+        "poll"
+        "suggestions"
+        "sponsors";
     }
-    .more-news-row2{
-        display: block;
-        grid-column: 1 / span 2;
-        grid-row: 4 / span 1;
-    }
-
+    .more-news-3 {display:none}
+    .more-news-4 {display:none}
+    .more-news-btn{display:none}
+    .suggestions {display:none}
 }
 
 .well{
