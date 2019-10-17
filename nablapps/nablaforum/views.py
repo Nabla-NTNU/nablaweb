@@ -35,7 +35,7 @@ class IndexView(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        query_set = Channel.objects.filter(group__in=user.groups.all())
+        query_set = Channel.objects.filter(group__in=user.groups.all()).order_by('-pk')
         paginator = Paginator(query_set, self.paginate_by)
         page = self.request.GET.get('page')
         channels = paginator.get_page(page)
@@ -71,7 +71,7 @@ class ChannelIndexView(LoginRequiredMixin, FormView):
         context = super().get_context_data(**kwargs)
         channel_id = self.kwargs['channel_id']
         channel = get_object_or_404(Channel, pk=channel_id)
-        query_set = self.model.objects.filter(channel__id=channel_id)
+        query_set = self.model.objects.filter(channel__id=channel_id).order_by('-pk')
         paginator = Paginator(query_set, self.paginate_by)
         page = self.request.GET.get('page')
         threads = paginator.get_page(page)
@@ -109,7 +109,7 @@ class ThreadView(LoginRequiredMixin, FormView):
         channel_id = self.kwargs['channel_id']
         thread_id = self.kwargs['thread_id']
         thread = get_object_or_404(Thread, pk=thread_id)
-        query_set = self.model.objects.filter(thread__id=thread_id)
+        query_set = self.model.objects.filter(thread__id=thread_id).order_by('-pk')
         paginator = Paginator(query_set, self.paginate_by)
         page = self.request.GET.get('page')
         messages = paginator.get_page(page)

@@ -17,7 +17,7 @@
 <h4>{{ thread.threadstarter }} skriver:</h4>
 <p>{{ thread.text }}</p>
 
-{% for message in thread_messages %}
+{% for message in thread_messages reversed %}
     <div class="well">
         <h4>{{ message.user }}</h4>
         <p>{{ message.message }}</p>
