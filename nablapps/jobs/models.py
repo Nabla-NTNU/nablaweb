@@ -179,7 +179,10 @@ class Advert(TimeStamped, TextContent):
 
     @property
     def expired(self):
-        return datetime.now()>self.deadline_date
+        if self.deadline_date:
+            return datetime.now()>self.deadline_date
+        else:
+            return False
 
     def get_absolute_url(self):
         """Get the canonical url for the advert."""
