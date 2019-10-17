@@ -10,6 +10,7 @@ from .views import (
     EventDetailView,
     EventRegistrationsView,
     RegisterAttendanceView,
+    RegisterUserMoreInformation,
     ical_event,
 )
 from .feeds import RecentEvents
@@ -46,6 +47,11 @@ urlpatterns = [
     url(r'^reg/(?P<pk>\d{1,8})$',
         EventRegistrationsView.as_view(),
         name='event_registrations'),
+
+    url(r'^registration/form$',
+        RegisterUserMoreInformation.as_view(),
+        name="registration_form"
+        ),
 
     url(r'^(?P<event_id>\d{1,8}).ics$',
         ical_event,

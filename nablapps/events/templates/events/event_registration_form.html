@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+
+{% block title %}Registrering{% endblock %}
+
+
+{% block content %}
+
+<!-- Ser ikke ut som at det er bootstrap her! Kan ordne html senere! -->
+<div class="row">
+        <div class="col-12 col-xl-10 col-xxl-8 col-xxxl-6">
+            <div class="card">
+                <div class="card-header"><i class="fa fa-comment-o"></i> Mer informasjon om deg </div>
+                <div class="card-body">
+                    Allergier?
+
+                    Annet?
+
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <button class="btn btn-primary">Send inn</button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+
+<form>
+    Har du noen allergier? I så fall, hvilke? <br>
+    <input type="textarea" name="allergies"><br>
+    Annet: <br>
+    <input type="textarea" name="remarks" <br>base
+</form>
+
+
+{% endblock %}

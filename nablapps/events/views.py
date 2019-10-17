@@ -148,7 +148,7 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
 
 
 class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
-    """Viser arrangementet."""
+    """Shows the event"""
     model = Event
     context_object_name = "event"
     template_name = 'events/event_detail.html'
@@ -214,7 +214,7 @@ class UserEventView(LoginRequiredMixin, TemplateView):
 class RegisterUserView(LoginRequiredMixin,
                        MessageMixin,
                        DetailView):
-    """View for at en bruker skal kunne melde seg av og på."""
+    """View for registration and deregistration"""
 
     model = Event
     template_name = 'events/event_detail.html'
@@ -234,10 +234,11 @@ class RegisterUserView(LoginRequiredMixin,
         self.messages.info(message)
         return HttpResponseRedirect(self.get_object().get_absolute_url())
 
-    def register_user(self, user):
-        """Prøver å melde en bruker på arrangementet.
 
-        Returnerer en melding som er ment for brukeren.
+    def register_user(self, user):
+        """Tries to register a user to the event.
+
+        Returns a message to the user.
         """
         try:
             reg = self.get_object().register_user(user)
@@ -254,16 +255,34 @@ class RegisterUserView(LoginRequiredMixin,
             return "Arrangementet har ikke påmelding."
         return "Du er påmeldt" if reg.attending else "Du står nå på venteliste."
 
-    def deregister_user(self, user):
-        """Prøver å melde en bruker av arrangementet.
 
-        Returnerer en melding som er ment for brukeren.
+    def deregister_user(self, user):
+        """Tries to deregister a user to the event.
+
+        Returns a message to the user.
         """
         try:
             self.get_object().deregister_user(user)
         except DeregistrationClosed:
             return "Avmeldingsfristen er ute."
         return "Du er meldt av arrangementet."
+
+
+class RegisterUserMoreInformation(TemplateView):
+    """View for registration form"""
+
+    template_name = 'events/event_registration_form.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        user = self.request.user
+        context_data['user'] = user
+        if user.is_authenticated:
+            return context_data
+
+
+
+
 
 class RegisterAttendanceView(DetailView, MessageMixin):
     """Used by event admins to register attendance"""
