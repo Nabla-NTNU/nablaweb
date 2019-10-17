@@ -17,7 +17,7 @@
         >
         </a>
     {% endif %}
-	<h3>{{ job.headline }}</h3>
+    <h3>{{ job.print_headline }}</h3>
     {{ job.lead_paragraph|markdown:"unsafe"}}
     <p><small>
         Stillingsannonsen er relevant for årskull {{ job.relevant_for_year.all|commas_no}} ved
