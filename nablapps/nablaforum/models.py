@@ -35,5 +35,15 @@ class Message(models.Model):
         return self.user.username
 
 
+class SeenThread(models.Model):
+    '''Represents "has read" relation between user and thread'''
+    user = models.ForeignKey(NablaUser, on_delete=models.CASCADE)
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
+
+
+class SeenMessage(models.Model):
+    '''Represents "has read" relation between user and message'''
+    user = models.ForeignKey(NablaUser, on_delete=models.CASCADE)
+    message = models.ForeignKey(Message, on_delete=models.CASCADE)
 
 
