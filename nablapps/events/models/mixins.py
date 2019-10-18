@@ -9,6 +9,8 @@ from datetime import datetime, date
 from django.db import models
 from django.contrib.auth.models import Group
 from six.moves.urllib.parse import urlparse
+
+from nablapps.accounts.models import FysmatClass
 from ..exceptions import (RegistrationNotRequiredException,
                           RegistrationNotAllowed, RegistrationNotOpen)
 from .eventregistration import EventRegistration
@@ -107,7 +109,7 @@ class RegistrationInfoMixin(models.Model):
                    "etter hvert som plasser blir ledige.")
     )
     open_for = models.ManyToManyField(
-        Group,
+        FysmatClass,
         verbose_name="Åpen for",
         blank=True,
         help_text=("Hvilke grupper som får lov til å melde seg på arrangementet. "
