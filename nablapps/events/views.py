@@ -147,6 +147,7 @@ class EventMainPage(ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context['penalties'] = user.get_penalties()
+        context['penalties__count'] = sum([reg.penalty for reg in context['penalties']])
         context['user_events'] = user.eventregistration_set.\
             filter(event__event_start__gte=datetime.date.today()).\
             order_by('event__event_start')

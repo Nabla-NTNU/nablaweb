@@ -1,78 +1,135 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <style>
-     #event_list .month {
-         /*     border: 1px solid black;
-            margin-bottom: 5px;*/
-     }
+<style>
+ #dash {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     grid-template-areas:
+         "penalty user_events"
+         "event_list event_list";
+     justify-items: stretch;
+     grid-column-gap: 40px;
+ }
 
-     #event_list .day {
-         text-decoration: underline;
-     }
-
+ @media (max-width: 600px) {
      #dash {
-         display: grid;
-         grid-template-columns: 1fr 1fr;
+         grid-template-columns: 1fr;
          grid-template-areas:
-             "user_events penalty"
-             "event_list event_list";
-         justify-items: stretch;
-         grid-column-gap: 40px;
+             "penalty"
+             "user_events"
+             "event_list";
      }
+ }
 
-     .dash-panel {
-         background-color: pink;
-         box-shadow: 0px 0px 10px 0px black;
-         padding: 2px 8px;
-     }
+ #penalties {
+     grid-area: penalty;
+     align-self: end;
+ }
+ #user_events {
+     grid-area: user_events;
+ }
 
-     .dash-panel h2 {
-         text-align: center;
-     }
+ #penalties, #user_events {
+     padding-bottom: 7px;
+     border-bottom: 1px solid black;
+ }
 
-     #penalties {
-         grid-area: penalty;
-     }
-     #user_events {
-         grid-area: user_events;
-     }
-     #event_list {
-         grid-area: event_list;
-     }
-    </style>
+ .header_like {
+     font-size: 1.4em;
+     line-height: 1.3;
+ }
 
-    <div id="dash">
-        <div id="user_events" class="dash-panel">
-            {% if user_events %}<h2>Påmeldte arrangementer:</h2>{% endif %}
-            {% for reg in user_events %}
-                {{ reg.event.event_start|date:"F d." }} - {{ reg.event.headline }}
+ #event_list {
+     grid-area: event_list;
+ }
+
+ .month__name {
+     color: #507eff;
+     border-bottom: 1px solid #507eff;
+ }
+
+ .penalties__questionmark {
+     display: inline-block;
+     border: 2px solid rgba(0,0,0,0.5);
+     width: 20px;
+     height: 20px;
+     border-radius: 10px;
+     text-align: center;
+     line-height: 20px;
+     color: rgba(0,0,0,0.5);
+     font-weight: bold;
+ }
+
+ .penalties__list {
+     position: absolute;
+     background: white;
+     border: 0.4px solid black;
+     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+     padding: 5px 10px;
+     display: none;
+ }
+
+ .penalties__list__item {
+     text-align: right;
+ }
+
+ .penalties__questionmark:hover ~ .penalties__list, .penalties__list:hover {
+     display: block;
+ }
+
+ #dash a{
+     text-decoration: none;
+     color: inherit;
+ }
+
+ .user_events__item--empty {
+     display: inline-block; /* Make the 'no events' text appear on same line */
+ }
+</style>
+<div id="dash">
+    <div id="penalties">
+        <span class="header_like">Prikker:</span> {{ penalties__count }}
+        {% if penalties__count %}
+        {% if penalties__count >= 4 %}<span class="fa fa-times" style="color: #c64444"></span>{% endif %}
+        <div class="penalties__questionmark">?</div>
+        <div class="penalties__list">
+            {% for penalty in penalties %}
+            <div class="penalties__list__item">{{ penalty.event.headline }}, {{ penalty.event.event_start|date:"j. F Y" }} - {{ penalty.penalty }} prikk{% if penalty.penalty > 1 %}er{% endif %}</div>
             {% endfor %}
         </div>
-
-        {% if penalties %}
-            <div id="penalties" class="dash-panel">
-                <h2>Prikker:</h2>
-                {% for penalty in penalties %}
-                    <span class="fa fa-times"></span> {{ penalty.event.headline }} - {{ penalty.penalty }} prikk{% if penalty.penalty > 1 %}er{% endif %}
-                {% endfor %}
-            </div>
-        {% endif %}
-        <div id="event_list">
-            {% regroup object_list by event_start.date|date:"F" as month_list %}
-            {% for month in month_list %}
-                <div class="month">
-                    <h2>{{ month.grouper }}</h2>
-                    {% regroup month.list by event_start.date|date:"d -l" as day_list %}
+        {% endif %} {# penalties__count #}
+    </div>
+    <div id="user_events">
+        <span class="header_like">Påmeldte arrangementer:</span>
+        {% for event in user_events %}
+        <div class="user_events__item">
+            <a href="{{ event.get_absolute_url }}">{{ event }}</a>
+        </div>
+        {% empty %}
+        <div class="user_events__item user_events__item--empty"> Ikke påmeldt noen arrangementer</div>
+        {% endfor %}gement/
+    </div>
+    <div id="event_list">
+        {% regroup object_list by event_start.date|date:"F" as month_list %}
+        {% for month in month_list %}
+        <div class="month">
+            <h2 class="month__name">{{ month.grouper|title }}</h2>
+                    {% regroup month.list by event_start.date|date:"d. - l" as day_list %}
                     {% for day in day_list %}
-                    <div class="day">
-                    <h3>{{ day.grouper }}</h3>
-                    {% for event in day.list %}
-                    {{ event }}
-                    {% endfor %}
-                    </div>
+                        <div class="day">
+                            <span class="header_like">{{ day.grouper }}</span>
+                            {% for event in day.list %}
+                            <a href="{{ event.get_absolute_url }}">
+                            <p> {{ event.headline }}
+                                {% if event.registration_required %} - {{ event.free_places }} plass{{ event.free_places|pluralize:"er" }} igjen{% endif %}
+                            </p>
+                            </a>
+                            {% endfor %}
+                        </div>
                     {% endfor %}
                 </div>
             {% endfor %}
         </div>
+    </div><!-- #dash -->
 {% endblock %}
