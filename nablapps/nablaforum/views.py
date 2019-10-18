@@ -33,6 +33,12 @@ class IndexView(LoginRequiredMixin, FormView):
                                             group = form_data['group'],
                                             name = form_data['name'],
                                             description = form_data['description'],)
+            first_thread = Thread.objects.create(
+
+                                            channel=new_channel,
+                                            threadstarter=self.request.user,
+                                            title="Velkommen til " + new_channel.name,
+                                            text="Dette en tråd!")
         except:
             print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
         return self.render_to_response(self.get_context_data(form=form))
