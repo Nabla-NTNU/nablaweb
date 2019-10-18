@@ -24,7 +24,10 @@
 <h4>Felleskanaler</h4>
 {% for channel in common_channels %}
     <a href="{% url "channel-index" channel_id=channel.pk %}">
-        <li class="thread box">
+        <li class="thread box"
+        {% if channel.has_unreads %}
+            style="color: red;"
+        {% endif %}>
             <h4 class="title">
                 {{ channel.name }}
             </h4>
@@ -40,20 +43,29 @@
 
 <h4>Festede kanaler</h4>
 {% for channel in pinned_channels %}
-    <a href="{% url "channel-index" channel_id=channel.pk %}"><li class="thread box"><h4 class="title">{{ channel.name }}</h4><h4 class="group">{{ channel.group.name }}</h4></li></a>
+    <a href="{% url "channel-index" channel_id=channel.pk %}">
+        <li class="thread box"{% if channel.has_unreads %}style="color: red;"{% endif %}>
+            <h4 class="title">{{ channel.name }}</h4><h4 class="group">{{ channel.group.name }}</h4>
+        </li>
+    </a>
 {% endfor %}
 
 
 <h4>Dine gruppers kanaler</h4>
 {% for channel in channels %}
     <a href="{% url "channel-index" channel_id=channel.pk %}">
-        <li class="thread box">
+        <li class="thread box"
+        {% if channel.has_unreads %}
+            style="color: red;"
+        {% endif %}>
             <h4 class="title">
                 {{ channel.name }}
             </h4>
             <h4 class="group">
                 {% if channel.has_unreads %}
                     Uleste meldinger!
+                {% else %}
+                    {{ channel.group.name }}
                 {% endif %}
             </h4>
         </li>

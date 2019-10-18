@@ -46,20 +46,19 @@ class IndexView(LoginRequiredMixin, FormView):
         common_channels = self.model.objects.filter(is_common=True) # channels common to all NablaUsers
 
         
-        # Trying to find all channels with unreads and set channel.has_unreads to True, but it does not currently work for some reason :((
+        # Find all channels with unreads and sets channel.has_unreads to True
+        # Was not able to figure out a more django way to do this :(
         for channel in query_set:
-            if Thread.objects.filter(channel=channel).filter(has_unreads=True):
-                channel.has_unreads = True
-                print("UNREADS ")
-            else:
-                print("NOO")
+            for thread in Thread.objects.filter(channel=channel):
+                if Message.objects.filter(thread=thread).exclude(read_by_user=self.request.user):
+                    channel.has_unreads = True
+                    break
 
         for channel in common_channels:
-            if Thread.objects.filter(channel=channel).filter(has_unreads=True):
-                channel.has_unreads = True
-                print("UNREADS COMMON")
-            else:
-                print("NOO COMMON")
+            for thread in Thread.objects.filter(channel=channel):
+                if Message.objects.filter(thread=thread).exclude(read_by_user=self.request.user):
+                    channel.has_unreads = True
+                    break
 
 
         paginator = Paginator(query_set, self.paginate_by)
