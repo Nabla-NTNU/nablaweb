@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 {% block main %}
 
-<h1>So you think you can code </h1>
-<h3> Webkoms kodegolf </h3>
-<h4> Nyeste kodegolf: <a href="{% url 'code_golf' newest_task.id %}">{{newest_task.title}}</a> </h4>
+<h1> Webkoms kodegolf </h1>
+<h4> 
+	<b> 
+		Nyeste kodegolf: <a href="{% url 'code_golf' newest_task.id %}">{{newest_task.title}}</a> 
+	</b> 
+</h4>
 
 <br>
 <table style="width:50%">
