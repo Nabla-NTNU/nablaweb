@@ -177,6 +177,19 @@ class Advert(TimeStamped, TextContent):
         """
         return self.company.cropping
 
+    @property
+    def expired(self):
+        if self.deadline_date:
+            return datetime.now()>self.deadline_date
+        else:
+            return False
+
     def get_absolute_url(self):
         """Get the canonical url for the advert."""
         return reverse("advert_detail", kwargs={'pk': self.pk, 'slug': self.slug})
+
+    def print_headline(self):
+        if self.expired:
+            return "[Utløpt] "+self.headline
+        else:
+            return self.headline

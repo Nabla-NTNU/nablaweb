@@ -167,6 +167,11 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
             except EventException as e:
                 self.messages.error(e)
 
+        if event.registration_required:
+            classnumber = [group.get_class_number() for group in event.open_for.all()]
+            classnumber = set(classnumber)
+            context['classnumber'] = classnumber
+
         context['type'] = "bedpres" if event.is_bedpres else "event" # Used to include correct template
         return context
 
