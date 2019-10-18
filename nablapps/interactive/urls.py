@@ -48,7 +48,7 @@ urlpatterns = [
         test_result,
         name="test_result"),
 
-    url(r'^kodegolf$', CodeTaskListView.as_view(), name="code_golf_menu"),
+    url(r'^kodegolf/$', CodeTaskListView.as_view(), name="code_golf_menu"),
     url(r'^kodegolf/(?P<task_id>[0-9]+)$', CodeGolf.as_view(), name="code_golf"),
     url(r'^kodegolf/score/(?P<task_id>[0-9]+)$', code_golf_score, name="code_golf_score"),
 ]
