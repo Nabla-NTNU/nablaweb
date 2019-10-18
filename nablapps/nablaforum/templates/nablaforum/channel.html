@@ -43,6 +43,8 @@
 {% endfor %}
 </ul>
 
+
+{% if not channel.is_common %}
 <form method="POST">
     {% csrf_token %}
     <h4>Ny tråd:</h4>
@@ -50,6 +52,7 @@
     {{ form.as_p }}
     <button type="submit">Opprett en ny tråd</button>
 </form>
+{% endif %}
 
 
 {% if is_paginated %}
