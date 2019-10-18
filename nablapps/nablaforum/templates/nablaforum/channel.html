@@ -8,6 +8,12 @@
         list-style: none;
         padding: 10px;
     }
+    .title{
+        float: left;
+    }
+    .unreads{
+        float: right;
+    }
 </style>
 
 
@@ -20,7 +26,20 @@
 
 <ul>
 {% for thread in threads %}
-    <a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}"><li class="thread box"><h4>{{ thread }}</h4></li></a>
+    <a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}">
+        <li class="thread box"
+        {% if thread.has_unreads %}
+            style="color: red;"
+        {% endif %}>
+            <h4 class="title">
+                {{ thread }}
+            </h4>
+            <h4 class="unreads">
+                {% if thread.has_unreads %}
+                    uleste meldinger!
+                {% endif %}
+            </h4>
+        </li></a>
 {% endfor %}
 </ul>
 
@@ -47,8 +66,6 @@
             <a href="?page={{ threads.next_page_number }}">next</a>
         {% endif %}
     </span>
-
 {% endif %}
-
 
 {% endblock main %}

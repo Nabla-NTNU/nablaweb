@@ -39,13 +39,29 @@ class IndexView(LoginRequiredMixin, FormView):
 
 
     def get_context_data(self, **kwargs):
-        # Check for unseen threads unseens = ...
-        # Display unseens on top
         context = super().get_context_data(**kwargs)
         user = self.request.user
         query_set = Channel.objects.filter(group__in=user.groups.all()).order_by('-pk') # All channels belonging to users group
         pinned_channels = query_set.filter(is_pinned=True) # pinned channels
         common_channels = self.model.objects.filter(is_common=True) # channels common to all NablaUsers
+
+        
+        # Trying to find all channels with unreads and set channel.has_unreads to True, but it does not currently work for some reason :((
+        for channel in query_set:
+            if Thread.objects.filter(channel=channel).filter(has_unreads=True):
+                channel.has_unreads = True
+                print("UNREADS ")
+            else:
+                print("NOO")
+
+        for channel in common_channels:
+            if Thread.objects.filter(channel=channel).filter(has_unreads=True):
+                channel.has_unreads = True
+                print("UNREADS COMMON")
+            else:
+                print("NOO COMMON")
+
+
         paginator = Paginator(query_set, self.paginate_by)
         page = self.request.GET.get('page')
         channels = paginator.get_page(page)
@@ -89,6 +105,11 @@ class ChannelIndexView(LoginRequiredMixin, FormView):
         channel_id = self.kwargs['channel_id']
         channel = get_object_or_404(Channel, pk=channel_id)
         query_set = self.model.objects.filter(channel__id=channel_id).order_by('-pk')
+
+        for thread in query_set:
+            if Message.objects.filter(thread=thread).exclude(read_by_user=self.request.user): # set of undread messages in a thread
+                thread.has_unreads = True
+
         paginator = Paginator(query_set, self.paginate_by)
         page = self.request.GET.get('page')
         threads = paginator.get_page(page)
@@ -117,6 +138,7 @@ class ThreadView(LoginRequiredMixin, FormView):
                                             thread = thread,
                                             user = self.request.user,
                                             message = form_data['message_field'],)
+            new_message.read_by_user.add(self.request.user)
         except:
             print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
         return self.render_to_response(self.get_context_data(form=form))
@@ -129,6 +151,11 @@ class ThreadView(LoginRequiredMixin, FormView):
         thread_id = self.kwargs['thread_id']
         thread = get_object_or_404(Thread, pk=thread_id)
         query_set = self.model.objects.filter(thread__id=thread_id).order_by('-pk')
+        
+        # Mark all unread messages read
+        for message in query_set.exclude(read_by_user=self.request.user):
+            message.read_by_user.add(self.request.user)
+
         paginator = Paginator(query_set, self.paginate_by)
         page = self.request.GET.get('page')
         messages = paginator.get_page(page)
@@ -137,3 +164,8 @@ class ThreadView(LoginRequiredMixin, FormView):
         context['channel_id'] = channel_id
         context['is_paginated'] = paginator.num_pages > 1
         return context
+
+
+
+
+
