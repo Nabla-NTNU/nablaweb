@@ -1,4 +1,22 @@
 {% load humanize %}
+{% load sekizai_tags %}
+
+{% addtoblock "css" %}
+<style>
+    .content-info span.trinn {
+        display: inline-block;
+        height: 30px;
+        width: 30px;
+        line-height: 30px;
+        -moz-border-radius: 30px; /* or 50% */
+        border-radius: 30px; /* or 50% */
+        background-color: #333;
+        color: white;
+        text-align: center;
+        font-size: 1em;
+    }
+</style>
+{% endaddtoblock %}
 
 <!-- event-info -->
 <h3 class="pull-left">Informasjon </h3>
@@ -60,6 +78,16 @@
     <!-- Påmeldingsfrist -->
     {% if event.registration_deadline %}
     {% block open_for %}
+    <tr>
+        <td>Trinn</td>
+            <td>
+                {% for group in classnumber %}
+                        <span class = "trinn">
+                            {{ group }}
+                        </span>
+                {% endfor %}
+            </td>
+    </tr>
     {% endblock %}
     <tr>
         <td>Påmeldingsfrist</td>
