@@ -102,3 +102,16 @@ def code_golf_score(request, task_id):
 
 class CodeTaskListView(ListView):
     model = CodeTask
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        result_list = Result.objects.all()
+        sorted_result_list = sorted(result_list, key=lambda x: x.length) 
+        best_result = sorted_result_list[0]
+        user_result = result_list.get(user = self.request.user)
+
+        newest_task = CodeTask.objects.all().reverse()[0]
+
+        context["best_result"] = best_result
+        context["user_result"] = user_result
+        context["newest_task"] = newest_task
+        return context
