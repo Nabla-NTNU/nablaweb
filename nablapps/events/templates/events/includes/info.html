@@ -75,8 +75,7 @@
     </tr>
     {% endif %}
 
-    <!-- Påmeldingsfrist -->
-    {% if event.registration_deadline %}
+    <!-- Åpen for -->
     {% block open_for %}
     <tr>
         <td>Trinn</td>
@@ -89,6 +88,9 @@
             </td>
     </tr>
     {% endblock %}
+
+    <!-- Påmeldingsfrist -->
+    {% if event.registration_deadline %}
     <tr>
         <td>Påmeldingsfrist</td>
         <td>
