@@ -19,18 +19,13 @@
 		<tr>
 			<td> <a href="{% url 'code_golf' Task.id %}">{{Task.title}}</a> </td>
 			<td> 
-				{% for result in result_list %}
-					{% if result.task == Task %}
-						{{result.length}} 
-						({{result.user.get_full_name}}) 
-					{% endif %}
-				{% endfor %}
+				{{ Task.result_set.all.first.length }}
+				({{ Task.result_set.all.first.user.get_full_name }})
 			</td>
 			<td> 
-				{% for result in result_list %}
-					{% if result.user == user and result.task == Task %}
+				{% for result in user_results %}
+					{% if result.task == Task %}
 						{{ result.length }}
-					{% else %}
 					{% endif %}
 				{% endfor %}
 			</td>

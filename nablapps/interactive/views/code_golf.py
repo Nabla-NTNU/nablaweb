@@ -115,4 +115,5 @@ class CodeTaskListView(ListView):
         context["result_list"] = result_list
         context["best_result"] = best_result
         context["newest_task"] = newest_task
+        context["user_results"] = user_results
         return context
