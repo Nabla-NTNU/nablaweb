@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from nablapps.accounts.models import NablaUser, NablaGroup
 
 class Channel(models.Model):
@@ -35,7 +36,13 @@ class Message(models.Model):
     user = models.ForeignKey(NablaUser, on_delete=models.CASCADE,)
     message = models.TextField()
     read_by_user = models.ManyToManyField(NablaUser, related_name="read_by_user")
+    created = models.DateTimeField(editable=False)
 
+    def save(self, *args, **kwargs):
+        """Update created timestamp on creation"""
+        if not self.id:  # Does not exist yet, ie. creation not modification
+            self.created = timezone.now()
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username
