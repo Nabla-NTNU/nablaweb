@@ -1,30 +1,24 @@
 {% extends "base.html" %}
-
+{% load sekizai_tags %}
+{% load static %}
 
 {% block main %}
 
-<style>
-    .thread{
-        list-style: none;
-        padding: 10px;
-    }
+{% addtoblock "css" %}
+    <link  rel="stylesheet" href="{% static "nablaforum/forum.css" %}">
+{% endaddtoblock %}
 
-    .title{
-        float: left;
-    }
-
-    .group{
-        float: right;
-    }
-</style>
 
 <h1>Nablaforum</h1>
 
+<h4>
+    Velkommen til Nablas interforum! Nedenfor finner du kanalene du med i. Det er kanaler tilhørende dine grupper, felleskanaler, samt kullgruppe og "feeds".
+</h4>
 
-<h4>Felleskanaler</h4>
-{% for channel in common_channels %}
+<h4>Feeds</h4>
+{% for channel in feeds %}
     <a href="{% url "channel-index" channel_id=channel.pk %}">
-        <li class="thread box"
+        <li class="tile"
         {% if channel.has_unreads %}
             style="color: red;"
         {% endif %}>
@@ -33,7 +27,9 @@
             </h4>
             <h4 class="group">
                 {% if channel.has_unreads %}
+                    <div style="color: red">
                     Uleste meldinger!
+                    </div>
                 {% endif %}
             </h4>
         </li>
@@ -41,11 +37,33 @@
 {% endfor %}
 
 
-<h4>Festede kanaler</h4>
+<h4>Felleskanaler</h4>
+{% for channel in common_channels %}
+    <a href="{% url "channel-index" channel_id=channel.pk %}">
+        <li class="tile"
+        {% if channel.has_unreads %}
+            style="color: red;"
+        {% endif %}>
+            <h4 class="title">
+                {{ channel.name }}
+            </h4>
+            <h4 class="meta">
+                {% if channel.has_unreads %}
+                    <div style="color: red">
+                    Uleste meldinger!
+                    </div>
+                {% endif %}
+            </h4>
+        </li>
+    </a>
+{% endfor %}
+
+
+<h4>Kullgruppe</h4>
 {% for channel in pinned_channels %}
     <a href="{% url "channel-index" channel_id=channel.pk %}">
-        <li class="thread box"{% if channel.has_unreads %}style="color: red;"{% endif %}>
-            <h4 class="title">{{ channel.name }}</h4><h4 class="group">{{ channel.group.name }}</h4>
+        <li class="tile"{% if channel.has_unreads %}style="color: red;"{% endif %}>
+            <h4 class="title">{{ channel.name }}</h4><h4 class="meta">{{ channel.group.name }}</h4>
         </li>
     </a>
 {% endfor %}
@@ -54,16 +72,15 @@
 <h4>Dine gruppers kanaler</h4>
 {% for channel in channels %}
     <a href="{% url "channel-index" channel_id=channel.pk %}">
-        <li class="thread box"
-        {% if channel.has_unreads %}
-            style="color: red;"
-        {% endif %}>
+        <li class="tile">
             <h4 class="title">
                 {{ channel.name }}
             </h4>
-            <h4 class="group">
+            <h4 class="meta">
                 {% if channel.has_unreads %}
+                    <div style="color: red">
                     Uleste meldinger!
+                    </div>
                 {% else %}
                     {{ channel.group.name }}
                 {% endif %}
@@ -84,13 +101,13 @@
 {% if is_paginated %}
     <span class="step-links">
         {% if channels.has_previous %}
-            <a href="?page={{ channels.previous_page_number }}">previous</a>
+            <a href="?page={{ channels.previous_page_number }}">forrige</a>
         {% endif %}
         <span class="current">
-            Page {{ channels.number }} of {{ channels.paginator.num_pages }}.
+            side {{ channels.number }} av {{ channels.paginator.num_pages }}
         </span>
         {% if channels.has_next %}
-            <a href="?page={{ channels.next_page_number }}">next</a>
+            <a href="?page={{ channels.next_page_number }}">neste</a>
         {% endif %}
     </span>
 {% endif %}

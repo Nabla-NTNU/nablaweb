@@ -50,8 +50,8 @@ class IndexView(LoginRequiredMixin, FormView):
         query_set = Channel.objects.filter(group__in=user.groups.all()).order_by('-pk') # All channels belonging to users group
         pinned_channels = query_set.filter(is_pinned=True) # pinned channels
         common_channels = self.model.objects.filter(is_common=True) # channels common to all NablaUsers
+        feeds = Channel.objects.filter(is_feed=True)# feeds
 
-        
         # Find all channels with unreads and sets channel.has_unreads to True
         # Was not able to figure out a more django way to do this :(
         for channel in query_set:
@@ -71,9 +71,11 @@ class IndexView(LoginRequiredMixin, FormView):
         page = self.request.GET.get('page')
         channels = paginator.get_page(page)
         context['channels'] = channels
+        context['feeds'] = feeds
         context['common_channels'] = common_channels
         context['pinned_channels'] = pinned_channels
         context['is_paginated'] = paginator.num_pages > 1
+        print(feeds)
         return context
 
 
@@ -86,7 +88,6 @@ class ChannelIndexView(LoginRequiredMixin, FormView):
 
 
     def form_valid(self, form):
-        # Make instance of SeenThread, ad this user to user field
         form_data = form.cleaned_data
         channel_id = self.kwargs['channel_id']
         channel = Channel.objects.get(pk=channel_id)
@@ -102,10 +103,6 @@ class ChannelIndexView(LoginRequiredMixin, FormView):
 
 
     def get_context_data(self, **kwargs):
-        # Check for unseen messages unreads = Message.objects.exclude(seenmessage__user=request.user) or sumtin like this
-        # Display these in own category (below pinned) evt. check seen in template and mark if not seen
-
-        # add this user to user field of all threads in this channel.
         context = super().get_context_data(**kwargs)
         channel_id = self.kwargs['channel_id']
         channel = get_object_or_404(Channel, pk=channel_id)
@@ -134,7 +131,6 @@ class ThreadView(LoginRequiredMixin, FormView):
 
     
     def form_valid(self, form):
-        # Make instance of SeenMessage, related to this message, ad request.user to user
         form_data = form.cleaned_data
         thread_id = self.kwargs['thread_id']
         thread = get_object_or_404(Thread, pk=thread_id)
@@ -150,7 +146,6 @@ class ThreadView(LoginRequiredMixin, FormView):
 
 
     def get_context_data(self, **kwargs):
-        # add request.user to all SendMessage instances' user field (of current channel)
         context = super().get_context_data(**kwargs)
         channel_id = self.kwargs['channel_id']
         thread_id = self.kwargs['thread_id']
@@ -169,8 +164,6 @@ class ThreadView(LoginRequiredMixin, FormView):
         context['channel_id'] = channel_id
         context['is_paginated'] = paginator.num_pages > 1
         return context
-
-
 
 
 

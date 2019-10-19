@@ -1,20 +1,13 @@
 {% extends "base.html" %}
+{% load static %}
+{% load sekizai_tags %}
 
 
 {% block main %}
 
-<style>
-    .thread{
-        list-style: none;
-        padding: 10px;
-    }
-    .title{
-        float: left;
-    }
-    .unreads{
-        float: right;
-    }
-</style>
+{% addtoblock "css" %}
+    <link  rel="stylesheet" href="{% static "nablaforum/forum.css" %}">
+{% endaddtoblock %}
 
 
 <h1>Tråder i kanalen: {{ channel }}</h1>
@@ -27,16 +20,18 @@
 <ul>
 {% for thread in threads %}
     <a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}">
-        <li class="thread box"
+        <li class="tile"
         {% if thread.has_unreads %}
             style="color: red;"
         {% endif %}>
             <h4 class="title">
                 {{ thread }}
             </h4>
-            <h4 class="unreads">
+            <h4 class="meta">
                 {% if thread.has_unreads %}
-                    uleste meldinger!
+                    <div style="color: red">
+                        uleste meldinger!
+                    </div>
                 {% endif %}
             </h4>
         </li></a>
@@ -44,7 +39,7 @@
 </ul>
 
 
-{% if not channel.is_common %}
+{% if not channel.is_feed %}
 <form method="POST">
     {% csrf_token %}
     <h4>Ny tråd:</h4>
@@ -58,15 +53,15 @@
 {% if is_paginated %}
     <span class="step-links">
         {% if threads.has_previous %}
-            <a href="?page={{ threads.previous_page_number }}">previous</a>
+            <a href="?page={{ threads.previous_page_number }}">forrige</a>
         {% endif %}
 
         <span class="current">
-            Page {{ threads.number }} of {{ threads.paginator.num_pages }}.
+            side {{ threads.number }} av {{ threads.paginator.num_pages }}
         </span>
 
         {% if threads.has_next %}
-            <a href="?page={{ threads.next_page_number }}">next</a>
+            <a href="?page={{ threads.next_page_number }}">neste</a>
         {% endif %}
     </span>
 {% endif %}
