@@ -37,11 +37,15 @@
 
  .header_like {
      font-size: 1.4em;
-     line-height: 1.3;
+     line-height: 1.3em;
  }
 
  #event_list {
      grid-area: event_list;
+ }
+
+ .event_list__event .header_like {
+     line-height: 2em;
  }
 
  .month__name {
@@ -100,6 +104,7 @@
         </div>
         {% endif %} {# penalties__count #}
     </div>
+
     <div id="user_events">
         <span class="header_like">Påmeldte arrangementer:</span>
         {% for event in user_events %}
@@ -110,7 +115,13 @@
         <div class="user_events__item user_events__item--empty"> Ikke påmeldt noen arrangementer</div>
         {% endfor %}gement/
     </div>
+
     <div id="event_list">
+        <div>
+            Filter
+            <div>Arrangementer</div>
+            <div>Bedpres</div>
+        </div>
         {% regroup object_list by event_start.date|date:"F" as month_list %}
         {% for month in month_list %}
         <div class="month">
@@ -118,13 +129,15 @@
                     {% regroup month.list by event_start.date|date:"d. - l" as day_list %}
                     {% for day in day_list %}
                         <div class="day">
-                            <span class="header_like">{{ day.grouper }}</span>
+                            <span>{{ day.grouper }}</span>
                             {% for event in day.list %}
-                            <a href="{{ event.get_absolute_url }}">
-                            <p> {{ event.headline }}
-                                {% if event.registration_required %} - {{ event.free_places }} plass{{ event.free_places|pluralize:"er" }} igjen{% endif %}
-                            </p>
-                            </a>
+                            <div class="event_list__event">
+                                <a href="{{ event.get_absolute_url }}">
+                                    <span class="header_like">{{ event.headline }}
+                                    {% if event.registration_required %} - {{ event.free_places }} plass{{ event.free_places|pluralize:"er" }} igjen{% endif %}
+                                    </span>
+                                </a>
+                            </div>
                             {% endfor %}
                         </div>
                     {% endfor %}
