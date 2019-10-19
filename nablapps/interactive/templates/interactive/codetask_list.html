@@ -13,25 +13,27 @@
 	<tr>
 		<th> Oppgave </th> 
 		<th> Beste resultat </th> 
-		<!-- <th> Ditt resultat </th> -->
+		<th> Ditt resultat </th>
 	</tr>
 	{% for Task in object_list %}
 		<tr>
 			<td> <a href="{% url 'code_golf' Task.id %}">{{Task.title}}</a> </td>
 			<td> 
-				{{best_result.length}} 
-				({{ best_result.user.get_full_name}}) 
-			</td>
-		<!--	
-			<td> 
-				{% for result in user_results %}
+				{% for result in result_list %}
 					{% if result.task == Task %}
+						{{result.length}} 
+						({{result.user.get_full_name}}) 
+					{% endif %}
+				{% endfor %}
+			</td>
+			<td> 
+				{% for result in result_list %}
+					{% if result.user == user and result.task == Task %}
 						{{ result.length }}
 					{% else %}
 					{% endif %}
 				{% endfor %}
 			</td>
-		-->
 		</tr>
 	{% endfor %}
 </table>

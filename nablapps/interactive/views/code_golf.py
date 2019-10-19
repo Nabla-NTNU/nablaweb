@@ -112,6 +112,7 @@ class CodeTaskListView(ListView):
 
         newest_task = CodeTask.objects.all().reverse()[0]
 
+        context["result_list"] = result_list
         context["best_result"] = best_result
         context["newest_task"] = newest_task
         return context
