@@ -4,18 +4,20 @@
 <h1> Webkoms kodegolf </h1>
 <h4> 
 	<b> 
-		Nyeste kodegolf: <a href="{% url 'code_golf' newest_task.id %}">{{newest_task.title}}</a> 
+		Nyeste oppgave: <a href="{% url 'code_golf' object_list.last.id %}">{{object_list.last.title}}</a> 
 	</b> 
 </h4>
 
 <br>
+
+<h4> <b> Alle kodegolfer: </b> </h4>
 <table style="width:50%">
 	<tr>
 		<th> Oppgave </th> 
 		<th> Beste resultat </th> 
 		<th> Ditt resultat </th>
 	</tr>
-	{% for Task in object_list %}
+	{% for Task in object_list.reverse %}
 		<tr>
 			<td> <a href="{% url 'code_golf' Task.id %}">{{Task.title}}</a> </td>
 			<td> 
