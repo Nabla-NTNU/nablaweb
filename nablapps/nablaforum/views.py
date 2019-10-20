@@ -41,8 +41,8 @@ class IndexView(LoginRequiredMixin, FormView):
                                             text="Dette en tråd!")
         except:
             print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
-        return self.render_to_response(self.get_context_data(form=form))
-
+        # return self.render_to_response(self.get_context_data(form=form))
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -70,10 +70,11 @@ class IndexView(LoginRequiredMixin, FormView):
         paginator = Paginator(query_set, self.paginate_by)
         page = self.request.GET.get('page')
         channels = paginator.get_page(page)
-        context['channels'] = channels
-        context['feeds'] = feeds
-        context['common_channels'] = common_channels
-        context['pinned_channels'] = pinned_channels
+        context['channel_types'] = {"Feeds": feeds,
+                                    "Felleskanaler": common_channels,
+                                    "Kullgruppe": pinned_channels,
+                                    "Dine gruppers kanaler": channels}
+
         context['is_paginated'] = paginator.num_pages > 1
         print(feeds)
         return context

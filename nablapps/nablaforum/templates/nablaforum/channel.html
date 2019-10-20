@@ -13,25 +13,13 @@
 <h1>Tråder i kanalen: {{ channel }}</h1>
 <a href="{% url "forum-index" %}">Tilbake til alle kanaler</a>
 
-<p>
-{{ channel.description }}
-</p>
+<p>{{ channel.description }}</p>
 
 {% for thread in threads %}
 <a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}">
-    <div class="tile{% if thread.has_unreads %} tile--unread{% endif %}">
-        <h4 class="title">
-            {{ thread }}
-        </h4>
-        <h4 class="meta">
-            {% if thread.has_unreads %}
-            <span class="meta--unread">uleste meldinger!</span>
-            {% endif %}
-        </h4>
-    </div>
+{% include "nablaforum/includes/tiles.html" with object=thread %}
 </a>
 {% endfor %}
-
 
 {% if not channel.is_feed %}
 <form method="POST">

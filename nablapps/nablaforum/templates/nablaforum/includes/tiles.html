@@ -1,0 +1,8 @@
+<div class="tile">
+    <h4 class="title {% if object.has_unreads %}tile--has_unread{% endif %}">{{ object }}</h4>
+    <h4 class="meta">
+        {% if object.has_unreads %}
+        <span class="meta--unread">Uleste meldinger</span>
+        {% endif %}
+    </h4>
+</div>

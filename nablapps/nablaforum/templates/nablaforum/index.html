@@ -11,82 +11,16 @@
 
 <h1>Nablaforum</h1>
 
-<h4>
-    Velkommen til Nablas interforum! Nedenfor finner du kanalene du med i. Det er kanaler tilhørende dine grupper, felleskanaler, samt kullgruppe og "feeds".
-</h4>
+<h4>Velkommen til Nablas interforum! Nedenfor finner du kanalene du med i. Det er kanaler tilhørende dine grupper, felleskanaler, samt kullgruppe og "feeds".</h4>
 
-<h4>Feeds</h4>
-{% for channel in feeds %}
+{# List all channels in the different types of channels #}
+{% for channel_type, channel_list in channel_types.items %}
+<h4>{{ channel_type }}</h4>
+{% for channel in channel_list %}
     <a href="{% url "channel-index" channel_id=channel.pk %}">
-        <li class="tile"
-        {% if channel.has_unreads %}
-            style="color: red;"
-        {% endif %}>
-            <h4 class="title">
-                {{ channel.name }}
-            </h4>
-            <h4 class="group">
-                {% if channel.has_unreads %}
-                    <div style="color: red">
-                    Uleste meldinger!
-                    </div>
-                {% endif %}
-            </h4>
-        </li>
+    {% include "nablaforum/includes/tiles.html" with object=channel %}
     </a>
 {% endfor %}
-
-
-<h4>Felleskanaler</h4>
-{% for channel in common_channels %}
-    <a href="{% url "channel-index" channel_id=channel.pk %}">
-        <li class="tile"
-        {% if channel.has_unreads %}
-            style="color: red;"
-        {% endif %}>
-            <h4 class="title">
-                {{ channel.name }}
-            </h4>
-            <h4 class="meta">
-                {% if channel.has_unreads %}
-                    <div style="color: red">
-                    Uleste meldinger!
-                    </div>
-                {% endif %}
-            </h4>
-        </li>
-    </a>
-{% endfor %}
-
-
-<h4>Kullgruppe</h4>
-{% for channel in pinned_channels %}
-    <a href="{% url "channel-index" channel_id=channel.pk %}">
-        <li class="tile"{% if channel.has_unreads %}style="color: red;"{% endif %}>
-            <h4 class="title">{{ channel.name }}</h4><h4 class="meta">{{ channel.group.name }}</h4>
-        </li>
-    </a>
-{% endfor %}
-
-
-<h4>Dine gruppers kanaler</h4>
-{% for channel in channels %}
-    <a href="{% url "channel-index" channel_id=channel.pk %}">
-        <li class="tile">
-            <h4 class="title">
-                {{ channel.name }}
-            </h4>
-            <h4 class="meta">
-                {% if channel.has_unreads %}
-                    <div style="color: red">
-                    Uleste meldinger!
-                    </div>
-                {% else %}
-                    {{ channel.group.name }}
-                {% endif %}
-            </h4>
-        </li>
-    </a>
 {% endfor %}
 
 
