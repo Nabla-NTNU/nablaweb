@@ -17,26 +17,20 @@
 {{ channel.description }}
 </p>
 
-<ul>
 {% for thread in threads %}
-    <a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}">
-        <li class="tile"
-        {% if thread.has_unreads %}
-            style="color: red;"
-        {% endif %}>
-            <h4 class="title">
-                {{ thread }}
-            </h4>
-            <h4 class="meta">
-                {% if thread.has_unreads %}
-                    <div style="color: red">
-                        uleste meldinger!
-                    </div>
-                {% endif %}
-            </h4>
-        </li></a>
+<a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}">
+    <div class="tile{% if thread.has_unreads %} tile--unread{% endif %}">
+        <h4 class="title">
+            {{ thread }}
+        </h4>
+        <h4 class="meta">
+            {% if thread.has_unreads %}
+            <span class="meta--unread">uleste meldinger!</span>
+            {% endif %}
+        </h4>
+    </div>
+</a>
 {% endfor %}
-</ul>
 
 
 {% if not channel.is_feed %}

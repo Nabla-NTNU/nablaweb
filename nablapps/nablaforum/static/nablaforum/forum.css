@@ -6,7 +6,11 @@
     padding-left: 20px;
     margin-bottom: 10px;
     background-color: #f0f0f0;
-}   
+}
+
+.tile--unread, .meta--unread {
+    color: red;
+}
 
 .tile:hover {
     background-color: #d4d4d4;
@@ -21,7 +25,7 @@
     float: right;
     padding-right: 20px;
     color: black;
-}   
+}
 
 .des{
     border-style: solid;
