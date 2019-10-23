@@ -33,19 +33,7 @@
 
 
 {% if is_paginated %}
-    <span class="step-links">
-        {% if threads.has_previous %}
-            <a href="?page={{ threads.previous_page_number }}">forrige</a>
-        {% endif %}
-
-        <span class="current">
-            side {{ threads.number }} av {{ threads.paginator.num_pages }}
-        </span>
-
-        {% if threads.has_next %}
-            <a href="?page={{ threads.next_page_number }}">neste</a>
-        {% endif %}
-    </span>
+{% include "nablaforum/includes/paginator.html" with page=page_obj %}
 {% endif %}
 
 {% endblock main %}

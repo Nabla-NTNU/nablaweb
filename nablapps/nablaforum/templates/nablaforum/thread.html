@@ -40,21 +40,7 @@
 
 
 {% if is_paginated %}
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}">Eldre</a>
-        {% endif %}
-
-        <span class="current">
-            side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
-        </span>
-
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">Nyere</a>
-           | <a href="?page=last">Nyeste</a>
-        {% endif %}
-    </span>
-
+{% include "nablaforum/includes/paginator.html" with page=page_obj %}
 {% endif %}
 
 
