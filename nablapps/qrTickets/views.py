@@ -3,10 +3,11 @@ from django.http import HttpResponse
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.views import View
-from django.urls import reverse
 
 from .models import QrTicket, QrEvent
 from .forms import EmailForm
+
+# For possible future implementation of ticket inside the mail
 from .utils import send_template_email
 
 import random, string
@@ -27,8 +28,6 @@ def render_ticket(request, qr_event_id, qr_ticket_id):
 
 class GenerateTicketsView(PermissionRequiredMixin, View):
     permission_required = "qrTickets.generate_tickets"
-    mail_template = "qrTickets/email/ticket.html"
-    
     def get(self, request):
         email_form = EmailForm()
         context = {'email_form': email_form}
@@ -47,13 +46,14 @@ class GenerateTicketsView(PermissionRequiredMixin, View):
                 ticket = QrTicket.objects.create(event=qr_event, email = email)
                 ticket.ticket_id = str(ticket.id) + randstr
                 ticket.save()
-                ticket_url = reverse("register_tickets",  kwargs={'qr_event_id': qr_event.id,
-                                                        'qr_ticket_id': ticket.ticket_id})
+
                 subject = 'din nablabillett' #noe mer spes etterhvert
-                context = {'ticket_url': ticket_url, 'event': ticket.event}
-                emails = [ticket.email]
+                message = 'Din billett til ' + str(ticket.event) + ' finner du her:\n'
+                link = 'nabla.no/qrTickets/render/' + str(qr_event.id) + '/' + ticket.ticket_id
+                message += link
+                
                 try:
-                    send_template_email(self.mail_template, context, subject, emails)
+                    send_mail(subject, message, "noreply@nablatickets.no", [email], fail_silently=False)
                 except BadHeaderError:
                     return HttpResponse('Invalid header found')
             return HttpResponse("Billetter generert og send på epost!")
