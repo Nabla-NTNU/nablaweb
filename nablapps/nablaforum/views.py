@@ -80,83 +80,87 @@ class IndexView(LoginRequiredMixin, FormView):
         print(feeds)
         return context
 
-
-# View for displaying Threads in a channel
-class ChannelIndexView(LoginRequiredMixin, FormView):
-    model = Thread
-    template_name = "nablaforum/channel.html"
-    form_class = ThreadForm
-    paginate_by = 10
-
-
-    def form_valid(self, form):
-        form_data = form.cleaned_data
-        channel_id = self.kwargs['channel_id']
-        channel = Channel.objects.get(pk=channel_id)
-        try:
-            new_thread = self.model.objects.create(
-                                            channel = channel,
-                                            threadstarter = self.request.user,
-                                            title = form_data['title_field'],
-                                            text = form_data['text_field'],)
-        except:
-            print('Ops! Kunne ikke opprette tråd, ugyldig verdi i feltene!')
-        return self.render_to_response(self.get_context_data(form=form))
-
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        channel_id = self.kwargs['channel_id']
-        channel = get_object_or_404(Channel, pk=channel_id)
-        query_set = self.model.objects.filter(channel__id=channel_id).order_by('-pk')
-
-        for thread in query_set:
-            if Message.objects.filter(thread=thread).exclude(read_by_user=self.request.user): # set of undread messages in a thread
-                thread.has_unreads = True
-
-        paginator = Paginator(query_set, self.paginate_by)
-        page = self.request.GET.get('page')
-        threads = paginator.get_page(page)
-        context['threads'] = threads
-        context['channel_id'] = channel_id
-        context['channel'] = channel
-        context['is_paginated'] = paginator.num_pages > 1
-        return context
-
-
-# View for displaying messages in a thread
-class ThreadView(LoginRequiredMixin, MultipleObjectMixin, CreateView):
-    model = Message
-    template_name = "nablaforum/thread.html"
-    fields = ['message']
+class GenericNameToBeChangedView(LoginRequiredMixin, MultipleObjectMixin, CreateView):
+    """
+    model               : model to be listed/created
+    template_name
+    fields              : fields of ::model to be included in form
+    paginate_by
+    context_object_name : name of object_list in context
+    """
     paginate_by = 10
 
     def dispatch(self, request, *args, **kwargs):
-        self.thread_id = kwargs['thread_id']
-        self.thread = get_object_or_404(Thread, pk=self.thread_id)
+        """
+        try:  # Assume ThreadView
+            self.thread_id = kwargs['thread_id']
+            self.thread = get_object_or_404(Thread, pk=self.thread_id)
+        except KeyError:  # No thread_id => we are in ChannelView
+            self.channel_id = kwargs['channel_id']
+            self.channel = get_object_or_404(Channel, pk=self.channel_id)
+        """
         self.channel_id = kwargs['channel_id']
+        self.container_name = self.container.__name__.lower()
+        setattr(self, self.container_name+"_id", kwargs[self.container_name+"_id"])
+        container_object = get_object_or_404(self.container, pk=getattr(self, self.container_name+"_id"))
+        setattr(self, self.container_name, container_object)
         return super().dispatch(request, *args, **kwargs)
 
-    def get_queryset(self):
-        return self.thread.message_set.order_by('created')
+    def _pre_save(self):
+        pass
+
+    def _post_save(self):
+        pass
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.thread = self.thread
-        self.object.user = self.request.user
+        self._pre_save()
         self.object.save()
-        self.object.read_by_user.add(self.request.user)
+        self._post_save()
 
-        form = self.get_form_class() # Clean form for writing new message
+        form = self.get_form_class() # Clean input field in order to be ready for new input
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_context_data(self, **kwargs):
         context = {}
         self.object_list = self.get_queryset()
-        # Each message in the view is now read by the user
+        context["channel_id"] = self.channel_id
+        context[self.container_name] = getattr(self, self.container_name)
+        return super().get_context_data(**context, **kwargs)
+
+class ChannelView(GenericNameToBeChangedView):
+    context_object_name = "thread_list"
+    fields = ["title", "text"]
+    model = Thread
+    container = Channel
+    template_name = "nablaforum/channel.html"
+
+    def get_queryset(self):
+        return self.channel.thread_set.order_by('-pk')
+
+    def _pre_save(self):
+        self.object.channel = self.channel
+        self.object.threadstarter = self.request.user
+
+class ThreadView(GenericNameToBeChangedView):
+    context_object_name = "message_list"
+    fields = ['message']
+    model = Message
+    template_name = "nablaforum/thread.html"
+    container = Thread
+
+    def get_queryset(self):
+        return self.thread.message_set.order_by('created')
+
+    def _pre_save(self):
+        self.object.thread = self.thread
+        self.object.user = self.request.user
+
+    def _post_save(self):
+        self.object.read_by_user.add(self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         for message in self.object_list:
             message.read_by_user.add(self.request.user)
-        context['thread'] = self.thread
-        context['channel_id'] = self.channel_id
-        print("context channel_id: ", "|" + context['channel_id'] + "|")
-        return super().get_context_data(**context, **kwargs)
+        return context
