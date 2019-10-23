@@ -16,7 +16,7 @@
 <p>{{ channel.description }}</p>
 
 {% for thread in threads %}
-<a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}">
+<a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}?page=last">
 {% include "nablaforum/includes/tiles.html" with object=thread %}
 </a>
 {% endfor %}

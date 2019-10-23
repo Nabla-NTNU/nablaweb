@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView, FormView
+from django.views.generic import FormView, CreateView
+from django.views.generic.list import MultipleObjectMixin
 from django.core.paginator import Paginator
 
 from .models import Channel, Thread, Message
@@ -124,47 +125,38 @@ class ChannelIndexView(LoginRequiredMixin, FormView):
 
 
 # View for displaying messages in a thread
-class ThreadView(LoginRequiredMixin, FormView):
+class ThreadView(LoginRequiredMixin, MultipleObjectMixin, CreateView):
     model = Message
     template_name = "nablaforum/thread.html"
-    form_class = MessageForm
+    fields = ['message']
     paginate_by = 10
 
-    
+    def dispatch(self, request, *args, **kwargs):
+        self.thread_id = kwargs['thread_id']
+        self.thread = get_object_or_404(Thread, pk=self.thread_id)
+        self.channel_id = kwargs['channel_id']
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return self.thread.message_set.order_by('created')
+
     def form_valid(self, form):
-        form_data = form.cleaned_data
-        thread_id = self.kwargs['thread_id']
-        thread = get_object_or_404(Thread, pk=thread_id)
-        try:
-            new_message = self.model.objects.create(
-                                            thread = thread,
-                                            user = self.request.user,
-                                            message = form_data['message_field'],)
-            new_message.read_by_user.add(self.request.user)
-        except:
-            print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
+        self.object = form.save(commit=False)
+        self.object.thread = self.thread
+        self.object.user = self.request.user
+        self.object.save()
+        self.object.read_by_user.add(self.request.user)
+
+        form = self.get_form_class() # Clean form for writing new message
         return self.render_to_response(self.get_context_data(form=form))
 
-
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        channel_id = self.kwargs['channel_id']
-        thread_id = self.kwargs['thread_id']
-        thread = get_object_or_404(Thread, pk=thread_id)
-        query_set = self.model.objects.filter(thread__id=thread_id).order_by('-pk')
-        
-        # Mark all unread messages read
-        for message in query_set.exclude(read_by_user=self.request.user):
+        context = {}
+        self.object_list = self.get_queryset()
+        # Each message in the view is now read by the user
+        for message in self.object_list:
             message.read_by_user.add(self.request.user)
-
-        paginator = Paginator(query_set, self.paginate_by)
-        page = self.request.GET.get('page')
-        messages = paginator.get_page(page)
-        context['thread_messages'] = messages
-        context['thread'] = thread
-        context['channel_id'] = channel_id
-        context['is_paginated'] = paginator.num_pages > 1
-        return context
-
-
-
+        context['thread'] = self.thread
+        context['channel_id'] = self.channel_id
+        print("context channel_id: ", "|" + context['channel_id'] + "|")
+        return super().get_context_data(**context, **kwargs)
