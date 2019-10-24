@@ -5,7 +5,6 @@ from django.db import models
 from hashlib import sha1
 from .utils import activate_user_and_create_password, send_activation_email
 from image_cropping.fields import ImageRatioField, ImageCropField
-from nablapps.events.models import EventRegistration
 
 
 class NablaUserManager(UserManager):
@@ -137,6 +136,7 @@ class NablaUser(AbstractUser):
 
     def get_penalties(self):
         """Returns the EventRegistrations for which the user has penalties this semester"""
+        from nablapps.events.models import EventRegistration #Moved down to avoid loop error when FysmatClass was imported to mixins in events
 
         # Find out if we are in first or second term
         today = date.today()

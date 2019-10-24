@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ job.headline }}{% endblock %}
+{% block title %}{{ job.print_headline }}{% endblock %}
 
 {% block content %}
 
@@ -21,7 +21,7 @@
          >
     {% endif %}
 
-    <header><h2>{{ job.headline }}</h2></header>
+    <header><h2>{{ job.print_headline }}</h2></header>
     <p><strong>{{ job.lead_paragraph }}</strong></p>
     <div style="overflow: hidden;">{{ job.body|markdown }}</div>
 </div>

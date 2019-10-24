@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% load sekizai_tags %}
+
+
+{% block main %}
+
+{% addtoblock "css" %}
+    <link  rel="stylesheet" href="{% static "nablaforum/forum.css" %}">
+{% endaddtoblock %}
+
+
+<h1>Tråder i kanalen: {{ channel }}</h1>
+<a href="{% url "forum-index" %}">Tilbake til alle kanaler</a>
+
+<p>{{ channel.description }}</p>
+
+{% for thread in threads %}
+<a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}">
+{% include "nablaforum/includes/tiles.html" with object=thread %}
+</a>
+{% endfor %}
+
+{% if not channel.is_feed %}
+<form method="POST">
+    {% csrf_token %}
+    <h4>Ny tråd:</h4>
+
+    {{ form.as_p }}
+    <button type="submit">Opprett en ny tråd</button>
+</form>
+{% endif %}
+
+
+{% if is_paginated %}
+    <span class="step-links">
+        {% if threads.has_previous %}
+            <a href="?page={{ threads.previous_page_number }}">forrige</a>
+        {% endif %}
+
+        <span class="current">
+            side {{ threads.number }} av {{ threads.paginator.num_pages }}
+        </span>
+
+        {% if threads.has_next %}
+            <a href="?page={{ threads.next_page_number }}">neste</a>
+        {% endif %}
+    </span>
+{% endif %}
+
+{% endblock main %}

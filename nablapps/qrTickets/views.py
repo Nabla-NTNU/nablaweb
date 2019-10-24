@@ -7,6 +7,9 @@ from django.views import View
 from .models import QrTicket, QrEvent
 from .forms import EmailForm
 
+# For possible future implementation of ticket inside the mail
+from .utils import send_template_email
+
 import random, string
 
 
