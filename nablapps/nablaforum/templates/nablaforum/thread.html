@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% load sekizai_tags %}
+
+
+{% block main %}
+
+{% addtoblock "css" %}
+    <link  rel="stylesheet" href="{% static "nablaforum/forum.css" %}">
+{% endaddtoblock %}
+
+
+<style>
+    .thread{
+        list-style: none;
+        padding: 10px;
+    }
+</style>
+
+
+<h1>{{ thread }}</h1>
+<a href={% url "channel-index" channel_id=channel_id %}>Tilbake til kanal</a>
+
+<h4>{{ thread.threadstarter.get_full_name }} skriver:</h4>
+<div class="des">{{ thread.text }}</div>
+
+{% for message in thread_messages reversed %}
+    <div class="well">
+        <h4>{{ message.user.get_full_name }}</h4>
+        <p>{{ message.message }}</p>
+    </div>
+{% endfor %}
+
+<h4>Ny medling:</h4>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">send</button>
+</form>
+
+
+{% if is_paginated %}
+    <span class="step-links">
+        {% if thread_messages.has_previous %}
+            <a href="?page={{ thread_messages.previous_page_number }}">forrige</a>
+        {% endif %}
+
+        <span class="current">
+            side {{ thread_messages.number }} av {{ thread_messages.paginator.num_pages }}
+        </span>
+
+        {% if thread_messages.has_next %}
+            <a href="?page={{ thread_messages.next_page_number }}">neste</a>
+        {% endif %}
+    </span>
+
+{% endif %}
+
+
+{% endblock main %}

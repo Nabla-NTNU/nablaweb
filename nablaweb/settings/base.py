@@ -111,6 +111,7 @@ INSTALLED_APPS = [
     'nablapps.contact',
     'nablapps.officeCalendar',
     'nablapps.qrTickets',
+    'nablapps.nablaforum',
     'nablaweb',
 
     ###########################
