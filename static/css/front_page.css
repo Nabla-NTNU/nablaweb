@@ -1,7 +1,7 @@
 .maingrid-container{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 20px;
+    grid-gap: 15px;
     align-items: stretch;
     grid-template-areas:
         "main-article    main-article    welcome"
@@ -12,9 +12,23 @@
         "latest-nablad   latest-nablad   suggestions"
         "sponsors        sponsors        sponsors";
 }
+.maingrid-container-authenticated{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 15px;
+    align-items: stretch;
+    grid-template-areas:
+        "main-article    main-article    main-article "
+        "upcoming-events upcoming-events office"
+        "more-news-1     more-news-2     poll"
+        "more-news-3     more-news-4     latest-podcast"
+        ".               more-news-btn   ."
+        "latest-nablad   latest-nablad   suggestions"
+        "sponsors        sponsors        sponsors";
+}
 
 @media (max-width: 1000px){
-    .maingrid-container{
+    .maingrid-container-authenticated, .maingrid-container{
         grid-template-columns: 1fr ;
         grid-template-areas:
         "main-article   "
@@ -35,6 +49,7 @@
     .more-news-btn{display:none}
     .suggestions {display:none}
 }
+
 
 .well{
     margin-bottom: 0px;

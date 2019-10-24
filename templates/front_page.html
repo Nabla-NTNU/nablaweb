@@ -15,7 +15,7 @@
     <link  rel="stylesheet" href="{% static "css/front_page.css" %}">
 {% endaddtoblock %}
 
-<div class="maingrid-container"><!--main grid container open tag-->
+<div class="maingrid-container{% if not newuser_message %}-authenticated{% endif  %}"><!--main grid container open tag-->
 <!--main content begin-->
 
     <article class="main-article box {{ news.content_type.model }}">
@@ -85,6 +85,7 @@
 <!--main content-->
 
 <!--Sidebar begin-->
+    {% if newuser_message %}
     <div class="welcome well">
         <h1>Velkommen til Nabla</h1>
         <p>
@@ -102,7 +103,7 @@
             Ta kontakt med bedriftskontakten på <a href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no.</a>
         </p>
     </div>
-
+    {% endif  %}
     <div class="office">
         <!--Kontoret-->
         {% include "officeCalendar/includes/list.html" %}
