@@ -33,6 +33,8 @@ class IndexView(LoginRequiredMixin, FormView):
                                             group = form_data['group'],
                                             name = form_data['name'],
                                             description = form_data['description'],)
+            new_channel.members.add(self.request.user)
+            new_channel.save()
             first_thread = Thread.objects.create(
 
                                             channel=new_channel,
@@ -50,7 +52,7 @@ class IndexView(LoginRequiredMixin, FormView):
         user = self.request.user
         query_set = Channel.objects.filter(group__in=user.groups.all()).order_by('-pk') # All channels belonging to users group
         pinned_channels = query_set.filter(is_pinned=True) # pinned channels
-        common_channels = self.model.objects.filter(is_common=True) # channels common to all NablaUsers
+        common_channels = self.model.objects.filter(group=None).filter(members=self.request.user) # channels common to all NablaUsers
         feeds = Channel.objects.filter(is_feed=True)# feeds
 
         # Find all channels with unreads and sets channel.has_unreads to True
@@ -166,6 +168,20 @@ class ThreadView(LoginRequiredMixin, FormView):
         context['channel_id'] = channel_id
         context['is_paginated'] = paginator.num_pages > 1
         return context
+
+
+class BrowseChannelsView(ListView):
+    '''View for browsing channels'''
+    model = Channel
+    template_name = 'nablaforum/browse_channels.html'
+
+    def get_queryset(self):
+        query_set = self.model.objects.filter(group=None).exclude(members=self.request.user)
+        return query_set
+
+
+
+
 
 
 

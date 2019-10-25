@@ -4,12 +4,12 @@ from nablapps.accounts.models import NablaUser, NablaGroup
 
 class Channel(models.Model):
     ''' Represents a channel in the forum '''
-    group = models.ForeignKey(NablaGroup, on_delete=models.CASCADE)
+    group = models.ForeignKey(NablaGroup, on_delete=models.CASCADE, blank=True, null=True)
+    members = models.ManyToManyField(NablaUser, related_name='members')
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     is_feed = models.BooleanField(default=False)
     is_pinned = models.BooleanField(default=False)
-    is_common = models.BooleanField(default=False)
     has_unreads = models.BooleanField(default=False)
 
 

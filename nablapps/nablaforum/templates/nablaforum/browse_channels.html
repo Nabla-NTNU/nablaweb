@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% load sekizai_tags %}
+
+
+
+{% block main %}
+
+{% addtoblock "css" %}
+    <link rel="stylesheet" href="{% static "nablaforum/forum.css" %}">
+{% endaddtoblock %}
+
+{% for channel in object_list %}
+    <p class="tile">
+    {{ channel.name }}
+    </p>
+{% endfor %}
+{% endblock main %}
