@@ -42,7 +42,8 @@ class IndexView(LoginRequiredMixin, FormView):
         except:
             print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
         # return self.render_to_response(self.get_context_data(form=form))
-        return super().form_valid(form)
+        return self.render_to_response(self.get_context_data(form=form))
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
