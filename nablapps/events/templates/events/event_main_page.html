@@ -90,6 +90,24 @@
  .user_events__item--empty {
      display: inline-block; /* Make the 'no events' text appear on same line */
  }
+
+ .day {
+     position: relative;
+     padding: 4px 8px;
+     margin-bottom: 16px;
+     box-shadow: 4px 4px 20px -10px;
+     border: 1px solid #00000029;
+ }
+
+ .day__date {
+     position: absolute;
+     right: 0;
+     top: 0;
+     max-height: 100%;
+     padding: 7px;
+     background-color: #c67676;
+     color: white;
+     font-size: 2em;
 </style>
 <div id="dash">
     <div id="penalties">
@@ -113,7 +131,7 @@
         </div>
         {% empty %}
         <div class="user_events__item user_events__item--empty"> Ikke påmeldt noen arrangementer</div>
-        {% endfor %}gement/
+        {% endfor %}
     </div>
 
     <div id="event_list">
@@ -126,23 +144,27 @@
         {% for month in month_list %}
         <div class="month">
             <h2 class="month__name">{{ month.grouper|title }}</h2>
-                    {% regroup month.list by event_start.date|date:"d. - l" as day_list %}
-                    {% for day in day_list %}
-                        <div class="day">
-                            <span>{{ day.grouper }}</span>
-                            {% for event in day.list %}
-                            <div class="event_list__event">
-                                <a href="{{ event.get_absolute_url }}">
-                                    <span class="header_like">{{ event.headline }}
-                                    {% if event.registration_required %} - {{ event.free_places }} plass{{ event.free_places|pluralize:"er" }} igjen{% endif %}
-                                    </span>
-                                </a>
-                            </div>
-                            {% endfor %}
+            {% regroup month.list by event_start.date|date:"d." as day_list %}
+            {% for day in day_list %}
+                <div class="day">
+                    <span class="day__date">{{ day.grouper }}</span>
+                    {% for event in day.list %}
+                    <a href="{{ event.get_absolute_url }}">
+                        <div class="event_list__event">
+                        <span class="header_like">{{ event.headline }}
+                            {% if event.registration_required %}
+                            {{ event.free_places }} plass{{ event.free_places|pluralize:"er" }} igjen
+                            <span class="fa fa-calendar-check-o">{{ event.registraion_deadline }}</span>
+                            {% endif %}
+                        </span>
+
                         </div>
+                    </a>
                     {% endfor %}
                 </div>
             {% endfor %}
         </div>
-    </div><!-- #dash -->
+        {% endfor %}
+    </div>
+</div><!-- #dash -->
 {% endblock %}
