@@ -19,7 +19,7 @@ from braces.views import (PermissionRequiredMixin,
 from nablapps.core.view_mixins import AdminLinksMixin
 from django.core.exceptions import ValidationError
 
-from .models.event import Event, attending_events,
+from .models.event import Event, attending_events
 from .models.eventregistration import EventRegistration
 from .exceptions import (EventException, UserRegistrationException, EventFullException,
                          RegistrationNotAllowed, RegistrationNotOpen, RegistrationAlreadyExists,
@@ -323,7 +323,7 @@ class EventRegistrationExtraView(FormView):
             form = EventRegistrationExtraForm(request.POST)
             if form.is_valid():
                 form_data = form.cleaned_data
-                new_instance = EventRegistration.objects.create(#Skal legge in data fra form_data på hvert av feltene her!)
+                new_instance = EventRegistration.objects.create()#Skal legge in data fra form_data på hvert av feltene her! (inni parentesen)
                 #Tror ikke dette er måten å gjøre det på, dersom jeg skal bruke samme model! Se på senere!
                 #Tror jeg burde ta bort dette viewet muligens, og skrive alt i det andre viewet som allerede finnes over?
                 #Eller så må det gjøres sånn som dette, men hvordan skal jeg få med alle da andre feltene fra det andre viewet her?
