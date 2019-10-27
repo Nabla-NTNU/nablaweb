@@ -24,9 +24,6 @@ class CodeTask(models.Model):
             return sorted(self.result_set.all(), key=lambda result: result.length)[0]
         else:
             return None
-    
-    def get_user_result(self, user):
-        return self.result_set.get(user)
 
 class Result(models.Model):
     """

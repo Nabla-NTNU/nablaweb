@@ -106,9 +106,6 @@ class CodeTaskListView(ListView):
         context = super().get_context_data(**kwargs)
 
         task_list = CodeTask.objects.all()
-        #best_results = [obj.get_best_result for obj in self.object_list]
-        #user_results = [obj.result_set.get(user=self.request.user).length for obj in self.object_list]
-                        #if obj.result_set.get(user=self.request.user) is not None else "--"
         best_results = []
         user_results = []
         
@@ -120,16 +117,8 @@ class CodeTaskListView(ListView):
                 user_results.append('--')
 
         tasks = zip(task_list, best_results, user_results)
-
-        #result_list = Result.objects.all()
-        #user_results = result_list.get(user=self.request.user)
-
         newest_task = task_list[0]
 
-        #context["user_results"] = user_results
-        #context["task_list"] = task_list
         context["newest_task"] = newest_task
         context["tasks"] = tasks
-        #context["result_list"] = result_list
-        #context["user_results"] = user_results
         return context
