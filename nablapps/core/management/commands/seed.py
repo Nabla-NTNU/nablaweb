@@ -84,9 +84,9 @@ class Command(BaseCommand):
         print("Creating %d NablaGroups" % count)
         ngroups = [
             NablaGroup.objects.create(
-                name=fake.word()+"-komitéen"
+                name=fake.word() + "-" + str(i) +"-komitéen"
             )
-            for _ in range(count)
+            for i in range(count)
         ]
 
         if delete:
@@ -145,6 +145,8 @@ class Command(BaseCommand):
             f.content_object = article
             f.save()
 
+        if delete:
+            Event.objects.all().delete()
 
         count = random.randint(10, 20)
         print("Creating %d Events" % count)
@@ -162,7 +164,11 @@ class Command(BaseCommand):
                 event_start=start,
                 event_end=start+td(hours=4),
                 organizer=fake.name(),
-                location=fake.address()
+                location=fake.address(),
+                registration_required=True,
+                registration_deadline=(dt.now()+td(30)),
+                registration_start=dt.now(),
+                places=10
             )
             f = FrontPageNews()
             f.content_object = event
