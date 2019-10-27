@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 
 from ..core.templatetags.listutil import row_split
-from ..core.view_mixins import AdminLinksMixin
+from ..core.view_mixins import AdminLinksMixin, FlatPageMixin
 from .models import Advert, Company, YearChoices, RelevantForChoices, TagChoices
 
 
@@ -15,12 +15,13 @@ def split_into_rows(jobs):
     return row_split(jobs, 2) if jobs else None
 
 
-class GenericJobsList(ListView):
+class GenericJobsList(FlatPageMixin, ListView):
     """Abstrakt rotklasse som håndterer info for sidebaren."""
     context_object_name = 'jobs_list'
     template_name = 'jobs/jobs_list.html'
     paginate_by = 8
     model = Advert
+    flatpages= [("jobsidebarinfo", "/jobsidebarinfo/")]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
