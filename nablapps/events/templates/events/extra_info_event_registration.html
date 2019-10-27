@@ -10,9 +10,12 @@
     <br>
     <p>Vi ønsker at du fyller inn litt mer informasjon om deg selv </p>
 
-    <form action="/informasjon/" method="post">
+    <form action="/informasjon/" method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
+        {% for field in form %}
+            <p style="width: 500px;" >{{ field.label }}<br>{{ field }}</p>
+            <br>
+    {% endfor %}
     <input type="submit" value="Submit">
     </form>
 

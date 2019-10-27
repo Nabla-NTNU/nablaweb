@@ -3,7 +3,7 @@ Forms for events
 """
 import operator
 
-from django.forms import BooleanField, ValidationError, ModelForm, Form, IntegerField, TextInput, CharField
+from django.forms import BooleanField, ValidationError, ModelForm, Form, IntegerField, TextInput, CharField, Textarea
 from django.forms.models import fields_for_model
 
 from .models import Event, EventRegistration
@@ -90,8 +90,10 @@ class EventRegistrationExtraForm(Form):
     """
     Form to add extra information about students registering for an event
     """
-    name = CharField(label="Skriv inn navnet ditt", max_length="100")
-    your_information = CharField(label="Informasjon du vil opplyse om? (Allergier f.eks)", empty_value="Ingenting")
+    name = CharField(label="Navn:", max_length="100")
+    user_name = CharField(label="Brukernavn:", max_length="100")
+    #Kan for eksempel lage noen avkrysningsbokser for allergier.etc som er vanligst!
+    your_information = CharField(label="Noe mer du du vil opplyse om?", widget=Textarea, empty_value="Ingenting", required=False)
 
 
 
