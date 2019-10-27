@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from django.template import loader
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, FormView
 from django.contrib.auth import get_user_model
 
 from django.utils.safestring import mark_safe
@@ -25,6 +25,7 @@ from .exceptions import (EventException, UserRegistrationException, EventFullExc
                          RegistrationNotAllowed, RegistrationNotOpen, RegistrationAlreadyExists,
                          RegistrationNotRequiredException, DeregistrationClosed)
 from .event_calendar import EventCalendar
+from .forms import EventRegistrationExtraForm
 
 from nablapps.accounts.models import NablaUser
 
@@ -302,6 +303,33 @@ class RegisterAttendanceView(DetailView, MessageMixin):
         registrations = event.eventregistration_set.filter(attending=True)
         context['registrations'] = registrations.order_by('user__first_name')
         return context
+
+
+class EventRegistrationExtraView(FormView):
+    """
+    Used to show form for POSTing extra information about students who are registering for an event
+    """
+    template_name = 'events/extra_info_event_registration.html'
+    form_class = EventRegistrationExtraForm
+    success_url = '/arrangement/'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    #Vet ikke om alt dette ovenfor trengs!
+
+    def get_information(request):
+        if request.method == "POST":
+            form = EventRegistrationExtraForm(request.POST)
+            if form.is_valid():
+                return HttpResponseRedirect('/arrangementer')
+        else:
+            form = EventRegistrationExtraForm()
+
+        context = {'form' : form}
+
+        return render(request, 'events/extra_info_event_registration.html', context)
+
 
 
 def ical_event(request, event_id):

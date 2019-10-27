@@ -2,6 +2,7 @@
 Urls for events
 """
 from django.conf.urls import url
+from django.urls import path
 from .views import (
     AdministerRegistrationsView,
     calendar,
@@ -11,6 +12,7 @@ from .views import (
     EventRegistrationsView,
     RegisterAttendanceView,
     ical_event,
+    EventRegistrationExtraView,
 )
 from .feeds import RecentEvents
 
@@ -50,6 +52,8 @@ urlpatterns = [
     url(r'^(?P<event_id>\d{1,8}).ics$',
         ical_event,
         name="ical_event"),
+
+    path('informasjon/', EventRegistrationExtraView.as_view(), name="event_registration_extra"),
 
     url(r'^feed/$',
         RecentEvents(),

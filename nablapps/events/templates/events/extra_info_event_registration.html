@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Mer informasjon om deg
+{% endblock %}
+
+{% block content %}
+    <h1> Fyll in mer informasjon om deg!</h1>
+    <p>Du ønsker å melde deg på følgende arrangement: <!-- Her vil jeg at den skal hente ut hvilket event det er! --></p>
+    <br>
+    <p>Vi ønsker at du fyller inn litt mer informasjon om deg selv </p>
+
+    <form action="/informasjon/" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+    </form>
+
+{% endblock %}
