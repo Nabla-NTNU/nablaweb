@@ -17,19 +17,26 @@
 		<th> Beste resultat </th> 
 		<th> Ditt resultat </th>
 	</tr>
-	{% for Task in object_list.reverse %}
+	{% for task, bestResult, userResult in tasks %}
 		<tr>
-			<td> <a href="{% url 'code_golf' Task.id %}">{{Task.title}}</a> </td>
+			<td> <a href="{% url 'code_golf' task.id %}">{{task.title}}</a> </td>
 			<td> 
-				{{ Task.result_set.all.first.length }}
-				({{ Task.result_set.all.first.user.get_full_name }})
+				{% if bestResult != None %}
+					{{ bestResult.length }}
+					({{ bestResult.user.get_full_name }})
+				{% else %}
+					--
+				{% endif %}
 			</td>
 			<td> 
+				{{ userResult }}
+				<!--
 				{% for result in user_results %}
 					{% if result.task == Task %}
 						{{ result.length }}
 					{% endif %}
 				{% endfor %}
+				-->
 			</td>
 		</tr>
 	{% endfor %}

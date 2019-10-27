@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
 
@@ -104,16 +104,32 @@ class CodeTaskListView(ListView):
     model = CodeTask
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        result_list = Result.objects.all()
-        sorted_result_list = sorted(result_list, key=lambda x: x.length) 
-        best_result = sorted_result_list[0]
 
-        user_results = result_list.filter(user=self.request.user)
+        task_list = CodeTask.objects.all()
+        #best_results = [obj.get_best_result for obj in self.object_list]
+        #user_results = [obj.result_set.get(user=self.request.user).length for obj in self.object_list]
+                        #if obj.result_set.get(user=self.request.user) is not None else "--"
+        best_results = []
+        user_results = []
+        
+        for obj in task_list:
+            best_results.append(obj.get_best_result)
+            try:
+                user_results.append(obj.result_set.get(user=self.request.user).length)
+            except ObjectDoesNotExist:
+                user_results.append('--')
 
-        newest_task = CodeTask.objects.all().reverse()[0]
+        tasks = zip(task_list, best_results, user_results)
 
-        context["result_list"] = result_list
-        context["best_result"] = best_result
+        #result_list = Result.objects.all()
+        #user_results = result_list.get(user=self.request.user)
+
+        newest_task = task_list[0]
+
+        #context["user_results"] = user_results
+        #context["task_list"] = task_list
         context["newest_task"] = newest_task
-        context["user_results"] = user_results
+        context["tasks"] = tasks
+        #context["result_list"] = result_list
+        #context["user_results"] = user_results
         return context

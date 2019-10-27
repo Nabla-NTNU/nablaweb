@@ -3,6 +3,9 @@ from django.db import models
 from datetime import timedelta, datetime
 from django.conf import settings
 from nablapps.accounts.models import NablaUser
+from django import template
+
+register=template.Library()
 
 
 class CodeTask(models.Model):
@@ -16,14 +19,21 @@ class CodeTask(models.Model):
     def get_correct_output(self):
         return self.correct_output
 
+    def get_best_result(self):
+        if len(self.result_set.all()) > 0:
+            return sorted(self.result_set.all(), key=lambda result: result.length)[0]
+        else:
+            return None
+    
+    def get_user_result(self, user):
+        return self.result_set.get(user)
+
 class Result(models.Model):
     """
     Users solution to a CodeTask
     """
-    
     task = models.ForeignKey(CodeTask, on_delete=models.CASCADE,)
     user = models.ForeignKey(NablaUser, on_delete=models.CASCADE,)
-
     solution = models.TextField(default="") # Users code
 
     @property
@@ -32,4 +42,3 @@ class Result(models.Model):
 
     def __str__(self):
         return f"{self.user}'s solution to CodeTask #{self.task.id}"
-
