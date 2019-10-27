@@ -7,9 +7,12 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from django.contrib.auth.models import Group
+from django.contrib.flatpages.admin import FlatPageAdmin
+from django.contrib.flatpages.models import FlatPage
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.utils.encoding import smart_text
+from django.utils.translation import gettext_lazy as _
 
 from .models import NablaUser, NablaGroup, FysmatClass, RegistrationRequest
 from .forms import NablaUserChangeForm, NablaUserCreationForm
@@ -120,3 +123,22 @@ class RegistrationRequestAdmin(admin.ModelAdmin):
         """Decline selected requests"""
         for req in queryset:
             req.delete()
+
+
+# Define a new FlatPageAdmin
+class FlatPageAdmin(FlatPageAdmin):
+    fieldsets = (
+        (None, {'fields': ('url', 'title', 'content', 'sites')}),
+    )
+
+    def get_form(self,request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        sites = form.base_fields["sites"]
+        sites.widget.can_add_related = False
+        sites.widget.can_delete_related = False
+        sites.widget.can_change_related = False
+        return form
+
+# Re-register FlatPageAdmin
+admin.site.unregister(FlatPage)
+admin.site.register(FlatPage, FlatPageAdmin)
