@@ -1,114 +1,129 @@
 {% extends "base.html" %}
 
 {% block main %}
-<style>
- #dash {
-     display: grid;
-     grid-template-columns: 1fr 1fr;
-     grid-template-areas:
-         "penalty user_events"
-         "event_list event_list";
-     justify-items: stretch;
-     grid-column-gap: 40px;
- }
-
- @media (max-width: 600px) {
+    <style>
      #dash {
-         grid-template-columns: 1fr;
+         display: grid;
+         grid-template-columns: 1fr 1fr;
          grid-template-areas:
-             "penalty"
-             "user_events"
-             "event_list";
+             "penalty user_events"
+             "event_list event_list";
+         justify-items: stretch;
+         grid-column-gap: 40px;
      }
- }
 
- #penalties {
-     grid-area: penalty;
-     align-self: end;
- }
- #user_events {
-     grid-area: user_events;
- }
+     @media (max-width: 600px) {
+         #dash {
+             grid-template-columns: 1fr;
+             grid-template-areas:
+                 "penalty"
+                 "user_events"
+                 "event_list";
+         }
+     }
 
- #penalties, #user_events {
-     padding-bottom: 7px;
-     border-bottom: 1px solid black;
- }
+     #penalties {
+         grid-area: penalty;
+         align-self: end;
+     }
+     #user_events {
+         grid-area: user_events;
+     }
 
- .header_like {
-     font-size: 1.4em;
-     line-height: 1.3em;
- }
+     #penalties, #user_events {
+         padding-bottom: 7px;
+         border-bottom: 1px solid black;
+     }
 
- #event_list {
-     grid-area: event_list;
- }
+     .header_like {
+         font-size: 1.4em;
+         line-height: 1.3em;
+     }
 
- .event_list__event .header_like {
-     line-height: 2em;
- }
+     #event_list {
+         grid-area: event_list;
+     }
 
- .month__name {
-     color: #507eff;
-     border-bottom: 1px solid #507eff;
- }
+     .event_list__event .header_like {
+         line-height: 2em;
+     }
 
- .penalties__questionmark {
-     display: inline-block;
-     border: 2px solid rgba(0,0,0,0.5);
-     width: 20px;
-     height: 20px;
-     border-radius: 10px;
-     text-align: center;
-     line-height: 20px;
-     color: rgba(0,0,0,0.5);
-     font-weight: bold;
- }
+     .month__name {
+         color: #507eff;
+         border-bottom: 1px solid #507eff;
+     }
 
- .penalties__list {
-     position: absolute;
-     background: white;
-     border: 0.4px solid black;
-     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
-     padding: 5px 10px;
-     display: none;
- }
+     .penalties__questionmark {
+         display: inline-block;
+         border: 2px solid rgba(0,0,0,0.5);
+         width: 20px;
+         height: 20px;
+         border-radius: 10px;
+         text-align: center;
+         line-height: 20px;
+         color: rgba(0,0,0,0.5);
+         font-weight: bold;
+     }
 
- .penalties__list__item {
-     text-align: right;
- }
+     .penalties__list {
+         position: absolute;
+         background: white;
+         border: 0.4px solid black;
+         box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+         padding: 5px 10px;
+         display: none;
+     }
 
- .penalties__questionmark:hover ~ .penalties__list, .penalties__list:hover {
-     display: block;
- }
+     .penalties__list__item {
+         text-align: right;
+     }
 
- #dash a{
-     text-decoration: none;
-     color: inherit;
- }
+     .penalties__questionmark:hover ~ .penalties__list, .penalties__list:hover {
+         display: block;
+     }
 
- .user_events__item--empty {
-     display: inline-block; /* Make the 'no events' text appear on same line */
- }
+     #dash a{
+         text-decoration: none;
+         color: inherit;
+     }
 
- .day {
-     position: relative;
-     padding: 4px 8px;
-     margin-bottom: 16px;
-     box-shadow: 4px 4px 20px -10px;
-     border: 1px solid #00000029;
- }
+     .user_events__item--empty {
+         display: inline-block; /* Make the 'no events' text appear on same line */
+     }
 
- .day__date {
-     position: absolute;
-     right: 0;
-     top: 0;
-     max-height: 100%;
-     padding: 7px;
-     background-color: #c67676;
-     color: white;
-     font-size: 2em;
-</style>
+     .day {
+         position: relative;
+         padding: 4px 8px;
+         margin-bottom: 16px;
+         box-shadow: 4px 4px 20px -10px;
+         border: 1px solid #00000029;
+     }
+
+     .day__date {
+         position: absolute;
+         right: 0;
+         top: 0;
+         max-height: 100%;
+         padding: 7px;
+         background-color: #c67676;
+         color: white;
+         font-size: 2em;
+     }
+
+     form.filter input[type="radio"] {
+         display: none;
+     }
+
+     .filter__option + label {
+         padding: 3px 6px;
+         display: inline-block;
+         background: #ff9d9d;
+     }
+
+     .filter__option:checked + label {
+         background: #7373ff;
+     }
+    </style>
 <div id="dash">
     <div id="penalties">
         <span class="header_like">Prikker:</span> {{ penalties__count }}
@@ -137,15 +152,15 @@
     <div id="event_list">
         <div>
             Filter
-            <form method="get">
+            <form method="get" class="filter">
             {% for type in filter_form.type %}
-            <div class="filter__option" >
+
                 {{ type }}
-            </div>
+
             {% endfor %}
 
             {{ filter_form.sort }}
-            <input type="submit">
+            <input type="submit" value="Filtrer">
             </form>
         </div>
         {% regroup object_list by event_start.date|date:"F" as month_list %}

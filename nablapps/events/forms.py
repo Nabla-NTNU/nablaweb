@@ -92,9 +92,9 @@ class FilterEventsForm(Form):
     """Form to filter and sort events in EventMainPage"""
 
     type = ChoiceField(choices=[('', 'Alle'), ('event', 'Arrangement'), ('bedpres', 'Bedpres')],
-                       widget=RadioSelect,
+                       widget=RadioSelect(),
                        required=False)
-
+    type.widget.attrs.update({'class': 'filter__option'})
     type.widget.option_template_name="events/radio_option.html"
 
     sort = ChoiceField(choices=[('event_start', 'Start'), ('registration_start', 'Registrering åpner')])
