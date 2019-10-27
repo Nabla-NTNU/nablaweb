@@ -90,10 +90,8 @@ class EventRegistrationExtraForm(Form):
     """
     Form to add extra information about students registering for an event
     """
-    name = CharField(label="Navn:", max_length="100")
-    user_name = CharField(label="Brukernavn:", max_length="100")
     #Kan for eksempel lage noen avkrysningsbokser for allergier.etc som er vanligst!
-    your_information = CharField(label="Noe mer du du vil opplyse om?", widget=Textarea, empty_value="Ingenting", required=False)
+    your_information = CharField(label="Noe mer du vil opplyse om? Noen allergier? Andre hensyn som må tas?", widget=Textarea, empty_value="Ingenting", required=False)
 
 
 

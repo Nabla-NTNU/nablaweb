@@ -10,9 +10,9 @@
     <br>
     <p>Vi ønsker at du fyller inn litt mer informasjon om deg selv </p>
 
-    <form action="/informasjon/" method="POST">
+    <form method="POST">
     {% csrf_token %}
-        {% for field in form %}
+        {% for field in form %}<!-- Løkka kan sannsynligvis slettes, men jeg lar det være foreløpig -->
             <p style="width: 500px;" >{{ field.label }}<br>{{ field }}</p>
             <br>
     {% endfor %}

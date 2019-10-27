@@ -322,6 +322,8 @@ class EventRegistrationExtraView(FormView):
         if request.method == "POST":
             form = EventRegistrationExtraForm(request.POST)
             if form.is_valid():
+                form_data = form.cleaned_data
+                #new_instance = klassenFraModellen.objects.creat(kall til form_data-dictionaryen)
                 return HttpResponseRedirect('/arrangementer')
         else:
             form = EventRegistrationExtraForm()
