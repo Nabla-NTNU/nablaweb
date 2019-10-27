@@ -26,6 +26,8 @@ from .exceptions import (EventException, UserRegistrationException, EventFullExc
                          RegistrationNotRequiredException, DeregistrationClosed)
 from .event_calendar import EventCalendar
 
+from .forms import FilterEventsForm  # Used in EventMainPage
+
 from nablapps.accounts.models import NablaUser
 
 User = get_user_model()
@@ -137,9 +139,24 @@ class EventMainPage(ListView):
     NUMBER_OF_EVENTS = 10  # Number of events to list
 
     def get_queryset(self):
-
         future_events = Event.objects.filter(event_start__gte=datetime.date.today())\
-                                      .order_by('event_start')[:self.NUMBER_OF_EVENTS]
+                                      .order_by('event_start')
+        self.filterForm = FilterEventsForm(self.request.GET)
+
+        #type = self.request.GET.get('type', None)
+        self.filterForm.is_valid()
+        type = self.filterForm.cleaned_data['type']
+        if type == 'event':
+            future_events = future_events.exclude(is_bedpres=True)
+        elif type == 'bedpres':
+            future_events = future_events.filter(is_bedpres=True)
+
+        sort = self.request.GET.get('sort', None)
+        if sort == 'registration_opens':
+            future_events = future_events.order_by('registration_start')
+
+        future_events = future_events[:self.NUMBER_OF_EVENTS]
+
         return future_events
 
 
@@ -151,6 +168,7 @@ class EventMainPage(ListView):
         context['user_events'] = user.eventregistration_set.\
             filter(event__event_start__gte=datetime.date.today()).\
             order_by('event__event_start')
+        context['filter_form'] = self.filterForm
         return context
 
 

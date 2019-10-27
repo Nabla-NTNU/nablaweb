@@ -137,8 +137,16 @@
     <div id="event_list">
         <div>
             Filter
-            <div>Arrangementer</div>
-            <div>Bedpres</div>
+            <form method="get">
+            {% for type in filter_form.type %}
+            <div class="filter__option" >
+                {{ type }}
+            </div>
+            {% endfor %}
+
+            {{ filter_form.sort }}
+            <input type="submit">
+            </form>
         </div>
         {% regroup object_list by event_start.date|date:"F" as month_list %}
         {% for month in month_list %}
