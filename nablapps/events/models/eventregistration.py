@@ -41,6 +41,11 @@ class EventRegistration(models.Model):
         default=0,
         blank=True)
 
+    information = models.TextField(
+        verbose_name="Informasjon",
+        default="",
+        blank = True)
+
     class Meta:
         verbose_name = 'påmelding'
         verbose_name_plural = 'påmeldte'
