@@ -3,13 +3,13 @@ Forms for events
 """
 import operator
 
-from django.forms import BooleanField, ValidationError, ModelForm, Form, IntegerField, TextInput, ChoiceField
-from django.forms.widgets import RadioSelect
+from django.forms import BooleanField, ValidationError, ModelForm, Form, IntegerField, TextInput, ChoiceField, DateField
+from django.forms.widgets import RadioSelect, SelectDateWidget
 from django.forms.models import fields_for_model
 
 from .models import Event, EventRegistration
 from nablapps.accounts.models import NablaUser
-
+from django.utils import timezone
 
 class EventForm(ModelForm):
     """
@@ -98,3 +98,5 @@ class FilterEventsForm(Form):
     type.widget.option_template_name="events/radio_option.html"
 
     sort = ChoiceField(choices=[('event_start', 'Start'), ('registration_start', 'Registrering åpner')])
+
+    start_time = DateField(widget=SelectDateWidget)
