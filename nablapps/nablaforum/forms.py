@@ -29,4 +29,10 @@ class MessageForm(forms.Form):
     message_field = forms.CharField(widget=forms.Textarea)
 
 
-
+class JoinChannelsForm(forms.Form):
+    selected_channels = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+    
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.pop('selected_channels', None)
+        super().__init__(*args, **kwargs)
+        self.fields['selected_channels'].choices = choices

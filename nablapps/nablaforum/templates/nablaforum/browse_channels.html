@@ -3,16 +3,24 @@
 {% load sekizai_tags %}
 
 
-
 {% block main %}
 
 {% addtoblock "css" %}
     <link rel="stylesheet" href="{% static "nablaforum/forum.css" %}">
 {% endaddtoblock %}
 
-{% for channel in object_list %}
-    <p class="tile">
-    {{ channel.name }}
-    </p>
+<h1>Finn nye kanaler</h1>
+<p>Her kan du se og evt. melde deg inn i kanaler du ikke er medlem i.</p>
+
+<form method="POST">
+{% csrf_token %}
+{% for checkbox in form.selected_channels %}
+    <label class="tile" style="display: block">
+    {{ checkbox }}
+    </label>
 {% endfor %}
+
+
+<button type="submit">Bli med i valgte kanaler</button>
+</form>
 {% endblock main %}

@@ -1,11 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, FormView
 from django.core.paginator import Paginator
 
 from .models import Channel, Thread, Message
-from .forms import ThreadForm, MessageForm, ChannelForm
+from .forms import ThreadForm, MessageForm, ChannelForm, JoinChannelsForm
 from nablapps.accounts.models import NablaGroup
 
 
@@ -170,18 +170,27 @@ class ThreadView(LoginRequiredMixin, FormView):
         return context
 
 
-class BrowseChannelsView(ListView):
+# Convert to Formview and do it with django form
+class BrowseChannelsView(LoginRequiredMixin, FormView):
     '''View for browsing channels'''
-    model = Channel
+    form_class = JoinChannelsForm
     template_name = 'nablaforum/browse_channels.html'
 
-    def get_queryset(self):
-        query_set = self.model.objects.filter(group=None).exclude(members=self.request.user)
-        return query_set
+
+    def form_valid(self, form):
+        form_data = form.cleaned_data # selected channels
+        channel_names = form_data['selected_channels']
+        joinable_channels = Channel.objects.filter(group=None).exclude(members=self.request.user)
+        for name in channel_names:
+            channel = joinable_channels.get(name=name)
+            channel.members.add(self.request.user)
+        return redirect('forum-index')
 
 
-
-
-
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        channels = Channel.objects.filter(group=None).exclude(members=self.request.user)
+        kwargs['selected_channels'] = [(c, c.name) for c in channels]
+        return kwargs
 
 
