@@ -48,6 +48,12 @@
          line-height: 2em;
      }
 
+     .event_list__event__free_places {
+         display: inline-block;
+         float: right;
+         margin-right: 12px;
+     }
+
      .month__name {
          color: #507eff;
          border-bottom: 1px solid #507eff;
@@ -94,6 +100,7 @@
      .day {
          position: relative;
          padding: 4px 8px;
+         padding-right: 53px; /* Compensate for day box */
          margin-bottom: 16px;
          box-shadow: 4px 4px 20px -10px;
          border: 1px solid #00000029;
@@ -177,8 +184,10 @@
                         <div class="event_list__event">
                         <span class="header_like">{{ event.headline }}
                             {% if event.registration_required %}
-                            {{ event.free_places }} plass{{ event.free_places|pluralize:"er" }} igjen
-                            <span class="fa fa-calendar-check-o">{{ event.registraion_deadline }}</span>
+                            <div class="event_list__event__free_places">
+                                {{ event.users_attending }} / {{ event.free_places }}
+                                <span class="fa fa-user"></span>
+                            </div>
                             {% endif %}
                         </span>
 
