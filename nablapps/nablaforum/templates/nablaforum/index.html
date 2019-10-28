@@ -13,6 +13,8 @@
 
 <h4>Velkommen til Nablas interforum! Nedenfor finner du kanalene du med i. Det er kanaler tilhørende dine grupper, felleskanaler, samt kullgruppe og "feeds".</h4>
 
+<a href={% url "browse-channels" %}><button style="font-size: 20px">Finn nye kanaler</button></a>
+
 {# List all channels in the different types of channels #}
 {% for channel_type, channel_list in channel_types.items %}
 <h4>{{ channel_type }}</h4>

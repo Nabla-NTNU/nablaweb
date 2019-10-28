@@ -12,6 +12,8 @@
 <h1>Finn nye kanaler</h1>
 <p>Her kan du se og evt. melde deg inn i kanaler du ikke er medlem i.</p>
 
+<a href={% url "forum-index" %}><button style="font-size: 20px; margin: 10px">Tilbake til din kanaloversikt</button></a>
+
 <form method="POST">
 {% csrf_token %}
 {% for checkbox in form.selected_channels %}
