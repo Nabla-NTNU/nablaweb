@@ -151,9 +151,13 @@ class EventMainPage(ListView):
         elif type == 'bedpres':
             future_events = future_events.filter(is_bedpres=True)
 
-        sort = self.request.GET.get('sort', None)
+        sort = self.filterForm.cleaned_data['sort']
         if sort == 'registration_opens':
             future_events = future_events.order_by('registration_start')
+
+        start_time = self.filterForm.cleaned_data['start_time']
+        if start_time:
+            future_events = future_events.filter(event_start__gte=start_time)
 
         future_events = future_events[:self.NUMBER_OF_EVENTS]
 
