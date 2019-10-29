@@ -43,8 +43,7 @@ class IndexView(LoginRequiredMixin, FormView):
                                             text="Dette en tråd!")
         except:
             print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
-        # return self.render_to_response(self.get_context_data(form=form))
-        return self.render_to_response(self.get_context_data(form=form))
+        return redirect('forum-index')
 
 
     def get_context_data(self, **kwargs):
@@ -103,7 +102,7 @@ class ChannelIndexView(LoginRequiredMixin, FormView):
                                             text = form_data['text_field'],)
         except:
             print('Ops! Kunne ikke opprette tråd, ugyldig verdi i feltene!')
-        return self.render_to_response(self.get_context_data(form=form))
+        return redirect('channel-index', channel_id=channel_id)
 
 
     def get_context_data(self, **kwargs):
@@ -137,6 +136,7 @@ class ThreadView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         form_data = form.cleaned_data
         thread_id = self.kwargs['thread_id']
+        channel_id = self.kwargs['channel_id']
         thread = get_object_or_404(Thread, pk=thread_id)
         try:
             new_message = self.model.objects.create(
@@ -146,7 +146,7 @@ class ThreadView(LoginRequiredMixin, FormView):
             new_message.read_by_user.add(self.request.user)
         except:
             print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
-        return self.render_to_response(self.get_context_data(form=form))
+        return redirect('thread-view', channel_id=channel_id, thread_id=thread_id)
 
 
     def get_context_data(self, **kwargs):
