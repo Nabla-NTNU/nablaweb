@@ -72,11 +72,11 @@ class IndexView(LoginRequiredMixin, FormView):
 
         paginator = Paginator(query_set, self.paginate_by)
         page = self.request.GET.get('page')
-        channels = paginator.get_page(page)
+        group_channels = paginator.get_page(page)
         context['channel_types'] = {"Feeds": feeds,
-                                    "Felleskanaler": common_channels,
+                                    "Ordinære kanaler": common_channels,
                                     "Kullgruppe": pinned_channels,
-                                    "Dine gruppers kanaler": channels}
+                                    "Dine gruppers kanaler": group_channels}
 
         context['is_paginated'] = paginator.num_pages > 1
         print(feeds)
