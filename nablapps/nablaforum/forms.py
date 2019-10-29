@@ -11,6 +11,9 @@ class ChannelForm(forms.ModelForm):
     class Meta:
         model = Channel
         fields = ['group', 'name', 'description']
+        help_texts = {
+            'group': 'Valgfritt felt, la stå tomt om du vil lage kanal uten gruppetilhørighet',
+        }
     def __init__(self, groups=None, **kwargs):
         super().__init__(**kwargs)
         if groups:
