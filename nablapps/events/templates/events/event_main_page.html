@@ -48,7 +48,7 @@
          line-height: 2em;
      }
 
-     .event_list__event__free_places {
+     .event_list__event__meta {
          display: inline-block;
          float: right;
          margin-right: 12px;
@@ -184,11 +184,15 @@
                         <div class="event_list__event">
                         <span class="header_like">{{ event.headline }}
                             {% if event.registration_required %}
-                            <div class="event_list__event__free_places">
+                            <div class="event_list__event__meta">
                                 {{ event.users_attending }} / {{ event.free_places }}
                                 <span class="fa fa-user"></span>
                             </div>
                             {% endif %}
+                            <div class="event_list__event__meta">
+                                {{ event.event_start|date:"H:i" }}
+                                <span class="fa fa-clock-o"></span>
+                            </div>
                         </span>
 
                         </div>
