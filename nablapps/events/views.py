@@ -152,21 +152,15 @@ class EventMainPage(FormMixin, ListView):
 
         events = super().get_queryset().order_by('event_start')
         filterForm = self.get_form()
-        filterForm.is_valid()
-
-        type = filterForm.cleaned_data['type']
-        if type == 'event':
-            events = events.exclude(is_bedpres=True)
-        elif type == 'bedpres':
-            events = events.filter(is_bedpres=True)
-
-        sort = filterForm.cleaned_data['sort']
-        if sort == 'registration_opens':
-            events = events.order_by('registration_start')
-
-        start_time = filterForm.cleaned_data['start_time']
-        if start_time:
-            events = events.filter(event_start__gte=start_time)
+        if filterForm.is_valid():
+            if filterForm.cleaned_data['type'] == 'event':
+                events = events.exclude(is_bedpres=True)
+            elif filterForm.cleaned_data['type'] == 'bedpres':
+                events = events.filter(is_bedpres=True)
+            if filterForm.cleaned_data['sort'] == 'registration_opens':
+                events = events.order_by('registration_start')
+            if filterForm.cleaned_data['start_time']:
+                events = events.filter(event_start__gte=filterForm.cleaned_data['start_time'])
 
         events = events[:self.NUMBER_OF_EVENTS]
 
