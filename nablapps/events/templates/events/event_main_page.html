@@ -50,7 +50,7 @@
 
      .event_list__event__meta {
          display: inline-block;
-         float: right;
+/*         float: right;*/
          margin-right: 12px;
      }
 
@@ -176,35 +176,32 @@
             <input type="submit" value="Filtrer">
             </form>-->
         </div>
-        {% regroup object_list by event_start.date|date:"F" as month_list %}
-        {% for month in month_list %}
-        <div class="month">
-            <h2 class="month__name">{{ month.grouper|title }}</h2>
-            {% regroup month.list by event_start.date|date:"d." as day_list %}
-            {% for day in day_list %}
-                <div class="day">
-                    <span class="day__date">{{ day.grouper }}</span>
-                    {% for event in day.list %}
-                    <a href="{{ event.get_absolute_url }}">
-                        <div class="event_list__event">
-                        <span class="header_like">{{ event.headline }}
-                            {% if event.registration_required %}
-                            <div class="event_list__event__meta">
-                                {{ event.users_attending }} / {{ event.free_places }}
-                                <span class="fa fa-user"></span>
-                            </div>
-                            {% endif %}
-                            <div class="event_list__event__meta">
-                                {{ event.event_start|date:"H:i" }}
-                                <span class="fa fa-clock-o"></span>
-                            </div>
-                        </span>
-
+        {% for event in object_list %}
+        {% ifchanged %}<h2 class="month__name">{{ event.event_start|date:"F"|title }}</h2>{% endifchanged %}
+        <div class="day">
+            <span class="day__date">{{ event.event_start|date:"d." }}</span>
+            <a href="{{ event.get_absolute_url }}">
+                <div class="event_list__event">
+                    <span class="header_like">
+                        <div>{{ event.headline }}</div>
+                        <div class="event_list__event__meta">
+                            {{ event.event_start|date:"H:i" }}
+                            <span class="fa fa-clock-o"></span>
                         </div>
-                    </a>
-                    {% endfor %}
+                        {% if event.registration_required %}
+                        <div class="event_list__event__meta">
+                            {{ event.users_attending }} / {{ event.free_places }}
+                            <span class="fa fa-user"></span>
+                        </div>
+                        {% endif %}
+                        {% if event.company %}
+                        <div class="event_list__event__meta">
+                            {{ event.company }}
+                        </div>
+                        {% endif %}
+                   </span>
                 </div>
-            {% endfor %}
+            </a>
         </div>
         {% endfor %}
     </div>
