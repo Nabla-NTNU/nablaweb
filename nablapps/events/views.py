@@ -152,8 +152,6 @@ class EventMainPage(ListView):
                 events = events.order_by('registration_start')
             if filterForm.cleaned_data['start_time']:
                 events = events.filter(event_start__gte=filterForm.cleaned_data['start_time'])
-        else:
-            print("noooo")
         self.filterForm = filterForm
         events = events[:self.NUMBER_OF_EVENTS]
         return events

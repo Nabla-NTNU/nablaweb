@@ -161,13 +161,12 @@
             Filter
             <form method="get" class="filter">
             {% for type in filter_form.type %}
-
                 {{ type }}
-
             {% endfor %}
 
             {{ filter_form.sort }}
             {{ filter_form.start_time }}
+            {{ filter_form.start_time.errors }}
             <input type="submit" value="Filtrer">
             </form>
         </div>
