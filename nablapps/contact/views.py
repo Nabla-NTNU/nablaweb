@@ -26,9 +26,9 @@ def contact(request):
                     if contact_form.get_reciever() == 'PostKom':
                         mailadress = 'forslagskasse.postkom@nabla.ntnu.no'
                     elif contact_form.get_reciever() == 'ITV ved IFY':
-                        mailadress = 'itv_imf@nabla.ntnu.no'
+                        mailadress = 'fysikk@sr-nv.no'
                     elif contact_form.get_reciever() == 'ITV ved IMF':
-                        mailadress = 'itv_imf@nabla.ntnu.no'
+                        mailadress = 'imf@sr-ie.no'
                     else:
                         mailadress = 'forslagskasse.styret@nabla.ntnu.no'
 
