@@ -35,6 +35,8 @@ class ContactForm(forms.Form):
     reciever_choices = (
         ('Styret', 'Styret'),
         ('PostKom', 'PostKom'),
+        ('ITV ved IFY', 'ITV ved IFY'),
+        ('ITV ved IMF', 'ITV ved IMF'),
     )
 
     your_name = forms.CharField(label='Ditt navn:', max_length=100, required=False)

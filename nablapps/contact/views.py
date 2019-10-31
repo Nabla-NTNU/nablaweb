@@ -5,11 +5,7 @@ from .forms import FeedbackForm, ContactForm
 
 import random
 
-'''
-The two views contact and feedback are almost identical, and one should probably rewrite them
-using some class based magic. Added the second view on the train with unreliable internet, and I
-just wanted to get it working.
-'''
+
 def contact(request):
     spam_check = False
     if request.method != 'POST':
@@ -29,8 +25,13 @@ def contact(request):
                 try:
                     if contact_form.get_reciever() == 'PostKom':
                         mailadress = 'forslagskasse.postkom@nabla.ntnu.no'
+                    elif contact_form.get_reciever() == 'ITV ved IFY':
+                        mailadress = 'itv_imf@nabla.ntnu.no'
+                    elif contact_form.get_reciever() == 'ITV ved IMF':
+                        mailadress = 'itv_imf@nabla.ntnu.no'
                     else:
                         mailadress = 'forslagskasse.styret@nabla.ntnu.no'
+
                     send_mail(subject, message, email, [mailadress], fail_silently=False)
                 except BadHeaderError:
                     return HttpResponse('Invalid header found')
@@ -40,6 +41,7 @@ def contact(request):
                 test_val = random.randint(0,20)
                 context = make_contact_context(request, spam_check, test_val)
                 return render(request, 'contact/contact.html', context)
+
 
 def feedback(request, template = 'feedback.html', send_to="webkom@nabla.ntnu.no"):
     spam_check = False
