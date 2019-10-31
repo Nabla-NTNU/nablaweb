@@ -7,7 +7,6 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.views.generic import TemplateView, DetailView, ListView
-from django.views.generic.edit import FormMixin
 from django.contrib.auth import get_user_model
 
 from django.utils.safestring import mark_safe
@@ -134,24 +133,16 @@ def calendar(request, year=None, month=None):
 
     return render(request, 'events/event_list.html', context)
 
-class EventMainPage(FormMixin, ListView):
+class EventMainPage(ListView):
     model = Event
     template_name = "events/event_main_page.html"
     NUMBER_OF_EVENTS = 10  # Number of events to list
-    form_class = FilterEventsForm
-    initial = {'start_time': datetime.date.today()}
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({'data': self.request.GET})
-        return kwargs
 
     def get_queryset(self):
-#        future_events = Event.objects.filter(event_start__gte=datetime.date.today())\
-#                                      .order_by('event_start')
-
         events = super().get_queryset().order_by('event_start')
-        filterForm = self.get_form()
+        print(self.request.GET)
+        data=self.request.GET if self.request.GET else {'start_time': datetime.date.today()}
+        filterForm = FilterEventsForm(data)
         if filterForm.is_valid():
             if filterForm.cleaned_data['type'] == 'event':
                 events = events.exclude(is_bedpres=True)
@@ -161,9 +152,10 @@ class EventMainPage(FormMixin, ListView):
                 events = events.order_by('registration_start')
             if filterForm.cleaned_data['start_time']:
                 events = events.filter(event_start__gte=filterForm.cleaned_data['start_time'])
-
+        else:
+            print("noooo")
+        self.filterForm = filterForm
         events = events[:self.NUMBER_OF_EVENTS]
-
         return events
 
 
@@ -175,7 +167,7 @@ class EventMainPage(FormMixin, ListView):
         context['user_events'] = user.eventregistration_set.\
             filter(event__event_start__gte=datetime.date.today()).\
             order_by('event__event_start')
-#        context['filter_form'] = self.filterForm
+        context['filter_form'] = self.filterForm
         return context
 
 

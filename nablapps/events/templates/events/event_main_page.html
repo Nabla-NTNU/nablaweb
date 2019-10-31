@@ -159,12 +159,7 @@
     <div id="event_list">
         <div>
             Filter
-            <form method="get"  class="filter" >
-                {{ form }}
-
-                <input type="submit" value="Filtrer" >
-            </form>
-<!--        <form method="get" class="filter">
+            <form method="get" class="filter">
             {% for type in filter_form.type %}
 
                 {{ type }}
@@ -174,7 +169,7 @@
             {{ filter_form.sort }}
             {{ filter_form.start_time }}
             <input type="submit" value="Filtrer">
-            </form>-->
+            </form>
         </div>
         {% for event in object_list %}
         {% ifchanged %}<h2 class="month__name">{{ event.event_start|date:"F"|title }}</h2>{% endifchanged %}
