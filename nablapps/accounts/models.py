@@ -146,7 +146,7 @@ class NablaUser(AbstractUser):
         semester_start = second_semester if second_semester <= today else first_semester
 
         penalties = EventRegistration.objects.\
-            filter(user=self, date__gte=semester_start)
+            filter(user=self, date__gte=semester_start).exclude(penalty=0)
         return penalties
 
 

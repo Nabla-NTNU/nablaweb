@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from django.template import loader
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 from django.contrib.auth import get_user_model
 
 from django.utils.safestring import mark_safe
@@ -25,6 +25,8 @@ from .exceptions import (EventException, UserRegistrationException, EventFullExc
                          RegistrationNotAllowed, RegistrationNotOpen, RegistrationAlreadyExists,
                          RegistrationNotRequiredException, DeregistrationClosed)
 from .event_calendar import EventCalendar
+
+from .forms import FilterEventsForm  # Used in EventMainPage
 
 from nablapps.accounts.models import NablaUser
 
@@ -130,6 +132,41 @@ def calendar(request, year=None, month=None):
     }
 
     return render(request, 'events/event_list.html', context)
+
+class EventMainPage(ListView):
+    model = Event
+    template_name = "events/event_main_page.html"
+    NUMBER_OF_EVENTS = 10  # Number of events to list
+
+    def get_queryset(self):
+        events = super().get_queryset().order_by('event_start')
+        print(self.request.GET)
+        data=self.request.GET if self.request.GET else {'start_time': datetime.date.today()}
+        filterForm = FilterEventsForm(data)
+        if filterForm.is_valid():
+            if filterForm.cleaned_data['type'] == 'event':
+                events = events.exclude(is_bedpres=True)
+            elif filterForm.cleaned_data['type'] == 'bedpres':
+                events = events.filter(is_bedpres=True)
+            if filterForm.cleaned_data['sort'] == 'registration_opens':
+                events = events.order_by('registration_start')
+            if filterForm.cleaned_data['start_time']:
+                events = events.filter(event_start__gte=filterForm.cleaned_data['start_time'])
+        self.filterForm = filterForm
+        events = events[:self.NUMBER_OF_EVENTS]
+        return events
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['penalties'] = user.get_penalties()
+        context['penalties__count'] = sum([reg.penalty for reg in context['penalties']])
+        context['user_events'] = user.eventregistration_set.\
+            filter(event__event_start__gte=datetime.date.today()).\
+            order_by('event__event_start')
+        context['filter_form'] = self.filterForm
+        return context
 
 
 class EventRegistrationsView(PermissionRequiredMixin, DetailView):
