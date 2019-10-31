@@ -7,6 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.views.generic import TemplateView, DetailView, ListView
+from django.views.generic.edit import FormMixin
 from django.contrib.auth import get_user_model
 
 from django.utils.safestring import mark_safe
@@ -133,35 +134,43 @@ def calendar(request, year=None, month=None):
 
     return render(request, 'events/event_list.html', context)
 
-class EventMainPage(ListView):
+class EventMainPage(FormMixin, ListView):
     model = Event
     template_name = "events/event_main_page.html"
     NUMBER_OF_EVENTS = 10  # Number of events to list
+    form_class = FilterEventsForm
+    initial = {'start_time': datetime.date.today()}
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'data': self.request.GET})
+        return kwargs
 
     def get_queryset(self):
-        future_events = Event.objects.filter(event_start__gte=datetime.date.today())\
-                                      .order_by('event_start')
-        self.filterForm = FilterEventsForm(self.request.GET)
+#        future_events = Event.objects.filter(event_start__gte=datetime.date.today())\
+#                                      .order_by('event_start')
 
-        #type = self.request.GET.get('type', None)
-        self.filterForm.is_valid()
-        type = self.filterForm.cleaned_data['type']
+        events = super().get_queryset().order_by('event_start')
+        filterForm = self.get_form()
+        filterForm.is_valid()
+
+        type = filterForm.cleaned_data['type']
         if type == 'event':
-            future_events = future_events.exclude(is_bedpres=True)
+            events = events.exclude(is_bedpres=True)
         elif type == 'bedpres':
-            future_events = future_events.filter(is_bedpres=True)
+            events = events.filter(is_bedpres=True)
 
-        sort = self.filterForm.cleaned_data['sort']
+        sort = filterForm.cleaned_data['sort']
         if sort == 'registration_opens':
-            future_events = future_events.order_by('registration_start')
+            events = events.order_by('registration_start')
 
-        start_time = self.filterForm.cleaned_data['start_time']
+        start_time = filterForm.cleaned_data['start_time']
         if start_time:
-            future_events = future_events.filter(event_start__gte=start_time)
+            events = events.filter(event_start__gte=start_time)
 
-        future_events = future_events[:self.NUMBER_OF_EVENTS]
+        events = events[:self.NUMBER_OF_EVENTS]
 
-        return future_events
+        return events
 
 
     def get_context_data(self, **kwargs):
@@ -172,7 +181,7 @@ class EventMainPage(ListView):
         context['user_events'] = user.eventregistration_set.\
             filter(event__event_start__gte=datetime.date.today()).\
             order_by('event__event_start')
-        context['filter_form'] = self.filterForm
+#        context['filter_form'] = self.filterForm
         return context
 
 

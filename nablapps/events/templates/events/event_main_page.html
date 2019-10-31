@@ -159,7 +159,12 @@
     <div id="event_list">
         <div>
             Filter
-            <form method="get" class="filter">
+            <form method="get"  class="filter" >
+                {{ form }}
+
+                <input type="submit" value="Filtrer" >
+            </form>
+<!--        <form method="get" class="filter">
             {% for type in filter_form.type %}
 
                 {{ type }}
@@ -169,7 +174,7 @@
             {{ filter_form.sort }}
             {{ filter_form.start_time }}
             <input type="submit" value="Filtrer">
-            </form>
+            </form>-->
         </div>
         {% regroup object_list by event_start.date|date:"F" as month_list %}
         {% for month in month_list %}
