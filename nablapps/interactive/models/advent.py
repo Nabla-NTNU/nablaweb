@@ -191,3 +191,17 @@ class AdventParticipation(InteractionResult):
         NablaUser,
         on_delete=models.CASCADE,
     )
+
+class SantaCount(models.Model):
+    user = models.ForeignKey(
+        NablaUser,
+        on_delete=models.CASCADE,
+    )
+
+    santas = models.CharField(
+        null = True,
+        max_length = 24,
+    )
+
+    def get_score(self):
+        return len(self.santas)

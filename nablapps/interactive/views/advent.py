@@ -10,7 +10,8 @@ from time import mktime
 from wsgiref.handlers import format_date_time
 from django.core.exceptions import PermissionDenied
 
-from ..models.advent import AdventCalendar, AdventDoor, AdventParticipation
+from ..models.advent import AdventCalendar, AdventDoor, AdventParticipation, SantaCount
+from ..forms.advent import SantaForm
 
 
 class AdventDoorView(DetailView):
@@ -153,3 +154,14 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
         context['base_template'] = self.object.calendar.template
 
         return context
+
+def register_found_santa(request):
+    if request.user:
+        santa_count = SantaCount.get_or_create(user = request.user)
+        santa_form = SantaForm(request.POST)
+        if santa_form.is_valid():
+            santa_id = santa_form.clean_data["santa_id"]
+            if santa_id not in santa_count.santas:
+                santa_count.santas += santa_id
+                santa_count.save()
+    return HttpResponseRedirect(request.path_info)
