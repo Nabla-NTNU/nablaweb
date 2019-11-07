@@ -13,6 +13,7 @@ def submitColorChoice(request):
         ColorChoice.objects.create(user=request.user,
                                    color=form.cleaned_data['color'])
 
+        print(ColorChoice.get_average_color())
         return HttpResponseRedirect('/')
     
-    return HttpResponse("Hm, got past is_valid()...." + form.cleaned_data)
+    return HttpResponse("Hm, got past is_valid()....")

@@ -141,6 +141,7 @@ class TestAdmin(admin.ModelAdmin):
                    'style': 'height: 4em;'})},
     }
 
+    
 admin.site.register(AdventCalendar, AdventCalendarAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Test, TestAdmin)
