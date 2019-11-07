@@ -1,0 +1,5 @@
+<form action="/colorpicker/" method="POST" >
+    {% csrf_token %}
+    <label for="id_color">Color:</label> <input type="color" name="color" required id="id_color">
+    <input type="submit" value="Send inn" />
+</form>

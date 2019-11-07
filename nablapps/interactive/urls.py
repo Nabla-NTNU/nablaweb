@@ -4,6 +4,7 @@ from .views.quiz import quiz_reply, QuizScoreboardView, QuizResultDeleteView
 from .views.user_test import test_result, TestView
 from .views.advent import participate_in_competition, AdventDoorAdminView, reset_door
 from .views.code_golf import CodeGolf, code_golf_score, CodeTaskListView
+from .views.color_picker import submitColorChoice
 
 urlpatterns = [
     url(r'^julekalender/(?P<year>\d+)/(?P<number>\d+)/$',
@@ -51,4 +52,7 @@ urlpatterns = [
     url(r'^kodegolf/$', CodeTaskListView.as_view(), name="code_golf_menu"),
     url(r'^kodegolf/(?P<task_id>[0-9]+)$', CodeGolf.as_view(), name="code_golf"),
     url(r'^kodegolf/score/(?P<task_id>[0-9]+)$', code_golf_score, name="code_golf_score"),
+
+    # Color picker
+    url(r'^colorpicker/$', submitColorChoice, name="color_picker"),
 ]

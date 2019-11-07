@@ -13,6 +13,7 @@ from .models import (
     TestResult,
     TestQuestion,
     TestQuestionAlternative,
+    ColorChoice
 )
 
 
@@ -140,10 +141,10 @@ class TestAdmin(admin.ModelAdmin):
                    'style': 'height: 4em;'})},
     }
 
-
 admin.site.register(AdventCalendar, AdventCalendarAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Test, TestAdmin)
 admin.site.register(TestQuestion, TestQuestionAdmin)
 admin.site.register(CodeTask)
 admin.site.register(Result)
+admin.site.register(ColorChoice)
