@@ -97,7 +97,4 @@ class FilterEventsForm(Form):
     type.widget.attrs.update({'class': 'filter__option'})
     type.widget.option_template_name="events/radio_option.html"
 
-    sort = ChoiceField(choices=[('event_start', 'Start'), ('registration_start', 'Registrering åpner')],
-                       required=False)
-
     start_time = DateField(widget=SelectDateWidget, required=False)

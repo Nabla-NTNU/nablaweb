@@ -140,18 +140,19 @@ class EventMainPage(ListView):
 
     def get_queryset(self):
         events = super().get_queryset().order_by('event_start')
-        print(self.request.GET)
-        data=self.request.GET if self.request.GET else {'start_time': datetime.date.today()}
+        data = self.request.GET if self.request.GET else {'start_time': datetime.date.today()}
         filterForm = FilterEventsForm(data)
         if filterForm.is_valid():
             if filterForm.cleaned_data['type'] == 'event':
                 events = events.exclude(is_bedpres=True)
             elif filterForm.cleaned_data['type'] == 'bedpres':
                 events = events.filter(is_bedpres=True)
-            if filterForm.cleaned_data['sort'] == 'registration_opens':
-                events = events.order_by('registration_start')
             if filterForm.cleaned_data['start_time']:
-                events = events.filter(event_start__gte=filterForm.cleaned_data['start_time'])
+                filter_time = filterForm.cleaned_data['start_time']
+            else:
+                filter_time = datetime.date.today()
+            events = events.filter(event_start__gte=filter_time)
+
         self.filterForm = filterForm
         events = events[:self.NUMBER_OF_EVENTS]
         return events
