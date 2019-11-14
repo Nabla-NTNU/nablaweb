@@ -15,6 +15,21 @@
         text-align: center;
         font-size: 1em;
     }
+
+   input:hover ~ div div{
+        font-size: 10px;
+        position: absolute;
+        color: #333333;
+        display: block;
+        border: #ddd solid 1px;
+        padding: 2px 5px 2px 5px;
+        border-radius: 11px;
+        background: white;
+        left: -67px;
+        top: 4px;
+        width: 130px;
+   }
+
 </style>
 {% endaddtoblock %}
 
@@ -148,9 +163,16 @@
         {% if not is_registered %} {# Show registration button #}
             <input type="hidden" name="registration_type" value="registration">
             {% if event.registration_open %}
-                <input type="submit"
-                       class="btn btn-primary"
-                       value="Meld deg på {% if event.has_queue and event.is_full %}ventelisten{% endif %}">
+                <input type="submit" class="btn btn-primary"
+                   {% if not allowed_to_attend %} style="cursor: default; background: #aaa; border-color: #aaa;" disabled {% endif %}
+                   value="Meld deg på {% if event.has_queue and event.is_full %}ventelisten{% endif %}">
+                <div style="height: 0; width: 0; position: relative; margin: 0 auto;">
+                    {% if not allowed_to_attend %}
+                        <div hidden class="button">
+                            {{ reason_for_registration_failure }}
+                        </div>
+                    {% endif %}
+                </div>
             {% else %}
                 Påmeldingen er stengt.
             {% endif %}

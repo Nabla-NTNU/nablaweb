@@ -208,6 +208,11 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
             classnumber = [group.get_class_number() for group in event.open_for.all()]
             classnumber = set(classnumber)
             context['classnumber'] = classnumber
+            context['allowed_to_attend'] = event.allowed_to_attend(user) and event.user_penalty_limit(user)
+            try:
+                event._assert_user_allowed_to_register(user)
+            except UserRegistrationException as e:
+                context['reason_for_registration_failure'] = str(e)
 
         context['type'] = "bedpres" if event.is_bedpres else "event" # Used to include correct template
         return context
