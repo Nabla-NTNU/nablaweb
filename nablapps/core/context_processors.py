@@ -18,8 +18,9 @@ def get_primary_dir(request):
 
 def get_navbar_color(request):
     """Returns the color of the navbar, based on default color from color-picker"""
-    if os.environ.get("USE_CUSTOM_COLOR", "False") == "False":
-        color = None
-    else:
+    if os.environ.get("USE_CUSTOM_COLOR", "False") == "True":
         color = ColorChoice.get_average_color()
+    else:
+        color = None
+
     return {'custom_color': color}
