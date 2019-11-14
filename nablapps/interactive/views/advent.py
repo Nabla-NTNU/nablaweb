@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import Http404
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView, ListView
 from nablapps.accounts.models import NablaUser
 from time import mktime
@@ -155,13 +155,16 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
 
         return context
 
-def register_found_santa(request):
+def register_found_santa(request, santa_id, redirect_url):
     if request.user:
-        santa_count = SantaCount.get_or_create(user = request.user)
-        santa_form = SantaForm(request.POST)
-        if santa_form.is_valid():
-            santa_id = santa_form.clean_data["santa_id"]
+        santa_count, created = SantaCount.objects.get_or_create(user=request.user)
+        if redirect_url is not False: 
             if santa_id not in santa_count.santas:
                 santa_count.santas += santa_id
                 santa_count.save()
-    return HttpResponseRedirect(request.path_info)
+    return redirect(redirect_url)
+
+def found_santas(request):
+    santa_count, created = SantaCount.objects.get_or_create(user=request.user)
+    context = {"score": santa_count.get_score(),}
+    return render(request, 'interactive/santa_hunt.html', context)

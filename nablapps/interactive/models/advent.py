@@ -199,7 +199,7 @@ class SantaCount(models.Model):
     )
 
     santas = models.CharField(
-        null = True,
+        default = '',
         max_length = 24,
     )
 
