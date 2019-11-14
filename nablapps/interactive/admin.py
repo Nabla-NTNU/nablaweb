@@ -14,6 +14,7 @@ from .models import (
     TestQuestion,
     TestQuestionAlternative,
 )
+from .models.advent import Santa
 
 
 class AdventDoorInline(admin.TabularInline):
@@ -147,3 +148,4 @@ admin.site.register(Test, TestAdmin)
 admin.site.register(TestQuestion, TestQuestionAdmin)
 admin.site.register(CodeTask)
 admin.site.register(Result)
+admin.site.register(Santa)
