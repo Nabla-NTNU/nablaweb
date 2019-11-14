@@ -1,3 +1,6 @@
+import os
+from nablapps.interactive.models import ColorChoice
+
 def get_primary_dir(request):
     """Adds the primary URL path to context.
 
@@ -12,3 +15,11 @@ def get_primary_dir(request):
         primary_dir_slashes = '/'
     return {'primary_dir': primary_dir,
             'primary_dir_slashes': primary_dir_slashes}
+
+def get_navbar_color(request):
+    """Returns the color of the navbar, based on default color from color-picker"""
+    if os.environ.get("USE_CUSTOM_COLOR", "False") == "False":
+        color = None
+    else:
+        color = ColorChoice.get_average_color()
+    return {'custom_color': color}

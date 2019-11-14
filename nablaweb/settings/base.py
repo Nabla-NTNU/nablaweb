@@ -70,6 +70,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'sekizai.context_processors.sekizai',
                 'nablapps.core.context_processors.get_primary_dir',
+                'nablapps.core.context_processors.get_navbar_color',
             ],
         },
     }

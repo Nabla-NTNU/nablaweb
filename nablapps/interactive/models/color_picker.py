@@ -5,6 +5,7 @@ from nablapps.accounts.models import NablaUser
 from django.core.validators import re, RegexValidator
 from math import atan2, sqrt
 import colorsys
+import datetime
 
 # Copied from django_extras
 color_re = re.compile(
@@ -26,29 +27,56 @@ class ColorChoice(models.Model):
     def __str__(self):
         return f"{self.user}'s choice of color {self.color} at {self.time}"
 
+    # Attempt at making more sophisticated algorithm
+    # working in the hsv-system. Feel free to fix and
+    # implement this solution in the future.
+    #
+    # def get_average_color():
+    #     """Returns average color"""ppp
+    #     colors = ColorChoice.objects.all()
+    #     hues = []
+    #     values = []
+    #     saturations = []
+    #     for color in colors.values_list('color', flat=True):
+    #         # color has format #rrggbb
+    #         try:
+    #             color = color.lstrip('#')
+    #             r, g, b = [int(color[i:i+2], 16)/255 for i in [0,2,4]]
+    #             hue = colorsys.rgb_to_hsv(r,g,b)[0]
+    #             value = max([r,g,b])
+    #             C = value - min([r,g,b])
+    #             saturation = C/value if value > 0 else 0
+    #             hues.append(hue)
+    #             values.append(value)
+    #             saturations.append(saturation)
+    #         except:
+    #             pass  # Ignore invalid colors
+    #     hue = sum(hues) / len(hues)
+    #     saturation = sum(saturations) / len(saturations)
+    #     value = sum(values) / len(values)
+
+    #     rgb = colorsys.hsv_to_rgb(hue, saturation, value)
+    #     return "#" + ''.join([hex(int(value*255))[-2:] for value in rgb])
+
     def get_average_color():
-        """Returns average color"""
-        colors = ColorChoice.objects.all()
-        hues = []
-        values = []
-        saturations = []
+        time_limit = datetime.datetime.now() + datetime.timedelta(minutes=-20)
+        colors = ColorChoice.objects.filter(time__gte=time_limit)
+        reds = []
+        greens = []
+        blues = []
         for color in colors.values_list('color', flat=True):
-            # color has format #rrggbb
             try:
                 color = color.lstrip('#')
-                r, g, b = [int(color[i:i+2], 16)/255 for i in [0,2,4]]
-                hue = colorsys.rgb_to_hsv(r,g,b)[0]
-                value = max([r,g,b])
-                C = value - min([r,g,b])
-                saturation = C/value if value > 0 else 0
-                hues.append(hue)
-                values.append(value)
-                saturations.append(saturation)
+                r,g,b = [int(color[i:i+2], 16) for i in [0,2,4]]
+                reds.append(r)
+                greens.append(g)
+                blues.append(b)
             except:
                 pass  # Ignore invalid colors
-        hue = sum(hues) / len(hues)
-        saturation = sum(saturations) / len(saturations)
-        value = sum(values) / len(values)
+        if len(reds) == 0:
+            return "#000000"
 
-        rgb = colorsys.hsv_to_rgb(hue, saturation, value)
-        return "#" + ''.join([hex(int(value*255))[-2:] for value in rgb])
+        r = sum(reds) / len(reds)
+        g = sum(greens) / len(greens)
+        b = sum(blues) / len(blues)
+        return '#' + ''.join([hex(int(value))[2:].zfill(2) for value in [r, g, b]])
