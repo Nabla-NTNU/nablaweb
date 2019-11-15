@@ -204,7 +204,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
             except EventException as e:
                 self.messages.error(e)
 
-        if event.registration_required:
+        if event.registration_required and self.request.user.is_authenticated:
             classnumber = [group.get_class_number() for group in event.open_for.all()]
             classnumber = set(classnumber)
             context['classnumber'] = classnumber
