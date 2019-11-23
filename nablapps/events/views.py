@@ -140,18 +140,19 @@ class EventMainPage(ListView):
 
     def get_queryset(self):
         events = super().get_queryset().order_by('event_start')
-        print(self.request.GET)
-        data=self.request.GET if self.request.GET else {'start_time': datetime.date.today()}
+        data = self.request.GET if self.request.GET else {'start_time': datetime.date.today()}
         filterForm = FilterEventsForm(data)
         if filterForm.is_valid():
             if filterForm.cleaned_data['type'] == 'event':
                 events = events.exclude(is_bedpres=True)
             elif filterForm.cleaned_data['type'] == 'bedpres':
                 events = events.filter(is_bedpres=True)
-            if filterForm.cleaned_data['sort'] == 'registration_opens':
-                events = events.order_by('registration_start')
             if filterForm.cleaned_data['start_time']:
-                events = events.filter(event_start__gte=filterForm.cleaned_data['start_time'])
+                filter_time = filterForm.cleaned_data['start_time']
+            else:
+                filter_time = datetime.date.today()
+            events = events.filter(event_start__gte=filter_time)
+
         self.filterForm = filterForm
         events = events[:self.NUMBER_OF_EVENTS]
         return events
@@ -160,11 +161,12 @@ class EventMainPage(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        context['penalties'] = user.get_penalties()
-        context['penalties__count'] = sum([reg.penalty for reg in context['penalties']])
-        context['user_events'] = user.eventregistration_set.\
-            filter(event__event_start__gte=datetime.date.today()).\
-            order_by('event__event_start')
+        if user.is_authenticated:
+            context['penalties'] = user.get_penalties()
+            context['penalties__count'] = sum([reg.penalty for reg in context['penalties']])
+            context['user_events'] = user.eventregistration_set.\
+                filter(event__event_start__gte=datetime.date.today()).\
+                order_by('event__event_start')
         context['filter_form'] = self.filterForm
         return context
 
