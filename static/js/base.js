@@ -27,11 +27,11 @@ function startTimer(duration, display) {
         var clock = hours + ":" +minutes + ":" + seconds;
 
         if (days != 0) {
-            clock = days + " dager " + clock;
+            clock = days + (days == 1 ? " dag " : " dager ") + clock;
         }
 
         if (weeks != 0) {
-          clock = weeks + " uker " + clock;
+          clock = weeks + (weeks == 1 ? " uke " : " uker ") + clock;
         }
 
 
