@@ -131,6 +131,7 @@
  }
 </style>
 <div id="dash">
+    {% if user.is_authenticated %}
     <div id="penalties">
         <span class="header_like">Prikker:</span> {{ penalties__count }}
         {% if penalties__count %}
@@ -154,6 +155,7 @@
         <div class="user_events__item user_events__item--empty"> Ikke påmeldt noen arrangementer</div>
         {% endfor %}
     </div>
+    {% endif %} {# user authenticated #}
 
     <div id="event_list">
         <div>
