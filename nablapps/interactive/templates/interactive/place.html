@@ -1,0 +1,526 @@
+{% extends "base.html" %}
+{% load static %}
+{% load markdown %}
+{% load interactive_tags %}
+{% load sekizai_tags %}
+
+{% block title %}Place{% endblock %}
+
+{% block more_head %}
+
+<script>
+    // Place API-endpoints:
+    {% with request.get_host as host %}
+    // Get current grid: {{ host }}{% url 'get_place_grid' pk=grid.pk %}
+    // POST Submit (parameters x, y, color) {{ host }}{% url 'submit_place' pk=grid.pk %}
+    // GET Timestamp of your last submit {{ host }}{% url 'submit_place' pk=grid.pk %}
+    // GET Updates (parameter last_updated) {{ host }}{% url 'get_place_updates' pk=grid.pk %}
+    // GET History {{ host }}{% url 'get_place_history' pk=grid.pk %}
+    {% endwith %}
+
+    var lastUpdate = {{ grid.last_updated|date:"U" }};
+    var lastSubmit = {{ request.user|timestamp_of_last_action:grid }};
+
+    var selectedX;
+    var selectedY;
+    var selectedColor;
+
+    var dragStartX;
+    var dragStartY;
+    var dragStartCameraX;
+    var dragStartCameraY;
+
+    var interval;
+
+    var infoInterval;
+    var infoString;
+
+    var placeInterval;
+
+    var dragging = false;
+    var placing = false;
+
+    var lastSelection;
+
+    var cameraScale = 20;
+    {% if request.GET.x %}
+    selectedX = Math.min(Math.max({{ request.GET.x }}, 0), {{ grid.width }});
+    var cameraX = selectedX + 0.5
+    {% else %}
+    var cameraX = {{ grid.width }} / 2;
+    {% endif %}
+    {% if request.GET.y %}
+    selectedY = Math.min(Math.max({{ request.GET.y }}, 0), {{ grid.height }});
+    var cameraY = selectedY + 0.5
+    {% else %}
+    var cameraY = {{ grid.height }} / 2;
+    {% endif %}
+
+    function drawPixel(ctx, x, y, color) {
+        ctx.fillStyle = "#" + color;
+        ctx.fillRect(x,y,1,1);
+    }
+
+    function drawGrid(ctx, grid) {
+        $.each(grid, function (y, line) {
+            $.each(line, function (x, info) {
+                drawPixel(ctx, x, y, info["color"]);
+            })
+        })
+    }
+
+    function firstUpdate(data, status) {
+        if (status == "success") {
+            grid = data["grid"];
+            drawGrid(ctx, grid);
+            interval = setInterval(checkForUpdates, 5000); // Start checking for updates
+
+            if (typeof selectedX !== "undefined" && typeof selectedY !== "undefined") {
+                displayPixelInfo(selectedX, selectedY);
+            }
+        } else {
+            // Retry getting the grid
+            initGrid();
+        }
+
+    }
+
+    function initGrid() {
+        $.getJSON("{% url 'get_place_grid' pk=grid.pk %}", firstUpdate);
+    }
+
+    function drawUpdates(ctx, updates) {
+        if (updates.length === 0) { return; }
+        $.each(updates, function (i, action) {
+            var x = action["x"];
+            var y = action["y"];
+            var color = action["color"];
+            drawPixel(ctx, x, y, color);
+        })
+    }
+
+    function update(data) {
+        updates = data["updates"]
+        drawUpdates(ctx, updates);
+        $.each(updates, function (i, action) {
+            var x = action["x"];
+            var y = action["y"];
+            grid[y][x] = {
+                "color": action["color"],
+                "time": action["time"],
+                "username": action["username"],
+            }
+            if (x == selectedX && y == selectedY) {
+                displayPixelInfo(x, y);
+            }
+        })
+        lastUpdate = data["last_updated"];
+
+    }
+
+    function checkForUpdates() {
+        $.getJSON("{% url 'get_place_updates' pk=grid.pk %}", {"last_updated": Math.floor(lastUpdate)}, update);
+    }
+
+    function submit(data, onsuccess, onerror) {
+        data["csrfmiddlewaretoken"] = "{{ csrf_token }}";
+        $.post("{% url 'submit_place' pk=grid.pk %}", data, function (result, status) {
+            if (status == "success") {
+                lastSubmit = Number(result);
+                placeCountdownLoop(lastSubmit - Date.now()/1000 + {{ grid.cooldown }} + 1);
+
+                drawPixel(ctx, selectedX, selectedY, selectedColor);
+                grid[selectedY][selectedX] = {
+                    "color": selectedColor,
+                    "time": Date.now()/1000,
+                    "username": "{{ request.user.username }}",
+                };
+                displayPixelInfo(selectedX, selectedY);
+
+            } else {
+                alert("Beklager, plasseringen feilet");
+                submitButton.disabled = false;
+            }
+        });
+
+    }
+
+    function placePixel() {
+        if (typeof selectedX === "undefined" || typeof selectedY === "undefined") {
+            alert("Du må velge en piksel du vil overskrive")
+            return;
+        }
+        if (typeof selectedColor === "undefined") {
+            alert("Du må velge en farge")
+            return;
+        }
+        submitButton.disabled = true;
+        submit({"x": selectedX, "y": selectedY, "color": selectedColor})
+    }
+
+    function updateCamera() {
+        scale.style.transform = "scale("+cameraScale+","+cameraScale+") translateZ(0)";
+        var borderWidth = parseInt(cont.style.borderWidth);
+        var x = cameraX - contRect.width / 2 + borderWidth;
+        var y = cameraY - contRect.height / 2 + borderWidth;
+        trans.style.transform = "translate("+(-x)+"px,"+(-y)+"px) translateZ(0)";
+    }
+
+    function getTimeString(seconds) {
+            var years = Math.floor(seconds / (3600*24*365.24));
+            var weeks = Math.floor(seconds / (3600*24*7));
+            var days = Math.floor(seconds / (3600*24));
+            var hours = Math.floor(seconds / 3600);
+            var minutes = Math.floor(seconds / 60);
+            var seconds = Math.floor(seconds);
+
+            var timeString;
+            if (years > 0) {
+                timeString = years + " år";
+            } else if (weeks > 0) {
+                timeString = weeks + (weeks == 1 ? " uke" : " uker");
+            } else if (days > 0) {
+                timeString = days + (days == 1 ? " dag" : " dager");
+            } else if (hours > 0) {
+                timeString = hours + (hours == 1 ? " time" : " timer");
+            } else if (minutes > 0) {
+                timeString = minutes + (minutes == 1 ? " minutt" : " minutter");
+            } else {
+                timeString = seconds + (seconds == 1 ? " sekund" : " sekunder");
+            }
+        return timeString;
+    }
+
+    function placeCountdownLoop(timeUntil) {
+        clearInterval(placeInterval);
+        var timer = timeUntil;
+        function update () {
+            if (--timer <= 0) {
+                clearInterval(placeInterval);
+                cooldownP.innerHTML = "Plasser en ny piksel nå!";
+                submitButton.disabled = false;
+
+            } else {
+                cooldownP.innerHTML = "Plasser en ny piksel om " + getTimeString(Math.ceil(timer)) + ".";
+            }
+        };
+        update();
+        placeInterval = setInterval(update, 1000);
+    }
+
+    function pixelInfoLoop(timeSince) {
+        clearInterval(infoInterval);
+        var timer = timeSince;
+        function update () {
+            pixelInfoP.innerHTML = infoString + getTimeString(timer) + " siden.";
+            timer++;
+        };
+        update();
+        infoInterval = setInterval(update, 1000);
+    }
+
+    function displayPixelInfo(x, y) {
+        var info = grid[y][x];
+        pixelLocationP.innerHTML = "(" + x + "," + y + ")";
+        colorPreview.style.backgroundColor = "#" + info["color"];
+        if (info["time"] != 0) {
+            if (info["username"] === "{{ request.user.username }}") {
+                infoString = "Plassert av deg, for ";
+            } else {
+                infoString = "Plassert av " + info["username"] + " for ";
+            }
+            pixelInfoLoop(Date.now()/1000 - info["time"]);
+        } else {
+            clearInterval(infoInterval);
+            pixelInfoP.innerHTML = "Pikselen er tom.";
+        }
+
+    }
+
+    function handlePopState(event) {
+        if (event.state) {
+            cameraX = event.state.x;
+            cameraY = event.state.y;
+        }
+        window.requestAnimationFrame(updateCamera);
+    }
+    window.onpopstate = handlePopState;
+
+    function captureMouseDown(event) {
+        if (event.button !== 0) return;
+        if (event.target === slider) {return;}
+        dragging = false;
+        dragStartX = event.pageX;
+        dragStartY = event.pageY;
+        dragStartCameraX = cameraX;
+        dragStartCameraY = cameraY;
+        document.addEventListener("mousemove", captureMouseMove);
+    }
+
+    function captureMouseUp(event) {
+        document.removeEventListener("mousemove", captureMouseMove);
+    }
+
+    function captureMouseMove(event) {
+        dragging = true;
+        cameraX = dragStartCameraX - (event.pageX - dragStartX ) / cameraScale;
+        cameraY = dragStartCameraY - (event.pageY - dragStartY ) / cameraScale;
+
+        cameraX = Math.min(Math.max(cameraX, 0), {{ grid.width }});
+        cameraY = Math.min(Math.max(cameraY, 0), {{ grid.height }});
+
+        window.requestAnimationFrame(updateCamera);
+    }
+
+    function getTargetCoords(event) {
+        var targetX = cameraX + (event.pageX - (contRect.left + contRect.right)/2) / cameraScale;
+        var targetY = cameraY + (event.pageY - (contRect.top + contRect.bottom)/2) / cameraScale;
+        return {"x": targetX, "y": targetY}
+    }
+
+    function validTarget(target) {
+        if (0 > target.x || target.x >= {{ grid.width }}) {
+            return false;
+        }
+        if (0 > target.y || target.y >= {{ grid.height }}) {
+            return false;
+        }
+        return true;
+    }
+
+    function captureMouseClick(event) {
+        if (dragging) {return;}
+        if (event.target === slider) {return;}
+        var target = getTargetCoords(event);
+        if (validTarget(target)) {
+            selectedX = Math.floor(target.x);
+            selectedY = Math.floor(target.y);
+            cameraX = selectedX + 0.5;
+            cameraY = selectedY + 0.5;
+            window.requestAnimationFrame(updateCamera);
+            displayPixelInfo(selectedX, selectedY);
+        }
+    }
+
+    function captureTouchStart(event) {
+        if (event.changedTouches[0].target === slider) {return;}
+        dragging = false;
+        dragStartX = event.changedTouches[0].pageX;
+        dragStartY = event.changedTouches[0].pageY;
+        dragStartCameraX = cameraX;
+        dragStartCameraY = cameraY;
+        event.preventDefault();
+        document.addEventListener("touchmove", captureTouchMove, true);
+    }
+
+    function captureTouchEnd(event) {
+        captureMouseClick(event.changedTouches[0]);
+        document.removeEventListener("touchmove", captureTouchMove, true);
+    }
+
+    function captureTouchMove(event) {
+        dragging = true;
+        cameraX = dragStartCameraX - (event.changedTouches[0].pageX - dragStartX) / cameraScale;
+        cameraY = dragStartCameraY - (event.changedTouches[0].pageY - dragStartY) / cameraScale;
+
+        window.requestAnimationFrame(updateCamera);
+    }
+
+    function resizeHandler() {
+        contRect = cont.getBoundingClientRect();
+        window.requestAnimationFrame(updateCamera);
+    }
+    window.onresize = resizeHandler;
+
+    function selectColor(element) {
+        selectedColor = element.attributes.color.value;
+        if (typeof lastSelection !== "undefined") {
+            lastSelection.style.borderWidth = "";
+        }
+        lastSelection = element;
+        element.style.borderWidth = "3px";
+    }
+function copyToClipboard(text) {
+    var target = document.createElement("textarea");
+    target.style.position = "absolute";
+    target.style.left = "-9999px";
+    target.style.top = "0";
+    document.body.appendChild(target);
+    target.textContent = text;
+    target.focus();
+    target.setSelectionRange(0, text.length);
+
+    try {
+        document.execCommand("copy");
+    } catch(e) {
+        console.log("Failed to copy text:'" + text + "'to clipboard")
+    }
+    target.remove()
+}
+</script>
+
+
+{% addtoblock "js" %}
+<script>
+    var canvas = document.getElementById("canvas");
+
+    var cont = document.getElementById("containerDiv");
+    var contRect = cont.getBoundingClientRect();
+    cont.addEventListener("click", captureMouseClick);
+
+    cont.addEventListener("mousedown", captureMouseDown);
+    cont.addEventListener("touchstart", captureTouchStart);
+    document.addEventListener("mouseup", captureMouseUp);
+    document.addEventListener("touchend", captureTouchEnd);
+    document.addEventListener("touchcancel", captureTouchEnd);
+    var trans = document.getElementById("translateDiv");
+    var scale = document.getElementById("scaleDiv");
+
+    var slider = document.getElementById("zoomSlider");
+    slider.value = Math.log(cameraScale);
+
+    var pixelLocationP = document.getElementById("selectedPixelP");
+    var pixelInfoP = document.getElementById("pixelInfoP");
+    var colorPreview = document.getElementById("colorPreviewDiv");
+    colorPreview.onclick = function () {
+        copyToClipboard("{{ request.get_host }}{% url 'place' pk=grid.pk %}?x=" + selectedX + "&y=" + selectedY);
+    };
+
+    var submitButton = document.getElementById("submitButton");
+    var cooldownP = document.getElementById("cooldownP");
+
+
+    {% if request.user.is_authenticated %}
+    {% if grid.enabled %}
+    placeCountdownLoop(lastSubmit - Date.now()/1000 + {{ grid.cooldown }});
+    {% endif %}
+    {% endif %}
+    var ctx = canvas.getContext("2d");
+    initGrid();
+    window.requestAnimationFrame(updateCamera);
+</script>
+{% endaddtoblock %}
+{% endblock %}
+
+
+{% block main %}
+<noscript><h3 style="color:red">Aktiver JavaScript for å bruke Place.</h3></noscript>
+<style>
+.color-preview {
+    padding:1px;
+    border-width:1px;
+    border-style:solid;
+    border-color:black;
+    width:2em;
+    height:2em;
+}
+
+.test1:hover {
+    cursor:pointer;
+    border-width:3px;
+    border-color:aqua;
+}
+
+colorPreviewDiv:hover {
+    cursor:pointer;
+    border-width:3px;
+    border-color:aqua;
+}
+
+#color-picker {
+    display: grid;
+    grid-template-columns: repeat(4, 2em);
+    grid-template-rows: repeat(4, 2em);
+    grid-column-gap: 3px;
+    grid-row-gap: 3px;
+}
+
+#div1 { grid-area: 1 / 1 / 2 / 2; }
+#div2 { grid-area: 1 / 2 / 2 / 3; }
+#div3 { grid-area: 1 / 3 / 2 / 4; }
+#div4 { grid-area: 1 / 4 / 2 / 5; }
+#div5 { grid-area: 2 / 1 / 3 / 2; }
+#div6 { grid-area: 2 / 2 / 3 / 3; }
+#div7 { grid-area: 2 / 3 / 3 / 4; }
+#div8 { grid-area: 2 / 4 / 3 / 5; }
+#div9 { grid-area: 3 / 1 / 4 / 2; }
+#div10 { grid-area: 3 / 2 / 4 / 3; }
+#div11 { grid-area: 3 / 3 / 4 / 4; }
+#div12 { grid-area: 3 / 4 / 4 / 5; }
+#div13 { grid-area: 4 / 1 / 5 / 2; }
+#div14 { grid-area: 4 / 2 / 5 / 3; }
+#div15 { grid-area: 4 / 3 / 5 / 4; }
+#div16 { grid-area: 4 / 4 / 5 / 5; }
+#tooltip{
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 25%;
+  left: 125%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#tooltip::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #555 transparent transparent;
+}
+
+#colorPreviewDiv:hover #tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+</style>
+
+<div style="width:100%;display:flex;flex-wrap:wrap;padding:5px;">
+    <div id="containerDiv" style="margin:5px;border-width:3px;border-style:solid;overflow:hidden;background-color:lightgray;width:80vh;height:80vh;transform:translateZ(0);">
+        <div id="scaleDiv" style="cursor:move;height:100%;transform-origin:center;transform: scale(20,20);">
+            <div id="translateDiv">
+                <canvas id="canvas" style="display:block;image-rendering:pixelated;image-rendering:crisp-edges;transform:translateZ(0);" width="{{ grid.width }}px" height="{{ grid.height }}px">Nettleseren din støtter ikke HTML5 canvas</canvas>
+            </div>
+        </div>
+        <input id="zoomSlider" type="range" min="1" step="0.01" max="4.5" style="position:absolute;top:10px;right:10px;width:20%;min-width:100px;z-index:10;" oninput="cameraScale=Math.exp(this.value);window.requestAnimationFrame(updateCamera)" onchange="cameraScale=Math.exp(this.value);window.requestAnimationFrame(updateCamera)">
+    </div>
+
+    <div id="UIDiv" style="text-align:center;width:300px;margin:5px;">
+        <div class="well" style="min-height:200px";>
+            <div id="colorPreviewDiv" class="color-preview" style="cursor:pointer;display:inline-block;width:6em;height:6em;background-color:transparent;text-align:center;vertical-align:middle;position:relative">
+                <p id="selectedPixelP" style="color:white;font-size:1.3em;padding:0px;position:relative;transform:translateY(-50%);top:50%;text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">(?,?)</p>
+                <span id="tooltip">Kopier permalenke</span>
+            </div>
+            <p style="margin-top:20px;" id="pixelInfoP"></p>
+        </div>
+
+        {% if request.user.is_authenticated %}
+        {% if grid.enabled %}
+        <div class="well" style="min-height:200px;text-align:center;">
+            <div id="color-picker" style="display:inline-grid;">
+                {% for color in grid.legal_colors %}
+                <div class="test1 color-preview" id="div{{ forloop.counter }}" color="{{ color }}"  style="background-color:#{{ color }}" onclick="selectColor(this)"></div>
+                {% endfor %}
+            </div>
+            <br>
+            <button id="submitButton" style="margin:10px;" onclick="placePixel()">Place</button>
+            <p id="cooldownP" style=""></p>
+        </div>
+        {% endif %}
+        {% else %}
+        <p><a href="{% url "auth_login" %}?next={{ request.get_full_path }}">Logg inn</a> for å plassere pixler</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+

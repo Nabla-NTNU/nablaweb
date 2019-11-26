@@ -1,10 +1,12 @@
 from django.conf.urls import url
+from django.urls import path
 from .views import AdventCalendarView, AdventDoorView, QuizListView, QuizView, QuizResultView
 from .views.quiz import quiz_reply, QuizScoreboardView, QuizResultDeleteView
 from .views.user_test import test_result, TestView
 from .views.advent import participate_in_competition, AdventDoorAdminView, reset_door, register_found_santa, SantaCountListView
 from .views.code_golf import CodeGolf, code_golf_score, CodeTaskListView
 from .views.color_picker import submitColorChoice
+from .views.place import NewestPlaceView, PlaceView, get_place_grid, submit_place, get_place_history, get_place_updates
 
 urlpatterns = [
 	url(r'^julekalender/(?P<year>\d+)/(?P<number>\d+)/$',
@@ -62,4 +64,11 @@ urlpatterns = [
 
     # Color picker
     url(r'^colorpicker/$', submitColorChoice, name="color_picker"),
+
+    path('place/', NewestPlaceView.as_view(), name="newest_place"),
+    path('place/<int:pk>', PlaceView.as_view(), name="place"),
+    path('place/<int:pk>/grid', get_place_grid, name="get_place_grid"),
+    path('place/<int:pk>/updates', get_place_updates, name="get_place_updates"),
+    path('place/<int:pk>/history', get_place_history, name="get_place_history"),
+    path('place/<int:pk>/submit', submit_place, name="submit_place"),
 ]
