@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('interactive', '0013_colorpicker'),
+        ('interactive', '0013_colorchoice'),
     ]
 
     operations = [
