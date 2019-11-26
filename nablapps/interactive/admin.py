@@ -4,6 +4,7 @@ from django.db import models
 from django.forms import TextInput, Textarea
 
 from .models.code_golf import CodeTask, Result
+from .models.place import PlaceGrid
 from .models import (
     AdventCalendar,
     AdventDoor,
@@ -142,7 +143,23 @@ class TestAdmin(admin.ModelAdmin):
                    'style': 'height: 4em;'})},
     }
 
-    
+
+class PlaceGridAdmin(admin.ModelAdmin):
+    exclude = ["last_updated"]
+    date_hierarchy = "publish_date"
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj is None:
+            # Object is being created
+            return []
+        else:
+            return ["width", "height"]
+
+    class Meta:
+        verbose_name = "Place grid"
+        verbose_name_plural = "Place grids"
+
+
 admin.site.register(AdventCalendar, AdventCalendarAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Test, TestAdmin)
@@ -151,3 +168,5 @@ admin.site.register(CodeTask)
 admin.site.register(Result)
 admin.site.register(Santa)
 admin.site.register(ColorChoice)
+admin.site.register(PlaceGrid, PlaceGridAdmin)
+
