@@ -332,6 +332,17 @@
     }
     window.onresize = resizeHandler;
 
+    function handleScroll(event) {
+        event.preventDefault();
+
+        sliderValue = slider.value - event.deltaY / 20;
+        sliderValue = Math.max(Math.min(sliderValue, slider.max), slider.min);
+        slider.value = sliderValue;
+        cameraScale = Math.exp(slider.value);
+
+        window.requestAnimationFrame(updateCamera);
+    }
+
     function selectColor(element) {
         selectedColor = element.attributes.color.value;
         if (typeof lastSelection !== "undefined") {
@@ -366,6 +377,7 @@ function copyToClipboard(text) {
 
     var cont = document.getElementById("containerDiv");
     var contRect = cont.getBoundingClientRect();
+    cont.addEventListener("wheel", handleScroll);
     cont.addEventListener("click", captureMouseClick);
 
     cont.addEventListener("mousedown", captureMouseDown);
