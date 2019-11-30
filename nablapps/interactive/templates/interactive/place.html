@@ -418,6 +418,15 @@ function copyToClipboard(text) {
 {% block main %}
 <noscript><h3 style="color:red">Aktiver JavaScript for å bruke Place.</h3></noscript>
 <style>
+canvas {
+    image-rendering: optimizeSpeed;
+    image-rendering: optimize-contrast;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast
+    -ms-interpolation-mode: nearest-neighbor;
+}
 .color-preview {
     padding:1px;
     border-width:1px;
@@ -500,7 +509,7 @@ colorPreviewDiv:hover {
     <div id="containerDiv" style="margin:5px;border-width:3px;border-style:solid;overflow:hidden;background-color:lightgray;width:80vh;height:80vh;transform:translateZ(0);">
         <div id="scaleDiv" style="cursor:move;height:100%;transform-origin:center;transform: scale(20,20);">
             <div id="translateDiv">
-                <canvas id="canvas" style="display:block;image-rendering:pixelated;image-rendering:crisp-edges;transform:translateZ(0);" width="{{ grid.width }}px" height="{{ grid.height }}px">Nettleseren din støtter ikke HTML5 canvas</canvas>
+                <canvas id="canvas" style="display:block;transform:translateZ(0);" width="{{ grid.width }}px" height="{{ grid.height }}px">Nettleseren din støtter ikke HTML5 canvas</canvas>
             </div>
         </div>
         <input id="zoomSlider" type="range" min="1" step="0.01" max="4.5" style="position:absolute;top:10px;right:10px;width:20%;min-width:100px;z-index:10;" oninput="cameraScale=Math.exp(this.value);window.requestAnimationFrame(updateCamera)" onchange="cameraScale=Math.exp(this.value);window.requestAnimationFrame(updateCamera)">
