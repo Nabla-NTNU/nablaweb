@@ -1,3 +1,13 @@
+/* Ugly hack, fixes body heigh issue
+I, (thorvald), believe that the issue is caused by the html,body rule which sets height to 100%.
+But I do not have time to test this properly, because of exams, so I apply this hacky rule.
+If the html,body height-rule is indeed not necessary, is should be removed (I believe it was added by me....)
+*/
+
+html {
+	height: auto;
+}
+
 /* MAIN */
 html, body {
     height: 100%;
