@@ -22,12 +22,12 @@
     {% endif %}
     {% if door.user_test %}
     <p><a href="{{ door.user_test.get_absolute_url }}" class="btn btn-large btn-wide btn-primary">Gå til brukertest!</a></p>
-    {% endif %}
+    {% endif %} {# door.user_test #}
     {% if door.is_lottery %}
     {% if door.winner %}
     <h1>Gratulerer med seieren!</h1>
     {% include "accounts/includes/user_large.html" with user=door.winner %}
-    {% else %}
+    {% else %} {# door.winner #}
     
     {# Do not show if user is not logged in. Causes errer in the redirect in participate_in_competition-view #}
     {% if user.is_authenticated %}
@@ -41,9 +41,9 @@
             {% else %}
             <label>Ditt svar:</label>
             <textarea class="form-control" name="text" rows="3"></textarea>
-            {% endif %}
+            {% endif %} {# part #}
         </div>
-        {% endif %}
+        {% endif %} {# door.is_text_response #}
         <button type="submit" class="btn btn-large btn-primary">
 	    {% if part %}
 	    Endre svar
@@ -54,9 +54,9 @@
     </form>
     {% else %} {# User is not authenticated #}
     Logg inn for å delta i trekningen.
-    {% endif %}
+    {% endif %} {# user.is_authenticated #}
     
-    {% endif %}
+    {% endif %} {# door.winner #}
     <h2>Med i trekningen:</h2>
     <div>
         {% for part in door.participation.all %}
@@ -64,7 +64,7 @@
         {% endfor %}
     </div>
 
-    {% endif %}
+    {% endif %} {# door.is_lottery #}
 </div>
 
 {% endblock %}
