@@ -5,7 +5,7 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
 */
 
 html {
-	height: auto;
+	height: auto !important;
 }
 
 /* MAIN */
