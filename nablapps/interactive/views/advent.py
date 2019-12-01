@@ -172,8 +172,11 @@ class SantaCountListView(ListView):
         context = super().get_context_data(**kwargs)
 
         if(self.request.user.is_authenticated):
-            user_count, created = SantaCount.objects.get_or_create(user=self.request.user)
-            context["user_score"] = user_count.get_score()
+            try:
+                user_count = SantaCount.objects.get(user=self.request.user)
+                context["user_score"] = user_count.get_score()
+            except:
+                context["user_score"] = 0
 
         all_santa_counts = SantaCount.objects.all()
 
