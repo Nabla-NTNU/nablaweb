@@ -8,7 +8,11 @@ I hele desember vil det være nisser gjemt på nettsiden vår. Klarer du å finn
 
 <h4>
     {% if request.user.is_authenticated %}
-        Du har funnet {{ user_score }} nisser!
+        {% if user_score == 1 %} 
+            Du har funnet {{ user_score }} nisse!
+        {% else %}
+            Du har funnet {{ user_score }} nisser!
+        {% endif %}
     {% else %}
         Logg inn for å delta i nisssejakten!
     {% endif %}
