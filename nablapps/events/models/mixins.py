@@ -135,7 +135,7 @@ class RegistrationInfoMixin(models.Model):
         """Return whether the event is closed for deregistration."""
         return self.deregistration_deadline and (self.deregistration_deadline < datetime.now())
 
-    def _user_penalty_limit(self, user):
+    def user_penalty_limit(self, user):
         """Counts the users penalties this term, used in _asser_user_allowed_to_register"""
 
         MAX_PENALTY = 4 # This is the limit at which one is not allowed to register
@@ -149,6 +149,6 @@ class RegistrationInfoMixin(models.Model):
         elif not self.registration_open():
             raise RegistrationNotOpen(event=self, user=user)
         elif not self.allowed_to_attend(user):
-            raise RegistrationNotAllowed(event=self, user=user)
-        elif not self._user_penalty_limit(user):
+            raise RegistrationNotAllowed("Arrangementet er ikke åpent for ditt kull.", event=self, user=user)
+        elif not self.user_penalty_limit(user):
             raise RegistrationNotAllowed("Du har for mange prikker!", event=self, user=user)

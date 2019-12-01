@@ -1,137 +1,138 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <style>
+<style>
+ #dash {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     grid-template-areas:
+         "penalty user_events"
+         "event_list event_list";
+     justify-items: stretch;
+     grid-column-gap: 40px;
+     grid-row-gap: 20px;
+ }
+
+ @media (max-width: 600px) {
      #dash {
-         display: grid;
-         grid-template-columns: 1fr 1fr;
+         grid-template-columns: 1fr;
          grid-template-areas:
-             "penalty user_events"
-             "event_list event_list";
-         justify-items: stretch;
-         grid-column-gap: 40px;
+             "penalty"
+             "user_events"
+             "event_list";
      }
+ }
 
-     @media (max-width: 600px) {
-         #dash {
-             grid-template-columns: 1fr;
-             grid-template-areas:
-                 "penalty"
-                 "user_events"
-                 "event_list";
-         }
-     }
+ #penalties {
+     grid-area: penalty;
+     align-self: end;
+ }
+ #user_events {
+     grid-area: user_events;
+ }
 
-     #penalties {
-         grid-area: penalty;
-         align-self: end;
-     }
-     #user_events {
-         grid-area: user_events;
-     }
+ #penalties, #user_events {
+     padding-bottom: 7px;
+     border-bottom: 1px solid black;
+ }
 
-     #penalties, #user_events {
-         padding-bottom: 7px;
-         border-bottom: 1px solid black;
-     }
+ .header_like {
+     font-size: 1.4em;
+     line-height: 1.3em;
+ }
 
-     .header_like {
-         font-size: 1.4em;
-         line-height: 1.3em;
-     }
+ #event_list {
+     grid-area: event_list;
+ }
 
-     #event_list {
-         grid-area: event_list;
-     }
+ .event_list__event .header_like {
+     line-height: 2em;
+ }
 
-     .event_list__event .header_like {
-         line-height: 2em;
-     }
+ .event_list__event__meta {
+     display: inline-block;
+     /*         float: right;*/
+     margin-right: 12px;
+ }
 
-     .event_list__event__meta {
-         display: inline-block;
-/*         float: right;*/
-         margin-right: 12px;
-     }
+ .month__name {
+     color: #507eff;
+     border-bottom: 1px solid #507eff;
+ }
 
-     .month__name {
-         color: #507eff;
-         border-bottom: 1px solid #507eff;
-     }
+ .penalties__questionmark {
+     display: inline-block;
+     border: 2px solid rgba(0,0,0,0.5);
+     width: 20px;
+     height: 20px;
+     border-radius: 10px;
+     text-align: center;
+     line-height: 20px;
+     color: rgba(0,0,0,0.5);
+     font-weight: bold;
+ }
 
-     .penalties__questionmark {
-         display: inline-block;
-         border: 2px solid rgba(0,0,0,0.5);
-         width: 20px;
-         height: 20px;
-         border-radius: 10px;
-         text-align: center;
-         line-height: 20px;
-         color: rgba(0,0,0,0.5);
-         font-weight: bold;
-     }
+ .penalties__list {
+     position: absolute;
+     background: white;
+     border: 0.4px solid black;
+     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+     padding: 5px 10px;
+     display: none;
+ }
 
-     .penalties__list {
-         position: absolute;
-         background: white;
-         border: 0.4px solid black;
-         box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
-         padding: 5px 10px;
-         display: none;
-     }
+ .penalties__list__item {
+     text-align: right;
+ }
 
-     .penalties__list__item {
-         text-align: right;
-     }
+ .penalties__questionmark:hover ~ .penalties__list, .penalties__list:hover {
+     display: block;
+ }
 
-     .penalties__questionmark:hover ~ .penalties__list, .penalties__list:hover {
-         display: block;
-     }
+ #dash a{
+     text-decoration: none;
+     color: inherit;
+ }
 
-     #dash a{
-         text-decoration: none;
-         color: inherit;
-     }
+ .user_events__item--empty {
+     display: inline-block; /* Make the 'no events' text appear on same line */
+ }
 
-     .user_events__item--empty {
-         display: inline-block; /* Make the 'no events' text appear on same line */
-     }
+ .day {
+     position: relative;
+     padding: 4px 8px;
+     padding-right: 53px; /* Compensate for day box */
+     margin-bottom: 16px;
+     box-shadow: 4px 4px 20px -10px;
+     border: 1px solid #00000029;
+ }
 
-     .day {
-         position: relative;
-         padding: 4px 8px;
-         padding-right: 53px; /* Compensate for day box */
-         margin-bottom: 16px;
-         box-shadow: 4px 4px 20px -10px;
-         border: 1px solid #00000029;
-     }
+ .day__date {
+     position: absolute;
+     right: 0;
+     top: 0;
+     max-height: 100%;
+     padding: 7px;
+     background-color: #c67676;
+     color: white;
+     font-size: 2em;
+ }
 
-     .day__date {
-         position: absolute;
-         right: 0;
-         top: 0;
-         max-height: 100%;
-         padding: 7px;
-         background-color: #c67676;
-         color: white;
-         font-size: 2em;
-     }
+ form.filter input[type="radio"] {
+     display: none;
+ }
 
-     form.filter input[type="radio"] {
-         display: none;
-     }
+ .filter__option + label {
+     padding: 3px 6px;
+     display: inline-block;
+ }
 
-     .filter__option + label {
-         padding: 3px 6px;
-         display: inline-block;
-         background: #ff9d9d;
-     }
-
-     .filter__option:checked + label {
-         background: #7373ff;
-     }
-    </style>
+ .filter__option:checked + label {
+     border-bottom: 3px solid #aeadad;
+ }
+</style>
 <div id="dash">
+    {% if user.is_authenticated %}
     <div id="penalties">
         <span class="header_like">Prikker:</span> {{ penalties__count }}
         {% if penalties__count %}
@@ -155,16 +156,16 @@
         <div class="user_events__item user_events__item--empty"> Ikke påmeldt noen arrangementer</div>
         {% endfor %}
     </div>
+    {% endif %} {# user authenticated #}
 
     <div id="event_list">
         <div>
-            Filter
             <form method="get" class="filter">
             {% for type in filter_form.type %}
                 {{ type }}
             {% endfor %}
 
-            {{ filter_form.sort }}
+            {{ filter_form.start_time.label }}
             {{ filter_form.start_time }}
             {{ filter_form.start_time.errors }}
             <input type="submit" value="Filtrer">

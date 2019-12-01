@@ -25,8 +25,19 @@
         {% addtoblock "css" %}
         <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">
         <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap-theme.min.css" %}">
-        <link rel="stylesheet" href="{% static "font-awesome/css/font-awesome.min.css" %}">
+        <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/v4-shims.min.css" %}">
+        <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/fontawesome.min.css" %}">
+        <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/brands.min.css" %}">
+        <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/solid.min.css" %}">
         <link href="{% static "css/default.css" %}" rel="stylesheet">
+        <link href="{% static "css/juletema.css" %}" rel="stylesheet">
+        {% if custom_color %}
+        <style>
+         nav.navbar {
+             background: {{ custom_color }};
+         }
+        </style>
+        {% endif %}
         {% endaddtoblock %}
         <!-- css-block -->
         {% render_block "css" %}
@@ -128,7 +139,7 @@
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <a class="logo pull-left" href="/">
                     {% block header_logo %}
-                    <img width="125" src="{% static "img/nabla_logo_white.svg" %}" alt="Nabla">
+                    <img width="125" src="{% static "img/nabla_logo_white_jul.svg" %}" alt="Nabla">
                     {% endblock header_logo %}
             </a>
 
@@ -164,7 +175,10 @@
                                     <li><a href="{% url "meeting_record_list" %}">Styremøtereferater</a></li>
                                     <li><a href="{% url "albums" %}">Bildealbum</a></li>
                                     <li><a href="{% url "blog" %}">Blogg</a></li>
-                                    <li><a href="{% url "advent_calendar" "2018" %}">Julekalender 2018</a></li>
+                                    <li><a href="/julekalender/2019/">Julekalender 2019</a></li>
+{% comment %}
+                                    <li><a href="{% url "advent_calendar" "2019" %}">Julekalender 2019</a></li>
+{% endcomment %}
                                 </ul>
                             </li>
                             <li><a href="{% url "om-nabla" %}">Om Nabla</a></li>
@@ -195,6 +209,7 @@
                             {# bruker-dropdown #}
                             <li class="dropdown">
                                 <a href="#bruker" class="dropdown-toggle" data-toggle="dropdown">
+                                    <img id="nisselue" src="/static/img/nisselue.png" style="width:14px;height:12px;position:absolute;z-index:2;left:17px;margin-top:-5px;">
                                     <span class="glyphicon glyphicon-user"></span>
                                     {% firstof user.get_full_name user.username %}
                                     <span class="caret"></span>
@@ -324,13 +339,14 @@
                     {# nablalogo #}
                     <div class="col-md-4 center" id="nablafooter">
                         <br><br>
-                        <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo">
+                        <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo" id="easteregg">
+                        <img src="/static/img/nisseslede.gif" style="width: 50%;height: 50%;" alt="nisseslede" id="slede"/>
                         <br />
                         <br />
-                        <a href="https://www.facebook.com/nablantnu/" class="fa fa-facebook fa-4x social-icon"></a>
-                        <a href="https://www.instagram.com/nablalinjeforening/" class="fa fa-instagram fa-4x social-icon"></a>
-                        <a href="https://nablantnu.slack.com/" class="fa fa-slack fa-4x social-icon"></a>
-                        <a href="https://github.com/Nabla-NTNU/nablaweb" class="fa fa-github fa-4x social-icon"></a>
+                        <a href="https://www.facebook.com/nablantnu/" class="fab fa-facebook-f fa-4x social-icon"></a>
+                        <a href="https://www.instagram.com/nablalinjeforening/" class="fab fa-instagram fa-4x social-icon"></a>
+                        <a href="https://nablantnu.slack.com/" class="fab fa-slack fa-4x social-icon"></a>
+                        <a href="https://github.com/Nabla-NTNU/nablaweb" class="fab fa-github fa-4x social-icon"></a>
                     </div>
             </div>
             </div>
