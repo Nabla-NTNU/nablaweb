@@ -179,6 +179,7 @@ class SantaCountListView(ListView):
                 context["user_score"] = 0
 
         all_santa_counts = SantaCount.objects.all()
+        all_santa_counts = sorted(all_santa_counts, key = lambda x: -x.get_score())
 
         users = []
         user_results = []
