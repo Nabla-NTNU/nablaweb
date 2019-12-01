@@ -3,16 +3,18 @@
 
 <h1> Webkoms julenissejakt </h1>
 
-{% if request.user.is_authenticated %}
-    Du har funnet {{ user_score }} nisser!
-{% else %}
-    Logg inn for å delta i nisssejakten!
-{% endif %}
+Nisser har inntatt nabla.no! <br>
+I hele desember vil det være nisser gjemt på nettsiden vår. Klarer du å finne alle? <br>
 
-<br> <br> <br>
+<h4>
+    {% if request.user.is_authenticated %}
+        Du har funnet {{ user_score }} nisser!
+    {% else %}
+        Logg inn for å delta i nisssejakten!
+    {% endif %}
+</h4>
 
 <h4> Resultater: </h4>
-
 <table style="width:40%">
     <tr>
         <th> Nissejeger </th>
@@ -35,9 +37,10 @@ Det er vikig at disse parametrene samssvarer med et Santa-object som kan oprette
 -->
 
 <!--
-<a href="{% url "register_santa" santa_id="1" redirect_url="hidden_santa" %}">
-    <img alt="NISSEJÆVEL!" src="https://nabla.no/media/uploads/com_pictures/lopelogo.png" width="200">
-</a>
+<br> <a href="{% url "register_santa" santa_id="1" redirect_url="hidden_santa" %}">
+    <img alt="Se! En nisse!" src="https://nabla.no/media/uploads/content/nisse_3.jpg" width="150">
+</a> <br>
+
 -->
 
 {% endblock %}
