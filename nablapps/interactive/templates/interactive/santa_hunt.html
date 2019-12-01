@@ -1,10 +1,40 @@
+{% extends "base.html" %}
+{% block main %}
+
 <h1> Webkoms julenissejakt </h1>
 
-Du har funnet {{ score }} nissejævler!
+{% if request.user.is_authenticated %}
+    Du har funnet {{ user_score }} nisser!
+{% else %}
+    Logg inn for å delta i nisssejakten!
+{% endif %}
 
 <br> <br> <br>
 
-<a href="{% url "register_santa" santa_id="1" redirect_url="hidden_santa" %}">
+<h4> Resultater: </h4>
+
+<table style="width:40%">
+    <tr>
+        <th> Nissejeger </th>
+        <th> Antall nisser </th>
+    </tr>
+    {% for name, result in santa_hunters %}
+        <tr>
+            <td> {{ name }} </td>
+            <td> {{ result }} </td>
+        </tr>
+    {%  endfor %}
+</table>
+
+<br>
+
+<!--
+Kopier denne for å lage en nisse.
+Angi id og posisjon på nissen. Posisjon er url-navnet til siden der nissen ligger.
+-->
+
+<a href="{% url "register_santa" santa_id="3" redirect_url="hidden_santa" %}">
     <img alt="NISSEJÆVEL!" src="https://nabla.no/media/uploads/com_pictures/lopelogo.png" width="200">
 </a>
 
+{% endblock %}

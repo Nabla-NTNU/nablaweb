@@ -2,7 +2,7 @@ from django.conf.urls import url
 from .views import AdventCalendarView, AdventDoorView, QuizListView, QuizView, QuizResultView
 from .views.quiz import quiz_reply, QuizScoreboardView, QuizResultDeleteView
 from .views.user_test import test_result, TestView
-from .views.advent import participate_in_competition, AdventDoorAdminView, reset_door, found_santas, register_found_santa
+from .views.advent import participate_in_competition, AdventDoorAdminView, reset_door, register_found_santa, SantaCountListView
 from .views.code_golf import CodeGolf, code_golf_score, CodeTaskListView
 
 urlpatterns = [
@@ -23,7 +23,7 @@ urlpatterns = [
 		name="advent_calendar"),
     
     url(r'^julenisser/',
-        found_santas,
+        SantaCountListView.as_view(),
         name="hidden_santa"),
     url(r'^registersanta/(?P<santa_id>\w)/(?P<redirect_url>[\w\-]+)/$',
         register_found_santa,

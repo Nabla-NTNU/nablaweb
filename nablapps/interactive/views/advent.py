@@ -155,16 +155,35 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
         return context
 
 def register_found_santa(request, santa_id, redirect_url):
-    if request.user:
+    if request.user.is_authenticated:
         santa_count, created = SantaCount.objects.get_or_create(user=request.user)
         santa = get_object_or_404(Santa, pk=santa_id)
-        if redirect_url is not False: 
+        if santa.santa_location == redirect_url:
             if santa not in santa_count.santas.all():
                 santa_count.santas.add(santa)
                 santa_count.save()
-    return redirect(redirect_url)
+    return redirect("hidden_santa")
 
-def found_santas(request):
-    santa_count, created = SantaCount.objects.get_or_create(user=request.user)
-    context = {"score": santa_count.get_score(),}
-    return render(request, 'interactive/santa_hunt.html', context)
+class SantaCountListView(ListView):
+    model = SantaCount
+    template_name = "interactive/santa_hunt.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if(self.request.user.is_authenticated):
+            user_count, created = SantaCount.objects.get_or_create(user=self.request.user)
+            context["user_score"] = user_count.get_score()
+
+        all_santa_counts = SantaCount.objects.all()
+
+        users = []
+        user_results = []
+
+        for obj in all_santa_counts:
+            users.append(obj.user.get_full_name())
+            user_results.append(obj.get_score())
+
+        santa_hunters = zip(users, user_results)
+        context["santa_hunters"] = santa_hunters
+        return context
