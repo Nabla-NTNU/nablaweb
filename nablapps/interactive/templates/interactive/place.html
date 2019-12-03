@@ -42,7 +42,7 @@
 
     var lastSelection;
 
-    var cameraScale = 20;
+    var cameraScale = 5;
     {% if request.GET.x %}
     selectedX = Math.min(Math.max({{ request.GET.x }}, 0), {{ grid.width }});
     var cameraX = selectedX + 0.5
