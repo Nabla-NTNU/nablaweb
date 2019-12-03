@@ -1,5 +1,6 @@
 from braces.views import PermissionRequiredMixin
 from datetime import datetime, timedelta
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import Http404
@@ -78,7 +79,7 @@ class AdventCalendarView(ListView):
         response['Expires'] = format_date_time(stamp)  # legacy support
         
         if self.calendar.requires_login and not request.user.is_authenticated:
-            raise PermissionDenied
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
         
         return response
 
