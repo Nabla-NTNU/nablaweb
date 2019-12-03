@@ -20,8 +20,8 @@ class AdventDoorView(DetailView):
     context_object_name = "door"
 
     def get_object(self, queryset=None):
-        calendar = get_object_or_404(AdventCalendar, year=self.kwargs['year'])
-        door = get_object_or_404(AdventDoor, number=self.kwargs['number'], calendar=calendar)
+        self.calendar = get_object_or_404(AdventCalendar, year=self.kwargs['year'])
+        door = get_object_or_404(AdventDoor, number=self.kwargs['number'], calendar=self.calendar)
         if door.is_published or self.request.user.has_perm("interactive.change_adventdoor"):
             return door
         else:
@@ -33,7 +33,7 @@ class AdventDoorView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         door = self.object
-        context['calendar'] = door.calendar
+        context['calendar'] = self.calendar
         try:
             user = self.request.user
             if not user.is_anonymous:
@@ -44,6 +44,11 @@ class AdventDoorView(DetailView):
         except AdventParticipation.DoesNotExist:
             pass
         return context
+
+    def get(self, request, *args, **kwargs):
+        if self.calendar.requires_login and not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+        return super().get(request, *args, **kwargs)
 
 
 class AdventCalendarView(ListView):
