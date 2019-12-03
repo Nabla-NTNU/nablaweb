@@ -42,7 +42,7 @@
 
     var lastSelection;
 
-    var cameraScale = 5;
+    var cameraScale; // set by call to resizeHandler later
     {% if request.GET.x %}
     selectedX = Math.min(Math.max({{ request.GET.x }}, 0), {{ grid.width }});
     var cameraX = selectedX + 0.5
@@ -160,7 +160,6 @@
 
     function updateCamera() {
         scale.style.transform = "scale("+cameraScale+","+cameraScale+") translateZ(0)";
-        var borderWidth = parseInt(cont.style.borderWidth);
         var x = cameraX - contRect.width / 2 + borderWidth;
         var y = cameraY - contRect.height / 2 + borderWidth;
         trans.style.transform = "translate("+(-x)+"px,"+(-y)+"px) translateZ(0)";
@@ -328,9 +327,22 @@
 
     function resizeHandler() {
         contRect = cont.getBoundingClientRect();
+        minXScale = (contRect.width - 2*borderWidth) / {{ grid.width }} * 0.9
+        minYScale = (contRect.height - 2*borderWidth) / {{ grid.height }} * 0.9
+        minScale = Math.min(minXScale, minYScale);
+        slider.min = Math.log(minScale).toFixed(2);
+        slider.max = parseInt(slider.min) + 4;
+        slider.value = Math.max(Math.min(slider.value, slider.max), slider.min);
+        updateZoom();
+
         window.requestAnimationFrame(updateCamera);
     }
     window.onresize = resizeHandler;
+    
+    function updateZoom() {
+        cameraScale=Math.exp(slider.value);
+        window.requestAnimationFrame(updateCamera);
+    }
 
     function handleScroll(event) {
         event.preventDefault();
@@ -338,7 +350,7 @@
         sliderValue = slider.value - event.deltaY / 20;
         sliderValue = Math.max(Math.min(sliderValue, slider.max), slider.min);
         slider.value = sliderValue;
-        cameraScale = Math.exp(slider.value);
+        updateZoom();
 
         window.requestAnimationFrame(updateCamera);
     }
@@ -376,7 +388,9 @@ function copyToClipboard(text) {
     var canvas = document.getElementById("canvas");
 
     var cont = document.getElementById("containerDiv");
-    var contRect = cont.getBoundingClientRect();
+    var contRect; // updated in resizeHandler
+    var borderWidth = parseInt(cont.style.borderWidth);
+
     cont.addEventListener("wheel", handleScroll);
     cont.addEventListener("click", captureMouseClick);
 
@@ -389,7 +403,6 @@ function copyToClipboard(text) {
     var scale = document.getElementById("scaleDiv");
 
     var slider = document.getElementById("zoomSlider");
-    slider.value = Math.log(cameraScale);
 
     var pixelLocationP = document.getElementById("selectedPixelP");
     var pixelInfoP = document.getElementById("pixelInfoP");
@@ -401,13 +414,15 @@ function copyToClipboard(text) {
     var submitButton = document.getElementById("submitButton");
     var cooldownP = document.getElementById("cooldownP");
 
-
     {% if request.user.is_authenticated %}
     {% if grid.enabled %}
     placeCountdownLoop(lastSubmit - Date.now()/1000 + {{ grid.cooldown }});
     {% endif %}
     {% endif %}
     var ctx = canvas.getContext("2d");
+    resizeHandler();
+    slider.value = slider.min;
+    updateZoom();
     initGrid();
     window.requestAnimationFrame(updateCamera);
 </script>
@@ -512,7 +527,7 @@ colorPreviewDiv:hover {
                 <canvas id="canvas" style="display:block;transform:translateZ(0);" width="{{ grid.width }}px" height="{{ grid.height }}px">Nettleseren din støtter ikke HTML5 canvas</canvas>
             </div>
         </div>
-        <input id="zoomSlider" type="range" min="1" step="0.01" max="4.5" style="position:absolute;top:10px;right:10px;width:20%;min-width:100px;z-index:10;" oninput="cameraScale=Math.exp(this.value);window.requestAnimationFrame(updateCamera)" onchange="cameraScale=Math.exp(this.value);window.requestAnimationFrame(updateCamera)">
+        <input id="zoomSlider" type="range" min="1" step="0.01" max="4.5" style="position:absolute;top:10px;right:10px;width:20%;min-width:100px;z-index:10;" oninput="updateZoom()" onchange="updateZoom()">
     </div>
 
     <div id="UIDiv" style="text-align:center;width:300px;margin:5px;">
