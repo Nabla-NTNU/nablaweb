@@ -46,9 +46,10 @@ class AdventDoorView(DetailView):
         return context
 
     def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
         if self.calendar.requires_login and not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-        return super().get(request, *args, **kwargs)
+        return response
 
 
 class AdventCalendarView(ListView):
