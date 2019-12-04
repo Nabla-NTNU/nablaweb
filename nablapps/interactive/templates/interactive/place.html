@@ -193,6 +193,7 @@
     function placeCountdownLoop(timeUntil) {
         clearInterval(placeInterval);
         var timer = timeUntil;
+        submitButton.disabled = true;
         function update () {
             if (--timer <= 0) {
                 clearInterval(placeInterval);
