@@ -273,8 +273,8 @@
     }
 
     function getTargetCoords(event) {
-        var targetX = cameraX + (event.pageX - (contRect.left + contRect.right)/2) / cameraScale;
-        var targetY = cameraY + (event.pageY - (contRect.top + contRect.bottom)/2) / cameraScale;
+        var targetX = cameraX + (event.pageX - contRect.avgX) / cameraScale;
+        var targetY = cameraY + (event.pageY - contRect.avgY) / cameraScale;
         return {"x": targetX, "y": targetY}
     }
 
@@ -328,6 +328,12 @@
 
     function resizeHandler() {
         contRect = cont.getBoundingClientRect();
+        contRect = {
+            "width": contRect.width,
+            "height": contRect.height,
+            "avgX": (contRect.right + contRect.left)/2 + window.pageXOffset,
+            "avgY": (contRect.top + contRect.bottom)/2 + window.pageYOffset,
+        }
         minXScale = (contRect.width - 2*borderWidth) / {{ grid.width }} * 0.9;
         minYScale = (contRect.height - 2*borderWidth) / {{ grid.height }} * 0.9;
         minScale = Math.min(minXScale, minYScale);
