@@ -11,12 +11,13 @@
 <script>
     // Place API-endpoints:
     {% with request.get_host as host %}
-    // Get current grid: {{ host }}{% url 'get_place_grid' pk=grid.pk %}
+    // GET current grid: {{ host }}{% url 'get_place_grid' pk=grid.pk %}
     // POST Submit (parameters x, y, color) {{ host }}{% url 'submit_place' pk=grid.pk %}
     // GET Timestamp of your last submit {{ host }}{% url 'submit_place' pk=grid.pk %}
     // GET Updates (parameter last_updated) {{ host }}{% url 'get_place_updates' pk=grid.pk %}
     // GET History {{ host }}{% url 'get_place_history' pk=grid.pk %}
     {% endwith %}
+    // Please be kind to our API-endpoints :^)
 
     var lastUpdate = {{ grid.last_updated|date:"U" }};
     var lastSubmit = {{ request.user|timestamp_of_last_action:grid }};
