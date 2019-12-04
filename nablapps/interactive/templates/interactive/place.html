@@ -327,11 +327,16 @@
 
     function resizeHandler() {
         contRect = cont.getBoundingClientRect();
-        minXScale = (contRect.width - 2*borderWidth) / {{ grid.width }} * 0.9
-        minYScale = (contRect.height - 2*borderWidth) / {{ grid.height }} * 0.9
+        minXScale = (contRect.width - 2*borderWidth) / {{ grid.width }} * 0.9;
+        minYScale = (contRect.height - 2*borderWidth) / {{ grid.height }} * 0.9;
         minScale = Math.min(minXScale, minYScale);
-        slider.min = Math.log(minScale).toFixed(2);
-        slider.max = parseInt(slider.min) + 4;
+        slider.min = +Math.log(minScale).toFixed(2);
+
+        maxXScale = (contRect.width - 2*borderWidth) / 4;
+        maxYScale = (contRect.height - 2*borderWidth) / 4;
+        maxScale = Math.max(maxXScale, maxYScale);
+        slider.max = Math.max(+Math.log(maxScale).toFixed(2), slider.min+2);
+
         slider.value = Math.max(Math.min(slider.value, slider.max), slider.min);
         updateZoom();
 
