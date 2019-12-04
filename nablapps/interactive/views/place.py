@@ -38,6 +38,21 @@ class NewestPlaceView(PlaceView):
             return newest_enabled_place
 
 
+def get_place_info(request, pk):
+    grid = get_object_or_404(PlaceGrid, pk=pk)
+    if not grid.is_published:
+        raise Http404
+    return JsonResponse(
+            {
+                "width": grid.width,
+                "height": grid.height,
+                "cooldown": grid.cooldown,
+                "enabled": grid.enabled,
+                "legal_colors": grid.legal_colors,
+            }
+    )
+
+
 def get_place_grid(request, pk):
     grid = get_object_or_404(PlaceGrid, pk=pk)
     if not grid.is_published:
