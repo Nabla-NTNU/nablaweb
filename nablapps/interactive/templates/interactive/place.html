@@ -229,7 +229,7 @@
             if (info["username"] === "{{ request.user.username }}") {
                 infoString = "Plassert av deg, for ";
             } else {
-                infoString = "Plassert av " + info["username"] + " for ";
+                infoString = "Plassert av " + info["username"] + ", for ";
             }
             pixelInfoLoop(Date.now()/1000 - info["time"]);
         } else {
