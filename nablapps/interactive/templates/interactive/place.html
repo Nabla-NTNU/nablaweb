@@ -121,7 +121,7 @@
     }
 
     function checkForUpdates() {
-        $.getJSON("{% url 'get_place_updates' pk=grid.pk %}", {"last_updated": Math.floor(lastUpdate)}, update);
+        $.getJSON("{% url 'get_place_updates' pk=grid.pk %}", {"last_updated": lastUpdate}, update);
     }
 
     function submit(data, onsuccess, onerror) {
