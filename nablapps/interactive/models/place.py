@@ -68,7 +68,7 @@ class PlaceGrid(models.Model):
     def is_published(self):
         if settings.DEBUG:
             return True
-        return datetime.now() >= publish_date
+        return datetime.now() >= self.publish_date
 
     def __str__(self):
         return f"Grid [{self.pk}] ({self.height}x{self.width}) " \
