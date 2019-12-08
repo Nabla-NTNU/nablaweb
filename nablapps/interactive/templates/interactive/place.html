@@ -140,9 +140,12 @@
                 displayPixelInfo(selectedX, selectedY);
 
             } else {
-                alert("Beklager, plasseringen feilet");
+                alert("Beklager, plasseringen feilet. Prøv igjen om en liten stund.");
                 submitButton.disabled = false;
             }
+        }).fail(function () {
+                alert("Beklager, plasseringen feilet. Prøv igjen om en liten stund.");
+                submitButton.disabled = false;
         });
 
     }
