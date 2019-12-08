@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^julenisser/',
         SantaCountListView.as_view(),
         name="hidden_santa"),
-    url(r'^registersanta/(?P<santa_id>\w)/(?P<redirect_url>[\w\-]+)/$',
+    url(r'^registersanta/(?P<santa_id>\d+)/(?P<redirect_url>[\w\-]+)/$',
         register_found_santa,
         name="register_santa"),
 
