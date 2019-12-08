@@ -8,6 +8,8 @@
 
 <p>Dette er Webkoms tilbakemeldingsskjema. Hvis du har funnet en feil på siden, eller har forslag til ny funksjonalitet eller andre forbedringer av nettsiden, er det bare å sende inn en tilbakemelding via skjemaet, så skal Webkom se på det så fort som mulig.</p>
 
+
+
 {% if spam_check == True %}
     <p style="color:red;"> Forsøk å regne kontrollspørsmål på nytt</p>
 {% endif %}
@@ -27,5 +29,13 @@
 
 {{ feedback_form.right_answer }}
 </form>
+
+<!-- Begin santa -->
+<br>
+<a href="https://nabla.no/registersanta/9/tilbakemelding">
+<img alt="Se! En nisse!" src="https://nabla.no/media/uploads/content/nisse_2.jpg" width="150">
+</a> 
+<br>
+<!-- End santa -->
 
 {% endblock %}
