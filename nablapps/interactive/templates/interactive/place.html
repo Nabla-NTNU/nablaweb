@@ -163,8 +163,11 @@
         submit({"x": selectedX, "y": selectedY, "color": selectedColor})
     }
 
-    function updateCamera() {
+    function updateScale() {
         scale.style.transform = "scale("+cameraScale+","+cameraScale+") translateZ(0)";
+    }
+
+    function updateCamera() {
         var x = cameraX - contRect.width / 2 + borderWidth;
         var y = cameraY - contRect.height / 2 + borderWidth;
         trans.style.transform = "translate("+(-x)+"px,"+(-y)+"px) translateZ(0)";
@@ -352,13 +355,13 @@
         slider.value = Math.max(Math.min(slider.value, slider.max), slider.min);
         updateZoom();
 
-        window.requestAnimationFrame(updateCamera);
+        window.requestAnimationFrame(updateScale);
     }
     window.onresize = resizeHandler;
     
     function updateZoom() {
         cameraScale=Math.exp(slider.value);
-        window.requestAnimationFrame(updateCamera);
+        window.requestAnimationFrame(updateScale);
     }
 
     function handleScroll(event) {
@@ -368,8 +371,6 @@
         sliderValue = Math.max(Math.min(sliderValue, slider.max), slider.min);
         slider.value = sliderValue;
         updateZoom();
-
-        window.requestAnimationFrame(updateCamera);
     }
 
     function selectColor(element) {
@@ -442,6 +443,7 @@ function copyToClipboard(text) {
     updateZoom();
     initGrid();
     window.requestAnimationFrame(updateCamera);
+    window.requestAnimationFrame(updateScale);
 </script>
 {% endaddtoblock %}
 {% endblock %}
