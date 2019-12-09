@@ -10,20 +10,21 @@
 
 <meta property="og:title" content="Place" />
 <meta property="og:description" content="Nablas versjon av place" />
-<meta property="og:image" content="{{ request.get_host }}{% static "/img/placelogo.png" %}" />
+{% with request.get_host as host %}
+<meta property="og:image:url" content="http://{{ host }}{% static "/img/placelogo.png" %}" />
+<meta property="og:image:secure_url" content="https://{{ host }}{% static "/img/placelogo.png" %}" />
 <meta property="og:image:width" content="1220" />
 <meta property="og:image:height" content="190" />
 
 <script>
     // Place API-endpoints:
-    {% with request.get_host as host %}
     // GET current grid: {{ host }}{% url 'get_place_grid' pk=grid.pk %}
     // POST Submit (parameters x, y, color) {{ host }}{% url 'submit_place' pk=grid.pk %}
     // GET Timestamp of your last submit {{ host }}{% url 'submit_place' pk=grid.pk %}
     // GET Updates (parameter last_updated) {{ host }}{% url 'get_place_updates' pk=grid.pk %}
     // GET History {{ host }}{% url 'get_place_history' pk=grid.pk %}
     // GET Info {{ host }}{% url 'get_place_info' pk=grid.pk %}
-    {% endwith %}
+{% endwith %}
     // Please be kind to our API-endpoints :^)
 
     var lastUpdate = {{ grid.last_updated|date:"U" }};
