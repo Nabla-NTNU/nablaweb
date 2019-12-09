@@ -8,6 +8,12 @@
 
 {% block more_head %}
 
+<meta property="og:title" content="Place" />
+<meta property="og:description" content="Nablas versjon av place" />
+<meta property="og:image" content="{% static "/img/placelogo.png" %}" />
+<meta property="og:image:width" content="1220" />
+<meta property="og:image:height" content="190" />
+
 <script>
     // Place API-endpoints:
     {% with request.get_host as host %}
