@@ -96,7 +96,13 @@
     }
 
     function initGrid() {
-        $.getJSON("{% url 'get_place_grid' pk=grid.pk %}", firstUpdate);
+        $.ajax({
+            dataType: "json",
+            url: "{% url 'get_place_grid' pk=grid.pk %}",
+            success: firstUpdate,
+            timeout: 0,
+            error: initGrid
+        });
     }
 
     function drawUpdates(ctx, updates) {
@@ -129,7 +135,13 @@
     }
 
     function checkForUpdates() {
-        $.getJSON("{% url 'get_place_updates' pk=grid.pk %}", {"last_updated": lastUpdate}, update);
+        $.ajax({
+            dataType: "json",
+            url: "{% url 'get_place_updates' pk=grid.pk %}",
+            data: {"last_updated": lastUpdate},
+            success: update,
+            timeout: 0
+        });
     }
 
     function submit(data, onsuccess, onerror) {
