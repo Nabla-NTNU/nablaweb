@@ -58,12 +58,12 @@ def get_place_grid(request, pk):
     if not grid.is_published:
         raise Http404
 
-    # Preload the foreignkey to user to avoid additional database queries
-    # qs = grid.lines.select_related("")
+    # Preload the foreignkey to latest_action and user to avoid additional database queries
+    qs = grid.lines.prefetch_related("pixels", "pixels__latest_action", "pixels__latest_action__user")
 
     grid_values = [
                 [get_pixel_data(pixel) for pixel in line.pixels.all()]
-                for line in grid.lines.all()
+                for line in qs.all()
     ]
     return JsonResponse(
             {
