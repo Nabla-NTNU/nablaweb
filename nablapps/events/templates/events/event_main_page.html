@@ -175,7 +175,7 @@
         {% for event in object_list %}
         {% ifchanged %}<h2 class="month__name">{{ event.event_start|date:"F"|title }}</h2>{% endifchanged %}
         <div class="day">
-            <span class="day__date">{{ event.event_start|date:"d." }}</span>
+            <span class="day__date">{{ event.event_start|date:"d" }}</span>
             <a href="{{ event.get_absolute_url }}">
                 <div class="event_list__event">
                     <span class="header_like">
