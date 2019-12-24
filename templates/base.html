@@ -267,6 +267,8 @@
         </header>
 
         <!-- Page Content -->
+        {% block full-content-body %}
+
         <div class="container box" id = "mainContent">
 
             {% bootstrap_messages %}
@@ -286,6 +288,8 @@
             <!-- /.row -->
             {% endblock main %}
         </div> <!-- id="mainContent" -->
+
+        {% endblock full-content-body %}
 
         <!-- Footer -->
         <footer>

@@ -9,13 +9,53 @@ from .forms import ThreadForm, MessageForm, ChannelForm, JoinChannelsForm
 from nablapps.accounts.models import NablaGroup
 
 
-''' Should make  every new channel with a welcome thread '''
+class MainView(TemplateView):
+    template_name = "nablaforum/forum.html"
+    paginate_thread_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        # All channels belonging to users group
+        group_channels = Channel.objects.filter(group__in=user.groups.all()).order_by('-pk')
+
+        # Ordinary channels the user is member of
+        common_channels = Channel.objects.filter(group=None).filter(members=self.request.user)
+        print(f'HEEYYOO: {common_channels}')
+
+        # Pinned channels
+        #pinned_channels = Channel.filter(is_pinned=True)
+
+        # Feeds
+        feeds = Channel.objects.filter(is_feed=True)
+
+        # get chosen channel
+        chosen_channel_id = self.kwargs['channel_id']
+        #chosen_channel = Channel.objects.get(pk=chosen_channel_id)
+        channel_threads = Thread.objects.filter(channel__id=chosen_channel_id)
+        paginator = Paginator(channel_threads, self.paginate_thread_by)
+        page = self.request.GET.get('page')
+        threads = paginator.get_page(page)
+
+        # get chosen thread
+        chosen_thread_id = self.kwargs['thread_id']
+        #chosen_thread = Thread.objects.get(pk=chosen_thread_id)
+        messages = Message.objects.filter(thread__id=chosen_thread_id)
+
+        context['feeds'] = feeds
+        context['group_channels'] = group_channels
+        context['common_channels'] = common_channels
+        context['threads'] = threads
+        context['messages'] = messages
+        context['is_paginated'] = paginator.num_pages > 1
+        return context
 
 
 # View for displaying Channels
 class IndexView(LoginRequiredMixin, FormView):
     model = Channel
-    template_name = "nablaforum/index.html"
+    template_name = "nablaforum/forum.html"
     form_class = ChannelForm
     paginate_by = 10
 
@@ -24,7 +64,7 @@ class IndexView(LoginRequiredMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs['groups'] = NablaGroup.objects.filter(pk__in=self.request.user.groups.all().values_list('pk'))
         return kwargs
-    
+
 
     def form_valid(self, form):
         form_data = form.cleaned_data
@@ -78,7 +118,6 @@ class IndexView(LoginRequiredMixin, FormView):
                                     "Dine gruppers kanaler": group_channels}
 
         context['is_paginated'] = paginator.num_pages > 1
-        print(feeds)
         return context
 
 
@@ -132,7 +171,7 @@ class ThreadView(LoginRequiredMixin, FormView):
     form_class = MessageForm
     paginate_by = 10
 
-    
+
     def form_valid(self, form):
         form_data = form.cleaned_data
         thread_id = self.kwargs['thread_id']
@@ -155,7 +194,7 @@ class ThreadView(LoginRequiredMixin, FormView):
         thread_id = self.kwargs['thread_id']
         thread = get_object_or_404(Thread, pk=thread_id)
         query_set = self.model.objects.filter(thread__id=thread_id).order_by('-pk')
-        
+
         # Mark all unread messages read
         for message in query_set.exclude(read_by_user=self.request.user):
             message.read_by_user.add(self.request.user)

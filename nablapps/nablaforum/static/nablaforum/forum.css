@@ -1,3 +1,15 @@
+.main-grid{
+    background-color: white;
+    margin-bottom: 500px;
+    padding: 100px 20px 20px 20px;
+
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-gap: 20px;
+    grid-template-areas:
+    "cahnnel-menu channel-threads thread-messages"
+}
+
 .tile{
     border-radius: 10px;
     padding-bottom: 45px;

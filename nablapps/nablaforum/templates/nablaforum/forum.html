@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load sekizai_tags %}
+{% load static %}
+
+{% block full-content-body %}
+
+{% addtoblock "css" %}
+    <link  rel="stylesheet" href="{% static "nablaforum/forum.css" %}">
+{% endaddtoblock %}
+
+<div class="main-grid">
+    <div class="channel-menu">
+        <h1>Nablaforum</h1>
+        <h4>Velkommen til Nablas interforum! Nedenfor finner du kanalene du med i. Det er kanaler tilhørende dine grupper, felleskanaler, samt kullgruppe og "feeds".</h4>
+
+        <a href={% url "browse-channels" %}><button style="font-size: 20px">Finn nye kanaler</button></a>
+
+        {# List all channels in the different types of channels #}
+
+        {#
+        {% for channel_type, channel_list in channel_types.items %}
+        <h4>{{ channel_type }}</h4>
+        {% for channel in channel_list %}
+            <a href="{% url "channel-index" channel_id=channel.pk %}">
+            {% include "nablaforum/includes/tiles.html" with object=channel %}
+            </a>
+        {% endfor %}
+        {% endfor %}
+        #}
+
+        <h4> "Feeds" </h4> 
+        {% for channel in feeds %}
+            <a href="{% url "channel-index" channel_id=channel.pk %}">
+            {% include "nablaforum/includes/tiles.html" with object=channel %}
+            </a>
+        {% endfor %}
+
+        <h4> Gruppekanaler </h4> 
+        {% for channel in group_channels %}
+            <a href="{% url "channel-index" channel_id=channel.pk %}">
+            {% include "nablaforum/includes/tiles.html" with object=channel %}
+            </a>
+        {% endfor %}
+
+        <h4> Ordinære kanaler </h4> 
+        {% for channel in common_channels %}
+            <a href="{% url "channel-index" channel_id=channel.pk %}">
+            {% include "nablaforum/includes/tiles.html" with object=channel %}
+            </a>
+        {% endfor %}
+
+
+        <h4>Opprett en ny kanal:</h4>
+    </div>
+
+
+    <div class="channel-threads">
+        <h1>Tråder i kanalen: {{ chosen_channel }}</h1>
+         
+         <p>{{ channel.description }}</p>
+         
+         {% for thread in threads %}
+         {# <a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}"> #}
+         <a href="https://nabla.no">
+         {% include "nablaforum/includes/tiles.html" with object=thread %}
+         </a>
+         {% endfor %}
+         
+         {% if not channel.is_feed %}
+         <form method="POST">
+             {% csrf_token %}
+             <h4>Ny tråd:</h4>
+         
+             {{ form.as_p }}
+             <button type="submit">Opprett en ny tråd</button>
+         </form>
+         {% endif %}
+         
+    </div>
+
+
+    <div class="thread-messages">
+        <style>
+             .thread{
+                 list-style: none;
+                 padding: 10px;
+             }
+         </style>
+         
+         
+         <h1>{{ thread }}</h1>
+         
+         <h4>{{ thread.threadstarter.get_full_name }} skriver:</h4>
+         <div class="des">{{ thread.text }}</div>
+         
+         {% for message in thread_messages reversed %}
+             <div class="well">
+                 <h4>{{ message.user.get_full_name }}</h4>
+                 <p>{{ message.message }}</p>
+             </div>
+         {% endfor %}
+         
+         <h4>Ny medling:</h4>
+         <form method="POST">
+             {% csrf_token %}
+             {{ form.as_p }}
+             <button type="submit">send</button>
+         </form>
+    </div>
+</div>
+{% endblock full-content-body %}
