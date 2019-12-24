@@ -8,6 +8,12 @@
     <link  rel="stylesheet" href="{% static "nablaforum/forum.css" %}">
 {% endaddtoblock %}
 
+{% block more_head %}
+    <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'js/infinite.min.js' %}"></script>
+{% endblock more_head %}
+
+
 <div class="main-grid">
     <div class="channel-menu">
         <h1>Nablaforum</h1>
@@ -54,28 +60,45 @@
     </div>
 
 
-    <div class="channel-threads">
+    <div class="channel-threads" style="max-height:1000px; overflow: auto">
         <h1>Tråder i kanalen: {{ chosen_channel }}</h1>
          
-         <p>{{ channel.description }}</p>
+        <p>{{ channel.description }}</p>
          
-         {% for thread in threads %}
-         {# <a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}"> #}
-         <a href="https://nabla.no">
-         {% include "nablaforum/includes/tiles.html" with object=thread %}
-         </a>
-         {% endfor %}
+        {% for thread in threads %}
+        <div class="infinite-item">
+            <a href="https://nabla.no">
+            {% include "nablaforum/includes/tiles.html" with object=thread %}
+            </a>
+        </div>
+        {# <a href="{% url "thread-view" channel_id=channel_id thread_id=thread.pk %}"> #}
+        {% endfor %}
+
+        {% if is_paginated %}
+         <span class="step-links">
+            {% if threads.has_previous %}
+                <a href="?page={{ threads.previous_page_number }}">Hent nyere</a>
+            {% endif %}
+
+            <span class="current">
+                side {{ threads.number }} av {{ threads.paginator.num_pages }}
+            </span>
+
+            {% if threads.has_next %}
+                <a href="?page={{ threads.next_page_number }}">Hent eldre</a>
+            {% endif %}
+         </span>
+     {% endif %}
          
-         {% if not channel.is_feed %}
-         <form method="POST">
-             {% csrf_token %}
-             <h4>Ny tråd:</h4>
-         
-             {{ form.as_p }}
-             <button type="submit">Opprett en ny tråd</button>
-         </form>
-         {% endif %}
-         
+        {% if not channel.is_feed %}
+        <form method="POST">
+            {% csrf_token %}
+            <h4>Ny tråd:</h4>
+        
+            {{ form.as_p }}
+            <button type="submit">Opprett en ny tråd</button>
+        </form>
+        {% endif %}
     </div>
 
 

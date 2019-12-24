@@ -11,7 +11,7 @@ from nablapps.accounts.models import NablaGroup
 
 class MainView(TemplateView):
     template_name = "nablaforum/forum.html"
-    paginate_thread_by = 10
+    paginate_thread_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -33,7 +33,7 @@ class MainView(TemplateView):
         # get chosen channel
         chosen_channel_id = self.kwargs['channel_id']
         #chosen_channel = Channel.objects.get(pk=chosen_channel_id)
-        channel_threads = Thread.objects.filter(channel__id=chosen_channel_id)
+        channel_threads = Thread.objects.filter(channel__id=chosen_channel_id).order_by('-pk')
         paginator = Paginator(channel_threads, self.paginate_thread_by)
         page = self.request.GET.get('page')
         threads = paginator.get_page(page)
@@ -52,10 +52,19 @@ class MainView(TemplateView):
         return context
 
 
+'''
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax():
+            return super().render_to_response(context)
+        else:
+            return super().render_to_response(context)
+'''
+
+
 # View for displaying Channels
 class IndexView(LoginRequiredMixin, FormView):
     model = Channel
-    template_name = "nablaforum/forum.html"
+    template_name = "nablaforum/index.html"
     form_class = ChannelForm
     paginate_by = 10
 
