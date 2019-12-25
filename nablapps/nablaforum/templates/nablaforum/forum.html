@@ -132,7 +132,7 @@
              <div style="text-align: right;">{{ chosen_thread.created }}</div>
          </div>
          
-         {% for message in messages reversed %}
+         {% for message in messages %}
              <div class="well">
                  <h4>{{ message.user.get_full_name }}</h4>
                  <p>{{ message.message }}</p>

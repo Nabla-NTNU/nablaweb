@@ -66,7 +66,7 @@ class MainView(TemplateView):
         # Feeds
         feeds = Channel.objects.filter(is_feed=True)
 
-        # get chosen channel
+        # get chosen channel and belonging threads
         chosen_channel_id = self.kwargs['channel_id']
         chosen_channel = Channel.objects.get(pk=chosen_channel_id)
         channel_threads = Thread.objects.filter(channel__id=chosen_channel_id).order_by('-pk')
@@ -74,7 +74,7 @@ class MainView(TemplateView):
         page = self.request.GET.get('page')
         threads = paginator.get_page(page)
 
-        # get chosen thread
+        # get chosen thread and beloning messages
         print(self.kwargs['thread_id'])
         if int(self.kwargs['thread_id']) != 0:
             chosen_thread_id = self.kwargs['thread_id']
