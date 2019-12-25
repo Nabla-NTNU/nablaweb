@@ -20,7 +20,7 @@ class ChannelForm(forms.ModelForm):
             self.fields['group'].queryset = groups
         else:
             # Just want to set an empty query set, so uses Channel just because it's already imported
-            self.fields['group'].queryset = Channel.objects.none() 
+            self.fields['group'].queryset = Channel.objects.none()
 
 
 class ThreadForm(forms.Form):
@@ -34,7 +34,7 @@ class MessageForm(forms.Form):
 
 class JoinChannelsForm(forms.Form):
     selected_channels = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
-    
+
     def __init__(self, *args, **kwargs):
         choices = kwargs.pop('selected_channels', None)
         super().__init__(*args, **kwargs)

@@ -13,6 +13,43 @@ class MainView(TemplateView):
     template_name = "nablaforum/forum.html"
     paginate_thread_by = 5
 
+
+    def post(self, request, **kwargs):
+        thread_form = ThreadForm(self.request.POST)
+        message_form = MessageForm(self.request.POST)
+
+        if thread_form.is_valid():
+            form_data = thread_form.cleaned_data
+            channel_id = self.kwargs['channel_id']
+            channel = Channel.objects.get(pk=channel_id)
+            print('HEHEHE: \n', form_data, channel_id)
+            print(channel)
+            try:
+                new_thread = Thread.objects.create(
+                                                channel = channel,
+                                                threadstarter = self.request.user,
+                                                title = form_data['title_field'],
+                                                text = form_data['text_field'],)
+            except:
+                print('Ops! Kunne ikke opprette tråd, ugyldig verdi i feltene!')
+            return redirect('forum-main', channel_id=channel_id, thread_id=0)
+
+        elif message_form.is_valid():
+            form_data = message_form.cleaned_data
+            thread_id = self.kwargs['thread_id']
+            channel_id = self.kwargs['channel_id']
+            thread = get_object_or_404(Thread, pk=thread_id)
+            try:
+                new_message = Message.objects.create(
+                                                thread = thread,
+                                                user = self.request.user,
+                                                message = form_data['message_field'],)
+                new_message.read_by_user.add(self.request.user)
+            except:
+                print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
+            return redirect('forum-main', channel_id=channel_id, thread_id=thread_id)
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
@@ -22,7 +59,6 @@ class MainView(TemplateView):
 
         # Ordinary channels the user is member of
         common_channels = Channel.objects.filter(group=None).filter(members=self.request.user)
-        print(f'HEEYYOO: {common_channels}')
 
         # Pinned channels
         #pinned_channels = Channel.filter(is_pinned=True)
@@ -32,41 +68,42 @@ class MainView(TemplateView):
 
         # get chosen channel
         chosen_channel_id = self.kwargs['channel_id']
-        #chosen_channel = Channel.objects.get(pk=chosen_channel_id)
+        chosen_channel = Channel.objects.get(pk=chosen_channel_id)
         channel_threads = Thread.objects.filter(channel__id=chosen_channel_id).order_by('-pk')
         paginator = Paginator(channel_threads, self.paginate_thread_by)
         page = self.request.GET.get('page')
         threads = paginator.get_page(page)
 
         # get chosen thread
-        chosen_thread_id = self.kwargs['thread_id']
-        #chosen_thread = Thread.objects.get(pk=chosen_thread_id)
-        messages = Message.objects.filter(thread__id=chosen_thread_id)
+        print(self.kwargs['thread_id'])
+        if int(self.kwargs['thread_id']) != 0:
+            chosen_thread_id = self.kwargs['thread_id']
+            chosen_thread = Thread.objects.get(pk=chosen_thread_id)
+            messages = Message.objects.filter(thread__id=chosen_thread_id)
+            context['messages'] = messages
+            context['chosen_thread'] = chosen_thread
+
+        # get thread and message forms
+        thread_form = ThreadForm
+        message_form = MessageForm
 
         context['feeds'] = feeds
         context['group_channels'] = group_channels
         context['common_channels'] = common_channels
         context['threads'] = threads
-        context['messages'] = messages
+        context['chosen_channel_id'] = chosen_channel_id
+        context['chosen_channel'] = chosen_channel
         context['is_paginated'] = paginator.num_pages > 1
+        context['thread_form'] = thread_form
+        context['message_form'] = message_form
         return context
 
 
-'''
-    def render_to_response(self, context, **response_kwargs):
-        if self.request.is_ajax():
-            return super().render_to_response(context)
-        else:
-            return super().render_to_response(context)
-'''
-
-
-# View for displaying Channels
-class IndexView(LoginRequiredMixin, FormView):
+# View for creating new Channels
+class CreateChannelView(LoginRequiredMixin, FormView):
     model = Channel
-    template_name = "nablaforum/index.html"
+    template_name = "nablaforum/create_channel.html"
     form_class = ChannelForm
-    paginate_by = 10
 
 
     def get_form_kwargs(self):
@@ -92,9 +129,9 @@ class IndexView(LoginRequiredMixin, FormView):
                                             text="Dette en tråd!")
         except:
             print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
-        return redirect('forum-index')
+        return redirect('forum-main', channel_id=1, thread_id=0)
 
-
+'''
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
@@ -117,7 +154,6 @@ class IndexView(LoginRequiredMixin, FormView):
                     channel.has_unreads = True
                     break
 
-
         paginator = Paginator(query_set, self.paginate_by)
         page = self.request.GET.get('page')
         group_channels = paginator.get_page(page)
@@ -128,94 +164,7 @@ class IndexView(LoginRequiredMixin, FormView):
 
         context['is_paginated'] = paginator.num_pages > 1
         return context
-
-
-# View for displaying Threads in a channel
-class ChannelIndexView(LoginRequiredMixin, FormView):
-    model = Thread
-    template_name = "nablaforum/channel.html"
-    form_class = ThreadForm
-    paginate_by = 10
-
-
-    def form_valid(self, form):
-        form_data = form.cleaned_data
-        channel_id = self.kwargs['channel_id']
-        channel = Channel.objects.get(pk=channel_id)
-        try:
-            new_thread = self.model.objects.create(
-                                            channel = channel,
-                                            threadstarter = self.request.user,
-                                            title = form_data['title_field'],
-                                            text = form_data['text_field'],)
-        except:
-            print('Ops! Kunne ikke opprette tråd, ugyldig verdi i feltene!')
-        return redirect('channel-index', channel_id=channel_id)
-
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        channel_id = self.kwargs['channel_id']
-        channel = get_object_or_404(Channel, pk=channel_id)
-        query_set = self.model.objects.filter(channel__id=channel_id).order_by('-pk')
-
-        for thread in query_set:
-            if Message.objects.filter(thread=thread).exclude(read_by_user=self.request.user): # set of undread messages in a thread
-                thread.has_unreads = True
-
-        paginator = Paginator(query_set, self.paginate_by)
-        page = self.request.GET.get('page')
-        threads = paginator.get_page(page)
-        context['threads'] = threads
-        context['channel_id'] = channel_id
-        context['channel'] = channel
-        context['is_paginated'] = paginator.num_pages > 1
-        return context
-
-
-# View for displaying messages in a thread
-class ThreadView(LoginRequiredMixin, FormView):
-    model = Message
-    template_name = "nablaforum/thread.html"
-    form_class = MessageForm
-    paginate_by = 10
-
-
-    def form_valid(self, form):
-        form_data = form.cleaned_data
-        thread_id = self.kwargs['thread_id']
-        channel_id = self.kwargs['channel_id']
-        thread = get_object_or_404(Thread, pk=thread_id)
-        try:
-            new_message = self.model.objects.create(
-                                            thread = thread,
-                                            user = self.request.user,
-                                            message = form_data['message_field'],)
-            new_message.read_by_user.add(self.request.user)
-        except:
-            print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
-        return redirect('thread-view', channel_id=channel_id, thread_id=thread_id)
-
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        channel_id = self.kwargs['channel_id']
-        thread_id = self.kwargs['thread_id']
-        thread = get_object_or_404(Thread, pk=thread_id)
-        query_set = self.model.objects.filter(thread__id=thread_id).order_by('-pk')
-
-        # Mark all unread messages read
-        for message in query_set.exclude(read_by_user=self.request.user):
-            message.read_by_user.add(self.request.user)
-
-        paginator = Paginator(query_set, self.paginate_by)
-        page = self.request.GET.get('page')
-        messages = paginator.get_page(page)
-        context['thread_messages'] = messages
-        context['thread'] = thread
-        context['channel_id'] = channel_id
-        context['is_paginated'] = paginator.num_pages > 1
-        return context
+'''
 
 
 # Convert to Formview and do it with django form
@@ -232,7 +181,7 @@ class BrowseChannelsView(LoginRequiredMixin, FormView):
         for name in channel_names:
             channel = joinable_channels.get(name=name)
             channel.members.add(self.request.user)
-        return redirect('forum-index')
+        return redirect('forum-main', channel_id=1, thread_id=0)
 
 
     def get_form_kwargs(self, *args, **kwargs):

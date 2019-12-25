@@ -20,10 +20,18 @@ class Channel(models.Model):
 class Thread(models.Model):
     ''' Represents a thread in a channel'''
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE) #which channel it belongs to
-    threadstarter = models.ForeignKey(NablaUser, on_delete=models.CASCADE)
+    threadstarter = models.ForeignKey(NablaUser, on_delete=models.CASCADE, blank=True)
     title = models.CharField(max_length=200)
     text = models.TextField()
+    created = models.DateTimeField(editable=False)
     has_unreads = models.BooleanField(default=False)
+
+
+    def save(self, *args, **kwargs):
+        """Update created timestamp on creation"""
+        if not self.id:  # Does not exist yet, ie. creation not modification
+            self.created = timezone.now()
+        return super().save(*args, **kwargs)
 
 
     def __str__(self):
@@ -38,11 +46,13 @@ class Message(models.Model):
     read_by_user = models.ManyToManyField(NablaUser, related_name="read_by_user")
     created = models.DateTimeField(editable=False)
 
+
     def save(self, *args, **kwargs):
         """Update created timestamp on creation"""
         if not self.id:  # Does not exist yet, ie. creation not modification
             self.created = timezone.now()
         return super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.user.username
