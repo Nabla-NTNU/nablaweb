@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, FormView
 from django.core.paginator import Paginator
+from django.utils import timezone
+from itertools import chain
 
 from .models import Channel, Thread, Message
 from .forms import ThreadForm, MessageForm, ChannelForm, JoinChannelsForm
@@ -22,14 +24,18 @@ class MainView(TemplateView):
             form_data = thread_form.cleaned_data
             channel_id = self.kwargs['channel_id']
             channel = Channel.objects.get(pk=channel_id)
-            print('HEHEHE: \n', form_data, channel_id)
-            print(channel)
             try:
                 new_thread = Thread.objects.create(
                                                 channel = channel,
                                                 threadstarter = self.request.user,
                                                 title = form_data['title_field'],
                                                 text = form_data['text_field'],)
+
+                new_message = Message.objects.create(
+                                                thread = new_thread,
+                                                user = self.request.user,
+                                                message = new_thread.text)
+                new_message.read_by_user.add(self.request.user)
             except:
                 print('Ops! Kunne ikke opprette tråd, ugyldig verdi i feltene!')
             return redirect('forum-main', channel_id=channel_id, thread_id=0)
@@ -80,12 +86,33 @@ class MainView(TemplateView):
             chosen_thread_id = self.kwargs['thread_id']
             chosen_thread = Thread.objects.get(pk=chosen_thread_id)
             messages = Message.objects.filter(thread__id=chosen_thread_id)
-            context['messages'] = messages
+
+            for message in messages.exclude(read_by_user=self.request.user):
+                message.read_by_user.add(self.request.user)
+
+            context['messages'] = messages[1:] # All messages except the first which is the same as thread.text
             context['chosen_thread'] = chosen_thread
 
         # get thread and message forms
         thread_form = ThreadForm
         message_form = MessageForm
+
+        # Check for unreads messages within the last week
+        one_week_ago = timezone.now() - timezone.timedelta(days=7)
+
+        # Check for channels with unreads
+        all_users_channels = chain(feeds, group_channels, common_channels)
+        for channel in all_users_channels:
+            for thread in Thread.objects.filter(channel=channel):
+                if Message.objects.filter(thread=thread, created__gte=one_week_ago).exclude(read_by_user=self.request.user):
+                        print(thread)
+                        channel.has_unreads = True
+                        break
+
+        # Check unreads for threads in chosen channel
+        for thread in threads:
+            if Message.objects.filter(thread=thread, created__gte=one_week_ago).exclude(read_by_user=self.request.user):
+                    thread.has_unreads = True
 
         context['feeds'] = feeds
         context['group_channels'] = group_channels
@@ -131,43 +158,7 @@ class CreateChannelView(LoginRequiredMixin, FormView):
             print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
         return redirect('forum-main', channel_id=1, thread_id=0)
 
-'''
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        query_set = Channel.objects.filter(group__in=user.groups.all()).order_by('-pk') # All channels belonging to users group
-        pinned_channels = query_set.filter(is_pinned=True) # pinned channels
-        common_channels = self.model.objects.filter(group=None).filter(members=self.request.user) # channels common to all NablaUsers
-        feeds = Channel.objects.filter(is_feed=True)# feeds
 
-        # Find all channels with unreads and sets channel.has_unreads to True
-        # Was not able to figure out a more django way to do this :(
-        for channel in query_set:
-            for thread in Thread.objects.filter(channel=channel):
-                if Message.objects.filter(thread=thread).exclude(read_by_user=self.request.user):
-                    channel.has_unreads = True
-                    break
-
-        for channel in common_channels:
-            for thread in Thread.objects.filter(channel=channel):
-                if Message.objects.filter(thread=thread).exclude(read_by_user=self.request.user):
-                    channel.has_unreads = True
-                    break
-
-        paginator = Paginator(query_set, self.paginate_by)
-        page = self.request.GET.get('page')
-        group_channels = paginator.get_page(page)
-        context['channel_types'] = {"Feeds": feeds,
-                                    "Ordinære kanaler": common_channels,
-                                    "Kullgruppe": pinned_channels,
-                                    "Dine gruppers kanaler": group_channels}
-
-        context['is_paginated'] = paginator.num_pages > 1
-        return context
-'''
-
-
-# Convert to Formview and do it with django form
 class BrowseChannelsView(LoginRequiredMixin, FormView):
     '''View for browsing channels'''
     form_class = JoinChannelsForm
