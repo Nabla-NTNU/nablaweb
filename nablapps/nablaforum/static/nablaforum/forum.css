@@ -1,13 +1,29 @@
-.main-grid{
+.main-container {
+    height: 900px;
     background-color: #f0f0f0;
-    margin-bottom: 500px;
-    padding: 100px 20px 20px 20px;
+    margin-bottom: 390px;
+    padding: 50px 20px 100px 20px;
+}
 
+header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-gap: 20px;
+}
+
+.main-grid{
+    height: 100%;
+    padding-bottom: 000px;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     grid-gap: 20px;
     grid-template-areas:
-    "cahnnel-menu channel-threads thread-messages"
+    "chahnnel-menu channel-threads thread-messages"
+}
+
+.grid-item {
+     height: 100%;
+     overflow: auto;
 }
 
 .tile{
