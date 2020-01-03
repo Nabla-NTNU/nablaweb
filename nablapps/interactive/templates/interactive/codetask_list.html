@@ -29,7 +29,11 @@
 				{% endif %}
 			</td>
 			<td> 
-				{{ userResult }}
+                {% if request.user.is_authenticated %}
+                    {{ userResult }}
+                {% else %}
+                    --
+                {% endif %}
 			</td>
 		</tr>
 	{% endfor %}

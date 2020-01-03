@@ -111,9 +111,12 @@ class CodeTaskListView(ListView):
         
         for obj in task_list:
             best_results.append(obj.get_best_result)
-            try:
-                user_results.append(obj.result_set.get(user=self.request.user).length)
-            except ObjectDoesNotExist:
+            if self.request.user.is_authenticated:
+                try:
+                    user_results.append(obj.result_set.get(user=self.request.user).length)
+                except ObjectDoesNotExist:
+                    user_results.append('--')
+            else:
                 user_results.append('--')
 
         tasks = zip(task_list, best_results, user_results)
