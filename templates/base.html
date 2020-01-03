@@ -30,7 +30,6 @@
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/brands.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/solid.min.css" %}">
         <link href="{% static "css/default.css" %}" rel="stylesheet">
-        <link href="{% static "css/juletema.css" %}" rel="stylesheet">
         {% if custom_color %}
         <style>
          nav.navbar {
@@ -139,7 +138,7 @@
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <a class="logo pull-left" href="/">
                     {% block header_logo %}
-                    <img width="125" src="{% static "img/nabla_logo_white_jul.svg" %}" alt="Nabla">
+                    <img width="125" src="{% static "img/nabla_logo_white.svg" %}" alt="Nabla">
                     {% endblock header_logo %}
             </a>
 
@@ -209,7 +208,6 @@
                             {# bruker-dropdown #}
                             <li class="dropdown">
                                 <a href="#bruker" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img id="nisselue" src="/static/img/nisselue.png" style="width:14px;height:12px;position:absolute;z-index:2;left:17px;margin-top:-5px;">
                                     <span class="glyphicon glyphicon-user"></span>
                                     {% firstof user.get_full_name user.username %}
                                     <span class="caret"></span>
@@ -339,8 +337,7 @@
                     {# nablalogo #}
                     <div class="col-md-4 center" id="nablafooter">
                         <br><br>
-                        <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo" id="easteregg">
-                        <img src="/static/img/nisseslede.gif" style="width: 50%;height: 50%;" alt="nisseslede" id="slede"/>
+                        <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo">
                         <br />
                         <br />
                         <a href="https://www.facebook.com/nablantnu/" class="fab fa-facebook-f fa-4x social-icon"></a>
