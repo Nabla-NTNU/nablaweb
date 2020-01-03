@@ -12,7 +12,7 @@
     {% if object.threadstarter %}
     <p class="content">{{ object.text }}</p>
     {% endif %}
-    <h4 class="meta">
+    <p class="meta">
         {% if object.has_unreads %}
         <span class="meta--unread">Uleste meldinger den siste uken</span>
         {% endif %}
@@ -20,5 +20,5 @@
         <span>{{ object.threadstarter.get_full_name }},</span>
         <span>{{ object.created }}</span>
         {% endif %}
-    </h4>
+    </p>
 </div>

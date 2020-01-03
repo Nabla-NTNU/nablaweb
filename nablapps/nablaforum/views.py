@@ -12,6 +12,7 @@ from nablapps.accounts.models import NablaGroup
 
 
 class MainView(TemplateView):
+    """ Main view displaying forum content """
     template_name = "nablaforum/forum.html"
     paginate_thread_by = 5
 
@@ -126,8 +127,8 @@ class MainView(TemplateView):
         return context
 
 
-# View for creating new Channels
 class CreateChannelView(LoginRequiredMixin, FormView):
+    """ View for creating new channels """
     model = Channel
     template_name = "nablaforum/create_channel.html"
     form_class = ChannelForm
