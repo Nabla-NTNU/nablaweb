@@ -120,7 +120,7 @@
                  <div style="text-align: right;" onclick="show_readers()" id="toggle_seen">Trykk for å vise seere</div>
                  <div id="readers" style="display: none">
                      {% for read in first_message.read_by_user.all %}
-                     {{ read }}
+                     {{ read.get_full_name }}
                      {% endfor %}
                  </div>
              </div>
