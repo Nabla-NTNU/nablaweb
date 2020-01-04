@@ -16,6 +16,8 @@ from ..podcast.models import Podcast
 from ..poll.models import Poll
 from ..officeCalendar.models import OfficeEvent
 from .view_mixins import FlatPageMixin
+from ..accounts.models import FysmatClass
+from ..nablaforum.models import Thread, Channel
 
 from datetime import datetime, timedelta
 from collections import defaultdict
@@ -37,6 +39,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
         self._add_poll(context)
         self._add_nablad(context)
         self._add_podcast(context)
+        self._add_forum(context)
         context['office_events'] = OfficeEvent.get_office_event_week(only_public = not self.request.user.is_authenticated)
         context['new_podcast'] = Podcast.objects.exclude(is_clip=True).filter(pub_date__lte=datetime.now()).first()
         context['album_list'] = Album.objects.exclude(visibility='h').order_by('-last_changed_date')[:4]
@@ -76,6 +79,15 @@ class FrontPageView(FlatPageMixin, TemplateView):
 
         if self.request.user.is_authenticated and context['poll'] is not None:
             context['poll_has_voted'] = context['poll'].user_has_voted(self.request.user)
+
+    def _add_forum(self, context):
+        latest_feed = Thread.objects.filter(channel__is_feed=True).order_by('-pk')[:4]
+        fysmat_class = FysmatClass.objects.get(user=self.request.user)
+        class_channel = Channel.objects.get(group=fysmat_class)
+        latest_class = Thread.objects.filter(channel=class_channel).order_by('-pk')[:4]
+        context['fysmat_class'] = fysmat_class
+        context['latest_feed'] = latest_feed
+        context['latest_class'] = latest_class
 
 
 class AboutView(TemplateView):

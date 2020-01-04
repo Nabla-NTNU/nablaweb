@@ -91,6 +91,7 @@ class MainView(TemplateView):
             for message in messages.exclude(read_by_user=self.request.user):
                 message.read_by_user.add(self.request.user)
 
+            context['first_message'] = messages[0]
             context['messages'] = messages[1:] # All messages except the first which is the same as thread.text
             context['chosen_thread'] = chosen_thread
 

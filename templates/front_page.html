@@ -103,6 +103,8 @@
             Ta kontakt med bedriftskontakten på <a href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no.</a>
         </p>
     </div>
+    {% else %}
+        {% include "nablaforum/includes/forum_widget.html" %}
     {% endif  %}
     <div class="office">
         <!--Kontoret-->
