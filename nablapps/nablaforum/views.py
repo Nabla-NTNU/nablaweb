@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages as django_messages
 from django.views.generic import TemplateView, ListView, FormView
 from django.core.paginator import Paginator
 from django.utils import timezone
@@ -38,7 +39,7 @@ class MainView(TemplateView):
                                                 message = new_thread.text)
                 new_message.read_by_user.add(self.request.user)
             except:
-                print('Ops! Kunne ikke opprette tråd, ugyldig verdi i feltene!')
+                django_messages.add_message(self.request, django_messages.INFO, 'Ops! Kunne ikke opprette tråd, ugyldig verdi i feltene!')
             return redirect('forum-main', channel_id=channel_id, thread_id=0)
 
         elif message_form.is_valid():
@@ -53,7 +54,7 @@ class MainView(TemplateView):
                                                 message = form_data['message_field'],)
                 new_message.read_by_user.add(self.request.user)
             except:
-                print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
+                django_messages.add_message(self.request, django_messages.INFO, 'Ops! Kunne ikke opprette melding, ugyldig verdi i feltene!')
             return redirect('forum-main', channel_id=channel_id, thread_id=thread_id)
 
 
@@ -151,7 +152,7 @@ class CreateChannelView(LoginRequiredMixin, FormView):
             new_channel.members.add(self.request.user)
             new_channel.save()
         except:
-            print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
+            django_messages.add_message(self.request, django_messages.INFO, 'Ops! Kunne ikke opprette melding, ugyldig verdi i feltene!')
         return redirect('forum-main', channel_id=1, thread_id=0)
 
 

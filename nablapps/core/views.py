@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from itertools import chain
 
 from django.views.generic import TemplateView
+from django.contrib import messages
 
 from nablapps.album.models import Album
 from nablapps.blog.models import BlogPost
@@ -81,13 +82,17 @@ class FrontPageView(FlatPageMixin, TemplateView):
             context['poll_has_voted'] = context['poll'].user_has_voted(self.request.user)
 
     def _add_forum(self, context):
-        latest_feed = Thread.objects.filter(channel__is_feed=True).order_by('-pk')[:4]
-        fysmat_class = FysmatClass.objects.get(user=self.request.user)
-        class_channel = Channel.objects.get(group=fysmat_class)
-        latest_class = Thread.objects.filter(channel=class_channel).order_by('-pk')[:4]
-        context['fysmat_class'] = fysmat_class
-        context['latest_feed'] = latest_feed
-        context['latest_class'] = latest_class
+        if self.request.user.is_authenticated:
+            try:
+                fysmat_class = FysmatClass.objects.get(user=self.request.user)
+                class_channel = Channel.objects.get(group=fysmat_class)
+                latest_class = Thread.objects.filter(channel=class_channel).order_by('-pk')[:4]
+                context['fysmat_class'] = fysmat_class
+                context['latest_class'] = latest_class
+            except:
+                messages.add_message(self.request, messages.INFO, 'Brukeren din er ikke tilknyttet noen kullgruppe. Ta kontakt med WebKom for å få det fikset.')
+            latest_feed = Thread.objects.filter(channel__is_feed=True).order_by('-pk')[:4]
+            context['latest_feed'] = latest_feed
 
 
 class AboutView(TemplateView):
