@@ -63,13 +63,13 @@ class MainView(TemplateView):
         user = self.request.user
 
         # All channels belonging to users group
-        group_channels = Channel.objects.filter(group__in=user.groups.all()).order_by('-pk')
+        group_channels = Channel.objects.filter(group__in=user.groups.all()).exclude(is_class=True).order_by('-pk')
 
         # Ordinary channels the user is member of
-        common_channels = Channel.objects.filter(group=None).filter(members=self.request.user)
+        common_channels = Channel.objects.filter(group=None).filter(members=self.request.user).exclude(is_feed=True).exclude(is_class=True)
 
-        # Pinned channels
-        #pinned_channels = Channel.filter(is_pinned=True)
+        # Class channel
+        class_channel = Channel.objects.filter(group__in=user.groups.all()).filter(is_class=True)
 
         # Feeds
         feeds = Channel.objects.filter(is_feed=True)
@@ -118,6 +118,7 @@ class MainView(TemplateView):
                     thread.has_unreads = True
 
         context['feeds'] = feeds
+        context['class_channel'] = class_channel
         context['group_channels'] = group_channels
         context['common_channels'] = common_channels
         context['threads'] = threads

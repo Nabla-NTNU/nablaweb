@@ -9,7 +9,7 @@ class Channel(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     is_feed = models.BooleanField(default=False)
-    is_pinned = models.BooleanField(default=False)
+    is_class = models.BooleanField(default=False)
     has_unreads = models.BooleanField(default=False)
 
 
