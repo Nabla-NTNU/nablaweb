@@ -69,12 +69,18 @@
             {% if threads.has_next %}
                 <a href="?page={{ threads.next_page_number }}">Hent eldre</a>
             {% endif %}
-             
-            {% for thread in threads reversed %}
-                <a href="{% url "forum-main" channel_id=chosen_channel_id thread_id=thread.pk %}?page={{ threads.number }}">
-                {% include "nablaforum/includes/tiles.html" with object=thread %}
-                </a>
-            {% endfor %}
+
+            {% if threads %}
+                {% for thread in threads reversed %}
+                    <a href="{% url "forum-main" channel_id=chosen_channel_id thread_id=thread.pk %}?page={{ threads.number }}">
+                    {% include "nablaforum/includes/tiles.html" with object=thread %}
+                    </a>
+                {% endfor %}
+            {% else %}
+                <div class="well">
+                    <h1>Opprett en tråd!</h1>
+                </div>
+            {% endif %}
 
             {% if threads.has_previous %}
                 <a href="?page={{ threads.previous_page_number }}">Hent nyere</a>

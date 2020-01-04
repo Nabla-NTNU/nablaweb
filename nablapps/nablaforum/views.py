@@ -150,12 +150,6 @@ class CreateChannelView(LoginRequiredMixin, FormView):
                                             description = form_data['description'],)
             new_channel.members.add(self.request.user)
             new_channel.save()
-            first_thread = Thread.objects.create(
-
-                                            channel=new_channel,
-                                            threadstarter=self.request.user,
-                                            title="Velkommen til " + new_channel.name,
-                                            text="Dette en tråd!")
         except:
             print('Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!')
         return redirect('forum-main', channel_id=1, thread_id=0)
