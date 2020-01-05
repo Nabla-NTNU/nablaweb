@@ -85,7 +85,8 @@ class FrontPageView(FlatPageMixin, TemplateView):
         if self.request.user.is_authenticated:
             try:
                 fysmat_class = FysmatClass.objects.get(user=self.request.user)
-                class_channel = Channel.objects.get(group=fysmat_class)
+                print(fysmat_class)
+                class_channel = Channel.objects.get(group=fysmat_class, is_class=True)
                 latest_class = Thread.objects.filter(channel=class_channel).order_by('-pk')[:4]
                 context['fysmat_class'] = fysmat_class
                 context['latest_class'] = latest_class
