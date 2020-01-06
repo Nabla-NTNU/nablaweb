@@ -126,6 +126,7 @@
  .filter__option + label {
      padding: 3px 6px;
      display: inline-block;
+     cursor: pointer;
  }
 
  .filter__option:checked + label {
@@ -165,10 +166,11 @@
             {% for type in filter_form.type %}
                 {{ type }}
             {% endfor %}
-
+            |
             {{ filter_form.start_time.label }}
             {{ filter_form.start_time }}
             {{ filter_form.start_time.errors }}
+            |
             <input type="submit" value="Filtrer">
             </form>
         </div>
