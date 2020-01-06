@@ -163,17 +163,20 @@
     <div id="event_list">
         <div>
             <form method="get" class="filter">
-            {% for type in filter_form.type %}
-                {{ type }}
-            {% endfor %}
-            |
-            {{ filter_form.start_time.label }}
-            {{ filter_form.start_time }}
-            {{ filter_form.start_time.errors }}
-            |
-            <input type="submit" value="Filtrer">
+                {% for type in filter_form.type %}
+                    {{ type }}
+                {% endfor %}
+                |
+                {{ filter_form.start_time.label }}
+                {{ filter_form.start_time }}
+                {{ filter_form.start_time.errors }}
+                |
+                <input type="submit" value="Filtrer">
             </form>
         </div>
+
+        <a href="{% url 'event_list' %}">Ta meg til den gamle kalenderen <span class="fa fa-arrow-right"></span></a>
+
         {% for event in object_list %}
         {% ifchanged %}<h2 class="month__name">{{ event.event_start|date:"F"|title }}</h2>{% endifchanged %}
         <div class="day">

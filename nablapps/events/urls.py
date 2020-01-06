@@ -24,15 +24,15 @@ urlpatterns = [
         RegisterAttendanceView.as_view(),
         name='event_register_attendance'),
 
-    url(r'^$',
+    url(r'^$', EventMainPage.as_view(), name="event_main_page"),
+
+    url(r'^calendar/$',
         calendar,
         name='event_list'),
 
-    url(r'^(\d{4})/(\d{1,2})/$',
+    url(r'^calendar/(\d{4})/(\d{1,2})/$',
         calendar,
         name='event_list'),
-
-    url(r'^fremover/$', EventMainPage.as_view(), name="event_main_page"),
 
     url(r'^mine/$',
         UserEventView.as_view(),
