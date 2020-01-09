@@ -3,7 +3,7 @@ Forms for events
 """
 import operator
 
-from django.forms import BooleanField, ValidationError, ModelForm, Form, IntegerField, TextInput, ChoiceField, DateField
+from django.forms import BooleanField, ValidationError, ModelForm, Form, IntegerField, TextInput, ChoiceField, DateField, DateInput
 from django.forms.widgets import RadioSelect, SelectDateWidget
 from django.forms.models import fields_for_model
 
@@ -87,6 +87,12 @@ class EventForm(ModelForm):
             if name in self._errors:
                 del self._errors[name]
 
+
+class HTML5DateInput(DateInput):
+    """Use type="date" in input tag,
+    because HTML5 is nice"""
+    input_type="date"
+
 class FilterEventsForm(Form):
     """Form to filter and sort events in EventMainPage"""
 
@@ -96,4 +102,4 @@ class FilterEventsForm(Form):
     type.widget.attrs.update({'class': 'filter__option'})
     type.widget.option_template_name="events/radio_option.html"
 
-    start_time = DateField(widget=SelectDateWidget, required=False, label="Etter dato")
+    start_time = DateField(widget=HTML5DateInput, required=False, label="Etter dato")
