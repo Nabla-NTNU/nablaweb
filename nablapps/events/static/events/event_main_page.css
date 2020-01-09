@@ -45,14 +45,17 @@
 }
 
 .event_list__event .header_like {
-    line-height: 2em;
+    margin: 4px 10px 4px 0px;
+    font-weight: bold;
+    color: #545252;
+    font-family: Arial, Arimo, Sans-Serif;
 }
 
 .event_list__event__meta {
     display: inline-block;
     /*         float: right;*/
     margin-right: 12px;
-    color: gray;
+    color: #989898;
     font-size: medium;
 }
 
