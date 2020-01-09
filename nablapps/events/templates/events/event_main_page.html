@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block more_head %}
-    <link rel="stylesheet" href="{% static 'events/event_main_page.css' %}">
+<link rel="stylesheet" href="{% static 'events/event_main_page.css' %}">
 {% endblock %}
 
 {% block main %}
@@ -37,7 +37,7 @@
         <div>
             <form method="get" class="filter">
                 {% for type in filter_form.type %}
-                    {{ type }}
+                {{ type }}
                 {% endfor %}
                 |
                 {{ filter_form.start_time.label }}
@@ -56,24 +56,22 @@
             <span class="day__date">{{ event.event_start|date:"d" }}</span>
             <a href="{{ event.get_absolute_url }}">
                 <div class="event_list__event">
-                    <span class="header_like">
-                        <div>{{ event.headline }}</div>
-                        <div class="event_list__event__meta">
-                            {{ event.event_start|date:"H:i" }}
-                            <span class="fa fa-clock-o"></span>
-                        </div>
-                        {% if event.registration_required %}
-                        <div class="event_list__event__meta">
-                            {{ event.users_attending }} / {{ event.places }}
-                            <span class="fa fa-user"></span>
-                        </div>
-                        {% endif %}
-                        {% if event.company %}
-                        <div class="event_list__event__meta">
-                            {{ event.company }}
-                        </div>
-                        {% endif %}
-                   </span>
+                    <div class="header_like">{{ event.headline }}</div>
+                    <div class="event_list__event__meta">
+                        {{ event.event_start|date:"H:i" }}
+                        <span class="fa fa-clock-o"></span>
+                    </div>
+                    {% if event.registration_required %}
+                    <div class="event_list__event__meta">
+                        {{ event.users_attending }} / {{ event.places }}
+                        <span class="fa fa-user"></span>
+                    </div>
+                    {% endif %}
+                    {% if event.company %}
+                    <div class="event_list__event__meta">
+                        {{ event.company }}
+                    </div>
+                    {% endif %}
                 </div>
             </a>
         </div>
