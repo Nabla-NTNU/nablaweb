@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "==2.1.13"
+django = "==2.1.15"
 django-bootstrap3 = "*"   # Templatetags for bootstrap3
 django-braces = "*"       # Extra mixinclasses for models and views
 django-contrib-comments = "*"
