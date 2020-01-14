@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load sekizai_tags %}
+{% load static %}
+
+{% block main %}
+
+{% addtoblock "css" %}
+    <link  rel="stylesheet" href="{% static "nablaforum/forum.css" %}">
+{% endaddtoblock %}
+
+<h4>Opprett en ny kanal:</h4>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Opprett ny kanal</button>
+</form>
+
+{% endblock main %}

@@ -1,8 +1,24 @@
-<div class="tile">
+<div class="tile"
+    {% if object == chosen_thread %}
+        style="
+            background-color: #d4d4d4;
+            border-style: solid;
+            border-radius: 10px;
+            border-color: green;
+            "
+    {% endif %}
+    >
     <h4 class="title {% if object.has_unreads %}tile--has_unread{% endif %}">{{ object }}</h4>
-    <h4 class="meta">
+    {% if object.threadstarter %}
+    <p class="content">{{ object.text | linebreaksbr }}</p>
+    {% endif %}
+    <p class="meta">
         {% if object.has_unreads %}
-        <span class="meta--unread">Uleste meldinger</span>
+        <span class="meta--unread">Uleste meldinger den siste uken</span>
         {% endif %}
-    </h4>
+        {% if object.created %}
+        <span>{{ object.threadstarter.get_full_name }},</span>
+        <span>{{ object.created }}</span>
+        {% endif %}
+    </p>
 </div>

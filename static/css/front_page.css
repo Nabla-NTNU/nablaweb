@@ -18,7 +18,7 @@
     grid-gap: 15px;
     align-items: stretch;
     grid-template-areas:
-        "main-article    main-article    main-article "
+        "main-article    main-article    forum"
         "upcoming-events upcoming-events office"
         "more-news-1     more-news-2     poll"
         "more-news-3     more-news-4     latest-podcast"

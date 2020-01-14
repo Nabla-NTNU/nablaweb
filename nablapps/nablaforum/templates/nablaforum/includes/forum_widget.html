@@ -1,0 +1,20 @@
+<div class="forum well">
+    <h1><a href="{% url "forum-main" channel_id=1 thread_id=0 %}" style="color: black">Nablaforum</a></h1>
+    <h4>Siste fra Nablafeed</h4>
+    {% for message in latest_feed %}
+    <p>
+    <a href="{% url "forum-main" channel_id=message.channel.id thread_id=message.id %}?page=1">
+        {{ message }}
+    </a>
+    </p>
+    {% endfor %}
+
+    <h4>Siste fra {{ fysmat_class }}</h4>
+    {% for message in latest_class %}
+    <p>
+    <a href="{% url "forum-main" channel_id=message.channel.id thread_id=message.id %}?page=1">
+        {{ message }}
+    </a>
+    </p>
+    {% endfor %}
+</div>

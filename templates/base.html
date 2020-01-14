@@ -213,7 +213,6 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="{% url "forum-index" %}">Nablaforum</a></li>
                                     <li><a href="{% url "member_profile" user.username %}">Vis profil</a></li>
                                     <li><a href="{% url "edit_profile" %}">Endre profil</a></li>
                                     <li><a href="{% url "password_change" %}">Endre passord</a></li>
@@ -265,6 +264,8 @@
         </header>
 
         <!-- Page Content -->
+        {% block full-content-body %}
+
         <div class="container box" id = "mainContent">
 
             {% bootstrap_messages %}
@@ -284,6 +285,8 @@
             <!-- /.row -->
             {% endblock main %}
         </div> <!-- id="mainContent" -->
+
+        {% endblock full-content-body %}
 
         <!-- Footer -->
         <footer>
