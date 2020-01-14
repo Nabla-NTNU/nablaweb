@@ -17,7 +17,7 @@
 <form method="POST">
 {% csrf_token %}
 {% for checkbox in form.selected_channels %}
-    <label class="tile" style="display: block">
+    <label class="tile" style="display: block; background-color: #eeeeee;">
     {{ checkbox }}
     </label>
 {% endfor %}

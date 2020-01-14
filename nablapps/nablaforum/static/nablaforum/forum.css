@@ -53,8 +53,10 @@ header {
     margin: 0;
 }   
 
-.content{
+.content {
     color: black;
+    width: 100%;
+    word-wrap: break-word;
 }
 
 .meta{

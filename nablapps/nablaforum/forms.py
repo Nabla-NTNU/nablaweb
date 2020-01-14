@@ -24,7 +24,7 @@ class ChannelForm(forms.ModelForm):
 
 
 class ThreadForm(forms.Form):
-    title_field = forms.CharField()
+    title_field = forms.CharField(max_length=50)
     text_field = forms.CharField(widget=forms.Textarea)
 
 

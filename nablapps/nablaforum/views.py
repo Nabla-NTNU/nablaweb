@@ -166,7 +166,7 @@ class BrowseChannelsView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         form_data = form.cleaned_data # selected channels
         channel_names = form_data['selected_channels']
-        joinable_channels = Channel.objects.filter(group=None).exclude(members=self.request.user)
+        joinable_channels = Channel.objects.filter(group=None).exclude(members=self.request.user).exclude(is_feed=True)
         for name in channel_names:
             channel = joinable_channels.get(name=name)
             channel.members.add(self.request.user)
@@ -175,7 +175,7 @@ class BrowseChannelsView(LoginRequiredMixin, FormView):
 
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super().get_form_kwargs(*args, **kwargs)
-        channels = Channel.objects.filter(group=None).exclude(members=self.request.user)
+        channels = Channel.objects.filter(group=None).exclude(members=self.request.user).exclude(is_feed=True)
         kwargs['selected_channels'] = [(c, c.name) for c in channels]
         return kwargs
 

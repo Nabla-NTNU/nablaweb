@@ -10,7 +10,7 @@
     >
     <h4 class="title {% if object.has_unreads %}tile--has_unread{% endif %}">{{ object }}</h4>
     {% if object.threadstarter %}
-    <p class="content">{{ object.text }}</p>
+    <p class="content">{{ object.text | linebreaksbr }}</p>
     {% endif %}
     <p class="meta">
         {% if object.has_unreads %}
