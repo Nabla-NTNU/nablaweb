@@ -5,7 +5,7 @@ from nablapps.accounts.models import NablaUser, NablaGroup
 class Channel(models.Model):
     ''' Represents a channel in the forum '''
     group = models.ForeignKey(NablaGroup, on_delete=models.CASCADE, blank=True, null=True)
-    members = models.ManyToManyField(NablaUser, related_name='members')
+    members = models.ManyToManyField(NablaUser, related_name='members', blank=True)
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     is_feed = models.BooleanField(default=False)
