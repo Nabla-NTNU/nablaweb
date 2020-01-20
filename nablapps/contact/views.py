@@ -14,7 +14,7 @@ def contact(request):
         return render(request, 'contact/contact.html', context)
     else:
         contact_form = ContactForm(request.POST)
-        
+
         if contact_form.is_valid():
             #spam check
             if contact_form.get_right_answer() == contact_form.get_answer():
@@ -109,12 +109,14 @@ def make_contact_context(request, spam_check, test_val):
                     ('PostKom', 'postkom'),
                     ('Arrkom', 'arrkom'),
                     ('BN - Bedriftkontakten Nabla', 'bedkom'),
+                    ('Eurekakom', 'eureka'),
                     ('Educom', 'educom'),
                     ('ProKom', 'prokom'),
                     ('Redaksjonen', 'nabladet'),
                     ('WebKom', 'webkom'),
                     ('Excom17', 'ekskom2019'),
                     ('Excom18', 'excom18'),
+                    ('Kontorkom', 'kontorkom'),
                     ('Koreolis', 'koreolis'),
                     ('nablarevyen', 'revy-alle'),
                     ('the Gravitones', 'gravitones'),
@@ -128,11 +130,11 @@ def make_contact_context(request, spam_check, test_val):
         #skjema uten navn og e-post
         contact_form = ContactForm(
                     initial={
-                    'your_name': request.user.get_full_name(), 
-                    'email': request.user.email, 
+                    'your_name': request.user.get_full_name(),
+                    'email': request.user.email,
                     'right_answer': test_val})
-        context = {'contact_form': contact_form, 
-                    'spam_check': spam_check, 
+        context = {'contact_form': contact_form,
+                    'spam_check': spam_check,
                     'test_val': test_val}
         context['board_emails'] = board_emails
         context['nabla_pos_emails'] = nabla_pos_emails
@@ -141,8 +143,8 @@ def make_contact_context(request, spam_check, test_val):
     else:
         #tomt skjema
         contact_form = ContactForm(initial={'right_answer': test_val})
-        context = {'contact_form': contact_form, 
-                    'spam_check': spam_check, 
+        context = {'contact_form': contact_form,
+                    'spam_check': spam_check,
                     'test_val': test_val}
         context['board_emails'] = board_emails
         context['nabla_pos_emails'] = nabla_pos_emails
@@ -154,18 +156,18 @@ def make_feedback_context(request, spam_check, test_val):
     if request.user.is_authenticated:
         #skjema uten navn og e-post
         feedback_form = FeedbackForm(initial={
-                    'your_name': request.user.get_full_name(), 
-                    'email': request.user.email, 
+                    'your_name': request.user.get_full_name(),
+                    'email': request.user.email,
                     'right_answer': test_val})
-        context = {'feedback_form': feedback_form, 
-                    'spam_check': spam_check, 
+        context = {'feedback_form': feedback_form,
+                    'spam_check': spam_check,
                     'test_val': test_val}
         return context
     else:
         #tomt skjema
         feedback_form = FeedbackForm(initial={'right_answer': test_val})
-        context = {'feedback_form': feedback_form, 
-                    'spam_check': spam_check, 
+        context = {'feedback_form': feedback_form,
+                    'spam_check': spam_check,
                     'test_val': test_val}
         return context
 
