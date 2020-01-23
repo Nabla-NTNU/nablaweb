@@ -25,7 +25,7 @@
         <span class="header_like">Påmeldte arrangementer:</span>
         {% for event in user_events %}
         <div class="user_events__item">
-            <a href="{{ event.get_absolute_url }}">{{ event.event }}</a>
+            <a href="{{ event.event.get_absolute_url }}">{{ event.event }}</a>
         </div>
         {% empty %}
         <div class="user_events__item user_events__item--empty"> Ikke påmeldt noen arrangementer</div>
