@@ -1,5 +1,6 @@
 {% load humanize %}
 {% load sekizai_tags %}
+{% load static %}
 
 {% addtoblock "css" %}
 <style>
@@ -225,21 +226,19 @@
 {% endif %}
 
 <div class="center">
+    <a title="Google Calendar" class="btn" href="https://calendar.google.com/calendar/r/eventedit?text={{ event.headline }}&dates={{event.event_start|date:'Ymd\THis' }}/{{event.event_end|date:'Ymd\THis' }}&details={{ request.build_absolute_uri }}&location={{ event.location }}&sf=true&output=xml&pli=1" target ="_blank">
+	<img hspace=10 height=32 src="{% static "events/Google_Calendar_icon.svg" %}" alt="iCalendar">
+	</a>
+
     {% if event.bpcid %}
-    <a class="btn btn-default btn-xs" href="{% url "bedpres_ical_event" event.pk %}">
-        <span class="glyphicon glyphicon-calendar"></span>
-        iCal
+    <a title="iCalendar" class="btn" href="{% url "bedpres_ical_event" event.pk %}">
+		<img hspace=10 height=32 src="{% static "events/iCal_icon.svg" %}" alt="iCalendar">
     </a>
     {% else %}
-    <a class="btn btn-default btn-xs" href="{% url "ical_event" event.pk %}">
-        <span class="glyphicon glyphicon-calendar"></span>
-        iCal
+    <a title="iCalendar" class="btn" href="{% url "ical_event" event.pk %}">
+		<img hspace=10 height=32 src="{% static "events/iCal_icon.svg" %}" alt="iCalendar">
     </a>
     {% endif %}
-    <a class="btn btn-default btn-xs" href="https://calendar.google.com/calendar/r/eventedit?text={{ event.headline }}&dates={{event.event_start|date:'Ymd\THis' }}/{{event.event_end|date:'Ymd\THis' }}&details={{ request.build_absolute_uri }}&location={{ event.location }}&sf=true&output=xml&pli=1" target ="_blank">
-    <span class="fas fa-calendar-alt"></span>
-    Google kalender
-</a>
 </div>
 
 
