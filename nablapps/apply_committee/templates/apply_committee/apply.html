@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block main %}
+{% if form %}
+<form method="post">
+    {% csrf_token %}
+    {% for form in form %}
+    {{ form }} <br />
+    {% endfor %}
+    <input type="submit" />
+</form>
+{% else %}
+<h2> Det er ikke åpnet noen søknader nå</h2>
+{% endif %}
+{% endblock %}
