@@ -60,4 +60,9 @@ class Application(models.Model):
         return f"{self.applicant}'s application for {self.committee} in {self.application_round}"
 
     class Meta:
-        unique_together = ["application_round", "applicant", "priority"]
+        unique_together = [
+            # Only one of each priority per round
+            ["application_round", "applicant", "priority"],
+            # Can only search a committee once per round
+            ["application_round", "applicant", "committee"]
+        ]
