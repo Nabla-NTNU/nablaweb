@@ -4,6 +4,7 @@
 {% if application_round %}
 <form method="post">
     {% csrf_token %}
+    {{ formset.non_form_errors }}
     {% for form in formset %}
     {{ form }} <br />
     {% endfor %}
