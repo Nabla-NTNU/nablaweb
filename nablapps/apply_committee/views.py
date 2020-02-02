@@ -1,9 +1,15 @@
-from django.forms import (HiddenInput, ModelForm, Textarea, TextInput,
+from django.forms import (BaseFormSet, HiddenInput, ModelForm, Textarea, TextInput,
                           formset_factory, ValidationError)
 from django.views.generic.edit import FormView
 
 from .models import Application, ApplicationRound, Committee
 
+class BaseApplicationFormSet(BaseFormSet):
+    def clean(self):
+        """Make sure that there is a first priority"""
+        first_form = self.forms[0]
+        if first_form.cleaned_data["committee"] is None:
+            raise ValidationError("You mus set a first priority!")
 
 class ApplicationForm(ModelForm):
     class Meta:
@@ -14,9 +20,10 @@ class ApplicationForm(ModelForm):
             "priority": HiddenInput(),
         }
 
-    def __init__(self, *args, application_round, applicant, **kwargs):
+    def __init__(self, *args, application_round, applicant, is_update=False, **kwargs):
         self.application_round = application_round
         self.applicant = applicant
+        self.is_update = is_update
         super().__init__(*args, **kwargs)
         self.fields["committee"].required = False
 
@@ -31,16 +38,31 @@ class ApplicationForm(ModelForm):
 
 class ApplicationView(FormView):
     num_forms = 3  # Number of forms in formset
-    form_class = formset_factory(ApplicationForm, extra=0)
+    form_class = formset_factory(ApplicationForm, extra=0, formset=BaseApplicationFormSet)
     template_name = "apply_committee/apply.html"
-    initial = [{"priority": i+1, "application_text": "jo"} for i in range(num_forms)]
+    initial = [{"priority": i+1} for i in range(num_forms)]
 
     def setup(self, request, *args, **kwargs):
         self.application_round = ApplicationRound.get_current()
         return super().setup(request, *args, **kwargs)
 
+    def get_queryset(self):
+        print("Get queryset!!")
+        return Application.objects.filter(
+            applicant=self.request.user,
+            application_round=self.application_round
+        )
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        existing = self.get_queryset()
+        initial = kwargs["initial"]
+        for i, entry in enumerate(existing):
+            initial[i]["committee"] = entry.committee
+            initial[i]["application_text"] = entry.application_text
+            initial[i]["anonymous"] = entry.anonymous
+        kwargs["initial"] = initial
+
         # form_kwargs are passed by formset to the underlying form
         kwargs['form_kwargs'] = {
             'applicant': self.request.user,
