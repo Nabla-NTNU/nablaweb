@@ -1,6 +1,7 @@
 from django.forms import (BaseFormSet, HiddenInput, ModelForm, Textarea, TextInput,
                           formset_factory, ValidationError)
 from django.shortcuts import redirect
+from django.views.generic import ListView
 from django.views.generic.edit import FormView
 
 from .models import Application, ApplicationRound, Committee
@@ -105,3 +106,12 @@ class ApplicationView(FormView):
         context["application_round"] = self.application_round
         context["formset"] = context.pop("form", None)  # Give a more intuitive name
         return context
+
+class ApplicationListView(ListView):
+    model = Application
+    context_object_name = "application_list"
+
+    def get_queryset(self):
+        return self.model.objects.\
+            filter(application_round=ApplicationRound.get_current()).\
+            order_by("committee")

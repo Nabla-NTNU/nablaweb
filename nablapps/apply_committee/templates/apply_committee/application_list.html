@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block main %}
+<ul>
+    {% for application in application_list %}
+    {% with applicant=application.applicant %}
+    {% ifchanged application.committee %}
+    <h1>{{ application.committee.name }} {{ cycle }}</h1>
+    <hr />
+    {% endifchanged %}
+
+    <li>{% if application.anonymous %} Anonym {% else %} {{ applicant.get_full_name }}{% endif %}</li>
+    {% endwith %}
+    {% endfor %}
+</ul>
+{% endblock %}
