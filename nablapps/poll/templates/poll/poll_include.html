@@ -10,7 +10,7 @@
     <link href="{% static "poll/poll_sidebar.css" %}" rel="stylesheet">
 {% endaddtoblock %}
 
-<div class="poll well">
+<div class="poll card card-body bg-light">
     <h4>{{ poll.question }}</h4>
 
     {% if poll_has_voted %}
@@ -20,7 +20,7 @@
     {% endif %}
 </div>
 {% else %}
-    <div class="well">
+    <div class="card card-body bg-light">
         <h1>Siste forsideavstemning</h1>
         <h4>...dukker opp her når den kommer!</h4>
     </div>

@@ -84,7 +84,7 @@
                     </a>
                 {% endfor %}
             {% else %}
-                <div class="well">
+                <div class="card card-body bg-light">
                     <h1>Opprett en tråd!</h1>
                 </div>
             {% endif %}
@@ -133,7 +133,7 @@
              </div>
              
              {% for message in messages %}
-                 <div class="well">
+                 <div class="card card-body bg-light">
                      <h4>{{ message.user.get_full_name }}</h4>
                      <p>{{ message.message }}</p>
                      <div style="text-align: right;">{{ message.created }}</div>
@@ -147,7 +147,7 @@
                  <button type="submit">send</button>
              </form>
              {% else %}
-             <div class="well">
+             <div class="card card-body bg-light">
                 <h1>Trykk på en tråd for å lese meldinger</h1>
              </div>
              {% endif %}

@@ -41,7 +41,7 @@
         {% endwith %}
     </article>
 
-    <div class="upcoming-events well">
+    <div class="upcoming-events card card-body bg-light">
         <!--upcoming event widget-->
         {% include "includes/event_widget.html" %}
     </div>
@@ -53,7 +53,7 @@
 
     <button onclick="location.href='{% url "news_list" %}'" type="button" class="more-news-btn button">Flere nyheter</button>
 
-    <div class="latest-nablad well">
+    <div class="latest-nablad card card-body bg-light">
         <!--Siste Nablad-->
         {% if new_nablad %}
             <div height=300px>
@@ -86,7 +86,7 @@
 
 <!--Sidebar begin-->
     {% if newuser_message %}
-    <div class="welcome well">
+    <div class="welcome card card-body bg-light">
         <h1>Velkommen til Nabla</h1>
         <p>
             Nabla er linjeforeningen for studenter ved sivilingeniørstudiet Fysikk og Matematikk ved NTNU, og har 
@@ -116,7 +116,7 @@
         {% include "poll/poll_include.html" %}
     </div>
 
-    <div class="latest-podcast well">
+    <div class="latest-podcast card card-body bg-light">
         <!--Siste Skråttcast-->
         {% if new_podcast %} 
             <h1>Siste Skråttcast</h1>

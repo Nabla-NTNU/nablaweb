@@ -10,7 +10,7 @@
 <h1>{{ album.title }}</h1>
 
 {% if children %}
-<div class="well">
+<div class="card card-body bg-light">
 {% for row in children|row_split:4 %}
 <div class="row">
     {% for album in row %}
