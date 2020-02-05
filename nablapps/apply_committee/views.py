@@ -1,5 +1,6 @@
 from django.forms import (BaseFormSet, HiddenInput, ModelForm, Textarea, TextInput,
                           formset_factory, ValidationError)
+from django.shortcuts import redirect
 from django.views.generic.edit import FormView
 
 from .models import Application, ApplicationRound, Committee
@@ -29,39 +30,58 @@ class ApplicationForm(ModelForm):
 
     def full_clean(self):
         super().full_clean()
-        try:
-            self.instance.applicant = self.applicant
-            self.instance.application_round = self.application_round
-            self.instance.validate_unique()
-        except ValidationError as e:
-            self._update_errors(e)
+        self.instance.applicant = self.applicant
+        self.instance.application_round = self.application_round
+
+        # The ideal would be to call validate_unique, but as of now
+        # it would raise an error if we tried to update an existing
+        # instance.
+
+        # try:
+        #     self.instance.validate_unique()
+        # except ValidationError as e:
+        #     self._update_errors(e)
 
 class ApplicationView(FormView):
-    num_forms = 3  # Number of forms in formset
     form_class = formset_factory(ApplicationForm, extra=0, formset=BaseApplicationFormSet)
     template_name = "apply_committee/apply.html"
-    initial = [{"priority": i+1} for i in range(num_forms)]
 
     def setup(self, request, *args, **kwargs):
         self.application_round = ApplicationRound.get_current()
         return super().setup(request, *args, **kwargs)
 
     def get_queryset(self):
-        print("Get queryset!!")
         return Application.objects.filter(
             applicant=self.request.user,
             application_round=self.application_round
         )
 
+    def get_initial(self):
+        existing = self.get_queryset().order_by("priority")
+        initial = []
+        for entry in existing:
+            initial.append({
+                "priority": entry.priority,
+                "committee": entry.committee,
+                "application_text": entry.application_text,
+                "anonymous": entry.anonymous
+            })
+
+        initial.append({"priority": initial[-1]["priority"]+1})
+        return initial
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        existing = self.get_queryset()
-        initial = kwargs["initial"]
-        for i, entry in enumerate(existing):
-            initial[i]["committee"] = entry.committee
-            initial[i]["application_text"] = entry.application_text
-            initial[i]["anonymous"] = entry.anonymous
-        kwargs["initial"] = initial
+        # existing = self.get_queryset()
+        # initial = kwargs["initial"]
+        # for i, entry in enumerate(existing):
+        #     initial[i]["priority"] = entry.priority
+        #     initial[i]["committee"] = entry.committee
+        #     initial[i]["application_text"] = entry.application_text
+        #     initial[i]["anonymous"] = entry.anonymous
+
+        # initial = sorted(initial, key=lambda item: item["priority"])
+        # kwargs["initial"] = initial
 
         # form_kwargs are passed by formset to the underlying form
         kwargs['form_kwargs'] = {
@@ -71,8 +91,14 @@ class ApplicationView(FormView):
         return kwargs
 
     def form_valid(self, formset):
+        Application.objects.filter(
+            applicant=self.request.user,
+            application_round=self.application_round
+        ).delete()
+
         for form in formset:
             committee = form.cleaned_data["committee"]
+            print(committee)
             if committee is not None:
                 application = form.save(commit=False)
                 application.applicant = self.request.user
@@ -81,7 +107,7 @@ class ApplicationView(FormView):
 
         # Redirect back to form when submitted
         # TODO: create confirm page instead?
-        return self.render_to_response(self.get_context_data(form=form))
+        return redirect("apply-committee")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

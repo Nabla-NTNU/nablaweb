@@ -6,7 +6,9 @@
     {% csrf_token %}
     {{ formset.non_form_errors }}
     {% for form in formset %}
-    {{ form }} <br />
+    <div class="form-row">
+        {{ form }}
+    </div>
     {% endfor %}
     {{ formset.management_form }}
     <input type="submit" />
