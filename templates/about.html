@@ -12,7 +12,7 @@
     <div class="navbar navbar-container">
         {% block navbar %}
             <h1 style="text-align: center">Om Nabla</h1>
-            <ul class="nav-list">
+            <ul class="list-group nav-list">
                 <a href="{% url "om-nabla" %}"><li>Generelt om Nabla</li></a>
                 <a href="{% url "show-board-page" slug="styret" %}"><li>Styret</li></a>
                 <a href="{% url "committee_overview" %}"><li>Undergrupper</li></a>
@@ -26,7 +26,7 @@
                 {% endfor %}
             </ul>
             <h3 style="text-align: center">Diverse</h3>
-            <ul class="nav-list">
+            <ul class="list-group nav-list">
                 <a href="{% url 'nablashop:index' %}"><li>Nablashop</li></a>
                 <a href="/nystudent/"><li>For nye studenter</li></a>
                 <a href="{% url "news_list" %}"><li>Nyhetsartikler</li></a>
