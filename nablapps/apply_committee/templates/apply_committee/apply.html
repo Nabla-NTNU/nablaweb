@@ -14,7 +14,6 @@
          var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
          $(this).attr('for', newFor);
      });
-     newElement.find('#id_' + type + '-' + total + '-priority').val(1 + +total);
      total++;
      $('#id_' + type + '-TOTAL_FORMS').val(total);
      $(selector).after(newElement);

@@ -8,30 +8,34 @@ from .models import Application, ApplicationRound, Committee
 class BaseApplicationFormSet(BaseFormSet):
     def clean(self):
         """Make sure that there is a first priority"""
+        super().clean()
         first_form = self.forms[0]
-        if first_form.cleaned_data["committee"] is None:
+        if ("committee" not in first_form.cleaned_data or
+            first_form.cleaned_data["committee"] is None):
             raise ValidationError("You mus set a first priority!")
 
 class ApplicationForm(ModelForm):
     class Meta:
         model = Application
-        exclude = ["application_round", "applicant"]
+        exclude = ["application_round", "applicant", "priority"]
         widgets = {
             "application_text": TextInput(),
-            "priority": HiddenInput(),
         }
 
-    def __init__(self, *args, application_round, applicant, is_update=False, **kwargs):
+    def __init__(self, *args, application_round, applicant, **kwargs):
+        super().__init__(*args, **kwargs)
         self.application_round = application_round
         self.applicant = applicant
-        self.is_update = is_update
-        super().__init__(*args, **kwargs)
         self.fields["committee"].required = False
 
-    def full_clean(self):
-        super().full_clean()
-        self.instance.applicant = self.applicant
-        self.instance.application_round = self.application_round
+    # def full_clean(self):
+    #     super().full_clean()
+    #     self.instance.applicant = self.applicant
+    #     self.instance.application_round = self.application_round
+    #     try:
+    #         self.instance.validate_unique()
+    #     except ValidationError as e:
+    #         self._update_errors(e)
 
         # The ideal would be to call validate_unique, but as of now
         # it would raise an error if we tried to update an existing
@@ -43,9 +47,8 @@ class ApplicationForm(ModelForm):
         #     self._update_errors(e)
 
 class ApplicationView(FormView):
-    form_class = formset_factory(ApplicationForm, extra=0, formset=BaseApplicationFormSet)
+    form_class = formset_factory(ApplicationForm, extra=2, formset=BaseApplicationFormSet)
     template_name = "apply_committee/apply.html"
-    num_initial = 3  # Inital number of options
 
     def setup(self, request, *args, **kwargs):
         self.application_round = ApplicationRound.get_current()
@@ -62,30 +65,14 @@ class ApplicationView(FormView):
         initial = []
         for entry in existing:
             initial.append({
-                "priority": entry.priority,
                 "committee": entry.committee,
                 "application_text": entry.application_text,
                 "anonymous": entry.anonymous
             })
-
-        for i in range(len(initial), self.num_initial):
-            initial.append({"priority": i+1})
         return initial
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        # existing = self.get_queryset()
-        # initial = kwargs["initial"]
-        # for i, entry in enumerate(existing):
-        #     initial[i]["priority"] = entry.priority
-        #     initial[i]["committee"] = entry.committee
-        #     initial[i]["application_text"] = entry.application_text
-        #     initial[i]["anonymous"] = entry.anonymous
-
-        # initial = sorted(initial, key=lambda item: item["priority"])
-        # kwargs["initial"] = initial
-
-        # form_kwargs are passed by formset to the underlying form
         kwargs['form_kwargs'] = {
             'applicant': self.request.user,
             'application_round': self.application_round
@@ -98,11 +85,13 @@ class ApplicationView(FormView):
             application_round=self.application_round
         ).delete()
 
+        priority = 0
         for form in formset:
-            committee = form.cleaned_data["committee"]
-            print(committee)
-            if committee is not None:
+            if ("committee" in form.cleaned_data and
+                form.cleaned_data["committee"] is not None):
+                priority+=1
                 application = form.save(commit=False)
+                application.priority = priority
                 application.applicant = self.request.user
                 application.application_round = self.application_round
                 application.save()
