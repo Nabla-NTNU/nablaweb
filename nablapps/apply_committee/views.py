@@ -45,6 +45,7 @@ class ApplicationForm(ModelForm):
 class ApplicationView(FormView):
     form_class = formset_factory(ApplicationForm, extra=0, formset=BaseApplicationFormSet)
     template_name = "apply_committee/apply.html"
+    num_initial = 3  # Inital number of options
 
     def setup(self, request, *args, **kwargs):
         self.application_round = ApplicationRound.get_current()
@@ -67,7 +68,8 @@ class ApplicationView(FormView):
                 "anonymous": entry.anonymous
             })
 
-        initial.append({"priority": initial[-1]["priority"]+1})
+        for i in range(len(initial), self.num_initial):
+            initial.append({"priority": i+1})
         return initial
 
     def get_form_kwargs(self):

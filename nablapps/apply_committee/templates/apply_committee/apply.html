@@ -1,6 +1,25 @@
 {% extends "base.html" %}
 
 {% block main %}
+<script>
+ function newForm(selector, type) {
+     var newElement = $(selector).clone(true);
+     var total = $('#id_' + type + '-TOTAL_FORMS').val();
+     newElement.find(':input').each(function() {
+         var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+         var id = 'id_' + name;
+         $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+     });
+     newElement.find('label').each(function() {
+         var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+         $(this).attr('for', newFor);
+     });
+     newElement.find('#id_' + type + '-' + total + '-priority').val(1 + +total);
+     total++;
+     $('#id_' + type + '-TOTAL_FORMS').val(total);
+     $(selector).after(newElement);
+ }
+</script>
 {% if application_round %}
 <form method="post">
     {% csrf_token %}
@@ -10,6 +29,7 @@
         {{ form }}
     </div>
     {% endfor %}
+    <button type="button" onclick="newForm($('.form-row:last'), 'form')">Add form</button>
     {{ formset.management_form }}
     <input type="submit" />
 </form>
