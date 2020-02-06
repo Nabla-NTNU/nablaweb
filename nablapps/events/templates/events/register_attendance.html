@@ -12,7 +12,18 @@
 <h1>Oppmøteregistrering for {{ event.headline }}</h1>
 <hr />
 
-<form method="post">{% csrf_token %}
+{% if event.penalty == 1 %} {# if is bedpres #}
+<script>
+ function make_all_penalty(id) {
+     $('#' + id).find('input[value="2"]').prop("checked",true);
+ }
+ {% endif %}
+</script>
+<form method="post" id="penalty_form">{% csrf_token %}
+{% if event.penalty == 1 %}
+    <button type="button" onclick="make_all_penalty('penalty_form')">Aktiver prikker</button>
+    <span>NB! Du må trykke send inn for at prikkene skal registreres.</span>
+{% endif %}
 <table id="attending_list" class="table">
     <tr>
         <th>Bruker</th>
