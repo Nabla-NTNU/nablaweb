@@ -20,7 +20,17 @@ class ApplicationForm(ModelForm):
         model = Application
         exclude = ["application_round", "applicant", "priority"]
         widgets = {
-            "application_text": TextInput(),
+            "application_text": TextInput(attrs={'placeholder': 'Fritekst'}),
+        }
+
+        labels = {
+            'committee': 'Komité',
+            'application_text': 'Fritekst',
+            'anonymous': 'Anonym søknad',
+        }
+
+        help_texts = {
+            'anonymous': None,  # Do not show help text
         }
 
     def __init__(self, *args, application_round, applicant, **kwargs):
@@ -110,6 +120,11 @@ class ApplicationView(FormView):
 class ApplicationListView(ListView):
     model = Application
     context_object_name = "application_list"
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['application_round'] = ApplicationRound.get_current()
+        return context
 
     def get_queryset(self):
         return self.model.objects.\

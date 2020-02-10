@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
 {% block main %}
+<h1>Liste over søknader for søknadsrunde {{ application_round.name }}</h1><hr />
 <ul>
     {% for application in application_list %}
     {% with applicant=application.applicant %}
     {% ifchanged application.committee %}
-    <h1>{{ application.committee.name }} {{ cycle }}</h1>
+    <h2>{{ application.committee.name }} {{ cycle }}</h2>
     <hr />
     {% endifchanged %}
 

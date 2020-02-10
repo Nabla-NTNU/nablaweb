@@ -14,23 +14,58 @@
          var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
          $(this).attr('for', newFor);
      });
+
+     newElement.find('.priority_label').first()[0].innerHTML = 1 + +total + ".";  // I seriously do not know jQuery
      total++;
      $('#id_' + type + '-TOTAL_FORMS').val(total);
      $(selector).after(newElement);
  }
 </script>
+
+<style>
+ .priority_label {
+     font-size: 25px;
+ }
+
+ .form-row {
+     margin-bottom: 10px;
+     padding-bottom: 10px;
+     border-bottom: 1px solid rgba(1, 1, 1, 0.2);
+ }
+
+ .form-row select {
+     border: 1px solid lightgray;
+     background: white;
+     border-bottom: 3px solid #c84040;
+     padding: 4px 6px;
+ }
+</style>
+<h1>Søk til nablas undergrupper</h1>
 {% if application_round %}
+Nåværende søkerunde: {{ application_round.name }} <br /><hr />
 <form method="post">
     {% csrf_token %}
     {{ formset.non_form_errors }}
     {% for form in formset %}
     <div class="form-row">
-        {{ form }}
+        <span class="priority_label">{{ forloop.counter }}.</span>
+        <div>
+        {{ form.committee.errors }}
+        {{ form.committee }}
+
+        <br />
+        {{ form.application_text.errors }}
+        {{ form.application_text }}
+
+        {{ form.anonymous.errors }}
+        {{ form.anonymous.label }}
+        {{ form.anonymous }}
+        </div>
     </div>
     {% endfor %}
-    <button type="button" onclick="newForm($('.form-row:last'), 'form')">Add form</button>
+    <button type="button" onclick="newForm($('.form-row:last'), 'form')">Legg til prioritering</button>
     {{ formset.management_form }}
-    <input type="submit" />
+    <button type="submit">Send inn søknad</buttom>
 </form>
 {% else %}
 <h2> Det er ikke åpnet noen søknader nå</h2>
