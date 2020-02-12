@@ -93,6 +93,7 @@ INSTALLED_APPS = [
     # Internt utviklede apps #
     ##########################
     'nablapps.accounts',
+    'nablapps.apply_committee',
     'nablapps.album',
     'nablapps.blog',
     'nablapps.com',

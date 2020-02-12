@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^admin/filebrowser/', filebrowser.sites.site.urls),
     url(r'^admin/', admin.site.urls),
     url(r'^album/', include('nablapps.album.urls')),
+    url(r'^application/', include('nablapps.apply_committee.urls')),
     url(r'^arrangement/', include('nablapps.events.urls')),
     url(r'^blogg/', include('nablapps.blog.urls')),
     url(r'^brukere/', include('nablapps.accounts.urls')),
