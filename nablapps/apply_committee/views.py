@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import (BaseFormSet, HiddenInput, ModelForm, Textarea, TextInput,
                           formset_factory, ValidationError)
 from django.shortcuts import redirect
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import FormView
 
 from .models import Application, ApplicationRound, Committee
@@ -23,6 +23,9 @@ class BaseApplicationFormSet(BaseFormSet):
         # Check that the same committee is not selected twice
         committees = []
         for form in self.forms:
+            print("yo")
+            if ("committee" not in form.cleaned_data or form.cleaned_data["committee"] is None):
+                continue
             committee = form.cleaned_data["committee"]
             if committee in committees:
                 raise ValidationError("You cannot select the same committee twice!")
@@ -73,6 +76,7 @@ class ApplicationForm(ModelForm):
 class ApplicationView(LoginRequiredMixin, FormView):
     form_class = formset_factory(ApplicationForm, extra=2, formset=BaseApplicationFormSet)
     template_name = "apply_committee/apply.html"
+    success_url = "confirmation/"
 
     def setup(self, request, *args, **kwargs):
         self.application_round = ApplicationRound.get_current()
@@ -120,6 +124,7 @@ class ApplicationView(LoginRequiredMixin, FormView):
                 application.application_round = self.application_round
                 application.save()
 
+        return super().form_valid(formset)
         # Redirect back to form when submitted
         # TODO: create confirm page instead?
         return redirect("apply-committee")
@@ -170,3 +175,15 @@ class AdminApplicationListView(UserPassesTestMixin, BaseApplicationListView):
         # that this is a database operation. That is faster than f.eks.
         # (pseudo-code) admin_group in user.groups
         return self.request.user.groups.filter(pk=admin_group.pk).exists()
+
+class ConfirmView(LoginRequiredMixin, TemplateView):
+    template_name = "apply_committee/confirm.html"
+
+    def get_context_data(self):
+        applications = Application.objects.filter(
+            application_round=ApplicationRound.get_current(),
+            applicant=self.request.user
+        ).order_by('priority')
+        context = super().get_context_data()
+        context["applications"] = applications
+        return context

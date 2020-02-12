@@ -42,7 +42,9 @@
 </style>
 <h1>Søk til nablas undergrupper</h1>
 {% if application_round %}
-Nåværende søkerunde: {{ application_round.name }} <br /><hr />
+Nåværende søkerunde: {{ application_round.name }} <br />
+<p>Skriv kún i fritekst-feltet dersom komiteen har sagt at du skal gjøre dette.</p>
+<hr />
 <form method="post">
     {% csrf_token %}
     {{ formset.non_form_errors }}
@@ -58,7 +60,7 @@ Nåværende søkerunde: {{ application_round.name }} <br /><hr />
         {{ form.application_text }}
 
         {{ form.anonymous.errors }}
-        {{ form.anonymous.label }}
+        {{ form.anonymous.label_tag }}
         {{ form.anonymous }}
         </div>
     </div>
@@ -68,6 +70,6 @@ Nåværende søkerunde: {{ application_round.name }} <br /><hr />
     <button type="submit">Send inn søknad</buttom>
 </form>
 {% else %}
-<h2> Det er ikke åpnet noen søknader nå</h2>
+<p> Det er ikke noen åpne søknader nå</p>
 {% endif %}
 {% endblock %}

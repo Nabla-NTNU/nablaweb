@@ -6,7 +6,7 @@ class Committee(models.Model):
     name = models.CharField(max_length=40)
 
     def __str__(self):
-        return f"{self.name} in apply_committee app"
+        return self.name
 
     def get_mailinglist(self):
         """Returns the mailinglist to the

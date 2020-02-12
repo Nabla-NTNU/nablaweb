@@ -7,5 +7,6 @@ urlpatterns =[
     path("list/", views.ApplicationListView.as_view(), name="list-applicants"),
     path("list/admin/",
          views.AdminApplicationListView.as_view(),
-         name="admin-list-applicants")
+         name="admin-list-applicants"),
+    path("confirmation/", views.ConfirmView.as_view(), name="confirm")
 ]
