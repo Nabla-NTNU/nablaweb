@@ -46,8 +46,9 @@
 </style>
 <h1>Søk til nablas undergrupper</h1>
 {% if application_round %}
-Nåværende søkerunde: {{ application_round.name }} <br />
-<p>Skriv kún i fritekst-feltet dersom komiteen har sagt at du skal gjøre dette.</p>
+Nåværende søkerunde: <u>{{ application_round.name }}</u> <br />
+Skriv kún i fritekst-feltet dersom komiteen har sagt at du skal gjøre dette.<br />
+Du kan se en oversikt over hvem som har søkt hva <a href="{% url 'list-applicants' %}">her</a>.
 <hr />
 <form method="post">
     {% csrf_token %}
