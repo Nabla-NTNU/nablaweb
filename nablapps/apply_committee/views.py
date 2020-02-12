@@ -12,12 +12,21 @@ import logging
 
 class BaseApplicationFormSet(BaseFormSet):
     def clean(self):
-        """Make sure that there is a first priority"""
         super().clean()
+
+        # Make sure there is a first form
         first_form = self.forms[0]
         if ("committee" not in first_form.cleaned_data or
             first_form.cleaned_data["committee"] is None):
             raise ValidationError("You mus set a first priority!")
+
+        # Check that the same committee is not selected twice
+        committees = []
+        for form in self.forms:
+            committee = form.cleaned_data["committee"]
+            if committee in committees:
+                raise ValidationError("You cannot select the same committee twice!")
+            committees.append(committee)
 
 class ApplicationForm(ModelForm):
     class Meta:
