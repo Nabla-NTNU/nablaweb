@@ -23,7 +23,6 @@ class BaseApplicationFormSet(BaseFormSet):
         # Check that the same committee is not selected twice
         committees = []
         for form in self.forms:
-            print("yo")
             if ("committee" not in form.cleaned_data or form.cleaned_data["committee"] is None):
                 continue
             committee = form.cleaned_data["committee"]
@@ -78,9 +77,9 @@ class ApplicationView(LoginRequiredMixin, FormView):
     template_name = "apply_committee/apply.html"
     success_url = "confirmation/"
 
-    def setup(self, request, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.application_round = ApplicationRound.get_current()
-        return super().setup(request, *args, **kwargs)
+        return super().__init__(*args, **kwargs)
 
     def get_queryset(self):
         return Application.objects.filter(
