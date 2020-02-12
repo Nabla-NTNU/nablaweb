@@ -8,6 +8,13 @@ class Committee(models.Model):
     def __str__(self):
         return f"{self.name} in apply_committee app"
 
+    def get_mailinglist(self):
+        """Returns the mailinglist to the
+        applicants to the committee for this application_round"""
+        return ";".join([application.applicant.email for application in
+                         Application.objects.\
+                         filter(committee=self).prefetch_related('applicant')])
+
 
 class ApplicationRound(models.Model):
     """An application round, ie. fall"""

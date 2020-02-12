@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import (BaseFormSet, HiddenInput, ModelForm, Textarea, TextInput,
                           formset_factory, ValidationError)
 from django.shortcuts import redirect
@@ -5,6 +6,9 @@ from django.views.generic import ListView
 from django.views.generic.edit import FormView
 
 from .models import Application, ApplicationRound, Committee
+from nablapps.accounts.models import NablaGroup
+
+import logging
 
 class BaseApplicationFormSet(BaseFormSet):
     def clean(self):
@@ -57,7 +61,7 @@ class ApplicationForm(ModelForm):
         # except ValidationError as e:
         #     self._update_errors(e)
 
-class ApplicationView(FormView):
+class ApplicationView(LoginRequiredMixin, FormView):
     form_class = formset_factory(ApplicationForm, extra=2, formset=BaseApplicationFormSet)
     template_name = "apply_committee/apply.html"
 
@@ -117,7 +121,7 @@ class ApplicationView(FormView):
         context["formset"] = context.pop("form", None)  # Give a more intuitive name
         return context
 
-class ApplicationListView(ListView):
+class BaseApplicationListView(ListView):
     model = Application
     context_object_name = "application_list"
 
@@ -130,3 +134,30 @@ class ApplicationListView(ListView):
         return self.model.objects.\
             filter(application_round=ApplicationRound.get_current()).\
             order_by("committee")
+
+    def get_queryset(self):
+        applications = self.model.objects.\
+            filter(application_round=ApplicationRound.get_current())
+        committees = {}
+        for application in applications:
+            committees[application.committee] = committees.get(application.committee, [])
+            committees[application.committee].append(application)
+        return committees
+
+class ApplicationListView(BaseApplicationListView):
+    template_name = "apply_committee/application_list.html"
+
+class AdminApplicationListView(UserPassesTestMixin, BaseApplicationListView):
+    template_name = "apply_committee/admin_application_list.html"
+
+    def test_func(self):
+        try:
+            admin_group = NablaGroup.objects.get(name="Gruppeledere")
+        except NablaGroup.DoesNotExist:
+            logging.getLogger('django').error("No NablaGroup 'Gruppeledere'. This is unexpected.")
+            return False
+
+        # This might seem like a roundabout way, but remember
+        # that this is a database operation. That is faster than f.eks.
+        # (pseudo-code) admin_group in user.groups
+        return self.request.user.groups.filter(pk=admin_group.pk).exists()

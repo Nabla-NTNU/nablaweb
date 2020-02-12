@@ -1,0 +1,14 @@
+{% extends "apply_committee/application_list.html" %}
+
+{% block warning %}
+<b>NB! Du er nå i gruppeledermodus. Det vil si at du kan se anonyme søknader.<br />
+    With great power comes great responsiblity!</b>
+{% endblock warning %}
+
+{% block com_mail_list %}
+<textarea rows="3" readonly>{{ committee.get_mailinglist }}</textarea>
+{% endblock %}
+
+{% block applicant_info %}
+<li>{{ application.applicant.get_full_name }}{% if application.anonymous %} <i>(Anonym søknad)</i>{% endif %}</li>
+{% endblock %}

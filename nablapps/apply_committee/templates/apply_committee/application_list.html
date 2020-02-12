@@ -1,17 +1,18 @@
 {% extends "base.html" %}
 
 {% block main %}
+{% block warning %}{% endblock warning %}
 <h1>Liste over søknader for søknadsrunde {{ application_round.name }}</h1><hr />
+{% for committee, applications in application_list.items %}
+<h2>{{ committee.name }}</h2>
+{% block com_mail_list %}{% endblock %}
 <ul>
-    {% for application in application_list %}
-    {% with applicant=application.applicant %}
-    {% ifchanged application.committee %}
-    <h2>{{ application.committee.name }} {{ cycle }}</h2>
-    <hr />
-    {% endifchanged %}
-
-    <li>{% if application.anonymous %} Anonym {% else %} {{ applicant.get_full_name }}{% endif %}</li>
-    {% endwith %}
+    {% for application in applications %}
+    {% block applicant_info %}
+    <li>{% if application.anonymous %} Anonym {% else %} {{ application.applicant.get_full_name }}{% endif %}</li>
+    {% endblock %}
     {% endfor %}
 </ul>
+<hr />
+{% endfor %}
 {% endblock %}
