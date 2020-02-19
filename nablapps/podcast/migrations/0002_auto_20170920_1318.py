@@ -8,16 +8,10 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('podcast', '0001_squashed_0014_podcast_content_type'),
+        ("podcast", "0001_squashed_0014_podcast_content_type"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='podcast',
-            name='allow_comments',
-        ),
-        migrations.RemoveField(
-            model_name='podcast',
-            name='content_type',
-        ),
+        migrations.RemoveField(model_name="podcast", name="allow_comments",),
+        migrations.RemoveField(model_name="podcast", name="content_type",),
     ]

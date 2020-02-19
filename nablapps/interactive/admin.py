@@ -1,40 +1,40 @@
 from django import forms
 from django.contrib import admin
 from django.db import models
-from django.forms import TextInput, Textarea
+from django.forms import Textarea, TextInput
 
-from .models.code_golf import CodeTask, Result
-from .models.place import PlaceGrid
 from .models import (
     AdventCalendar,
     AdventDoor,
+    ColorChoice,
     Quiz,
     QuizQuestion,
     Test,
-    TestResult,
     TestQuestion,
     TestQuestionAlternative,
-    ColorChoice
+    TestResult,
 )
 from .models.advent import Santa
+from .models.code_golf import CodeTask, Result
+from .models.place import PlaceGrid
 
 
 class AdventDoorInline(admin.TabularInline):
     model = AdventDoor
     extra = 24
     fields = (
-        'number',
-        'content',
-        'short_description',
-        'is_lottery',
-        'template',
-        'image',
-        'is_text_response',
-        'winner',
-        'quiz',
-        'user_test',
+        "number",
+        "content",
+        "short_description",
+        "is_lottery",
+        "template",
+        "image",
+        "is_text_response",
+        "winner",
+        "quiz",
+        "user_test",
     )
-    readonly_fields = ['winner']
+    readonly_fields = ["winner"]
     fk_name = "calendar"
 
 
@@ -44,66 +44,68 @@ class AdventCalendarAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name = "Julekalender"
         verbose_name_plural = "Julekalendere"
-        fields = '__all__'
+        fields = "__all__"
 
 
 class QuizQuestionInline(admin.TabularInline):
     model = QuizQuestion
     extra = 8
     fields = (
-        'question',
-        'alternative_1',
-        'alternative_2',
-        'alternative_3',
-        'alternative_4',
-        'correct_alternative',
+        "question",
+        "alternative_1",
+        "alternative_2",
+        "alternative_3",
+        "alternative_4",
+        "correct_alternative",
     )
     fk_name = "quiz"
 
 
 class QuizAdmin(admin.ModelAdmin):
     inlines = [QuizQuestionInline]
-    exclude = ['scoreboard']
+    exclude = ["scoreboard"]
 
     class Meta:
         verbose_name = "Quiz"
 
 
 class TestQuestionAlternativeForm(forms.ModelForm):
-
     class Meta:
         model = TestQuestionAlternative
-        fields = ['target']
+        fields = ["target"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance.id:
-            self.fields['target'].queryset = TestResult.objects.filter(
-                                        test=self.instance.question.test)
+            self.fields["target"].queryset = TestResult.objects.filter(
+                test=self.instance.question.test
+            )
 
 
 class TestQuestionAlternativeInline(admin.TabularInline):
     model = TestQuestionAlternative
-    fields = ('text', 'target', 'weights', )
+    fields = (
+        "text",
+        "target",
+        "weights",
+    )
     fk_name = "question"
     extra = 1
     form = TestQuestionAlternativeForm
     formfield_overrides = {
-        models.TextField: {'widget': Textarea(
-            attrs={'rows': 1,
-                   'cols': 10,
-                   'style': 'height: 4em;'})},
+        models.TextField: {
+            "widget": Textarea(attrs={"rows": 1, "cols": 10, "style": "height: 4em;"})
+        },
     }
 
 
 class TestQuestionAdmin(admin.ModelAdmin):
     inlines = [TestQuestionAlternativeInline]
-    exclude = ('test',)
+    exclude = ("test",)
     formfield_overrides = {
-        models.TextField: {'widget': Textarea(
-            attrs={'rows': 1,
-                   'cols': 10,
-                   'style': 'height: 4em;'})},
+        models.TextField: {
+            "widget": Textarea(attrs={"rows": 1, "cols": 10, "style": "height: 4em;"})
+        },
     }
 
     def get_model_perms(self, request):
@@ -116,20 +118,19 @@ class TestQuestionAdmin(admin.ModelAdmin):
 class TestQuestionInline(admin.TabularInline):
     model = TestQuestion
     extra = 1
-    fields = ('text', 'changeform_link')
+    fields = ("text", "changeform_link")
     fk_name = "test"
-    readonly_fields = ('changeform_link',)
+    readonly_fields = ("changeform_link",)
     formfield_overrides = {
-        models.TextField: {'widget': Textarea(
-            attrs={'rows': 1,
-                   'cols': 10,
-                   'style': 'height: 4em;'})},
+        models.TextField: {
+            "widget": Textarea(attrs={"rows": 1, "cols": 10, "style": "height: 4em;"})
+        },
     }
 
 
 class TestResultInline(admin.TabularInline):
     model = TestResult
-    fields = ('title', 'content')
+    fields = ("title", "content")
     fk_name = "test"
     extra = 1
 
@@ -137,10 +138,9 @@ class TestResultInline(admin.TabularInline):
 class TestAdmin(admin.ModelAdmin):
     inlines = [TestQuestionInline, TestResultInline]
     formfield_overrides = {
-        models.TextField: {'widget': Textarea(
-            attrs={'rows': 1,
-                   'cols': 10,
-                   'style': 'height: 4em;'})},
+        models.TextField: {
+            "widget": Textarea(attrs={"rows": 1, "cols": 10, "style": "height: 4em;"})
+        },
     }
 
 
@@ -169,4 +169,3 @@ admin.site.register(Result)
 admin.site.register(Santa)
 admin.site.register(ColorChoice)
 admin.site.register(PlaceGrid, PlaceGridAdmin)
-

@@ -6,12 +6,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0002_20170920_1255_remove_allow_comments'),
+        ("blog", "0002_20170920_1255_remove_allow_comments"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='blogpost',
-            name='view_counter',
-        ),
+        migrations.RemoveField(model_name="blogpost", name="view_counter",),
     ]

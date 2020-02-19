@@ -6,12 +6,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('album', '0003_albumimage_is_display_image'),
+        ("album", "0003_albumimage_is_display_image"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='album',
-            name='view_counter',
-        ),
+        migrations.RemoveField(model_name="album", name="view_counter",),
     ]

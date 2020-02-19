@@ -1,25 +1,23 @@
 import os
 
-import django_nyt.urls
-import filebrowser.sites
-import wiki.urls
-
-from  django.urls import path
-
-from nablapps.news.feeds import RecentNews
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.views.static import serve
+from django.urls import path
 from django.views.generic import RedirectView, TemplateView
+from django.views.static import serve
 
-from haystack.views import SearchView, search_view_factory
+import django_nyt.urls
+import filebrowser.sites
+import wiki.urls
 from haystack.forms import ModelSearchForm
 from haystack.query import SearchQuerySet
+from haystack.views import SearchView, search_view_factory
 
 from nablapps.accounts.urls import login_urls
-from nablapps.nabladet.views import serve_nablad
 from nablapps.core.views import FrontPageView
+from nablapps.nabladet.views import serve_nablad
+from nablapps.news.feeds import RecentNews
 
 admin.autodiscover()
 

@@ -1,3 +1,3 @@
-from .advent import AdventDoorView, AdventCalendarView
-from .quiz import QuizListView, QuizResultView, QuizView
+from .advent import AdventCalendarView, AdventDoorView
 from .color_picker import submitColorChoice
+from .quiz import QuizListView, QuizResultView, QuizView

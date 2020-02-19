@@ -6,9 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('interactive', '0013_santa_santacount'),
-        ('interactive', '0013_colorchoice'),
+        ("interactive", "0013_santa_santacount"),
+        ("interactive", "0013_colorchoice"),
     ]
 
-    operations = [
-    ]
+    operations = []

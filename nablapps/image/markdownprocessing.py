@@ -2,8 +2,11 @@
 Custom markdown processing
 """
 import re
+
 from django.template.loader import render_to_string
+
 import markdown
+
 from .models import ContentImage
 
 
@@ -30,13 +33,14 @@ class ImagePreprocessor(markdown.preprocessors.Preprocessor):
 
     # Regular expression which matches a line with a custom image tag
     image_re = re.compile(
-        r'(?P<before>.*)' # Match everything before the image tag
-        r'\[image\:(?P<id>\d+)' # Match id of image
-        r'((\s+align\:(?P<align>right|left))|' # Optional alignment
-        r'(\s+size\:(?P<size>small|large|full)))*\s*\]' # Optional size
-        r'(?P<after>.*)', # Match everything after the image tag
-        re.IGNORECASE)
-    caption_re = re.compile(r'    (?P<caption>.*)')
+        r"(?P<before>.*)"  # Match everything before the image tag
+        r"\[image\:(?P<id>\d+)"  # Match id of image
+        r"((\s+align\:(?P<align>right|left))|"  # Optional alignment
+        r"(\s+size\:(?P<size>small|large|full)))*\s*\]"  # Optional size
+        r"(?P<after>.*)",  # Match everything after the image tag
+        re.IGNORECASE,
+    )
+    caption_re = re.compile(r"    (?P<caption>.*)")
     caption_placeholder = "{{{IMAGECAPTION}}}"
 
     def run(self, lines):
@@ -50,18 +54,20 @@ class ImagePreprocessor(markdown.preprocessors.Preprocessor):
             if image_match:
                 caption_match = self.caption_re.match(line)
                 if caption_match:
-                    caption_lines.append(caption_match.group('caption'))
+                    caption_lines.append(caption_match.group("caption"))
                     continue
                 else:
                     html = self.render_html(image_match)
                     html_before, html_after = html.split(self.caption_placeholder)
                     store = self.markdown.htmlStash.store
                     yield "".join(
-                        [image_match.group('before'),
-                         store(html_before, safe=True),
-                         "\n".join(caption_lines),
-                         store(html_after, safe=True),
-                         image_match.group('after')]
+                        [
+                            image_match.group("before"),
+                            store(html_before, safe=True),
+                            "\n".join(caption_lines),
+                            store(html_after, safe=True),
+                            image_match.group("after"),
+                        ]
                     )
 
             image_match = self.image_re.match(line)
@@ -79,26 +85,29 @@ class ImagePreprocessor(markdown.preprocessors.Preprocessor):
         image_id = match.group("id")
         alignment = match.group("align")
         size = match.group("size")
-        image = ContentImage.objects.filter(id=image_id).first() # Don't fail if image not found
+        image = ContentImage.objects.filter(
+            id=image_id
+        ).first()  # Don't fail if image not found
 
         html = render_to_string(
             "content/images/render.html",
             {
-                'image': image,
-                'caption': self.caption_placeholder,
-                'align': alignment,
-                'size': size
-            })
+                "image": image,
+                "caption": self.caption_placeholder,
+                "align": alignment,
+                "size": size,
+            },
+        )
         return html
-
 
 
 class ImageExtension(markdown.Extension):
     """
     Class defining the extension to markdown for adding images from ContentImage-model
     """
+
     def extendMarkdown(self, md, md_globals):
-        md.preprocessors.add('dw-images', ImagePreprocessor(md), '>html_block')
+        md.preprocessors.add("dw-images", ImagePreprocessor(md), ">html_block")
 
 
 def content_markdown(text):

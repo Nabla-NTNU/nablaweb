@@ -20,71 +20,48 @@ def reverse_func(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('news', '0009_set_object_id_from_news_id'),
+        ("news", "0009_set_object_id_from_news_id"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='news',
-            options={'ordering': ('-sticky', '-bump_time'),
-                     'verbose_name': 'nyhet',
-                     'verbose_name_plural': 'nyheter'},
+            name="news",
+            options={
+                "ordering": ("-sticky", "-bump_time"),
+                "verbose_name": "nyhet",
+                "verbose_name_plural": "nyheter",
+            },
         ),
-        migrations.RemoveField(
-            model_name='news',
-            name='body',
-        ),
-        migrations.RemoveField(
-            model_name='news',
-            name='created_by',
-        ),
-        migrations.RemoveField(
-            model_name='news',
-            name='last_changed_by',
-        ),
-        migrations.RemoveField(
-            model_name='news',
-            name='last_changed_date',
-        ),
-        migrations.RemoveField(
-            model_name='news',
-            name='publication_date',
-        ),
-        migrations.RemoveField(
-            model_name='news',
-            name='published',
-        ),
-        migrations.RemoveField(
-            model_name='news',
-            name='slug',
-        ),
-        migrations.RemoveField(
-            model_name='news',
-            name='view_counter',
+        migrations.RemoveField(model_name="news", name="body",),
+        migrations.RemoveField(model_name="news", name="created_by",),
+        migrations.RemoveField(model_name="news", name="last_changed_by",),
+        migrations.RemoveField(model_name="news", name="last_changed_date",),
+        migrations.RemoveField(model_name="news", name="publication_date",),
+        migrations.RemoveField(model_name="news", name="published",),
+        migrations.RemoveField(model_name="news", name="slug",),
+        migrations.RemoveField(model_name="news", name="view_counter",),
+        migrations.AddField(
+            model_name="news",
+            name="bump_time",
+            field=models.DateTimeField(default=timezone.now),
         ),
         migrations.AddField(
-            model_name='news',
-            name='bump_time',
-            field=models.DateTimeField(default=timezone.now)),
-        migrations.AddField(
-            model_name='news',
-            name='visible',
-            field=models.BooleanField(default=True),
+            model_name="news", name="visible", field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='news',
-            name='sticky',
-            field=models.BooleanField(default=False),
+            model_name="news", name="sticky", field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='news',
-            name='created_date',
+            model_name="news",
+            name="created_date",
             field=models.DateTimeField(auto_now_add=True, null=True),
         ),
         migrations.AlterField(
-            model_name='news',
-            name='content_type',
-            field=models.ForeignKey(to='contenttypes.ContentType', null=True, on_delete=models.CASCADE),
+            model_name="news",
+            name="content_type",
+            field=models.ForeignKey(
+                to="contenttypes.ContentType", null=True, on_delete=models.CASCADE
+            ),
         ),
         migrations.RunPython(forwards_func, reverse_func),
     ]

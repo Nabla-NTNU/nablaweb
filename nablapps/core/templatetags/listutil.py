@@ -2,6 +2,7 @@
 Templatetags for dealing with python lists in django template
 """
 from django import template
+
 register = template.Library()
 
 
@@ -18,4 +19,4 @@ def row_split(l, n):
     Source: http://stackoverflow.com/questions/312443/
     """
     for i in range(0, len(l), n):
-        yield l[i:i + n]
+        yield l[i : i + n]

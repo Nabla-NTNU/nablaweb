@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+
 from image_cropping.fields import ImageRatioField
 
 
@@ -8,17 +9,14 @@ def get_season_count():
 
 
 class Season(models.Model):
-    number = models.IntegerField(
-        verbose_name="Sesongnummer",
-        unique=True,
-    )
+    number = models.IntegerField(verbose_name="Sesongnummer", unique=True,)
 
     banner = models.ImageField(
         upload_to="podcast/images",
         null=True,
         blank=True,
         verbose_name="Banner",
-        help_text="Sesongbanner."
+        help_text="Sesongbanner.",
     )
 
     logo = models.ImageField(
@@ -26,14 +24,14 @@ class Season(models.Model):
         null=True,
         blank=True,
         verbose_name="Logo",
-        help_text="Podcastlogo. (Bruker fra forrige sesong hvis dette feltet er tomt)"
+        help_text="Podcastlogo. (Bruker fra forrige sesong hvis dette feltet er tomt)",
     )
 
     def name(self):
         return "Sesong " + str(self.number)
 
     def get_absolute_url(self):
-        return reverse('season_view', kwargs={'number': int(self.number)})
+        return reverse("season_view", kwargs={"number": int(self.number)})
 
     def get_next(self):
         try:
@@ -52,7 +50,12 @@ class Season(models.Model):
         if self.logo:
             return self.logo
         else:
-            last = Season.objects.filter(number__lt=self.number).exclude(logo=self.logo).order_by('number').last()
+            last = (
+                Season.objects.filter(number__lt=self.number)
+                .exclude(logo=self.logo)
+                .order_by("number")
+                .last()
+            )
             if last is None:
                 return None
             else:
@@ -62,8 +65,8 @@ class Season(models.Model):
         return str(self.number)
 
     class Meta:
-        verbose_name = 'Sesong'
-        verbose_name_plural = 'Sesonger'
+        verbose_name = "Sesong"
+        verbose_name_plural = "Sesonger"
 
 
 class Podcast(models.Model):
@@ -73,77 +76,68 @@ class Podcast(models.Model):
         null=True,
         blank=True,
         verbose_name="Bilde",
-        help_text=("Bilder som er større enn 300x300 px ser best ut. "
-                   "Du kan beskjære bildet etter opplasting."),
-        )
+        help_text=(
+            "Bilder som er større enn 300x300 px ser best ut. "
+            "Du kan beskjære bildet etter opplasting."
+        ),
+    )
     cropping = ImageRatioField(
-        'image',
-        '300x300',
+        "image",
+        "300x300",
         allow_fullsize=False,
         verbose_name="Beskjæring",
-        help_text="Bildet vises i full form på detaljsiden."
+        help_text="Bildet vises i full form på detaljsiden.",
     )
 
-    title = models.CharField(
-        verbose_name='tittel',
-        max_length=200,
-        blank=False
-    )
+    title = models.CharField(verbose_name="tittel", max_length=200, blank=False)
 
     description = models.TextField(
-        verbose_name='beskrivelse',
-        help_text='Teksten vil bli kuttet etter 250 tegn på sesongsiden.',
-        blank=True
+        verbose_name="beskrivelse",
+        help_text="Teksten vil bli kuttet etter 250 tegn på sesongsiden.",
+        blank=True,
     )
 
     short_title = models.CharField(
-        verbose_name='kort tittel',
-        help_text='kort tittel som vises i boksen på forsiden med de fire siste sendingene.',
+        verbose_name="kort tittel",
+        help_text="kort tittel som vises i boksen på forsiden med de fire siste sendingene.",
         max_length=50,
-        blank=True
+        blank=True,
     )
 
     extra_markdown = models.TextField(
-        verbose_name='Ekstra markdown',
+        verbose_name="Ekstra markdown",
         blank=True,
         null=True,
-        help_text='Ekstra markdown for å putte inn videoer etc.',
+        help_text="Ekstra markdown for å putte inn videoer etc.",
     )
 
-    pub_date = models.DateTimeField(
-        verbose_name='publisert',
-        blank=False,
-        null=True,
-    )
+    pub_date = models.DateTimeField(verbose_name="publisert", blank=False, null=True,)
 
     file = models.FileField(
-        upload_to='podcast',
+        upload_to="podcast",
         blank=True,
-        verbose_name='lydfil',
-        help_text='Filformat: MP3'
+        verbose_name="lydfil",
+        help_text="Filformat: MP3",
     )
 
     is_clip = models.BooleanField(
         default=False,
         verbose_name="Er lydklipp",
-        help_text="Lydklipp blir ikke vist sammen med episodene."
+        help_text="Lydklipp blir ikke vist sammen med episodene.",
     )
 
     has_video = models.BooleanField(
         default=False,
         verbose_name="Har video",
-        help_text="For å få video-ikon i oversikten."
+        help_text="For å få video-ikon i oversikten.",
     )
 
     season = models.ForeignKey(
-        'Season',
-        verbose_name="Sesong",
-        on_delete=models.CASCADE,
-        blank=False
+        "Season", verbose_name="Sesong", on_delete=models.CASCADE, blank=False
     )
 
     def get_absolute_url(self):
-        return reverse('podcast_detail', kwargs={'pk': self.id})
+        return reverse("podcast_detail", kwargs={"pk": self.id})
 
     def get_short_description(self):
         description = str(self.description)
@@ -155,6 +149,6 @@ class Podcast(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = 'Podcast'
-        verbose_name_plural = 'Podcast'
+        verbose_name = "Podcast"
+        verbose_name_plural = "Podcast"
         ordering = ["-pub_date"]

@@ -8,16 +8,10 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('nabladet', '0006_news_ptr_to_id_20171006_1559'),
+        ("nabladet", "0006_news_ptr_to_id_20171006_1559"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='nablad',
-            name='publication_date',
-        ),
-        migrations.RemoveField(
-            model_name='nablad',
-            name='published',
-        ),
+        migrations.RemoveField(model_name="nablad", name="publication_date",),
+        migrations.RemoveField(model_name="nablad", name="published",),
     ]

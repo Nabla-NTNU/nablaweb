@@ -4,9 +4,11 @@ Abstract models to be included in other apps
 # Ignore pylint problems with Meta-classes
 # pylint: disable=missing-docstring,too-few-public-methods
 from datetime import datetime
-from django.db import models
+
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.db import models
+
 from image_cropping.fields import ImageRatioField
 
 
@@ -16,9 +18,7 @@ class BaseImageModel(models.Model):
     """
 
     file = models.ImageField(
-        max_length=100,
-        verbose_name="Bildefil",
-        upload_to="uploads/content"
+        max_length=100, verbose_name="Bildefil", upload_to="uploads/content"
     )
 
     def __str__(self):
@@ -27,7 +27,7 @@ class BaseImageModel(models.Model):
     def image_thumb(self):
         """Return a string containing html for showing a thumbnail of the image"""
         if not self.file:
-            return 'No image'
+            return "No image"
         return f'<img src="{self.file.url}" style="max-width:100px;max-height:100px;"/>'
 
     image_thumb.allow_tags = True
@@ -41,20 +41,20 @@ class WithPicture(models.Model):
     """
     Abstract model to be mixed in to models requiring a single image.
     """
+
     picture = models.ImageField(
         upload_to="uploads/news_pictures",
         null=True,
         blank=True,
         verbose_name="Bilde",
-        help_text=("Bilder som er større enn 770x300 px ser best ut. "
-                   "Du kan beskjære bildet etter opplasting."),
+        help_text=(
+            "Bilder som er større enn 770x300 px ser best ut. "
+            "Du kan beskjære bildet etter opplasting."
+        ),
     )
 
     cropping = ImageRatioField(
-        'picture',
-        '770x300',
-        allow_fullsize=False,
-        verbose_name="Beskjæring"
+        "picture", "770x300", allow_fullsize=False, verbose_name="Beskjæring"
     )
 
     class Meta:
@@ -65,7 +65,7 @@ class WithPicture(models.Model):
         domain = Site.objects.get_current().domain
         media_url = settings.MEDIA_URL
         filename = self.picture.name
-        return f'http://{domain}{media_url}{filename}'
+        return f"http://{domain}{media_url}{filename}"
 
 
 class TimeStamped(models.Model):
@@ -79,9 +79,7 @@ class TimeStamped(models.Model):
     """
 
     created_date = models.DateTimeField(
-        verbose_name="Publiseringsdato",
-        auto_now_add=True,
-        null=True
+        verbose_name="Publiseringsdato", auto_now_add=True, null=True
     )
 
     created_by = models.ForeignKey(
@@ -95,9 +93,7 @@ class TimeStamped(models.Model):
     )
 
     last_changed_date = models.DateTimeField(
-        verbose_name="Redigeringsdato",
-        auto_now=True,
-        null=True
+        verbose_name="Redigeringsdato", auto_now=True, null=True
     )
 
     last_changed_by = models.ForeignKey(

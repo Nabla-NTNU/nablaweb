@@ -3,29 +3,47 @@ Forms for events
 """
 import operator
 
-from django.forms import BooleanField, ValidationError, ModelForm, Form, IntegerField, TextInput, ChoiceField, DateField, DateInput
-from django.forms.widgets import RadioSelect, SelectDateWidget
+from django.forms import (
+    BooleanField,
+    ChoiceField,
+    DateField,
+    DateInput,
+    Form,
+    IntegerField,
+    ModelForm,
+    TextInput,
+    ValidationError,
+)
 from django.forms.models import fields_for_model
+from django.forms.widgets import RadioSelect, SelectDateWidget
+from django.utils import timezone
+
+from nablapps.accounts.models import NablaUser
 
 from .models import Event, EventRegistration
-from nablapps.accounts.models import NablaUser
-from django.utils import timezone
+
 
 class EventForm(ModelForm):
     """
     Form to validate creation and editing of Event-instances in the admin interface
     """
+
     has_queue = BooleanField(
         required=False,
         label="Har venteliste",
-        help_text=("Hvis arrangementet har venteliste, "
-                   "går det ann å melde seg på selv etter at det er fullt. "
-                   "Man havner da på venteliste, og blir automatisk meldt på om det blir ledig."))
+        help_text=(
+            "Hvis arrangementet har venteliste, "
+            "går det ann å melde seg på selv etter at det er fullt. "
+            "Man havner da på venteliste, og blir automatisk meldt på om det blir ledig."
+        ),
+    )
 
     # Fields required when registration_required is set
     required_registration_fields = ("places", "registration_deadline", "has_queue")
-    registration_fields = required_registration_fields + ("deregistration_deadline",
-                                                          "registration_start")
+    registration_fields = required_registration_fields + (
+        "deregistration_deadline",
+        "registration_start",
+    )
 
     # Restrict order of the DateTimeFields
     datetime_restrictions = (
@@ -55,9 +73,15 @@ class EventForm(ModelForm):
     def _validate_datetime_order(self):
         """Check if the datetime fields have the correct order."""
         comparison_dict = {
-            "after": (operator.gt, '"%(field1)s" må ikke være tidligere enn "%(field2)s".'),
-            "before": (operator.lt, '"%(field1)s" må ikke være senere enn "%(field2)s".'),
-            }
+            "after": (
+                operator.gt,
+                '"%(field1)s" må ikke være tidligere enn "%(field2)s".',
+            ),
+            "before": (
+                operator.lt,
+                '"%(field1)s" må ikke være senere enn "%(field2)s".',
+            ),
+        }
 
         for field1, comparison, field2 in self.datetime_restrictions:
             date1 = self.cleaned_data.get(field1)
@@ -67,8 +91,13 @@ class EventForm(ModelForm):
 
             op, msg = comparison_dict.get(comparison)
             if not op(date1, date2):
-                error = ValidationError(msg, params={"field1": self.fields[field1].label,
-                                                     "field2": self.fields[field2].label})
+                error = ValidationError(
+                    msg,
+                    params={
+                        "field1": self.fields[field1].label,
+                        "field2": self.fields[field2].label,
+                    },
+                )
                 self.add_error(field1, error)
 
     def _assert_required_registration_fields_supplied(self):
@@ -76,8 +105,11 @@ class EventForm(ModelForm):
             if self.cleaned_data.get(field) is None and (field not in self._errors):
                 error = ValidationError(
                     'Feltet "%(field)s" er påkrevd når %(field2)s er valgt.',
-                    params={"field": self.fields[field].label,
-                            "field2": self.fields["registration_required"].label})
+                    params={
+                        "field": self.fields[field].label,
+                        "field2": self.fields["registration_required"].label,
+                    },
+                )
                 self.add_error(field, error)
 
     def _ignore_registration_fields(self):
@@ -91,15 +123,19 @@ class EventForm(ModelForm):
 class HTML5DateInput(DateInput):
     """Use type="date" in input tag,
     because HTML5 is nice"""
-    input_type="date"
+
+    input_type = "date"
+
 
 class FilterEventsForm(Form):
     """Form to filter and sort events in EventMainPage"""
 
-    type = ChoiceField(choices=[('', 'Alle'), ('event', 'Arrangement'), ('bedpres', 'Bedpres')],
-                       widget=RadioSelect(),
-                       required=False)
-    type.widget.attrs.update({'class': 'filter__option'})
-    type.widget.option_template_name="events/radio_option.html"
+    type = ChoiceField(
+        choices=[("", "Alle"), ("event", "Arrangement"), ("bedpres", "Bedpres")],
+        widget=RadioSelect(),
+        required=False,
+    )
+    type.widget.attrs.update({"class": "filter__option"})
+    type.widget.option_template_name = "events/radio_option.html"
 
     start_time = DateField(widget=HTML5DateInput, required=False, label="Etter dato")

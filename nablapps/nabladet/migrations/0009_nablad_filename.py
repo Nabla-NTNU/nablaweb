@@ -18,13 +18,13 @@ def create_filenames(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('nabladet', '0008_remove_nablad_view_counter'),
+        ("nabladet", "0008_remove_nablad_view_counter"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='nablad',
-            name='filename',
+            model_name="nablad",
+            name="filename",
             field=models.TextField(blank=True, editable=False),
         ),
         migrations.RunPython(create_filenames, RunPython.noop),

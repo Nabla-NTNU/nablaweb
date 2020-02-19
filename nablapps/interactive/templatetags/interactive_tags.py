@@ -1,11 +1,11 @@
 """
 Tags for interactive
 """
-from django import template
 from datetime import datetime
 
-from ..models.place import PlaceAction
-from ..models.place import time_of_last_action
+from django import template
+
+from ..models.place import PlaceAction, time_of_last_action
 
 register = template.Library()
 
@@ -19,4 +19,3 @@ def timestamp_of_last_action(user, grid):
     if not user.is_authenticated:
         return 0
     return time_of_last_action(user, grid).timestamp()
-

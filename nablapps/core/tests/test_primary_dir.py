@@ -1,11 +1,12 @@
-from django.test import TestCase
 from django.http import HttpRequest
+from django.test import TestCase
 
 from nablapps.core.context_processors import get_primary_dir
 
 
 class TestPrimaryDir(TestCase):
     """Class for testing the primary_dir context processor"""
+
     def test_batman(self):
         """Test batman as primary dir."""
         request = HttpRequest()

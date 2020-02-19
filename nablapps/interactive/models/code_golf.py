@@ -1,11 +1,13 @@
-#Models for code_golf
-from django.db import models
-from datetime import timedelta, datetime
-from django.conf import settings
-from nablapps.accounts.models import NablaUser
-from django import template
+# Models for code_golf
+from datetime import datetime, timedelta
 
-register=template.Library()
+from django import template
+from django.conf import settings
+from django.db import models
+
+from nablapps.accounts.models import NablaUser
+
+register = template.Library()
 
 
 class CodeTask(models.Model):
@@ -25,13 +27,15 @@ class CodeTask(models.Model):
         else:
             return None
 
+
 class Result(models.Model):
     """
     Users solution to a CodeTask
     """
+
     task = models.ForeignKey(CodeTask, on_delete=models.CASCADE,)
     user = models.ForeignKey(NablaUser, on_delete=models.CASCADE,)
-    solution = models.TextField(default="") # Users code
+    solution = models.TextField(default="")  # Users code
 
     @property
     def length(self):

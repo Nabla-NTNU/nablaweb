@@ -6,17 +6,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('com', '0006_auto_20191003_1624'),
+        ("com", "0006_auto_20191003_1624"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='compage',
-            name='cropping',
-        ),
+        migrations.RemoveField(model_name="compage", name="cropping",),
         migrations.AlterField(
-            model_name='compage',
-            name='picture',
-            field=models.ImageField(blank=True, help_text='Last opp din undergruppes logo.', null=True, upload_to='uploads/com_pictures', verbose_name='Bilde'),
+            model_name="compage",
+            name="picture",
+            field=models.ImageField(
+                blank=True,
+                help_text="Last opp din undergruppes logo.",
+                null=True,
+                upload_to="uploads/com_pictures",
+                verbose_name="Bilde",
+            ),
         ),
     ]

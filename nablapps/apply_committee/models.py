@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 
 class Committee(models.Model):
@@ -11,9 +11,14 @@ class Committee(models.Model):
     def get_mailinglist(self):
         """Returns the mailinglist to the
         applicants to the committee for this application_round"""
-        return ";".join([application.applicant.email for application in
-                         Application.objects.\
-                         filter(committee=self).prefetch_related('applicant')])
+        return ";".join(
+            [
+                application.applicant.email
+                for application in Application.objects.filter(
+                    committee=self
+                ).prefetch_related("applicant")
+            ]
+        )
 
 
 class ApplicationRound(models.Model):
@@ -71,5 +76,5 @@ class Application(models.Model):
             # Only one of each priority per round
             ["application_round", "applicant", "priority"],
             # Can only search a committee once per round
-            ["application_round", "applicant", "committee"]
+            ["application_round", "applicant", "committee"],
         ]

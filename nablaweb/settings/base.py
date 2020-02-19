@@ -4,6 +4,7 @@ Ikke bruk denne til å kjøre django med
 Bruk heller devel.py eller production.py
 """
 import os
+
 from easy_thumbnails.conf import Settings as EasyThumbnailSettings
 
 DEBUG = True
@@ -128,7 +129,7 @@ INSTALLED_APPS = [
     'haystack',
     'hitcount',
     'markdown_deux',
-    'sekizai', # http://django-sekizai.readthedocs.org/en/latest/#
+    'sekizai',  # http://django-sekizai.readthedocs.org/en/latest/#
     'qr_code',
     'multi_email_field',
 

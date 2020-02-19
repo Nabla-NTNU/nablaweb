@@ -8,13 +8,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('album', '0002_auto_20190130_1936'),
+        ("album", "0002_auto_20190130_1936"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='albumimage',
-            name='is_display_image',
-            field=models.BooleanField(default=False, help_text='Bildet som vises i listen over album', verbose_name='Er visningbilde'),
+            model_name="albumimage",
+            name="is_display_image",
+            field=models.BooleanField(
+                default=False,
+                help_text="Bildet som vises i listen over album",
+                verbose_name="Er visningbilde",
+            ),
         ),
     ]

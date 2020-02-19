@@ -1,11 +1,12 @@
 """
 Views for album app
 """
-from django.views.generic import TemplateView, ListView, DetailView
-from django.shortcuts import redirect, get_object_or_404
-from django.core.paginator import Paginator, EmptyPage
-from django.urls import reverse
+from django.core.paginator import EmptyPage, Paginator
 from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
+from django.views.generic import DetailView, ListView, TemplateView
+
 from .models import Album
 
 
@@ -13,15 +14,18 @@ class AlbumList(ListView):
     """
     List of publically visible albums
     """
+
     model = Album
     context_object_name = "albums"
     template_name = "album/album_list.html"
     paginate_by = 10
-    queryset = Album.objects.filter(level=0).exclude(visibility='h').order_by('-created_date')
+    queryset = (
+        Album.objects.filter(level=0).exclude(visibility="h").order_by("-created_date")
+    )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_user'] = self.request.user.is_authenticated
+        context["is_user"] = self.request.user.is_authenticated
         return context
 
 
@@ -34,12 +38,13 @@ class PermissionToSeeAlbumMixin:
 
     Redirect to login if user is not allowed to view the album.
     """
+
     def dispatch(self, request, *args, **kwargs):
         """View dispatch"""
-        album = get_object_or_404(Album, pk=kwargs['pk'])
+        album = get_object_or_404(Album, pk=kwargs["pk"])
         allowed_to_view_album = album.is_visible(request.user)
         if not allowed_to_view_album:
-            return redirect('auth_login')
+            return redirect("auth_login")
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -47,6 +52,7 @@ class AlbumOverview(PermissionToSeeAlbumMixin, DetailView):
     """
     Show an album with all images in the album if the user is allowed to view them.
     """
+
     model = Album
     context_object_name = "album"
     template_name = "album/album_overview.html"
@@ -54,19 +60,19 @@ class AlbumOverview(PermissionToSeeAlbumMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            context['children'] = self.object.get_children().exclude(visibility='h')
+            context["children"] = self.object.get_children().exclude(visibility="h")
         else:
-            context['children'] = self.object.get_children().exclude(visibility='h')
-        context['is_user'] = self.request.user.is_authenticated
+            context["children"] = self.object.get_children().exclude(visibility="h")
+        context["is_user"] = self.request.user.is_authenticated
         parent = self.object.get_ancestors(ascending=False, include_self=False).first()
         if parent is None:
-            parent_url = reverse('albums')
-            parent_name = 'Til oversikt'
+            parent_url = reverse("albums")
+            parent_name = "Til oversikt"
         else:
             parent_url = parent.get_absolute_url()
             parent_name = parent.title
-        context['parent_url'] = parent_url
-        context['parent_name'] = parent_name
+        context["parent_url"] = parent_url
+        context["parent_name"] = parent_name
         return context
 
 
@@ -79,23 +85,23 @@ class AlbumImageView(PermissionToSeeAlbumMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['album'] = get_object_or_404(Album, pk=kwargs['pk'])
+        context["album"] = get_object_or_404(Album, pk=kwargs["pk"])
 
-        images = context['album'].images.order_by('num').all()
+        images = context["album"].images.order_by("num").all()
         paginator = Paginator(images, 1)
         try:
-            context['page_obj'] = paginator.page(kwargs['num'])
+            context["page_obj"] = paginator.page(kwargs["num"])
         except EmptyPage:
-            raise Http404('Bildet finnes ikke')
+            raise Http404("Bildet finnes ikke")
 
-        if context['page_obj'].object_list:
-            context['image'] = context['page_obj'].object_list[0]
+        if context["page_obj"].object_list:
+            context["image"] = context["page_obj"].object_list[0]
 
-        context['admin_links'] = [
+        context["admin_links"] = [
             {
                 "name": "Endre Album",
                 "glyphicon_symbol": "cog",
-                "url": reverse("admin:album_album_change", args=[context["album"].id])
+                "url": reverse("admin:album_album_change", args=[context["album"].id]),
             }
         ]
 

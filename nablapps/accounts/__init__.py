@@ -1,1 +1,1 @@
-default_app_config = 'nablapps.accounts.apps.AccountsConfig'
+default_app_config = "nablapps.accounts.apps.AccountsConfig"

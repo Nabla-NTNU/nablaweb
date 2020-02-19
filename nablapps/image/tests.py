@@ -3,13 +3,16 @@ Tests for image app
 """
 # pylint: disable=C0111
 from django.test import TestCase
-from nablapps.image.models import ContentImage
+
 from nablapps.image.markdownprocessing import content_markdown
+from nablapps.image.models import ContentImage
+
 
 class BaseContentImageTest(TestCase):
     def setUp(self):
         ContentImage.objects.bulk_create(
-            [ContentImage(file=f"image{i}.jpg") for i in range(10)])
+            [ContentImage(file=f"image{i}.jpg") for i in range(10)]
+        )
 
 
 class ContentImageTest(BaseContentImageTest):
@@ -28,9 +31,7 @@ class MarkdownProcessTest(BaseContentImageTest):
 
     def test_simple_image(self):
         result = content_markdown("[image:1]")
-        self.assertIn(
-            self.first_image.file.name,
-            result)
+        self.assertIn(self.first_image.file.name, result)
         self.assertNotIn("[image:1]", result)
 
     def test_nonexistant_image(self):
@@ -58,8 +59,9 @@ class MarkdownProcessTest(BaseContentImageTest):
 
     def test_invalid_size(self):
         """Invalid sizes are not processed"""
-        self.assertIn("[image:1 size:invalidsize]",
-                      content_markdown("[image:1 size:invalidsize]"))
+        self.assertIn(
+            "[image:1 size:invalidsize]", content_markdown("[image:1 size:invalidsize]")
+        )
 
     def test_left_align(self):
         result = content_markdown("[image:1 align:left]")
@@ -87,5 +89,7 @@ class MarkdownProcessTest(BaseContentImageTest):
         self.assertIn("This is a caption.", result)
 
     def test_multiline_caption(self):
-        result = content_markdown("[image:1]\n    This is a\n    multiline\n    caption")
+        result = content_markdown(
+            "[image:1]\n    This is a\n    multiline\n    caption"
+        )
         self.assertIn("This is a\nmultiline\ncaption", result)

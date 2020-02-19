@@ -1,17 +1,17 @@
-from django.views.generic import DetailView, ListView, DeleteView
-from django.urls import reverse, reverse_lazy
-from django.shortcuts import get_object_or_404, redirect
+from datetime import datetime
+from uuid import uuid4
+
 from django.contrib import messages
 from django.contrib.auth.views import login_required
 from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
+from django.views.generic import DeleteView, DetailView, ListView
 
-from datetime import datetime
-from uuid import uuid4
 from braces.views import FormMessagesMixin, LoginRequiredMixin
 
-from ..models.quiz import Quiz, QuizReply, QuizScoreboard, QuizReplyTimeout
+from ..models.quiz import Quiz, QuizReply, QuizReplyTimeout, QuizScoreboard
 from .mixins import ObjectOwnerMixin
-
 
 # Key in the user' session used to store start-times for quizes
 QUIZREPLIES_SESSIONKEY = "quizreplies_timestamps"
@@ -44,7 +44,7 @@ class QuizView(LoginRequiredMixin, DetailView):
         return self.template_name
 
     def get_form_url(self):
-        return reverse('quiz_reply', kwargs={'pk': self.object.id})
+        return reverse("quiz_reply", kwargs={"pk": self.object.id})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -61,8 +61,9 @@ class QuizView(LoginRequiredMixin, DetailView):
         # its corresponding start-time
         # The time is converted to a string because a datetime object isn't
         # JSON-serializable, and can't be stored in the session
-        self.request.session[QUIZREPLIES_SESSIONKEY][self.quiz_reply_id] = \
-            datetime.strftime(datetime.now(), DATE_FORMAT)
+        self.request.session[QUIZREPLIES_SESSIONKEY][
+            self.quiz_reply_id
+        ] = datetime.strftime(datetime.now(), DATE_FORMAT)
 
         # Mark the session as modified, because we are modifying a nested object
         self.request.session.modified = True
@@ -76,8 +77,10 @@ def quiz_reply(request, pk):
         # This entry in the session is created when the user starts the quiz.
         # Could be missing if the users session is invalidated while they are
         # taking the quiz, or there is foul play.
-        messages.info(request, "Beklager, det har oppstått en feil. (Brukte du for lang tid?)")
-        return redirect('/quiz')
+        messages.info(
+            request, "Beklager, det har oppstått en feil. (Brukte du for lang tid?)"
+        )
+        return redirect("/quiz")
 
     quiz_reply_id = request.POST.get("quiz_reply_id")
 
@@ -85,7 +88,7 @@ def quiz_reply(request, pk):
         # The quiz reply id submitted with the POST request is invalid.
         # Most likely foul play.
         messages.info(request, "Beklager, det har oppstått en feil.")
-        return redirect('/quiz')
+        return redirect("/quiz")
 
     # Get the start-time of the submitted quizreply
     starttimestring = request.session[QUIZREPLIES_SESSIONKEY][quiz_reply_id]
@@ -102,29 +105,27 @@ def quiz_reply(request, pk):
     answers = (request.POST.get(f"{q.id}_alternative") for q in questions)
 
     q_and_a = [
-        (q, int(answer))
-        for q, answer in zip(questions, answers)
-        if answer is not None
+        (q, int(answer)) for q, answer in zip(questions, answers) if answer is not None
     ]
 
     if len(q_and_a) == 0:
         # User didn't answer any questions -> deny the reply
         messages.info(request, "Du må svare på minst ett spørsmål!")
-        return redirect('/quiz')
+        return redirect("/quiz")
 
     # Create the reply
     reply = QuizReply.objects.create(
         user=request.user,
         scoreboard=quiz.scoreboard,
         start=startdatetime,
-        when=startdatetime
+        when=startdatetime,
     )
 
     try:
         reply.add_question_replies(q_and_a)
     except QuizReplyTimeout:
         messages.info(request, "Beklager, tiden gikk ut")
-        return redirect('/')
+        return redirect("/")
     else:
         reply.save()
 
@@ -139,7 +140,7 @@ class QuizResultView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['quiz'] = context['result'].scoreboard.quiz
+        context["quiz"] = context["result"].scoreboard.quiz
         return context
 
 
@@ -150,14 +151,18 @@ class QuizScoreboardView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['replies'] = context['scoreboard'].replies.order_by('-score')
+        context["replies"] = context["scoreboard"].replies.order_by("-score")
         return context
 
 
-class QuizResultDeleteView(LoginRequiredMixin, ObjectOwnerMixin, FormMessagesMixin, DeleteView):
+class QuizResultDeleteView(
+    LoginRequiredMixin, ObjectOwnerMixin, FormMessagesMixin, DeleteView
+):
     model = QuizReply
     form_valid_message = "Svaret er slettet"
     form_invalid_message = "Svaret ble ikke slettet"
 
     def get_success_url(self):
-        return reverse_lazy('quiz_score', kwargs={'pk': self.get_object().scoreboard.id})
+        return reverse_lazy(
+            "quiz_score", kwargs={"pk": self.get_object().scoreboard.id}
+        )

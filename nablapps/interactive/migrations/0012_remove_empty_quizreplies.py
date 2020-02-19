@@ -1,9 +1,10 @@
 from django.db import migrations
 
+
 def remove_empty_quizreplies(apps, schema_editor):
     # Getting the historical `QuizReply` and `QuestionReply` model
-    QuizReply = apps.get_model('interactive', 'QuizReply')
-    QuestionReply = apps.get_model('interactive', 'QuestionReply')
+    QuizReply = apps.get_model("interactive", "QuizReply")
+    QuestionReply = apps.get_model("interactive", "QuestionReply")
 
     # Set of all seen quiz_reply_ids
     seen_ids = set()
@@ -20,7 +21,9 @@ def remove_empty_quizreplies(apps, schema_editor):
 
             # Score has to be 0 when answering no questions
             if not (quiz_reply.score == score == 0):
-                print(f"Quizreply with id {quiz_reply.id} had non-zero score, but had no questionreplies!")
+                print(
+                    f"Quizreply with id {quiz_reply.id} had non-zero score, but had no questionreplies!"
+                )
                 print("Consider deleting the quizreply manually.")
 
                 # Skip this quizreply for manual intervention later
@@ -33,11 +36,9 @@ def remove_empty_quizreplies(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('interactive', '0011_update_quizreply_scores'),
+        ("interactive", "0011_update_quizreply_scores"),
     ]
 
     operations = [
-            migrations.RunPython(remove_empty_quizreplies),
+        migrations.RunPython(remove_empty_quizreplies),
     ]
-
-

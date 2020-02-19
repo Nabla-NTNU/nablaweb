@@ -10,18 +10,23 @@ Currently creates (11.09.2019):
 """
 import random
 import textwrap
-from datetime import datetime as dt, timedelta as td
+from datetime import datetime as dt
+from datetime import timedelta as td
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
+
 from faker import Factory
-from nablapps.accounts.models import NablaUser as User, FysmatClass, NablaGroup
+
+from nablapps.accounts.models import FysmatClass, NablaGroup
+from nablapps.accounts.models import NablaUser as User
 from nablapps.events.models import Event
-from nablapps.news.models import NewsArticle, FrontPageNews
+from nablapps.news.models import FrontPageNews, NewsArticle
 
+fake = Factory.create("no_NO")  # Norwegian sentences
 
-fake = Factory.create('no_NO') # Norwegian sentences
+random.seed()  # Initialize random seed generator
 
-random.seed() # Initialize random seed generator
 
 def g():
     """ A lot of random text """
@@ -32,19 +37,18 @@ def s():
     """ Short random string """
     return textwrap.shorten(fake.sentence(), width=40)
 
+
 def ss():
     """ Longer random string """
     return textwrap.shorten(fake.sentence(), width=20)
 
+
 class Command(BaseCommand):
-    help = 'Puts data into the database'
+    help = "Puts data into the database"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--delete',
-            dest='delete',
-            default=True,
-            help='Delete existing data',
+            "--delete", dest="delete", default=True, help="Delete existing data",
         )
 
     def handle(self, *args, **options):
@@ -52,7 +56,7 @@ class Command(BaseCommand):
         if not settings.DEBUG:
             raise Exception("Trying to seed in production.")
 
-        delete = options['delete']
+        delete = options["delete"]
         print("Deleting old entries: " + str(delete))
         if delete:
             FrontPageNews.objects.all().delete()
@@ -62,19 +66,18 @@ class Command(BaseCommand):
 
         print("Creating superuser admin")
         User.objects.create_user(
-            username='admin',
-            password='admin',
+            username="admin",
+            password="admin",
             first_name=fake.first_name(),
             last_name=fake.last_name(),
             address=fake.address(),
-            email='admin@stud.ntnu.no',
+            email="admin@stud.ntnu.no",
             about=fake.text(),
             birthday=fake.date_time_between_dates(
-                datetime_start=None,
-                datetime_end=None,
-                tzinfo=None),
+                datetime_start=None, datetime_end=None, tzinfo=None
+            ),
             is_superuser=True,
-            is_staff=True
+            is_staff=True,
         )
 
         if delete:
@@ -83,9 +86,7 @@ class Command(BaseCommand):
         count = random.randint(5, 10)
         print("Creating %d NablaGroups" % count)
         ngroups = [
-            NablaGroup.objects.create(
-                name=fake.word() + "-" + str(i) +"-komitéen"
-            )
+            NablaGroup.objects.create(name=fake.word() + "-" + str(i) + "-komitéen")
             for i in range(count)
         ]
 
@@ -97,8 +98,7 @@ class Command(BaseCommand):
         year = dt.now().year
         classes = [
             FysmatClass.objects.create(
-                starting_year=year-i,
-                name="kull%d" % (year-i)
+                starting_year=year - i, name="kull%d" % (year - i)
             )
             for i in range(count)
         ]
@@ -113,14 +113,13 @@ class Command(BaseCommand):
                 first_name=fake.first_name(),
                 last_name=fake.last_name(),
                 address=fake.address(),
-                password='password',
-                email=username+'@stud.ntnu.no',
-                ntnu_card_number=str(random.randint(int(1E7), int(1E10)-1)),
+                password="password",
+                email=username + "@stud.ntnu.no",
+                ntnu_card_number=str(random.randint(int(1e7), int(1e10) - 1)),
                 about=fake.text(),
                 birthday=fake.date_time_between_dates(
-                    datetime_start=None,
-                    datetime_end=None,
-                    tzinfo=None),
+                    datetime_start=None, datetime_end=None, tzinfo=None
+                ),
             )
 
             nabla_group = random.choice(ngroups)
@@ -129,7 +128,6 @@ class Command(BaseCommand):
             fysmat_class = random.choice(classes)
             fysmat_class.user_set.add(user)
 
-
         if delete:
             NewsArticle.objects.all().delete()
 
@@ -137,9 +135,7 @@ class Command(BaseCommand):
         print("Creating %d News" % count)
         for i in range(count):
             article = NewsArticle.objects.create(
-                headline=s(),
-                body=g(),
-                lead_paragraph=g()
+                headline=s(), body=g(), lead_paragraph=g()
             )
             f = FrontPageNews()
             f.content_object = article
@@ -152,8 +148,7 @@ class Command(BaseCommand):
         print("Creating %d Events" % count)
         for i in range(count):
             start = fake.date_time_between_dates(
-                datetime_start=dt.now(),
-                datetime_end=(dt.now()+td(30))
+                datetime_start=dt.now(), datetime_end=(dt.now() + td(30))
             )
 
             event = Event.objects.create(
@@ -162,13 +157,13 @@ class Command(BaseCommand):
                 lead_paragraph=g(),
                 short_name=ss(),
                 event_start=start,
-                event_end=start+td(hours=4),
+                event_end=start + td(hours=4),
                 organizer=fake.name(),
                 location=fake.address(),
                 registration_required=True,
-                registration_deadline=(dt.now()+td(30)),
+                registration_deadline=(dt.now() + td(30)),
                 registration_start=dt.now(),
-                places=10
+                places=10,
             )
             f = FrontPageNews()
             f.content_object = event

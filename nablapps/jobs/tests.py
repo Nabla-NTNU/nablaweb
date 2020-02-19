@@ -1,10 +1,10 @@
 from django.test import TestCase
+
 from nablapps.jobs.models import TagChoices
 from nablapps.jobs.templatetags.jobs_filters import commas_no
 
 
 class NorwegianCommasTest(TestCase):
-
     def setUp(self):
         for i in range(5):
             TagChoices.objects.create(tag=str(i))
@@ -34,7 +34,9 @@ class NorwegianCommasTest(TestCase):
     def test_queryset_contains_three_elements(self):
         queryset = TagChoices.objects.all()[:3]
         strings = [str(x) for x in queryset]
-        self.assertEqual(f"{strings[0]}, {strings[1]} og {strings[2]}", commas_no(queryset))
+        self.assertEqual(
+            f"{strings[0]}, {strings[1]} og {strings[2]}", commas_no(queryset)
+        )
 
     def test_queryset_contains_five_elements(self):
         queryset = TagChoices.objects.all()[:5]

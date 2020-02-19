@@ -27,7 +27,9 @@ fields_to_copy = [
     "deregistration_deadline",
     "places",
     "has_queue",
-    "facebook_url"]
+    "facebook_url",
+]
+
 
 def forwards_func(apps, schema_editor):
     try:
@@ -53,11 +55,11 @@ def forwards_func(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0003_add_fields_from_bedpres_and_penalty'),
+        ("events", "0003_add_fields_from_bedpres_and_penalty"),
     ]
 
-    if global_apps.is_installed('bedpres'):
-        dependencies.append(('bedpres', '0002_auto_20190205_1251.py'))
+    if global_apps.is_installed("bedpres"):
+        dependencies.append(("bedpres", "0002_auto_20190205_1251.py"))
 
     operations = [
         migrations.RunPython(forwards_func, migrations.RunPython.noop),

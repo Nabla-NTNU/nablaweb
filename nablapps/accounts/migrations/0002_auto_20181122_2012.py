@@ -3,24 +3,37 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
+
 import image_cropping.fields
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0001_squashed_0009_auto_20171004_2140'),
+        ("accounts", "0001_squashed_0009_auto_20171004_2140"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='nablauser',
-            name='cropping',
-            field=image_cropping.fields.ImageRatioField('avatar', '140x170', adapt_rotation=False, allow_fullsize=True, free_crop=False, help_text=None, hide_image_field=False, size_warning=True, verbose_name='Beskjæring'),
+            model_name="nablauser",
+            name="cropping",
+            field=image_cropping.fields.ImageRatioField(
+                "avatar",
+                "140x170",
+                adapt_rotation=False,
+                allow_fullsize=True,
+                free_crop=False,
+                help_text=None,
+                hide_image_field=False,
+                size_warning=True,
+                verbose_name="Beskjæring",
+            ),
         ),
         migrations.AlterField(
-            model_name='nablauser',
-            name='avatar',
-            field=image_cropping.fields.ImageCropField(blank=True, null=True, upload_to='avatars', verbose_name='Avatar'),
+            model_name="nablauser",
+            name="avatar",
+            field=image_cropping.fields.ImageCropField(
+                blank=True, null=True, upload_to="avatars", verbose_name="Avatar"
+            ),
         ),
     ]

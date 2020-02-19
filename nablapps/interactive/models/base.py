@@ -1,5 +1,6 @@
-from nablapps.core.models import TimeStamped
 from django.db import models
+
+from nablapps.core.models import TimeStamped
 
 
 class InteractiveElement(TimeStamped, models.Model):
@@ -10,9 +11,7 @@ class InteractiveElement(TimeStamped, models.Model):
     default_template = "interactive/advent_door_base.html"
 
     template = models.CharField(
-        max_length=100,
-        verbose_name="Template",
-        default=default_template
+        max_length=100, verbose_name="Template", default=default_template
     )
 
     class Meta:
@@ -35,9 +34,7 @@ class InteractionResult(models.Model):
     Represents an interaction with a given element. For example a score.
     """
 
-    when = models.DateTimeField(
-        auto_created=True
-    )
+    when = models.DateTimeField(auto_created=True)
 
     class Meta:
         abstract = True

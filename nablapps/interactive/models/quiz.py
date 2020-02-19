@@ -1,56 +1,36 @@
+from datetime import datetime, timedelta
+
 from django.db import models
 from django.urls import reverse
 
-from datetime import timedelta, datetime
-
-from .base import InteractiveElement, Scoreboard, InteractionResult
+from .base import InteractionResult, InteractiveElement, Scoreboard
 
 
 class QuizQuestion(models.Model):
-    question = models.TextField(
-        verbose_name="Spørsmål",
-        blank=False
-    )
+    question = models.TextField(verbose_name="Spørsmål", blank=False)
 
     quiz = models.ForeignKey(
-        to='Quiz',
-        related_name="questions",
-        on_delete=models.CASCADE,
-        unique=False
+        to="Quiz", related_name="questions", on_delete=models.CASCADE, unique=False
     )
 
     correct_alternative = models.IntegerField(
-        choices=[
-            (1, '1'),
-            (2, '2'),
-            (3, '3'),
-            (4, '4')
-        ],
-        verbose_name="Riktig svar"
+        choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4")], verbose_name="Riktig svar"
     )
 
     alternative_1 = models.CharField(
-        max_length=200,
-        verbose_name="Alternativ 1",
-        blank=False
+        max_length=200, verbose_name="Alternativ 1", blank=False
     )
 
     alternative_2 = models.CharField(
-        max_length=200,
-        verbose_name="Alternativ 2",
-        blank=False
+        max_length=200, verbose_name="Alternativ 2", blank=False
     )
 
     alternative_3 = models.CharField(
-        max_length=200,
-        verbose_name="Alternativ 3",
-        blank=False
+        max_length=200, verbose_name="Alternativ 3", blank=False
     )
 
     alternative_4 = models.CharField(
-        max_length=200,
-        verbose_name="Alternativ 4",
-        blank=False
+        max_length=200, verbose_name="Alternativ 4", blank=False
     )
 
     def __str__(self):
@@ -64,34 +44,22 @@ class Quiz(InteractiveElement):
 
     default_template = "interactive/quiz.html"
 
-    title = models.CharField(
-        max_length=80,
-        verbose_name="Tittel"
-    )
+    title = models.CharField(max_length=80, verbose_name="Tittel")
 
-    is_timed = models.BooleanField(
-        verbose_name="Bruk tidsbegrensning?",
-        default=False
-    )
+    is_timed = models.BooleanField(verbose_name="Bruk tidsbegrensning?", default=False)
 
     duration = models.PositiveIntegerField(
         verbose_name="Tidsbegrensning",
         blank=True,
         null=True,
-        help_text="Tid til å fullføre quizen målt i sekunder."
+        help_text="Tid til å fullføre quizen målt i sekunder.",
     )
 
     scoreboard = models.OneToOneField(
-        to='QuizScoreboard',
-        related_name="quiz",
-        on_delete=models.CASCADE,
-        null=True
+        to="QuizScoreboard", related_name="quiz", on_delete=models.CASCADE, null=True
     )
 
-    published = models.NullBooleanField(
-        default=True,
-        verbose_name="Publisert",
-    )
+    published = models.NullBooleanField(default=True, verbose_name="Publisert",)
 
     class Meta:
         verbose_name = "Quiz"
@@ -109,7 +77,7 @@ class Quiz(InteractiveElement):
         return self.questions.count()
 
     def get_absolute_url(self):
-        return reverse("quiz", kwargs={'pk': self.id})
+        return reverse("quiz", kwargs={"pk": self.id})
 
     def __str__(self):
         return str(self.title)
@@ -120,20 +88,12 @@ class QuestionReply(models.Model):
     Reply to a single question
     """
 
-    question = models.ForeignKey(
-        'QuizQuestion',
-        on_delete=models.CASCADE,
-    )
+    question = models.ForeignKey("QuizQuestion", on_delete=models.CASCADE,)
 
-    alternative = models.PositiveIntegerField(
-        unique=False
-    )
+    alternative = models.PositiveIntegerField(unique=False)
 
     quiz_reply = models.ForeignKey(
-        to='QuizReply',
-        related_name="questions",
-        on_delete=models.CASCADE,
-        null=True
+        to="QuizReply", related_name="questions", on_delete=models.CASCADE, null=True
     )
 
     @property
@@ -151,25 +111,17 @@ class QuizReply(InteractionResult):
     """
 
     scoreboard = models.ForeignKey(
-        to='QuizScoreboard',
-        on_delete=models.CASCADE,
-        related_name="replies"
+        to="QuizScoreboard", on_delete=models.CASCADE, related_name="replies"
     )
 
-    score = models.IntegerField(
-        null=True,
-        blank=True
-    )
+    score = models.IntegerField(null=True, blank=True)
 
-    start = models.DateTimeField(
-        blank=True,
-        null=True
-    )
+    start = models.DateTimeField(blank=True, null=True)
 
     user = models.ForeignKey(
-        'accounts.NablaUser',
+        "accounts.NablaUser",
         on_delete=models.CASCADE,
-        related_name="interaction_results"
+        related_name="interaction_results",
     )
 
     class Meta:
@@ -191,7 +143,7 @@ class QuizReply(InteractionResult):
         return self.quiz.is_timed and self.end_time() < datetime.now()
 
     def get_absolute_url(self):
-        return reverse('quiz_result', kwargs={'pk': self.id})
+        return reverse("quiz_result", kwargs={"pk": self.id})
 
     def get_correct_count(self):
         return len([q for q in self.questions.all() if q.is_correct])
@@ -208,11 +160,7 @@ class QuizReply(InteractionResult):
             raise QuizReplyTimeout
         for q, alternative in replies:
             QuestionReply.objects.update_or_create(
-                question=q,
-                quiz_reply=self,
-                defaults={
-                    'alternative': alternative,
-                }
+                question=q, quiz_reply=self, defaults={"alternative": alternative,}
             )
 
 
@@ -222,4 +170,4 @@ class QuizScoreboard(Scoreboard):
     """
 
     def get_absolute_url(self):
-        return reverse("quiz_score", kwargs={'pk': self.id})
+        return reverse("quiz_score", kwargs={"pk": self.id})

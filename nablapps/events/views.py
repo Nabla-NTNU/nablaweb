@@ -2,61 +2,70 @@
 Views for events app
 """
 import datetime
-from django.urls import reverse
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render, redirect
-from django.template import loader
-from django.views.generic import TemplateView, DetailView, ListView
+
 from django.contrib.auth import get_user_model
-
-from django.utils.safestring import mark_safe
-
-from braces.views import (PermissionRequiredMixin,
-                          LoginRequiredMixin,
-                          StaticContextMixin,
-                          MessageMixin)
-
-from nablapps.core.view_mixins import AdminLinksMixin
 from django.core.exceptions import ValidationError
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
+from django.template import loader
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+from django.views.generic import DetailView, ListView, TemplateView
 
-from .models.event import Event, attending_events
-from .models.eventregistration import EventRegistration
-from .exceptions import (EventException, UserRegistrationException, EventFullException,
-                         RegistrationNotAllowed, RegistrationNotOpen, RegistrationAlreadyExists,
-                         RegistrationNotRequiredException, DeregistrationClosed)
-from .event_calendar import EventCalendar
-
-from .forms import FilterEventsForm  # Used in EventMainPage
+from braces.views import (
+    LoginRequiredMixin,
+    MessageMixin,
+    PermissionRequiredMixin,
+    StaticContextMixin,
+)
 
 from nablapps.accounts.models import NablaUser
+from nablapps.core.view_mixins import AdminLinksMixin
+
+from .event_calendar import EventCalendar
+from .exceptions import (
+    DeregistrationClosed,
+    EventException,
+    EventFullException,
+    RegistrationAlreadyExists,
+    RegistrationNotAllowed,
+    RegistrationNotOpen,
+    RegistrationNotRequiredException,
+    UserRegistrationException,
+)
+from .forms import FilterEventsForm  # Used in EventMainPage
+from .models.event import Event, attending_events
+from .models.eventregistration import EventRegistration
 
 User = get_user_model()
 
 
-class AdministerRegistrationsView(StaticContextMixin,
-                                  PermissionRequiredMixin,
-                                  MessageMixin,
-                                  DetailView):
+class AdministerRegistrationsView(
+    StaticContextMixin, PermissionRequiredMixin, MessageMixin, DetailView
+):
     """Viser påmeldingslisten til et Event med mulighet for å melde folk på og av."""
+
     model = Event
     template_name = "events/event_administer.html"
-    permission_required = 'events.administer'
-    actions = {"add": ("Legg til", "register_user"),
-               "del": ("Fjern", "deregister_users")}
-    static_context = {'actions': [(key, name) for key, (name, _) in actions.items()]}
+    permission_required = "events.administer"
+    actions = {
+        "add": ("Legg til", "register_user"),
+        "del": ("Fjern", "deregister_users"),
+    }
+    static_context = {"actions": [(key, name) for key, (name, _) in actions.items()]}
 
     def post(self, request, pk):
         """Handle http post request"""
-        action_key = request.POST.get('action')
+        action_key = request.POST.get("action")
         _, method = self.actions[action_key]
         getattr(self, method)()
-        return HttpResponseRedirect(reverse('event_admin', kwargs={'pk': pk}))
+        return HttpResponseRedirect(reverse("event_admin", kwargs={"pk": pk}))
 
     def register_user(self):
         """Melder på brukeren nevnt i POST['text'] på arrangementet."""
-        username = self.request.POST.get('text')
+        username = self.request.POST.get("text")
 
-        #Tar inn verdien True fra checkboksen hvis den er markert
+        # Tar inn verdien True fra checkboksen hvis den er markert
         if self.request.POST.get("Regelboks") == "True":
             regelbryting = True
         else:
@@ -68,18 +77,19 @@ class AdministerRegistrationsView(StaticContextMixin,
         try:
             user = User.objects.get(username=username)
 
-            #Legger brukeren i listen.
-            self.get_object().register_user(user, ignore_restrictions = regelbryting)
+            # Legger brukeren i listen.
+            self.get_object().register_user(user, ignore_restrictions=regelbryting)
         except (User.DoesNotExist, UserRegistrationException) as ex:
             self.messages.warning(
                 f"Kunne ikke legge til {username} i påmeldingslisten. "
                 f"Returnert error var: {type(ex).__name__}: {str(ex)}. "
                 "Ta kontakt med WebKom, og oppgi denne feilmeldingen "
-                "dersom du tror dette er en feil.")
+                "dersom du tror dette er en feil."
+            )
 
     def deregister_users(self):
         """Melder av brukerne nevnt i POST['user']."""
-        user_list = self.request.POST.getlist('user')
+        user_list = self.request.POST.getlist("user")
         if not user_list:
             self.messages.warning("Ingen brukere krysset av!")
 
@@ -92,7 +102,9 @@ class AdministerRegistrationsView(StaticContextMixin,
                     f"Kunne ikke fjerne {username} fra påmeldingslisten. "
                     f"Returnert error var: {type(ex).__name__}: {str(ex)}. "
                     "Ta kontakt med WebKom, og oppgi denne feilmeldingen "
-                    "dersom du tror dette er en feil.")
+                    "dersom du tror dette er en feil."
+                )
+
 
 def calendar(request, year=None, month=None):
     """
@@ -106,16 +118,16 @@ def calendar(request, year=None, month=None):
     except ValueError:  # Not a valid year and month
         raise Http404
 
-    events = Event.objects.filter(
-        event_start__year = year,
-        event_start__month = month)
+    events = Event.objects.filter(event_start__year=year, event_start__month=month)
     cal = EventCalendar(events, year, month).formatmonth(year, month)
 
     user = request.user
     future_attending_events = attending_events(user, today)
 
-    months = year*12 + month - 1 # months since epoch (Christ)
-    month_list = [datetime.date(m//12, m%12+1, 1) for m in range(months-5, months+7)]
+    months = year * 12 + month - 1  # months since epoch (Christ)
+    month_list = [
+        datetime.date(m // 12, m % 12 + 1, 1) for m in range(months - 5, months + 7)
+    ]
 
     # Get some random dates in the current, next, and previous month.
     # These dates are used load the calendar for that month.
@@ -123,15 +135,16 @@ def calendar(request, year=None, month=None):
     # * this is some day in this month
     # * next is some day in the next month
     context = {
-        'calendar': mark_safe(cal),
-        'prev': first_of_month - datetime.timedelta(27),
-        'this': first_of_month,
-        'next': first_of_month + datetime.timedelta(32),
-        'future_attending_events': future_attending_events,
-        'month_list': month_list
+        "calendar": mark_safe(cal),
+        "prev": first_of_month - datetime.timedelta(27),
+        "this": first_of_month,
+        "next": first_of_month + datetime.timedelta(32),
+        "future_attending_events": future_attending_events,
+        "month_list": month_list,
     }
 
-    return render(request, 'events/event_list.html', context)
+    return render(request, "events/event_list.html", context)
+
 
 class EventMainPage(ListView):
     model = Event
@@ -139,58 +152,65 @@ class EventMainPage(ListView):
     NUMBER_OF_EVENTS = 10  # Number of events to list
 
     def get_queryset(self):
-        events = super().get_queryset().order_by('event_start')
-        data = self.request.GET if self.request.GET else {'start_time': datetime.date.today()}
+        events = super().get_queryset().order_by("event_start")
+        data = (
+            self.request.GET
+            if self.request.GET
+            else {"start_time": datetime.date.today()}
+        )
         filterForm = FilterEventsForm(data)
         if filterForm.is_valid():
-            if filterForm.cleaned_data['type'] == 'event':
+            if filterForm.cleaned_data["type"] == "event":
                 events = events.exclude(is_bedpres=True)
-            elif filterForm.cleaned_data['type'] == 'bedpres':
+            elif filterForm.cleaned_data["type"] == "bedpres":
                 events = events.filter(is_bedpres=True)
-            if filterForm.cleaned_data['start_time']:
-                filter_time = filterForm.cleaned_data['start_time']
+            if filterForm.cleaned_data["start_time"]:
+                filter_time = filterForm.cleaned_data["start_time"]
             else:
                 filter_time = datetime.date.today()
             events = events.filter(event_start__gte=filter_time)
 
         self.filterForm = filterForm
-        events = events[:self.NUMBER_OF_EVENTS]
+        events = events[: self.NUMBER_OF_EVENTS]
         return events
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         if user.is_authenticated:
-            context['penalties'] = user.get_penalties()
-            context['penalties__count'] = sum([reg.penalty for reg in context['penalties']])
-            context['user_events'] = user.eventregistration_set.\
-                filter(event__event_start__gte=datetime.date.today()).\
-                order_by('event__event_start')
-        context['filter_form'] = self.filterForm
+            context["penalties"] = user.get_penalties()
+            context["penalties__count"] = sum(
+                [reg.penalty for reg in context["penalties"]]
+            )
+            context["user_events"] = user.eventregistration_set.filter(
+                event__event_start__gte=datetime.date.today()
+            ).order_by("event__event_start")
+        context["filter_form"] = self.filterForm
         return context
 
 
 class EventRegistrationsView(PermissionRequiredMixin, DetailView):
     """Viser en liste over alle brukere påmeldt til arrangementet."""
+
     model = Event
     context_object_name = "event"
     template_name = "events/event_registrations.html"
-    permission_required = 'events.add_event'
+    permission_required = "events.add_event"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         event = self.object
         regs = event.eventregistration_set
-        context['eventregistrations'] = regs.order_by('-attending', 'user__last_name')
+        context["eventregistrations"] = regs.order_by("-attending", "user__last_name")
         return context
 
 
 class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
     """Viser arrangementet."""
+
     model = Event
     context_object_name = "event"
-    template_name = 'events/event_detail.html'
+    template_name = "events/event_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -200,77 +220,84 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
         if user.is_authenticated:
             # Innlogget, så sjekk om de er påmeldt
             try:
-                context['is_registered'] = event.is_registered(user)
-                context['is_attending'] = event.is_attending(user)
-                context['is_waiting'] = event.is_waiting(user)
+                context["is_registered"] = event.is_registered(user)
+                context["is_attending"] = event.is_attending(user)
+                context["is_waiting"] = event.is_waiting(user)
             except EventException as e:
                 self.messages.error(e)
 
         if event.registration_required and self.request.user.is_authenticated:
             classnumber = [group.get_class_number() for group in event.open_for.all()]
             classnumber = set(classnumber)
-            context['classnumber'] = classnumber
-            context['allowed_to_attend'] = event.allowed_to_attend(user) and event.user_penalty_limit(user)
+            context["classnumber"] = classnumber
+            context["allowed_to_attend"] = event.allowed_to_attend(
+                user
+            ) and event.user_penalty_limit(user)
             try:
                 event._assert_user_allowed_to_register(user)
             except UserRegistrationException as e:
-                context['reason_for_registration_failure'] = str(e)
+                context["reason_for_registration_failure"] = str(e)
 
-        context['type'] = "bedpres" if event.is_bedpres else "event" # Used to include correct template
+        context["type"] = (
+            "bedpres" if event.is_bedpres else "event"
+        )  # Used to include correct template
         return context
 
     def get_admin_links(self):
         admin_list = []
         if self.object.registration_required:
-            admin_list += [{
-                "name": "Administrer påmeldinger",
-                "glyphicon_symbol": "user",
-                "url": reverse("event_admin", args=[self.object.id]),
-            },
-            {
-                "name": "Påmeldingsliste",
-                "glyphicon_symbol": "list",
-                "url": reverse("event_registrations", args=[self.object.id]),
-            }]
+            admin_list += [
+                {
+                    "name": "Administrer påmeldinger",
+                    "glyphicon_symbol": "user",
+                    "url": reverse("event_admin", args=[self.object.id]),
+                },
+                {
+                    "name": "Påmeldingsliste",
+                    "glyphicon_symbol": "list",
+                    "url": reverse("event_registrations", args=[self.object.id]),
+                },
+            ]
             if self.object.penalty != 0:
-                admin_list.append({
-                    "name": "Registrer oppmøte",
-                    "glyphicon_symbol": "check",
-                    "url": reverse("event_register_attendance", args=[self.object.id]),
-                })
+                admin_list.append(
+                    {
+                        "name": "Registrer oppmøte",
+                        "glyphicon_symbol": "check",
+                        "url": reverse(
+                            "event_register_attendance", args=[self.object.id]
+                        ),
+                    }
+                )
 
         return admin_list + super().get_admin_links()
 
 
-
-
 class UserEventView(LoginRequiredMixin, TemplateView):
     """Show list of events the logged in user is registered to"""
-    template_name = 'events/event_showuser.html'
+
+    template_name = "events/event_showuser.html"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         user = self.request.user
-        context_data['user'] = user
+        context_data["user"] = user
         if user.is_authenticated:
-            regs = user.eventregistration_set.all().order_by('event__event_start')
-            context_data['eventregistration_list'] = regs
-            context_data['is_on_a_waiting_list'] = regs.filter(attending=False).exists()
-            context_data['is_attending_an_event'] = regs.filter(attending=True).exists()
+            regs = user.eventregistration_set.all().order_by("event__event_start")
+            context_data["eventregistration_list"] = regs
+            context_data["is_on_a_waiting_list"] = regs.filter(attending=False).exists()
+            context_data["is_attending_an_event"] = regs.filter(attending=True).exists()
         return context_data
 
 
-class RegisterUserView(LoginRequiredMixin,
-                       MessageMixin,
-                       DetailView):
+class RegisterUserView(LoginRequiredMixin, MessageMixin, DetailView):
     """View for at en bruker skal kunne melde seg av og på."""
 
     model = Event
-    template_name = 'events/event_detail.html'
+    template_name = "events/event_detail.html"
 
-    def post(self, *args, **kwargs): # pylint: disable=W0613
+    def post(self, *args, **kwargs):  # pylint: disable=W0613
         """Handle http post request"""
-        reg_type = self.request.POST['registration_type']
+        reg_type = self.request.POST["registration_type"]
         user = self.request.user
 
         if reg_type == "registration":
@@ -294,9 +321,9 @@ class RegisterUserView(LoginRequiredMixin,
             return "Arrangementet er fullt"
         except RegistrationNotAllowed as e:
             # Include e to allow more precise reason for NotAllowed
-            return 'Du har ikke lov til å melde deg på dette arrangementet. ' + str(e)
+            return "Du har ikke lov til å melde deg på dette arrangementet. " + str(e)
         except RegistrationNotOpen:
-            return 'Påmeldingen er ikke åpen.'
+            return "Påmeldingen er ikke åpen."
         except RegistrationAlreadyExists:
             return "Du er allerede påmeldt."
         except RegistrationNotRequiredException:
@@ -314,21 +341,23 @@ class RegisterUserView(LoginRequiredMixin,
             return "Avmeldingsfristen er ute."
         return "Du er meldt av arrangementet."
 
+
 class RegisterAttendanceView(DetailView, MessageMixin):
     """Used by event admins to register attendance"""
 
     model = Event
     template_name = "events/register_attendance.html"
 
-
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         attending = EventRegistration.objects.filter(event=self.object, attending=True)
-        redirection = redirect(self.request.resolver_match.view_name, kwargs.pop('pk', 1))
+        redirection = redirect(
+            self.request.resolver_match.view_name, kwargs.pop("pk", 1)
+        )
 
         for q in request.POST:
-            if q.startswith('user_penalty_'):
-                pk = q.split('_')[-1]
+            if q.startswith("user_penalty_"):
+                pk = q.split("_")[-1]
                 penalty_value = request.POST[q]
                 reg_req = attending.get(pk=pk)
                 reg_req.penalty = penalty_value
@@ -339,12 +368,11 @@ class RegisterAttendanceView(DetailView, MessageMixin):
                     self.messages.warning(f"Invalid penalty value for {reg_req.user}.")
         return redirection
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         event = self.object
         registrations = event.eventregistration_set.filter(attending=True)
-        context['registrations'] = registrations.order_by('user__first_name')
+        context["registrations"] = registrations.order_by("user__first_name")
         return context
 
 
@@ -354,8 +382,10 @@ def ical_event(request, event_id):
     event = Event.objects.get(id=event_id)
 
     # Use the same template for both Event and BedPres.
-    template = loader.get_template('events/event_icalendar.ics')
-    context = {'event_list': (event,), }
-    response = HttpResponse(template.render(context), content_type='text/calendar')
-    response['Content-Disposition'] = 'attachment; filename=Nabla_%s.ics' % event.slug
+    template = loader.get_template("events/event_icalendar.ics")
+    context = {
+        "event_list": (event,),
+    }
+    response = HttpResponse(template.render(context), content_type="text/calendar")
+    response["Content-Disposition"] = "attachment; filename=Nabla_%s.ics" % event.slug
     return response

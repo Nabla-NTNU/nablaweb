@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Application, ApplicationRound, Committee
 
 
@@ -10,6 +11,7 @@ class ApplicationRoundAdmin(admin.ModelAdmin):
 @admin.register(Committee)
 class CommitteeAdmin(admin.ModelAdmin):
     pass
+
 
 @admin.register(Application)
 class Application(admin.ModelAdmin):

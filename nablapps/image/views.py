@@ -13,4 +13,5 @@ def view_markdown(request):
     return render(
         request,
         "content/images/markdown_test.html",
-        {"markdown_text": request.POST.get("markdown_text", "")})
+        {"markdown_text": request.POST.get("markdown_text", "")},
+    )

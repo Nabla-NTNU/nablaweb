@@ -1,17 +1,26 @@
-from braces.views import PermissionRequiredMixin
 from datetime import datetime, timedelta
+from time import mktime
+from wsgiref.handlers import format_date_time
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from django.http import Http404
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import DetailView, ListView
-from nablapps.accounts.models import NablaUser
-from time import mktime
-from wsgiref.handlers import format_date_time
 from django.core.exceptions import PermissionDenied
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import DetailView, ListView
 
-from ..models.advent import AdventCalendar, AdventDoor, AdventParticipation, SantaCount, Santa
+from braces.views import PermissionRequiredMixin
+
+from nablapps.accounts.models import NablaUser
+
+from ..models.advent import (
+    AdventCalendar,
+    AdventDoor,
+    AdventParticipation,
+    Santa,
+    SantaCount,
+)
 
 
 class AdventDoorView(DetailView):
@@ -20,9 +29,13 @@ class AdventDoorView(DetailView):
     context_object_name = "door"
 
     def get_object(self, queryset=None):
-        self.calendar = get_object_or_404(AdventCalendar, year=self.kwargs['year'])
-        door = get_object_or_404(AdventDoor, number=self.kwargs['number'], calendar=self.calendar)
-        if door.is_published or self.request.user.has_perm("interactive.change_adventdoor"):
+        self.calendar = get_object_or_404(AdventCalendar, year=self.kwargs["year"])
+        door = get_object_or_404(
+            AdventDoor, number=self.kwargs["number"], calendar=self.calendar
+        )
+        if door.is_published or self.request.user.has_perm(
+            "interactive.change_adventdoor"
+        ):
             return door
         else:
             raise Http404("Ikke publisert")
@@ -33,13 +46,12 @@ class AdventDoorView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         door = self.object
-        context['calendar'] = self.calendar
+        context["calendar"] = self.calendar
         try:
             user = self.request.user
             if not user.is_anonymous:
-                context['part'] = AdventParticipation.objects.get(
-                    user=user,
-                    door=door.id
+                context["part"] = AdventParticipation.objects.get(
+                    user=user, door=door.id
                 )
         except AdventParticipation.DoesNotExist:
             pass
@@ -57,7 +69,7 @@ class AdventCalendarView(ListView):
     context_object_name = "doors"
 
     def dispatch(self, request, *args, **kwargs):
-        self.calendar = get_object_or_404(AdventCalendar, year=kwargs['year'])
+        self.calendar = get_object_or_404(AdventCalendar, year=kwargs["year"])
         return super().dispatch(request, *args, **kwargs)
 
     def get_template_names(self):
@@ -70,7 +82,7 @@ class AdventCalendarView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['calendar'] = self.calendar
+        context["calendar"] = self.calendar
         return context
 
     def get(self, request, *args, **kwargs):
@@ -79,14 +91,13 @@ class AdventCalendarView(ListView):
         if now < datetime(now.year, now.month, now.day, 10):
             now = now - timedelta(days=1)
         next = datetime(now.year, now.month, now.day, 10) + timedelta(days=1)
-        response['Cache-Control'] = "max-age=" \
-                                    + str((next - now).seconds)
+        response["Cache-Control"] = "max-age=" + str((next - now).seconds)
         stamp = mktime(next.timetuple())
-        response['Expires'] = format_date_time(stamp)  # legacy support
-        
+        response["Expires"] = format_date_time(stamp)  # legacy support
+
         if self.calendar.requires_login and not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-        
+
         return response
 
 
@@ -94,21 +105,13 @@ class AdventCalendarView(ListView):
 def participate_in_competition(request, year, number):
 
     calendar = get_object_or_404(AdventCalendar, year=year)
-    door = get_object_or_404(AdventDoor,
-                             calendar=calendar,
-                             number=number
-                             )
+    door = get_object_or_404(AdventDoor, calendar=calendar, number=number)
 
     if door.is_lottery and door.is_today:
         user = request.user
-        text = request.POST.get('text')
+        text = request.POST.get("text")
         AdventParticipation.objects.update_or_create(
-            user=user,
-            door=door,
-            defaults={
-                'text': text,
-                'when': datetime.now()
-            }
+            user=user, door=door, defaults={"text": text, "when": datetime.now()}
         )
     return redirect(door.get_absolute_url())
 
@@ -116,11 +119,8 @@ def participate_in_competition(request, year, number):
 @permission_required("interactive.change_adventdoor")
 def reset_door(request, year, number):
     calendar = get_object_or_404(AdventCalendar, year=year)
-    door = get_object_or_404(AdventDoor,
-                             calendar=calendar,
-                             number=number
-                             )
-    my_next = request.GET.get('next')
+    door = get_object_or_404(AdventDoor, calendar=calendar, number=number)
+    my_next = request.GET.get("next")
 
     if door.is_today:
         door.winner = None
@@ -136,8 +136,10 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
     permission_required = "interactive.change_adventdoor"
 
     def get_object(self, queryset=None):
-        calendar = get_object_or_404(AdventCalendar, year=self.kwargs['year'])
-        return get_object_or_404(AdventDoor, number=self.kwargs['number'], calendar=calendar)
+        calendar = get_object_or_404(AdventCalendar, year=self.kwargs["year"])
+        return get_object_or_404(
+            AdventDoor, number=self.kwargs["number"], calendar=calendar
+        )
 
     def post(self, *args, **kwargs):
         door = self.get_object()
@@ -145,7 +147,7 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
             messages.info(self.request, "Vinner allerede valgt")
         elif door.is_text_response:
             try:
-                winner_username = self.request.POST.get('winner')
+                winner_username = self.request.POST.get("winner")
                 door.winner = NablaUser.objects.get(username=winner_username)
                 door.save()
             except NablaUser.DoesNotExist:
@@ -157,9 +159,10 @@ class AdventDoorAdminView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['base_template'] = self.object.calendar.template
+        context["base_template"] = self.object.calendar.template
 
         return context
+
 
 def register_found_santa(request, santa_id, redirect_url):
     if request.user.is_authenticated:
@@ -171,6 +174,7 @@ def register_found_santa(request, santa_id, redirect_url):
                 santa_count.save()
     return redirect("hidden_santa")
 
+
 class SantaCountListView(ListView):
     model = SantaCount
     template_name = "interactive/santa_hunt.html"
@@ -178,15 +182,15 @@ class SantaCountListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if(self.request.user.is_authenticated):
+        if self.request.user.is_authenticated:
             try:
                 user_count = SantaCount.objects.get(user=self.request.user)
                 context["user_score"] = user_count.get_score()
-            except:
+            except:  # noqa: E722
                 context["user_score"] = 0
 
         all_santa_counts = SantaCount.objects.all()
-        all_santa_counts = sorted(all_santa_counts, key = lambda x: -x.get_score())
+        all_santa_counts = sorted(all_santa_counts, key=lambda x: -x.get_score())
 
         users = []
         user_results = []

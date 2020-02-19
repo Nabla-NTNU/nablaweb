@@ -1,7 +1,7 @@
-from django.conf.urls import url 
+from django.conf.urls import url
+
 from .views import AboutView
 
-urlpatterns = [ 
-    url(r'^$', AboutView.as_view(), name='om-nabla'),
+urlpatterns = [
+    url(r"^$", AboutView.as_view(), name="om-nabla"),
 ]
-

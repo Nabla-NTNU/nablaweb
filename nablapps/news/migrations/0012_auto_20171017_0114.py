@@ -8,13 +8,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('news', '0011_auto_20171017_0035'),
+        ("news", "0011_auto_20171017_0035"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='newsarticle',
-            name='last_changed_date',
-            field=models.DateTimeField(auto_now=True, null=True, verbose_name='Redigeringsdato'),
+            model_name="newsarticle",
+            name="last_changed_date",
+            field=models.DateTimeField(
+                auto_now=True, null=True, verbose_name="Redigeringsdato"
+            ),
         ),
     ]

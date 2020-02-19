@@ -1,20 +1,24 @@
 # Vote for color
 
-from django.db import models
-from nablapps.accounts.models import NablaUser
-from django.core.validators import re, RegexValidator
-from math import atan2, sqrt
 import colorsys
 import datetime
+from math import atan2, sqrt
+
+from django.core.validators import RegexValidator, re
+from django.db import models
+
+from nablapps.accounts.models import NablaUser
 
 # Copied from django_extras
 color_re = re.compile(
-    r'(^#[a-f0-9]{3,6}$)'  # Hash style
-    r'|(^rgb\s*\(\s*((2[0-4][0-9]|25[0-5]|1?[0-9]{1,2}|100%|[0-9]{1,2}%)\s*,\s*){2}((2[0-4][0-9]|25[0-5]|1?[0-9]{1,2}|100%|[0-9]{1,2}%)\s*)\))'  # rgb style
-    r'|(^hsl\s*\(\s*(360|3[0-5][0-9]|[0-2]?[0-9]{1,2})\s*,\s*(100%|[0-9]{1,2}%)\s*,\s*(100%|[0-9]{1,2}%)\s*\)$)',  # hsl style
-    re.IGNORECASE
+    r"(^#[a-f0-9]{3,6}$)"  # Hash style
+    r"|(^rgb\s*\(\s*((2[0-4][0-9]|25[0-5]|1?[0-9]{1,2}|100%|[0-9]{1,2}%)\s*,\s*){2}((2[0-4][0-9]|25[0-5]|1?[0-9]{1,2}|100%|[0-9]{1,2}%)\s*)\))"  # rgb style
+    r"|(^hsl\s*\(\s*(360|3[0-5][0-9]|[0-2]?[0-9]{1,2})\s*,\s*(100%|[0-9]{1,2}%)\s*,\s*(100%|[0-9]{1,2}%)\s*\)$)",  # hsl style
+    re.IGNORECASE,
 )
-validate_color = RegexValidator(color_re, 'Enter a valid color in CSS format.', 'invalid')
+validate_color = RegexValidator(
+    color_re, "Enter a valid color in CSS format.", "invalid"
+)
 
 
 class ColorChoice(models.Model):
@@ -64,14 +68,14 @@ class ColorChoice(models.Model):
         reds = []
         greens = []
         blues = []
-        for color in colors.values_list('color', flat=True):
+        for color in colors.values_list("color", flat=True):
             try:
-                color = color.lstrip('#')
-                r,g,b = [int(color[i:i+2], 16) for i in [0,2,4]]
+                color = color.lstrip("#")
+                r, g, b = [int(color[i : i + 2], 16) for i in [0, 2, 4]]
                 reds.append(r)
                 greens.append(g)
                 blues.append(b)
-            except:
+            except:  # noqa: E722
                 pass  # Ignore invalid colors
         if len(reds) == 0:
             return "#000000"
@@ -79,4 +83,4 @@ class ColorChoice(models.Model):
         r = sum(reds) / len(reds)
         g = sum(greens) / len(greens)
         b = sum(blues) / len(blues)
-        return '#' + ''.join([hex(int(value))[2:].zfill(2) for value in [r, g, b]])
+        return "#" + "".join([hex(int(value))[2:].zfill(2) for value in [r, g, b]])

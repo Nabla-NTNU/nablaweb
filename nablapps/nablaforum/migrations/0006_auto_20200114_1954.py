@@ -7,13 +7,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('nablaforum', '0005_auto_20200104_1336'),
+        ("nablaforum", "0005_auto_20200104_1336"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='channel',
-            name='members',
-            field=models.ManyToManyField(blank=True, related_name='members', to=settings.AUTH_USER_MODEL),
+            model_name="channel",
+            name="members",
+            field=models.ManyToManyField(
+                blank=True, related_name="members", to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]

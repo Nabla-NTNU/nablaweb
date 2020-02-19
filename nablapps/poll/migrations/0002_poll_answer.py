@@ -8,13 +8,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('poll', '0001_squashed_0008_remove_poll_content_type'),
+        ("poll", "0001_squashed_0008_remove_poll_content_type"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='poll',
-            name='answer',
-            field=models.CharField(blank=True, default='', max_length=1000, verbose_name='Svar'),
+            model_name="poll",
+            name="answer",
+            field=models.CharField(
+                blank=True, default="", max_length=1000, verbose_name="Svar"
+            ),
         ),
     ]

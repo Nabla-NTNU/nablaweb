@@ -8,12 +8,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('news', '0013_auto_20171017_0144'),
+        ("news", "0013_auto_20171017_0144"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='newsarticle',
-            name='view_counter',
-        ),
+        migrations.RemoveField(model_name="newsarticle", name="view_counter",),
     ]

@@ -3,14 +3,17 @@ Tests for the EventForm
 """
 # pylint: disable=C0111,C0301
 from collections import ChainMap
+
 from django.test import TestCase
+
 from nablapps.events.forms import EventForm
 
 
 class EventFormTestCase(TestCase):
-
     def assertFormValid(self, form):
-        self.assertTrue(form.is_valid(), f"Form should be valid but has these errors: {form.errors}")
+        self.assertTrue(
+            form.is_valid(), f"Form should be valid but has these errors: {form.errors}"
+        )
 
     def assertFormInValid(self, form):
         self.assertFalse(form.is_valid(), "Form should be invalid but isn't")
@@ -23,13 +26,16 @@ class EventFormTestCase(TestCase):
         }
 
     def get_valid_registration_form_dict(self):
-        return ChainMap({
-            "registration_required": "1",
-            "places": "20",
-            "registration_deadline": "2015-09-01",
-            "has_queue": "0",
-            "penalty": 0
-        }, self.get_smallest_valid_form())
+        return ChainMap(
+            {
+                "registration_required": "1",
+                "places": "20",
+                "registration_deadline": "2015-09-01",
+                "has_queue": "0",
+                "penalty": 0,
+            },
+            self.get_smallest_valid_form(),
+        )
 
     def test_empty_form(self):
         self.assertFormInValid(EventForm({}))
