@@ -6,9 +6,9 @@ help:
 	@echo 'check        - Check code formatting'
 
 fixme:
-	black nablaweb nablapps
+	isort -rc && black nablapps
 
 check:
-	flake8 --max-line-length=88
+	flake8 --max-line-length=88 && isort -rc --check-only
 
 .PHONY: fixme check
