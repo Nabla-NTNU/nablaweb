@@ -27,6 +27,8 @@ django-node-assets = "*"
 markdown = "*"
 django-qr-code = "*"
 django-multi-email-field = "*"
+black = "==19.10b0"
+isort = "*"
 
 [dev-packages]
 pylint = "*"
