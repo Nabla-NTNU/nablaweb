@@ -1,5 +1,5 @@
 # Nablaweb #
-
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 Velkommen til nablaweb!
 
 All python-kode, html, css, javascript og andre statiske filer som har med http://nabla.no skal ligge her.
@@ -42,6 +42,18 @@ For å komme i gang med Nablaweb, sjekk [wikien.](https://github.com/NablaWebkom
 - nablaweb -- inneholder settings og urls. Knutepunktet for prosjektet.
 - var -- variabelt innhold. Inneholder bl.a. media og sqlite.db
 - static -- inneholder js, css og noen bilder. 
+
+## Kodestil
+Nablaweb følger en PEP8 substil som heter Black.
+Vi bruker Black og isort for å formatere koden.
+flake8 brukes til kontroll av formatering.
+
+For å formatere koden din:
+ - `make fixme` formaterer feil i koden din.
+ - `make check` kontrollerer at du har korrekt formatert kode.
+
+Alltid kjør `make check` før du pusher kode.
+
 
 ## Standard mappestruktur i Django (de fleste Django-apps, f.eks. nablapps/accounts) ##
 - migrations/ -- lages når man kjører python manage.py makemigrations, ikke gjør manuelle endringer her (med mindre du vet hva du gjør)
