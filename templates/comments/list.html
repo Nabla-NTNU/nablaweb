@@ -7,11 +7,10 @@
 
 <hr>
 
-<div class="row comment" id="c{{ comment.id }}">
-
-    <img class="col-xs-2 thumbnail img-responsive" alt="avatar" width="150" height="150" src=
+<div class="row comment" id="c{{ comment.id }}" style="display: flex">
+    <img class="col-xs-2 thumbnail img-responsive" alt="avatar" width="50" height="50" src=
         {% if comment.user.avatar %}
-            "{% thumbnail comment.user.avatar 150x150 box=comment.user.cropping %}"
+            "{% thumbnail comment.user.avatar 50x50 box=comment.user.cropping %}"
         {% else %}
             "{% static "img/default_avatar.png" %}"
         {%endif %}>
