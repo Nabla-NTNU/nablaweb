@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "==2.2.9"
+django = "==2.1.13"
 django-bootstrap3 = "*"   # Templatetags for bootstrap3
 django-braces = "*"       # Extra mixinclasses for models and views
 django-contrib-comments = "*"
@@ -27,8 +27,9 @@ django-node-assets = "*"
 markdown = "*"
 django-qr-code = "*"
 django-multi-email-field = "*"
-bleach = "==2.1.4"
-wiki = "*"
+flake8 = "*"
+black = "==19.10b0"
+isort = "*"
 
 [dev-packages]
 pylint = "*"
