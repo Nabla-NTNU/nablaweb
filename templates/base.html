@@ -18,18 +18,18 @@
         <meta name="author" content="Nabla">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<!-- Used by Google to verify that we own the domain. --> 
-	<meta name="google-site-verification" content="lfXfxPU7wQGV0Sd87zCnA_3v0rQlDVQdth3kH_1fzIM" />
+        <!-- Used by Google to verify that we own the domain. -->
+        <meta name="google-site-verification" content="lfXfxPU7wQGV0Sd87zCnA_3v0rQlDVQdth3kH_1fzIM" />
 
         <!-- Bootstrap Core CSS -->
         {% addtoblock "css" %}
-{#        <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">#}
-{#        <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap-theme.min.css" %}">#}
+        <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">
+        <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap-theme.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/v4-shims.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/fontawesome.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/brands.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/solid.min.css" %}">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+{#        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">#}
 
         <link href="{% static "css/default.css" %}" rel="stylesheet">
 
@@ -139,30 +139,30 @@
     <div id = "content">
         <!-- Navigation -->
         <header>
-            <nav class="navbar navbar-dark navbar-expand-xl" role="navigation">
+            <nav class="navbar navbar-dark navbar-expand-lg" role="navigation">
             <a class="navbar-brand" href="/">
                     {% block header_logo %}
                     <img width="125" src="{% static "img/nabla_logo_white.svg" %}" alt="Nabla">
                     {% endblock header_logo %}
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-controls="bs-example-navbar-collapse-1" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nabla-navbar-collapse-1" aria-controls="nabla-navbar-collapse-1" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
+            <div class="collapse navbar-collapse " id="nabla-navbar-collapse-1">
                 {% block navbar_container %}
                 {# navigasjonslenker #}
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item mr-1 ">
-                        <a class="nav-link" href="{% url "event_main_page" %}">Arrangementer</a>
+                        <a class="nav-link text-light" href="{% url "event_main_page" %}">Arrangementer</a>
                     </li>
                     <li class="nav-item mr-1 ">
-                    <a class="nav-link" href="{% url "jobs_list" %}">Karriere</a>
+                        <a class="nav-link text-light" href="{% url "jobs_list" %}">Karriere</a>
                     </li>
 
                     <li class="nav-item mr-1 dropdown ">
-                        <a href="#ting" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdown1" role="button"  aria-haspopup="true" aria-expanded="false">
+                        <a href="#ting" class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown1" role="button"  aria-haspopup="true" aria-expanded="false">
                             Nablamedia
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
@@ -179,10 +179,10 @@
                         </div>
                     </li>
                     <li class="nav-item mr-1">
-                    <a class="nav-link" href="{% url "om-nabla" %}">Om Nabla</a></li>
+                        <a class="nav-link text-light" href="{% url "om-nabla" %}">Om Nabla</a></li>
                     <li class="nav-item mr-1 dropdown ">
 
-                        <a href="#Om" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdown2" role="button"  aria-haspopup="true" aria-expanded="false">
+                        <a href="#Om" class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown2" role="button"  aria-haspopup="true" aria-expanded="false">
                             Kontakt og varsling
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
@@ -198,7 +198,7 @@
 {#                </form>#}
                 <ul class="nav navbar-nav ">
                     <li class="nav-item mr-1 ">
-                    <a class="nav-link" href="/search/">Søk</a>
+                        <a class="nav-link text-light" href="/search/">Søk</a>
                     </li>
                     {% if user.is_authenticated %}
                     {# bruker-dropdown #}
@@ -232,10 +232,10 @@
                     {% else %}
 
                     <li class="nav-item mr-1 ">
-                        <a class="nav-link" href="{% url "user_registration" %}">Registrer deg</a>
+                        <a class="nav-link text-light" href="{% url "user_registration" %}">Registrer deg</a>
                     </li>
                     <li class="nav-item mr-1 dropdown">
-                        <a href="{% url "auth_login" %}?next={{ request.path }}" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdown4" role="button"  aria-haspopup="true" aria-expanded="false">
+                        <a href="{% url "auth_login" %}?next={{ request.path }}" class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown4" role="button"  aria-haspopup="true" aria-expanded="false">
                             Logg inn
                         </a>
                         <form class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown4" action="{% url "auth_login" %}" method="post">
@@ -248,9 +248,11 @@
                     </li>
                 {% endif %}
                 {% block flag %}
-                    <li class="nav-item mr-1" ><a class="navbar-brand " href="/english/">
-                        <img src="{% static "img/GB_flag.png" %}" alt="Eng">
-                    </a></li>
+                    <li class="nav-item" >
+                        <a class="navbar-brand " href="/english/">
+                            <img src="{% static "img/GB_flag.png" %}" alt="Eng">
+                        </a>
+                    </li>
                 {% endblock %}
                 </ul>
                 {% endblock navbar_container %}
@@ -262,7 +264,7 @@
         <!-- Page Content -->
         {% block full-content-body %}
 
-        <div class="container box" id = "mainContent">
+        <div class="container" id = "mainContent">
 
             {% block main %}
             <div class="row">
