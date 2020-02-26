@@ -18,7 +18,7 @@ class AlbumList(ListView):
     model = Album
     context_object_name = "albums"
     template_name = "album/album_list.html"
-    paginate_by = 10
+    paginate_by = 12
     queryset = (
         Album.objects.filter(level=0).exclude(visibility="h").order_by("-created_date")
     )
