@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.html import format_html
 
 from image_cropping import ImageCroppingMixin
+
 from nablapps.core.admin import ChangedByMixin
 
 from .models import FrontPageNews, NewsArticle
@@ -14,6 +15,7 @@ from .models import FrontPageNews, NewsArticle
 @admin.register(FrontPageNews)
 class NewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
     """Admin interface for FrontPageNews"""
+
     date_hierarchy = "bump_time"
     list_display = (
         "headline",
@@ -36,8 +38,10 @@ class NewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
     )
     actions = [
         "bump",
-        "stick", "unstick",
-        "hide", "reveal",
+        "stick",
+        "unstick",
+        "hide",
+        "reveal",
     ]
 
     def content_object_with_link(self, news):
@@ -45,8 +49,9 @@ class NewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
         url = news.get_absolute_url()
         return format_html(
             '{content_type}: <a href="{url}">{news}</a>',
-            url=url, news=news,
-            content_type=str(news.content_type).capitalize()
+            url=url,
+            news=news,
+            content_type=str(news.content_type).capitalize(),
         )
 
     def bump(self, request, queryset):
@@ -85,5 +90,6 @@ def add_to_frontpage(modeladmin, request, queryset):
 @admin.register(NewsArticle)
 class NewsArticleAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
     """Admin interface for NewsArticle"""
-    prepopulated_fields = {"slug": ("headline", )}
+
+    prepopulated_fields = {"slug": ("headline",)}
     actions = [add_to_frontpage]

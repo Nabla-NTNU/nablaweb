@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
+
 import pymysql
+
 from .base import *
 
 pymysql.install_as_MySQLdb()
@@ -8,7 +10,7 @@ get_env = os.environ.get
 
 DEBUG = bool(get_env('DEBUG', False))
 ADMINS = [("Django-logging", "django-log@abel.nabla.no")]
-TEMPLATE_DEBUG=False
+TEMPLATE_DEBUG = False
 
 SECRET_KEY = get_env('SECRET_KEY')
 

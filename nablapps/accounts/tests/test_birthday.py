@@ -1,5 +1,6 @@
 from datetime import date
-from django.test import TestCase, Client
+
+from django.test import Client, TestCase
 from django.urls import reverse
 
 from nablapps.accounts.models import NablaUser
@@ -13,8 +14,7 @@ class BirthdayTest(TestCase):
 
     def test_filter_birthday_today(self):
         self.assertListEqual(
-            list(NablaUser.objects.filter_has_birthday_today()),
-            self.birthday_today
+            list(NablaUser.objects.filter_has_birthday_today()), self.birthday_today
         )
 
     def set_birthday_today(self, user_list):

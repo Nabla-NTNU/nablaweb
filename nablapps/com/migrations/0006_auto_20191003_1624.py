@@ -6,13 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('com', '0005_auto_20191003_1327'),
+        ("com", "0005_auto_20191003_1327"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='compage',
-            name='picture',
-            field=models.ImageField(blank=True, help_text='Bilder som er større enn 770x300 px ser best ut. Du kan beskjære bildet etter opplasting.', null=True, upload_to='uploads/com_pictures', verbose_name='Bilde'),
+            model_name="compage",
+            name="picture",
+            field=models.ImageField(
+                blank=True,
+                help_text="Bilder som er større enn 770x300 px ser best ut. Du kan beskjære bildet etter opplasting.",
+                null=True,
+                upload_to="uploads/com_pictures",
+                verbose_name="Bilde",
+            ),
         ),
     ]

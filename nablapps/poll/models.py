@@ -24,6 +24,7 @@ class UserHasVoted(Exception):
 
 class PollManager(models.Manager):
     """Django manager for Poll model"""
+
     def current_poll(self):
         """Gets the current poll"""
         queryset = super().get_queryset()
@@ -34,69 +35,47 @@ class Poll(models.Model):
     """
     Model representing a poll.
     """
-    question = models.CharField(
-        'Spørsmål',
-        max_length=1000
-    )
 
-    answer = models.CharField(
-        'Svar',
-        max_length=1000,
-        default="",
-        blank=True
-    )
+    question = models.CharField("Spørsmål", max_length=1000)
 
-    creation_date = models.DateTimeField(
-        'Opprettet',
-        auto_now_add=True
-    )
+    answer = models.CharField("Svar", max_length=1000, default="", blank=True)
 
-    publication_date = models.DateTimeField(
-        'Publisert'
-    )
+    creation_date = models.DateTimeField("Opprettet", auto_now_add=True)
+
+    publication_date = models.DateTimeField("Publisert")
 
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name="poll_created_by",
-        verbose_name='Lagt til av',
+        verbose_name="Lagt til av",
         editable=False,
         null=True,
         on_delete=models.CASCADE,
     )
 
-    edit_date = models.DateTimeField(
-        'Sist endret',
-        auto_now=True
-    )
+    edit_date = models.DateTimeField("Sist endret", auto_now=True)
 
-    is_current = models.BooleanField(
-        'Nåværende avstemning?',
-        default=True
-    )
+    is_current = models.BooleanField("Nåværende avstemning?", default=True)
 
     users_voted = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        verbose_name='Brukere som har stemt',
+        verbose_name="Brukere som har stemt",
         editable=False,
-        help_text=""
+        help_text="",
     )
 
-    is_user_poll = models.BooleanField(
-        "Er brukerpoll",
-        editable=False,
-        default=False
-    )
+    is_user_poll = models.BooleanField("Er brukerpoll", editable=False, default=False)
 
     objects = PollManager()
 
     def __str__(self):
         return self.question
 
-    def save(self, *args, **kwargs): # pylint: disable=W0221
+    def save(self, *args, **kwargs):  # pylint: disable=W0221
         if self.is_current:
-            Poll.objects.filter(is_current=True)\
-                .exclude(pk=self.pk)\
-                .update(is_current=False)
+            Poll.objects.filter(is_current=True).exclude(pk=self.pk).update(
+                is_current=False
+            )
         super().save(*args, **kwargs)
 
     def get_total_votes(self):
@@ -116,36 +95,23 @@ class Choice(models.Model):
     """
     Model representing a single choice for a single Poll instance
     """
-    poll = models.ForeignKey(
-        Poll,
-        on_delete=models.CASCADE,
-        related_name="choices"
-    )
 
-    choice = models.CharField(
-        'Navn på valg',
-        max_length=80
-    )
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="choices")
 
-    votes = models.IntegerField(
-        'Antall stemmer',
-        blank=False,
-        default=0
-    )
+    choice = models.CharField("Navn på valg", max_length=80)
 
-    creation_date = models.DateTimeField(
-        'Lagt til',
-        auto_now_add=True
-    )
+    votes = models.IntegerField("Antall stemmer", blank=False, default=0)
+
+    creation_date = models.DateTimeField("Lagt til", auto_now_add=True)
 
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name="choice_created_by",
-        verbose_name='Lagt til av',
+        verbose_name="Lagt til av",
         editable=False,
         help_text="Hvem som la til valget i avstemningen",
         on_delete=models.CASCADE,
-        null=True
+        null=True,
     )
 
     def __str__(self):

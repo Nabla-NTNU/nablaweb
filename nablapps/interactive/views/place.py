@@ -2,20 +2,25 @@ import string
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse, Http404
+from django.db.models import Model
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.db.models import Model
-
-from django.views.generic.detail import DetailView
 from django.views.generic.base import RedirectView
+from django.views.generic.detail import DetailView
 
-from ..models.place import PlaceGrid, PlaceAction, extract_action, get_pixel_data, time_of_last_action
-
+from ..models.place import (
+    PlaceAction,
+    PlaceGrid,
+    extract_action,
+    get_pixel_data,
+    time_of_last_action,
+)
 
 
 class PlaceView(DetailView):
     """DetailView displaying the grid with a given pk"""
+
     model = PlaceGrid
     template_name = "interactive/place.html"
     context_object_name = "grid"
@@ -27,11 +32,15 @@ class PlaceView(DetailView):
         else:
             return obj
 
+
 class NewestPlaceView(PlaceView):
     """DetailView displaying the latest grid"""
+
     def get_object(self):
         try:
-            newest_enabled_place = PlaceGrid.objects.filter(publish_date__lte=datetime.now()).latest("publish_date")
+            newest_enabled_place = PlaceGrid.objects.filter(
+                publish_date__lte=datetime.now()
+            ).latest("publish_date")
         except PlaceGrid.DoesNotExist:
             raise Http404
         else:
@@ -43,13 +52,13 @@ def get_place_info(request, pk):
     if not grid.is_published:
         raise Http404
     return JsonResponse(
-            {
-                "width": grid.width,
-                "height": grid.height,
-                "cooldown": grid.cooldown,
-                "enabled": grid.enabled,
-                "legal_colors": grid.legal_colors,
-            }
+        {
+            "width": grid.width,
+            "height": grid.height,
+            "cooldown": grid.cooldown,
+            "enabled": grid.enabled,
+            "legal_colors": grid.legal_colors,
+        }
     )
 
 
@@ -59,17 +68,15 @@ def get_place_grid(request, pk):
         raise Http404
 
     # Preload the foreignkey to latest_action and user to avoid additional database queries
-    qs = grid.lines.prefetch_related("pixels", "pixels__latest_action", "pixels__latest_action__user")
+    qs = grid.lines.prefetch_related(
+        "pixels", "pixels__latest_action", "pixels__latest_action__user"
+    )
 
     grid_values = [
-                [get_pixel_data(pixel) for pixel in line.pixels.all()]
-                for line in qs.all()
+        [get_pixel_data(pixel) for pixel in line.pixels.all()] for line in qs.all()
     ]
     return JsonResponse(
-            {
-                "grid": grid_values,
-                "last_updated": grid.last_updated.timestamp()
-            }
+        {"grid": grid_values, "last_updated": grid.last_updated.timestamp()}
     )
 
 
@@ -119,12 +126,7 @@ def get_place_updates(request, pk):
                         if action is not None:
                             updates.append(extract_action(action))
 
-    return JsonResponse(
-            {
-                "last_updated": grid_timestamp,
-                "updates": updates
-            }
-    )
+    return JsonResponse({"last_updated": grid_timestamp, "updates": updates})
 
 
 @login_required
@@ -140,19 +142,18 @@ def submit_place(request, pk):
             time = 0
         else:
             time = latest_action.time.timestamp()
-    
+
         resp = HttpResponse(time, status=200)
         return resp
     elif request.method == "POST":
         # Validate a pixel submission from a user
         if not grid.enabled:
-            return HttpResponse(
-                    "Submissions closed for this grid",
-                    status=403
-            )
+            return HttpResponse("Submissions closed for this grid", status=403)
 
-        now = datetime.now() # Assumes system time is in UTC
-        next_allowed_place = time_of_last_action(request.user, grid).timestamp() + grid.cooldown
+        now = datetime.now()  # Assumes system time is in UTC
+        next_allowed_place = (
+            time_of_last_action(request.user, grid).timestamp() + grid.cooldown
+        )
         if next_allowed_place > now.timestamp():
             return HttpResponse("Still on cooldown", status=400)
 
@@ -170,7 +171,6 @@ def submit_place(request, pk):
         except (ValueError, TypeError):
             return HttpResponse("Invalid x or y", status=400)
 
-
         # x and y have valid values
         if not 0 <= x < grid.width:
             return HttpResponse("x out of range", status=400)
@@ -185,12 +185,7 @@ def submit_place(request, pk):
 
         # Create the action
         action = PlaceAction.objects.create(
-                user=request.user,
-                grid=grid,
-                time=now,
-                x=x,
-                y=y,
-                color=color
+            user=request.user, grid=grid, time=now, x=x, y=y, color=color
         )
 
         # If the grid was not updated after this pixel was submitted
@@ -198,7 +193,7 @@ def submit_place(request, pk):
         if now > grid.last_updated:
             grid.last_updated = now
             grid.save()
-            
+
             line = grid.lines.get(y=y)
             line.last_updated = now
             line.save()
@@ -210,4 +205,3 @@ def submit_place(request, pk):
             pixel.save()
 
         return HttpResponse(now.timestamp(), status=200)
-

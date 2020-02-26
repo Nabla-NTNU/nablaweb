@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from nablapps.accounts.utils import extract_usernames
 from nablapps.accounts.models import NablaUser
+from nablapps.accounts.utils import extract_usernames
 
 
 class TestExtractUsername(TestCase):

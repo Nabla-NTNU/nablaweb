@@ -1,22 +1,25 @@
-from datetime import datetime, date
-from django.contrib.auth.models import Group, AbstractUser, UserManager
-from django.urls import reverse
-from django.db import models
+from datetime import date, datetime
 from hashlib import sha1
+
+from django.contrib.auth.models import AbstractUser, Group, UserManager
+from django.db import models
+from django.urls import reverse
+
+from image_cropping.fields import ImageCropField, ImageRatioField
+
 from .utils import activate_user_and_create_password, send_activation_email
-from image_cropping.fields import ImageRatioField, ImageCropField
 
 
 class NablaUserManager(UserManager):
     def filter_has_birthday_today(self, today=None):
         today = today or date.today()
-        return self.filter(birthday__day=today.day,
-                           birthday__month=today.month,
-                           is_active=True)
+        return self.filter(
+            birthday__day=today.day, birthday__month=today.month, is_active=True
+        )
 
     def get_from_rfid(self, rfid):
         # Assumes only one result
-        return self.filter(ntnu_card_number = self.rfid_to_em(rfid)).first()
+        return self.filter(ntnu_card_number=self.rfid_to_em(rfid)).first()
 
     @staticmethod
     def rfid_to_em(rfid):
@@ -27,13 +30,13 @@ class NablaUserManager(UserManager):
         binary = bin(int(rfid))[2:]
 
         # Pad with zeros, so it is divisable by 8
-        binary = '0' * (8 - len(binary) % 8)  + binary
+        binary = "0" * (8 - len(binary) % 8) + binary
 
         # Split into 8 bit chuncks
-        chunked = [binary[i: i+8] for i in range(0, len(binary), 8)]
+        chunked = [binary[i : i + 8] for i in range(0, len(binary), 8)]
 
         # Reverse each chuk
-        reversed = ''.join([chunk[::-1] for chunk in chunked])
+        reversed = "".join([chunk[::-1] for chunk in chunked])
 
         # Convert back to decimal
         decimal = str(int(reversed, 2))
@@ -43,54 +46,29 @@ class NablaUserManager(UserManager):
 
         return decimal
 
-        
 
 class NablaUser(AbstractUser):
-    telephone = models.CharField(
-        verbose_name="Telefon",
-        max_length=15,
-        blank=True)
-    cell_phone = models.CharField(
-        verbose_name="Mobil",
-        max_length=15,
-        blank=True)
-    birthday = models.DateField(
-        verbose_name="Bursdag",
-        blank=True,
-        null=True)
-    address = models.CharField(
-        verbose_name="Adresse",
-        max_length=40,
-        blank=True)
-    mail_number = models.CharField(
-        verbose_name="Postnr",
-        max_length=4,
-        blank=True)
-    web_page = models.CharField(
-        verbose_name="Hjemmeside",
-        max_length=80,
-        blank=True)
-    wants_email = models.BooleanField(
-        verbose_name="Motta kullmail",
-        default=True)
-    about = models.TextField(
-        verbose_name="Biografi",
-        blank=True)
+    telephone = models.CharField(verbose_name="Telefon", max_length=15, blank=True)
+    cell_phone = models.CharField(verbose_name="Mobil", max_length=15, blank=True)
+    birthday = models.DateField(verbose_name="Bursdag", blank=True, null=True)
+    address = models.CharField(verbose_name="Adresse", max_length=40, blank=True)
+    mail_number = models.CharField(verbose_name="Postnr", max_length=4, blank=True)
+    web_page = models.CharField(verbose_name="Hjemmeside", max_length=80, blank=True)
+    wants_email = models.BooleanField(verbose_name="Motta kullmail", default=True)
+    about = models.TextField(verbose_name="Biografi", blank=True)
     avatar = ImageCropField(
-        verbose_name='Avatar',
-        blank=True,
-        null=True,
-        upload_to='avatars')
+        verbose_name="Avatar", blank=True, null=True, upload_to="avatars"
+    )
     cropping = ImageRatioField(
-        #assosiated ImageField:
-        'avatar',
-        #Ratio and Minimum size
-        #(width, height):
-        '140x170',
+        # assosiated ImageField:
+        "avatar",
+        # Ratio and Minimum size
+        # (width, height):
+        "140x170",
         allow_fullsize=True,
-        verbose_name='Beskjæring',
+        verbose_name="Beskjæring",
         size_warning=True,
-        )
+    )
     ntnu_card_number = models.CharField(
         verbose_name="NTNU kortnr",
         max_length=10,
@@ -100,7 +78,7 @@ class NablaUser(AbstractUser):
             "På nye kort er dette sifrene etter EM."
             "På gamle kort er dette sifrene nede til venstre."
             "Det brukes blant annet for å komme inn på bedpresser."
-        )
+        ),
     )
 
     objects = NablaUserManager()
@@ -114,7 +92,9 @@ class NablaUser(AbstractUser):
 
          Returnerer 0 hvis brukeren ikke går på fysmat."""
         try:
-            theclass = FysmatClass.objects.filter(user=self).order_by('starting_year')[0]
+            theclass = FysmatClass.objects.filter(user=self).order_by("starting_year")[
+                0
+            ]
             return theclass.get_class_number()
         except (FysmatClass.DoesNotExist, IndexError):
             return 0
@@ -122,8 +102,9 @@ class NablaUser(AbstractUser):
     def get_absolute_url(self):
         return reverse("member_profile", kwargs={"username": self.username})
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
         if not self.last_login:
             self.last_login = datetime.today()
 
@@ -136,7 +117,9 @@ class NablaUser(AbstractUser):
 
     def get_penalties(self):
         """Returns the EventRegistrations for which the user has penalties this semester"""
-        from nablapps.events.models import EventRegistration #Moved down to avoid loop error when FysmatClass was imported to mixins in events
+        from nablapps.events.models import (
+            EventRegistration,
+        )  # Moved down to avoid loop error when FysmatClass was imported to mixins in events
 
         # Find out if we are in first or second term
         today = date.today()
@@ -145,33 +128,31 @@ class NablaUser(AbstractUser):
 
         semester_start = second_semester if second_semester <= today else first_semester
 
-        penalties = EventRegistration.objects.\
-            filter(user=self, date__gte=semester_start).exclude(penalty=0)
+        penalties = EventRegistration.objects.filter(
+            user=self, date__gte=semester_start
+        ).exclude(penalty=0)
         return penalties
-
 
 
 class NablaGroup(Group):
     """
     Subklasse av Group som definerer ekstrainformasjon om grupper
     """
+
     description = models.TextField(verbose_name="Beskrivelse", blank=True)
     mail_list = models.EmailField(verbose_name="Epostliste", blank=True)
 
     logo = models.FileField(
-        upload_to="logos",
-        verbose_name="Logo",
-        blank=True,
-        null=True
+        upload_to="logos", verbose_name="Logo", blank=True, null=True
     )
 
     GROUP_TYPES = (
-        ('komite', 'Komité'),
-        ('kull', 'Kull'),
-        ('studprog', 'Studieprogram'),
-        ('komleder', 'Komitéleder'),
-        ('styremedlm', 'Styremedlem'),
-        ('stilling', 'Stilling'),
+        ("komite", "Komité"),
+        ("kull", "Kull"),
+        ("studprog", "Studieprogram"),
+        ("komleder", "Komitéleder"),
+        ("styremedlm", "Styremedlem"),
+        ("stilling", "Stilling"),
     )
 
     group_type = models.CharField(max_length=10, blank=True, choices=GROUP_TYPES)
@@ -192,32 +173,18 @@ class FysmatClass(NablaGroup):
         return 5 if num > 5 else num
 
     def save(self, *args, **kwargs):
-        self.group_type = 'kull'
+        self.group_type = "kull"
         super().save(*args, **kwargs)
 
 
 class RegistrationRequest(models.Model):
-    username = models.CharField(
-        max_length=80,
-        verbose_name="Brkuernavn"
-    )
+    username = models.CharField(max_length=80, verbose_name="Brkuernavn")
 
-    created = models.DateTimeField(
-        auto_created=True,
-        verbose_name="Opprettet"
-    )
+    created = models.DateTimeField(auto_created=True, verbose_name="Opprettet")
 
-    first_name = models.CharField(
-        max_length=80,
-        verbose_name="Fornavn",
-        null=True
-    )
+    first_name = models.CharField(max_length=80, verbose_name="Fornavn", null=True)
 
-    last_name = models.CharField(
-        max_length=80,
-        verbose_name="Etternavn",
-        null=True
-    )
+    last_name = models.CharField(max_length=80, verbose_name="Etternavn", null=True)
 
     def save(self, *args, **kwargs):
         if not self.id:

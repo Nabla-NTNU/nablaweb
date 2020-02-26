@@ -1,10 +1,11 @@
 """
 Model representing a registration to an event.
 """
-from django.db import models
 from django.conf import settings
-from django.template import loader
 from django.core.exceptions import ValidationError
+from django.db import models
+from django.template import loader
+
 
 class EventRegistration(models.Model):
     """Modell for påmelding på arrangementer.
@@ -14,42 +15,36 @@ class EventRegistration(models.Model):
     Førstmann på ventelista er den påmeldingen med lavest id.
     """
 
-    event = models.ForeignKey(
-        'Event',
-        on_delete=models.CASCADE,
-        blank=False,
-        null=True)
+    event = models.ForeignKey("Event", on_delete=models.CASCADE, blank=False, null=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        verbose_name='bruker',
+        verbose_name="bruker",
         on_delete=models.CASCADE,
         blank=False,
-        null=True)
+        null=True,
+    )
     date = models.DateTimeField(
-        verbose_name="Påmeldingsdato",
-        auto_now_add=True,
-        null=True)
+        verbose_name="Påmeldingsdato", auto_now_add=True, null=True
+    )
     attending = models.BooleanField(
-        verbose_name='har plass',
+        verbose_name="har plass",
         default=True,
         blank=False,
         null=False,
         help_text="Hvis denne er satt til sann har man en plass "
-                  "på arrangementet ellers er det en ventelisteplass.")
-    penalty = models.IntegerField(
-        verbose_name="Prikk",
-        default=0,
-        blank=True)
+        "på arrangementet ellers er det en ventelisteplass.",
+    )
+    penalty = models.IntegerField(verbose_name="Prikk", default=0, blank=True)
 
     class Meta:
-        verbose_name = 'påmelding'
-        verbose_name_plural = 'påmeldte'
+        verbose_name = "påmelding"
+        verbose_name_plural = "påmeldte"
         unique_together = (("event", "user"),)
         db_table = "content_eventregistration"
 
         # This is the order the waiting list will be consulted.
         # So don't change this without thinking.
-        ordering = ("id", )
+        ordering = ("id",)
 
     def __str__(self):
         return f'{self.event}, {self.user} is {"Attending" if self.attending else "Waiting"}'
@@ -71,7 +66,11 @@ class EventRegistration(models.Model):
     def waiting_list_place(self):
         """Returnerer hvilken plass man har på ventelisten gitt at man er på ventelisten."""
         regs = self.event.waiting_registrations
-        return next(i+1 for i, reg in enumerate(regs) if reg == self) if self.waiting else None
+        return (
+            next(i + 1 for i, reg in enumerate(regs) if reg == self)
+            if self.waiting
+            else None
+        )
 
     def set_attending_and_send_email(self):
         """Change the registration to be attending and send an email to the user."""
@@ -82,7 +81,9 @@ class EventRegistration(models.Model):
 
     def _send_moved_to_attending_email(self):
         if self.user.email:
-            subject = f'Påmeldt {self.event.headline}'
+            subject = f"Påmeldt {self.event.headline}"
             template = loader.get_template("events/moved_to_attending_email.txt")
-            message = template.render({'event': self.event, 'name': self.user.get_full_name()})
+            message = template.render(
+                {"event": self.event, "name": self.user.get_full_name()}
+            )
             self.user.email_user(subject, message)

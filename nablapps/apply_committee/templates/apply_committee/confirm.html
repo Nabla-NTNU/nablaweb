@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{% url 'apply-committee' %}">Endre søknad</a>
+
+<h1>Din søknad</h1>
+<ol>
+    {% for application in applications %}
+    <li>{{ application.committee }}</li>
+    {% empty %}
+    Du har ikke søkt.
+    {% endfor %}
+</ol>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block main %}
+<script>
+ function newForm(selector, type) {
+     var newElement = $(selector).clone(true);
+     var total = $('#id_' + type + '-TOTAL_FORMS').val();
+     newElement.find(':input').each(function() {
+         var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+         var id = 'id_' + name;
+         $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+     });
+     newElement.find('label').each(function() {
+         var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+         $(this).attr('for', newFor);
+     });
+
+     newElement.find('.priority_label').first()[0].innerHTML = 1 + +total + ".";  // I seriously do not know jQuery
+     total++;
+     $('#id_' + type + '-TOTAL_FORMS').val(total);
+     $(selector).after(newElement);
+ }
+</script>
+
+<style>
+ #application_form {
+     text-align: center;
+ }
+
+ .priority_label {
+     font-size: 30px;
+     padding-right: 20px;
+ }
+
+ .form-row {
+     margin-bottom: 30px;
+     padding-bottom: 10px;
+ }
+
+ .form-row select {
+     border: 1px solid lightgray;
+     border-radius: 4px;
+     background: white;
+     border-bottom: 3px solid #c84040;
+     padding: 4px 6px;
+     font-size: 26px;
+     width: 300px;
+     margin-bottom: 16px;
+     background: #f5f5f5;
+     margin-right: 30px;
+ }
+
+ .form-row .formgroup {
+     display: inline-block;
+</style>
+<h1>Søk til nablas undergrupper</h1>
+{% if application_round %}
+Nåværende søkerunde: <u>{{ application_round.name }}</u> <br />
+Skriv kún i fritekst-feltet dersom komiteen har sagt at du skal gjøre dette.<br />
+Du kan se en oversikt over hvem som har søkt hva <a href="{% url 'list-applicants' %}">her</a>.
+<hr />
+<form id="application_form" method="post">
+    {% csrf_token %}
+    {{ formset.non_form_errors }}
+    {% for form in formset %}
+    <div class="form-row">
+        <span class="priority_label">{{ forloop.counter }}.</span>
+        <div class="formgroup">
+        {{ form.committee.errors }}
+        {{ form.committee }}
+
+        {{ form.application_text.errors }}
+        {{ form.application_text }}
+
+        {{ form.anonymous.errors }}
+        {{ form.anonymous.label_tag }}
+        {{ form.anonymous }}
+        </div>
+    </div>
+    {% endfor %}
+    <button type="button" onclick="newForm($('.form-row:last'), 'form')">Legg til prioritering</button>
+    {{ formset.management_form }}
+    <button type="submit">Send inn søknad</buttom>
+</form>
+{% else %}
+<p> Det er ikke noen åpne søknader nå</p>
+{% endif %}
+{% endblock %}

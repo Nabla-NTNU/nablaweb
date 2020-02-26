@@ -8,5 +8,6 @@ class AlbumConfig(AppConfig):
     """
     Default appconfig for album app
     """
-    name = 'nablapps.album'
-    verbose_name = 'Album'
+
+    name = "nablapps.album"
+    verbose_name = "Album"

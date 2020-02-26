@@ -8,17 +8,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('news', '0002_remove_news_allow_comments'),
+        ("news", "0002_remove_news_allow_comments"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='news',
-            name='priority',
-        ),
+        migrations.RemoveField(model_name="news", name="priority",),
         migrations.AlterField(
-            model_name='news',
-            name='slug',
+            model_name="news",
+            name="slug",
             field=models.SlugField(blank=True, null=True),
         ),
     ]

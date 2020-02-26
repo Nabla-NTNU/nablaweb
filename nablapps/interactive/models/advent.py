@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta
-from django.conf import settings
-from django.urls import reverse
-from django.db import models
-from nablapps.accounts.models import NablaUser
-from nablapps.com.models import Committee
 from random import choice
 
-from .base import InteractiveElement, InteractionResult
+from django.conf import settings
+from django.db import models
+from django.urls import reverse
+
+from nablapps.accounts.models import NablaUser
+from nablapps.com.models import Committee
+
+from .base import InteractionResult, InteractiveElement
 
 
 class AdventDoor(InteractiveElement):
@@ -14,21 +16,16 @@ class AdventDoor(InteractiveElement):
     An element of the advent calendar.
     """
 
-    number = models.IntegerField(
-        verbose_name="Nummer"
-    )
+    number = models.IntegerField(verbose_name="Nummer")
 
-    content = models.TextField(
-        verbose_name="Innhold",
-        blank=True
-    )
+    content = models.TextField(verbose_name="Innhold", blank=True)
 
     committee = models.ForeignKey(
         Committee,
         blank=True,
         verbose_name="Komité",
         on_delete=models.CASCADE,
-        null=True
+        null=True,
     )
 
     winner = models.ForeignKey(
@@ -37,71 +34,58 @@ class AdventDoor(InteractiveElement):
         blank=True,
         null=True,
         on_delete=models.CASCADE,
-        related_name="advent_doors_won"
+        related_name="advent_doors_won",
     )
 
     calendar = models.ForeignKey(
-        'interactive.AdventCalendar',
-        on_delete=models.CASCADE,
-        verbose_name="Kalender"
+        "interactive.AdventCalendar", on_delete=models.CASCADE, verbose_name="Kalender"
     )
 
-    is_lottery = models.BooleanField(
-        default=False,
-        verbose_name="Har trekning"
-    )
+    is_lottery = models.BooleanField(default=False, verbose_name="Har trekning")
 
-    is_text_response = models.BooleanField(
-        default=False,
-        verbose_name="Har tekstsvar"
-    )
+    is_text_response = models.BooleanField(default=False, verbose_name="Har tekstsvar")
 
     short_description = models.CharField(
-        max_length=200,
-        verbose_name="Kort beskrivelse",
-        null=True,
-        blank=True
+        max_length=200, verbose_name="Kort beskrivelse", null=True, blank=True
     )
 
-    image = models.ImageField(
-        verbose_name="Bilde",
-        null=True,
-        blank=True
-    )
+    image = models.ImageField(verbose_name="Bilde", null=True, blank=True)
 
     quiz = models.ForeignKey(
-        'interactive.Quiz',
+        "interactive.Quiz",
         verbose_name="Lenket quiz",
         on_delete=models.CASCADE,
         null=True,
-        blank=True
+        blank=True,
     )
 
     user_test = models.ForeignKey(
-        'interactive.Test',
+        "interactive.Test",
         verbose_name="Lenket brukertest",
         on_delete=models.CASCADE,
         null=True,
-        blank=True
+        blank=True,
     )
 
     class Meta:
         verbose_name = "Adventsluke"
         verbose_name_plural = "Adventsluker"
-        unique_together = ('number', 'calendar', )
+        unique_together = (
+            "number",
+            "calendar",
+        )
 
     def __str__(self):
         return str(self.number)
 
     def get_absolute_url(self):
-        return reverse("advent_door", kwargs={
-            'year': self.calendar.year,
-            'number': self.number
-        })
+        return reverse(
+            "advent_door", kwargs={"year": self.calendar.year, "number": self.number}
+        )
 
     @property
     def date(self):
-        return self.calendar.first + timedelta(days=(self.number-1))
+        return self.calendar.first + timedelta(days=(self.number - 1))
 
     @property
     def is_published(self):
@@ -111,7 +95,9 @@ class AdventDoor(InteractiveElement):
 
     @property
     def is_today(self):
-        return datetime.now() >= self.date and datetime.now() <= self.date + timedelta(days=1)
+        return datetime.now() >= self.date and datetime.now() <= self.date + timedelta(
+            days=1
+        )
 
     @property
     def is_previous(self):
@@ -126,7 +112,7 @@ class AdventDoor(InteractiveElement):
         """
 
         class_list = []
-        
+
         if self.is_today:
             class_list.append("advent-door-today")
         if self.is_previous:
@@ -135,8 +121,7 @@ class AdventDoor(InteractiveElement):
         # Yes, we could return inside each if-statement, but this way makes it
         # easier and cleaner to add multiple classes
         return " ".join(class_list)
-        
-    
+
     def choose_winner(self):
         if self.is_lottery and self.is_published:
             self.winner = choice(self.participation.all()).user
@@ -144,22 +129,16 @@ class AdventDoor(InteractiveElement):
 
 class AdventCalendar(models.Model):
 
-    year = models.IntegerField(
-        verbose_name="År",
-        unique=True
-    )
+    year = models.IntegerField(verbose_name="År", unique=True)
 
     requires_login = models.BooleanField(
-        default = False,
-        verbose_name = "Krever innlogging for å se side"
+        default=False, verbose_name="Krever innlogging for å se side"
     )
 
     template = models.CharField(
-        max_length=100,
-        verbose_name="Template",
-        default="interactive/advent_base.html"
+        max_length=100, verbose_name="Template", default="interactive/advent_base.html"
     )
-    
+
     @property
     def first(self):
         return datetime(year=self.year, day=1, month=12)
@@ -169,7 +148,7 @@ class AdventCalendar(models.Model):
         verbose_name_plural = "Adventskalendere"
 
     def get_absolute_url(self):
-        return reverse("advent_calendar", kwargs={'year': self.year})
+        return reverse("advent_calendar", kwargs={"year": self.year})
 
     def __str__(self):
         return str(self.year)
@@ -177,36 +156,23 @@ class AdventCalendar(models.Model):
 
 class AdventParticipation(InteractionResult):
 
-    text = models.TextField(
-        null=True
-    )
+    text = models.TextField(null=True)
 
     door = models.ForeignKey(
-        AdventDoor,
-        on_delete=models.CASCADE,
-        related_name="participation"
+        AdventDoor, on_delete=models.CASCADE, related_name="participation"
     )
 
-    user = models.ForeignKey(
-        NablaUser,
-        on_delete=models.CASCADE,
-    )
+    user = models.ForeignKey(NablaUser, on_delete=models.CASCADE,)
+
 
 class Santa(models.Model):
-    santa_location = models.CharField(
-        max_length= 30,
-    )
+    santa_location = models.CharField(max_length=30,)
+
 
 class SantaCount(models.Model):
-    user = models.ForeignKey(
-        NablaUser,
-        on_delete=models.CASCADE,
-    )
+    user = models.ForeignKey(NablaUser, on_delete=models.CASCADE,)
 
-    santas = models.ManyToManyField(
-        Santa,
-        related_name = "santa",
-    )
+    santas = models.ManyToManyField(Santa, related_name="santa",)
 
     def get_score(self):
         return self.santas.count()

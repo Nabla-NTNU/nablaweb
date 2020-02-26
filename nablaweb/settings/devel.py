@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from .base import *
 import os
+
+from .base import *
 
 DEBUG = True
 
@@ -9,14 +10,14 @@ SECRET_KEY = "my_not_so_secret_development_key"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(VARIABLE_CONTENT, os.environ.get('NABLAWEB_DB', 'sqlite.db')),
+        'NAME': os.path.join(VARIABLE_CONTENT, os.environ.get('NABLAWEB_DB', 'sqlite.db')),  # noqa: F405
     }
 }
 
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-        }
+    }
 }
 
 # All epost blir sendt til terminalen, istedet for ut til brukerne.

@@ -1,34 +1,35 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView, TemplateView
-from .models import Product, Category
+from django.shortcuts import get_object_or_404, render
+from django.views.generic import DetailView, ListView, TemplateView
+
+from .models import Category, Product
 
 
 class IndexView(ListView):
-    queryset = Product.objects.order_by('-pub_date')
-    template_name = 'nablashop/index.html'
+    queryset = Product.objects.order_by("-pub_date")
+    template_name = "nablashop/index.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+        context["categories"] = Category.objects.all()
         return context
 
 
 class ProductDetailView(DetailView):
     model = Product
-    template_name = 'nablashop/product_detail.html'
+    template_name = "nablashop/product_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+        context["categories"] = Category.objects.all()
         return context
 
 
 class CategoryDetailView(DetailView):
     model = Category
-    template_name = 'nablashop/category_detail.html'
+    template_name = "nablashop/category_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
-        context['products'] = self.object.product_set.order_by('-pub_date')
+        context["categories"] = Category.objects.all()
+        context["products"] = self.object.product_set.order_by("-pub_date")
         return context

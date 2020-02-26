@@ -6,17 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('interactive', '0009_auto_20190205_1416'),
+        ("interactive", "0009_auto_20190205_1416"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='quiz',
-            name='publication_date',
-        ),
+        migrations.RemoveField(model_name="quiz", name="publication_date",),
         migrations.AlterField(
-            model_name='quiz',
-            name='published',
-            field=models.NullBooleanField(default=True, verbose_name='Publisert'),
+            model_name="quiz",
+            name="published",
+            field=models.NullBooleanField(default=True, verbose_name="Publisert"),
         ),
     ]

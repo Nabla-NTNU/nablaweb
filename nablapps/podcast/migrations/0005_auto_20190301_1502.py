@@ -4,7 +4,8 @@ from django.db import migrations, models
 
 from nablapps.podcast.models import Podcast
 
-'''
+
+"""
 def set_has_video(apps, schema_editor):
     podcasts = Podcast.objects.all()
 
@@ -12,25 +13,35 @@ def set_has_video(apps, schema_editor):
         if pod.extra_markdown:
             pod.has_video = True
             pod.save()
-'''
+"""
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('podcast', '0004_auto_20190205_1402'),
+        ("podcast", "0004_auto_20190205_1402"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='podcast',
-            name='has_video',
-            field=models.BooleanField(default=False, help_text='For å få video-ikon i oversikten.', verbose_name='Har video'),
+            model_name="podcast",
+            name="has_video",
+            field=models.BooleanField(
+                default=False,
+                help_text="For å få video-ikon i oversikten.",
+                verbose_name="Har video",
+            ),
         ),
         migrations.AlterField(
-            model_name='season',
-            name='logo',
-            field=models.ImageField(blank=True, help_text='Podcastlogo. (Bruker fra forrige sesong hvis dette feltet er tomt)', null=True, upload_to='podcast/images', verbose_name='Logo'),
+            model_name="season",
+            name="logo",
+            field=models.ImageField(
+                blank=True,
+                help_text="Podcastlogo. (Bruker fra forrige sesong hvis dette feltet er tomt)",
+                null=True,
+                upload_to="podcast/images",
+                verbose_name="Logo",
+            ),
         ),
-        #migrations.RunPython(set_has_video)
+        # migrations.RunPython(set_has_video)
     ]

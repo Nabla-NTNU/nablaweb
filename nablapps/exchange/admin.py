@@ -1,8 +1,11 @@
 from django.contrib import admin
+
 from image_cropping import ImageCroppingMixin
+
 from nablapps.core.admin import ChangedByMixin
-from .models import University, Exchange, Info, ExchangeNewsArticle
 from nablapps.news.admin import add_to_frontpage
+
+from .models import Exchange, ExchangeNewsArticle, Info, University
 
 
 class ExchangeAdmin(admin.ModelAdmin):
@@ -34,7 +37,8 @@ class InfoAdmin(admin.ModelAdmin):
 
 class ExchangeNewsAdmin(ImageCroppingMixin, ChangedByMixin, admin.ModelAdmin):
     """Admin interface for NewsArticle"""
-    prepopulated_fields = {"slug": ("headline", )}
+
+    prepopulated_fields = {"slug": ("headline",)}
     actions = [add_to_frontpage]
 
 

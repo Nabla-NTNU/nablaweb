@@ -12,7 +12,10 @@ class FlatPageMixin(ContextMixin):
     """
     Adds the content of a FlatPage object into the context of the view.
     """
-    flatpages = []  # Should be a list of tuples of the form ("context_variable", "/flatpage/url")
+
+    flatpages = (
+        []
+    )  # Should be a list of tuples of the form ("context_variable", "/flatpage/url")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -49,11 +52,15 @@ class AdminLinksMixin(ContextMixin):
             {
                 "name": "Endre",
                 "glyphicon_symbol": "pencil",
-                "url": reverse(f"admin:{app_label}_{model_name}_change", args=[self.object.id]),
+                "url": reverse(
+                    f"admin:{app_label}_{model_name}_change", args=[self.object.id]
+                ),
             },
             {
                 "name": "Slett",
                 "glyphicon_symbol": "trash",
-                "url": reverse(f"admin:{app_label}_{model_name}_delete", args=[self.object.id]),
-            }
+                "url": reverse(
+                    f"admin:{app_label}_{model_name}_delete", args=[self.object.id]
+                ),
+            },
         ]

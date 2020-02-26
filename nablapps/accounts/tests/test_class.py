@@ -1,7 +1,8 @@
 from datetime import date
+
 from django.test import TestCase
 
-from nablapps.accounts.models import NablaUser, FysmatClass
+from nablapps.accounts.models import FysmatClass, NablaUser
 
 
 class ClassesTest(TestCase):
@@ -9,17 +10,14 @@ class ClassesTest(TestCase):
         now = date.today()
         years = [now.year - y for y in range(7)]
         self.classes = [
-            FysmatClass.objects.create(
-                name=f"kull{year}",
-                starting_year=year
-            ) for year in years
+            FysmatClass.objects.create(name=f"kull{year}", starting_year=year)
+            for year in years
         ]
         self.users = []
 
         for j, cls in enumerate(self.classes):
             users = [
-                NablaUser.objects.create(username=f"user{j*10+i}")
-                for i in range(4)
+                NablaUser.objects.create(username=f"user{j*10+i}") for i in range(4)
             ]
 
             for u in users:

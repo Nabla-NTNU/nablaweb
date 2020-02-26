@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('news', '0007_move_fields_from_news_to_newsarticle'),
+        ("news", "0007_move_fields_from_news_to_newsarticle"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='news',
-            name='object_id',
+            model_name="news",
+            name="object_id",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
     ]

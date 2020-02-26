@@ -8,20 +8,11 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('interactive', '0001_squashed_0022_adventdoor_user_test'),
+        ("interactive", "0001_squashed_0022_adventdoor_user_test"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='adventdoor',
-            name='view_counter',
-        ),
-        migrations.RemoveField(
-            model_name='quiz',
-            name='view_counter',
-        ),
-        migrations.RemoveField(
-            model_name='test',
-            name='view_counter',
-        ),
+        migrations.RemoveField(model_name="adventdoor", name="view_counter",),
+        migrations.RemoveField(model_name="quiz", name="view_counter",),
+        migrations.RemoveField(model_name="test", name="view_counter",),
     ]

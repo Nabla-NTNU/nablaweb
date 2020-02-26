@@ -10,20 +10,20 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('events', '0006_remove_event_view_counter'),
+        ("events", "0006_remove_event_view_counter"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='eventregistration',
-            unique_together=set([('event', 'user')]),
+            name="eventregistration", unique_together=set([("event", "user")]),
         ),
         migrations.AlterModelOptions(
-            name='eventregistration',
-            options={'ordering': ('id',), 'verbose_name': 'påmelding', 'verbose_name_plural': 'påmeldte'},
+            name="eventregistration",
+            options={
+                "ordering": ("id",),
+                "verbose_name": "påmelding",
+                "verbose_name_plural": "påmeldte",
+            },
         ),
-        migrations.RemoveField(
-            model_name='eventregistration',
-            name='number',
-        ),
+        migrations.RemoveField(model_name="eventregistration", name="number",),
     ]

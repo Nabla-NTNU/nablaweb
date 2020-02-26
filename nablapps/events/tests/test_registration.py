@@ -5,14 +5,16 @@ Tests for registration to an event
 import random
 from datetime import datetime
 
-from django.core import mail
 from django.contrib.auth import get_user_model
-
-from nablapps.events.exceptions import RegistrationAlreadyExists, EventException
+from django.core import mail
 from django.core.exceptions import ValidationError
+
+from nablapps.events.exceptions import EventException, RegistrationAlreadyExists
+
 from .common import GeneralEventTest
 
 User = get_user_model()
+
 
 class RegistrationTest(GeneralEventTest):
     """
@@ -44,7 +46,9 @@ class RegistrationTest(GeneralEventTest):
 
     def test_register_if_already_registered(self):
         self.event.register_user(self.user)
-        self.assertRaises(RegistrationAlreadyExists, self.event.register_user, self.user)
+        self.assertRaises(
+            RegistrationAlreadyExists, self.event.register_user, self.user
+        )
 
     def test_raises_exception_on_registration_required_false(self):
         self.event.registration_required = False
@@ -69,6 +73,7 @@ class RegistrationTest(GeneralEventTest):
         self.event.register_user(self.user)
         self.assertRaises(EventException, self.event.deregister_user, self.user)
 
+
 class PenaltyTest(GeneralEventTest):
     """Tests for the penalty system"""
 
@@ -87,13 +92,15 @@ class PenaltyTest(GeneralEventTest):
         """Tries setting penalty in registration request to some thing not valid for the event"""
         self.event.register_user(self.user)
         event_reg = self.event.eventregistration_set.first()
-        event_reg.penalty = -1 # Invalid penalty
+        event_reg.penalty = -1  # Invalid penalty
         self.assertRaises(ValidationError, event_reg.clean)
+
 
 class WaitingListTest(GeneralEventTest):
     """
     Tests everything concerning the waiting list
     """
+
     def setUp(self):
         super().setUp()
 
@@ -103,12 +110,12 @@ class WaitingListTest(GeneralEventTest):
             self.event.register_user(u)
 
         registered = len(self.users) + 1
-        for i in range(registered, 2*self.event.places):
+        for i in range(registered, 2 * self.event.places):
             u = User.objects.create(
-                username=f"user{i}",
-                password=f"user{i}",
-                email=f"user{i}@localhost")
+                username=f"user{i}", password=f"user{i}", email=f"user{i}@localhost"
+            )
             self.event.register_user(u)
+
     def test_deregister_user(self):
         while self.event.eventregistration_set.all():
             reg = random.choice(self.event.eventregistration_set.all())
@@ -139,15 +146,11 @@ class WaitingListTest(GeneralEventTest):
 
 
 class WaitingListTest2(GeneralEventTest):
-
     def test_correct_order_from_waiting_list(self):
         self.event.places = 5
         self.event.save()
 
-        registrations = [
-            self.event.register_user(user)
-            for user in self.users
-        ]
+        registrations = [self.event.register_user(user) for user in self.users]
 
         self.assertTrue(self.event.is_attending(self.users[0]))
         self.assertTrue(self.event.is_waiting(self.users[5]))

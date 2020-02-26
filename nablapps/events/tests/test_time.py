@@ -8,7 +8,6 @@ from .common import GeneralEventTest
 
 
 class TimeTest(GeneralEventTest):
-
     def _test_time_has_passed(self, field, method):
         now = datetime.now()
         an_hour = timedelta(hours=1)
@@ -43,8 +42,8 @@ class TimeTest(GeneralEventTest):
         times = ((-2, -1, False), (-1, 1, True), (1, 2, False))
 
         for a, b, is_open in times:
-            self.event.registration_start = now + a*an_hour
-            self.event.registration_deadline = now + b*an_hour
+            self.event.registration_start = now + a * an_hour
+            self.event.registration_deadline = now + b * an_hour
             self.event.save()
             self.assertEqual(self.event.registration_open(), is_open, msg=f"{a},{b}")
 

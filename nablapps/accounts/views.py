@@ -1,30 +1,42 @@
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.http import Http404, HttpResponseForbidden
+from django.shortcuts import redirect
+from django.views.generic import (
+    DetailView,
+    FormView,
+    ListView,
+    TemplateView,
+    UpdateView,
+)
+
 from braces.views import (
     FormMessagesMixin,
     LoginRequiredMixin,
     MessageMixin,
     PermissionRequiredMixin,
 )
-from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden, Http404
-from django.shortcuts import redirect
-from django.views.generic import DetailView, ListView, UpdateView, FormView, TemplateView
 
-from .forms import UserForm, RegistrationForm, InjectUsersForm
-from .models import NablaUser, NablaGroup, RegistrationRequest
-from .utils import activate_user_and_create_password, send_activation_email, extract_usernames
+from .forms import InjectUsersForm, RegistrationForm, UserForm
+from .models import NablaGroup, NablaUser, RegistrationRequest
+from .utils import (
+    activate_user_and_create_password,
+    extract_usernames,
+    send_activation_email,
+)
 
 User = get_user_model()
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     """Viser brukerens profil."""
-    context_object_name = 'member'
+
+    context_object_name = "member"
     template_name = "accounts/view_member_profile.html"
 
     def get_object(self, queryset=None):
         try:
-            view_user = NablaUser.objects.get(username=self.kwargs['username'])
+            view_user = NablaUser.objects.get(username=self.kwargs["username"])
         except NablaUser.DoesNotExist:
             raise Http404("Bruker finnes ikke")
         return view_user
@@ -32,33 +44,35 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
 class UpdateProfile(LoginRequiredMixin, FormMessagesMixin, UpdateView):
     form_class = UserForm
-    template_name = 'accounts/edit_profile.html'
-    form_valid_message = 'Profil oppdatert.'
-    form_invalid_message = 'Du har skrevet inn noe feil.'
+    template_name = "accounts/edit_profile.html"
+    form_valid_message = "Profil oppdatert."
+    form_invalid_message = "Du har skrevet inn noe feil."
 
     def get_object(self, queryset=None):
         return self.request.user
 
 
 class UserList(LoginRequiredMixin, ListView):
-    queryset = NablaUser.objects.filter(is_active=True)\
-                        .prefetch_related('groups')\
-                        .order_by('username')
-    context_object_name = 'users'
-    template_name = 'accounts/list.html'
+    queryset = (
+        NablaUser.objects.filter(is_active=True)
+        .prefetch_related("groups")
+        .order_by("username")
+    )
+    context_object_name = "users"
+    template_name = "accounts/list.html"
     paginate_by = 20
-    page_kwarg = 'side'
+    page_kwarg = "side"
 
 
 class RegistrationView(MessageMixin, FormView):
     form_class = RegistrationForm
-    template_name = 'accounts/user_registration.html'
-    success_url = '/login/'
+    template_name = "accounts/user_registration.html"
+    success_url = "/login/"
 
     def form_valid(self, form):
-        username = form.cleaned_data['username']
-        first_name = form.cleaned_data.get('first_name')
-        last_name = form.cleaned_data.get('last_name')
+        username = form.cleaned_data["username"]
+        first_name = form.cleaned_data.get("first_name")
+        last_name = form.cleaned_data.get("last_name")
 
         # Activate a user or create a registration request.
         try:
@@ -74,13 +88,13 @@ class RegistrationView(MessageMixin, FormView):
                 self.messages.info(f"Registreringsepost sendt til {user.email}")
         except NablaUser.DoesNotExist:
             RegistrationRequest.objects.create(
-                    username=username,
-                    first_name=first_name,
-                    last_name=last_name
+                username=username, first_name=first_name, last_name=last_name
             )
-            self.messages.info("Denne brukeren er ikke registrert. "
-                               "En forespørsel har blitt opprettet og "
-                               "du vil få en epost hvis den blir godkjent.")
+            self.messages.info(
+                "Denne brukeren er ikke registrert. "
+                "En forespørsel har blitt opprettet og "
+                "du vil få en epost hvis den blir godkjent."
+            )
         return super().form_valid(form)
 
 
@@ -88,7 +102,7 @@ class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
     form_class = InjectUsersForm
     form_valid_message = "Brukerne er lagt i databasen."
     form_invalid_message = "Ikke riktig utfyllt."
-    template_name = 'form.html'
+    template_name = "form.html"
     success_url = "/"
 
     def dispatch(self, request, *args, **kwargs):
@@ -99,10 +113,10 @@ class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
     def form_valid(self, form):
         from .models import FysmatClass
 
-        data = form.cleaned_data['data']
-        fysmat_class = form.cleaned_data['fysmat_class']
+        data = form.cleaned_data["data"]
+        fysmat_class = form.cleaned_data["fysmat_class"]
 
-        if fysmat_class != '':
+        if fysmat_class != "":
             fysmat_class = FysmatClass.objects.get(name=fysmat_class)
         else:
             fysmat_class = None
@@ -122,12 +136,12 @@ class BirthdayView(LoginRequiredMixin, ListView):
 
 
 class MailListView(PermissionRequiredMixin, TemplateView):
-    template_name = 'accounts/mail_list.html'
-    permission_required = 'accounts.change_nablagroup'
+    template_name = "accounts/mail_list.html"
+    permission_required = "accounts.change_nablagroup"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        group_ids = {int(i) for i in self.kwargs['groups'].split('/')}
+        group_ids = {int(i) for i in self.kwargs["groups"].split("/")}
         groups = NablaGroup.objects.filter(id__in=group_ids)
         context["users"] = NablaUser.objects.filter(groups__in=groups)
         context["groups"] = groups

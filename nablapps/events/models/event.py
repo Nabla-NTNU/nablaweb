@@ -2,24 +2,27 @@
 The Event model
 """
 import logging
-from django.urls import reverse
-from django.db import IntegrityError, models
+
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError, models
+from django.urls import reverse
 
-from ..exceptions import RegistrationAlreadyExists, EventFullException, DeregistrationClosed
-from  .eventregistration import EventRegistration
-
-from nablapps.core.models import (
-    TimeStamped,
-    WithPicture,
-)
-from nablapps.news.models import TextContent
-from .mixins import RegistrationInfoMixin, EventInfoMixin
+from nablapps.core.models import TimeStamped, WithPicture
 from nablapps.jobs.models import Company
+from nablapps.news.models import TextContent
+
+from ..exceptions import (
+    DeregistrationClosed,
+    EventFullException,
+    RegistrationAlreadyExists,
+)
+from .eventregistration import EventRegistration
+from .mixins import EventInfoMixin, RegistrationInfoMixin
 
 
-class Event(RegistrationInfoMixin, EventInfoMixin,
-            TimeStamped, TextContent, WithPicture):
+class Event(
+    RegistrationInfoMixin, EventInfoMixin, TimeStamped, TextContent, WithPicture
+):
     """Arrangementer både med og uten påmelding.
     Dukker opp som nyheter på forsiden.
     """
@@ -33,17 +36,20 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
     # The reason for not using a dict, where the key obviously would be the index,
     # is to make it easier to add/remove rules.
     penalty_rules = {
-        0 : ('Ingen prikker', {}),
-        1 : ('Bedpres', {'Oppmøte': 0, 'Oppmøte for seint': 1, 'Ikke møtt opp': 2}),
-        2 : ('Arrangement med betaling', {'Betalt': 0, 'Betalt etter purring': 1, 'Ikke betalt': 4}),
-        3 : ('Arrangement uten betaling', {'Møtt opp': 0, 'Ikke møtt opp': 1})
+        0: ("Ingen prikker", {}),
+        1: ("Bedpres", {"Oppmøte": 0, "Oppmøte for seint": 1, "Ikke møtt opp": 2}),
+        2: (
+            "Arrangement med betaling",
+            {"Betalt": 0, "Betalt etter purring": 1, "Ikke betalt": 4},
+        ),
+        3: ("Arrangement uten betaling", {"Møtt opp": 0, "Ikke møtt opp": 1}),
     }
 
     penalty = models.IntegerField(
         default=0,
         choices=zip(penalty_rules.keys(), [rule[0] for rule in penalty_rules.values()]),
         blank=True,
-        null=True
+        null=True,
     )
 
     is_bedpres = models.BooleanField(default=False)
@@ -53,9 +59,10 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
         Company,
         verbose_name="Bedrift",
         blank=True,
-        null=True, 
+        null=True,
         on_delete=models.CASCADE,
-        help_text="Kun relevant for bedriftspresentasjoner.")
+        help_text="Kun relevant for bedriftspresentasjoner.",
+    )
 
     def clean(self):
         if self.is_bedpres and self.company is None:
@@ -69,13 +76,11 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
     class Meta:
         verbose_name = "arrangement"
         verbose_name_plural = "arrangement"
-        permissions = (
-            ("administer", "Can administer models"),
-        )
+        permissions = (("administer", "Can administer models"),)
         db_table = "content_event"
 
     def __str__(self):
-        return '%s, %s' % (self.headline, self.event_start.strftime('%d.%m.%y'))
+        return "%s, %s" % (self.headline, self.event_start.strftime("%d.%m.%y"))
 
     def get_penalty_rule_name(self):
         """Returns the name of the penalty rule for the event"""
@@ -87,7 +92,11 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
 
     def get_short_name(self):
         """Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke."""
-        return self.short_name if self.short_name else (self.headline[0:18].capitalize() + '...')
+        return (
+            self.short_name
+            if self.short_name
+            else (self.headline[0:18].capitalize() + "...")
+        )
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -166,10 +175,7 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
         if not ignore_restrictions:
             self._assert_user_allowed_to_register(user)
 
-        registration = EventRegistration(
-            event=self,
-            user=user,
-        )
+        registration = EventRegistration(event=self, user=user,)
         if not self.is_full() or ignore_restrictions:
             registration.attending = True
         elif self.has_queue:
@@ -196,7 +202,7 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
             reg.delete()
         except EventRegistration.DoesNotExist:
             logger = logging.getLogger(__name__)
-            logger.info('Attempt to deregister user from non-existent event.')
+            logger.info("Attempt to deregister user from non-existent event.")
 
     def move_waiting_to_attending(self):
         """
@@ -208,10 +214,11 @@ class Event(RegistrationInfoMixin, EventInfoMixin,
             reg.set_attending_and_send_email()
 
     def get_registration_url(self):
-        return reverse('registration', kwargs={'pk': self.pk})
+        return reverse("registration", kwargs={"pk": self.pk})
 
     def get_absolute_url(self):
-        return reverse("event_detail", kwargs={'pk': self.pk, 'slug': self.slug})
+        return reverse("event_detail", kwargs={"pk": self.pk, "slug": self.slug})
+
 
 def attending_events(user, today):
     """Get the future events attended by a user"""
