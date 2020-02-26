@@ -9,9 +9,9 @@
 {% endaddtoblock %}
 
 <div class="main-grid-container">
-    <div class="navbar navbar-container">
+    <div >
         {% block navbar %}
-            <h1 style="text-align: center">Om Nabla</h1>
+            <h1 >Om Nabla</h1>
             <ul class="list-group nav-list">
                 <a href="{% url "om-nabla" %}"><li>Generelt om Nabla</li></a>
                 <a href="{% url "show-board-page" slug="styret" %}"><li>Styret</li></a>
@@ -25,7 +25,7 @@
                 <a href="{{ page.url }}"><li>{{ page.title }}</li></a>
                 {% endfor %}
             </ul>
-            <h3 style="text-align: center">Diverse</h3>
+            <h3 >Diverse</h3>
             <ul class="list-group nav-list">
                 <a href="{% url 'nablashop:index' %}"><li>Nablashop</li></a>
                 <a href="/nystudent/"><li>For nye studenter</li></a>
