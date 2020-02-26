@@ -1,7 +1,7 @@
 {% load comments i18n %}
 
 
-<form action="{% comment_form_target %}" method="post" class="add-comment card card-body bg-light row">
+<form action="{% comment_form_target %}" method="post" class="add-comment well row">
     {% csrf_token %}
     <fieldset>
 

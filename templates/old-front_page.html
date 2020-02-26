@@ -34,7 +34,7 @@
 </article>
 {% endwith %}
 
-<div class="card card-body bg-light">
+<div class="well">
     {% include "includes/event_widget.html" %}
 </div>
 
@@ -89,7 +89,7 @@
   <li><a data-toggle="tab" href="#Podcast">Skråttcast</a></li>
 </ul>
 
-<div height=300px class="card card-body bg-light">
+<div height=300px class="well">
     <div class="tab-content fixed-tab-height">
         <div  id="Nablad" class="tab-pane fade in active">
             <h3><a href="{% url "nablad_list" %}">Siste Nablad</a></h3>
@@ -133,7 +133,7 @@
 
 
 {% block sidebar %}
-    <div class="card card-body bg-light" style="min-height: 410px;">
+    <div class="well" style="min-height: 410px;">
         <h1>Velkommen til Nabla</h1>
         <p>
             Nabla er linjeforeningen for sivilingeniørstudiet Fysikk og Matematikk ved NTNU, og har som formål

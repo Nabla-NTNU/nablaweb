@@ -20,12 +20,12 @@
 <div class="col-md-12">
 
 <h2>Kalender {{ this.year }}</h2>
-<ul class="pagination">
-    <li class="page-item">
-        <a class="page-link" href="{% url "event_list" prev.year prev.month %}">&laquo;</a>
+<ul class="pager">
+    <li>
+        <a href="{% url "event_list" prev.year prev.month %}">&laquo;</a>
     </li>
-    <li class="page-item">
-        <div class ="page-link opt">
+    <li>
+        <div class = opt>
             <select onchange="if (this.value) window.location.href=this.value" onmouseover="" style="cursor: pointer;">
                 {% for i in month_list %}
                     <option value="{% url "event_list" i.year i.month %}" {% if i == month_list.5 %} selected {% endif %} >{{ i|date:"F"|capfirst }}</option>
@@ -33,7 +33,7 @@
             </select>
         </div>
     </li>
-    <li class="page-item">
+    <li>
         <a href="{% url "event_list" next.year next.month %}">&raquo;</a>
     </li>
 </ul>

@@ -10,7 +10,7 @@
 <h1>{{ album.title }}</h1>
 
 {% if children %}
-<div class="card card-body bg-light">
+<div class="well">
 {% for row in children|row_split:4 %}
 <div class="row">
     {% for album in row %}
@@ -44,9 +44,9 @@
     {% endfor %}
 </div>
 {% endfor %}
-    <ul class="pagination">
-          <li class="page-item">
-              <a  class="page-link" href="{{ parent_url }}"><span aria-hidden="true">&larr;</span> {{parent_name}}</a>
+    <ul class="pager">
+          <li class="previous">
+              <a href="{{ parent_url }}"><span aria-hidden="true">&larr;</span> {{parent_name}}</a>
           </li>
     </ul>
 
