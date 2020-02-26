@@ -53,7 +53,7 @@
         {% for event in object_list %}
         {% ifchanged %}<h2 class="month__name">{{ event.event_start|date:"F"|title }}</h2>{% endifchanged %}
         <div class="day">
-            <span class="day__date">{{ event.event_start|date:"d" }}</span>
+            <span class="day__date{% if event.is_bedpres %} event__bedpres{% endif %}">{{ event.event_start|date:"d" }}</span>
             <a href="{{ event.get_absolute_url }}">
                 <div class="event_list__event">
                     <div class="header_like">{{ event.headline }}</div>
@@ -71,6 +71,11 @@
                     <div class="event_list__event__meta">
                         {{ event.company }}
                     </div>
+                    {% if event.is_bedpres %}
+                    <div class="event_list__event__meta right">
+                        Bedpres
+                    </div>
+                    {% endif %}
                     {% endif %}
                 </div>
             </a>
