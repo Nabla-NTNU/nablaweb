@@ -1,3 +1,4 @@
+import random
 import string
 from datetime import datetime
 
@@ -58,6 +59,7 @@ def get_place_info(request, pk):
             "cooldown": grid.cooldown,
             "enabled": grid.enabled,
             "legal_colors": grid.legal_colors,
+            "uncertainty": grid.uncertainty,
         }
     )
 
@@ -151,9 +153,12 @@ def submit_place(request, pk):
             return HttpResponse("Submissions closed for this grid", status=403)
 
         now = datetime.now()  # Assumes system time is in UTC
-        next_allowed_place = (
-            time_of_last_action(request.user, grid).timestamp() + grid.cooldown
-        )
+        next_allowed_place = time_of_last_action(request.user, grid).timestamp()
+        if grid.uncertainty:
+            delta_t = float(request.POST.get("delta_t", 1))
+            next_allowed_place += grid.cooldown * delta_t
+        else:
+            next_allowed_place += grid.cooldown
         if next_allowed_place > now.timestamp():
             return HttpResponse("Still on cooldown", status=400)
 
@@ -183,6 +188,27 @@ def submit_place(request, pk):
         if color not in grid.legal_colors:
             return HttpResponse("Invalid color", status=400)
 
+        # Uncertainty
+        if grid.uncertainty:
+            # Move the pixel
+            # This distribution gives about a 33% chance of the pixel moving
+            # with `delta_t` = 0.3, and about 0% at `delta_t` = 1
+
+            offX = round(random.gauss(0, 0.15 / delta_t))
+            offY = round(random.gauss(0, 0.15 / delta_t))
+            x = max(0, min(x + offX, grid.width - 1))
+            y = max(0, min(y + offY, grid.height - 1))
+
+            # Change the color
+            # This distribution gives about a 15% chance of the pixel changing color
+            # with `delta_t` = 0.3, and about 0% at `delta_t` = 1
+            offC = round(random.gauss(0, 0.10 / delta_t))
+            if abs(offC) >= 1:
+                amt_colors = len(PlaceGrid.legal_colors)
+                ind = PlaceGrid.legal_colors.index(color)
+                color = PlaceGrid.legal_colors[(ind + offC) % amt_colors]
+            print(offX, offY, offC)
+
         # Create the action
         action = PlaceAction.objects.create(
             user=request.user, grid=grid, time=now, x=x, y=y, color=color
@@ -204,4 +230,6 @@ def submit_place(request, pk):
             pixel.latest_action = action
             pixel.save()
 
-        return HttpResponse(now.timestamp(), status=200)
+    return JsonResponse(
+        {"last_submit": now.timestamp(), "action": extract_action(action)}
+    )
