@@ -7,8 +7,13 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
 /* MAIN */
 html, body {
     height: 100%;
-    background-color: #FFFFFF;
+    background-color: #f7f7f7;
+}
 
+#mainContent{
+    border-style: solid;
+    border-width: thin;
+    border-color: lightgray;
 }
 
 .logo {
