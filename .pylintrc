@@ -254,7 +254,7 @@ ignored-classes=optparse.Values,thread._local,_thread._local
 # List of module names for which member attributes should not be checked
 # (useful for modules/projects where namespaces are manipulated during runtime
 # and thus existing member attributes cannot be deduced by static analysis. It
-# supports qualified module names, as well as Unix pattern matching.
+# supports qualified module names, as  as Unix pattern matching.
 ignored-modules=
 
 # Show a hint with possible names when a member name was not found. The aspect

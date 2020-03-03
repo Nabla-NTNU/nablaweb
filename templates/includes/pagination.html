@@ -4,20 +4,20 @@ It fits perfectly if you are using the django.views.generic.ListView with pagina
 {% endcomment %}
 {% if is_paginated %}
     <nav>
-        <ul class="pager">
+        <ul class="pagination">
             {% if page_obj.has_next %}
-                <li class="previous">
-                    <a href="?page={{ page_obj.next_page_number }}"><span aria-hidden="true">&larr;</span> Eldre</a>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}"><span aria-hidden="true">&larr;</span> Eldre</a>
                 </li>
             {% endif %}
 
-            <li class="disabled pager-counter">
-                Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
+            <li class="disabled page-item pager-counter">
+                <a class="page-link" >Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</a>
             </li>
 
             {% if page_obj.has_previous %}
-                <li class="next">
-                    <a href="?page={{ page_obj.previous_page_number }}">Nyere <span aria-hidden="true">&rarr;</span></a>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Nyere <span aria-hidden="true">&rarr;</span></a>
                 </li>
             {% endif %}
         </ul>

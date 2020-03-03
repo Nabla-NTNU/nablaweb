@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: 30% 70%;
     grid-template-areas:
-    "navbar content"
+    "navbar content";
     grid-gap: 1rem;
 }
 
