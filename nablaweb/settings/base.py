@@ -48,7 +48,6 @@ STATIC_ROOT = os.path.join(VARIABLE_CONTENT, 'static_collected')
 
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
-    os.path.join(PROJECT_ROOT, 'node_modules'),
 )
 
 STATICFILES_FINDERS = (
