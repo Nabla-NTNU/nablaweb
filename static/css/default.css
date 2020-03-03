@@ -8,10 +8,7 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
 html, body {
     height: 100%;
     background-color: #FFFFFF;
-}
 
-ul.nav.nav-list>li {
-    margin-left: 10px;
 }
 
 .logo {
@@ -231,15 +228,17 @@ h3 a, h3 a:hover, h3 a:active, h3 a:focus{
 
 
 /* FOOTER */
+
     footer {
         /* TODO: Add cross-browser support */
         background-color: black;
         border-top:1px solid #666;
         color: #ccc;
         padding-top: 30px;
-        bottom: 0;
         width: 100%;
-    }
+
+}
+
 
     /* h2 is black, so make it white */
     footer h2 {
@@ -394,11 +393,13 @@ Overflow-x: hidden;
 
 #content {
     min-width: 360px;
-    min-height: 100%;
-    overflow: hidden;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
 #mainContent {
-  padding: 20px 20px 0px 20px;
-  background-color: white;
+    padding: 20px 20px 20px 20px;
+    background-color: white;
+    flex: 1;
 }

@@ -133,7 +133,7 @@
         </div>
 	{% endif %}
 
-    <div id = "content">
+    <div  id = "content">
         <!-- Navigation -->
         <header>
             <nav class="navbar navbar-dark navbar-expand-lg" role="navigation">
@@ -221,6 +221,8 @@
                             <a class="dropdown-item" href="{% url "admin:index" %}">Admin</a>
                             <a class="dropdown-item" href="/admin/filebrowser/browse">Filer</a>
                             {% endif %}
+
+                            {# Kan wære den ikke denne varselimplementeringen ikke fungerer #}
                             {% load i18n sekizai_tags static %}
                                   <div class="dropdown-divider"></div>
                                   <a class=" dropdown-item" href="#"><em>{% trans "No notifications" %}</em></a>
@@ -301,7 +303,7 @@
         {% endblock full-content-body %}
 
         <!-- Footer -->
-        <footer>
+        <footer >
 
             <div class="container">
             <div class="row">
