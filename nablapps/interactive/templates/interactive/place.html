@@ -145,6 +145,7 @@
     }
 
     function submit(data) {
+	submitButton.disabled = true;
         data["csrfmiddlewaretoken"] = "{{ csrf_token }}";
         $.post("{% url 'submit_place' pk=grid.pk %}", data, function (result, status) {
             if (status === "success") {
