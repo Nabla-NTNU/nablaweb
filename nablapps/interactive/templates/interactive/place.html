@@ -144,21 +144,33 @@
         });
     }
 
-    function submit(data, onsuccess, onerror) {
+    function submit(data) {
+	submitButton.disabled = true;
         data["csrfmiddlewaretoken"] = "{{ csrf_token }}";
         $.post("{% url 'submit_place' pk=grid.pk %}", data, function (result, status) {
-            if (status == "success") {
-                lastSubmit = Number(result);
-                placeCountdownLoop(lastSubmit - Date.now()/1000 + {{ grid.cooldown }} + 1);
+            if (status === "success") {
+                lastSubmit = Number(result["last_submit"]);
+                placeCountdownLoop(lastSubmit - Date.now()/1000 + {{ grid.cooldown }});
+                var action = result["action"];
 
-                drawPixel(ctx, selectedX, selectedY, selectedColor);
+                {% if grid.uncertainty %}
+                // Move the user's focus to the pixel if it was moved by an uncertainty
+                selectedX = action["x"];
+                selectedY = action["y"];
+                cameraX = selectedX + 0.5;
+                cameraY = selectedY + 0.5;
+                selectColor($("div[color='"+action["color"]+"']")[0])
+
+                window.requestAnimationFrame(updateCamera);
+
+                {% endif %}
                 grid[selectedY][selectedX] = {
-                    "color": selectedColor,
-                    "time": Date.now()/1000,
-                    "username": "{{ request.user.username }}",
-                };
+                    "color": action["color"],
+                    "time": action["time"],
+                    "username": action["username"],
+                }
                 displayPixelInfo(selectedX, selectedY);
-
+                drawPixel(ctx, selectedX, selectedY, action["color"]);
             } else {
                 alert("Beklager, plasseringen feilet. Prøv igjen om en liten stund.");
                 submitButton.disabled = false;
@@ -180,7 +192,11 @@
             return;
         }
         submitButton.disabled = true;
+        {% if grid.uncertainty %}
+        submit({"x": selectedX, "y": selectedY, "color": selectedColor, "delta_t": timeSlider.value})
+        {% else %}
         submit({"x": selectedX, "y": selectedY, "color": selectedColor})
+        {% endif %}
     }
 
     function updateScale() {
@@ -218,12 +234,33 @@
         return timeString;
     }
 
+    {% if grid.uncertainty %}
+    function placeCountdownLoop(timeUntil) {
+        clearInterval(placeInterval);
+        var waited = {{ grid.cooldown }} - timeUntil;
+        submitButton.disabled = true;
+        function update () {
+            waited += 0.1;
+            progressBar.style.width = Math.min(1, waited/{{ grid.cooldown }}) * 100 + "%";
+            if (waited >= {{ grid.cooldown }}) {
+                clearInterval(placeInterval);
+                submitButton.disabled = false;
+            } else if (waited >= timeSlider.value * {{ grid.cooldown }}) {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
+        };
+        update();
+        placeInterval = setInterval(update, 100);
+    }
+    {% else %}
     function placeCountdownLoop(timeUntil) {
         clearInterval(placeInterval);
         var timer = timeUntil;
         submitButton.disabled = true;
         function update () {
-            if (--timer <= 0) {
+            if (timer <= 0) {
                 clearInterval(placeInterval);
                 cooldownP.innerHTML = "Plasser en ny piksel nå!";
                 submitButton.disabled = false;
@@ -231,10 +268,12 @@
             } else {
                 cooldownP.innerHTML = "Plasser en ny piksel om " + getTimeString(Math.ceil(timer)) + ".";
             }
+            timer--;
         };
         update();
         placeInterval = setInterval(update, 1000);
     }
+    {% endif %}
 
     function pixelInfoLoop(timeSince) {
         clearInterval(infoInterval);
@@ -441,6 +480,12 @@ function copyToClipboard(text) {
     var scale = document.getElementById("scaleDiv");
 
     var slider = document.getElementById("zoomSlider");
+    {% if grid.uncertainty %}
+    var timeSlider = document.getElementById("timeSlider");
+    var progressBar = document.getElementById("progressBar");
+    {% else %}
+    var cooldownP = document.getElementById("cooldownP");
+    {% endif %}
 
     var pixelLocationP = document.getElementById("selectedPixelP");
     var pixelInfoP = document.getElementById("pixelInfoP");
@@ -450,7 +495,6 @@ function copyToClipboard(text) {
     };
 
     var submitButton = document.getElementById("submitButton");
-    var cooldownP = document.getElementById("cooldownP");
 
     {% if request.user.is_authenticated %}
     {% if grid.enabled %}
@@ -557,6 +601,49 @@ colorPreviewDiv:hover {
   visibility: visible;
   opacity: 1;
 }
+{% if grid.uncertainty %}
+
+#progressBackground {
+  width: 100%;
+  height: 30px;
+  position: relative;
+  background: none;
+  border-width: 2px;
+}
+
+#progressBar {
+  left: 0px;
+  top: 0px;
+  width: 1%;
+  height: 100%;
+  background-color: #4CAF50;
+}
+
+#timeSlider {
+  left: 30%;
+  top: 0px;
+  position: absolute;
+  background: none;
+  width: 70%;
+  height: 100%;
+}
+
+#timeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 5px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+#timeSlider::-moz-range-thumb {
+  width: 5px;
+  height: 25px;
+  background: lightgray;
+  cursor: pointer;
+}
+{% endif %}
 </style>
 
 <div style="width:100%;display:flex;flex-wrap:wrap;padding:5px;">
@@ -588,7 +675,14 @@ colorPreviewDiv:hover {
             </div>
             <br>
             <button id="submitButton" style="margin:10px;" onclick="placePixel()">Place</button>
+            {% if grid.uncertainty %}
+            <div id="progressBackground">
+                <div id="progressBar"></div>
+                <input id="timeSlider" type="range" min="0.3" step="0.01" max="1" oninput="updateZoom()" onchange="updateZoom()">
+            </div>
+            {% else %}
             <p id="cooldownP" style=""></p>
+            {% endif %}
         </div>
         {% endif %}
         {% else %}

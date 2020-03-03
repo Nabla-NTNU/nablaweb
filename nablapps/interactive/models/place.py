@@ -32,6 +32,13 @@ class PlaceGrid(models.Model):
     # Set in `create_grid`
     last_updated = models.DateTimeField(blank=True, null=True)
 
+    # Disable commutation of position and time
+    uncertainty = models.BooleanField(
+        default=False,
+        verbose_name="Uskarphet i posisjon og tid og farge",
+        help_text="Brukere vil kunne velge mellom å plassere raskt og å plassere sikkert.",
+    )
+
     legal_colors = [
         "FFFFFF",
         "E4E4E4",
