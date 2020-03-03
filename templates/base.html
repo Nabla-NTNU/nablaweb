@@ -24,7 +24,6 @@
         <!-- Bootstrap Core CSS -->
         {% addtoblock "css" %}
         <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">
-        <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap-theme.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/v4-shims.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/fontawesome.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/brands.min.css" %}">
@@ -158,7 +157,6 @@
                     <li class="nav-item mr-1 ">
                         <a class="nav-link text-light" href="{% url "jobs_list" %}">Karriere</a>
                     </li>
-
                     <li class="nav-item mr-1 dropdown ">
                         <a href="#ting" class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown1" role="button"  aria-haspopup="true" aria-expanded="false">
                             Nablamedia
@@ -201,7 +199,7 @@
                     {% if user.is_authenticated %}
                     {# bruker-dropdown #}
                     <li class="nav-item mr-1 dropdown">
-                        <a href="#bruker" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdown3" role="button"  aria-haspopup="true" aria-expanded="false">
+                        <a href="#bruker " class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown3" role="button"  aria-haspopup="true" aria-expanded="false">
                             <span class="glyphicon glyphicon-user"></span>
                             {% firstof user.get_full_name user.username %}
                             <span class="caret"></span>
@@ -223,7 +221,26 @@
                             <a class="dropdown-item" href="{% url "admin:index" %}">Admin</a>
                             <a class="dropdown-item" href="/admin/filebrowser/browse">Filer</a>
                             {% endif %}
-                            {% include "wiki/plugins/notifications/menubaritem.html" %}
+                            {% load i18n sekizai_tags static %}
+                                  <div class="dropdown-divider"></div>
+                                  <a class=" dropdown-item" href="#"><em>{% trans "No notifications" %}</em></a>
+                                  <div class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#" onclick="notify_mark_read()">
+                                      <i class="fa fa-check-square-o"></i>
+                                      {% trans "Clear notifications list" %}
+                                  </a>
+                                    <a class="dropdown-item" href="{% url 'wiki:notification_settings' %}">
+                                      <i class="fa fa-wrench"></i>
+                                      {% trans "Notification settings" %}
+                                    </a>
+                                {% addtoblock "js" %}
+                                <script type="text/javascript">
+                                  URL_NOTIFY_GET_NEW = "{% url "nyt:json_get" %}";
+                                  URL_NOTIFY_MARK_READ = "{% url "nyt:json_mark_read_base" %}";
+                                  URL_NOTIFY_GOTO = "{% url "nyt:goto_base" %}";
+                                </script>
+                                {% endaddtoblock %}
+    {#                               {% addtoblock "js" %}<script type="text/javascript" src="{% static "wiki/plugins/notifications/js/ui.js" %}"></script>{% endaddtoblock %}#}
                         </div>
                     </li>
                     {# end bruker-dropdown #}

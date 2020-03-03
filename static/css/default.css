@@ -7,7 +7,7 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
 /* MAIN */
 html, body {
     height: 100%;
-    background-color: #fafafa;
+    background-color: #FFFFFF;
 }
 
 ul.nav.nav-list>li {
@@ -399,6 +399,6 @@ Overflow-x: hidden;
 }
 
 #mainContent {
-  padding: 80px 20px 0px 20px;
+  padding: 20px 20px 0px 20px;
   background-color: white;
 }

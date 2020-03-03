@@ -51,7 +51,7 @@
     {% include "includes/article_widget.html" with number=forloop.counter %}
     {% endfor %}{# news_list #}
 
-    <button onclick="location.href='{% url "news_list" %}'" type="button" class="more-news-btn button">Flere nyheter</button>
+    <button onclick="location.href='{% url "news_list" %}'" type="button" class="more-news-btn btn btn-secondary btn-block">Flere nyheter</button>
 
     <div class="latest-nablad card card-body bg-light">
         <!--Siste Nablad-->
@@ -111,12 +111,12 @@
         {% include "officeCalendar/includes/list.html" %}
     </div>
 
-    <div class="poll">
+    <div class="poll mb-2">
         <!--Poll-->
         {% include "poll/poll_include.html" %}
     </div>
 
-    <div class="latest-podcast card card-body bg-light">
+    <div class="latest-podcast card card-body bg-light mb-2">
         <!--Siste Skråttcast-->
         {% if new_podcast %} 
             <h1>Siste Skråttcast</h1>

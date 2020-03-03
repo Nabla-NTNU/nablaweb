@@ -12,7 +12,7 @@
     {{ image.description }}
   </p>
   <nav>
-      <ul class="pagination">
+      <ul class="pagination d-flex justify-content-between">
         {% if page_obj.has_previous %}
             <li class="page-item">
                 <a class="page-link" href="../{{ page_obj.previous_page_number }}/"><span aria-hidden="true">&larr;</span> forrige</a>
