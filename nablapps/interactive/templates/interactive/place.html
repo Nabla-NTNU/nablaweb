@@ -355,15 +355,26 @@
         return true;
     }
 
+    function highlightPixel(ctx, oldX, oldY, newX, newY) {
+        if (typeof(oldX) != "undefined") {
+            drawPixel(ctx, oldX, oldY, grid[oldX][oldY]["color"]);
+        }
+        ctx.fillStyle = "#00000033";
+        ctx.fillRect(newX, newY,1,1);
+    }
+
     function captureMouseClick(event) {
         if (dragging) {return;}
         if (event.target === slider) {return;}
         var target = getTargetCoords(event);
         if (validTarget(target)) {
+            var previousX = selectedX;
+            var previousY = selectedY;
             selectedX = Math.floor(target.x);
             selectedY = Math.floor(target.y);
             cameraX = selectedX + 0.5;
             cameraY = selectedY + 0.5;
+            highlightPixel(ctx, previousX, previousY, selectedX, selectedY);
             window.requestAnimationFrame(updateCamera);
             displayPixelInfo(selectedX, selectedY);
         }
