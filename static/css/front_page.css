@@ -113,3 +113,7 @@
 .suggestions {
     grid-area: suggestions;
 }
+
+.poll.card-body{
+    height: 100%;
+}

@@ -31,7 +31,7 @@
              class="card-img-top"
              src="{% thumbnail news.picture 570x200 quality=95 upscale crop="smart" detail %}">
     {% endif %}
-    <div class="card-body">
+    <div class="card-body card-body-overline">
         <h5 class="card-title"><a href="{{ news.get_absolute_url }}" class="text-dark stretched-link" >{{ news.headline }}</a></h5>
         <p class="card-text">{{ news.lead_paragraph}}</p>
     </div>

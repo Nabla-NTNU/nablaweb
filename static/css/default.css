@@ -10,11 +10,26 @@ html, body {
     background-color: #f7f7f7;
 }
 
-#mainContent{
-    border-style: solid;
-    border-width: thin;
-    border-color: lightgray;
+#content {
+    min-width: 360px;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
+
+#mainContent {
+    padding: 20px 20px 20px 20px;
+    background-color: white;
+    flex: 1;
+    overflow: hidden;
+    border-left-style: solid;
+    border-left-width: thin;
+    border-left-color: lightgray;
+    border-right-style: solid;
+    border-right-width: thin;
+    border-right-color: lightgray;
+}
+
 
 .logo {
 padding: 7px;
@@ -30,6 +45,9 @@ nav.navbar {
     font-family: 'PT Sans', Helvetica, arial, sans-serif;
 }
 
+.card-body-overline{
+    border-top: 4px solid #222222;
+}
 
 .box {
     word-wrap: break-word;
@@ -396,18 +414,6 @@ Overflow-x: hidden;
     /*}*/
 /*}*/
 
-#content {
-    min-width: 360px;
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-}
-
-#mainContent {
-    padding: 20px 20px 20px 20px;
-    background-color: white;
-    flex: 1;
-}
 
 .nounderline{
     text-decoration: none !important
