@@ -58,11 +58,11 @@
         {% if new_nablad %}
             <div height=300px>
                 <h3><a href="{% url "nablad_list" %}">Siste Nablad</a></h3>
-                <div class="row">
+                <div class="row text-center">
                     {% for nablad in new_nablad %}
-                        <div class="col-md-3{% if not forloop.first %} hidden-xs{% endif %}">
+                        <div class="col-md-3{% if not forloop.first %} d-none d-md-block {% endif %}">
                             <a class="thumbnail" href="{{ nablad.get_absolute_url }}">
-                                <img src="{% thumbnail nablad.thumbnail 730x200 %}">
+                                <img class="rounded mw-100" src="{% thumbnail nablad.thumbnail 730x200 %}">
                             </a>
                         </div >
                     {% endfor %}
