@@ -17,7 +17,7 @@
         {% for c in committees %}
             <div class="grid-element">
                 <a class="com-link" href="{{ c.get_absolute_url }}">
-                    <img class="img-responsive com-img"
+                    <img class="img-fluid com-img"
                     {% if c.picture %}
                         src="{% thumbnail c.picture 250x250 crop="smart" %}"
                     {% else %}
@@ -37,7 +37,7 @@
         {% for c in interest_groups %}
             <div class="grid-element">
                 <a class="com-link" href="{{ c.get_absolute_url }}">
-                    <img class="img-responsive com-img"
+                    <img class="img-fluid com-img"
                     {% if c.picture %}
                         src="{% thumbnail c.picture 250x250 crop="smart" %}"
                     {% else %}

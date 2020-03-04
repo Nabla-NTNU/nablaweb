@@ -23,12 +23,12 @@
         {% with main_news as news %}
         {% if news.cropping and news.picture %}
         <a href="{{ news.get_absolute_url }}">
-            <img alt="" class="img-responsive"
+            <img alt="" class="img-fluid"
                  src="{% thumbnail news.picture 760x300 box=news.cropping upscale=True quality=95 detail=True %}" height="100%" width="100%">
         </a>
         {% elif news.picture %}
         <a href="{{ news.get_absolute_url }}">
-            <img alt="" class="img-responsive"
+            <img alt="" class="img-fluid"
                  src="{% thumbnail news.picture 760x300 quality=95 upscale=True crop="smart" detail=True %}" height="100%" width="100%">
         </a>
         {% endif %}

@@ -26,7 +26,7 @@
     {% else %}
 
         <div class="row comment" id="c{{ comment.id }}">
-            <img class="col-xs-2 thumbnail img-responsive" alt="avatar" width="150" height="150" src=
+            <img class="col-xs-2 thumbnail img-fluid" alt="avatar" width="150" height="150" src=
                 {% if user.avatar %}
                     "{% thumbnail user.avatar 150x150 box=user.cropping %}"
                 {% else %}

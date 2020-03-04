@@ -61,7 +61,7 @@
 
 <div class="box">
     {% if nablad.picture %}
-    <img alt="header" class="img-responsive" src="{% thumbnail nablad.picture 760x300 box=nablad.cropping upscale=True detail=True quality=95 %}">
+    <img alt="header" class="img-fluid" src="{% thumbnail nablad.picture 760x300 box=nablad.cropping upscale=True detail=True quality=95 %}">
     {% endif %}
 
     <header><h2>{{ nablad.headline }}</h2></header>

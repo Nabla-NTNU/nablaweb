@@ -19,7 +19,7 @@
         {% if album.visibility != 'u' or is_user%}
         <a href="{{ album.get_absolute_url }}">
             {% if album.first.file %}
-            <img class="img-responsive" src="{% thumbnail album.first.file 350x350 crop="smart" %}"/>
+            <img class="img-fluid" src="{% thumbnail album.first.file 350x350 crop="smart" %}"/>
             {% endif %}
         {% endif %}
         <div class="caption" style="word-wrap: break-word; hyphens: auto;">
@@ -38,7 +38,7 @@
     {% for image in row %}
     <div class="col-xs-6 col-md-3" style="margin-bottom: 10px">
         <a href="{{ image.get_absolute_url }}">
-        <img class="img-responsive" src="{% thumbnail image.file 350x350 crop="smart" %}"/>
+        <img class="img-fluid" src="{% thumbnail image.file 350x350 crop="smart" %}"/>
         </a>
     </div>
     {% endfor %}

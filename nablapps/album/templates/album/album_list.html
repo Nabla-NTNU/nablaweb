@@ -17,7 +17,7 @@
         {% if album.visibility != 'u' or is_user %}
         <a href="{{ album.get_absolute_url }}">
             {% if album.first.file %}
-            <img class="img-responsive" src="{% thumbnail album.first.file 350x350 crop="smart" %}"/>
+            <img class="img-fluid" src="{% thumbnail album.first.file 350x350 crop="smart" %}"/>
             {% endif %}
         {% endif %}
         <div class="caption" style="word-wrap: break-word; hyphens: auto;">

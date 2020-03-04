@@ -7,7 +7,7 @@
 {% block content %}
 <div class="">
   <h1><a href="{{ album.get_absolute_url }}">{{ album.title }}</a></h1>
-  <img src="{{ image.file.url }}" class="img-responsive" />
+  <img src="{{ image.file.url }}" class="img-fluid" />
   <p>
     {{ image.description }}
   </p>
