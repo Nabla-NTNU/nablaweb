@@ -4,7 +4,7 @@
     padding: 50px 20px 100px 20px;
 }
 
-header {
+.forum-header{
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     grid-gap: 20px;
