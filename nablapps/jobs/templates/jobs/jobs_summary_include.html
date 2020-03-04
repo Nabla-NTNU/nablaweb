@@ -3,12 +3,11 @@
 {% load jobs_filters %}
 {% load easy_thumbnails %}
 
-<div class="col-md-6 news_item advert">
+<div class="col-md-6 news_item advert card">
     {% if job.company.picture %}
         <a href="{{ job.get_absolute_url }}">
-            <img class="news-picture" 
+            <img class="card-img-top"
             alt="" 
-            style="display:block; margin-right:auto; margin-left:auto" 
          {% if job.company.ignoreCrop %}
          src="{% thumbnail job.company.picture 370x144 upscale=True detail=True quality=95 %}"
          {% else %}

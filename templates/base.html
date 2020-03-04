@@ -49,6 +49,9 @@
         <link rel="apple-touch-icon" sizes="114x114" href="{% static "img/apple-touch-icon-114x114.png" %}">
 
         {% addtoblock "js" %}
+                <!-- Bootstrap 4 og popper javascript  -->
+        <script type="text/javascript" src="{% static "bootstrap/dist/js/bootstrap.bundle.min.js" %}"></script>
+
         <script src="{% static "js/base.js" %}"></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
         <script type="text/x-mathjax-config">
@@ -56,7 +59,7 @@
               tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
             });
         </script>
-        <script type="text/javascript" src="{% static "bootstrap/dist/js/bootstrap.bundle.min.js" %}"></script>
+
         {% endaddtoblock %}
 
         {% render_block "js-head" %}
