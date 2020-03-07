@@ -20,12 +20,12 @@
 
 {% block sidebar %}
     {% get_flatpages '/englishcom/' as com_pages %}
-    <ul class="nav nav-pills nav-stacked">
+    <ul class="nav flex-column">
     {% for page in com_pages %}
         {% if page.url == flatpage.url %}
-            <li class="active"><a href="{{ page.url }}">{{ page.title }}</a></li>
+            <li class="nav-item "><a class="nav-link active" href="{{ page.url }}">{{ page.title }}</a></li>
         {% else %}
-            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+            <li class="nav-item"> ><a class="nav-link" href="{{ page.url }}">{{ page.title }}</a></li>
         {% endif %}
     {% endfor %}
 

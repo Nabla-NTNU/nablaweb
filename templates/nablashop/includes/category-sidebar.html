@@ -1,7 +1,11 @@
-<ul class="nav nav-pills nav-stacked">
-    <li><a href="{% url 'nablashop:index' %}">Alt</a></li>
+<ul class="nav flex-column">
+    <li class="nav-item"><a class="nav-link active" href="{% url 'nablashop:index' %}">Alt</a></li>
     {% for category in category_list %}
-    <li><a href="{% url 'nablashop:category_detail' category.id %}">{{ category.name }}</a></li>
+    <li class="nav-item"><a class="nav-link "href="{% url 'nablashop:category_detail' category.id %}">{{ category.name }}</a></li>
     {% endfor %}
 </ul>
 
+<ul class="nav flex-column">
+  <li class="nav-item">
+    <a class="nav-link active" href="#">Active</a>
+  </li>
