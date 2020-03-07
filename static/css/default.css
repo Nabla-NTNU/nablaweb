@@ -31,7 +31,6 @@ html, body {
 }
 
 
-
 .logo {
 padding: 7px;
 }
@@ -44,12 +43,6 @@ nav.navbar {
     text-shadow: 0 1px 0 #000;
     color: #efefef;
     font-family: 'PT Sans', Helvetica, arial, sans-serif;
-}
-
-#navbar-center {
-    width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .card-body-overline{
