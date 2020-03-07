@@ -48,7 +48,7 @@
 
     <!-- Front page news -->
     {% for news in news_list %}
-    {% include "includes/article_widget.html" with number=forloop.counter %}
+    {% include "includes/article_widget.html" with number=forloop.counter margin="mb-0" %}
     {% endfor %}{# news_list #}
 
     <button onclick="location.href='{% url "news_list" %}'" type="button" class="more-news-btn btn btn-outline-secondary btn-block">Flere nyheter</button>
@@ -111,12 +111,12 @@
         {% include "officeCalendar/includes/list.html" %}
     </div>
 
-    <div class="poll mb-2">
+    <div class="poll ">
         <!--Poll-->
         {% include "poll/poll_include.html" %}
     </div>
 
-    <div class="latest-podcast card card-body card-body-overline bg-light mb-2">
+    <div class="latest-podcast card card-body card-body-overline bg-light ">
         <!--Siste Skråttcast-->
         {% if new_podcast %} 
             <h1>Siste Skråttcast</h1>

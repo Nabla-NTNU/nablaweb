@@ -21,7 +21,7 @@
 {#    <p>{{ news.lead_paragraph}}</p>#}
 {#</div>#}
 
-<div class="card mb-2 news more-news-{{ number }}">
+<div class="card  news more-news-{{ number }} {{ margin|default:"mb-2" }}">
  {% if news.cropping and news.picture %}
         <img alt=""
              class="card-img-top"
