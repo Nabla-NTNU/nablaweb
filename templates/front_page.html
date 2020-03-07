@@ -118,14 +118,13 @@
 
     <div class="latest-podcast card card-body card-body-overline bg-light ">
         <!--Siste Skråttcast-->
-        {% if new_podcast %} 
-            <h1>Siste Skråttcast</h1>
-            <a href="{{ new_podcast.get_absolute_url }}">
-                {% if new_podcast.image %}
-                    <img src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
-                {% endif %}
-            </a>
-           <p><i>Dato: {{ new_podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {% get_hit_count for new_podcast %}</i></p>
+        {% if new_podcast %}
+            <div height=300px>
+                <h3><a href="{{new_podcast.get_absolute_url }}">Siste Skråttcast</a></h3>
+                <a class="thumbnail" href="{{ new_podcast.get_absolute_url }}">
+                     <img class="rounded mw-100" src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
+                </a>
+            </div>
         {% else %}
             <h1>Siste Skråttcast</h1>
             <h4>...vil dukke opp her når den kommer!</h4>
