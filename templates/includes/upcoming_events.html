@@ -3,20 +3,20 @@
     <link href="{{ STATIC_URL }}events/upcoming_events.css" rel="stylesheet">
 {% endaddtoblock %}
 
-<ul class="list-group nav">
+<ul class="list-unstyled nav  " >
 {% for event in upcoming %}
-        <li class="mb-1">
-            <a  class="text-dark nounderline" href="{{ event.get_absolute_url }}">
+        <li class=" w-100 d-flex pb-2" >
+            <a class="text-dark text-decoration-none  pr-3 text-truncate " href="{{ event.get_absolute_url }}" style="overflow: hidden">
                 <time class="badge badge-pill badge-dark {{ class }}"
                       datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"d.m" }}
                 </time>
                 {{ event.headline }}
-                {% if event.registration_required %}
-                    <span title="Ledige plasser / Totalt antall plasser">
-                        {{ event.users_attending }}/{{ event.places }}
-                    </span>
-                {% endif %}
             </a>
+            {% if event.registration_required and user.is_authenticated%}
+                <span class="ml-auto text-dark text-decoration-none " title="Ledige plasser / Totalt antall plasser">
+                    ({{ event.users_attending }}/{{ event.places }})
+                </span>
+            {% endif %}
         </li>
 {% empty %}
     <li>Ingen arrangementer</li>
