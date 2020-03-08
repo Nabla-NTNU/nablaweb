@@ -101,7 +101,7 @@
                 <h4>Ny tråd:</h4>
             
                 {{ thread_form.as_p }}
-                <button type="submit">Opprett en ny tråd</button>
+                <button type="submit" class="submit-button">Opprett en ny tråd</button>
             </form>
             {% endif %}
         </div>
@@ -144,7 +144,7 @@
              <form method="POST">
                  {% csrf_token %}
                  {{ message_form.as_p }}
-                 <button type="submit">send</button>
+                 <button type="submit" class="submit-button">send</button>
              </form>
              {% else %}
              <div class="card card-body bg-light">

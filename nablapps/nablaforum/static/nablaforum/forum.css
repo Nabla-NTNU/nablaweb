@@ -1,7 +1,6 @@
 .main-container {
     height: 900px;
     background-color: #f7f7f7;
-    padding: 0px 0px 120px 0px;
 }
 
 .forum-header{
@@ -34,6 +33,7 @@
     display: grid;
     grid-template-columns: 1fr 4fr 2fr;
     grid-gap: 20px;
+    padding-bottom: 100px;
     grid-template-areas:
     "chahnnel-menu channel-threads thread-messages"
 }
@@ -49,6 +49,10 @@
     border-right: solid;
     border-color: gray;
     min-width: 230px;
+}
+
+.submit-button {
+    margin: 20px;
 }
 
 .tile{
