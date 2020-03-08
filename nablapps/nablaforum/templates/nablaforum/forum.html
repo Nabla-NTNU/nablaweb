@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load sekizai_tags %}
 {% load static %}
+{% load markdown %}
 
 {% block full-content-body %}
 
@@ -79,7 +80,7 @@
 
             {% if threads %}
                 {% for thread in threads reversed %}
-                    <a href="{% url "forum-main" channel_id=chosen_channel_id thread_id=thread.pk %}?page={{ threads.number }}">
+                    <a href="{% url "forum-main" channel_id=chosen_channel_id thread_id=thread.pk %}?page={{ threads.number }}" style="color: black">
                     {% include "nablaforum/includes/tiles.html" with object=thread %}
                     </a>
                 {% endfor %}
@@ -95,7 +96,7 @@
 
             
              
-            {% if not chosen_channel.is_feed %}
+            {% if not chosen_channel.is_feed or request.user.is_superuser %}
             <form method="POST">
                 {% csrf_token %}
                 <h4>Ny tråd:</h4>
@@ -135,7 +136,7 @@
              {% for message in messages %}
                  <div class="card card-body bg-light">
                      <h4>{{ message.user.get_full_name }}</h4>
-                     <p>{{ message.message }}</p>
+                     <p>{{ message.message | markdown }}</p>
                      <div style="text-align: right;">{{ message.created }}</div>
                  </div>
              {% endfor %}

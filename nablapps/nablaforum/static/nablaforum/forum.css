@@ -46,32 +46,21 @@
 .channel-menu {
     background-color: white;
     padding-left: 20px;
+    padding-right: 20px;
     border-right: solid;
     border-color: gray;
     min-width: 230px;
 }
 
 .submit-button {
-    margin: 20px;
+    margin-bottom: 20px;
 }
 
-.tile{
-    border-radius: 10px;
-    padding-bottom: 20px;
-    padding-top: 10px;
-    padding-left: 20px;
-    margin-right: 20px;
-    margin-bottom: 10px;
-    background-color: white;
-}
 
-.tile--unread, .meta--unread {
+.meta--unread {
     color: red;
 }
 
-.well {
-    background-color: white;
-}
 
 .tile:hover {
     background-color: #d4d4d4;
@@ -83,7 +72,6 @@
 }   
 
 .content {
-    color: black;
     width: 100%;
     word-wrap: break-word;
 }
