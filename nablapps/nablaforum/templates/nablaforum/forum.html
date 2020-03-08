@@ -121,7 +121,7 @@
              
              <h4>{{ chosen_thread.threadstarter.get_full_name }} skriver:</h4>
              <div class="des">
-                 {{ chosen_thread.text }}
+                 {{ chosen_thread.text | markdown }}
                  <br>
                  <br>
                  <div style="text-align: right; margin-bottom: 5px">{{ chosen_thread.created }}</div>
