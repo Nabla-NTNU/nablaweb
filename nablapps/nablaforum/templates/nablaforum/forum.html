@@ -10,16 +10,16 @@
 
 <div class="main-container">
     <header class="forum-header">
-        <div>
+        <div class="channel-menu-header">
             <h1>Nablaforum</h1>
         </div>
 
-        <div>
+        <div class="thread-menu-header">
             <h1>{{ chosen_channel }}</h1>
             <p>{{ chosen_channel.description }}</p>
         </div>
 
-        <div>
+        <div class="messages-header">
             {% if chosen_thread %}
                 <h1>{{ chosen_thread }}</h1>
             {% else %}

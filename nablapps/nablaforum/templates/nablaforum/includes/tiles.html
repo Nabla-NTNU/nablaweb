@@ -7,6 +7,12 @@
             border-color: green;
             "
     {% endif %}
+
+    {% if object == chosen_channel %}
+        style="
+            background-color: #d4d4d4;
+            "
+    {% endif %}
     >
     <h4 class="title {% if object.has_unreads %}tile--has_unread{% endif %}">{{ object }}</h4>
     {% if object.threadstarter %}
