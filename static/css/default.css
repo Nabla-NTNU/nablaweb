@@ -418,3 +418,16 @@ Overflow-x: hidden;
 .nounderline{
     text-decoration: none !important
 }
+
+/* Messages */
+.messages {
+    list-style-type: none;
+    padding: unset;
+}
+
+.close {
+    cursor: pointer;
+}
+
+
+

@@ -16,11 +16,11 @@
 {% endaddtoblock %}
 
 {% if messages %}
-<ul class="messages" style="list-style-type: none; padding: unset">
+<ul class="messages">
     {% for message in messages %}
     <li{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
         {{ message }}
-        <p class="close" data-dismiss="alert" style="cursor: pointer;">X</p>
+        <p class="close" data-dismiss="alert">X</p>
     </li>
     {% endfor %}
 </ul>
