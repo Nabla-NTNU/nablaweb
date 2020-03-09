@@ -15,17 +15,6 @@
     <link  rel="stylesheet" href="{% static "css/front_page.css" %}">
 {% endaddtoblock %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
-        {{ message }}
-        <p class="close" data-dismiss="alert">X</p>
-    </li>
-    {% endfor %}
-</ul>
-{% endif %}
-
 <div class="maingrid-container{% if not newuser_message %}-authenticated{% endif  %}"><!--main grid container open tag-->
 <!--main content begin-->
 
