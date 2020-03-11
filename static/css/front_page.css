@@ -14,7 +14,7 @@
         "more-news-1     more-news-2     more-news-3"
         "more-news-4     more-news-5     more-news-6"
         "more-news-btn   more-news-btn   more-news-btn"
-        "latest-nablad   latest-podcast   poll"
+        "latest-nablad   latest-podcast  poll"
         "sponsors        sponsors        suggestions";
 }
 .maingrid-container-authenticated{
@@ -80,6 +80,12 @@
 
 .more-news-4 {
     grid-area: more-news-4;
+}
+.more-news-5 {
+    grid-area: more-news-5;
+}
+.more-news-6 {
+    grid-area: more-news-6;
 }
 
 .more-news-btn {

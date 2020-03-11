@@ -73,7 +73,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
         context["news_list"] = news_list[1:7    ]
 
     def _add_nablad(self, context):
-        context["new_nablad"] = Nablad.objects.order_by("-pub_date")[:4]
+        context["new_nablad"] = Nablad.objects.order_by("-pub_date")[:2]
         if not self.request.user.is_authenticated:
             context["new_nablad"] = Nablad.objects.exclude(is_public=False).order_by(
                 "-pub_date"

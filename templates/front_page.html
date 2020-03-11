@@ -55,7 +55,7 @@
         <!--Siste Nablad-->
         {% if new_nablad %}
             <div height=300px>
-                <h3><a href="{% url "nablad_list" %}">Siste Nablad</a></h3>
+                <h3><a class="text-dark" href="{% url "nablad_list" %}">Siste Nablad</a></h3>
                 <div class="row text-center">
                     {% for nablad in new_nablad %}
                         <div class="col-md-6{% if not forloop.first %} d-none d-md-block {% endif %}">
@@ -119,7 +119,7 @@
         <!--Siste Skråttcast-->
         {% if new_podcast %}
             <div height=300px>
-                <h3><a href="{% url "season_view" %}">Siste Skråttcast</a></h3>
+                <h3><a class="text-dark" href="{% url "season_view" %}">Siste Skråttcast</a></h3>
                 <a  href="{{ new_podcast.get_absolute_url }}">
                      <img class="rounded mw-100" src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
                 </a>
