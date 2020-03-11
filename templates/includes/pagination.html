@@ -9,6 +9,10 @@ It fits perfectly if you are using the django.views.generic.ListView with pagina
                 <li class="page-item">
                     <a class="page-link" href="?page={{ page_obj.next_page_number }}"><span aria-hidden="true">&larr;</span> Eldre</a>
                 </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" ><span aria-hidden="true">&larr;</span> Eldre</a>
+                </li>
             {% endif %}
 
             <li class="disabled page-item pager-counter">
@@ -19,7 +23,12 @@ It fits perfectly if you are using the django.views.generic.ListView with pagina
                 <li class="page-item">
                     <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Nyere <span aria-hidden="true">&rarr;</span></a>
                 </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">Nyere <span aria-hidden="true">&rarr;</span></a>
+                </li>
             {% endif %}
+
         </ul>
     </nav>
 {% endif %}

@@ -1,21 +1,39 @@
 .main-container {
     height: 900px;
-    background-color: #f0f0f0;
-    padding: 50px 20px 100px 20px;
+    background-color: #f7f7f7;
 }
 
 .forum-header{
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 4fr 2fr;
     grid-gap: 20px;
+}
+
+.channel-menu-header {
+    background-color: white;
+    padding-left: 20px;
+    border-right: solid;
+    border-color: gray;
+    min-width: 230px;
+}
+
+.thread-menu-header {
+    border-bottom: solid;
+    border-color: gray;
+}
+
+.messages-header {
+    border-bottom: solid;
+    border-color: gray;
 }
 
 .main-grid{
     height: 100%;
     padding-bottom: 000px;
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 4fr 2fr;
     grid-gap: 20px;
+    padding-bottom: 100px;
     grid-template-areas:
     "chahnnel-menu channel-threads thread-messages"
 }
@@ -25,23 +43,24 @@
      overflow: auto;
 }
 
-.tile{
-    border-radius: 10px;
-    padding-bottom: 20px;
-    padding-top: 20px;
-    padding-left: 20px;
-    margin-right: 20px;
-    margin-bottom: 10px;
+.channel-menu {
     background-color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-right: solid;
+    border-color: gray;
+    min-width: 230px;
 }
 
-.tile--unread, .meta--unread {
+.submit-button {
+    margin-bottom: 20px;
+}
+
+
+.meta--unread {
     color: red;
 }
 
-.well {
-    background-color: white;
-}
 
 .tile:hover {
     background-color: #d4d4d4;
@@ -53,7 +72,6 @@
 }   
 
 .content {
-    color: black;
     width: 100%;
     word-wrap: break-word;
 }

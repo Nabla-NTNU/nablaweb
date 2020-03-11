@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load sekizai_tags %}
 {% load static %}
+{% load markdown %}
 
 {% block full-content-body %}
 
@@ -10,16 +11,16 @@
 
 <div class="main-container">
     <header class="forum-header">
-        <div>
+        <div class="channel-menu-header">
             <h1>Nablaforum</h1>
         </div>
 
-        <div>
+        <div class="thread-menu-header">
             <h1>{{ chosen_channel }}</h1>
             <p>{{ chosen_channel.description }}</p>
         </div>
 
-        <div>
+        <div class="messages-header">
             {% if chosen_thread %}
                 <h1>{{ chosen_thread }}</h1>
             {% else %}
@@ -79,7 +80,7 @@
 
             {% if threads %}
                 {% for thread in threads reversed %}
-                    <a href="{% url "forum-main" channel_id=chosen_channel_id thread_id=thread.pk %}?page={{ threads.number }}">
+                    <a href="{% url "forum-main" channel_id=chosen_channel_id thread_id=thread.pk %}?page={{ threads.number }}" style="color: black">
                     {% include "nablaforum/includes/tiles.html" with object=thread %}
                     </a>
                 {% endfor %}
@@ -95,13 +96,13 @@
 
             
              
-            {% if not chosen_channel.is_feed %}
+            {% if not chosen_channel.is_feed or request.user.is_superuser %}
             <form method="POST">
                 {% csrf_token %}
                 <h4>Ny tråd:</h4>
             
                 {{ thread_form.as_p }}
-                <button type="submit">Opprett en ny tråd</button>
+                <button type="submit" class="submit-button">Opprett en ny tråd</button>
             </form>
             {% endif %}
         </div>
@@ -120,7 +121,7 @@
              
              <h4>{{ chosen_thread.threadstarter.get_full_name }} skriver:</h4>
              <div class="des">
-                 {{ chosen_thread.text }}
+                 {{ chosen_thread.text | markdown }}
                  <br>
                  <br>
                  <div style="text-align: right; margin-bottom: 5px">{{ chosen_thread.created }}</div>
@@ -135,7 +136,7 @@
              {% for message in messages %}
                  <div class="card card-body bg-light">
                      <h4>{{ message.user.get_full_name }}</h4>
-                     <p>{{ message.message }}</p>
+                     <p>{{ message.message | markdown }}</p>
                      <div style="text-align: right;">{{ message.created }}</div>
                  </div>
              {% endfor %}
@@ -144,7 +145,7 @@
              <form method="POST">
                  {% csrf_token %}
                  {{ message_form.as_p }}
-                 <button type="submit">send</button>
+                 <button type="submit" class="submit-button">send</button>
              </form>
              {% else %}
              <div class="card card-body bg-light">
