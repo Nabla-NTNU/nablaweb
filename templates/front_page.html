@@ -123,7 +123,7 @@
             <div height=300px>
                 <h3><a class="text-dark" href="{% url "season_view" %}">Siste Skråttcast</a></h3>
                 <a  href="{{ new_podcast.get_absolute_url }}">
-                     <img class="rounded mw-100" src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
+                     <img class="rounded m-75" src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
                 </a>
             </div>
         {% else %}
