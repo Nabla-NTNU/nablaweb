@@ -14,7 +14,7 @@
         <h1>{{ season_name }}</h1>
         {% if season.banner %}
         <div class="">
-            <img class="img-responsive" src="{{ season.banner.url }}"/>
+            <img class="img-fluid" src="{{ season.banner.url }}"/>
         </div>
         {% endif %}
     {% endif %}
@@ -48,34 +48,32 @@
         <p>Ingen podcast tilgjengelig.</p>
     {% endif %}
 <nav>
-    <ul class="pager">
+    <ul class="pagination d-flex justify-content-between" >
         {% if previous %}
-            <li class="previous">
-                <a href="{{ previous.get_absolute_url }}"><span aria-hidden="true">&larr;</span><span class="hidden-xs"> Forrige sesong</span></a>
+            <li class="page-item">
+                <a class="page-link" href="{{ previous.get_absolute_url }}"><span aria-hidden="true">&larr;</span><span class="hidden-xs"> Forrige sesong</span></a>
             </li>
         {% else %}
-             <li class="previous" style="visibility: hidden">
-                <a><span aria-hidden="true">&larr;</span><span class="hidden-xs"> Forrige sesong</span></a>
+             <li class="page-item" style="visibility: hidden">
+                <a class="page-link"><span aria-hidden="true">&larr;</span><span class="hidden-xs"> Forrige sesong</span></a>
             </li>
         {% endif %}
 
-        <li class="disabled pager-counter">
-            <div class = "opt">
-                <select onchange="if (this.value) window.location.href=this.value" onmouseover="" style="cursor: pointer;">
+        <li class=" page-item ">
+                <select class="form-control m-0 page-link text-primary" onchange="if (this.value) window.location.href=this.value" onmouseover="" style="cursor: pointer;">
                     {% for i in season_list %}
-                        <option value="{% url "season_view" i.number %}" {% if i == season %} selected {% endif %} >{{ i.name }}</option>
+                        <option c value="{% url "season_view" i.number %}" {% if i == season %} selected {% endif %} >{{ i.name }}</option>
                     {% endfor %}
                 </select>
-            </div>
         </li>
 
         {% if next %}
-            <li class="next">
-                <a href="{{ next.get_absolute_url }}"><span class="hidden-xs">Neste sesong </span><span aria-hidden="true">&rarr;</span></a>
+            <li class=" page-item">
+                <a class="page-link" href="{{ next.get_absolute_url }}"><span class="hidden-xs">Neste sesong </span><span aria-hidden="true">&rarr;</span></a>
             </li>
         {% else %}
-            <li class="next" style="visibility: hidden">
-                <a><span class="hidden-xs">Neste sesong </span><span aria-hidden="true">&rarr;</span></a>
+            <li class="page-item " style="visibility: hidden">
+                <a class="page-link" ><span class="hidden-xs">Neste sesong </span><span aria-hidden="true">&rarr;</span></a>
             </li>
         {% endif %}
     </ul>

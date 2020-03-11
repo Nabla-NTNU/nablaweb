@@ -9,7 +9,7 @@
 
 <div class="box">
     {% if event.picture %}
-    <img alt="header" class="img-responsive"
+    <img alt="header" class="img-fluid"
          src="{% thumbnail event.picture 760x300 box=event.cropping upscale=True detail=True quality=95 %}">
     {% endif %}
 
@@ -26,7 +26,7 @@
     <div class="registrations">
         {% for registration in event.eventregistration_set.all %}
         {% with user=registration.user %}
-        <span class="label label-default
+        <span class="badge {% ifequal user request.user %} badge-info {% else %} badge-secondary {% endifequal %}
                      {% if registration.waiting %} 
                      waiting-place
                      {% endif %}" style="display: inline-block;">

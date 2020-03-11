@@ -15,7 +15,7 @@
 <div class="tittel">
   <h2>{{ podcast.title }}</h2>
   {% if podcast.image %}
-  <img class="img-responsive" src="{{ podcast.image.url }}" alt="{{ podcast.title }}" style="max-width: 100%;"/>
+  <img class="img-fluid" src="{{ podcast.image.url }}" alt="{{ podcast.title }}" style="max-width: 100%;"/>
   {% endif %}
   <p>
   <i>Dato: {{ podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {{ hitcount.total_hits }}</i>

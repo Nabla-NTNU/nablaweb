@@ -23,12 +23,12 @@
         {% with main_news as news %}
         {% if news.cropping and news.picture %}
         <a href="{{ news.get_absolute_url }}">
-            <img alt="" class="img-responsive"
+            <img alt="" class="img-fluid"
                  src="{% thumbnail news.picture 760x300 box=news.cropping upscale=True quality=95 detail=True %}" height="100%" width="100%">
         </a>
         {% elif news.picture %}
         <a href="{{ news.get_absolute_url }}">
-            <img alt="" class="img-responsive"
+            <img alt="" class="img-fluid"
                  src="{% thumbnail news.picture 760x300 quality=95 upscale=True crop="smart" detail=True %}" height="100%" width="100%">
         </a>
         {% endif %}
@@ -41,28 +41,28 @@
         {% endwith %}
     </article>
 
-    <div class="upcoming-events well">
+    <div class="upcoming-events card card-body card-body-overline bg-light">
         <!--upcoming event widget-->
         {% include "includes/event_widget.html" %}
     </div>
 
     <!-- Front page news -->
     {% for news in news_list %}
-    {% include "includes/article_widget.html" with number=forloop.counter %}
+    {% include "includes/article_widget.html" with number=forloop.counter margin="mb-0" %}
     {% endfor %}{# news_list #}
 
-    <button onclick="location.href='{% url "news_list" %}'" type="button" class="more-news-btn button">Flere nyheter</button>
+    <button onclick="location.href='{% url "news_list" %}'" type="button" class="more-news-btn btn btn-outline-secondary btn-block">Flere nyheter</button>
 
-    <div class="latest-nablad well">
+    <div class="latest-nablad card card-body card-body-overline bg-light">
         <!--Siste Nablad-->
         {% if new_nablad %}
             <div height=300px>
                 <h3><a href="{% url "nablad_list" %}">Siste Nablad</a></h3>
-                <div class="row">
+                <div class="row text-center">
                     {% for nablad in new_nablad %}
-                        <div class="col-md-3{% if not forloop.first %} hidden-xs{% endif %}">
-                            <a class="thumbnail" href="{{ nablad.get_absolute_url }}">
-                                <img src="{% thumbnail nablad.thumbnail 730x200 %}">
+                        <div class="col-md-3{% if not forloop.first %} d-none d-md-block {% endif %}">
+                            <a  href="{{ nablad.get_absolute_url }}">
+                                <img class="rounded mw-100" src="{% thumbnail nablad.thumbnail 730x200 %}">
                             </a>
                         </div >
                     {% endfor %}
@@ -74,7 +74,7 @@
         {% endif %}
     </div>
 
-    <div class="sponsors">
+    <div class="sponsors card card-body card-body-overline">
         <!--Sponsorer-->
         {% if frontpageinfo %}
             <p>
@@ -86,7 +86,7 @@
 
 <!--Sidebar begin-->
     {% if newuser_message %}
-    <div class="welcome well">
+    <div class="welcome card card-body card-body-overline bg-light">
         <h1>Velkommen til Nabla</h1>
         <p>
             Nabla er linjeforeningen for studenter ved sivilingeniørstudiet Fysikk og Matematikk ved NTNU, og har 
@@ -96,11 +96,11 @@
         </p>
         <h4>Ny student?</h4>
         <p>
-            Les vår informasjon for nye studenter <a href="/nystudent/">her.</a>
+            Les vår informasjon for nye studenter <a href="/nystudent/">her</a>.
         </p>
         <h4>Bedrift?</h4>
         <p>
-            Ta kontakt med bedriftskontakten på <a href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no.</a>
+            Sjekk ut <a href="/bedriftskontakten/">bedriftskontakten sine sider</a>, eller ta kontakt med bedriftskontakten på <a href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no</a>.
         </p>
     </div>
     {% else %}
@@ -111,28 +111,27 @@
         {% include "officeCalendar/includes/list.html" %}
     </div>
 
-    <div class="poll">
+    <div class="poll ">
         <!--Poll-->
         {% include "poll/poll_include.html" %}
     </div>
 
-    <div class="latest-podcast well">
+    <div class="latest-podcast card card-body card-body-overline ">
         <!--Siste Skråttcast-->
-        {% if new_podcast %} 
-            <h1>Siste Skråttcast</h1>
-            <a href="{{ new_podcast.get_absolute_url }}">
-                {% if new_podcast.image %}
-                    <img src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
-                {% endif %}
-            </a>
-           <p><i>Dato: {{ new_podcast.pub_date | date:"d.m.Y" }}. Antall visninger: ca. {% get_hit_count for new_podcast %}</i></p>
+        {% if new_podcast %}
+            <div height=300px>
+                <h3><a href="{% url "season_view" %}">Siste Skråttcast</a></h3>
+                <a  href="{{ new_podcast.get_absolute_url }}">
+                     <img class="rounded mw-100" src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}" style="max-width: 100%;"/>
+                </a>
+            </div>
         {% else %}
             <h1>Siste Skråttcast</h1>
             <h4>...vil dukke opp her når den kommer!</h4>
         {% endif %}
     </div>
 
-    <div class="suggestions">
+    <div class="suggestions card card-body card-body-overline">
         <!--Send inn ellernoe?-->
         {% if sidebarinfo %}
             <p>

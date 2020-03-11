@@ -14,7 +14,7 @@ from .forms import ChannelForm, JoinChannelsForm, MessageForm, ThreadForm
 from .models import Channel, Message, Thread
 
 
-class MainView(TemplateView):
+class MainView(LoginRequiredMixin, TemplateView):
     """ Main view displaying forum content """
 
     template_name = "nablaforum/forum.html"

@@ -8,9 +8,9 @@
         "upcoming-events upcoming-events office"
         "more-news-1     more-news-2     poll"
         "more-news-3     more-news-4     latest-podcast"
-        ".               more-news-btn   ."
-        "latest-nablad   latest-nablad   suggestions"
-        "sponsors        sponsors        sponsors";
+        "more-news-btn   more-news-btn   ."
+        "latest-nablad   latest-nablad   latest-nablad"
+        "sponsors        sponsors        suggestions";
 }
 .maingrid-container-authenticated{
     display: grid;
@@ -22,9 +22,9 @@
         "upcoming-events upcoming-events office"
         "more-news-1     more-news-2     poll"
         "more-news-3     more-news-4     latest-podcast"
-        ".               more-news-btn   ."
-        "latest-nablad   latest-nablad   suggestions"
-        "sponsors        sponsors        sponsors";
+        "more-news-btn   more-news-btn   ."
+        "latest-nablad   latest-nablad   latest-nablad"
+        "sponsors        sponsors        suggestions";
 }
 
 @media (max-width: 1000px){
@@ -112,4 +112,8 @@
 
 .suggestions {
     grid-area: suggestions;
+}
+
+.poll.card-body{
+    height: 100%;
 }

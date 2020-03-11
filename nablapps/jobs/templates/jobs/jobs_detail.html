@@ -11,7 +11,7 @@
 <div class="box">
     {% if job.company.picture %}
     <img alt="header"
-         class="img-responsive"
+         class="img-fluid"
          style="display:block; margin-right:auto;margin-left:auto"
          {% if job.company.ignoreCrop %}
          src="{% thumbnail job.company.picture 770x300 upscale=True detail=True quality=95 %}"

@@ -1,7 +1,7 @@
 {% load comments i18n %}
 
 
-<form action="{% comment_form_target %}" method="post" class="add-comment well row">
+<form action="{% comment_form_target %}" method="post" class="continer add-comment card card-body bg-light">
     {% csrf_token %}
     <fieldset>
 
@@ -12,11 +12,11 @@
         galt, og vi havnet på forhåndsvisningen, bruk URL fra den originale
         siden, som ble POSTet via next-feltet
         {% endcomment %}
-        <input type="hidden" name="next" 
+        <input type="hidden" name="next"
                value="{% if request.POST.next %}{{ request.POST.next }}{% else %}{{ request.get_full_path }}{% endif %}">
 
         {% for field in form %}
-           
+
             {% if field.is_hidden %}
 
                 {{ field }}
@@ -53,33 +53,35 @@
     </fieldset>
 
     <div id="comment-help-buttons">
-        <div class="col-md-8">
-            <p>Kommentarene bruker Markdown og MathJax. HTML blir fjernet. [[Ord]] i doble hakeparenteser lenker til wikien.</p>
-        </div>
-        <div class="col-md-4">
-            <button style="display:none;" class="btn btn-default comment-help-btn">Vis hjelp</button>
-            <button style="display:none;" class="btn btn-default comment-help-btn">Gjem hjelp</button>
+        <div class="row">
+            <div class="col-lg-8">
+                <p>Kommentarene bruker Markdown og MathJax. HTML blir fjernet. [[Ord]] i doble hakeparenteser lenker til wikien.</p>
+            </div>
+            <div class="col-lg-4">
+                <button style="display:none;" class="btn btn-outline-secondary comment-help-btn">Vis hjelp</button>
+                <button style="display:none;" class="btn btn-outline-secondary comment-help-btn">Gjem hjelp</button>
+            </div>
         </div>
     </div>
 
     <div id="comment-help-text">
         <div class="row">
-            <div class="col-md-7"><pre class="tex2jax_ignore">Heisann, [Lenketekst](http://google.com), 
-**bold**, _kursiv_. 
+            <div class="col-lg-7"><pre class="tex2jax_ignore">Heisann, [Lenketekst](http://google.com),
+**bold**, _kursiv_.
 Og litt `kode`.
             </pre></div>
-            <div class="col-md-5">
+            <div class="col-lg-5">
                 <p>Heisann, <a href="http://google.com">Lenketekst</a>, <strong>bold</strong>, <em>kursiv</em>. Og litt <code>kode</code>.</p>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-7"><pre class="tex2jax_ignore">Jeg kan skrive store ligninger:
+            <div class="col-lg-7"><pre class="tex2jax_ignore">Jeg kan skrive store ligninger:
 
 `$$ \int_0^\infty \frac1{x^2}\, dx = y. $$`
 Og små ligninger `$ \int x^5\, dx$`, som dette.
             </pre></div>
-            <div class="col-md-5">
+            <div class="col-lg-5">
                 <p>Jeg kan skrive store ligninger:</p>
 
                 <p><code>$$ \int_0^\infty \frac1{x^2}\, dx = y. $$</code></p>
@@ -89,7 +91,7 @@ Og små ligninger `$ \int x^5\, dx$`, som dette.
         </div>
 
         <div class="row">
-            <div class="col-md-7"><pre class="tex2jax_ignore">Liste:
+            <div class="col-lg-7"><pre class="tex2jax_ignore">Liste:
 
 * Ein
 * To
@@ -103,7 +105,7 @@ Numerert liste:
     * Fem
 3. Tre
             </pre></div>
-            <div class="col-md-5">
+            <div class="col-lg-5">
                 <p>Liste:</p>
 
                 <ul>
@@ -130,9 +132,9 @@ Numerert liste:
         </div>
 
         <div class="row">
-            <div class="col-md-7"><pre class="tex2jax_ignore">&gt; Slik som dette siterer jeg noen. Du trenger kun en &gt; i starten av hver paragraf. 
+            <div class="col-lg-7"><pre class="tex2jax_ignore">&gt; Slik som dette siterer jeg noen. Du trenger kun en &gt; i starten av hver paragraf. 
             </pre></div>
-            <div class="col-md-5">
+            <div class="col-lg-5">
 
                 <blockquote>
                   <p>Slik som dette siterer jeg noen. Du trenger kun en &gt; i starten av hver paragraf.</p>

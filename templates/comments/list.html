@@ -7,8 +7,8 @@
 
 <hr>
 
-<div class="row comment" id="c{{ comment.id }}" style="display: flex">
-    <img class="col-xs-2 thumbnail img-responsive" alt="avatar" width="150" height="150" src=
+<div class="row pl-3" id="c{{ comment.id }}" style="display: flex">
+    <img class="col-xs-2 pr-2" alt="avatar" width="150" height="150" src=
         {% if comment.user.avatar %}
             "{% thumbnail comment.user.avatar 150x150 box=comment.user.cropping %}"
         {% else %}

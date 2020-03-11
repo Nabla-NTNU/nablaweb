@@ -4,6 +4,7 @@ from hashlib import sha1
 from django.contrib.auth.models import AbstractUser, Group, UserManager
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 from image_cropping.fields import ImageCropField, ImageRatioField
 
@@ -121,15 +122,11 @@ class NablaUser(AbstractUser):
             EventRegistration,
         )  # Moved down to avoid loop error when FysmatClass was imported to mixins in events
 
-        # Find out if we are in first or second term
-        today = date.today()
-        first_semester = date(today.year, 1, 1)  # First semester starts 1. jan
-        second_semester = date(today.year, 6, 1)  # Second semester starts 6. jun
-
-        semester_start = second_semester if second_semester <= today else first_semester
+        # Penalties are valid for six months
+        six_months_ago = timezone.now() - timezone.timedelta(days=182) # about six months
 
         penalties = EventRegistration.objects.filter(
-            user=self, date__gte=semester_start
+            user=self, date__gte=six_months_ago
         ).exclude(penalty=0)
         return penalties
 

@@ -2,7 +2,7 @@
 {% load markdown %}
 
 {% block content %}
-    <img class="img img-responsive" style="width: 70%" src="{{ product.photo.url }}"></p>
+    <img class="img img-fluid" style="width: 70%" src="{{ product.photo.url }}"></p>
     <h1>{{ product.name }} - {{ product.price }} kr</h1>
     <p>{{ product.description|markdown }}</p>
 

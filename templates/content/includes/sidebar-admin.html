@@ -1,18 +1,16 @@
 {% if admin_links and user.is_staff %}
-<div class="panel panel-default">
-    <div class="panel-heading">
+<div class="card panel-default">
+    <div class="card-header">
         Admin
     </div>
-    <ul class="nav">
+    <ul class="nav flex-column">
         {% for link in admin_links %}
-        <li>
-            <a href="{{ link.url }}">
+            <a class="nav-link" href="{{ link.url }}">
                 {% if link.glyphicon_symbol %}
                 <span class="glyphicon glyphicon-{{ link.glyphicon_symbol }}"></span>
                 {% endif %}
                 {{ link.name }}
             </a>
-        </li>
         {% endfor %}
     </ul>
 </div>

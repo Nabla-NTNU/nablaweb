@@ -38,14 +38,23 @@ class NewestPlaceView(PlaceView):
     """DetailView displaying the latest grid"""
 
     def get_object(self):
+        published_grids = PlaceGrid.objects.filter(publish_date__lte=datetime.now())
+        enabled_grids = published_grids.filter(enabled=True)
+
         try:
-            newest_enabled_place = PlaceGrid.objects.filter(
-                publish_date__lte=datetime.now()
-            ).latest("publish_date")
+            # Try getting the latest enabled grid
+            enabled_grid = enabled_grids.latest("publish_date")
         except PlaceGrid.DoesNotExist:
-            raise Http404
+            try:
+                # Fallback to the latest published grid
+                published_grid = published_grids.latest("publish_date")
+            except PlaceGrid.DoesNotExist:
+                # No grids
+                raise Http404
+            else:
+                return published_grid
         else:
-            return newest_enabled_place
+            return enabled_grid
 
 
 def get_place_info(request, pk):

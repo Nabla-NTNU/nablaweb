@@ -18,18 +18,19 @@
         <meta name="author" content="Nabla">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<!-- Used by Google to verify that we own the domain. --> 
-	<meta name="google-site-verification" content="lfXfxPU7wQGV0Sd87zCnA_3v0rQlDVQdth3kH_1fzIM" />
+        <!-- Used by Google to verify that we own the domain. -->
+        <meta name="google-site-verification" content="lfXfxPU7wQGV0Sd87zCnA_3v0rQlDVQdth3kH_1fzIM" />
 
         <!-- Bootstrap Core CSS -->
         {% addtoblock "css" %}
         <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">
-        <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap-theme.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/v4-shims.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/fontawesome.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/brands.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/solid.min.css" %}">
+
         <link href="{% static "css/default.css" %}" rel="stylesheet">
+
         {% if custom_color %}
         <style>
          nav.navbar {
@@ -48,8 +49,9 @@
         <link rel="apple-touch-icon" sizes="114x114" href="{% static "img/apple-touch-icon-114x114.png" %}">
 
         {% addtoblock "js" %}
-        <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
-        <script src="{% static "wiki/js/core.js" %}"></script>
+                <!-- Bootstrap 4 og popper javascript  -->
+        <script type="text/javascript" src="{% static "bootstrap/dist/js/bootstrap.bundle.min.js" %}"></script>
+
         <script src="{% static "js/base.js" %}"></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
         <script type="text/x-mathjax-config">
@@ -57,6 +59,7 @@
               tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
             });
         </script>
+
         {% endaddtoblock %}
 
         {% render_block "js-head" %}
@@ -132,141 +135,155 @@
         </div>
 	{% endif %}
 
-    <div id = "content">
+    <div  id = "content">
         <!-- Navigation -->
         <header>
-            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <a class="logo pull-left" href="/">
+            <nav class="navbar navbar-dark navbar-expand-lg" role="navigation">
+            <a class="navbar-brand" href="/">
                     {% block header_logo %}
                     <img width="125" src="{% static "img/nabla_logo_white.svg" %}" alt="Nabla">
                     {% endblock header_logo %}
             </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nabla-navbar-collapse-1" aria-controls="nabla-navbar-collapse-1" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <div class="container">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                    </div>
-
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        {% block navbar_container %}
-                        {# navigasjonslenker #}
-                        <ul class="nav navbar-nav">
-                            <li><a href="{% url "event_main_page" %}">Arrangementer</a></li>
-                            <li><a href="{% url "jobs_list" %}">Karriere</a></li>
-
-                            <li class="dropdown">
-                                <a href="#ting" class="dropdown-toggle" data-toggle="dropdown">
-                                    Nablamedia
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" >
-                                    {# Faste lenker om Nabla #}
-
-                                    <li><a href="{% url "nablad_list" %}">Nabladet</a></li>
-                                    <li><a href="{% url "season_view" %}">Skråttcast</a></li>
-                                    <li><a href="{% url "meeting_record_list" %}">Styremøtereferater</a></li>
-                                    <li><a href="{% url "albums" %}">Bildealbum</a></li>
-                                    <li><a href="{% url "blog" %}">Blogg</a></li>
-                                    <li><a href="/julekalender/2019/">Julekalender 2019</a></li>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse " id="nabla-navbar-collapse-1">
+                {% block navbar_container %}
+                {# navigasjonslenker #}
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item mr-1 ">
+                        <a class="nav-link text-light" href="{% url "event_main_page" %}">Arrangementer</a>
+                    </li>
+                    <li class="nav-item mr-1 ">
+                        <a class="nav-link text-light" href="{% url "jobs_list" %}">Karriere</a>
+                    </li>
+                    <li class="nav-item mr-1 dropdown ">
+                        <a href="#ting" class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown1" role="button"  aria-haspopup="true" aria-expanded="false">
+                            Nablamedia
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                            {# Faste lenker om Nabla #}
+                            <a class="dropdown-item" href="{% url "nablad_list" %}">Nabladet</a>
+                            <a class="dropdown-item" href="{% url "season_view" %}">Skråttcast</a>
+                            <a class="dropdown-item" href="{% url "meeting_record_list" %}">Styremøtereferater</a>
+                            <a class="dropdown-item" href="{% url "albums" %}">Bildealbum</a>
+                            <a class="dropdown-item" href="{% url "blog" %}">Blogg</a>
+                            <a class="dropdown-item" href="/julekalender/2019/">Julekalender 2019</a>
 {% comment %}
-                                    <li><a href="{% url "advent_calendar" "2019" %}">Julekalender 2019</a></li>
+                            <a class="dropdown-item" href="{% url "advent_calendar" "2019" %}">Julekalender 2019</a>
 {% endcomment %}
-                                </ul>
-                            </li>
-                            <li><a href="{% url "om-nabla" %}">Om Nabla</a></li>
-                            <li class="dropdown">
-                                <a href="#Om" class="dropdown-toggle" data-toggle="dropdown">
-                                    Kontakt og varsling
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" >
-                                    <li><a href="/contact/">Kontakt oss</a></li>
-                                    <li><a href="/varsling/">Varsling</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        {# end navigasjonslenker #}
-                        <form class="form-inline" id="searchtop" method="get" action="{% url "haystack_search" %}">
-                            <div class="input-group">
-                                <input name="q" placeholder="Søk..." type="text" class="form-control">
-                                <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-default">
-                                        <span class="glyphicon glyphicon-search"></span>
-                                    </button>
-                                </span>
-                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item mr-1">
+                        <a class="nav-link text-light" href="{% url "om-nabla" %}">Om Nabla</a></li>
+                    <li class="nav-item mr-1 dropdown ">
+
+                        <a href="#Om" class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown2" role="button"  aria-haspopup="true" aria-expanded="false">
+                            Kontakt og varsling
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                            <a class="dropdown-item" href="/contact/">Kontakt oss</a>
+                            <a class="dropdown-item" href="/varsling/">Varsling</a>
+                        </div>
+                    </li>
+                </ul>
+
+                {# end navigasjonslenker #}
+{#                <form class="form-inline mr-5" id="searchtop" method="get" action="{% url "haystack_search" %}">#}
+{#                    <input name="q" placeholder="Søk..." type="search" class="form-control mr-sm-2">#}
+{#                </form>#}
+                <ul class="nav navbar-nav ">
+                    <li class="nav-item mr-1 ">
+                        <a class="nav-link text-light" href="/search/">Søk</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    {# bruker-dropdown #}
+                    <li class="nav-item mr-1 dropdown">
+                        <a href="#bruker " class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown3" role="button"  aria-haspopup="true" aria-expanded="false">
+                            <span class="glyphicon glyphicon-user"></span>
+                            {% firstof user.get_full_name user.username %}
+                            <span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown3">
+                            <a class="dropdown-item" href="{% url "member_profile" user.username %}">Vis profil</a>
+                            <a class="dropdown-item" href="{% url "edit_profile" %}">Endre profil</a>
+                            <a class="dropdown-item" href="{% url "password_change" %}">Endre passord</a>
+                            <a class="dropdown-item" href="{% url "view_user_events" %}">Påmeldte arrangementer</a>
+                            <a class="dropdown-item" href="{% url "auth_logout" %}">Logg ut</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url "user_polls" %}">Brukeravstemninger</a>
+                            <a class="dropdown-item" href="{% url "officebeer_account" %}">Office Beer</a>
+                            <a class="dropdown-item" href="{% url "users_birthday" %}">Bursdag</a>
+                            <a class="dropdown-item" href="{% url "quiz_list" %}">Quiz</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url "user_list" %}">Medlemsliste</a>
+                            {% if user.is_staff %}
+                            <a class="dropdown-item" href="{% url "admin:index" %}">Admin</a>
+                            <a class="dropdown-item" href="/admin/filebrowser/browse">Filer</a>
+                            {% endif %}
+
+                            {# Kan wære den ikke denne varselimplementeringen ikke fungerer #}
+                            {% load i18n sekizai_tags static %}
+                                  <div class="dropdown-divider"></div>
+                                  <a class=" dropdown-item" href="#"><em>{% trans "No notifications" %}</em></a>
+                                  <div class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#" onclick="notify_mark_read()">
+                                      <i class="fa fa-check-square-o"></i>
+                                      {% trans "Clear notifications list" %}
+                                  </a>
+                                    <a class="dropdown-item" href="{% url 'wiki:notification_settings' %}">
+                                      <i class="fa fa-wrench"></i>
+                                      {% trans "Notification settings" %}
+                                    </a>
+                                {% addtoblock "js" %}
+                                <script type="text/javascript">
+                                  URL_NOTIFY_GET_NEW = "{% url "nyt:json_get" %}";
+                                  URL_NOTIFY_MARK_READ = "{% url "nyt:json_mark_read_base" %}";
+                                  URL_NOTIFY_GOTO = "{% url "nyt:goto_base" %}";
+                                </script>
+                                {% endaddtoblock %}
+    {#                               {% addtoblock "js" %}<script type="text/javascript" src="{% static "wiki/plugins/notifications/js/ui.js" %}"></script>{% endaddtoblock %}#}
+                        </div>
+                    </li>
+                    {# end bruker-dropdown #}
+                    {% else %}
+
+                    <li class="nav-item mr-1 ">
+                        <a class="nav-link text-light" href="{% url "user_registration" %}">Registrer deg</a>
+                    </li>
+                    <li class="nav-item mr-1 dropdown">
+                        <a href="{% url "auth_login" %}?next={{ request.path }}" class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown4" role="button"  aria-haspopup="true" aria-expanded="false">
+                            Logg inn
+                        </a>
+                        <form class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown4" action="{% url "auth_login" %}" method="post">
+                            {% csrf_token %}
+                            <input type='hidden' name='next' value='{{ request.path }}' />
+                            <input class="form-control" type="text" placeholder="Brukernavn" name="username" />
+                            <input class="form-control" type="password"  placeholder="Passord" name="password" />
+                            <button class="submit btn btn-primary btn-block" type="submit">Logg inn</button>
                         </form>
-                        <ul class="nav navbar-nav navbar-right">
-                            {% if user.is_authenticated %}
-                            {# bruker-dropdown #}
-                            <li class="dropdown">
-                                <a href="#bruker" class="dropdown-toggle" data-toggle="dropdown">
-                                    <span class="glyphicon glyphicon-user"></span>
-                                    {% firstof user.get_full_name user.username %}
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{% url "member_profile" user.username %}">Vis profil</a></li>
-                                    <li><a href="{% url "edit_profile" %}">Endre profil</a></li>
-                                    <li><a href="{% url "password_change" %}">Endre passord</a></li>
-                                    <li><a href="{% url "view_user_events" %}">Påmeldte arrangementer</a></li>
-                                    <li><a href="{% url "auth_logout" %}">Logg ut</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="{% url "user_polls" %}">Brukeravstemninger</a></li>
-                                    <li><a href="{% url "officebeer_account" %}">Office Beer</a></li>
-                                    <li><a href="{% url "users_birthday" %}">Bursdag</a></li>
-                                    <li><a href="{% url "quiz_list" %}">Quiz</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="{% url "user_list" %}">Medlemsliste</a></li>
-                                    {% if user.is_staff %}
-                                    <li><a href="{% url "admin:index" %}">Admin</a></li>
-                                    <li><a href="/admin/filebrowser/browse">Filer</a></li>
-                                    {% endif %}
-                                    {% include "wiki/plugins/notifications/menubaritem.html" %}
-                                </ul>
-                            </li>
-                            {# end bruker-dropdown #}
-                            {% else %}
-                            <li><a href="{% url "user_registration" %}">Registrer deg</a></li>
-                            <li class="dropdown">
-                                <a href="{% url "auth_login" %}?next={{ request.path }}" class="dropdown-toggle" data-toggle="dropdown">
-                                    Logg inn
-                                    <span class="caret"></span>
-                                </a>
-                                <form class="dropdown-menu" action="{% url "auth_login" %}" method="post">
-                                    {% csrf_token %}
-                                    <input type='hidden' name='next' value='{{ request.path }}' />
-                                    <input class="form-control" type="text" placeholder="Brukernavn" name="username" />
-                                    <input class="form-control" type="password"  placeholder="Passord" name="password" />
-                                    <button class="submit btn btn-primary btn-block" type="submit">Logg inn</button>
-                                </form>
-                            </li>
-                        {% endif %}
-                        {% block flag %}
-                            <li><a class="logo" href="/english/">
-                                <img src="{% static "img/GB_flag.png" %}" alt="Eng">
-                            </a></li>
-                        {% endblock %}
-                        </ul>
-                        {% endblock navbar_container %}
-                    </div>
-                    <!-- /.navbar-collapse -->
-                </div>
-                <!-- /.container -->
+                    </li>
+                {% endif %}
+                {% block flag %}
+                    <li class="nav-item" >
+                        <a class="navbar-brand " href="/english/">
+                            <img src="{% static "img/GB_flag.png" %}" alt="Eng">
+                        </a>
+                    </li>
+                {% endblock %}
+                </ul>
+                {% endblock navbar_container %}
+            </div>
+            <!-- /.navbar-collapse -->
             </nav>
         </header>
 
         <!-- Page Content -->
         {% block full-content-body %}
-
-        <div class="container box" id = "mainContent">
+        <!-- Hvis du ikke har med mainContent vil ikke footer alltid være på bunnen -->
+        <div class="container" id = "mainContent">
 
             {% bootstrap_messages %}
             {% block main %}
@@ -289,7 +306,7 @@
         {% endblock full-content-body %}
 
         <!-- Footer -->
-        <footer>
+        <footer >
 
             <div class="container">
             <div class="row">
@@ -323,11 +340,11 @@
                     <div class="col-md-4">
                     <h2>Informasjon</h2>
                     <p>
-                        Organisasjonsnr.: <span class="pull-right">992168544</span><br /><br />
-                        Hovedkonto: <span class="pull-right">1503.13.57338</span><br />
-                        Arrkomkonto: <span class="pull-right">1503.13.57400</span><br />
-                        ProKom-konto: <span class="pull-right">1506.19.24172</span><br />
-                        Gravitoneskonto: <span class="pull-right">1503.65.97965</span><br />
+                        Organisasjonsnr.: <span class="float-right">992168544</span><br /><br />
+                        Hovedkonto: <span class="float-right">1503.13.57338</span><br />
+                        Arrkomkonto: <span class="float-right">1503.13.57400</span><br />
+                        ProKom-konto: <span class="float-right">1506.19.24172</span><br />
+                        Gravitoneskonto: <span class="float-right">1503.65.97965</span><br />
                     </p>
                     <h2>Tilbakemelding</h2>
                         <p>

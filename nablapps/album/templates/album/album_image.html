@@ -7,25 +7,25 @@
 {% block content %}
 <div class="">
   <h1><a href="{{ album.get_absolute_url }}">{{ album.title }}</a></h1>
-  <img src="{{ image.file.url }}" class="img-responsive" />
+  <img src="{{ image.file.url }}" class="img-fluid" />
   <p>
     {{ image.description }}
   </p>
   <nav>
-      <ul class="pager">
+      <ul class="pagination d-flex justify-content-between">
         {% if page_obj.has_previous %}
-            <li class="previous">
-                <a href="../{{ page_obj.previous_page_number }}/"><span aria-hidden="true">&larr;</span> forrige</a>
+            <li class="page-item">
+                <a class="page-link" href="../{{ page_obj.previous_page_number }}/"><span aria-hidden="true">&larr;</span> forrige</a>
             </li>
         {% endif %}
 
-          <li class="disabled pager-counter">
-              Bilde {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
+          <li class="disabled page-item pager-counter">
+              <a class="page-link">  Bilde {{ page_obj.number }} av {{ page_obj.paginator.num_pages }} </a>
           </li>
 
           {% if page_obj.has_next %}
-              <li class="next">
-                  <a href="../{{ page_obj.next_page_number }}/">neste  <span aria-hidden="true">&rarr;</span></a>
+              <li class="page-item">
+                  <a class="page-link" href="../{{ page_obj.next_page_number }}/">neste  <span aria-hidden="true">&rarr;</span></a>
               </li>
           {% endif %}
       </ul>
