@@ -7,6 +7,7 @@ from itertools import chain
 
 from django.contrib import messages
 from django.views.generic import TemplateView
+from django.utils import timezone
 
 from nablapps.album.models import Album
 from nablapps.blog.models import BlogPost
@@ -14,7 +15,7 @@ from nablapps.blog.models import BlogPost
 from ..accounts.models import FysmatClass
 from ..events.models import Event
 from ..nabladet.models import Nablad
-from ..nablaforum.models import Channel, Thread
+from ..nablaforum.models import Channel, Thread, Message
 from ..news.models import FrontPageNews
 from ..officeCalendar.models import OfficeEvent
 from ..podcast.models import Podcast
@@ -113,6 +114,41 @@ class FrontPageView(FlatPageMixin, TemplateView):
 
     def _add_forum(self, context):
         if self.request.user.is_authenticated:
+            # Check for unread messages in users channels
+            new_forum_messages = False
+
+            user = self.request.user
+            one_week_ago = timezone.now() - timezone.timedelta(days=7)
+
+            # All channels belonging to users group
+            group_channels = (
+                Channel.objects.filter(group__in=user.groups.all())
+                .exclude(is_class=True)
+                .order_by("-pk")
+            )
+
+            # Ordinary channels the user is member of
+            common_channels = (
+                Channel.objects.filter(group=None)
+                .filter(members=self.request.user)
+                .exclude(is_feed=True)
+                .exclude(is_class=True)
+            )
+
+            # Feeds
+            feeds = Channel.objects.filter(is_feed=True)
+
+            all_users_channels = chain(feeds, group_channels, common_channels)
+            for channel in all_users_channels:
+                if new_forum_messages == True: break;
+                for thread in Thread.objects.filter(channel=channel):
+                    if Message.objects.filter(
+                        thread=thread, created__gte=one_week_ago
+                    ).exclude(read_by_user=self.request.user):
+                        new_forum_messages = True
+                        break
+            context["new_forum_messages"] = new_forum_messages
+
             try:
                 fysmat_class = FysmatClass.objects.get(user=self.request.user)
                 class_channel = Channel.objects.get(group=fysmat_class, is_class=True)

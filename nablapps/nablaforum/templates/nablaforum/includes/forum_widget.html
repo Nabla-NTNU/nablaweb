@@ -1,5 +1,10 @@
 <div class="forum card card-body card-body-overline">
     <h1><a href="{% url "forum-main" channel_id=1 thread_id=0 %}" style="color: black">Nablaforum</a></h1>
+    
+    {% if new_forum_messages %}
+        <p style="color: red">Uleste meldinger i forumet!</p>
+    {% endif %}
+
     <h4>Siste fra Nablafeed</h4>
     {% for message in latest_feed %}
     <p>
