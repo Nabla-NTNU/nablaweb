@@ -1,3 +1,8 @@
+#mainContent{
+    background-color: var(--nabla-background);
+    border: 0;
+}
+
 .maingrid-container{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -6,10 +11,10 @@
     grid-template-areas:
         "main-article    main-article    welcome"
         "upcoming-events upcoming-events office"
-        "more-news-1     more-news-2     poll"
-        "more-news-3     more-news-4     latest-podcast"
-        "more-news-btn   more-news-btn   ."
-        "latest-nablad   latest-nablad   latest-nablad"
+        "more-news-1     more-news-2     more-news-3"
+        "more-news-4     more-news-5     more-news-6"
+        "more-news-btn   more-news-btn   more-news-btn"
+        "latest-nablad   latest-podcast   poll"
         "sponsors        sponsors        suggestions";
 }
 .maingrid-container-authenticated{
@@ -20,10 +25,10 @@
     grid-template-areas:
         "main-article    main-article    forum"
         "upcoming-events upcoming-events office"
-        "more-news-1     more-news-2     poll"
-        "more-news-3     more-news-4     latest-podcast"
-        "more-news-btn   more-news-btn   ."
-        "latest-nablad   latest-nablad   latest-nablad"
+        "more-news-1     more-news-2     more-news-3"
+        "more-news-4     more-news-5     more-news-6"
+        "more-news-btn   more-news-btn   more-news-btn"
+        "latest-nablad   latest-podcast  poll"
         "sponsors        sponsors        suggestions";
 }
 

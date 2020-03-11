@@ -1,0 +1,23 @@
+{% load easy_thumbnails %}
+
+<div class="card {{ class|default:" " }}-{{ number|default:"" }} ">
+        <!--main article-->
+        {% with main_news as news %}
+        {% if news.cropping and news.picture %}
+            <img alt=""
+                 class="card-img-top"
+                 src="{% thumbnail news.picture 570x200 box=news.cropping upscale crop="smart" quality=95 detail %}">
+            </img>
+
+        {% elif news.picture %}
+            <img alt=""
+             class="card-img-top"
+             src="{% thumbnail news.picture 570x200 quality=95 upscale crop="smart" detail %}">
+            </img>
+        {% endif %}
+        <div class="card-body card-body-overline">
+            <h1 class="card-title"><a href="{{ news.get_absolute_url }}" class="text-dark stretched-link" >{{ news.headline }}</a></h1>
+            <p class="card-text">{{ news.lead_paragraph}}</p>
+        </div>
+        {% endwith %}
+</div>

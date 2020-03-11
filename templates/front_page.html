@@ -17,31 +17,29 @@
 
 <div class="maingrid-container{% if not newuser_message %}-authenticated{% endif  %}"><!--main grid container open tag-->
 <!--main content begin-->
+    <article class="card main-article ">
+            <!--main article-->
+            {% with main_news as news %}
+            {% if news.cropping and news.picture %}
+                <img alt=""
+                     class="card-img-top"
+                     src="{% thumbnail news.picture 570x200 box=news.cropping upscale crop="smart" quality=95 detail %}">
+                </img>
 
-    <article class="main-article box {{ news.content_type.model }}">
-        <!--main article-->
-        {% with main_news as news %}
-        {% if news.cropping and news.picture %}
-        <a href="{{ news.get_absolute_url }}">
-            <img alt="" class="img-fluid"
-                 src="{% thumbnail news.picture 760x300 box=news.cropping upscale=True quality=95 detail=True %}" height="100%" width="100%">
-        </a>
-        {% elif news.picture %}
-        <a href="{{ news.get_absolute_url }}">
-            <img alt="" class="img-fluid"
-                 src="{% thumbnail news.picture 760x300 quality=95 upscale=True crop="smart" detail=True %}" height="100%" width="100%">
-        </a>
-        {% endif %}
-        <header>
-            <h2>
-                <a href="{{ news.get_absolute_url }}">{{ news.headline }}</a>
-            </h2>
-        </header>
-        <p>{{ news.lead_paragraph}}</p>
-        {% endwith %}
+            {% elif news.picture %}
+                <img alt=""
+                 class="card-img-top"
+                 src="{% thumbnail news.picture 570x200 quality=95 upscale crop="smart" detail %}">
+                </img>
+            {% endif %}
+            <div class="card-body card-body-overline">
+                <h1 class="card-title"><a href="{{ news.get_absolute_url }}" class="text-dark stretched-link" >{{ news.headline }}</a></h1>
+                <p class="card-text">{{ news.lead_paragraph}}</p>
+            </div>
+            {% endwith %}
     </article>
 
-    <div class="upcoming-events card card-body card-body-overline bg-light">
+    <div class="upcoming-events card card-body card-body-overline">
         <!--upcoming event widget-->
         {% include "includes/event_widget.html" %}
     </div>
@@ -53,14 +51,14 @@
 
     <button onclick="location.href='{% url "news_list" %}'" type="button" class="more-news-btn btn btn-outline-secondary btn-block">Flere nyheter</button>
 
-    <div class="latest-nablad card card-body card-body-overline bg-light">
+    <div class="latest-nablad card card-body card-body-overline ">
         <!--Siste Nablad-->
         {% if new_nablad %}
             <div height=300px>
                 <h3><a href="{% url "nablad_list" %}">Siste Nablad</a></h3>
                 <div class="row text-center">
                     {% for nablad in new_nablad %}
-                        <div class="col-md-3{% if not forloop.first %} d-none d-md-block {% endif %}">
+                        <div class="col-md-6{% if not forloop.first %} d-none d-md-block {% endif %}">
                             <a  href="{{ nablad.get_absolute_url }}">
                                 <img class="rounded mw-100" src="{% thumbnail nablad.thumbnail 730x200 %}">
                             </a>
@@ -86,7 +84,7 @@
 
 <!--Sidebar begin-->
     {% if newuser_message %}
-    <div class="welcome card card-body card-body-overline bg-light">
+    <div class="welcome card card-body card-body-overline ">
         <h1>Velkommen til Nabla</h1>
         <p>
             Nabla er linjeforeningen for studenter ved sivilingeniørstudiet Fysikk og Matematikk ved NTNU, og har 

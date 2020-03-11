@@ -69,14 +69,14 @@ class FrontPageView(FlatPageMixin, TemplateView):
             bump_time__lte=datetime.now()
         )
         context["main_news"] = news_list.first()
-        context["news_list"] = news_list[1:5]
+        context["news_list"] = news_list[1:7    ]
 
     def _add_nablad(self, context):
         context["new_nablad"] = Nablad.objects.order_by("-pub_date")[:4]
         if not self.request.user.is_authenticated:
             context["new_nablad"] = Nablad.objects.exclude(is_public=False).order_by(
                 "-pub_date"
-            )[:4]
+            )[:2]
 
     def _add_podcast(self, context):
         context["new_podcast_list"] = (

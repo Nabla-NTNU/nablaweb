@@ -4,10 +4,29 @@ But I do not have time to test this properly, because of exams, so I apply this 
 If the html,body height-rule is indeed not necessary, is should be removed (I believe it was added by me....)
 */
 
+
+:root{
+    --nabla-yellow: #ffeb3b;
+    --nabla-yellow-dark: #c8b900;
+    --nabla-yellow-light: #ffff72;
+    --nabla-blue: #1a237e;
+    --nabla-blue-dark: #000051;
+    --nabla-blue-light: #534bae;
+    --nabla-background: #f7f7f7
+}
+
+a{
+    color : var(--nabla-blue);
+}
+
+a:hover{
+     color : var(--nabla-blue);
+}
+
 /* MAIN */
 html, body {
     height: 100%;
-    background-color: #f7f7f7;
+    background-color: var(--nabla-background);
 }
 
 #content {
@@ -19,15 +38,15 @@ html, body {
 
 #mainContent {
     padding: 20px 20px 20px 20px;
-    background-color: white;
-    flex: 1;
-    overflow: hidden;
+    background-color: var(--white);
     border-left-style: solid;
     border-left-width: thin;
     border-left-color: lightgray;
     border-right-style: solid;
     border-right-width: thin;
     border-right-color: lightgray;
+    flex: 1;
+    overflow: hidden;
 }
 
 
@@ -36,17 +55,14 @@ padding: 7px;
 }
 
 nav.navbar {
-    background: #222222;
-    box-shadow: 0px 0px 10px black;
-}
-.navbar .nav>li>a {
-    text-shadow: 0 1px 0 #000;
-    color: #efefef;
-    font-family: 'PT Sans', Helvetica, arial, sans-serif;
+    background: var(--gray-dark);
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+
 }
 
-.card-body-overline{
-    border-top: 4px solid #222222;
+
+.card{
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
 }
 
 .box {
@@ -161,9 +177,7 @@ nav.navbar {
         line-height: 28px;
     }
 
-h3 a, h3 a:hover, h3 a:active, h3 a:focus{
-    color: #222222;
-}
+
 
     p {
         font-size: 14px;
@@ -252,22 +266,33 @@ h3 a, h3 a:hover, h3 a:active, h3 a:focus{
 
 /* FOOTER */
 
-    footer {
+    .nabla-footer {
         /* TODO: Add cross-browser support */
-        background-color: black;
-        border-top:1px solid #666;
-        color: #ccc;
+        background-color: var(--gray-dark);
+        border-top:1px solid #ffffff;
+        color: var(--white);
         padding-top: 30px;
         width: 100%;
+        box-shadow: 0 1px 4px rgba(0,0,0,.05);
 
 }
 
 
     /* h2 is black, so make it white */
     footer h2 {
-        color: #ccc;
+        color: var(--white);
     }
-    footer a { color: #bddeff; }
+    footer a {
+        color: var(--light);
+        font-weight: bold;
+
+    }
+    footer a:hover {
+        color: var(--light);
+        font-weight: bold;
+
+    }
+
 
     footer .kontakt table {
     }

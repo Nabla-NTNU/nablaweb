@@ -305,57 +305,55 @@
         {% endblock full-content-body %}
 
         <!-- Footer -->
-        <footer >
+        <footer class="nabla-footer" >
 
             <div class="container">
-            <div class="row">
+            <div class="row pb-4">
 
                     {# kontakt #}
-                    <div class="col-md-4 kontakt">
-                        <h2>Kontakt</h2>
 
-                        <p>Du kan nå oss på <a class="email" href="mailto:nabla@nabla.ntnu.no">nabla@nabla.ntnu.no</a></p>
-
-                        <p> Varslingsskjema finner du <a href="/contact/"> her.</a></p>
-
-                        <p>Bedrift? Kontakt Bedriftskontakten Nabla på <a class="email" href="mailto:bedkom@nabla.ntnu.no">bedkom@nabla.ntnu.no</a></p>
-
-                        <p>Gruppeledere: <a class="email" href="mailto:gruppeledere@nabla.ntnu.no">gruppeledere@nabla.ntnu.no</a></p>
-
-                        Øvrig kontaktinformasjon: <a href="/contact/">kontaktside.</a>
-
-                        <address>
-                            <br>
-                            Nabla <br>
-                            Kjemiblokk 2 <br>
-                            Sem Sælands vei 10, NTNU <br>
-                            7034 Trondheim <br>
-                            Norway
-                        </address>
-                    </div>
                     {# end kontakt #}
 
                     {# om nabla #}
-                    <div class="col-md-4">
+                    <div class="col-md-3 ">
                     <h2>Informasjon</h2>
+{#                    <p >Se <a href="/contact/">kontaktsiden</a></p>#}
+
                     <p>
-                        Organisasjonsnr.: <span class="float-right">992168544</span><br /><br />
+                        Organisasjonsnr.: <span class="float-right">992168544</span><br />
                         Hovedkonto: <span class="float-right">1503.13.57338</span><br />
                         Arrkomkonto: <span class="float-right">1503.13.57400</span><br />
                         ProKom-konto: <span class="float-right">1506.19.24172</span><br />
                         Gravitoneskonto: <span class="float-right">1503.65.97965</span><br />
                     </p>
+
+
+                    </div>
+                     <div class="col-md-3 text-center ">
+                        <h2>Kontakt</h2>
+{#                        <a class="email" href="mailto:nabla@nabla.ntnu.no">nabla@nabla.ntnu.no</a>#}
+                                             <p > <a href="/contact/">Kontaktside</a> <br>
+                            Nabla <br>
+                            Kjemiblokk 2 <br>
+                            Sem Sælands vei 10, NTNU <br>
+                            7034 Trondheim <br>
+                            Norway
+                        </p>
+                    </div>
+
+                    <div class="col-md-3 ">
+
                     <h2>Tilbakemelding</h2>
                         <p>
                         Har du funnet en feil, får du ikke logget på, eller er det noe som burde forbedres? Fyll ut <a href="/contact/feedback/">tilbakemeldingskjema</a> eller kontakt webkom:<br>
                         <a class="email" href="mailto:webkom@nabla.ntnu.no">webkom@nabla.ntnu.no</a>
                         </p>
                     </div>
+
                     {# end om nabla #}
 
                     {# nablalogo #}
-                    <div class="col-md-4 center" id="nablafooter">
-                        <br><br>
+                    <div class="col-md-3 center" id="nablafooter">
                         <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo">
                         <br />
                         <br />
@@ -367,8 +365,6 @@
             </div>
             </div>
         </footer>
-
-
         <!-- /.container -->
         {% render_block "js" %}
     </div>
