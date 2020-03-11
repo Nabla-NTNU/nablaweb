@@ -73,7 +73,6 @@
 .more-news-2 {
     grid-area: more-news-2;
 }
-
 .more-news-3 {
     grid-area: more-news-3;
 }
@@ -87,7 +86,10 @@
 .more-news-6 {
     grid-area: more-news-6;
 }
+.forum{
+    grid-area: forum;
 
+}
 .more-news-btn {
     grid-area: more-news-btn;
     grid-gap: 0;
