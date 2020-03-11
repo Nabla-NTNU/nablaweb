@@ -145,7 +145,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
                     if Message.objects.filter(
                         thread=thread, created__gte=one_week_ago
                     ).exclude(read_by_user=self.request.user):
-                        new_forum_messages = true
+                        new_forum_messages = True
                         break
             context["new_forum_messages"] = new_forum_messages
 
