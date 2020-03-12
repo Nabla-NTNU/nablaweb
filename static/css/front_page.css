@@ -33,7 +33,7 @@
 }
 
 @media (max-width: 1000px){
-    .maingrid-container-authenticated, .maingrid-container{
+    .maingrid-container{
         grid-template-columns: 1fr ;
         grid-template-areas:
         "main-article   "
@@ -49,8 +49,26 @@
         "suggestions"
         "sponsors";
     }
-    .more-news-3 {display:none}
+
+    .maingrid-container-authenticated {
+        grid-template-columns: 1fr ;
+        grid-template-areas:
+        "main-article   "
+        "upcoming-events "
+        "forum"
+        "more-news-1"
+        "more-news-2"
+        "more-news-3"
+        "office"
+        "latest-nablad"
+        "latest-podcast"
+        "poll"
+        "suggestions"
+        "sponsors";
+    }
     .more-news-4 {display:none}
+    .more-news-5 {display:none}
+    .more-news-6 {display:none}
     .more-news-btn{display:none}
     .suggestions {display:none}
 }
