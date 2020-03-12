@@ -123,7 +123,9 @@ class NablaUser(AbstractUser):
         )  # Moved down to avoid loop error when FysmatClass was imported to mixins in events
 
         # Penalties are valid for six months
-        six_months_ago = timezone.now() - timezone.timedelta(days=182) # about six months
+        six_months_ago = timezone.now() - timezone.timedelta(
+            days=182
+        )  # about six months
 
         penalties = EventRegistration.objects.filter(
             user=self, date__gte=six_months_ago

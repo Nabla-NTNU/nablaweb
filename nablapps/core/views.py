@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 from itertools import chain
 
 from django.contrib import messages
-from django.views.generic import TemplateView
 from django.utils import timezone
+from django.views.generic import TemplateView
 
 from nablapps.album.models import Album
 from nablapps.blog.models import BlogPost
@@ -15,7 +15,7 @@ from nablapps.blog.models import BlogPost
 from ..accounts.models import FysmatClass
 from ..events.models import Event
 from ..nabladet.models import Nablad
-from ..nablaforum.models import Channel, Thread, Message
+from ..nablaforum.models import Channel, Message, Thread
 from ..news.models import FrontPageNews
 from ..officeCalendar.models import OfficeEvent
 from ..podcast.models import Podcast
@@ -70,7 +70,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
             bump_time__lte=datetime.now()
         )
         context["main_news"] = news_list.first()
-        context["news_list"] = news_list[1:7    ]
+        context["news_list"] = news_list[1:7]
 
     def _add_nablad(self, context):
         context["new_nablad"] = Nablad.objects.order_by("-pub_date")[:1]
@@ -140,7 +140,8 @@ class FrontPageView(FlatPageMixin, TemplateView):
 
             all_users_channels = chain(feeds, group_channels, common_channels)
             for channel in all_users_channels:
-                if new_forum_messages == True: break;
+                if new_forum_messages:
+                    break
                 for thread in Thread.objects.filter(channel=channel):
                     if Message.objects.filter(
                         thread=thread, created__gte=one_week_ago
