@@ -30,6 +30,7 @@ django-multi-email-field = "*"
 flake8 = "*"
 black = "==19.10b0"
 isort = "*"
+django-bootstrap4 = "*"
 
 [dev-packages]
 pylint = "*"

@@ -120,7 +120,7 @@ INSTALLED_APPS = [
     ###########################
     # Eksternt utviklede apps #
     ###########################
-    'bootstrap3',
+    'bootstrap4',
     'django_comments',
     'django_node_assets',
     'easy_thumbnails',  # thumbnail-taggen i templates
