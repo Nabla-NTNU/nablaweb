@@ -63,9 +63,9 @@ class ImagePreprocessor(markdown.preprocessors.Preprocessor):
                     yield "".join(
                         [
                             image_match.group("before"),
-                            store(html_before, safe=True),
+                            store(html_before),
                             "\n".join(caption_lines),
-                            store(html_after, safe=True),
+                            store(html_after),
                             image_match.group("after"),
                         ]
                     )
