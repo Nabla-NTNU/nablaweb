@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 django = "==2.1.13"
-django-bootstrap3 = "*"   # Templatetags for bootstrap3
+# Templatetags for bootstrap3
 django-braces = "*"       # Extra mixinclasses for models and views
 django-contrib-comments = "*"
 django-filebrowser-no-grappelli = "*"  # Filebrowser for mediafiles.
