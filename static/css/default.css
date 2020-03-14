@@ -443,3 +443,8 @@ Overflow-x: hidden;
 .nounderline{
     text-decoration: none !important
 }
+
+/* Temporary for corona banner */
+.corona {
+    font-size: 20px; 
+}
