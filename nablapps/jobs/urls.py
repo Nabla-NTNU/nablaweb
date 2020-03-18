@@ -1,7 +1,7 @@
 """
 Urls for jobs app
 """
-from django.conf.urls import url
+from django.urls import path, re_path
 
 from .feeds import RecentJobs
 from .views import (
@@ -16,31 +16,31 @@ from .views import (
 )
 
 urlpatterns = [
-    url(
-        r"^dato/(?P<year>\d{4})/$", YearList.as_view(), name="jobs_year_list"
+    path(
+        "dato/<int:year>/", YearList.as_view(), name="jobs_year_list"
     ),  # Stillingsannonser som er lagt inn dette året
-    url(
-        r"^dato/(?P<year>\d{4})/(?P<month>\d{2})/$",
+    path(
+        "dato/<int:year>/<int:month>/",
         MonthList.as_view(),
         name="jobs_month_list",
     ),  # Stillingsannonser som er lagt inn denne måneden
-    url(
+    re_path(
         r"^bedrift/(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$",
         CompanyList.as_view(),
         name="company_detail",
     ),  # Stillingsannonser fra én bedrift
-    url(
-        r"^linje/(?P<linje>[-\w\s]{1,50})/$",
+    path(
+        "linje/<str:linje>/",
         RelevantForLinjeList.as_view(),
         name="relevant_for_linje_list",
     ),
-    url(
-        r"^kull/(?P<year>\d{1,5})/$",
+    path(
+        "kull/<int:year>/",
         RelevantForYearList.as_view(),
         name="relevant_for_year_list",
     ),
-    url(r"^tag/(?P<tag>[-\w ]{1,50})/$", TagList.as_view(), name="tag_list"),
-    url(r"^$", EverythingList.as_view(), name="jobs_list"),
-    url(r"^(?P<pk>\d{1,8})/(?P<slug>[-\w]*)$", ShowJob.as_view(), name="advert_detail"),
-    url(r"^feed/$", RecentJobs()),
+    path("tag/<str:tag>/", TagList.as_view(), name="tag_list"),
+    path("", EverythingList.as_view(), name="jobs_list"),
+    path("<int:pk>/<str:slug>/", ShowJob.as_view(), name="advert_detail"),
+    path("feed/", RecentJobs()),
 ]

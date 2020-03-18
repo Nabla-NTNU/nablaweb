@@ -1,10 +1,10 @@
-from django.conf.urls import url
+from django.urls import path
 
 from .views import PodcastDetailView, RssView, SeasonView
 
 urlpatterns = [
-    url(r"^$", SeasonView.as_view(), name="season_view"),
-    url(r"^season(?P<number>\d+)$", SeasonView.as_view(), name="season_view"),
-    url(r"^(?P<pk>\d+)/$", PodcastDetailView.as_view(), name="podcast_detail"),
-    url(r"^subscribe.rss$", RssView.as_view(), name="season_rss"),
+    path("", SeasonView.as_view(), name="season_view"),
+    path("season<int:number>/", SeasonView.as_view(), name="season_view"),
+    path("<int:pk>/", PodcastDetailView.as_view(), name="podcast_detail"),
+    path("subscribe.rss/", RssView.as_view(), name="season_rss"),
 ]

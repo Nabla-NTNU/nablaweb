@@ -1,18 +1,18 @@
-from django.conf.urls import url
+from django.urls import path
 
 from .views import GenerateTicketsView, RegisterTicketsView, render_ticket, test
 
 urlpatterns = [
-    url(r"generate/$", GenerateTicketsView.as_view(), name="generate_tickets"),
-    url(
-        r"register/(?P<qr_event_id>[0-9]+)/(?P<qr_ticket_id>[\w\-]+)/$",
+    path("generate/", GenerateTicketsView.as_view(), name="generate_tickets"),
+    path(
+        "register/<int:qr_event_id>/<str:qr_ticket_id>/",
         RegisterTicketsView.as_view(),
         name="register_tickets",
     ),
-    url(
-        r"render/(?P<qr_event_id>[0-9]+)/(?P<qr_ticket_id>[\w\-]+)/$",
+    path(
+        "render/<int:qr_event_id>/<str:qr_ticket_id>/",
         render_ticket,
         name="render",
     ),
-    url(r"test/$", test, name="test"),
+    path("test/", test, name="test"),
 ]

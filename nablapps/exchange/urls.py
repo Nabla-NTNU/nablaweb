@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.urls import path
 
 from .views import (
     ExchangeFrontpageView,
@@ -10,13 +10,13 @@ from .views import (
 )
 
 urlpatterns = [
-    url(r"^$", ExchangeFrontpageView.as_view(), name="ex_frontpage"),
-    url(r"^info/(?P<pk>\d+)/$", InfoDetailView.as_view(), name="info_detail"),
-    url(r"^(?P<pk>\d+)/$", UnivDetailView.as_view(), name="ex_detail_list"),
-    url(r"^exchange-list$", ExchangeListView.as_view(), name="ex_list"),
-    url(r"^exchange-news$", ExchangeNewsView.as_view(), name="ex_news"),
-    url(
-        r"^exchange-news/detail/(?P<pk>\d+)/(?P<slug>[-\w]*)$",
+    path("", ExchangeFrontpageView.as_view(), name="ex_frontpage"),
+    path("info/(<int:pk>/", InfoDetailView.as_view(), name="info_detail"),
+    path("<int:pk>/", UnivDetailView.as_view(), name="ex_detail_list"),
+    path("exchange-list/", ExchangeListView.as_view(), name="ex_list"),
+    path("exchange-news/", ExchangeNewsView.as_view(), name="ex_news"),
+    path(
+        "exchange-news/detail/<int:pk>/<str:slug>/",
         ExchangeNewsDetailView.as_view(),
         name="ex_news_detail",
     ),

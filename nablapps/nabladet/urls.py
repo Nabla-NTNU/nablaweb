@@ -1,14 +1,14 @@
 """
 Urls for nabladet app
 """
-from django.conf.urls import url
+from django .urls import path
 
 from .views import NabladDetailView, NabladList
 
 urlpatterns = [
-    url(r"^$", NabladList.as_view(), name="nablad_list"),
-    url(
-        r"^(?P<pk>\d{1,8})/(?P<slug>[-\w]*)$",
+    path("", NabladList.as_view(), name="nablad_list"),
+    path(
+        "<int:pk>/<str:slug>/",
         NabladDetailView.as_view(),
         name="nablad_detail",
     ),
