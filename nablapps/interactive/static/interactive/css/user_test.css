@@ -1,0 +1,71 @@
+.content {
+    width: 100%;
+}
+
+body {
+    color: black;
+    background-color: #333;
+}
+
+a, a:hover {
+    color: white;
+}
+
+h1 {
+    font-size: 80px;
+    text-align: center;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background: url(/media/jul.jpg) 0 0;
+    background-size: 100% 60%;
+    background-repeat: repeat-y;
+}
+
+content {
+    max-width:  300px;
+    margin: auto;
+}
+
+.user-pic {
+    display: inline-block;
+}
+
+.info {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    font-size: 20px;
+    color: #ffd;
+    padding: 4px;
+}
+.info a {
+    color: #ffd;
+}
+
+.text, .well {
+    background: rgba(0,0,0,0.5);
+    padding: 30px;
+    font-size: 20px;
+    border-radius: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.row, .col-md-8 {
+    max-width:  1000px;
+    margin: auto;
+}
+
+.list-group-item {
+    background: rgba(0,0,0,0.5);
+}

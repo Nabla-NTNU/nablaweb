@@ -1,0 +1,23 @@
+{% extends "interactive/user_test_base.html" %}
+
+{% block content %}
+
+<form action="{{ view.get_form_url }}" method="post">
+    {% csrf_token %}
+    {% for question in test.questions.all %}
+    <h2 class="quiz-question">{{ forloop.counter }}. {{ question.text }}</h2>
+    <ul class="list-group">
+        {% for alt in question.alternatives.all %}
+        <li class="list-group-item">
+            <label>{{ alt.text }}</label>
+            <input type="radio" name="{{ question.id }}_alternative" value="{{ alt.id }}"/>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">
+        Send inn
+    </button>
+</form>
+
+{% endblock %}
