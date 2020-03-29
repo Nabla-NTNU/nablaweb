@@ -10,17 +10,18 @@
     {% if not quiz.published %}
 <div class="alert alert-warning alert-dismissible">Dette er bare synlig fordi du har riktige rettigheter</div>
 {% endif %}
+
 {% if quiz.is_timed %}
-<div class="float-left card card-body card-body-overline bg-light">
+<div class="float-center card card-body card-body-overline bg-light", id=clock>
     <h2>Tid igjen</h2>
     <div class="countdown"></div>
     <script>
-jQuery(function ($) {
-    var time = {{ quiz.duration }},
-        display = $('.countdown');
-    startTimer(time, display);
-});
-</script>
+    jQuery(function ($) {
+        var time = {{ quiz.duration }},
+            display = $('.countdown');
+        startTimer(time, display);
+        });
+    </script>
 
 </div>
 {% endif %}
