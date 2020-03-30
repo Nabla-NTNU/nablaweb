@@ -1,0 +1,29 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 21">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #002868;
+      }
+
+      .cls-2 {
+        fill: #ee2b2d;
+      }
+
+      .cls-3 {
+        fill: #fefdfd;
+      }
+    </style>
+  </defs>
+  <title>NOR_flag2</title>
+  <g>
+    <path class="cls-1" d="M9.57-.39H12.3V9.06c0,.1,0,.1.11.1H30v2.73H12.43c-.07,0-.13,0-.13.1v9.45H9.57V12.05c0-.16,0-.16-.16-.16H0V9.16H9.43c.12,0,.14,0,.14-.14V-.39Z" transform="translate(-0.02 0.39)"/>
+    <path class="cls-2" d="M13.67-.39H29.9c.1,0,.13,0,.13.12,0,2.69,0,5.37,0,8.06H13.81c-.13,0-.15,0-.15-.16V-.25A.33.33,0,0,1,13.67-.39Z" transform="translate(-0.02 0.39)"/>
+    <path class="cls-2" d="M30,13.26c0,2.69,0,5.39,0,8.08,0,.08,0,.1-.11.1H13.67a.43.43,0,0,1,0-.16V13.43c0-.2,0-.17.17-.17H30Z" transform="translate(-0.02 0.39)"/>
+    <path class="cls-2" d="M0,7.79C0,5.1,0,2.4,0-.29c0-.08,0-.1.11-.1H8.2v.13q0,3.94,0,7.91c0,.12,0,.15-.15.15H0Z" transform="translate(-0.02 0.39)"/>
+    <path class="cls-2" d="M8.2,21.44H.13c-.09,0-.11,0-.11-.1C0,18.65,0,16,0,13.26h8c.12,0,.15,0,.15.15q0,4,0,7.91Z" transform="translate(-0.02 0.39)"/>
+    <path class="cls-3" d="M13.67-.39a.33.33,0,0,0,0,.14V7.64c0,.12,0,.16.15.16H30V9.16H12.41c-.07,0-.11,0-.11-.1V-.39Z" transform="translate(-0.02 0.39)"/>
+    <path class="cls-3" d="M30,13.26H13.83c-.19,0-.17,0-.17.17v7.85a.43.43,0,0,0,0,.16H12.3V12c0-.12.06-.1.13-.1H30Z" transform="translate(-0.02 0.39)"/>
+    <path class="cls-3" d="M0,7.79h8c.12,0,.15,0,.15-.15q0-4,0-7.91V-.39H9.57V9c0,.11,0,.14-.14.14H0Z" transform="translate(-0.02 0.39)"/>
+    <path class="cls-3" d="M8.2,21.44v-.13q0-3.94,0-7.91c0-.12,0-.15-.15-.15H0V11.89H9.41c.16,0,.16,0,.16.16v9.39Z" transform="translate(-0.02 0.39)"/>
+  </g>
+</svg>
