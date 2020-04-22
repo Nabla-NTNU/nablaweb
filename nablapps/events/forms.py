@@ -39,11 +39,14 @@ class EventForm(ModelForm):
     )
 
     # Fields required when registration_required is set
-    required_registration_fields = ("places", "registration_deadline", "has_queue")
-    registration_fields = required_registration_fields + (
-        "deregistration_deadline",
+    required_registration_fields = (
+        "places",
+        "registration_deadline",
+        "has_queue",
         "registration_start",
     )
+
+    registration_fields = required_registration_fields + ("deregistration_deadline",)
 
     # Restrict order of the DateTimeFields
     datetime_restrictions = (
