@@ -5,7 +5,7 @@ Also adds urls from contrib.auth for login, logout,
 password change and password reset.
 """
 import django.contrib.auth.views as auth_views
-from django.urls import path, re_path, include
+from django.urls import include, path, re_path
 from django.views.generic import RedirectView
 
 from .views import (
@@ -30,9 +30,7 @@ password_change_patterns = [
 password_reset_patterns = [
     path("", auth_views.PasswordResetView.as_view(), name="password_reset"),
     path(
-        "done/",
-        auth_views.PasswordResetDoneView.as_view(),
-        name="password_reset_done",
+        "done/", auth_views.PasswordResetDoneView.as_view(), name="password_reset_done",
     ),
     re_path(
         r"^confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$",
@@ -53,7 +51,9 @@ urlpatterns = [
     path("view/<str:username>/", UserDetailView.as_view(), name="member_profile"),
     path("registrer/", RegistrationView.as_view(), name="user_registration"),
     path("oppdater/", InjectUsersFormView.as_view(), name="users_inject"),
-    re_path(r"^bursdag/(?P<day>[0-9]+)?", BirthdayView.as_view(), name="users_birthday"),
+    re_path(
+        r"^bursdag/(?P<day>[0-9]+)?", BirthdayView.as_view(), name="users_birthday"
+    ),
     path("password/change/", include(password_change_patterns)),
     path("password/reset/", include(password_reset_patterns)),
     re_path(

@@ -9,7 +9,5 @@ from .views import BlogListView, BlogPostView, BlogView
 urlpatterns = [
     path("", BlogListView.as_view(), name="blog"),
     path("<str:blog>/", BlogView.as_view(), name="blog"),
-    path(
-        "<str:blog>/<str:slug>/", BlogPostView.as_view(), name="blog_post"
-    ),
+    path("<str:blog>/<str:slug>/", BlogPostView.as_view(), name="blog_post"),
 ]

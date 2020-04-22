@@ -1,5 +1,5 @@
-from django.urls import path
 from django.conf.urls import url
+from django.urls import path
 
 from .views import (
     AdventCalendarView,
@@ -69,21 +69,13 @@ urlpatterns = [
         QuizResultDeleteView.as_view(),
         name="quiz_result_delete",
     ),
-    path(
-        "quiz/resultat/<int:pk>/", QuizResultView.as_view(), name="quiz_result"
-    ),
-    path(
-        "quiz/highscore/<int:pk>/",
-        QuizScoreboardView.as_view(),
-        name="quiz_score",
-    ),
+    path("quiz/resultat/<int:pk>/", QuizResultView.as_view(), name="quiz_result"),
+    path("quiz/highscore/<int:pk>/", QuizScoreboardView.as_view(), name="quiz_score",),
     path("brukertest/<int:pk>/", TestView.as_view(), name="user_test"),
     path("brukertest/<int:pk>/resultat/", test_result, name="test_result"),
     path("kodegolf/", CodeTaskListView.as_view(), name="code_golf_menu"),
     path("kodegolf/<int:task_id>/", CodeGolf.as_view(), name="code_golf"),
-    path(
-        "kodegolf/score/<int:task_id>/", code_golf_score, name="code_golf_score"
-    ),
+    path("kodegolf/score/<int:task_id>/", code_golf_score, name="code_golf_score"),
     # Color picker
     path("colorpicker/", submitColorChoice, name="color_picker"),
     path("place/", NewestPlaceView.as_view(), name="newest_place"),

@@ -18,9 +18,7 @@ from .views import (
 
 urlpatterns = [
     path(
-        "<int:pk>/admin2/",
-        AdministerRegistrationsView.as_view(),
-        name="event_admin",
+        "<int:pk>/admin2/", AdministerRegistrationsView.as_view(), name="event_admin",
     ),
     path(
         "<int:pk>/attendance/",
@@ -31,20 +29,14 @@ urlpatterns = [
     path("calendar/", calendar, name="event_list"),
     re_path(r"^calendar/(\d{4})/(\d{1,2})/$", calendar, name="event_list"),
     path("mine/", UserEventView.as_view(), name="view_user_events"),
-    path(
-        "<int:pk>/registration/",
-        RegisterUserView.as_view(),
-        name="registration",
-    ),
+    path("<int:pk>/registration/", RegisterUserView.as_view(), name="registration",),
     re_path(
         r"^(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$",
         EventDetailView.as_view(),
         name="event_detail",
     ),
     path(
-        "reg/<int:pk>/",
-        EventRegistrationsView.as_view(),
-        name="event_registrations",
+        "reg/<int:pk>/", EventRegistrationsView.as_view(), name="event_registrations",
     ),
     re_path(r"^(?P<event_id>\d{1,8}).ics$", ical_event, name="ical_event"),
     path("feed/", RecentEvents(), name="event_feed"),

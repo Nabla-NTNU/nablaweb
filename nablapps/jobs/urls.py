@@ -20,9 +20,7 @@ urlpatterns = [
         "dato/<int:year>/", YearList.as_view(), name="jobs_year_list"
     ),  # Stillingsannonser som er lagt inn dette året
     path(
-        "dato/<int:year>/<int:month>/",
-        MonthList.as_view(),
-        name="jobs_month_list",
+        "dato/<int:year>/<int:month>/", MonthList.as_view(), name="jobs_month_list",
     ),  # Stillingsannonser som er lagt inn denne måneden
     re_path(
         r"^bedrift/(?P<pk>\d{1,8})-(?P<slug>[-\w]*)$",

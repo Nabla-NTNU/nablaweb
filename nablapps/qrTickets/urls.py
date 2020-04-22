@@ -9,10 +9,6 @@ urlpatterns = [
         RegisterTicketsView.as_view(),
         name="register_tickets",
     ),
-    path(
-        "render/<int:qr_event_id>/<str:qr_ticket_id>/",
-        render_ticket,
-        name="render",
-    ),
+    path("render/<int:qr_event_id>/<str:qr_ticket_id>/", render_ticket, name="render",),
     path("test/", test, name="test"),
 ]
