@@ -121,14 +121,14 @@
     top: -4px;
     max-height: 100%;
     padding: 7px;
-    background-color: #c67676;
+    background-color: #5cb85c;
     color: white;
     font-size: 2em;
     box-shadow: 0px 4px 7px -2px black;
 }
 
 .event__bedpres {
-    background: #5075cb; 
+    background: #d9534f; 
 }
 
 form.filter input[type="radio"] {
