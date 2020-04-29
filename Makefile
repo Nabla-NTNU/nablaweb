@@ -4,6 +4,7 @@
 help:
 	@echo 'fixme        - Fix code formatting'
 	@echo 'check        - Check code formatting'
+	@echo 'diff         - View proposed changes to code formatting'
 
 fixme:
 	isort -rc && black nablapps nablaweb manage.py
@@ -11,4 +12,7 @@ fixme:
 check:
 	isort -rc --check-only && black --check nablapps nablaweb manage.py
 
-.PHONY: fixme check
+diff:
+	isort -rc --check-only --stdout && black --diff nablapps nablaweb manage.py
+
+.PHONY: fixme check diff
