@@ -1,4 +1,4 @@
-{% extends "wiki/base.html" %}
+{% extends "wiki/base_site.html" %}
 {% load wiki_tags i18n sekizai_tags %}
 {% load staticfiles %}
 
@@ -14,17 +14,23 @@
   <link rel="stylesheet" href="{% static 'css/wiki/article.css' %}" />
 
   <div id="article-container">
-    <ul class="nav nav-pills" id="article-menu">
-      <li class="pull-left" id="article-title-li">
-        <h1 id="article-title">
-          {{ article.current_revision.title }}
-          <small style="font-size: 14px;">
-            {% if article.current_revision.locked %}
-              <span class="fa fa-lock"></span> {% trans "locked" %}
-            {% endif %}
-          </small>
-        </h1>
-      </li>
+  <nav 
+    id="article-menu" 
+    class="navbar navbar-expand-md" 
+    style="background-color: #ffffff; margin-top: 7px; margin-bottom: 15px">
+      <ul class="nav nav-pills" id="article-menu">
+        <li class="pull-left" id="article-title-li">
+          <h1 id="article-title">
+            {{ article.current_revision.title }}
+              {% if article.current_revision.locked %}
+                <span class="fa fa-lock"></span> {% trans "locked" %}
+              {% endif %}
+          </h1>
+        </li>
+      </ul>
+    </nav>
+    <ul class="nav justify-content">
+          {% include "wiki/includes/article_menu.html" %}
     </ul>
     <div>
       {% block wiki_contents_tab %}
