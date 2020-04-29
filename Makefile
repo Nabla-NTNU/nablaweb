@@ -9,6 +9,6 @@ fixme:
 	isort -rc && black nablapps
 
 check:
-	flake8 --max-line-length=88 && isort -rc --check-only
+	isort -rc --check-only && black --check nablapps
 
 .PHONY: fixme check

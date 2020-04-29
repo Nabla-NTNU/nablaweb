@@ -47,7 +47,6 @@ For å komme i gang med Nablaweb, sjekk [wikien.](https://github.com/NablaWebkom
 ## Kodestil
 Nablaweb følger en PEP8 substil som heter Black.
 Vi bruker Black og isort for å formatere koden.
-flake8 brukes til kontroll av formatering.
 
 For å formatere koden din:
  - `make fixme` formaterer feil i koden din.
