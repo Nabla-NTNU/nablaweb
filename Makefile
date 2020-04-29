@@ -6,9 +6,9 @@ help:
 	@echo 'check        - Check code formatting'
 
 fixme:
-	isort -rc && black nablapps
+	isort -rc && black nablapps nablaweb manage.py
 
 check:
-	isort -rc --check-only && black --check nablapps
+	isort -rc --check-only && black --check nablapps nablaweb manage.py
 
 .PHONY: fixme check
