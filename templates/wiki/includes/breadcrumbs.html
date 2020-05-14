@@ -83,47 +83,6 @@
   </div>
 
 
-    {% comment %} <div class="float-left" style="margin-left: 5px;">
-      <a class="btn btn-info"  href="{% url 'wiki:settings' article_id=article.id path=urlpath.path %}" style="padding-bottom: 8px;">
-        <span class="fa fa-wrench"></span>
-        <span class="d-none">{% trans "Settings" %}</span>
-      </a>
-    </div>
-
-    {% for plugin in article_tabs %}
-      <div class="float-left" style="margin-left: 5px;">
-        <a class="btn btn-info"  href="{% url 'wiki:plugin' slug=plugin.slug article_id=article.id path=urlpath.path %}" style="padding-bottom: 8px;">
-          <span class="{{ plugin.article_tab.1 }}"></span>
-          <span class="d-none">{{ plugin.article_tab.0 }}</span>
-        </a>
-      </div>
-    {% endfor %}
-
-    <div class="float-left" style="margin-left: 5px;">
-      <a class="btn btn-info"  href="{% url 'wiki:history' article_id=article.id path=urlpath.path %}" style="padding-bottom: 8px;">
-        <span class="fas fa-clock"></span>
-          <span class="d-none">{% trans "Changes" %}</span>
-      </a>
-    </div>
-
-    {% if article|can_write:user and not article.current_revision.locked %}
-      <div class="float-left" style="margin-left: 5px;">
-        <a class="btn btn-info"  href="{% url 'wiki:edit' article_id=article.id path=urlpath.path %}" style="padding-bottom: 8px;">
-          <span class="fa fa-edit"></span>
-          <span class="d-none">Edit</span>
-        </a>
-      </div>
-
-    {% else %}
-      <div class="float-left" style="margin-left: 5px;">
-        <a class="btn btn-info"  href="{% url 'wiki:source' article_id=article.id path=urlpath.path %}" style="padding-bottom: 8px;">
-          <span class="fa fa-lock"></span>
-          <span class="d-none">{% trans "View Source" %}</span>
-        </a>
-      </div>
-
-  {% endif %} {% endcomment %}
-
   <div style="clear: both"></div>
 </div>
 
