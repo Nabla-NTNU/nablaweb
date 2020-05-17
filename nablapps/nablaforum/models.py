@@ -21,6 +21,12 @@ class Channel(models.Model):
         return self.name
 
 
+    class Meta:
+        permissions = [
+            ("can_post_in_nablafeed", "Can post thread in nablafeed"),
+        ]
+
+
 class Thread(models.Model):
     """ Represents a thread in a channel"""
 

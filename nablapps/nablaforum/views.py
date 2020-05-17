@@ -28,25 +28,35 @@ class MainView(LoginRequiredMixin, TemplateView):
             form_data = thread_form.cleaned_data
             channel_id = self.kwargs["channel_id"]
             channel = Channel.objects.get(pk=channel_id)
-            try:
-                new_thread = Thread.objects.create(
-                    channel=channel,
-                    threadstarter=self.request.user,
-                    title=form_data["title_field"],
-                    text=form_data["text_field"],
-                )
+            if not channel.is_feed():
+                try:
+                    new_thread = Thread.objects.create(
+                        channel=channel,
+                        threadstarter=self.request.user,
+                        title=form_data["title_field"],
+                        text=form_data["text_field"],
+                    )
 
-                new_message = Message.objects.create(
-                    thread=new_thread, user=self.request.user, message=new_thread.text
-                )
-                new_message.read_by_user.add(self.request.user)
-            except:  # noqa: E722
-                django_messages.add_message(
+                    new_message = Message.objects.create(
+                        thread=new_thread, user=self.request.user, message=new_thread.text
+                    )
+                    new_message.read_by_user.add(self.request.user)
+                except:  # noqa: E722
+                    django_messages.add_message(
+                        self.request,
+                        django_messages.INFO,
+                        "Ops! Kunne ikke opprette tråd, ugyldig verdi i feltene!",
+                    )
+                return redirect("forum-main", channel_id=channel_id, thread_id=0)
+            else:
+                # In the unlikely event that somone without permission sends a valid post
+                # request, despite the form not being rendered
+                messages.add_message(
                     self.request,
-                    django_messages.INFO,
-                    "Ops! Kunne ikke opprette tråd, ugyldig verdi i feltene!",
+                    messages.INFO,
+                    "Brukeren din har ikke tillatelse til å opprette ny tråd i nablafeed.",
                 )
-            return redirect("forum-main", channel_id=channel_id, thread_id=0)
+                return redirect("forum-main", channel_id=channel_id, thread_id=0)
 
         elif message_form.is_valid():
             form_data = message_form.cleaned_data
