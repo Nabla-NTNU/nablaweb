@@ -5,6 +5,7 @@ import pymysql
 
 from .base import *
 
+pymysql.version_info = (1, 4, 2, "final", 0) # PyMySQL needs to lie about its version for django>=2.2
 pymysql.install_as_MySQLdb()
 get_env = os.environ.get
 

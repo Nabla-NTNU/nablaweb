@@ -4,12 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "==2.1.13"
+django = "==3.0.6"
 # Templatetags for bootstrap3
 django-braces = "*"       # Extra mixinclasses for models and views
 django-contrib-comments = "*"
 django-filebrowser-no-grappelli = "*"  # Filebrowser for mediafiles.
-django-haystack = "*"     # Search functionality for django models. See whoosh as well
+django-haystack = "==3.0b1"     # Search functionality for django models. See whoosh as well
 django-hitcount = "*"
 django-image-cropping = "*"
 django-markdown-deux = "*"
