@@ -16,8 +16,8 @@
                 <a href="{% url "om-nabla" %}"><li>Generelt om Nabla</li></a>
                 <a href="{% url "show-board-page" slug="styret" %}"><li>Styret</li></a>
                 <a href="{% url "committee_overview" %}"><li>Undergrupper</li></a>
-                <a href="{% url 'wiki:get' 'lovverk/nablas-lover/' %}"><li>Nablas Lover</li></a>
-                <a href="{% url 'wiki:get' 'lovverk/nablas-forskrifter/' %}"><li>Nablas Forskrifter</li></a>
+                <a href="{% url 'wiki:get' 'lovverk/nablas-lover/' %}"><li>Nablas lover</li></a>
+                <a href="{% url 'wiki:get' 'lovverk/nablas-forskrifter/' %}"><li>Nablas forskrifter</li></a>
 
                 {# Hent alle sider som starter på /om/ #}
                 {% get_flatpages '/om/' as about_pages %}
