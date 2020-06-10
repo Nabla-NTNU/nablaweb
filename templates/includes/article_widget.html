@@ -25,7 +25,7 @@
  {% if news.cropping and news.picture %}
         <img alt=""
              class="card-img-top"
-             src="{% thumbnail news.picture 570x200 box=news.cropping upscale crop="smart" quality=95 detail %}">
+             src="{% thumbnail news.picture 570x200 box=news.cropping upscale quality=95 detail %}">
     {% elif news.picture %}
         <img alt=""
              class="card-img-top"

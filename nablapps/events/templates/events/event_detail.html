@@ -7,20 +7,8 @@
 {% block content %}
 
 
-<div class="card ">
-    {% if  event.picture %}
-    <img alt="header"
-         class="card-img-top"
-         src="{% thumbnail event.picture 760x300 quality=95 upscale crop="smart" detail %}">
-    {% endif %}
-    <div class="card-body card-body-overline">
-        <header><h2>{{ event.headline }}</h2></header>
-        <p><strong>{{ event.lead_paragraph}}</strong></p>
-        <div style="overflow: hidden;">{{ event.body|markdown}}</div>
-    </div>
-</div>
+{% include "content/includes/article_content.html" with content=event %}
 <br>
-
 {# Vis påmeldte #}
 {% if user.is_authenticated %}
     {% if event.eventregistration_set.all %}

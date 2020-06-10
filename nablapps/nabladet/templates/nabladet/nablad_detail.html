@@ -58,16 +58,7 @@
 {% load markdown %}
 {% load easy_thumbnails %}
 
-
-<div class="box">
-    {% if nablad.picture %}
-    <img alt="header" class="img-fluid" src="{% thumbnail nablad.picture 760x300 box=nablad.cropping upscale=True detail=True quality=95 %}">
-    {% endif %}
-
-    <header><h2>{{ nablad.headline }}</h2></header>
-    <p><strong>{{ nablad.lead_paragraph}}</strong></p>
-    <div style="overflow: hidden;">{{ nablad.body|markdown}}</div>
-</div>
+{% include "content/includes/article_content.html" with content=nablad %}
 
 {% include "content/includes/comments.html" with content=nablad %}
 {% endblock %}

@@ -8,23 +8,7 @@
 {% load easy_thumbnails %}
 
 
-<div class="box">
-    {% if job.company.picture %}
-    <img alt="header"
-         class="img-fluid"
-         style="display:block; margin-right:auto;margin-left:auto"
-         {% if job.company.ignoreCrop %}
-         src="{% thumbnail job.company.picture 770x300 upscale=True detail=True quality=95 %}"
-         {% else %}
-         src="{% thumbnail job.company.picture 770x300 box=job.company.cropping upscale=True detail=True quality=95 %}"
-        {% endif %}
-         >
-    {% endif %}
-
-    <header><h2>{{ job.print_headline }}</h2></header>
-    <p><strong>{{ job.lead_paragraph }}</strong></p>
-    <div style="overflow: hidden;">{{ job.body|markdown }}</div>
-</div>
+{% include "content/includes/article_content.html" with content=job %}
 
 {% include "content/includes/comments.html" with content=job %}
 
