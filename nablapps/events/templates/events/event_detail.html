@@ -7,16 +7,19 @@
 {% block content %}
 
 
-<div class="box">
-    {% if event.picture %}
-    <img alt="header" class="img-fluid"
-         src="{% thumbnail event.picture 760x300 box=event.cropping upscale=True detail=True quality=95 %}">
+<div class="card ">
+    {% if  event.picture %}
+    <img alt="header"
+         class="card-img-top"
+         src="{% thumbnail event.picture 760x300 quality=95 upscale crop="smart" detail %}">
     {% endif %}
-
-    <header><h2>{{ event.headline }}</h2></header>
-    <p><strong>{{ event.lead_paragraph}}</strong></p>
-    <div style="overflow: hidden;">{{ event.body|markdown}}</div>
+    <div class="card-body card-body-overline">
+        <header><h2>{{ event.headline }}</h2></header>
+        <p><strong>{{ event.lead_paragraph}}</strong></p>
+        <div style="overflow: hidden;">{{ event.body|markdown}}</div>
+    </div>
 </div>
+<br>
 
 {# Vis påmeldte #}
 {% if user.is_authenticated %}
