@@ -47,11 +47,11 @@
 </h3>
 {% endif %}
 
-<table class="table table-bordered table-striped content-info" style="table-layout: fixed;">
+<table class="table table-bordered table-striped" style="table-layout: fixed;">
 
     <!-- Fra -->
     <tr>
-        <td style="width:120px;">Starter</td>
+        <td scope="row">Starter</td>
         <td>
             <time datetime="{{ event.event_start|date:"c" }}">
                 <b>{{ event.event_start|naturalday }} kl. {{ event.event_start|date:"H:i" }}</b>
@@ -72,7 +72,10 @@
     {% endif %}
 
     <!-- Sted -->
-    <tr><td>Sted</td><td>{{ event.location }}</td></tr>
+    <tr>
+        <td>Sted</td>
+        <td>{{ event.location }}</td>
+    </tr>
 
 
     {% block more_info %}
