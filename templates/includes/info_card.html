@@ -1,23 +1,42 @@
 {% load easy_thumbnails %}
+{% load jobs_filters %}
+{% load humanize %}
+{% load markdown_deux_tags %}
 
-<div class="card {{ class|default:" " }}-{{ number|default:"" }} ">
-        <!--main article-->
-        {% with main_news as news %}
-        {% if news.cropping and news.picture %}
-            <img alt=""
-                 class="card-img-top"
-                 src="{% thumbnail news.picture 570x200 box=news.cropping upscale crop="smart" quality=95 detail %}">
-            </img>
 
-        {% elif news.picture %}
-            <img alt=""
-             class="card-img-top"
-             src="{% thumbnail news.picture 570x200 quality=95 upscale crop="smart" detail %}">
-            </img>
-        {% endif %}
-        <div class="card-body card-body-overline">
-            <h1 class="card-title"><a href="{{ news.get_absolute_url }}" class="text-dark stretched-link" >{{ news.headline }}</a></h1>
-            <p class="card-text">{{ news.lead_paragraph}}</p>
+
+<div class="card {{ class|default:" " }}{{ number|default:"" }}">
+    <img alt=""
+         class="card-img-top"
+    {% if content.company.picture and content.company.ignoreCrop %}
+         src="{% thumbnail content.company.picture 770x300 upscale=True detail=True quality=95 background="white" %}"
+    {% elif content.company.picture and content.company.cropping %}
+         src="{% thumbnail content.company.picture 770x300 box=content.company.cropping upscale=True detail=True quality=95 %}"
+    {% elif content.company.picture %}
+         src="{% thumbnail content.company.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
+    {% elif content.picture and content.cropping %}
+         src="{% thumbnail content.picture 770x300 box=content.cropping upscale=True detail=True quality=95 %}"
+    {% elif content.picture %}
+         src="{% thumbnail content.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
+    {% endif %}
+    >
+    <div class="card-body card-body-overline">
+        <h5 class="card-title {{ header_size|default:"" }}"><a href="{{ content.get_absolute_url }}" class="text-dark stretched-link" >
+            {% if content.print_headline and show_details|default:False %}
+            {{  content.print_headline }}
+            {% else %}
+            {{ content.headline }}
+            {% endif %}
+            </a></h5>
+        <p class="card-text">{{ content.lead_paragraph|markdown:"unsafe"}}</p>
+    </div>
+        {%  if show_details|default:False %}
+        <div class="card-footer">
+            <small class="text-muted">
+                {% if job.relevant_for_year%} Stillingsannonsen er relevant for årskull {{ job.relevant_for_year.all|commas_no}} ved
+                {{ job.relevant_for_group.all|commas_no }}.{% endif %}{% if job.deadline_date %} Søknadsfristen er {{ job.deadline_date|naturalday }} kl.
+                {{ job.deadline_date|date:"H:i" }}.{% endif %}
+            </small>
         </div>
-        {% endwith %}
+        {% endif %}
 </div>
