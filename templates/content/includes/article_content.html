@@ -1,9 +1,8 @@
 {% load markdown %}
 {% load easy_thumbnails %}
 
-<div class="card ">
     <img alt=""
-         class="card-img-top"
+         class="img-fluid"
     {% if content.picture and content.cropping %}
          src="{% thumbnail content.picture 770x300 box=content.cropping upscale=True detail=True quality=95 %}"
     {% elif content.picture %}
@@ -16,9 +15,6 @@
          src="{% thumbnail content.company.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
     {% endif %}
     >
-    <div class="card-body card-body-overline">
-        <header><h2>{{ content.headline }}</h2></header>
-        <p><strong>{{ content.lead_paragraph}}</strong></p>
-        <div style="overflow: hidden;">{{ content.body|markdown}}</div>
-    </div>
-</div>
+    <header><h2>{{ content.headline }}</h2></header>
+    <p><strong>{{ content.lead_paragraph}}</strong></p>
+    <div style="overflow: hidden;">{{ content.body|markdown}}</div>

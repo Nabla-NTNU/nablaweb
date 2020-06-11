@@ -8,7 +8,6 @@
 
 
 {% include "content/includes/article_content.html" with content=event %}
-<br>
 {# Vis påmeldte #}
 {% if user.is_authenticated %}
     {% if event.eventregistration_set.all %}
