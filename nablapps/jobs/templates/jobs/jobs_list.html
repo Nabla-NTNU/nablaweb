@@ -3,28 +3,41 @@
 {% load humanize %}
 {% load jobs_filters %}
 
+
 {% block title %}Stillingsannonser{% endblock %}
+
 
 {% block more_head %}
 <link rel="alternate" type="application/rss+xml" href="/stillinger/feed/" title="RSS feed">
 {% endblock %}
 
 {% block sidebar %}
-{% include "jobs/sidebar_include.html" %}
+    <div class="card h-100 ">
+        <div class="card-body px-3">
+                {% include "jobs/sidebar_include.html" %}
+        </div>
+    </div>
 {% endblock %}
 
 {% block content %}
+<style>
+    #mainContent {
+    background-color: var(--nabla-background);
+    border: 0;
+}
+</style>
 
+<div class="row">
 {% for row in jobs_rows %}
-    <div class="row">
     {% for job in row %}
-        {% include "jobs/jobs_summary_include.html" %}
-    {% endfor %}
+    <div class="col-md-6 pb-4">
+        {%  include "includes/info_card.html" with content=job show_details=True header_size="h4" class="h-100 "%}
     </div>
-    <hr>
+    {% endfor %}
 {% empty %}
     <p>Vi har for øyeblikket ingen stillingsannonser som matcher dine kriterier.</p>
 {% endfor %}
+</div>
 
 {% include "includes/pagination.html" %}
 
