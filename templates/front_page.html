@@ -17,23 +17,7 @@
 
 <div class="maingrid-container{% if not newuser_message %}-authenticated{% endif  %}"><!--main grid container open tag-->
 <!--main content begin-->
-    <article class="card main-article ">
-            <!--main article-->
-            {% with main_news as news %}
-            <img alt=""
-                 class="card-img-top"
-            {% if news.cropping and news.picture %}
-                 src="{% thumbnail news.picture 770x300 box=news.cropping upscale=True quality=95 detail=True  %}"
-            {% elif news.picture %}
-                 src="{% thumbnail news.picture 770x300 quality=95 crop="smart" upscale=True crop="smart" detail=True %}"
-            {% endif %}
-            >
-            <div class="card-body card-body-overline">
-                <h1 class="card-title"><a href="{{ news.get_absolute_url }}" class="text-dark stretched-link" >{{ news.headline }}</a></h1>
-                <p class="card-text">{{ news.lead_paragraph}}</p>
-            </div>
-            {% endwith %}
-    </article>
+    {% include "includes/info_card.html" with content=main_news class="main-article" header_size="h1" %}
 
     <div class="upcoming-events card card-body card-body-overline">
         <!--upcoming event widget-->
