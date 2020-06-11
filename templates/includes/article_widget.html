@@ -1,25 +1,4 @@
 {% load easy_thumbnails %}
-{#<div class="box {{ news.content_type.model }} news more-news-{{ number }}">#}
-{#    {% if news.cropping and news.picture %}#}
-{#    <a href="{{ news.get_absolute_url }}">#}
-{#        <img alt=""#}
-{#             class="news-picture img-responsive"#}
-{#             src="{% thumbnail news.picture 570x200 box=news.cropping upscale crop="smart" quality=95 detail %}" height="100%" width="100%">#}
-{#    </a>#}
-{#    {% elif news.picture %}#}
-{#    <a href="{{ news.get_absolute_url }}">#}
-{#        <img alt=""#}
-{#             class="news-picture img-responsive"#}
-{#             src="{% thumbnail news.picture 570x200 quality=95 upscale crop="smart" detail %}" height="100%" width="100%">#}
-{#    </a>#}
-{#    {% endif %}#}
-{#    <header>#}
-{#        <h2>#}
-{#            <a href="{{ news.get_absolute_url }}">{{ news.headline }}</a>#}
-{#        </h2>#}
-{#    </header>#}
-{#    <p>{{ news.lead_paragraph}}</p>#}
-{#</div>#}
 
 <div class="card news more-news-{{ number|default:"mb-2" }} {{ margin|default:"mb-2" }}">
  {% if news.cropping and news.picture %}
