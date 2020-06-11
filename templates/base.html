@@ -278,32 +278,49 @@
             </nav>
 
         </header>
-
+        <!-- Hvis du ikke har med full-body vil ikke footer alltid være på bunnen -->
+        <div id="full-body">
         <!-- Page Content -->
+
         {% block full-content-body %}
-        <!-- Hvis du ikke har med mainContent vil ikke footer alltid være på bunnen -->
         <div class="container" id = "mainContent">
+        {% bootstrap_messages %}
 
-            {% bootstrap_messages %}
-            {% block main %}
-            <div class="row">
-                <!-- Blog Entries Column -->
-                <div class="col-md-8">
-                {% block content %}{% endblock content %}
-                </div>
+        {% block main-blank %}
+        <style>
+            #mainContent {
+                padding: 1rem;
+                background-color: var(--white);
+                border-left-style: solid;
+                border-left-width: thin;
+                border-left-color: lightgray;
+                border-right-style: solid;
+                border-right-width: thin;
+                border-right-color: lightgray;
+            }
+        </style>
 
-                <!-- Blog Sidebar Widgets Column -->
-                <div class="col-md-4">
-                {% block sidebar %}
-                {% endblock sidebar %}
-                </div>
+        {% block main %}
+        <div class="row">
+            <!-- Blog Entries Column -->
+            <div class="col-md-8">
+            {% block content %}{% endblock content %}
             </div>
-            <!-- /.row -->
-            {% endblock main %}
-        </div> <!-- id="mainContent" -->
+            <!-- Blog Sidebar Widgets Column -->
+            <div class="col-md-4">
+            {% block sidebar %}
+            {% endblock sidebar %}
+            </div>
+        </div>
+        <!-- /.row -->
+        {% endblock main %}
 
+        {% endblock main-blank %}
+
+        </div> <!-- id="mainContent" -->
         {% endblock full-content-body %}
 
+        </div>
         <!-- Footer -->
         <footer class="nabla-footer" >
 

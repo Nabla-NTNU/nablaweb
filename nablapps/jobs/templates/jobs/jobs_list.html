@@ -11,34 +11,30 @@
 <link rel="alternate" type="application/rss+xml" href="/stillinger/feed/" title="RSS feed">
 {% endblock %}
 
-{% block sidebar %}
-    <div class="card pb-2">
-        <div class="card-body px-3">
-                {% include "jobs/sidebar_include.html" %}
-        </div>
-    </div>
-{% endblock %}
-
-{% block content %}
-<style>
-    #mainContent {
-    background-color: var(--nabla-background);
-    border: 0;
-}
-</style>
+{% block main-blank %}
 
 <div class="row">
-{% for row in jobs_rows %}
-    {% for job in row %}
-    <div class="col-md-6 pb-4">
-        {%  include "includes/info_card.html" with content=job show_details=True header_size="h4" class="h-100 "%}
+    <div class="col-md-8">
+        <div class="row">
+            {% for row in jobs_rows %}
+                {% for job in row %}
+                <div class="col-md-6 pb-4">
+                    {%  include "includes/info_card.html" with content=job show_details=True header_size="h4" class="h-100 "%}
+                </div>
+                {% endfor %}
+            {% empty %}
+                <p>Vi har for øyeblikket ingen stillingsannonser som matcher dine kriterier.</p>
+            {% endfor %}
+        </div>
+        {% include "includes/pagination.html" %}
     </div>
-    {% endfor %}
-{% empty %}
-    <p>Vi har for øyeblikket ingen stillingsannonser som matcher dine kriterier.</p>
-{% endfor %}
+    <div class="col-md-4">
+        <div class="card pb-2">
+            <div class="card-body px-3">
+                {% include "jobs/sidebar_include.html" %}
+            </div>
+        </div>
+    </div>
 </div>
 
-{% include "includes/pagination.html" %}
-
-{% endblock content %}
+{% endblock main-blank %}
