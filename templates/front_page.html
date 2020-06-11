@@ -23,9 +23,9 @@
             <img alt=""
                  class="card-img-top"
             {% if news.cropping and news.picture %}
-                 src="{% thumbnail news.picture 570x200 box=news.cropping upscale=True quality=95 detail=True  %}"
+                 src="{% thumbnail news.picture 770x300 box=news.cropping upscale=True quality=95 detail=True  %}"
             {% elif news.picture %}
-                 src="{% thumbnail news.picture 570x200 quality=95 crop="smart" upscale=True crop="smart" detail=True %}"
+                 src="{% thumbnail news.picture 770x300 quality=95 crop="smart" upscale=True crop="smart" detail=True %}"
             {% endif %}
             >
             <div class="card-body card-body-overline">

@@ -25,11 +25,11 @@
  {% if news.cropping and news.picture %}
         <img alt=""
              class="card-img-top"
-             src="{% thumbnail news.picture 570x200 box=news.cropping upscale quality=95 detail %}">
+             src="{% thumbnail news.picture 770x300 box=news.cropping upscale quality=95 detail %}">
     {% elif news.picture %}
         <img alt=""
              class="card-img-top"
-             src="{% thumbnail news.picture 570x200 quality=95 upscale crop="smart" detail %}">
+             src="{% thumbnail news.picture 770x300 quality=95 upscale crop="smart" detail %}">
     {% endif %}
     <div class="card-body card-body-overline">
         <h5 class="card-title"><a href="{{ news.get_absolute_url }}" class="text-dark stretched-link" >{{ news.headline }}</a></h5>
