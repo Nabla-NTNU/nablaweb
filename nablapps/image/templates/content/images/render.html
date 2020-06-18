@@ -1,5 +1,5 @@
 {% spaceless %}
-<div class="thumbnail {% if align %} pull-{{ align }}{% endif %}"
+<div class="thumbnail {% if align %} float-{{ align }}{% endif %}"
      style="width: {% if size == 'full' %}100%{% elif size == 'large' %}500px{% else %}350px{% endif %};max-width: 100%">
     <a href="{{ image.file.url }}">
       <img class="img-fluid" src="{{ image.file.url }}" alt="{{ revision.get_filename }}" />
