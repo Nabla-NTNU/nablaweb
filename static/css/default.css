@@ -38,9 +38,11 @@ html, body {
 #full-body {
     flex: 1;
     overflow: hidden;
+    display: flex;
 }
 
 #mainContent {
+    flex: 1;
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
