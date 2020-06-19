@@ -1,4 +1,3 @@
-
 /* Calendar */
 
 @media (min-width: 600px) {
@@ -24,6 +23,10 @@
         border-collapse: separate;
         width: 100%;
         border-spacing: 3px;
+    }
+    .month ul {
+        list-style-type: none;
+        padding-left: 0;
     }
 
     .daynames { display: table-header-group; }
@@ -71,6 +74,10 @@
         -moz-appearance: none;
     }
     .month { display: block; }
+    .month ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
     .daynames { display: none; }
     .week { list-style: none; margin: 0;}
     .noday { display: none; }
