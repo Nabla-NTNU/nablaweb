@@ -10,13 +10,11 @@
     {% addtoblock "css" %}
         <link href="{% static "blog/blog.css" %}" rel="stylesheet"/>
     {% endaddtoblock %}
-<div class="">
     <h1>Nyeste blogginnlegg</h1>
 
     <div class="list-group">
-
         {% for post in post_list %}
-            <div class="list-group-item row">
+            <div class="list-group-item">
                 <div class="row">
                     <div class="col-md-8">
                         <a href="{{ post.get_absolute_url }}">
@@ -49,7 +47,7 @@
             Ingen posts her enda.
         {% endfor %}
     </div>
-</div>
+
 
 {% endblock content %}
 

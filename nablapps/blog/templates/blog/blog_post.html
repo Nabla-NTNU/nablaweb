@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="card panel-default card-body">
+<div class="card card-body">
         <h1>{{ post.title }}</h1>
         {{ post.content|markdown:"unsafe"}}
         <i>{{ post.created_date|date:"d.m.y"}}</i>
