@@ -9,14 +9,14 @@ div.table-responsive table {
 	margin: 6px 10px 10px 10px;
 	border-collapse: collapse;
 	font-size: 13px;
-	@media screen and (max-width: 480px) {
-		float: center;
-		width: 100%;
-	}
 	border: 1px solid #a5afa8;
 }
 
-
+@media screen and (max-width: 480px) {
+	div.table-responsive table {
+		width: 100%;
+	}
+}
 
 div.table-responsive td {
 	padding: .3em 1em;
@@ -45,6 +45,9 @@ div#article-container {
 
 .article_list {
 	/*background: #000000;*/
+}
+.article-list ul{
+	padding-left: 40px;
 }
 .list_header {
 	font-size: large;
@@ -80,7 +83,7 @@ li .article-index-element {
 .article-index-element label {
 	padding-left: 1.5em;
 	background: url("/static/img/wiki/toggle-small-expand.png") no-repeat;
-	cursor: pointer;\
+	cursor: pointer;
 }
 
 .article-index-container {
