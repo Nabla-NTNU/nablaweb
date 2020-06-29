@@ -34,7 +34,7 @@ class EventRegistration(models.Model):
         help_text="Hvis denne er satt til sann har man en plass "
         "på arrangementet ellers er det en ventelisteplass.",
     )
-    penalty = models.IntegerField(verbose_name="Prikk", default=0, blank=True)
+    penalty = models.IntegerField(verbose_name="Prikk", blank=True, null=True, default=None)
 
     class Meta:
         verbose_name = "påmelding"
@@ -51,7 +51,7 @@ class EventRegistration(models.Model):
 
     def clean(self):
         valid_penalties = self.event.get_penalty_rule_dict().values()
-        if self.penalty not in valid_penalties:
+        if self.penalty not in valid_penalties and self.penalty != None:
             raise ValidationError("Penalty value is not valid for this event")
 
     def delete(self, *args, **kwargs):

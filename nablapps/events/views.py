@@ -245,6 +245,30 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
 
     def get_admin_links(self):
         admin_list = []
+        if  self.object.penalty ==2:
+            admin_ticket_name = "Administrer betalinger"
+        elif self.object.penalty in [1,3]:
+            admin_ticket_name = "Administrer oppmøte"
+        else:
+            admin_ticket_name = "Administrer prikker"
+        if self.object.registration_required:
+            admin_list.append(
+                {
+                    "name": "Registrer oppmøte ",
+                    "glyphicon_symbol": "user",
+                    "url": reverse("event_register_attendance", args=[self.object.id]),
+                }
+            )
+        if self.object.penalty != 0:
+            admin_list.append(
+                {
+                    "name": admin_ticket_name,
+                    "glyphicon_symbol": "check",
+                    "url": reverse(
+                        "event_administer_tickets", args=[self.object.id]
+                    ),
+                }
+            )
         if self.object.registration_required:
             admin_list += [
                 {
@@ -258,16 +282,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
                     "url": reverse("event_registrations", args=[self.object.id]),
                 },
             ]
-            if self.object.penalty != 0:
-                admin_list.append(
-                    {
-                        "name": "Registrer oppmøte",
-                        "glyphicon_symbol": "check",
-                        "url": reverse(
-                            "event_register_attendance", args=[self.object.id]
-                        ),
-                    }
-                )
+
 
         return admin_list + super().get_admin_links()
 
@@ -342,6 +357,42 @@ class RegisterUserView(LoginRequiredMixin, MessageMixin, DetailView):
         return "Du er meldt av arrangementet."
 
 
+class AdministerTicketsView(DetailView, MessageMixin):
+    """Used by event admins to register attendance"""
+
+    model = Event
+    template_name = "events/administer_tickets.html"
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        attending = EventRegistration.objects.filter(event=self.object, attending=True)
+        redirection = redirect(
+            self.request.resolver_match.view_name, kwargs.pop("pk", 1)
+        )
+
+        for q in request.POST:
+            if q.startswith("user_penalty_"):
+                pk = q.split("_")[-1]
+                penalty_value = request.POST[q]
+                reg_req = attending.get(pk=pk)
+                if penalty_value == "None":
+                    reg_req.penalty = None
+                else:
+                    reg_req.penalty = penalty_value
+                try:
+                    reg_req.clean_fields()
+                    reg_req.save()
+                except ValidationError:
+                    self.messages.warning(f"Invalid penalty value for {reg_req.user}.")
+        return redirection
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        event = self.object
+        registrations = event.eventregistration_set.filter(attending=True)
+        context["registrations"] = registrations.order_by("user__first_name")
+        return context
+
 class RegisterAttendanceView(DetailView, MessageMixin):
     """Used by event admins to register attendance"""
 
@@ -360,9 +411,12 @@ class RegisterAttendanceView(DetailView, MessageMixin):
                 pk = q.split("_")[-1]
                 penalty_value = request.POST[q]
                 reg_req = attending.get(pk=pk)
-                reg_req.penalty = penalty_value
+                if penalty_value == "None":
+                    reg_req.penalty = None
+                else:
+                    reg_req.penalty = penalty_value
                 try:
-                    reg_req.full_clean()
+                    reg_req.clean_fields()
                     reg_req.save()
                 except ValidationError:
                     self.messages.warning(f"Invalid penalty value for {reg_req.user}.")
@@ -374,7 +428,6 @@ class RegisterAttendanceView(DetailView, MessageMixin):
         registrations = event.eventregistration_set.filter(attending=True)
         context["registrations"] = registrations.order_by("user__first_name")
         return context
-
 
 def ical_event(request, event_id):
     """Returns a given event or bedpres as an iCal .ics file"""

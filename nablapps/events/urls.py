@@ -9,6 +9,7 @@ from .views import (
     EventDetailView,
     EventMainPage,
     EventRegistrationsView,
+    AdministerTicketsView,
     RegisterAttendanceView,
     RegisterUserView,
     UserEventView,
@@ -21,7 +22,12 @@ urlpatterns = [
         "<int:pk>/admin2/", AdministerRegistrationsView.as_view(), name="event_admin",
     ),
     path(
-        "<int:pk>/attendance/",
+        "<int:pk>/tickets/",
+        AdministerTicketsView.as_view(),
+        name="event_administer_tickets",
+    ),
+    path(
+        "<int:pk>/register_attendance/",
         RegisterAttendanceView.as_view(),
         name="event_register_attendance",
     ),

@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
+{# Administer påmeldinger #}
 
 {% block title %}{{ event.headline }}{% endblock %}
 
 {% block content %}
 
-
-<h2> Administrer <a href="{{event.get_absolute_url}}">{{ event.headline }}</a> </h2>
+<h2> Administrer <a href="{{event.get_absolute_url}}">{{ event.headline }}</a></h2>
 {% if event.registration_required %}
 <br>
 <form action="" method="post" class="form-inline" >{% csrf_token %}

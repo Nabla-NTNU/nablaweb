@@ -1,45 +1,12 @@
 {% extends 'base.html' %}
 
-{% block more_head %}
+{% block main-blank %}
 <style>
- #attending_list label {
-     font-weight: normal;
- }
+    #full-body{
+        background-color: green;
+    }
 </style>
-{% endblock %}
 
-{% block content %}
-<h1>Oppmøteregistrering for {{ event.headline }}</h1>
-<hr />
+<p>Hello world </p>
 
-{% if event.penalty == 1 %} {# if is bedpres #}
-<script>
- function make_all_penalty(id) {
-     $('#' + id).find('input[value="2"]').prop("checked",true);
- }
- {% endif %}
-</script>
-<form method="post" id="penalty_form">{% csrf_token %}
-{% if event.penalty == 1 %}
-    <button type="button" onclick="make_all_penalty('penalty_form')">Aktiver prikker</button>
-    <span>NB! Du må trykke send inn for at prikkene skal registreres.</span>
-{% endif %}
-<table id="attending_list" class="table">
-    <tr>
-        <th>Bruker</th>
-        {% for case, penalty in event.get_penalty_rule_dict.items %}
-        <th>{{ case }} ({{ penalty }}p)</th>
-        {% endfor %}
-    </tr>
-    {% for registration in registrations %}
-    <tr>
-        <td><label for="user_penalty_{{registration.pk}}">{{ registration.user.get_full_name }}</label></td>
-        {% for penalty in event.get_penalty_rule_dict.values %}
-        <td><label style="width: 100%"><input type="radio" name="user_penalty_{{registration.pk}}" value="{{ penalty }}" {% ifequal registration.penalty penalty %}checked{% endifequal %}></label></td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
-</table>
-<button type="submit">Send inn</button>
-</form>
 {% endblock %} {# block "content" #}

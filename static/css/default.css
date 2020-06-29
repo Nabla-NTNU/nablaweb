@@ -266,7 +266,6 @@ nav.navbar {
     .nabla-footer {
         /* TODO: Add cross-browser support */
         background-color: var(--gray-dark);
-        border-top:1px solid #ffffff;
         color: var(--white);
         padding-top: 30px;
         width: 100%;
