@@ -3,10 +3,27 @@
 {% block main-blank %}
 <style>
     #full-body{
-        background-color: green;
+        background-color: #79e5c2;
     }
 </style>
 
-<p>Hello world </p>
+
+<h1>{{ namestring }}</h1>
+<form method="post" id="user_identity_form">{% csrf_token %}
+{#{% if event.penalty == 1 %}#}
+{#    <button type="button" onclick="make_all_penalty('penalty_form')">Aktiver prikker</button>#}
+{#    <span>NB! Du må trykke send inn for at prikkene skal registreres.</span>#}
+{#{% endif %}#}
+{% if attendance_message %}
+<p>{{ attendance_message }}</p>
+{%  endif %}
+<div class="form-group row">
+    <label for="colFormLabelLg" class="col-sm-12 col-form-label col-form-label-lg">Brukernavn</label>
+    <div class="col-sm-12">
+      <input type="text" class="form-control form-control-lg" name="input_field_value" id="colFormLabelLg" placeholder="Skriv inn brukernavn">
+    </div>
+</div>
+
+</form>
 
 {% endblock %} {# block "content" #}

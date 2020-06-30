@@ -395,10 +395,9 @@ class AdministerTicketsView(DetailView, MessageMixin):
 
 class RegisterAttendanceView(DetailView, MessageMixin):
     """Used by event admins to register attendance"""
-
+    string = "lkj"
     model = Event
     template_name = "events/register_attendance.html"
-
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         attending = EventRegistration.objects.filter(event=self.object, attending=True)
@@ -406,27 +405,31 @@ class RegisterAttendanceView(DetailView, MessageMixin):
             self.request.resolver_match.view_name, kwargs.pop("pk", 1)
         )
 
-        for q in request.POST:
-            if q.startswith("user_penalty_"):
-                pk = q.split("_")[-1]
-                penalty_value = request.POST[q]
-                reg_req = attending.get(pk=pk)
-                if penalty_value == "None":
-                    reg_req.penalty = None
-                else:
-                    reg_req.penalty = penalty_value
-                try:
-                    reg_req.clean_fields()
-                    reg_req.save()
-                except ValidationError:
-                    self.messages.warning(f"Invalid penalty value for {reg_req.user}.")
-        return redirection
+        for name in request.POST:
+            if name == "input_field_value":
+                stringname = request.POST[name]
+                # pk = q.split("_")[-1]
+                # penalty_value = request.POST[q]
+                # reg_req = attending.get(pk=pk)
+                # if penalty_value == "None":
+                #     reg_req.penalty = None
+                # else:
+                #     reg_req.penalty = penalty_value
+                # try:
+                #     reg_req.clean_fields()
+                #     reg_req.save()
+                # except ValidationError:
+                #     self.messages.warning(f"Invalid penalty value for {reg_req.user}.")
+        context = self.get_context_data(attendance_message=stringname,**kwargs)
+        return render(request, template_name="events/register_attendance.html",context=context)
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, attendance_message=None, attendance_type=None, **kwargs):
         context = super().get_context_data(**kwargs)
         event = self.object
         registrations = event.eventregistration_set.filter(attending=True)
         context["registrations"] = registrations.order_by("user__first_name")
+        context["attendance_message"] = attendance_message
+        context["attendance_type"] = attendance_type
         return context
 
 def ical_event(request, event_id):

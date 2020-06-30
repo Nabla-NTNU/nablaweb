@@ -34,7 +34,20 @@ class EventRegistration(models.Model):
         help_text="Hvis denne er satt til sann har man en plass "
         "på arrangementet ellers er det en ventelisteplass.",
     )
-    penalty = models.IntegerField(verbose_name="Prikk", blank=True, null=True, default=None)
+    penalty = models.IntegerField(
+        verbose_name="Prikk",
+        blank=True,
+        null=True,
+        default=None
+    )
+    attendance_registration = models.DateTimeField(
+        verbose_name="Første regisreringstidspunkt",
+        blank=True,
+        null=True,
+        default=None,
+        help_text="Hvis dette tidspunktet er satt er det gjort en regisrering på at brukeren har møtt opp"
+    )
+
 
     class Meta:
         verbose_name = "påmelding"

@@ -9,19 +9,21 @@
 {% endblock %}
 
 {% block main %}
+{# Må finne en måte å huske y-posisjonen til nettsiden for at dette skal funke #}
+{#<script>#}
+{#$( document ).ready(function() {#}
+{#     $("input:radio.penalty_table_radio").change(function ()#}
+{#     {#}
+{#        $("form#penalty_form").submit();#}
+{#     }#}
+{#     );#}
+{##}
+{#</script>#}
+
 <h2>Prikkadministrering for <a href="{{event.get_absolute_url}}">{{ event.headline }}</a></h2>
 <br>
-<script>
-$( document ).ready(function() {
-     $("input:radio.penalty_table_radio").change(function ()
-     {
-        $("form#penalty_form").submit();
-     }
-     );
 
-});
 
-</script>
 <form method="post" id="penalty_form">{% csrf_token %}
 {#{% if event.penalty == 1 %}#}
 {#    <button type="button" onclick="make_all_penalty('penalty_form')">Aktiver prikker</button>#}
