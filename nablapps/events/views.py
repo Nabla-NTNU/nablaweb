@@ -32,6 +32,9 @@ from .exceptions import (
     RegistrationNotOpen,
     RegistrationNotRequiredException,
     UserRegistrationException,
+    UserAttendanceException,
+    UserAlreadyRegistered,
+    UserNotAttending
 )
 from .forms import FilterEventsForm  # Used in EventMainPage
 from .models.event import Event, attending_events
@@ -393,44 +396,76 @@ class AdministerTicketsView(DetailView, MessageMixin):
         context["registrations"] = registrations.order_by("user__first_name")
         return context
 
+
 class RegisterAttendanceView(DetailView, MessageMixin):
     """Used by event admins to register attendance"""
-    string = "lkj"
     model = Event
     template_name = "events/register_attendance.html"
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        attending = EventRegistration.objects.filter(event=self.object, attending=True)
-        redirection = redirect(
-            self.request.resolver_match.view_name, kwargs.pop("pk", 1)
-        )
+        username = "ali"
+        for key in request.POST:
+            if key == "identification_string":
+                username = request.POST[key]
+                attendance_message = ""
+                status_type = "warning"
+                try:
+                    registration = self.get_registration_by_identification_string(identification_string=username, methods=["username"])
+                except EventRegistration.DoesNotExist:
+                    attendance_message = "Fant ikke brukeren"
+                    status_type = "danger"
+                except UserNotAttending:
+                    attendance_message = "Brukeren er på ventelisten"
+                    status_type = "danger"
+                except UserAlreadyRegistered as e:
+                    reg_datetime = e.eventregistration.attendance_registration
+                    if reg_datetime.date() == datetime.datetime.now().date():
+                        attendance_message = f"Oppmøte allerede registrert (klokken: {reg_datetime.strftime('%H.%M')})"
+                    else:
+                        attendance_message = f"Oppmøte allerede registrert (dato: {reg_datetime.strftime('%d.%m.%Y')})"
+                    status_type = "warning"
+                except:
+                    self.messages.error("Noe gikk galt prøv igjen")
+                    status_type = "warning"
+                else:
+                    try:
+                        registration.attendance_registration = datetime.datetime.now()
+                        registration.clean_fields()
+                        registration.save()
+                        attendance_message = f"Velkommen {registration.user.first_name}"
+                    except ValidationError:
+                        self.messages.warning(f"Noe gikk galt prøv igjen")
+                context = self.get_context_data(attendance_message = attendance_message, status_type=status_type,**kwargs)
+                return render(request, template_name="events/register_attendance.html", context=context)
+        self.messages.warning("Det skjeddde ingen ting, prøv igjen")
+        return redirect(self.request.resolver_match.view_name, kwargs.pop("pk", 1))
 
-        for name in request.POST:
-            if name == "input_field_value":
-                stringname = request.POST[name]
-                # pk = q.split("_")[-1]
-                # penalty_value = request.POST[q]
-                # reg_req = attending.get(pk=pk)
-                # if penalty_value == "None":
-                #     reg_req.penalty = None
-                # else:
-                #     reg_req.penalty = penalty_value
-                # try:
-                #     reg_req.clean_fields()
-                #     reg_req.save()
-                # except ValidationError:
-                #     self.messages.warning(f"Invalid penalty value for {reg_req.user}.")
-        context = self.get_context_data(attendance_message=stringname,**kwargs)
-        return render(request, template_name="events/register_attendance.html",context=context)
-
-    def get_context_data(self, attendance_message=None, attendance_type=None, **kwargs):
+    def get_context_data(self, attendance_message=None, status_type=None, **kwargs):
         context = super().get_context_data(**kwargs)
         event = self.object
         registrations = event.eventregistration_set.filter(attending=True)
         context["registrations"] = registrations.order_by("user__first_name")
         context["attendance_message"] = attendance_message
-        context["attendance_type"] = attendance_type
+        context["status_type"] = status_type
         return context
+
+    # including user name is a little secure way to id users
+    def get_registration_by_identification_string(self,identification_string, methods):
+        event = self.get_object()
+        for method in methods:
+            if method == "username":
+                registration = event.eventregistration_set.get(user__username=identification_string)
+            elif method == "ntnu_card":
+                raise UserAttendanceException(identification_string=identification_string, method = method)
+            elif method == "qr_code":
+                raise UserAttendanceException(identification_string=identification_string, method = method)
+            else: continue
+            if not registration.attending:
+                raise UserNotAttending(eventregistration=registration, identification_string=identification_string)
+            elif registration.attendance_registration is not None:
+                raise UserAlreadyRegistered(eventregistration=registration, identification_string=identification_string)
+            return registration
+        raise UserAttendanceException(identification_string=identification_string)
 
 def ical_event(request, event_id):
     """Returns a given event or bedpres as an iCal .ics file"""
