@@ -359,7 +359,7 @@ class RegisterUserView(LoginRequiredMixin, MessageMixin, DetailView):
             return "Avmeldingsfristen er ute."
         return "Du er meldt av arrangementet."
 
-class AdministerPenaltiesView(DetailView, MessageMixin):
+class AdministerPenaltiesView(DetailView, MessageMixin,PermissionRequiredMixin):
     """Used by event admins to register attendance"""
 
     model = Event
