@@ -45,7 +45,6 @@
         <td><label style="width: 100%"><input type="radio" class="penalty_table_radio" name="user_penalty_{{registration.pk}}" value="{{ penalty }}" {% ifequal registration.penalty penalty %}checked{% endifequal %}></label></td>
         {% endfor %}
         <td><label style="width: 100%"><input type="radio" class="penalty_table_radio" name="user_penalty_{{registration.pk}}" value="None" {% ifequal registration.penalty None %}checked{% endifequal %}></label></td>
-
     </tr>
     {% endfor %}
 </table>
