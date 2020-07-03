@@ -45,6 +45,11 @@ class Event(
         3: ("Arrangement uten betaling", {"Møtt opp": 0, "Ikke møtt opp": 1}),
     }
 
+    # måtte definere disse to feltene fordi en maskin ikke er like smart som den som skrev penalty_rules
+    show_penalties = [None, 0, None, 0]
+    late_penalties = [None, 1, None, 0]
+    noshow_penalties = [None, 2, 0, 1]
+
     penalty = models.IntegerField(
         default=0,
         choices=zip(penalty_rules.keys(), [rule[0] for rule in penalty_rules.values()]),
@@ -89,6 +94,15 @@ class Event(
     def get_penalty_rule_dict(self):
         """Returns the penalty rule dict for the event"""
         return self.penalty_rules[self.penalty][1]
+
+    def get_show_penalty(self):
+        return self.show_penalties[self.penalty]
+
+    def get_late_penalty(self):
+        return self.late_penalties[self.penalty]
+
+    def get_noshow_penalty(self):
+        return self.noshow_penalties[self.penalty]
 
     def get_short_name(self):
         """Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke."""
@@ -220,6 +234,8 @@ class Event(
         return reverse("event_detail", kwargs={"pk": self.pk, "slug": self.slug})
 
 
+
+
 def attending_events(user, today):
     """Get the future events attended by a user"""
     if user.is_anonymous:
@@ -232,3 +248,4 @@ def attending_events(user, today):
         event.waiting = not reg.attending
         events.append(event)
     return events
+

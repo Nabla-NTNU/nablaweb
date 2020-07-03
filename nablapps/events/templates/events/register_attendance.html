@@ -9,7 +9,7 @@
 
 
 <h1>{{ namestring }}</h1>
-<form method="post" action="{% url "event_noshow_penalties" event.pk %}">{% csrf_token %}
+<form method="post">{% csrf_token %}
 {#{% if event.penalty == 1 %}#}
 {#    <button type="button" onclick="make_all_penalty('penalty_form')">Aktiver prikker</button>#}
 {#    <span>NB! Du må trykke send inn for at prikkene skal registreres.</span>#}
@@ -20,14 +20,16 @@
 <div class="form-group row">
     <label for="colFormLabelLg" class="col-sm-12 col-form-label col-form-label-lg">Brukernavn</label>
     <div class="col-sm-12">
-      <input type="text" class="form-control form-control-lg" name="identification_string" id="colFormLabelLg" placeholder="Skriv inn brukernavn">
+        <input type="text" class="form-control form-control-lg" name="identification_string" id="colFormLabelLg" placeholder="Skriv inn brukernavn">
+        <input type="hidden"  name="identification_type" value="username">
+        <input type="hidden"  name="identification_type" value="ntnu_card">
     </div>
 </div>
 
 </form>
 
 <form method="post" action="{% url "event_noshow_penalties" event.pk %}">{% csrf_token %}
-<button class="btn btn-primary float-right" type="submit" value="register_noshow_penalties"></button>
+<button class="btn btn-primary float-right" type="submit" value="register_noshow_penalties">Avslutt registrering</button>
 
 </form>
 

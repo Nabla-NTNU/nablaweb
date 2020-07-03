@@ -396,10 +396,6 @@ class AdministerPenaltiesView(DetailView, MessageMixin,PermissionRequiredMixin):
         context["registrations"] = registrations.order_by("user__first_name")
         return context
 
-class RegisterNoshowPenaltiesView(AdministerPenaltiesView):
-    def post(self, request, *args, **kwargs):
-        return redirect("event_administer_penalties", kwargs.pop("pk", 1))
-
 
 class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
     """Used by event admins to register attendance"""
@@ -408,22 +404,9 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        name = request.POST.get("name")
-
-
-
-        if name == "register_attendance":
-            identification_string = request.POST.get("identification_string")
-            identification_types = request.POST.getlist("identification_type")
-            return self.register_attendance(request, requestidentification_string=identification_string, identification_types=identification_types)
-        elif name == "register_rest":
-            return redirect(self.request.resolver_match.view_name, kwargs.pop("pk", 1))
-        else:
-            self.messages.warning("Det skjeddde ingen ting, prøv igjen")
-            return redirect(self.request.resolver_match.view_name, kwargs.pop("pk", 1))
-
-    def register_attendance(self, request, identification_string, identification_types, **kwargs):
-        attendance_message = ""
+        identification_string = request.POST.get("identification_string")
+        identification_types = request.POST.getlist("identification_type")
+        attendance_message = "Noe gikk galt, prøv igjen"
         status_type = "warning"
         try:
             registration = self.get_registration_by_identification_string(identification_string=identification_string, identification_types=identification_types)
@@ -446,6 +429,15 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
         else:
             try:
                 registration.attendance_registration = datetime.datetime.now()
+                # Her sjekker man at det ikke finnes prikkregistrering på påmeldingen fra før
+                # Det kan også være en løsning at vi setter antall prikekr til maksimalt antall
+                if (
+                    registration.event.event_start < registration.attendance_registration
+                    and registration.penalty is None
+                ):
+                    registration.penalty = registration.event.get_late_penalty()
+                else:
+                    registration.penalty = 0
                 registration.clean_fields()
                 registration.save()
                 attendance_message = f"Velkommen {registration.user.first_name}"
@@ -454,7 +446,7 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
         context = self.get_context_data(attendance_message = attendance_message, status_type=status_type,**kwargs)
         return render(request, template_name="events/register_attendance.html", context=context)
 
-        # including user name is a little secure way to id users
+
     def get_registration_by_identification_string(self, identification_string, identification_types):
         event = self.get_object()
         for method in identification_types:
@@ -481,6 +473,19 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
         context["attendance_message"] = attendance_message
         context["status_type"] = status_type
         return context
+
+class RegisterNoshowPenaltiesView(AdministerPenaltiesView):
+    def post(self, request, *args, **kwargs):
+        try:
+            event = self.get_object().event
+            noshow_penalty = event.get_noshow_penalty()
+            if noshow_penalty is not None:
+                event.eventregistration_set.filter(attending=True).filter(penalty=None).filter(attendance_registration=None).update(penalty = noshow_penalty)
+        except:
+            self.messages.warning("Noe gikk galt")
+            return redirect(self.request.resolver_match.view_name, kwargs.pop("pk", 1))
+        else:
+            return redirect("event_administer_penalties", kwargs.pop("pk", 1))
 
 
 
