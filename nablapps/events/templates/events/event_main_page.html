@@ -48,7 +48,7 @@
             </form>
         </div>
 
-        <a href="{% url 'event_list' %}">Ta meg til den gamle kalenderen <span class="fa fa-arrow-right"></span></a>
+        <!--<a href="{% url 'event_list' %}">Ta meg til den gamle kalenderen <span class="fa fa-arrow-right"></span></a>-->
 
         {% for event in object_list %}
         {% ifchanged %}<h2 class="month__name">{{ event.event_start|date:"F"|title }}</h2>{% endifchanged %}
