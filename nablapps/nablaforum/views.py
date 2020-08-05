@@ -28,7 +28,7 @@ class MainView(LoginRequiredMixin, TemplateView):
             form_data = thread_form.cleaned_data
             channel_id = self.kwargs["channel_id"]
             channel = Channel.objects.get(pk=channel_id)
-            if not channel.is_feed():
+            if not channel.is_feed:
                 try:
                     new_thread = Thread.objects.create(
                         channel=channel,
@@ -51,9 +51,9 @@ class MainView(LoginRequiredMixin, TemplateView):
             else:
                 # In the unlikely event that somone without permission sends a valid post
                 # request, despite the form not being rendered
-                messages.add_message(
+                django_messages.add_message(
                     self.request,
-                    messages.INFO,
+                    django_messages.INFO,
                     "Brukeren din har ikke tillatelse til å opprette ny tråd i nablafeed.",
                 )
                 return redirect("forum-main", channel_id=channel_id, thread_id=0)
