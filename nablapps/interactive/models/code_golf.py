@@ -1,8 +1,5 @@
 # Models for code_golf
-from datetime import datetime, timedelta
-
 from django import template
-from django.conf import settings
 from django.db import models
 
 from nablapps.accounts.models import NablaUser

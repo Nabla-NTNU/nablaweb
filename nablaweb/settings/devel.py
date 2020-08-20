@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
-from .base import *
+# Import all common settings
+from .base import *  # noqa: F401, F403
 
 DEBUG = True
 

@@ -2,8 +2,6 @@
 
 from django.db import migrations, models
 
-from nablapps.podcast.models import Podcast
-
 
 """
 def set_has_video(apps, schema_editor):

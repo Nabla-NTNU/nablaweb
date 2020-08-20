@@ -1,5 +1,4 @@
-from django.shortcuts import get_object_or_404, render
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import DetailView, ListView
 
 from .models import Category, Product
 

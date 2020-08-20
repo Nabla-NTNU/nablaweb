@@ -1,11 +1,9 @@
 """
 Tags for interactive
 """
-from datetime import datetime
-
 from django import template
 
-from ..models.place import PlaceAction, time_of_last_action
+from ..models.place import time_of_last_action
 
 register = template.Library()
 

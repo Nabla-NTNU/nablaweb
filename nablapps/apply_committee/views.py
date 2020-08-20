@@ -3,9 +3,7 @@ import logging
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import (
     BaseFormSet,
-    HiddenInput,
     ModelForm,
-    Textarea,
     TextInput,
     ValidationError,
     formset_factory,
@@ -16,7 +14,7 @@ from django.views.generic.edit import FormView
 
 from nablapps.accounts.models import NablaGroup
 
-from .models import Application, ApplicationRound, Committee
+from .models import Application, ApplicationRound
 
 
 class BaseApplicationFormSet(BaseFormSet):

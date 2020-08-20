@@ -1,7 +1,7 @@
 import random
 import string
 
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -9,7 +9,6 @@ from django.views import View
 
 from .forms import EmailForm
 from .models import QrEvent, QrTicket
-from .utils import send_template_email
 
 
 def test(request):

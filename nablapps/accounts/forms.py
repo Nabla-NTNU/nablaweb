@@ -4,9 +4,7 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.forms.widgets import SelectDateWidget
 
-from image_cropping import ImageCropWidget
-
-from .models import FysmatClass, NablaUser, RegistrationRequest
+from .models import FysmatClass, NablaUser
 
 
 class UserForm(forms.ModelForm):

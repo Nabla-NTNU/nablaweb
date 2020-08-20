@@ -1,8 +1,6 @@
 """
 Haystack search indexes for events-app
 """
-from datetime import datetime
-
 from haystack import indexes
 
 from .models import Event

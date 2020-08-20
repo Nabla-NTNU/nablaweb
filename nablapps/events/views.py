@@ -19,7 +19,6 @@ from braces.views import (
     StaticContextMixin,
 )
 
-from nablapps.accounts.models import NablaUser
 from nablapps.core.view_mixins import AdminLinksMixin
 
 from .event_calendar import EventCalendar

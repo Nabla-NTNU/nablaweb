@@ -9,18 +9,13 @@ from django.forms import (
     DateField,
     DateInput,
     Form,
-    IntegerField,
     ModelForm,
-    TextInput,
     ValidationError,
 )
 from django.forms.models import fields_for_model
-from django.forms.widgets import RadioSelect, SelectDateWidget
-from django.utils import timezone
+from django.forms.widgets import RadioSelect
 
-from nablapps.accounts.models import NablaUser
-
-from .models import Event, EventRegistration
+from .models import Event
 
 
 class EventForm(ModelForm):

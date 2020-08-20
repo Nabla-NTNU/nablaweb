@@ -3,8 +3,6 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
-from nablapps.podcast.models import Podcast, Season
-
 
 """
 def fix_missing_season(apps, schema_editor):

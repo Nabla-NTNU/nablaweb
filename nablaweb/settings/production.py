@@ -3,7 +3,8 @@ import os
 
 import pymysql
 
-from .base import *
+# Import all common settings
+from .base import *  # noqa: F401, F403
 
 pymysql.version_info = (1, 4, 2, "final", 0) # PyMySQL needs to lie about its version for django>=2.2
 pymysql.install_as_MySQLdb()

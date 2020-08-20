@@ -1,13 +1,9 @@
 import random
-import string
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
-from django.db.models import Model
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
-from django.views.generic.base import RedirectView
 from django.views.generic.detail import DetailView
 
 from ..models.place import (

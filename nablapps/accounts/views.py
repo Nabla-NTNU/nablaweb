@@ -1,7 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseForbidden
-from django.shortcuts import redirect
 from django.views.generic import (
     DetailView,
     FormView,

@@ -1,8 +1,6 @@
 # Vote for color
 
-import colorsys
 import datetime
-from math import atan2, sqrt
 
 from django.core.validators import RegexValidator, re
 from django.db import models

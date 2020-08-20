@@ -7,8 +7,6 @@ import django.core.files.storage
 from django.conf import settings
 from django.db import migrations, models
 
-from nablapps.nabladet.models import Nablad
-
 
 def move_to_protected(apps, schema_editor):
     """Move existing nablads from MEDIA_ROOT/nabladet to PROTECTED_MEDIA_ROOT/nabladet

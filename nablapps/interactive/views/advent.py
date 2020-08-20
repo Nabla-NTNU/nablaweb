@@ -5,9 +5,8 @@ from wsgiref.handlers import format_date_time
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from django.core.exceptions import PermissionDenied
 from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, ListView
 
 from braces.views import PermissionRequiredMixin

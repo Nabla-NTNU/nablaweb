@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
-from django.views.generic import FormView, TemplateView
+from django.views.generic import TemplateView
 
 from nablapps.accounts.models import NablaUser
 

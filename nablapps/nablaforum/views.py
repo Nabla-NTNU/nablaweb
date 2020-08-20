@@ -3,10 +3,9 @@ from itertools import chain
 from django.contrib import messages as django_messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
-from django.views.generic import FormView, ListView, TemplateView
+from django.views.generic import FormView, TemplateView
 
 from nablapps.accounts.models import NablaGroup
 

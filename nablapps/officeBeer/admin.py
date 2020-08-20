@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Account, DepositRequest, Product, Transaction
+from .models import Account, DepositRequest, Product
 
 
 @admin.register(Account)

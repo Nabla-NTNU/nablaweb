@@ -12,4 +12,4 @@ class NewsConfig(AppConfig):
 
     def ready(self):
         # import from signals in order to register the callbacks
-        from .signals import callback as _
+        from .signals import callback as _  # noqa: F401
