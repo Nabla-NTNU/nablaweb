@@ -30,6 +30,7 @@ class EventFormTestCase(TestCase):
             {
                 "registration_required": "1",
                 "places": "20",
+                "registration_start": "2015-08-01",
                 "registration_deadline": "2015-09-01",
                 "has_queue": "0",
                 "penalty": 0,
