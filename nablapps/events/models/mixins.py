@@ -163,3 +163,20 @@ class RegistrationInfoMixin(models.Model):
             raise RegistrationNotAllowed(
                 "Du har for mange prikker!", event=self, user=user
             )
+
+
+class RegistrationInfo(RegistrationInfoMixin):
+    pass
+
+
+class ExtendedRegistrationInfoMixin(models.Model):
+    """Mixin for information about registration.
+
+    Extends RegistrationInfoMixin in that it allows different rules
+    for different groups.
+    Essentially just a collection of RegistrationInfoMixin."""
+
+    registration_info_collection = models.ManyToManyField(RegistrationInfo)
+    
+    class Meta:
+        abstract = True

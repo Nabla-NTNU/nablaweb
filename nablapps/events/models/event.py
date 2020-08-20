@@ -17,11 +17,11 @@ from ..exceptions import (
     RegistrationAlreadyExists,
 )
 from .eventregistration import EventRegistration
-from .mixins import EventInfoMixin, RegistrationInfoMixin
+from .mixins import EventInfoMixin, ExtendedRegistrationInfoMixin
 
 
 class Event(
-    RegistrationInfoMixin, EventInfoMixin, TimeStamped, TextContent, WithPicture
+    ExtendedRegistrationInfoMixin, EventInfoMixin, TimeStamped, TextContent, WithPicture
 ):
     """Arrangementer både med og uten påmelding.
     Dukker opp som nyheter på forsiden.
