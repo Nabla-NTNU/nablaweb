@@ -3,7 +3,6 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
-
 """
 def fix_missing_season(apps, schema_editor):
     podcasts = Podcast.objects.all()

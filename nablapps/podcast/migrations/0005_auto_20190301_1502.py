@@ -2,7 +2,6 @@
 
 from django.db import migrations, models
 
-
 """
 def set_has_video(apps, schema_editor):
     podcasts = Podcast.objects.all()

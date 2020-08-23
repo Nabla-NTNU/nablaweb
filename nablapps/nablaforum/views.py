@@ -37,7 +37,9 @@ class MainView(LoginRequiredMixin, TemplateView):
                     )
 
                     new_message = Message.objects.create(
-                        thread=new_thread, user=self.request.user, message=new_thread.text
+                        thread=new_thread,
+                        user=self.request.user,
+                        message=new_thread.text,
                     )
                     new_message.read_by_user.add(self.request.user)
                 except:  # noqa: E722

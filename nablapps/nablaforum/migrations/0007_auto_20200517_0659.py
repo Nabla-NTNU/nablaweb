@@ -6,12 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('nablaforum', '0006_auto_20200114_1954'),
+        ("nablaforum", "0006_auto_20200114_1954"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='channel',
-            options={'permissions': [('can_post_in_nablafeed', 'Can post thread in nablafeed')]},
+            name="channel",
+            options={
+                "permissions": [
+                    ("can_post_in_nablafeed", "Can post thread in nablafeed")
+                ]
+            },
         ),
     ]

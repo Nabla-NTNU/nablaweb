@@ -20,7 +20,6 @@ class Channel(models.Model):
     def __str__(self):
         return self.name
 
-
     class Meta:
         permissions = [
             ("can_post_in_nablafeed", "Can post thread in nablafeed"),

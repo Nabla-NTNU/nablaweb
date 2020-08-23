@@ -118,9 +118,9 @@ class NablaUser(AbstractUser):
 
     def get_penalties(self):
         """Returns the EventRegistrations for which the user has penalties this semester"""
-        from nablapps.events.models import (
+        from nablapps.events.models import (  # Moved down to avoid loop error when FysmatClass was imported to mixins in events
             EventRegistration,
-        )  # Moved down to avoid loop error when FysmatClass was imported to mixins in events
+        )
 
         # Penalties are valid for six months
         six_months_ago = timezone.now() - timezone.timedelta(
