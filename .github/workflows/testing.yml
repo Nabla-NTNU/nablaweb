@@ -1,0 +1,72 @@
+name: Python testing
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  test:
+    env:
+      # Have the venv be in the project folder so it is easier to cache
+      PIPENV_VENV_IN_PROJECT: true
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        python_version: [3.6]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python_version }}
+    - name: Install pipenv
+      run: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+    - name: Cache virtualenv
+      id: cache-venv
+      uses: actions/cache@v2
+      env:
+        CACHE_NAME: CACHE_VIRTUALENV
+      with:
+        path: .venv
+        key: >
+          ${{ runner.os }}-${{ env.CACHE_NAME }}-python${{ matrix.python_version }}-${{ hashFiles('Pipfile.lock') }}
+        # Fallbacks to partially restore cache
+        restore-keys: |
+          ${{ runner.os }}-${{ env.CACHE_NAME }}-python${{ matrix.python_version }}-
+          ${{ runner.os }}-${{ env.CACHE_NAME }}-
+    - name: Install dependencies
+      if: steps.cache-venv.outputs.cache-hit != 'true'
+      run: |
+        # Force copying dependencies into the venv to prevent an error on windows
+        python -m venv --copies .venv
+        # Install dependencies into the newly created venv
+        pipenv install --deploy --dev
+
+    - name: Allow reading and writing PDFs (linux only)
+      # Edit imagemagick's policy file to allow reading and writing PDFs
+      # This is needed to create Nablad instances, which is done during testing
+      if: runner.os == 'Linux'
+      run: |
+        configure_path=$(convert -list configure | sed -n -e 's/CONFIGURE_PATH[[:space:]]*//p')
+        sudo sed -i -e 's/<policy domain="coder" rights=".*" pattern="PDF" \/>/<policy domain="coder" rights="read | write" pattern="PDF" \/>/' "${configure_path}policy.xml"
+
+    - name: Exclude tests that need ImageMagick (non-linux)
+      # ImageMagick does not come pre-installed on mac- and windows runners, so we skip
+      # tests that need it on those hosts. This is done by excluding a specific test tag,
+      # which is set on the test that needs ImageMagick
+      if: runner.os != 'Linux'
+      run: |
+        echo '::set-env name=exclude_tag::needs_imagemagick'
+
+    - name: Run tests
+      # Tests are run in parallel, which may cause issues if the tests aren't propertly isolated
+      run: |
+        pipenv run python manage.py test --parallel --exclude-tag=${{ env.exclude_tag }}
