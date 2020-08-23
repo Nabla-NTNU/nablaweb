@@ -15,8 +15,6 @@ django-image-cropping = "*"
 django-markdown-deux = "*"
 django-sekizai = "*"      # Templatetag library for extra block functionality
 easy-thumbnails = "*"     # Thumbnail creator
-faker = "*"                 # Fake data generator, used in tests.
-factory-boy = "*"         # For creating many objects for testing (seed)
 gunicorn = "*"              # Web-server used to run django
 pymysql = "*"               # Database bindings for mysql
 wand = "*"                  # Python bindings for ImageMagick. Needs ImageMagick installed
@@ -27,14 +25,17 @@ django-node-assets = "*"
 markdown = "*"
 django-qr-code = "*"
 django-multi-email-field = "*"
-flake8 = "*"
-black = "==19.10b0"
-isort = "*"
 django-bootstrap4 = "*"
 
 [dev-packages]
-pylint = "*"
+faker = "*"               # Fake data generator, used in tests.
+factory-boy = "*"         # For creating many objects for testing (seed)
+black = "==19.10b0"
+isort = ">=5.0"
+flake8 = "*"
+pylint = ">=2.6"
 pylint-django = "*"
+bandit = "*"
 
 [requires]
 python_version = "3.6"
