@@ -91,7 +91,7 @@ class NablaUser(AbstractUser):
     def get_class_number(self):
         """Henter hvilken klasse på fysmat (1-5) brukeren går i.
 
-         Returnerer 0 hvis brukeren ikke går på fysmat."""
+        Returnerer 0 hvis brukeren ikke går på fysmat."""
         try:
             theclass = FysmatClass.objects.filter(user=self).order_by("starting_year")[
                 0

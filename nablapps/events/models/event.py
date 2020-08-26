@@ -175,7 +175,10 @@ class Event(
         if not ignore_restrictions:
             self._assert_user_allowed_to_register(user)
 
-        registration = EventRegistration(event=self, user=user,)
+        registration = EventRegistration(
+            event=self,
+            user=user,
+        )
         if not self.is_full() or ignore_restrictions:
             registration.attending = True
         elif self.has_queue:

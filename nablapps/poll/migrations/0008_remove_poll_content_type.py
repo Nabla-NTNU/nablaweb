@@ -12,5 +12,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="poll", name="content_type",),
+        migrations.RemoveField(
+            model_name="poll",
+            name="content_type",
+        ),
     ]

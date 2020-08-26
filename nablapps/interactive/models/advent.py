@@ -162,17 +162,28 @@ class AdventParticipation(InteractionResult):
         AdventDoor, on_delete=models.CASCADE, related_name="participation"
     )
 
-    user = models.ForeignKey(NablaUser, on_delete=models.CASCADE,)
+    user = models.ForeignKey(
+        NablaUser,
+        on_delete=models.CASCADE,
+    )
 
 
 class Santa(models.Model):
-    santa_location = models.CharField(max_length=30,)
+    santa_location = models.CharField(
+        max_length=30,
+    )
 
 
 class SantaCount(models.Model):
-    user = models.ForeignKey(NablaUser, on_delete=models.CASCADE,)
+    user = models.ForeignKey(
+        NablaUser,
+        on_delete=models.CASCADE,
+    )
 
-    santas = models.ManyToManyField(Santa, related_name="santa",)
+    santas = models.ManyToManyField(
+        Santa,
+        related_name="santa",
+    )
 
     def get_score(self):
         return self.santas.count()

@@ -180,7 +180,9 @@ class Migration(migrations.Migration):
                 "abstract": False,
                 "verbose_name": "user",
             },
-            managers=[("objects", django.contrib.auth.models.UserManager()),],
+            managers=[
+                ("objects", django.contrib.auth.models.UserManager()),
+            ],
         ),
         migrations.CreateModel(
             name="NablaGroup",
@@ -245,7 +247,10 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name_plural": "Kull", "verbose_name": "Kull",},
+            options={
+                "verbose_name_plural": "Kull",
+                "verbose_name": "Kull",
+            },
             bases=("accounts.nablagroup",),
         ),
         migrations.AddField(
@@ -310,7 +315,9 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelManagers(
             name="nablauser",
-            managers=[("objects", nablapps.accounts.models.NablaUserManager()),],
+            managers=[
+                ("objects", nablapps.accounts.models.NablaUserManager()),
+            ],
         ),
         migrations.AddField(
             model_name="nablagroup",

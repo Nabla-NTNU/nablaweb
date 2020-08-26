@@ -30,7 +30,7 @@ django-bootstrap4 = "*"
 [dev-packages]
 faker = "*"               # Fake data generator, used in tests.
 factory-boy = "*"         # For creating many objects for testing (seed)
-black = "==19.10b0"
+black = "==20.8b1"
 isort = ">=5.0"
 flake8 = "*"
 pylint = ">=2.6"

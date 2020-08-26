@@ -51,7 +51,11 @@ class CodeGolf(LoginRequiredMixin, View):
 
         # Only one result per user
         Result.objects.update_or_create(
-            user=request.user, task=task, defaults={"solution": code,},
+            user=request.user,
+            task=task,
+            defaults={
+                "solution": code,
+            },
         )
 
         return redirect("/kodegolf/score/" + str(task_id))

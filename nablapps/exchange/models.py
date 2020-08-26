@@ -56,7 +56,10 @@ class Exchange(models.Model):
     univ = models.ForeignKey(University, on_delete=models.CASCADE)
 
     retning = models.CharField(
-        max_length=6, blank=False, help_text="Retning", choices=RETNINGER,
+        max_length=6,
+        blank=False,
+        help_text="Retning",
+        choices=RETNINGER,
     )
 
     start = models.DateField(

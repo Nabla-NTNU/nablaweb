@@ -12,7 +12,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="news", name="priority",),
+        migrations.RemoveField(
+            model_name="news",
+            name="priority",
+        ),
         migrations.AlterField(
             model_name="news",
             name="slug",

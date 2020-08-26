@@ -126,8 +126,7 @@ class PurchaseView(PermissionRequiredMixin, TemplateView):
 
 
 class DepositRequestView(LoginRequiredMixin, TemplateView):
-    """View for the user to create a depositRequest.
-    """
+    """View for the user to create a depositRequest."""
 
     template_name = "officeBeer/deposit.html"
 

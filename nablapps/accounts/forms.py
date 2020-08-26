@@ -82,4 +82,8 @@ class InjectUsersForm(forms.Form):
 
     title = "Putt brukernavn i databasen."
     data = forms.CharField(widget=forms.Textarea, label="Data")
-    fysmat_class = forms.ChoiceField(required=False, label="Klasse", choices=(),)
+    fysmat_class = forms.ChoiceField(
+        required=False,
+        label="Klasse",
+        choices=(),
+    )

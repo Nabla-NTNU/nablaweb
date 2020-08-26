@@ -10,7 +10,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="compage", name="cropping",),
+        migrations.RemoveField(
+            model_name="compage",
+            name="cropping",
+        ),
         migrations.AlterField(
             model_name="compage",
             name="picture",

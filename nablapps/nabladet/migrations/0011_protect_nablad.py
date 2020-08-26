@@ -10,7 +10,7 @@ from django.db import migrations, models
 
 def move_to_protected(apps, schema_editor):
     """Move existing nablads from MEDIA_ROOT/nabladet to PROTECTED_MEDIA_ROOT/nabladet
-    This is really a one-off, because we move existing nablads to protect """
+    This is really a one-off, because we move existing nablads to protect"""
 
     src = os.path.join(settings.MEDIA_ROOT, "nabladet")
     dst = os.path.join(settings.PROTECTED_MEDIA_ROOT, "nabladet")

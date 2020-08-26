@@ -12,7 +12,16 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="adventdoor", name="view_counter",),
-        migrations.RemoveField(model_name="quiz", name="view_counter",),
-        migrations.RemoveField(model_name="test", name="view_counter",),
+        migrations.RemoveField(
+            model_name="adventdoor",
+            name="view_counter",
+        ),
+        migrations.RemoveField(
+            model_name="quiz",
+            name="view_counter",
+        ),
+        migrations.RemoveField(
+            model_name="test",
+            name="view_counter",
+        ),
     ]
