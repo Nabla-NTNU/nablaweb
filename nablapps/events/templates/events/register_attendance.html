@@ -9,27 +9,29 @@
 
 
 <h1>{{ namestring }}</h1>
-<form method="post">{% csrf_token %}
+<form method="post" autocomplete="off">{% csrf_token %}
 {#{% if event.penalty == 1 %}#}
 {#    <button type="button" onclick="make_all_penalty('penalty_form')">Aktiver prikker</button>#}
 {#    <span>NB! Du må trykke send inn for at prikkene skal registreres.</span>#}
 {#{% endif %}#}
 {% if attendance_message %}
-<p>{{ attendance_message }}</p>
+<h1 >{{ attendance_message }}</h1>
+{% else %}
+<h1>Skriv inn brukernavn eller skann NTNU-kortet</h1>
 {%  endif %}
+<br>
 <div class="form-group row">
-    <label for="colFormLabelLg" class="col-sm-12 col-form-label col-form-label-lg">Brukernavn</label>
     <div class="col-sm-12">
-        <input type="text" class="form-control form-control-lg" name="identification_string" id="colFormLabelLg" placeholder="Skriv inn brukernavn">
+        <input type="text" class="form-control form-control-lg" name="identification_string" id="colFormLabelLg" placeholder="Skriv inn brukernavn eller skann NTNU-kortet" autofocus>
         <input type="hidden"  name="identification_type" value="username">
         <input type="hidden"  name="identification_type" value="ntnu_card">
     </div>
 </div>
-
+<br>
 </form>
 
 <form method="post" action="{% url "event_noshow_penalties" event.pk %}">{% csrf_token %}
-<button class="btn btn-primary float-right" type="submit" value="register_noshow_penalties">Avslutt registrering</button>
+<button class="btn btn-primary float-right" type="submit" value="register_noshow_penalties" onclick="return confirm('Er du sikker på at du vil avslutte registreringe. De som ikke har møtt opp vil kanskje få prikk?')">Avslutt registrering</button>
 
 </form>
 

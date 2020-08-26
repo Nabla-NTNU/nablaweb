@@ -48,7 +48,7 @@ class Event(
     # måtte definere disse to feltene fordi en maskin ikke er like smart som den som skrev penalty_rules
     show_penalties = [None, 0, None, 0]
     late_penalties = [None, 1, None, 0]
-    noshow_penalties = [None, 2, 0, 1]
+    noshow_penalties = [None, 2, None, 1]
 
     penalty = models.IntegerField(
         default=0,
