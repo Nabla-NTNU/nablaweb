@@ -412,7 +412,7 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
         try:
             registration = self.get_registration_by_identification_string(identification_string=identification_string, identification_types=identification_types)
         except EventRegistration.DoesNotExist:
-            attendance_message = "Fant ikke bruker med påmelding. "
+            attendance_message = "Fant ikke bruker med påmelding"
             status_type = "danger"
         except UserNotAttending:
             attendance_message = "Brukeren er på ventelisten"
@@ -425,7 +425,7 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
                 attendance_message = f"Oppmøte allerede registrert (dato: {reg_datetime.strftime('%d.%m.%Y')})"
             status_type = "warning"
         except UserAttendanceException:
-            attendance_message = "Fant ikke bruker med påmelding. "
+            attendance_message = "Fant ikke bruker med påmelding"
             status_type = "danger"
         except :
             attendance_message = "Noe gikk galt"
@@ -498,9 +498,9 @@ class RegisterNoshowPenaltiesView(DetailView,MessageMixin, PermissionRequiredMix
             event = self.get_object()
             noshow_penalty = event.get_noshow_penalty()
             if noshow_penalty is None:
-                self.messages.info(f"Arrangementet gir ikke prikk for å ikke møte opp" )
+                self.messages.info(f"Arrangementet gir ikke prikk for å ikke møte opp. Ingen prikker ble fordelt" )
             elif event.event_start >= datetime.datetime.now():
-                self.messages.warning("Du kan ikke gi prikk til de uregisrerte før arrangementet har begynt")
+                self.messages.warning("Du kan ikke gi prikk for manglende oppmøte før arrangementet har begynt!")
             else:
                 event.eventregistration_set.filter(attending=True).filter(penalty=None).filter(attendance_registration=None).update(penalty=noshow_penalty)
                 return redirect("event_administer_penalties", kwargs.pop("pk", 1))

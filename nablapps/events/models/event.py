@@ -45,7 +45,9 @@ class Event(
         3: ("Arrangement uten betaling", {"Møtt opp": 0, "Ikke møtt opp": 1}),
     }
 
-    # måtte definere disse to feltene fordi en maskin ikke er like smart som den som skrev penalty_rules
+    # Dette er bare en oppsmumering av penalty_rules
+    # None står for ikke-registrert. Dette er en hack for arrangementer der oppmøte ikke korresponderer med prikker
+    # Arrangement type : [0, 1, 2, 3],
     show_penalties = [None, 0, None, 0]
     late_penalties = [None, 1, None, 0]
     noshow_penalties = [None, 2, None, 1]
