@@ -407,29 +407,27 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
         self.object = self.get_object()
         identification_string = request.POST.get("identification_string")
         identification_types = request.POST.getlist("identification_type")
-        attendance_message = "Noe gikk galt, prøv igjen"
-        status_type = "warning"
+        context = {"attendance_message": "Noe gikk galt, prøv igjen",
+                    "status_type": "danger"}
         try:
             registration = self.get_registration_by_identification_string(identification_string=identification_string, identification_types=identification_types)
         except EventRegistration.DoesNotExist:
-            attendance_message = "Fant ikke bruker med påmelding"
-            status_type = "danger"
+            context["attendance_message"] = "Fant ikke bruker med påmelding"
+            context["status_type"] = "danger"
         except UserNotAttending:
-            attendance_message = "Brukeren er på ventelisten"
-            status_type = "danger"
+            context["attendance_message"] = "Brukeren er på ventelisten"
+            context["status_type"] = "danger"
         except UserAlreadyRegistered as e:
             reg_datetime = e.eventregistration.attendance_registration
-            if reg_datetime.date() == datetime.datetime.now().date():
-                attendance_message = f"Oppmøte allerede registrert (klokken: {reg_datetime.strftime('%H.%M')})"
-            else:
-                attendance_message = f"Oppmøte allerede registrert (dato: {reg_datetime.strftime('%d.%m.%Y')})"
-            status_type = "warning"
+            context["reg_datetime"] = reg_datetime
+            context["attendance_message"] = "Oppmøte allerede registrert"
+            context["status_type"] = "warning"
         except UserAttendanceException:
-            attendance_message = "Fant ikke bruker med påmelding"
-            status_type = "danger"
+            context["attendance_message"] = "Fant ikke bruker med påmelding"
+            context["status_type"] = "danger"
         except :
-            attendance_message = "Noe gikk galt"
-            status_type = "danger"
+            context["attendance_message"] = "Noe gikk galt, prøv igjen"
+            context["status_type"] = "danger"
         else:
             try:
                 registration.attendance_registration = datetime.datetime.now()
@@ -444,14 +442,25 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
                     registration.penalty = 0
                 registration.clean_fields()
                 registration.save()
-                attendance_message = f"Velkommen {registration.user.first_name}"
-                status_type ="success"
+                context["attendance_message"] = f"Velkommen {registration.user.first_name}"
+                context["status_type"] ="success"
             except ValidationError:
-                attendance_message = f"Noe gikk galt prøv igjen"
-                status_type = "warning"
-        context = self.get_context_data(attendance_message = attendance_message, status_type=status_type,**kwargs)
+                context["attendance_message"]  = "Noe gikk galt, prøv igjen"
+                context["status_type"] = "warning"
+
+        # hack to get the right colours
+        if context["status_type"] in [ "danger","success"] : context["text_type"] = "text-light"
+        elif context["status_type"] == "warning": context["text_type"] = "text-dark"
+
+        context = {**context, **self.get_context_data(**kwargs)}
         return render(request, template_name="events/register_attendance.html", context=context)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        event = self.object
+        registrations = event.eventregistration_set.filter(attending=True)
+        context["registrations_not_registered"] = registrations.filter(attendance_registration=None).count()
+        return context
 
     def get_registration_by_identification_string(self, identification_string, identification_types):
         event = self.get_object()
@@ -461,10 +470,10 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
                 if method == "username":
                     registration = event.eventregistration_set.get(user__username=identification_string)
                 elif method == "ntnu_card" and identification_string.isnumeric() :
-                    #dette tallet blir feil nå 
                     registration = event.eventregistration_set.get(user=NablaUser.objects.get_from_rfid(identification_string))
-                elif method == "qr_code":
-                    raise UserAttendanceException(identification_string=identification_string, method=method)
+                # not implemented jet
+                # elif method == "qr_code":
+                #     raise UserAttendanceException(identification_string=identification_string, method=method)
                 else: continue
             except EventRegistration.DoesNotExist:
                 if not itr == num_id_types: continue
@@ -475,15 +484,6 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
                 raise UserAlreadyRegistered(eventregistration=registration, identification_string=identification_string)
             return registration
         raise UserAttendanceException(identification_string=identification_string)
-
-    def get_context_data(self, attendance_message=None, status_type="nabla-background", **kwargs):
-        context = super().get_context_data(**kwargs)
-        event = self.object
-        registrations = event.eventregistration_set.filter(attending=True)
-        context["registrations"] = registrations.order_by("user__first_name")
-        context["attendance_message"] = attendance_message
-        context["status_type"] = status_type
-        return context
 
 class RegisterNoshowPenaltiesView(DetailView,MessageMixin, PermissionRequiredMixin):
     """

@@ -5,24 +5,22 @@
     #full-body{
         background-color: var(--{{status_type}});
     }
+    .const-height{
+        min-height: 10rem;
+    }
+
+
 </style>
-{% if status_type == "danger" or status_type == "success"  %}
-<p>
-    <a href="{{event.get_absolute_url}}" class="text-light">Tilbake til arrangementsiden</a>
 
-    <a class="text-light float-right" data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
+
+
+<p>
+    <a href="{{event.get_absolute_url}}" class="{% firstof text_type "text-muted"%}">Tilbake til arrangementsiden</a>
+
+    <a class="{% firstof text_type "text-muted"%} float-right" data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
     Forklaring
     </a>
 </p>
-{% else %}
-<p>
-    <a href="{{event.get_absolute_url}}" class="text-muted">Tilbake til arrangementsiden</a>
-
-    <a class="text-muted float-right" data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
-    Forklaring
-    </a>
-</p>
-{% endif %}
 
 <div class="collapse" id="collapseInfo">
   <div class="card card-body">
@@ -38,14 +36,17 @@
       </p>
   </div>
 </div>
-
-{% if status_type == "danger" or status_type == "success"   %}
-<h1 class="display-4 text-light">{%  firstof attendance_message "Skriv inn brukernavn eller skann NTNU-kortet" %}</h1>
-{% else %}
-<h1 class="display-4">{%  firstof attendance_message "Skriv inn brukernavn eller skann NTNU-kortet" %}</h1>
-{% endif %}
 <br>
-<form method="post" autocomplete="off">{% csrf_token %}
+<br>
+<br>
+<div class="const-height ">
+    <h1 class="display-4 {% firstof text_type "" %}"> {%  firstof attendance_message "Skriv inn brukernavn eller skann NTNU-kortet" %}</h1>
+
+    {% if reg_datetime and status_type != "success"  %}
+    <p class="lead {% firstof text_type  %} ">{{ reg_datetime|date:"t. F" }} klokken {{ reg_datetime|time:"H.i" }}</p>
+    {% endif %}
+</div>
+<form method="post"  autocomplete="off">{% csrf_token %}
     <div class="form-group row">
         <div class="col-sm-12">
             <input type="text" class="form-control form-control-lg" name="identification_string" id="colFormLabelLg" placeholder="Skriv inn brukernavn eller skann NTNU-kortet" autofocus>
@@ -55,9 +56,14 @@
     </div>
 </form>
 <br>
-<form method="post" action="{% url "event_noshow_penalties" event.pk %}">{% csrf_token %}
+<br>
+<br>
+<br>
+<form  method="post"  class="py-3"action="{% url "event_noshow_penalties" event.pk %}">{% csrf_token %}
+    <a href="{%  url "event_administer_penalties" pk=event.pk %}" class="{% firstof text_type "text-muted"%}">Antall ikke registrerte: {{ registrations_not_registered }}</a>
+
     <button class="btn btn-secondary float-right" type="submit" value="register_noshow_penalties" onclick="return confirm('Er du sikker på at du vil avslutte registreringen. De som ikke er registrert vil da få prikk i henhold til prikkreglementet')">Avslutt registrering</button>
 </form>
-<br>
+
 
 {% endblock %} {# block "content" #}
