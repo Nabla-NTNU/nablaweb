@@ -383,7 +383,7 @@ class AdministerPenaltiesView(DetailView, MessageMixin,PermissionRequiredMixin):
                 else:
                     reg_req.penalty = penalty_value
                 try:
-                    reg_req.clean_fields()
+                    reg_req.full_clean()
                     reg_req.save()
                 except ValidationError:
                     self.messages.warning(f"Invalid penalty value for {reg_req.user}.")
