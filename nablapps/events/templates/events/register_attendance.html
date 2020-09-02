@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-
+{% load bootstrap4 %}
 {% block body %}
-<style>
+<style xmlns="http://www.w3.org/1999/html">
     body{
-        background-color: var(--{{status_type}});
+        background-color: var(--{%  firstof status_type "nabla-background"%});
     }
     .const-height{
         min-height: 12rem;
@@ -20,24 +20,31 @@
 </style>
 
 <div class="container d-flex flex-column justify-content-between py-3" id="registration-content">
-<p>
-    <a href="{{event.get_absolute_url}}" class="{% firstof text_type "text-muted"%}">Tilbake til arrangementsiden</a>
+{% bootstrap_messages %}
 
-    <a class="{% firstof text_type "text-muted"%} float-right" data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
+<div class="d-flex justify-content-between">
+    <a href="{{event.get_absolute_url}}" class="{% firstof text_type "text-muted"%}">{{ event.headline}}</a>
+    <a href="{% url 'wiki:get' 'retningslinjer-arrangement/' %}" class="{% firstof text_type "text-muted"%} text-center">Prikkreglement: {{ event.get_penalty_rule_name}}</a>
+
+    <a class="{% firstof text_type "text-muted"%}" data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
     Forklaring
     </a>
-</p>
+</div>
 
 <div class="collapse" id="collapseInfo">
   <div class="card card-body">
       <p>
       Her kan arrangementadministratorer registrere oppmøte for brukere som er påmeldt et arrangement.
-      Brukere registreres ved å skrive inn brukernavnet sitt, eller ved å scanne NTNU-kortet sitt i en kortskanner.
+      Brukere registreres ved å skrive inn brukernavnet sitt, eller ved å skanne NTNU-kortet sitt i en kortskanner.
       Merk at for at NTNU-kortet skal fungere så må brukeren ha registrert EM-koden på baksiden av kortet.
       Dette gjøres under "Endre profil" på nabla.no.
       <br><br>
       Prikkfordeling skjer automatisk når en registrering skjer, men bare for arrangementer der prikker korresponderer med oppmøte.
-      Klikk på "Avslutt registrering" for å fordele prikker til dem som ikke møtte opp.
+      Hvis en bruker har prikk fra før vil ikke prikkene bli endret her.
+      Merk at siden kan brukes til å sjekke påmelding, selv om arrangementet ikke har prikker.
+      <br><br>
+      Klikk på "Start arrangementet " for å starte å fordele for-sent prikker til dem som møter opp.
+      Klikk på "Avslutt registrering" for å fordele ikke-møtt prikker til dem som ikke møtte opp.
       Prikkoversikten finnes <a href="{%  url "event_administer_penalties" pk=event.pk %}">her</a>
       </p>
   </div>
@@ -60,12 +67,57 @@
     </div>
 </form>
 </div>
-<form  method="post"  class="py-3"action="{% url "event_noshow_penalties" event.pk %}">{% csrf_token %}
-    <a href="{%  url "event_administer_penalties" pk=event.pk %}" class="{% firstof text_type "text-muted"%}">Antall ikke registrerte: {{ registrations_not_registered }}</a>
+<form method="post"  class="py-3 d-flex justify-content-between align-items-center" action="{% url "event_noshow_penalties" event.pk %}">{% csrf_token %}
+    <a href="{%  url "event_administer_penalties" pk=event.pk %}" class="{% firstof text_type "text-muted"%}">Antall ikke møtt: {{ registrations_not_registered }}</a>
 
-    <button class="btn btn-secondary float-right" type="submit" value="register_noshow_penalties" onclick="return confirm('Er du sikker på at du vil avslutte registreringen. De som ikke er registrert vil da få prikk i henhold til prikkreglementet')">Avslutt registrering</button>
+    <p class="{% firstof text_type "text-muted"%} m-0" >
+    {% if event.penalties_finished_distributed %}
+    Ingen prikker å fordele
+    {% elif event.has_started %}
+    Arrangementet har startet, registrerte får {% firstof event.get_late_penalty "ingen" %} prikk(er)
+    {% elif event.should_have_started %}
+    Klikk på knappen for å starte å starte arrangementet!
+    {% else %}
+    Arrangementet har ikke startet. Registrerte får {% firstof event.get_late_penalty "ingen" %} prikk(er)
+    {% endif %}
+    </p>
+
+    {% if event.has_started %}
+    <button class="btn btn-secondary" type="submit" value="register_noshow_penalties"
+            onclick="return confirm('Hvis du avslutter registreringen får alle som ikke er registrert {% firstof event.get_noshow_penalty "ingen" %}} prikk(er).')">
+        Avslutt registrering
+    </button>
+
+    {% elif event.should_have_started %}
+    <button class="btn btn-primary" type="submit" value="register_noshow_penalties">
+        Start arrangementet
+    </button>
+    {% elif not event.penalties_finished_distributed %}
+        <button class="btn btn-primary" type="submit" value="register_noshow_penalties" disabled>
+        Start arrangementet
+        </button>
+    {% endif %}
+
 </form>
 </div>
+<script>
+
+let interval = 10000;
+{%  if not status_type %}
+interval*=6;
+{% endif %}
+setTimeout(condRefresh, interval);
+
+function condRefresh() {
+    if (document.querySelector("input#colFormLabelLg").value === ""){
+        location.reload();
+    }else{
+        setTimeout(condRefresh, interval);
+    }
+}
+
+</script>
+
 
 
 {% endblock body %}

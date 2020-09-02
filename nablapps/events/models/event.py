@@ -2,6 +2,7 @@
 The Event model
 """
 import logging
+from datetime import datetime
 
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, models
@@ -60,6 +61,8 @@ class Event(
     )
 
     is_bedpres = models.BooleanField(default=False)
+
+    has_started = models.BooleanField(default=False)
 
     # Company is required if is_bedpres is True, see clean()
     company = models.ForeignKey(
@@ -235,7 +238,23 @@ class Event(
     def get_absolute_url(self):
         return reverse("event_detail", kwargs={"pk": self.pk, "slug": self.slug})
 
+    def start_event(self):
+        if self.event_start < datetime.now():
+            self.has_started = True
+        else:
+            raise
 
+    def has_stated(self):
+        if self.event_start < datetime.now() and self.has_started:
+            return True
+
+    def should_have_started(self):
+        if self.event_start < datetime.now() and not self.has_stated():
+            return True
+
+    def penalties_finished_distributed(self):
+        if self.has_stated() and self.eventregistration_set.filter(penalty=None).count() == 0:
+            return True
 
 
 def attending_events(user, today):

@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template import loader
-
+from datetime import datetime
 
 class EventRegistration(models.Model):
     """Modell for påmelding på arrangementer.
@@ -100,3 +100,4 @@ class EventRegistration(models.Model):
                 {"event": self.event, "name": self.user.get_full_name()}
             )
             self.user.email_user(subject, message)
+

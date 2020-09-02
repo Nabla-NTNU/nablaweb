@@ -31,6 +31,7 @@ from .exceptions import (
     RegistrationNotAllowed,
     RegistrationNotOpen,
     RegistrationNotRequiredException,
+    EventNotStartedException,
     UserRegistrationException,
     UserAttendanceException,
     UserAlreadyRegistered,
@@ -202,7 +203,7 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        event = self.object
+        event = self.get_object()
         regs = event.eventregistration_set
         context["eventregistrations"] = regs.order_by("-attending", "user__last_name")
         return context
@@ -407,6 +408,7 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
         self.object = self.get_object()
         identification_string = request.POST.get("identification_string")
         identification_types = request.POST.getlist("identification_type")
+
         context = {"attendance_message": "Noe gikk galt, prøv igjen",
                     "status_type": "danger"}
         try:
@@ -417,11 +419,6 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
         except UserNotAttending:
             context["attendance_message"] = "Brukeren er på ventelisten"
             context["status_type"] = "danger"
-        except UserAlreadyRegistered as e:
-            reg_datetime = e.eventregistration.attendance_registration
-            context["reg_datetime"] = reg_datetime
-            context["attendance_message"] = "Oppmøte allerede registrert"
-            context["status_type"] = "warning"
         except UserAttendanceException:
             context["attendance_message"] = "Fant ikke bruker med påmelding"
             context["status_type"] = "danger"
@@ -430,24 +427,17 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
             context["status_type"] = "danger"
         else:
             try:
-                registration.attendance_registration = datetime.datetime.now()
-                # Her sjekker man at det ikke finnes prikkregistrering på påmeldingen fra før
-                # Det kan også være en løsning at vi setter antall prikekr til maksimalt antall
-                if (
-                    registration.event.event_start < registration.attendance_registration
-                    and registration.penalty is None
-                ):
-                    registration.penalty = registration.event.get_late_penalty()
-                else:
-                    registration.penalty = 0
-                registration.clean_fields()
-                registration.save()
+                self.register_user_attendance(registration = registration)
                 context["attendance_message"] = f"Velkommen {registration.user.first_name}"
                 context["status_type"] ="success"
+            except UserAlreadyRegistered as e:
+                reg_datetime = e.eventregistration.attendance_registration
+                context["reg_datetime"] = reg_datetime
+                context["attendance_message"] = "Oppmøte allerede registrert"
+                context["status_type"] = "warning"
             except ValidationError:
                 context["attendance_message"]  = "Noe gikk galt, prøv igjen"
-                context["status_type"] = "warning"
-
+                context["status_type"] = "danger"
         # hack to get the right colours
         if context["status_type"] in [ "danger","success"] : context["text_type"] = "text-light"
         elif context["status_type"] == "warning": context["text_type"] = "text-dark"
@@ -457,7 +447,7 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        event = self.object
+        event = self.get_object()
         registrations = event.eventregistration_set.filter(attending=True)
         context["registrations_not_registered"] = registrations.filter(attendance_registration=None).count()
         return context
@@ -480,10 +470,24 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
                 else: raise EventRegistration.DoesNotExist
             if not registration.attending:
                 raise UserNotAttending(eventregistration=registration, identification_string=identification_string)
-            elif registration.attendance_registration is not None:
-                raise UserAlreadyRegistered(eventregistration=registration, identification_string=identification_string)
             return registration
         raise UserAttendanceException(identification_string=identification_string)
+
+    def register_user_attendance(self, registration):
+        if registration.attendance_registration is not None:
+            raise UserAlreadyRegistered(eventregistration=registration)
+        else:
+            registration.attendance_registration = datetime.datetime.now()
+            # Her sjekker man at det ikke finnes prikkregistrering på påmeldingen fra før
+            # Det kan også være en løsning at vi setter antall prikekr til maksimalt antall
+
+            if registration.event.has_stated() and registration.penalty is None:
+                registration.penalty = registration.event.get_late_penalty()
+            else:
+                registration.penalty = registration.event.get_show_penalty()
+            registration.full_clean()
+            registration.save()
+
 
 class RegisterNoshowPenaltiesView(DetailView,MessageMixin, PermissionRequiredMixin):
     """
@@ -494,18 +498,30 @@ class RegisterNoshowPenaltiesView(DetailView,MessageMixin, PermissionRequiredMix
     permission_required = "events.administer"
 
     def post(self, request, *args, **kwargs):
-        try:
-            event = self.get_object()
-            noshow_penalty = event.get_noshow_penalty()
-            if noshow_penalty is None:
-                self.messages.info(f"Arrangementet gir ikke prikk for å ikke møte opp. Ingen prikker ble fordelt" )
-            elif event.event_start >= datetime.datetime.now():
-                self.messages.warning("Du kan ikke gi prikk for manglende oppmøte før arrangementet har begynt!")
-            else:
-                event.eventregistration_set.filter(attending=True).filter(penalty=None).filter(attendance_registration=None).update(penalty=noshow_penalty)
-                return redirect("event_administer_penalties", kwargs.pop("pk", 1))
-        except:
-            self.messages.warning("Noe gikk galt")
+        self.object = self.get_object()
+        event = self.object
+        noshow_penalty = event.get_noshow_penalty()
+        if not event.has_stated():
+            try:
+                event.start_event()
+                event.full_clean()
+                event.save()
+                return redirect("event_register_attendance", kwargs.pop("pk", 1))
+            except EventNotStartedException:
+                self.messages.warning("Du kan ikke starte arrangementet før startiden")
+            except:
+                self.messages.warning("Noe gikk galt")
+        elif not event.penalties_finished_distributed():
+            try:
+                if noshow_penalty is None:
+                    self.messages.info(f"Arrangementet gir ikke prikk for å ikke møte opp. Ingen prikker ble fordelt" )
+                elif not event.has_stated():
+                    self.messages.warning("Du kan ikke gi prikk for manglende oppmøte før arrangementet har begynt!")
+                else:
+                    event.eventregistration_set.filter(attending=True).filter(penalty=None).filter(attendance_registration=None).update(penalty=noshow_penalty)
+                    return redirect("event_administer_penalties", kwargs.pop("pk", 1))
+            except:
+                self.messages.warning("Noe gikk galt")
         return redirect("event_register_attendance", kwargs.pop("pk", 1))
 
 

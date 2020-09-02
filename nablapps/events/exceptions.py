@@ -49,6 +49,9 @@ class UserAttendanceException(EventException):
         self.eventregistration = eventregistration
         self.identification_string = identification_string
         self.method = None
+class EventNotStartedException(EventException):
+    """Raised when a user tries to start an event before event has started"""
+
 
 class UserNotAttending(UserAttendanceException):
     """Raised whten the user is on the waiting list"""
