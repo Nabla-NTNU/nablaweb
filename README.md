@@ -1,5 +1,7 @@
 # Nablaweb #
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Python linting](https://github.com/Nabla-NTNU/nablaweb/workflows/Python%20linting/badge.svg)](https://github.com/Nabla-NTNU/nablaweb/actions?query=workflow%3A"Python+linting")
+[![Python testing](https://github.com/Nabla-NTNU/nablaweb/workflows/Python%20testing/badge.svg)](https://github.com/Nabla-NTNU/nablaweb/actions?query=workflow%3A"Python+testing")
 
 Velkommen til nablaweb!
 
