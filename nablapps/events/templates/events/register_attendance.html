@@ -1,19 +1,25 @@
 {% extends 'base.html' %}
 
-{% block main-blank %}
+{% block body %}
 <style>
-    #full-body{
+    body{
         background-color: var(--{{status_type}});
     }
     .const-height{
         min-height: 10rem;
     }
+    #registration-content {
+        min-height: 100vh;
+    }
+    .collapsing {
+      transition: none !important;
+    }
+
 
 
 </style>
 
-
-
+<div class="container d-flex flex-column justify-content-between py-3" id="registration-content">
 <p>
     <a href="{{event.get_absolute_url}}" class="{% firstof text_type "text-muted"%}">Tilbake til arrangementsiden</a>
 
@@ -36,11 +42,9 @@
       </p>
   </div>
 </div>
-<br>
-<br>
-<br>
+<div>
 <div class="const-height ">
-    <h1 class="display-4 {% firstof text_type "" %}"> {%  firstof attendance_message "Skriv inn brukernavn eller skann NTNU-kortet" %}</h1>
+    <h1 class="display-3 {% firstof text_type "" %}"> {%  firstof attendance_message "Skriv inn brukernavn eller skann NTNU-kortet" %}</h1>
 
     {% if reg_datetime and status_type != "success"  %}
     <p class="lead {% firstof text_type  %} ">{{ reg_datetime|date:"t. F" }} klokken {{ reg_datetime|time:"H.i" }}</p>
@@ -55,15 +59,13 @@
         </div>
     </div>
 </form>
-<br>
-<br>
-<br>
-<br>
+</div>
 <form  method="post"  class="py-3"action="{% url "event_noshow_penalties" event.pk %}">{% csrf_token %}
     <a href="{%  url "event_administer_penalties" pk=event.pk %}" class="{% firstof text_type "text-muted"%}">Antall ikke registrerte: {{ registrations_not_registered }}</a>
 
     <button class="btn btn-secondary float-right" type="submit" value="register_noshow_penalties" onclick="return confirm('Er du sikker på at du vil avslutte registreringen. De som ikke er registrert vil da få prikk i henhold til prikkreglementet')">Avslutt registrering</button>
 </form>
+</div>
 
 
-{% endblock %} {# block "content" #}
+{% endblock body %}
