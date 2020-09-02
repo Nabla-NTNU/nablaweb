@@ -17,7 +17,6 @@ from nablapps.accounts.models import FysmatClass
 from ..exceptions import (
     RegistrationNotAllowed,
     RegistrationNotOpen,
-    RegistrationNotRequiredException,
 )
 from .eventregistration import EventRegistration
 
@@ -82,20 +81,17 @@ class RegistrationInfoMixin(models.Model):
     Most of these fields don't make any sense unless registration_required is set.
     """
 
-    registration_required = models.BooleanField(
-        verbose_name="påmelding", default=False, null=False, blank=False
-    )
     registration_deadline = models.DateTimeField(
-        verbose_name="påmeldingsfrist", null=True, blank=True
+        verbose_name="påmeldingsfrist"
     )
     registration_start = models.DateTimeField(
-        verbose_name="påmelding åpner", null=True, blank=True
+        verbose_name="påmelding åpner"
     )
     deregistration_deadline = models.DateTimeField(
-        verbose_name="avmeldingsfrist", null=True, blank=True
+        verbose_name="avmeldingsfrist"
     )
     places = models.PositiveIntegerField(
-        verbose_name="antall plasser", null=True, blank=True
+        verbose_name="antall plasser"
     )
     has_queue = models.NullBooleanField(
         verbose_name="har venteliste",
@@ -127,7 +123,7 @@ class RegistrationInfoMixin(models.Model):
 
     def registration_has_started(self):
         """Return whether registration has started"""
-        return self.registration_required and self.registration_start < datetime.now()
+        return self.registration_start < datetime.now()
 
     def registration_open(self):
         """Return whether it is possible to register for the event"""
@@ -150,10 +146,23 @@ class RegistrationInfoMixin(models.Model):
         penalty_count = sum([reg.penalty for reg in user.get_penalties()])
         return False if penalty_count >= MAX_PENALTY else True
 
+    def get_registrations(self):
+        return self.eventregistration_set.all()
+
+    def get_attending_registrations(self):
+        return self.get_registrations.filter(attending=True)
+
+    def get_waiting_registrations(self):
+        return self.get_registrations.filter(attending=False)
+
+    def available_places(self):
+        # Set min value to 0 because admin-registrations sometimes causes there
+        # to be more registered than actual places.
+        return max(self.places - self.get_attending_registrations.count(), 0)
+
+
     def _assert_user_allowed_to_register(self, user):
-        if not self.registration_required:
-            raise RegistrationNotRequiredException(event=self, user=user)
-        elif not self.registration_open():
+        if not self.registration_open():
             raise RegistrationNotOpen(event=self, user=user)
         elif not self.allowed_to_attend(user):
             raise RegistrationNotAllowed(
@@ -177,6 +186,6 @@ class ExtendedRegistrationInfoMixin(models.Model):
     Essentially just a collection of RegistrationInfoMixin."""
 
     registration_info_collection = models.ManyToManyField(RegistrationInfo)
-    
+
     class Meta:
         abstract = True

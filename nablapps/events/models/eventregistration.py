@@ -16,6 +16,9 @@ class EventRegistration(models.Model):
     """
 
     event = models.ForeignKey("Event", on_delete=models.CASCADE, blank=False, null=True)
+    # TODO: Think about on_delete and choose something that makes sense.
+    # The rule that the EventRegistration belongs to
+    rule = models.ForeignKey("RegistrationInfo", on_delete=models.CASCADE, blank=False)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name="bruker",

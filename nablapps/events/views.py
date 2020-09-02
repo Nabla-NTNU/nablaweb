@@ -30,7 +30,6 @@ from .exceptions import (
     RegistrationAlreadyExists,
     RegistrationNotAllowed,
     RegistrationNotOpen,
-    RegistrationNotRequiredException,
     UserRegistrationException,
 )
 from .forms import FilterEventsForm  # Used in EventMainPage
@@ -326,8 +325,6 @@ class RegisterUserView(LoginRequiredMixin, MessageMixin, DetailView):
             return "Påmeldingen er ikke åpen."
         except RegistrationAlreadyExists:
             return "Du er allerede påmeldt."
-        except RegistrationNotRequiredException:
-            return "Arrangementet har ikke påmelding."
         return "Du er påmeldt" if reg.attending else "Du står nå på venteliste."
 
     def deregister_user(self, user):

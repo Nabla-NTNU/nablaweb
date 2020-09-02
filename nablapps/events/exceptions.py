@@ -17,11 +17,6 @@ class UserRegistrationException(EventException):
         self.event = event
         self.user = user
 
-
-class RegistrationNotRequiredException(UserRegistrationException):
-    """Raised when a user tries to register to an event without registration"""
-
-
 class RegistrationNotOpen(UserRegistrationException):
     """Raised when a user tries to register to and that is not open for registration"""
 

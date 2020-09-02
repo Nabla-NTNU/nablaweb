@@ -69,7 +69,7 @@ class Event(
             raise ValidationError("Company must be set when 'is_bedpres' is True!")
         if not self.is_bedpres and self.company is not None:
             raise ValidationError("Company should only be set for bedpres!")
-        if self.registration_required:
+        if self.has_registration:
             if self.penalty is None:
                 raise ValidationError("Penalty must be set when registration is True")
 
@@ -98,17 +98,23 @@ class Event(
             else (self.headline[0:18].capitalize() + "...")
         )
 
+    def get_absolute_url(self):
+        return reverse("event_detail", kwargs={"pk": self.pk, "slug": self.slug})
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.move_waiting_to_attending()
 
+    ##################
+    ## Registration ##
+    ##################
     @property
-    def waiting_registrations(self):
-        return self.eventregistration_set.filter(attending=False)
+    def waiting_registrations(self, rule):
+        return self.eventregistration_set.filter(attending=False, rule=rule)
 
     @property
-    def attending_registrations(self):
-        return self.eventregistration_set.filter(attending=True)
+    def attending_registrations(self, rule):
+        return self.eventregistration_set.filter(attending=True, rule=rule)
 
     def free_places(self):
         """Returnerer antall ledige plasser.
@@ -150,6 +156,9 @@ class Event(
         except ZeroDivisionError:
             return 100
 
+    def has_registration(self):
+        return self.registration_info_collection.exists()
+
     def is_registered(self, user):
         return self.eventregistration_set.filter(user=user).exists()
 
@@ -165,6 +174,46 @@ class Event(
     def get_waiting_list(self):
         return [e.user for e in self.waiting_registrations]
 
+    def has_rule_for_user(self, user):
+        """Return true if theere exists a rule for the user."""
+        try:
+            user_fysmat_class = FysmatClass.objects.get(user=user)
+        except FysmatClass.DoesNotExist:
+            # Oh no, user does not have a FysmatClass!
+            pass
+        except FysmatClass.MultipleObejctsReturned:
+            # OH Oh no, user has multiple FysmatClasses!
+            pass
+
+        try:
+        except RegistrationInfo.DoesNotExist:
+            # This should be expected to happen sometimes, so should handle this well
+            pass
+        except RegistrationInfo.MultipleObjectsReturned:
+            pass
+
+    def get_rule_for_user(self, user):
+        """Get the registration info rule under which the user should be registered.
+        """
+        try:
+            user_fysmat_class = FysmatClass.objects.get(user=user)
+        except FysmatClass.DoesNotExist:
+            # Oh no, user does not have a FysmatClass!
+            raise FysmatClass.DoesNotExist
+        except FysmatClass.MultipleObejctsReturned:
+            # OH Oh no, user has multiple FysmatClasses!
+            raise FysmatClass.MultipleObjecstReturned
+
+        try:
+            rule = self.registration_info_collection.get(open_for=user_fysmat_class)
+        except RegistrationInfo.DoesNotExist:
+            # This should be expected to happen sometimes, so should handle this well
+            raise RegistrationInfo.DoesNotExist
+        except RegistrationInfo.MultipleObjectsReturned:
+            raise RegistrationInfo.MultipleObjectsReturned
+
+        return rule
+
     def register_user(self, user, ignore_restrictions=False):
         """
         Tries to register a user for an event.
@@ -175,7 +224,10 @@ class Event(
         if not ignore_restrictions:
             self._assert_user_allowed_to_register(user)
 
-        registration = EventRegistration(event=self, user=user,)
+        registration = EventRegistration(
+            event=self, rule=self.get_rule_for_user(user), user=user,
+        )
+
         if not self.is_full() or ignore_restrictions:
             registration.attending = True
         elif self.has_queue:
@@ -215,9 +267,6 @@ class Event(
 
     def get_registration_url(self):
         return reverse("registration", kwargs={"pk": self.pk})
-
-    def get_absolute_url(self):
-        return reverse("event_detail", kwargs={"pk": self.pk, "slug": self.slug})
 
 
 def attending_events(user, today):
