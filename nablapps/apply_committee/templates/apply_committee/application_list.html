@@ -6,13 +6,15 @@
 {% for committee, applications in application_list.items %}
 <h2>{{ committee.name }}</h2>
 {% block com_mail_list %}{% endblock %}
-<ul>
+<table>
     {% for application in applications %}
     {% block applicant_info %}
-    <li>{% if application.anonymous %} Anonym {% else %} {{ application.applicant.get_full_name }}{% endif %}</li>
+    <tr>
+        <td>{% if application.anonymous %} Anonym {% else %} {{ application.applicant.get_full_name }}{% endif %}</td>
+    </tr>
     {% endblock %}
     {% endfor %}
-</ul>
+</table>
 <hr />
 {% endfor %}
 {% endblock %}
