@@ -77,7 +77,7 @@
     <a class="{% firstof text_type "text-muted"%} m-0" >
     {% if event.penalties_finished_distributed %}
     Ingen prikker å fordele
-    {% elif event.has_started %}
+    {% elif event.get_is_started %}
     Arrangementet har startet. Registrering gir {% firstof event.get_late_penalty "ingen" %} prikk(er)
     {% elif event.should_have_started %}
     Klikk på knappen for å starte å starte arrangementet!
@@ -86,7 +86,7 @@
     {% endif %}
     </a>
 
-    {% if event.has_started and not event.penalties_finished_distributed %}
+    {% if event.get_is_started and not event.penalties_finished_distributed %}
     <button class="btn btn-secondary" type="submit" value="register_noshow_penalties"
             onclick="return confirm('Hvis du avslutter registreringen får alle som ikke er registrert {% firstof event.get_noshow_penalty "ingen" %} prikk(er).')">
         Avslutt registrering
@@ -96,7 +96,7 @@
     <button class="btn btn-primary" type="submit" value="register_noshow_penalties">
         Start arrangementet
     </button>
-    {% elif not event.has_started %}
+    {% elif not event.get_is_started %}
     <a class=" {% firstof text_type "text-muted"%} m-0" >
         Arrangementet starter
         {% now "Y-m-d" as todays_date %}

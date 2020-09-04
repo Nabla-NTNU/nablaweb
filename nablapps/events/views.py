@@ -323,7 +323,6 @@ class RegisterUserView(LoginRequiredMixin, MessageMixin, DetailView):
 
     def register_user(self, user):
         """Prøver å melde en bruker på arrangementet.
-
         Returnerer en melding som er ment for brukeren.
         """
         try:
@@ -473,7 +472,7 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
             # Her sjekker man at det ikke finnes prikkregistrering på påmeldingen fra før
             # Det kan også være en løsning at vi setter antall prikekr til maksimalt antall
 
-            if registration.event.has_stated() and registration.penalty is None:
+            if registration.event.get_is_started() and registration.penalty is None:
                 registration.penalty = registration.event.get_late_penalty()
             else:
                 registration.penalty = registration.event.get_show_penalty()
@@ -493,7 +492,7 @@ class RegisterNoshowPenaltiesView(DetailView,MessageMixin, PermissionRequiredMix
         self.object = self.get_object()
         event = self.object
         noshow_penalty = event.get_noshow_penalty()
-        if not event.has_stated():
+        if not event.get_is_started():
             try:
                 event.start_event()
                 event.full_clean()
@@ -507,7 +506,7 @@ class RegisterNoshowPenaltiesView(DetailView,MessageMixin, PermissionRequiredMix
             try:
                 if noshow_penalty is None:
                     self.messages.info(f"Arrangementet gir ikke prikk for å ikke møte opp. Ingen prikker ble fordelt" )
-                elif not event.has_stated():
+                elif not event.get_is_started():
                     self.messages.warning("Du kan ikke gi prikk for manglende oppmøte før arrangementet har begynt!")
                 else:
                     event.eventregistration_set.filter(attending=True).filter(penalty=None).filter(attendance_registration=None).update(penalty=noshow_penalty)

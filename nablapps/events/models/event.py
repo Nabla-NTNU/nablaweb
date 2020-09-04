@@ -62,7 +62,7 @@ class Event(
 
     is_bedpres = models.BooleanField(default=False)
 
-    has_started = models.BooleanField(default=False)
+    is_started = models.BooleanField(default=False)
 
     # Company is required if is_bedpres is True, see clean()
     company = models.ForeignKey(
@@ -240,20 +240,20 @@ class Event(
 
     def start_event(self):
         if self.event_start < datetime.now():
-            self.has_started = True
+            self.is_started = True
         else:
             raise
 
-    def has_stated(self):
-        if self.event_start < datetime.now() and self.has_started:
+    def get_is_started(self):
+        if self.event_start < datetime.now() and self.is_started:
             return True
 
     def should_have_started(self):
-        if self.event_start < datetime.now() and not self.has_stated():
+        if self.event_start < datetime.now() and not self.get_is_started():
             return True
 
     def penalties_finished_distributed(self):
-        if self.has_stated() and (
+        if self.get_is_started() and (
                 self.eventregistration_set.filter(penalty=None).count() == 0 or
                 self.eventregistration_set.filter(attendance_registration=None).count() == 0
         ):
