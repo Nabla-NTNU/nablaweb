@@ -262,7 +262,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
                     "url": reverse("event_registrations", args=[self.object.id]),
                 },
             ]
-        if self.object.penalty is not None:
+        if self.object.registration_required:
             admin_list.append(
                 {
                     "name": "Administrer prikker",
@@ -275,7 +275,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
         if self.object.registration_required:
             admin_list.append(
                 {
-                    "name": "Registrer oppmøte ",
+                    "name": "Registrer oppmøte",
                     "glyphicon_symbol": "user",
                     "url": reverse("event_register_attendance", args=[self.object.id]),
                 }
