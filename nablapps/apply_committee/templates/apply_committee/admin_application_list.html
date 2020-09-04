@@ -12,13 +12,17 @@
 {% block applicant_info %}
 <style>
  .application_text {
+
      margin-left: 10px;
      border-left: 4px solid #989898;
      padding-left: 3px;
  }
 </style>
-<li>
-    {{ application.applicant.get_full_name }}{% if application.anonymous %} <i>(Anonym søknad)</i>{% endif %}
-    {% if application.application_text %}<div class="application_text">{{ application.application_text }}</div>{% endif %}
-</li>
+<tr>
+    <td>{{ application.applicant.get_full_name }} ({{ application.applicant.get_class_number }}. klasse){% if application.anonymous %} <i>(Anonym søknad)</i>{% endif %}</td>
+    <td>{{ application.applicant.email }}</td>
+    <td>
+        {% if application.application_text %}<div class="application_text">{{ application.application_text }}</div>{% endif %}
+    </td>
+</tr>
 {% endblock %}
