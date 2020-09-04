@@ -186,6 +186,7 @@ class Event(
             pass
 
         try:
+            pass
         except RegistrationInfo.DoesNotExist:
             # This should be expected to happen sometimes, so should handle this well
             pass
