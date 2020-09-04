@@ -35,7 +35,9 @@
         {% for case, penalty in event.get_penalty_rule_dict.items %}
         <th>{{ case }} ({{ penalty }}p)</th>
         {% endfor %}
-        <th>Ikke registrert</th>
+        <th>Ubestemt (0p)</th>
+        <th>Registrert oppmøte </th>
+
 
     </tr>
     {% for registration in registrations %}
@@ -45,6 +47,14 @@
         <td><label style="width: 100%"><input type="radio" class="penalty_table_radio" name="user_penalty_{{registration.pk}}" value="{{ penalty }}" {% ifequal registration.penalty penalty %}checked{% endifequal %}></label></td>
         {% endfor %}
         <td><label style="width: 100%"><input type="radio" class="penalty_table_radio" name="user_penalty_{{registration.pk}}" value="None" {% ifequal registration.penalty None %}checked{% endifequal %}></label></td>
+        <td>
+        {% if registration.attendance_registration %}
+            Ja
+        {% else %}
+            Nei
+        {% endif %}
+        </td>
+
     </tr>
     {% endfor %}
 </table>

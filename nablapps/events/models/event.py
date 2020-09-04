@@ -253,7 +253,10 @@ class Event(
             return True
 
     def penalties_finished_distributed(self):
-        if self.has_stated() and self.eventregistration_set.filter(penalty=None).count() == 0:
+        if self.has_stated() and (
+                self.eventregistration_set.filter(penalty=None).count() == 0 or
+                self.eventregistration_set.filter(attendance_registration=None).count() == 0
+        ):
             return True
 
 

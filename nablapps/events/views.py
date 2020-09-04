@@ -249,30 +249,6 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
 
     def get_admin_links(self):
         admin_list = []
-        if  self.object.penalty ==2:
-            admin_penalty_name = "Administrer betalinger"
-        elif self.object.penalty in [1,3]:
-            admin_penalty_name = "Administrer oppmøte"
-        else:
-            admin_penalty_name = "Administrer prikker"
-        if self.object.registration_required:
-            admin_list.append(
-                {
-                    "name": "Registrer oppmøte ",
-                    "glyphicon_symbol": "user",
-                    "url": reverse("event_register_attendance", args=[self.object.id]),
-                }
-            )
-        if self.object.penalty != 0:
-            admin_list.append(
-                {
-                    "name": admin_penalty_name,
-                    "glyphicon_symbol": "check",
-                    "url": reverse(
-                        "event_administer_penalties", args=[self.object.id]
-                    ),
-                }
-            )
         if self.object.registration_required:
             admin_list += [
                 {
@@ -286,8 +262,24 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
                     "url": reverse("event_registrations", args=[self.object.id]),
                 },
             ]
-
-
+        if self.object.penalty is not None:
+            admin_list.append(
+                {
+                    "name": "Administrer prikker",
+                    "glyphicon_symbol": "check",
+                    "url": reverse(
+                        "event_administer_penalties", args=[self.object.id]
+                    ),
+                }
+            )
+        if self.object.registration_required:
+            admin_list.append(
+                {
+                    "name": "Registrer oppmøte ",
+                    "glyphicon_symbol": "user",
+                    "url": reverse("event_register_attendance", args=[self.object.id]),
+                }
+            )
         return admin_list + super().get_admin_links()
 
 
