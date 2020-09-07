@@ -9,6 +9,11 @@ from django.views.generic import FormView, TemplateView
 
 from nablapps.accounts.models import NablaGroup
 
+from .exceptions.py import (
+    ChannelCreationException,
+    MessageCreationException,
+    ThreadCreationException,
+)
 from .forms import ChannelForm, JoinChannelsForm, MessageForm, ThreadForm
 from .models import Channel, Message, Thread
 
@@ -42,7 +47,7 @@ class MainView(LoginRequiredMixin, TemplateView):
                         message=new_thread.text,
                     )
                     new_message.read_by_user.add(self.request.user)
-                except:  # noqa: E722
+                except ThreadCreationException:
                     django_messages.add_message(
                         self.request,
                         django_messages.INFO,
@@ -71,7 +76,7 @@ class MainView(LoginRequiredMixin, TemplateView):
                     message=form_data["message_field"],
                 )
                 new_message.read_by_user.add(self.request.user)
-            except:  # noqa: E722
+            except MessageCreationException:
                 django_messages.add_message(
                     self.request,
                     django_messages.INFO,
@@ -102,6 +107,10 @@ class MainView(LoginRequiredMixin, TemplateView):
         class_channel = Channel.objects.filter(group__in=user.groups.all()).filter(
             is_class=True
         )
+
+        print("###########")
+        print(class_channel.count)
+        print("###########")
 
         # Feeds
         feeds = Channel.objects.filter(is_feed=True)
@@ -194,11 +203,11 @@ class CreateChannelView(LoginRequiredMixin, FormView):
             )
             new_channel.members.add(self.request.user)
             new_channel.save()
-        except:  # noqa: E722
+        except ChannelCreationException:
             django_messages.add_message(
                 self.request,
                 django_messages.INFO,
-                "Ops! Kunne ikke opprette melding, ugyldig verdi i feltene!",
+                "Ops! Kunne ikke opprette kanal, ugyldig verdi i feltene!",
             )
         return redirect("forum-main", channel_id=1, thread_id=0)
 
