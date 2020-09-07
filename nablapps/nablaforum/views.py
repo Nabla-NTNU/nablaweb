@@ -108,10 +108,6 @@ class MainView(LoginRequiredMixin, TemplateView):
             is_class=True
         )
 
-        print("###########")
-        print(class_channel.count)
-        print("###########")
-
         # Feeds
         feeds = Channel.objects.filter(is_feed=True)
 
@@ -126,7 +122,6 @@ class MainView(LoginRequiredMixin, TemplateView):
         threads = paginator.get_page(page)
 
         # get chosen thread and beloning messages
-        print(self.kwargs["thread_id"])
         if int(self.kwargs["thread_id"]) != 0:
             chosen_thread_id = self.kwargs["thread_id"]
             chosen_thread = Thread.objects.get(pk=chosen_thread_id)
@@ -155,7 +150,6 @@ class MainView(LoginRequiredMixin, TemplateView):
                 if Message.objects.filter(
                     thread=thread, created__gte=one_week_ago
                 ).exclude(read_by_user=self.request.user):
-                    print(thread)
                     channel.has_unreads = True
                     break
 
