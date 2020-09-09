@@ -266,6 +266,7 @@ class Event(
             and (
                 self.eventregistration_set.filter(penalty=None).count() == 0
                 or self.eventregistration_set.filter(attendance_registration=None).count() == 0
+                or self.get_noshow_penalty() is None
             )
         ):
             return True
