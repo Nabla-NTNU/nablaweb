@@ -54,10 +54,12 @@ class Event(
     noshow_penalties = [None, 2, None, 1]
 
     penalty = models.IntegerField(
+        verbose_name="Prikkregler",
         default=0,
         choices=zip(penalty_rules.keys(), [rule[0] for rule in penalty_rules.values()]),
         blank=True,
         null=True,
+        help_text="Bestem hvilke prikkregler som skal gjelde for arrangementet.",
     )
 
     is_bedpres = models.BooleanField(default=False)

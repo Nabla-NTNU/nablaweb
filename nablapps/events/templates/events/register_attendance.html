@@ -16,17 +16,16 @@
     }
     a:hover {
         text-decoration: none;
-        color: var(--nabla-blue); !important;
     }
 
 </style>
 
-<div class="container d-flex flex-column justify-content-between py-3" id="registration-content">
+<div class="container-lg d-flex flex-column justify-content-between py-3" id="registration-content">
 {% bootstrap_messages %}
 
 <div class="d-flex justify-content-between">
     <a href="{{event.get_absolute_url}}" class="{% firstof text_type "text-muted"%}">{{ event.headline}}</a>
-    <a href="{% url 'wiki:get' 'retningslinjer-arrangement/' %}" class="{% firstof text_type "text-muted"%}">Prikkreglement: {{ event.get_penalty_rule_name}}</a>
+    <a href="{% url 'wiki:get' 'retningslinjer-arrangement/' %}" class="{% firstof text_type "text-muted"%}">Prikkregler: {{ event.get_penalty_rule_name}}</a>
 
     <a class="{% firstof text_type "text-muted"%}" data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
     Forklaring
