@@ -1,11 +1,12 @@
 """
 Model representing a registration to an event.
 """
+from datetime import datetime
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template import loader
-from datetime import datetime
 
 
 class EventRegistration(models.Model):
@@ -36,17 +37,14 @@ class EventRegistration(models.Model):
         "på arrangementet ellers er det en ventelisteplass.",
     )
     penalty = models.IntegerField(
-        verbose_name="Prikk",
-        blank=True,
-        null=True,
-        default=None
+        verbose_name="Prikk", blank=True, null=True, default=None
     )
     attendance_registration = models.DateTimeField(
         verbose_name="Første regisreringstidspunkt",
         blank=True,
         null=True,
         default=None,
-        help_text="Hvis dette tidspunktet er satt er det gjort en regisrering på at brukeren har møtt opp"
+        help_text="Hvis dette tidspunktet er satt er det gjort en regisrering på at brukeren har møtt opp",
     )
 
     class Meta:

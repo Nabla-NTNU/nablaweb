@@ -127,9 +127,11 @@ class NablaUser(AbstractUser):
             days=182
         )  # about six months
 
-        penalties = EventRegistration.objects.filter(
-            user=self, date__gte=six_months_ago
-        ).exclude(penalty=0).exclude(penalty=None)
+        penalties = (
+            EventRegistration.objects.filter(user=self, date__gte=six_months_ago)
+            .exclude(penalty=0)
+            .exclude(penalty=None)
+        )
         return penalties
 
 

@@ -5,11 +5,11 @@ from django.urls import path, re_path
 
 from .feeds import RecentEvents
 from .views import (
+    AdministerPenaltiesView,
     AdministerRegistrationsView,
     EventDetailView,
     EventMainPage,
     EventRegistrationsView,
-    AdministerPenaltiesView,
     RegisterAttendanceView,
     RegisterNoshowPenaltiesView,
     RegisterUserView,
@@ -39,7 +39,6 @@ urlpatterns = [
         RegisterNoshowPenaltiesView.as_view(),
         name="event_noshow_penalties",
     ),
-
     path("", EventMainPage.as_view(), name="event_main_page"),
     path("calendar/", calendar, name="event_list"),
     re_path(r"^calendar/(\d{4})/(\d{1,2})/$", calendar, name="event_list"),

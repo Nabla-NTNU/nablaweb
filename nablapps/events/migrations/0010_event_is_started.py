@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0009_remove_event_has_started'),
+        ("events", "0009_remove_event_has_started"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='event',
-            name='is_started',
+            model_name="event",
+            name="is_started",
             field=models.BooleanField(default=False),
         ),
     ]

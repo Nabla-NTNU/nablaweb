@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('album', '0004_remove_album_view_counter'),
+        ("album", "0004_remove_album_view_counter"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='album',
-            name='level',
+            model_name="album",
+            name="level",
             field=models.PositiveIntegerField(editable=False),
         ),
         migrations.AlterField(
-            model_name='album',
-            name='lft',
+            model_name="album",
+            name="lft",
             field=models.PositiveIntegerField(editable=False),
         ),
         migrations.AlterField(
-            model_name='album',
-            name='rght',
+            model_name="album",
+            name="rght",
             field=models.PositiveIntegerField(editable=False),
         ),
     ]

@@ -19,6 +19,7 @@ from braces.views import (
     StaticContextMixin,
 )
 
+from nablapps.accounts.models import NablaUser
 from nablapps.core.view_mixins import AdminLinksMixin
 
 from .event_calendar import EventCalendar
@@ -26,15 +27,15 @@ from .exceptions import (
     DeregistrationClosed,
     EventException,
     EventFullException,
+    EventNotStartedException,
     RegistrationAlreadyExists,
     RegistrationNotAllowed,
     RegistrationNotOpen,
     RegistrationNotRequiredException,
-    EventNotStartedException,
-    UserRegistrationException,
-    UserAttendanceException,
     UserAlreadyRegistered,
-    UserNotAttending
+    UserAttendanceException,
+    UserNotAttending,
+    UserRegistrationException,
 )
 from .forms import FilterEventsForm  # Used in EventMainPage
 from .models.event import Event, attending_events
@@ -266,9 +267,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
                 {
                     "name": "Administrer prikker",
                     "glyphicon_symbol": "check",
-                    "url": reverse(
-                        "event_administer_penalties", args=[self.object.id]
-                    ),
+                    "url": reverse("event_administer_penalties", args=[self.object.id]),
                 }
             )
         if self.object.registration_required:
@@ -351,7 +350,7 @@ class RegisterUserView(LoginRequiredMixin, MessageMixin, DetailView):
         return "Du er meldt av arrangementet."
 
 
-class AdministerPenaltiesView(DetailView, MessageMixin,PermissionRequiredMixin):
+class AdministerPenaltiesView(DetailView, MessageMixin, PermissionRequiredMixin):
     """Used by event admins to register attendance"""
 
     model = Event
@@ -391,6 +390,7 @@ class AdministerPenaltiesView(DetailView, MessageMixin,PermissionRequiredMixin):
 
 class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
     """Used by event admins to register attendance"""
+
     model = Event
     template_name = "events/register_attendance.html"
     permission_required = "events.administer"
@@ -400,9 +400,15 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
         identification_string = request.POST.get("identification_string")
         identification_types = request.POST.getlist("identification_type")
 
-        context = {"attendance_message": "Noe gikk galt, prøv igjen", "status_type": "danger"}
+        context = {
+            "attendance_message": "Noe gikk galt, prøv igjen",
+            "status_type": "danger",
+        }
         try:
-            registration = self.get_registration_by_identification_string(identification_string=identification_string, identification_types=identification_types)
+            registration = self.get_registration_by_identification_string(
+                identification_string=identification_string,
+                identification_types=identification_types,
+            )
         except EventRegistration.DoesNotExist:
             context["attendance_message"] = "Fant ikke bruker med påmelding"
             context["status_type"] = "danger"
@@ -415,7 +421,9 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
         else:
             try:
                 self.register_user_attendance(registration=registration)
-                context["attendance_message"] = f"Velkommen {registration.user.first_name}"
+                context[
+                    "attendance_message"
+                ] = f"Velkommen {registration.user.first_name}"
                 context["status_type"] = "success"
             except UserAlreadyRegistered as e:
                 reg_datetime = e.eventregistration.attendance_registration
@@ -426,30 +434,40 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
                 context["attendance_message"] = "Noe gikk galt, prøv igjen"
                 context["status_type"] = "danger"
         # hack to get the right colours
-        if context["status_type"] in ["danger","success"]:
+        if context["status_type"] in ["danger", "success"]:
             context["text_type"] = "text-light"
         elif context["status_type"] == "warning":
             context["text_type"] = "text-dark"
 
         context = {**context, **self.get_context_data(**kwargs)}
-        return render(request, template_name="events/register_attendance.html", context=context)
+        return render(
+            request, template_name="events/register_attendance.html", context=context
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         event = self.get_object()
         registrations = event.eventregistration_set.filter(attending=True)
-        context["registrations_not_registered"] = registrations.filter(attendance_registration=None).count()
+        context["registrations_not_registered"] = registrations.filter(
+            attendance_registration=None
+        ).count()
         return context
 
-    def get_registration_by_identification_string(self, identification_string, identification_types):
+    def get_registration_by_identification_string(
+        self, identification_string, identification_types
+    ):
         event = self.get_object()
         num_id_types = len(identification_types)
-        for itr, method in enumerate(identification_types,start=1):
+        for itr, method in enumerate(identification_types, start=1):
             try:
                 if method == "username":
-                    registration = event.eventregistration_set.get(user__username=identification_string)
-                elif method == "ntnu_card" and identification_string.isnumeric() :
-                    registration = event.eventregistration_set.get(user=NablaUser.objects.get_from_rfid(identification_string))
+                    registration = event.eventregistration_set.get(
+                        user__username=identification_string
+                    )
+                elif method == "ntnu_card" and identification_string.isnumeric():
+                    registration = event.eventregistration_set.get(
+                        user=NablaUser.objects.get_from_rfid(identification_string)
+                    )
                 # not implemented jet
                 # elif method == "qr_code":
                 #     raise UserAttendanceException(identification_string=identification_string, method=method)
@@ -461,7 +479,10 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
                 else:
                     raise EventRegistration.DoesNotExist
             if not registration.attending:
-                raise UserNotAttending(eventregistration=registration, identification_string=identification_string)
+                raise UserNotAttending(
+                    eventregistration=registration,
+                    identification_string=identification_string,
+                )
             return registration
         raise UserAttendanceException(identification_string=identification_string)
 
@@ -481,10 +502,11 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
             registration.save()
 
 
-class RegisterNoshowPenaltiesView(DetailView,MessageMixin, PermissionRequiredMixin):
+class RegisterNoshowPenaltiesView(DetailView, MessageMixin, PermissionRequiredMixin):
     """
     Når en post blir sendt hit gis det prikk til til dem som ikke er registrert
     """
+
     model = Event
     template_name = "events/register_attendance.html"
     permission_required = "events.administer"
@@ -506,11 +528,19 @@ class RegisterNoshowPenaltiesView(DetailView,MessageMixin, PermissionRequiredMix
         elif not event.penalties_finished_distributed():
             try:
                 if noshow_penalty is None:
-                    self.messages.info("Arrangementet gir ikke prikk for å ikke møte opp. Ingen prikker ble fordelt")
+                    self.messages.info(
+                        "Arrangementet gir ikke prikk for å ikke møte opp. Ingen prikker ble fordelt"
+                    )
                 elif not event.get_is_started():
-                    self.messages.warning("Du kan ikke gi prikk for manglende oppmøte før arrangementet har begynt!")
+                    self.messages.warning(
+                        "Du kan ikke gi prikk for manglende oppmøte før arrangementet har begynt!"
+                    )
                 else:
-                    event.eventregistration_set.filter(attending=True).filter(penalty=None).filter(attendance_registration=None).update(penalty=noshow_penalty)
+                    event.eventregistration_set.filter(attending=True).filter(
+                        penalty=None
+                    ).filter(attendance_registration=None).update(
+                        penalty=noshow_penalty
+                    )
                     return redirect("event_administer_penalties", kwargs.pop("pk", 1))
             except ValidationError:
                 self.messages.warning("Noe gikk galt")

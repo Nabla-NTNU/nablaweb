@@ -6,13 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0010_event_is_started'),
+        ("events", "0010_event_is_started"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='event',
-            name='penalty',
-            field=models.IntegerField(blank=True, choices=[(0, 'Ingen prikker'), (1, 'Bedpres'), (2, 'Arrangement med betaling'), (3, 'Arrangement uten betaling')], default=0, help_text='Bestem hvilke prikkregler som skal gjelde for arrangementet.', null=True, verbose_name='Prikkregler'),
+            model_name="event",
+            name="penalty",
+            field=models.IntegerField(
+                blank=True,
+                choices=[
+                    (0, "Ingen prikker"),
+                    (1, "Bedpres"),
+                    (2, "Arrangement med betaling"),
+                    (3, "Arrangement uten betaling"),
+                ],
+                default=0,
+                help_text="Bestem hvilke prikkregler som skal gjelde for arrangementet.",
+                null=True,
+                verbose_name="Prikkregler",
+            ),
         ),
     ]

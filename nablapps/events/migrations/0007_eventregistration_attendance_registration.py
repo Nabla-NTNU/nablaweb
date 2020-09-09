@@ -6,13 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0006_auto_20200629_1958'),
+        ("events", "0006_auto_20200629_1958"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='eventregistration',
-            name='attendance_registration',
-            field=models.DateTimeField(blank=True, default=None, help_text='Hvis dette tidspunktet er satt er det gjort en regisrering på at brukeren har møtt opp', null=True, verbose_name='Første regisreringstidspunkt'),
+            model_name="eventregistration",
+            name="attendance_registration",
+            field=models.DateTimeField(
+                blank=True,
+                default=None,
+                help_text="Hvis dette tidspunktet er satt er det gjort en regisrering på at brukeren har møtt opp",
+                null=True,
+                verbose_name="Første regisreringstidspunkt",
+            ),
         ),
     ]

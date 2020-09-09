@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0005_20191018_modify_open_for'),
+        ("events", "0005_20191018_modify_open_for"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='eventregistration',
-            name='penalty',
-            field=models.IntegerField(blank=True, default=None, null=True, verbose_name='Prikk'),
+            model_name="eventregistration",
+            name="penalty",
+            field=models.IntegerField(
+                blank=True, default=None, null=True, verbose_name="Prikk"
+            ),
         ),
     ]

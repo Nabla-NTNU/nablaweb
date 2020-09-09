@@ -45,7 +45,14 @@ class DeregistrationClosed(UserRegistrationException):
 class UserAttendanceException(EventException):
     """Base class for exceptions that can be raised when a user trys to register for an event"""
 
-    def __init__(self, *args, eventregistration=None, user=None, identification_string=None, method=None):
+    def __init__(
+        self,
+        *args,
+        eventregistration=None,
+        user=None,
+        identification_string=None,
+        method=None
+    ):
         super().__init__(*args)
         self.eventregistration = eventregistration
         self.identification_string = identification_string
