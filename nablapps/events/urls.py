@@ -9,7 +9,9 @@ from .views import (
     EventDetailView,
     EventMainPage,
     EventRegistrationsView,
+    AdministerPenaltiesView,
     RegisterAttendanceView,
+    RegisterNoshowPenaltiesView,
     RegisterUserView,
     UserEventView,
     calendar,
@@ -23,10 +25,21 @@ urlpatterns = [
         name="event_admin",
     ),
     path(
-        "<int:pk>/attendance/",
+        "<int:pk>/penalties/",
+        AdministerPenaltiesView.as_view(),
+        name="event_administer_penalties",
+    ),
+    path(
+        "<int:pk>/register_attendance/",
         RegisterAttendanceView.as_view(),
         name="event_register_attendance",
     ),
+    path(
+        "<int:pk>/register_attendance/noshow_penalties",
+        RegisterNoshowPenaltiesView.as_view(),
+        name="event_noshow_penalties",
+    ),
+
     path("", EventMainPage.as_view(), name="event_main_page"),
     path("calendar/", calendar, name="event_list"),
     re_path(r"^calendar/(\d{4})/(\d{1,2})/$", calendar, name="event_list"),

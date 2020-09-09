@@ -2,6 +2,7 @@
 The Event model
 """
 import logging
+from datetime import datetime
 
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, models
@@ -45,14 +46,25 @@ class Event(
         3: ("Arrangement uten betaling", {"Møtt opp": 0, "Ikke møtt opp": 1}),
     }
 
+    # Dette er bare en oppsmumering av penalty_rules
+    # None står for ikke-registrert. Dette er en hack for arrangementer der oppmøte ikke korresponderer med prikker
+    # Arrangement type : [0, 1, 2, 3],
+    show_penalties = [None, 0, None, 0]
+    late_penalties = [None, 1, None, 0]
+    noshow_penalties = [None, 2, None, 1]
+
     penalty = models.IntegerField(
+        verbose_name="Prikkregler",
         default=0,
         choices=zip(penalty_rules.keys(), [rule[0] for rule in penalty_rules.values()]),
         blank=True,
         null=True,
+        help_text="Bestem hvilke prikkregler som skal gjelde for arrangementet.",
     )
 
     is_bedpres = models.BooleanField(default=False)
+
+    is_started = models.BooleanField(default=False)
 
     # Company is required if is_bedpres is True, see clean()
     company = models.ForeignKey(
@@ -89,6 +101,18 @@ class Event(
     def get_penalty_rule_dict(self):
         """Returns the penalty rule dict for the event"""
         return self.penalty_rules[self.penalty][1]
+
+    def get_show_penalty(self):
+        if self.penalty is not None:
+            return self.show_penalties[self.penalty]
+
+    def get_late_penalty(self):
+        if self.penalty is not None:
+            return self.late_penalties[self.penalty]
+
+    def get_noshow_penalty(self):
+        if self.penalty is not None:
+            return self.noshow_penalties[self.penalty]
 
     def get_short_name(self):
         """Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke."""
@@ -221,6 +245,30 @@ class Event(
 
     def get_absolute_url(self):
         return reverse("event_detail", kwargs={"pk": self.pk, "slug": self.slug})
+
+    def start_event(self):
+        if self.event_start < datetime.now():
+            self.is_started = True
+        else:
+            raise
+
+    def get_is_started(self):
+        if self.event_start < datetime.now() and self.is_started:
+            return True
+
+    def should_have_started(self):
+        if self.event_start < datetime.now() and not self.get_is_started():
+            return True
+
+    def penalties_finished_distributed(self):
+        if(
+            self.get_is_started()
+            and (
+                self.eventregistration_set.filter(penalty=None).count() == 0
+                or self.eventregistration_set.filter(attendance_registration=None).count() == 0
+            )
+        ):
+            return True
 
 
 def attending_events(user, today):

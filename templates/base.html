@@ -150,8 +150,8 @@
     </head>
 
     <body>
-
-<!-- Pop up window displaying important information about the 'fadderperiode' -->
+    {% block body%}
+    <!-- Pop up window displaying important information about the 'fadderperiode' -->
     {% if newuser_popup %}
         <!-- Show the modal on page load-->
         <script type="text/javascript">
@@ -384,11 +384,11 @@
         {% block main %}
         <div class="row">
             <!-- Blog Entries Column -->
-            <div class="col-md-8">
+            <div class="col-lg-8">
             {% block content %}{% endblock content %}
             </div>
             <!-- Blog Sidebar Widgets Column -->
-            <div class="col-md-4">
+            <div class="col-lg-4">
             {% block sidebar %}
             {% endblock sidebar %}
             </div>
@@ -465,10 +465,10 @@
             </div>
         </footer>
         <!-- /.container -->
-        {% render_block "js" %}
     </div>
+    {% endblock body%}
     </body>
-
+    {% render_block "js" %}
 </html>
 
 

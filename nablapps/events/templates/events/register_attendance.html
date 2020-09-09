@@ -1,45 +1,133 @@
 {% extends 'base.html' %}
-
-{% block more_head %}
+{% load bootstrap4 %}
+{% block body %}
 <style>
- #attending_list label {
-     font-weight: normal;
- }
+    body{
+        background-color: var(--{%  firstof status_type "nabla-background"%});
+    }
+    .const-height{
+        min-height: 12rem;
+    }
+    #registration-content {
+        min-height: 100vh;
+    }
+    .collapsing {
+      transition: none !important;
+    }
+    a:hover {
+        text-decoration: none;
+    }
+
 </style>
-{% endblock %}
 
-{% block content %}
-<h1>Oppmøteregistrering for {{ event.headline }}</h1>
-<hr />
+<div class="container-lg d-flex flex-column justify-content-between py-3" id="registration-content">
+{% bootstrap_messages %}
 
-{% if event.penalty == 1 %} {# if is bedpres #}
-<script>
- function make_all_penalty(id) {
-     $('#' + id).find('input[value="2"]').prop("checked",true);
- }
- {% endif %}
-</script>
-<form method="post" id="penalty_form">{% csrf_token %}
-{% if event.penalty == 1 %}
-    <button type="button" onclick="make_all_penalty('penalty_form')">Aktiver prikker</button>
-    <span>NB! Du må trykke send inn for at prikkene skal registreres.</span>
-{% endif %}
-<table id="attending_list" class="table">
-    <tr>
-        <th>Bruker</th>
-        {% for case, penalty in event.get_penalty_rule_dict.items %}
-        <th>{{ case }} ({{ penalty }}p)</th>
-        {% endfor %}
-    </tr>
-    {% for registration in registrations %}
-    <tr>
-        <td><label for="user_penalty_{{registration.pk}}">{{ registration.user.get_full_name }}</label></td>
-        {% for penalty in event.get_penalty_rule_dict.values %}
-        <td><label style="width: 100%"><input type="radio" name="user_penalty_{{registration.pk}}" value="{{ penalty }}" {% ifequal registration.penalty penalty %}checked{% endifequal %}></label></td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
-</table>
-<button type="submit">Send inn</button>
+<div class="d-flex justify-content-between">
+    <a href="{{event.get_absolute_url}}" class="{% firstof text_type "text-muted"%}">{{ event.headline}}</a>
+    <a href="{% url 'wiki:get' 'retningslinjer-arrangement/' %}" class="{% firstof text_type "text-muted"%}">Prikkregler: {{ event.get_penalty_rule_name}}</a>
+
+    <a class="{% firstof text_type "text-muted"%}" data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
+    Forklaring
+    </a>
+</div>
+
+<div class="collapse pt-3" id="collapseInfo">
+    <div class="card card-body">
+        <p>
+            Her kan arrangementadministratorer registrere oppmøte for brukere som er påmeldt et arrangement.
+            Brukere registreres ved å skrive inn brukernavnet sitt, eller ved å skanne NTNU-kortet sitt i en kortskanner.
+            Merk at for at NTNU-kortet skal fungere må brukeren ha registrert EM-koden på baksiden av kortet.
+            Dette gjøres under "Endre profil" på nabla.no.
+        </p>
+        <p>
+            Prikkfordeling skjer automatisk når en registrering skjer, men bare for arrangementer der prikker korresponderer med oppmøte.
+            Hvis en bruker har prikk fra før vil ikke prikkene bli endret her.
+            Merk at siden kan brukes til å sjekke påmelding, selv om arrangementet ikke har prikker.
+        </p>
+        <p>
+            Klikk på "Start arrangementet " for å starte å fordele for-sent prikker til dem som møter opp.
+            Dette kan bare gjøres etter starttidspunktet.
+            Klikk på "Avslutt registrering" for å fordele ikke-møtt prikker til dem som ikke møtte opp.
+            Prikkoversikten finnes <a href="{%  url "event_administer_penalties" pk=event.pk %}">her</a>
+        </p>
+    </div>
+</div>
+<div>
+<div class="const-height ">
+    <h1 class="display-3 {% firstof text_type "" %}"> {%  firstof attendance_message "Skriv inn brukernavn eller skann NTNU-kortet" %}</h1>
+
+    {% if reg_datetime and status_type != "success"  %}
+    <p class="lead {% firstof text_type  %} ">{{ reg_datetime|date:"j. F" }} klokken {{ reg_datetime|time:"H.i" }}</p>
+    {% endif %}
+</div>
+<form method="post"  autocomplete="off">{% csrf_token %}
+    <div class="form-group row">
+        <div class="col-sm-12">
+            <input type="text" class="form-control form-control-lg" name="identification_string" id="colFormLabelLg" placeholder="Skriv inn brukernavn eller skann NTNU-kortet" autofocus>
+            <input type="hidden"  name="identification_type" value="username">
+            <input type="hidden"  name="identification_type" value="ntnu_card">
+        </div>
+    </div>
 </form>
-{% endblock %} {# block "content" #}
+</div>
+<form method="post"  class="py-3 d-flex justify-content-between align-items-center" action="{% url "event_noshow_penalties" event.pk %}">{% csrf_token %}
+    <a href="{%  url "event_administer_penalties" pk=event.pk %}" class="{% firstof text_type "text-muted"%}">Ikke registrert: {{ registrations_not_registered }}</a>
+
+    <a class="{% firstof text_type "text-muted"%} m-0" >
+    {% if event.penalties_finished_distributed %}
+    Ingen prikker å fordele
+    {% elif event.get_is_started %}
+    Arrangementet har startet. Registrering gir {% firstof event.get_late_penalty "ingen" %} prikk(er)
+    {% elif event.should_have_started %}
+    Klikk på knappen for å starte å starte arrangementet!
+    {% else %}
+    Arrangementet har ikke startet. Registrering gir {% firstof event.get_show_penalty "ingen" %} prikk(er)
+    {% endif %}
+    </a>
+
+    {% if event.get_is_started and not event.penalties_finished_distributed %}
+    <button class="btn btn-secondary" type="submit" value="register_noshow_penalties"
+            onclick="return confirm('Hvis du avslutter registreringen får alle som ikke er registrert {% firstof event.get_noshow_penalty "ingen" %} prikk(er).')">
+        Avslutt registrering
+    </button>
+
+    {% elif event.should_have_started %}
+    <button class="btn btn-primary" type="submit" value="register_noshow_penalties">
+        Start arrangementet
+    </button>
+    {% elif not event.get_is_started %}
+    <a class=" {% firstof text_type "text-muted"%} m-0" >
+        Arrangementet starter
+        {% now "Y-m-d" as todays_date %}
+        {% if todays_date == event.event_start|date:"Y-m-d" %}
+            kl. {{ event.event_start|time:"H.i" }}
+        {% else %}
+            {{ event.event_start|date:"j. F" }}
+        {% endif %}
+    </a>
+    {% endif %}
+
+</form>
+</div>
+<script>
+
+let interval = 15000;
+{%  if not status_type %}
+interval*=4;
+{% endif %}
+setTimeout(condRefresh, interval);
+
+function condRefresh() {
+    if (document.querySelector("input#colFormLabelLg").value === ""){
+        location.reload();
+    }else{
+        setTimeout(condRefresh, interval);
+    }
+}
+
+</script>
+
+
+
+{% endblock body %}

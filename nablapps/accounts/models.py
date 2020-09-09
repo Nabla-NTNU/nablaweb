@@ -75,10 +75,10 @@ class NablaUser(AbstractUser):
         max_length=10,
         blank=True,
         help_text=(
-            "Dette er et 7-10-sifret nummer på baksiden av kortet."
-            "På nye kort er dette sifrene etter EM."
-            "På gamle kort er dette sifrene nede til venstre."
-            "Det brukes blant annet for å komme inn på bedpresser."
+            "Dette er et 7-10-sifret nummer på baksiden av kortet. "
+            "På nye kort er dette sifrene etter EM. "
+            "På gamle kort er dette sifrene nede til venstre. "
+            "Det kan brukes of å identifisere deg på bedriftspresentasjoner og andre arrangementer. "
         ),
     )
 
@@ -129,7 +129,7 @@ class NablaUser(AbstractUser):
 
         penalties = EventRegistration.objects.filter(
             user=self, date__gte=six_months_ago
-        ).exclude(penalty=0)
+        ).exclude(penalty=0).exclude(penalty=None)
         return penalties
 
 

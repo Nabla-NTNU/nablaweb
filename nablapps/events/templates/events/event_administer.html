@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
+{# Administer påmeldinger #}
 
 {% block title %}{{ event.headline }}{% endblock %}
 
 {% block content %}
 
-
-<h2> Administrer <a href="{{event.get_absolute_url}}">{{ event.headline }}</a> </h2>
+<h2> Administrer <a href="{{event.get_absolute_url}}">{{ event.headline }}</a></h2>
 {% if event.registration_required %}
 <br>
-<form action="" method="post" class="form-inline" >{% csrf_token %}
+<form action="" method="post" class="form-inline" autocomplete="off" >{% csrf_token %}
     <div class="input-group mb-2 mr-sm-2">
         <div class="input-group-prepend">
             <div class="input-group-text">@</div>
         </div>
-        <input type="text" class="form-control" name="text" maxlength="10" id="usernameInput"  placeholder="brukernavn">
+        <input type="text" class="form-control" name="text" maxlength="10" id="usernameInput"  placeholder="brukernavn" >
     </div>
     <input type="hidden" name="action" value="add" />
     <button  type="submit" value="Legg til"  class="btn btn-primary mb-2 mr-2">Meld på bruker</button>

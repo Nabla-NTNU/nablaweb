@@ -30,7 +30,11 @@ from .exceptions import (
     RegistrationNotAllowed,
     RegistrationNotOpen,
     RegistrationNotRequiredException,
+    EventNotStartedException,
     UserRegistrationException,
+    UserAttendanceException,
+    UserAlreadyRegistered,
+    UserNotAttending
 )
 from .forms import FilterEventsForm  # Used in EventMainPage
 from .models.event import Event, attending_events
@@ -198,7 +202,7 @@ class EventRegistrationsView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        event = self.object
+        event = self.get_object()
         regs = event.eventregistration_set
         context["eventregistrations"] = regs.order_by("-attending", "user__last_name")
         return context
@@ -257,17 +261,24 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
                     "url": reverse("event_registrations", args=[self.object.id]),
                 },
             ]
-            if self.object.penalty != 0:
-                admin_list.append(
-                    {
-                        "name": "Registrer oppmøte",
-                        "glyphicon_symbol": "check",
-                        "url": reverse(
-                            "event_register_attendance", args=[self.object.id]
-                        ),
-                    }
-                )
-
+        if self.object.registration_required:
+            admin_list.append(
+                {
+                    "name": "Administrer prikker",
+                    "glyphicon_symbol": "check",
+                    "url": reverse(
+                        "event_administer_penalties", args=[self.object.id]
+                    ),
+                }
+            )
+        if self.object.registration_required:
+            admin_list.append(
+                {
+                    "name": "Registrer oppmøte",
+                    "glyphicon_symbol": "user",
+                    "url": reverse("event_register_attendance", args=[self.object.id]),
+                }
+            )
         return admin_list + super().get_admin_links()
 
 
@@ -311,7 +322,6 @@ class RegisterUserView(LoginRequiredMixin, MessageMixin, DetailView):
 
     def register_user(self, user):
         """Prøver å melde en bruker på arrangementet.
-
         Returnerer en melding som er ment for brukeren.
         """
         try:
@@ -341,11 +351,12 @@ class RegisterUserView(LoginRequiredMixin, MessageMixin, DetailView):
         return "Du er meldt av arrangementet."
 
 
-class RegisterAttendanceView(DetailView, MessageMixin):
+class AdministerPenaltiesView(DetailView, MessageMixin,PermissionRequiredMixin):
     """Used by event admins to register attendance"""
 
     model = Event
-    template_name = "events/register_attendance.html"
+    template_name = "events/administer_penalties.html"
+    permission_required = "events.administer"
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -359,7 +370,10 @@ class RegisterAttendanceView(DetailView, MessageMixin):
                 pk = q.split("_")[-1]
                 penalty_value = request.POST[q]
                 reg_req = attending.get(pk=pk)
-                reg_req.penalty = penalty_value
+                if penalty_value == "None":
+                    reg_req.penalty = None
+                else:
+                    reg_req.penalty = penalty_value
                 try:
                     reg_req.full_clean()
                     reg_req.save()
@@ -373,6 +387,134 @@ class RegisterAttendanceView(DetailView, MessageMixin):
         registrations = event.eventregistration_set.filter(attending=True)
         context["registrations"] = registrations.order_by("user__first_name")
         return context
+
+
+class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
+    """Used by event admins to register attendance"""
+    model = Event
+    template_name = "events/register_attendance.html"
+    permission_required = "events.administer"
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        identification_string = request.POST.get("identification_string")
+        identification_types = request.POST.getlist("identification_type")
+
+        context = {"attendance_message": "Noe gikk galt, prøv igjen", "status_type": "danger"}
+        try:
+            registration = self.get_registration_by_identification_string(identification_string=identification_string, identification_types=identification_types)
+        except EventRegistration.DoesNotExist:
+            context["attendance_message"] = "Fant ikke bruker med påmelding"
+            context["status_type"] = "danger"
+        except UserNotAttending:
+            context["attendance_message"] = "Brukeren er på ventelisten"
+            context["status_type"] = "danger"
+        except UserAttendanceException:
+            context["attendance_message"] = "Fant ikke bruker med påmelding"
+            context["status_type"] = "danger"
+        else:
+            try:
+                self.register_user_attendance(registration=registration)
+                context["attendance_message"] = f"Velkommen {registration.user.first_name}"
+                context["status_type"] = "success"
+            except UserAlreadyRegistered as e:
+                reg_datetime = e.eventregistration.attendance_registration
+                context["reg_datetime"] = reg_datetime
+                context["attendance_message"] = "Oppmøte allerede registrert"
+                context["status_type"] = "warning"
+            except ValidationError:
+                context["attendance_message"] = "Noe gikk galt, prøv igjen"
+                context["status_type"] = "danger"
+        # hack to get the right colours
+        if context["status_type"] in ["danger","success"]:
+            context["text_type"] = "text-light"
+        elif context["status_type"] == "warning":
+            context["text_type"] = "text-dark"
+
+        context = {**context, **self.get_context_data(**kwargs)}
+        return render(request, template_name="events/register_attendance.html", context=context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        event = self.get_object()
+        registrations = event.eventregistration_set.filter(attending=True)
+        context["registrations_not_registered"] = registrations.filter(attendance_registration=None).count()
+        return context
+
+    def get_registration_by_identification_string(self, identification_string, identification_types):
+        event = self.get_object()
+        num_id_types = len(identification_types)
+        for itr, method in enumerate(identification_types,start=1):
+            try:
+                if method == "username":
+                    registration = event.eventregistration_set.get(user__username=identification_string)
+                elif method == "ntnu_card" and identification_string.isnumeric() :
+                    registration = event.eventregistration_set.get(user=NablaUser.objects.get_from_rfid(identification_string))
+                # not implemented jet
+                # elif method == "qr_code":
+                #     raise UserAttendanceException(identification_string=identification_string, method=method)
+                else:
+                    continue
+            except EventRegistration.DoesNotExist:
+                if not itr == num_id_types:
+                    continue
+                else:
+                    raise EventRegistration.DoesNotExist
+            if not registration.attending:
+                raise UserNotAttending(eventregistration=registration, identification_string=identification_string)
+            return registration
+        raise UserAttendanceException(identification_string=identification_string)
+
+    def register_user_attendance(self, registration):
+        if registration.attendance_registration is not None:
+            raise UserAlreadyRegistered(eventregistration=registration)
+        else:
+            registration.attendance_registration = datetime.datetime.now()
+            # Her sjekker man at det ikke finnes prikkregistrering på påmeldingen fra før
+            # Det kan også være en løsning at vi setter antall prikekr til maksimalt antall
+
+            if registration.event.get_is_started() and registration.penalty is None:
+                registration.penalty = registration.event.get_late_penalty()
+            else:
+                registration.penalty = registration.event.get_show_penalty()
+            registration.full_clean()
+            registration.save()
+
+
+class RegisterNoshowPenaltiesView(DetailView,MessageMixin, PermissionRequiredMixin):
+    """
+    Når en post blir sendt hit gis det prikk til til dem som ikke er registrert
+    """
+    model = Event
+    template_name = "events/register_attendance.html"
+    permission_required = "events.administer"
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        event = self.object
+        noshow_penalty = event.get_noshow_penalty()
+        if not event.get_is_started():
+            try:
+                event.start_event()
+                event.full_clean()
+                event.save()
+                return redirect("event_register_attendance", kwargs.pop("pk", 1))
+            except EventNotStartedException:
+                self.messages.warning("Du kan ikke starte arrangementet før startiden")
+            except ValidationError:
+                self.messages.warning("Noe gikk galt")
+        elif not event.penalties_finished_distributed():
+            try:
+                if noshow_penalty is None:
+                    self.messages.info("Arrangementet gir ikke prikk for å ikke møte opp. Ingen prikker ble fordelt")
+                elif not event.get_is_started():
+                    self.messages.warning("Du kan ikke gi prikk for manglende oppmøte før arrangementet har begynt!")
+                else:
+                    event.eventregistration_set.filter(attending=True).filter(penalty=None).filter(attendance_registration=None).update(penalty=noshow_penalty)
+                    return redirect("event_administer_penalties", kwargs.pop("pk", 1))
+            except ValidationError:
+                self.messages.warning("Noe gikk galt")
+        return redirect("event_register_attendance", kwargs.pop("pk", 1))
 
 
 def ical_event(request, event_id):
