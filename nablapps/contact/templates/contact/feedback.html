@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load bootstrap4 %}
 {% block title %}Tilbakemelding{% endblock %}
 
 {% block content %}
@@ -11,22 +11,12 @@
 
 
 {% if spam_check == True %}
-    <p style="color:red;"> Forsøk å regne kontrollspørsmål på nytt</p>
+    {% bootstrap_alert "Forsøk å regne kontrollspørsmål på nytt" alert_type="danger" %}
 {% endif %}
 
 <form method="POST">
     {% csrf_token %}
-    {% for field in feedback_form %}
-        {% if forloop.counter <= 4 %}
-            <p style="width: 100px;" >{{field.label}} {{field}}</p>
-        {% endif %}
-    {% endfor %}
-    
-    <p>Hva er kvadratroten av {{ test_val }} ganget med kvadratroten av {{ test_val }}?</p>
-    <p>{{ feedback_form.spam_check }}</p>
-
-    <button type="submit">Send</button>
-
-{{ feedback_form.right_answer }}
+    {% bootstrap_form feedback_form %}
+    {% bootstrap_button "Send" button_type="submit" %}
 </form>
 {% endblock %}

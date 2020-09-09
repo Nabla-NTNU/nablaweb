@@ -40,7 +40,7 @@ class ContactForm(forms.Form):
     )
 
     your_name = forms.CharField(label="Ditt navn:", max_length=100, required=False)
-    reciever = forms.ChoiceField(choices=reciever_choices, label="mottaker")
+    reciever = forms.ChoiceField(choices=reciever_choices, label="Mottaker")
     subject = forms.CharField(label="Emne:", max_length=100, required=True)
     message = forms.CharField(label="Melding:", widget=forms.Textarea, required=True)
     email = forms.EmailField(label="Din e-post:", max_length=100, required=False)

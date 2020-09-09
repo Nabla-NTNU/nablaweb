@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load bootstrap4  %}
 {% block title %}Gullkorn{% endblock %}
 
 {% block content %}
@@ -9,23 +9,19 @@
 <p>Har du hørt noe morsom på gløs? Meld det inn her, så kommer det kanskje i Nabladet!</p>
 
 {% if spam_check == True %}
-<p style="color:red;"> Forsøk å regne kontrollspørsmål på nytt</p>
+    {% bootstrap_alert "Forsøk å regne kontrollspørsmål på nytt" alert_type="danger" %}
 {% endif %}
 
 <form method="POST">
     {% csrf_token %}
-
-    {{ feedback_form.message }}
-
-    <br />
     {# Hacky løsning, men bruker subject for å få hvem som sa gullkornet #}
-    <label>Hvem sa dette?</label> {{ feedback_form.subject }}
-    <p>Hva er kvadratroten av {{ test_val }} ganget med kvadratroten av {{ test_val }}?</p>
-    <p>{{ feedback_form.spam_check }}</p>
+    {% bootstrap_field feedback_form.message show_label=False placeholder="Skriv gullkornet her" %}
+    {% bootstrap_label "Hvem sa dette?" label_for="id_subject"%}
+    {% bootstrap_field feedback_form.subject show_label=False %}
+    {% bootstrap_field feedback_form.spam_check placeholder="Svar" %}
+    {% bootstrap_field feedback_form.right_answer %}
+    {% bootstrap_button "Send" button_type="submit" %}
 
-    <button type="submit">Send</button>
-
-{{ feedback_form.right_answer }}
 </form>
 
 {% endblock %}
