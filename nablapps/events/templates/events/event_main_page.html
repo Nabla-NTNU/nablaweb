@@ -35,7 +35,7 @@
 
     <div id="event_list">
         <div>
-            <form method="get" class="filter">
+            <form method="get" class="filter" onchange="submit(this)">
                 {% for type in filter_form.type %}
                 {{ type }}
                 {% endfor %}
@@ -43,8 +43,6 @@
                 {{ filter_form.start_time.label }}
                 {{ filter_form.start_time }}
                 {{ filter_form.start_time.errors }}
-                |
-                <input type="submit" value="Filtrer">
             </form>
         </div>
 
