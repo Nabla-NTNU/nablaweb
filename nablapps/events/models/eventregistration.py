@@ -7,6 +7,7 @@ from django.db import models
 from django.template import loader
 from datetime import datetime
 
+
 class EventRegistration(models.Model):
     """Modell for påmelding på arrangementer.
 
@@ -48,7 +49,6 @@ class EventRegistration(models.Model):
         help_text="Hvis dette tidspunktet er satt er det gjort en regisrering på at brukeren har møtt opp"
     )
 
-
     class Meta:
         verbose_name = "påmelding"
         verbose_name_plural = "påmeldte"
@@ -64,7 +64,7 @@ class EventRegistration(models.Model):
 
     def clean(self):
         valid_penalties = self.event.get_penalty_rule_dict().values()
-        if self.penalty not in valid_penalties and self.penalty != None:
+        if self.penalty not in valid_penalties and self.penalty is not None:
             raise ValidationError("Penalty value is not valid for this event")
 
     def delete(self, *args, **kwargs):
@@ -100,4 +100,3 @@ class EventRegistration(models.Model):
                 {"event": self.event, "name": self.user.get_full_name()}
             )
             self.user.email_user(subject, message)
-

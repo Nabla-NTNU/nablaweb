@@ -41,14 +41,17 @@ class EventFullException(UserRegistrationException):
 class DeregistrationClosed(UserRegistrationException):
     """Raised when a user tries to deregister from an event after the deregistration deadline"""
 
+
 class UserAttendanceException(EventException):
     """Base class for exceptions that can be raised when a user trys to register for an event"""
 
-    def __init__(self, *args, eventregistration=None, user=None, identification_string=None, method=None ):
+    def __init__(self, *args, eventregistration=None, user=None, identification_string=None, method=None):
         super().__init__(*args)
         self.eventregistration = eventregistration
         self.identification_string = identification_string
         self.method = None
+
+
 class EventNotStartedException(EventException):
     """Raised when a user tries to start an event before event has started"""
 
@@ -56,8 +59,10 @@ class EventNotStartedException(EventException):
 class UserNotAttending(UserAttendanceException):
     """Raised whten the user is on the waiting list"""
 
+
 class UserAlreadyRegistered(UserAttendanceException):
     """Raised when users attendance already has been registered"""
+
 
 class UserNotPaid(UserAttendanceException):
     """Raised when the user has not paid for their ticket. This exception is not used but might be used in the future"""

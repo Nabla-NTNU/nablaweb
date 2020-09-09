@@ -103,13 +103,16 @@ class Event(
         return self.penalty_rules[self.penalty][1]
 
     def get_show_penalty(self):
-        return self.show_penalties[self.penalty]
+        if self.penalty is not None:
+            return self.show_penalties[self.penalty]
 
     def get_late_penalty(self):
-        return self.late_penalties[self.penalty]
+        if self.penalty is not None:
+            return self.late_penalties[self.penalty]
 
     def get_noshow_penalty(self):
-        return self.noshow_penalties[self.penalty]
+        if self.penalty is not None:
+            return self.noshow_penalties[self.penalty]
 
     def get_short_name(self):
         """Henter short_name hvis den finnes, og kutter av enden av headline hvis ikke."""
@@ -255,9 +258,12 @@ class Event(
             return True
 
     def penalties_finished_distributed(self):
-        if self.get_is_started() and (
-                self.eventregistration_set.filter(penalty=None).count() == 0 or
-                self.eventregistration_set.filter(attendance_registration=None).count() == 0
+        if(
+            self.get_is_started()
+            and (
+                self.eventregistration_set.filter(penalty=None).count() == 0
+                or self.eventregistration_set.filter(attendance_registration=None).count() == 0
+            )
         ):
             return True
 
@@ -274,4 +280,3 @@ def attending_events(user, today):
         event.waiting = not reg.attending
         events.append(event)
     return events
-

@@ -351,6 +351,7 @@ class RegisterUserView(LoginRequiredMixin, MessageMixin, DetailView):
             return "Avmeldingsfristen er ute."
         return "Du er meldt av arrangementet."
 
+
 class AdministerPenaltiesView(DetailView, MessageMixin,PermissionRequiredMixin):
     """Used by event admins to register attendance"""
 
@@ -400,8 +401,7 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
         identification_string = request.POST.get("identification_string")
         identification_types = request.POST.getlist("identification_type")
 
-        context = {"attendance_message": "Noe gikk galt, prøv igjen",
-                    "status_type": "danger"}
+        context = {"attendance_message": "Noe gikk galt, prøv igjen", "status_type": "danger"}
         try:
             registration = self.get_registration_by_identification_string(identification_string=identification_string, identification_types=identification_types)
         except EventRegistration.DoesNotExist:
@@ -413,25 +413,24 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
         except UserAttendanceException:
             context["attendance_message"] = "Fant ikke bruker med påmelding"
             context["status_type"] = "danger"
-        except :
-            context["attendance_message"] = "Noe gikk galt, prøv igjen"
-            context["status_type"] = "danger"
         else:
             try:
-                self.register_user_attendance(registration = registration)
+                self.register_user_attendance(registration=registration)
                 context["attendance_message"] = f"Velkommen {registration.user.first_name}"
-                context["status_type"] ="success"
+                context["status_type"] = "success"
             except UserAlreadyRegistered as e:
                 reg_datetime = e.eventregistration.attendance_registration
                 context["reg_datetime"] = reg_datetime
                 context["attendance_message"] = "Oppmøte allerede registrert"
                 context["status_type"] = "warning"
             except ValidationError:
-                context["attendance_message"]  = "Noe gikk galt, prøv igjen"
+                context["attendance_message"] = "Noe gikk galt, prøv igjen"
                 context["status_type"] = "danger"
         # hack to get the right colours
-        if context["status_type"] in [ "danger","success"] : context["text_type"] = "text-light"
-        elif context["status_type"] == "warning": context["text_type"] = "text-dark"
+        if context["status_type"] in ["danger","success"]:
+            context["text_type"] = "text-light"
+        elif context["status_type"] == "warning":
+            context["text_type"] = "text-dark"
 
         context = {**context, **self.get_context_data(**kwargs)}
         return render(request, template_name="events/register_attendance.html", context=context)
@@ -455,10 +454,13 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
                 # not implemented jet
                 # elif method == "qr_code":
                 #     raise UserAttendanceException(identification_string=identification_string, method=method)
-                else: continue
+                else:
+                    continue
             except EventRegistration.DoesNotExist:
-                if not itr == num_id_types: continue
-                else: raise EventRegistration.DoesNotExist
+                if not itr == num_id_types:
+                    continue
+                else:
+                    raise EventRegistration.DoesNotExist
             if not registration.attending:
                 raise UserNotAttending(eventregistration=registration, identification_string=identification_string)
             return registration
@@ -500,21 +502,20 @@ class RegisterNoshowPenaltiesView(DetailView,MessageMixin, PermissionRequiredMix
                 return redirect("event_register_attendance", kwargs.pop("pk", 1))
             except EventNotStartedException:
                 self.messages.warning("Du kan ikke starte arrangementet før startiden")
-            except:
+            except ValidationError:
                 self.messages.warning("Noe gikk galt")
         elif not event.penalties_finished_distributed():
             try:
                 if noshow_penalty is None:
-                    self.messages.info(f"Arrangementet gir ikke prikk for å ikke møte opp. Ingen prikker ble fordelt" )
+                    self.messages.info("Arrangementet gir ikke prikk for å ikke møte opp. Ingen prikker ble fordelt")
                 elif not event.get_is_started():
                     self.messages.warning("Du kan ikke gi prikk for manglende oppmøte før arrangementet har begynt!")
                 else:
                     event.eventregistration_set.filter(attending=True).filter(penalty=None).filter(attendance_registration=None).update(penalty=noshow_penalty)
                     return redirect("event_administer_penalties", kwargs.pop("pk", 1))
-            except:
+            except ValidationError:
                 self.messages.warning("Noe gikk galt")
         return redirect("event_register_attendance", kwargs.pop("pk", 1))
-
 
 
 def ical_event(request, event_id):
