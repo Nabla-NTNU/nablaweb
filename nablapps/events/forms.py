@@ -24,6 +24,7 @@ class EventForm(ModelForm):
     """
 
     has_queue = BooleanField(
+        initial=True,
         required=False,
         label="Har venteliste",
         help_text=(
