@@ -48,7 +48,6 @@ LOGGING = {
     "loggers": {"django": {"handlers": ["file"], "level": "ERROR", "propagate": True}},
 }
 
-BPC_TESTING = False
 
 FILE_UPLOAD_PERMISSIONS = 0o644
 FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o755

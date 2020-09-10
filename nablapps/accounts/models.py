@@ -84,10 +84,6 @@ class NablaUser(AbstractUser):
 
     objects = NablaUserManager()
 
-    def get_hashed_ntnu_card_number(self):
-        """Returnerer sha1-hashen av ntnu kortnummeret som BPC-trenger."""
-        return sha1(self.ntnu_card_number.encode()).hexdigest()
-
     def get_class_number(self):
         """Henter hvilken klasse på fysmat (1-5) brukeren går i.
 
