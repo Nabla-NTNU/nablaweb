@@ -24,28 +24,7 @@
       {% endif %}
     {% endfor %}
     {% else %}
-
-        <div class="row pl-4" id="c{{ comment.id }}">
-            <img class="col-xs-2 pr-2" alt="avatar" width="150" height="150" src=
-                {% if user.avatar %}
-                    "{% thumbnail user.avatar 150x150 box=user.cropping %}"
-                {% else %}
-                    "{% static "img/default_avatar.png" %}"
-                {%endif %}>
-
-            <div class="col-xs-10 text">
-                <div class="info">
-                    <span class="author">
-                        <a href="{% url "member_profile" user.username %}">
-                            {{ user.get_full_name }} 
-                        </a>
-                    </span>
-                    <span class="date">i dag</span>
-                </div>
-
-                {{ form.data.comment|markdown}}
-            </div>
-        </div>
+    {%  include "comments/comment_line.html" with is_preview=True comment_content=form.data.comment %}
     {% endif %}
 
     {% include "comments/form.html" %}
