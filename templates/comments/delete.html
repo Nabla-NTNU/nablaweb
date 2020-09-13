@@ -5,7 +5,9 @@
 
 {% block content %}
 <h2>{% trans "Really remove this comment?" %}</h2>
-  <blockquote>{{ comment|linebreaks }}</blockquote>
+    <blockquote>
+    {% include "comments/comment_line.html" with user=comment.user is_preview=True comment_content=comment.comment %}
+    </blockquote>
   <form action="." method="post">{% csrf_token %}
     <input type="hidden" name="next" value="{{ comment.content_object.get_absolute_url }}">
     {% if next %}<div><input type="hidden" name="next" value="{{ next }}" id="next" /></div>{% endif %}
