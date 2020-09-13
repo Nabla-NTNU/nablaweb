@@ -74,7 +74,8 @@ Velg mottaker ITV ved IFY for fysikk eller ITV ved IMF for matte
 <br>
 <form method="POST">
     {% csrf_token %}
-    {% bootstrap_form contact_form %}
+    {% bootstrap_form contact_form exclude="spam_check" %}
+    {% bootstrap_field contact_form.spam_check placeholder="Svar" %}
     {% bootstrap_button "Send" button_type="submit" %}
 </form>
 

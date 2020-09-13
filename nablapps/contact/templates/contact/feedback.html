@@ -16,7 +16,8 @@
 
 <form method="POST">
     {% csrf_token %}
-    {% bootstrap_form feedback_form %}
+    {% bootstrap_form feedback_form exclude="spam_check" %}
+    {% bootstrap_field feedback_form.spam_check placeholder="Svar" %}
     {% bootstrap_button "Send" button_type="submit" %}
 </form>
 {% endblock %}
