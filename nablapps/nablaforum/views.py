@@ -9,11 +9,11 @@ from django.views.generic import FormView, TemplateView
 
 from nablapps.accounts.models import NablaGroup
 
-from .exceptions.py import (
+from .exceptions import (
     ChannelCreationException,
     MessageCreationException,
     ThreadCreationException,
-)
+    )
 from .forms import ChannelForm, JoinChannelsForm, MessageForm, ThreadForm
 from .models import Channel, Message, Thread
 
@@ -113,7 +113,10 @@ class MainView(LoginRequiredMixin, TemplateView):
 
         # get chosen channel and belonging threads
         chosen_channel_id = self.kwargs["channel_id"]
-        chosen_channel = Channel.objects.get(pk=chosen_channel_id)
+        if chosen_channel_id == "1":
+            chosen_channel = Channel.objects.get_or_create(pk=chosen_channel_id, name="Nablafeed", is_feed=True)
+        else:
+            chosen_channel = Channel.objects.get(pk=chosen_channel_id)
         channel_threads = Thread.objects.filter(channel__id=chosen_channel_id).order_by(
             "-pk"
         )
