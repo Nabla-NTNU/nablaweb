@@ -13,7 +13,7 @@ from .exceptions import (
     ChannelCreationException,
     MessageCreationException,
     ThreadCreationException,
-    )
+)
 from .forms import ChannelForm, JoinChannelsForm, MessageForm, ThreadForm
 from .models import Channel, Message, Thread
 
@@ -32,21 +32,22 @@ class MainView(LoginRequiredMixin, TemplateView):
             form_data = thread_form.cleaned_data
             channel_id = self.kwargs["channel_id"]
             channel = Channel.objects.get(pk=channel_id)
-            if not channel.is_feed:
+            user = self.request.user
+            if not channel.is_feed or user.has_perm("nablaforum.can_post_in_nablafeed"):
                 try:
                     new_thread = Thread.objects.create(
                         channel=channel,
-                        threadstarter=self.request.user,
+                        threadstarter=user,
                         title=form_data["title_field"],
                         text=form_data["text_field"],
                     )
 
                     new_message = Message.objects.create(
                         thread=new_thread,
-                        user=self.request.user,
+                        user=user,
                         message=new_thread.text,
                     )
-                    new_message.read_by_user.add(self.request.user)
+                    new_message.read_by_user.add(user)
                 except ThreadCreationException:
                     django_messages.add_message(
                         self.request,
@@ -114,7 +115,9 @@ class MainView(LoginRequiredMixin, TemplateView):
         # get chosen channel and belonging threads
         chosen_channel_id = self.kwargs["channel_id"]
         if chosen_channel_id == "1":
-            chosen_channel = Channel.objects.get_or_create(pk=chosen_channel_id, name="Nablafeed", is_feed=True)
+            chosen_channel = Channel.objects.get_or_create(
+                pk=chosen_channel_id, name="Nablafeed", is_feed=True
+            )
         else:
             chosen_channel = Channel.objects.get(pk=chosen_channel_id)
         channel_threads = Thread.objects.filter(channel__id=chosen_channel_id).order_by(
@@ -173,6 +176,9 @@ class MainView(LoginRequiredMixin, TemplateView):
         context["is_paginated"] = paginator.num_pages > 1
         context["thread_form"] = thread_form
         context["message_form"] = message_form
+        context["render_thread_form"] = not channel.is_feed or user.has_perm(
+            "nablaforum.can_post_in_nablafeed"
+        )
         return context
 
 
