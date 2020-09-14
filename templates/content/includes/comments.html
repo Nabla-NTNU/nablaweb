@@ -3,14 +3,13 @@
 
 {% get_comment_count for content as comment_count %}
 
-{% if comment_count > 0 %}
-    <h3 class="comments-header">Kommentarer</h3>
-{% endif %}
+<h3 class="comments-header">Kommentarer</h3>
 
 {% render_comment_list for content %}
 
 {% if user.is_authenticated %}
     {% render_comment_form for content %}
 {% else %}
+    <hr>
     <p class="card card-body bg-light">Logg inn for å skrive en kommentar</p>
 {% endif %}
