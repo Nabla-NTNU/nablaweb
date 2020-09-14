@@ -96,7 +96,7 @@
 
             
              
-            {% if not chosen_channel.is_feed or perms.nablaforum.can_post_in_nablafeed %}
+            {% if render_thread_form %}
             <form method="POST">
                 {% csrf_token %}
                 <h4>Ny tråd:</h4>
