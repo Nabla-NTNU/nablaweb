@@ -4,7 +4,7 @@
 {% load static %}
 
 {% for comment in comment_list %}
-
-{% include "comments/comment_line.html" with user=comment.user comment_content=comment.comment%}
 <hr>
+{% include "comments/comment_line.html" with user=comment.user comment_content=comment.comment%}
+
 {% endfor %}

@@ -24,6 +24,7 @@
       {% endif %}
     {% endfor %}
     {% else %}
+    <br>
     {%  include "comments/comment_line.html" with is_preview=True comment_content=form.data.comment %}
     {% endif %}
 
