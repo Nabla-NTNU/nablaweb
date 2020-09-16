@@ -11,7 +11,7 @@
         <div class="col-1 p-0">
             <img  alt="avatar" class="rounded img-fluid" src=
                 {% if user.avatar %}
-                    "{% thumbnail comment.user.avatar 150x150 box=comment.user.cropping %}"
+                    "{% thumbnail user.avatar 150x150 box=user.cropping %}"
                 {% else %}
                     "{% static "img/default_avatar.png" %}"
                 {%endif %}>
