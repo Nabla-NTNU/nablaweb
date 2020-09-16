@@ -328,8 +328,8 @@ nav.navbar {
     }
     form.add-comment .control-group:first-of-type { padding-top: 9px;}
     form.add-comment textarea {
-        width: 98%;
-        height: 100px;
+        width: 100%;
+        height: 5rem;
     }
     .comment .text { width: 100%; overflow: hidden; }
     .comment .info { margin-bottom: 10px; }

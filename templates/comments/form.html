@@ -1,148 +1,130 @@
 {% load comments i18n %}
+{% load bootstrap4 %}
+{% load easy_thumbnails %}
+{% load static %}
 
+<hr>
 
-<form action="{% comment_form_target %}" method="post" class="continer add-comment card card-body bg-light mb-3">
+<form action="{% comment_form_target %}" method="post" class="add-comment mb-3">
     {% csrf_token %}
-    <fieldset>
+    <div class="row pl-3">
+        <div class="col-1 p-0">
+            <img  alt="avatar" class="rounded img-fluid" src=
+                {% if user.avatar %}
+                    "{% thumbnail user.avatar 150x150 box=user.cropping %}"
+                {% else %}
+                    "{% static "img/default_avatar.png" %}"
+                {%endif %}>
+        </div>
+        <div class="col-11">
+            <fieldset>
 
-        <legend>Legg til en kommentar</legend>
+                {% comment %}
+                Hvis vi er på den originale siden, hent nåværende URL.  Hvis noe gikk
+                galt, og vi havnet på forhåndsvisningen, bruk URL fra den originale
+                siden, som ble POSTet via next-feltet
+                {% endcomment %}
+                <input type="hidden" name="next"
+                       value="{% if request.POST.next %}{{ request.POST.next }}{% else %}{{ request.get_full_path }}{% endif %}">
+                {% bootstrap_form form exclude="name,email,url,honeypot,comment" %}
+                {% bootstrap_field form.comment show_label=False placeholder="Legg til en kommentar" %}
+                {% bootstrap_field form.honeypot form_group_class="d-none" %}
 
-        {% comment %}
-        Hvis vi er på den originale siden, hent nåværende URL.  Hvis noe gikk
-        galt, og vi havnet på forhåndsvisningen, bruk URL fra den originale
-        siden, som ble POSTet via next-feltet
-        {% endcomment %}
-        <input type="hidden" name="next"
-               value="{% if request.POST.next %}{{ request.POST.next }}{% else %}{{ request.get_full_path }}{% endif %}">
-
-        {% for field in form %}
-
-            {% if field.is_hidden %}
-
-                {{ field }}
-
-            {% else %}
-
-                {# Fjern uønskede felt, ved å sjekke svartliste feltnavn #}
-                {% if field.name != "name" and field.name != "email" and field.name != "url" %}
-
-                    {# Vis feltet hvis det er godkjent #}
-                    <div class="form-group {% if field.errors %}error {% endif %}"
-                         {% if field.name == 'honeypot' %}style="display:none;"{% endif %}>
-                        <label class="control-label" for="id_{{ field.name }}">{{ field.label }}</label>
-
-                        {{ field }}
-                        {{ field.size }}
-
-                        <div class="help-block">
-                            {{ field.help_text }}
-                            {{ field.errors }}
-                        </div>
+                <div class="form-actions">
+                    <button type="submit" name="post" class="btn btn-primary">Lagre</button>
+                    <button type="submit" name="preview" class="btn btn-default">Forhåndsvis</button>
+                    <div class="float-right">
+                        <button style="display:none;" class="btn btn-outline-secondary comment-help-btn">Vis hjelp</button>
+                        <button style="display:none;" class="btn btn-outline-secondary comment-help-btn">Gjem hjelp</button>
                     </div>
-                {% endif %}
+                </div>
 
-            {% endif %}
+            </fieldset>
 
-        {% endfor %}
+            <div id="comment-help-text" class="text-break">
+                <div class="row pt-3">
+                    <div class="col-12">
+                        <p>Kommentarene bruker Markdown og MathJax. HTML blir fjernet. [[Ord]] i doble hakeparenteser lenker til wikien.</p>
+                    </div>
+                    <div class="col-lg-7"><pre class="tex2jax_ignore">Heisann, [Lenketekst](http://google.com),
+        **bold**, _kursiv_.
+        Og litt `kode`.
+                    </pre></div>
+                    <div class="col-lg-5">
+                        <p>Heisann, <a href="http://google.com">Lenketekst</a>, <strong>bold</strong>, <em>kursiv</em>. Og litt <code>kode</code>.</p>
+                    </div>
+                </div>
 
-        <div class="form-actions">
-            <button type="submit" name="post" class="btn btn-primary">Lagre</button>
-            <button type="submit" name="preview" class="btn btn-default">Forhåndsvis</button>
-        </div>
+                <div class="row">
+                    <div class="col-lg-7"><pre class="tex2jax_ignore">Jeg kan skrive store ligninger:
 
-    </fieldset>
+        $$ \int_0^\infty \frac1{x^2}\, dx = y. $$
+        Og små ligninger $ \int x^5\, dx$, som dette.
+                    </pre></div>
+                    <div class="col-lg-5">
+                        <p>Jeg kan skrive store ligninger:</p>
 
-    <div id="comment-help-buttons">
-        <div class="row">
-            <div class="col-lg-8">
-                <p>Kommentarene bruker Markdown og MathJax. HTML blir fjernet. [[Ord]] i doble hakeparenteser lenker til wikien.</p>
-            </div>
-            <div class="col-lg-4">
-                <button style="display:none;" class="btn btn-outline-secondary comment-help-btn">Vis hjelp</button>
-                <button style="display:none;" class="btn btn-outline-secondary comment-help-btn">Gjem hjelp</button>
-            </div>
-        </div>
-    </div>
+                        <p>$$ \int_0^\infty \frac1{x^2}\, dx = y. $$</p>
 
-    <div id="comment-help-text">
-        <div class="row">
-            <div class="col-lg-7"><pre class="tex2jax_ignore">Heisann, [Lenketekst](http://google.com),
-**bold**, _kursiv_.
-Og litt `kode`.
-            </pre></div>
-            <div class="col-lg-5">
-                <p>Heisann, <a href="http://google.com">Lenketekst</a>, <strong>bold</strong>, <em>kursiv</em>. Og litt <code>kode</code>.</p>
-            </div>
-        </div>
+                        <p>Og små ligninger $ \int x^5\, dx$, som dette.</p>
+                    </div>
+                </div>
 
-        <div class="row">
-            <div class="col-lg-7"><pre class="tex2jax_ignore">Jeg kan skrive store ligninger:
+                <div class="row">
+                    <div class="col-lg-7"><pre class="tex2jax_ignore">Liste:
 
-`$$ \int_0^\infty \frac1{x^2}\, dx = y. $$`
-Og små ligninger `$ \int x^5\, dx$`, som dette.
-            </pre></div>
-            <div class="col-lg-5">
-                <p>Jeg kan skrive store ligninger:</p>
+        * Ein
+        * To
+        * Tri
 
-                <p><code>$$ \int_0^\infty \frac1{x^2}\, dx = y. $$</code></p>
+        Numerert liste:
 
-                <p>Og små ligninger <code>$ \int x^5\, dx$</code>, som dette.</p>
-            </div>
-        </div>
+        1. Ein
+        2. To
+            * Fire
+            * Fem
+        3. Tre
+                    </pre></div>
+                    <div class="col-lg-5">
+                        <p>Liste:</p>
 
-        <div class="row">
-            <div class="col-lg-7"><pre class="tex2jax_ignore">Liste:
-
-* Ein
-* To
-* Tri
-
-Numerert liste:
-
-1. Ein
-2. To
-    * Fire
-    * Fem
-3. Tre
-            </pre></div>
-            <div class="col-lg-5">
-                <p>Liste:</p>
-
-                <ul>
-                    <li>Ein</li>
-                    <li>To</li>
-                    <li>Tri</li>
-                </ul>
-
-                <p>Numerert liste:</p>
-
-                <ol>
-                    <li>Ein</li>
-                    <li>To
                         <ul>
-                            <li>Fire</li>
-                            <li>Fem</li>
+                            <li>Ein</li>
+                            <li>To</li>
+                            <li>Tri</li>
                         </ul>
-                    </li>
-                    <li>Tre</li>
-                </ol>
 
+                        <p>Numerert liste:</p>
+
+                        <ol>
+                            <li>Ein</li>
+                            <li>To
+                                <ul>
+                                    <li>Fire</li>
+                                    <li>Fem</li>
+                                </ul>
+                            </li>
+                            <li>Tre</li>
+                        </ol>
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-7"><pre class="tex2jax_ignore">&gt; Slik som dette siterer jeg noen. Du trenger kun en &gt; i starten av hver paragraf.
+                    </pre></div>
+                    <div class="col-lg-5">
+
+                        <blockquote>
+                          <p>Slik som dette siterer jeg noen. Du trenger kun en &gt; i starten av hver paragraf.</p>
+                        </blockquote>
+
+                    </div>
+                </div>
 
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-lg-7"><pre class="tex2jax_ignore">&gt; Slik som dette siterer jeg noen. Du trenger kun en &gt; i starten av hver paragraf. 
-            </pre></div>
-            <div class="col-lg-5">
-
-                <blockquote>
-                  <p>Slik som dette siterer jeg noen. Du trenger kun en &gt; i starten av hver paragraf.</p>
-                </blockquote>
-
-            </div>
-        </div>
-
     </div>
 
     <script>
@@ -155,6 +137,7 @@ Numerert liste:
             commentHelp.slideToggle();
             e.preventDefault();
         });
+
         
     </script>
 

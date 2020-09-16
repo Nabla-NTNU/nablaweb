@@ -1,0 +1,31 @@
+{% load humanize %}
+{% load easy_thumbnails %}
+{% load markdown_deux_tags %}
+{% load static %}
+
+<div class="row pl-3" id="c{{ comment.id }}">
+    <div class="col-1 p-0">
+    <img alt="avatar" class="rounded img-fluid" src=
+        {% if user.avatar %}
+            "{% thumbnail user.avatar 150x150 box=user.cropping %}"
+        {% else %}
+            "{% static "img/default_avatar.png" %}"
+        {%endif %}>
+    </div>
+    <div class="col-11 text">
+        <div class="info">
+            <span class="author">
+                <a href="{% url "member_profile" user.username %}">
+                    {% firstof user.get_full_name user.username %}
+                </a>
+            </span>
+            <span class="date">{{ comment.submit_date|naturalday }}</span>
+            {% if perms.django_comments.can_moderate and not is_preview %}
+                (<a href="{% url "comments-delete" comment.id %}">fjern</a>)
+            {% endif %}
+        </div>
+        <div class="text-break">
+        {{ comment_content|striptags|markdown }}
+        </div>
+    </div>
+</div>

@@ -4,31 +4,7 @@
 {% load static %}
 
 {% for comment in comment_list %}
-
 <hr>
-
-<div class="row pl-3" id="c{{ comment.id }}" style="display: flex">
-    <img class="col-xs-2 pr-2" alt="avatar" width="150" height="150" src=
-        {% if comment.user.avatar %}
-            "{% thumbnail comment.user.avatar 150x150 box=comment.user.cropping %}"
-        {% else %}
-            "{% static "img/default_avatar.png" %}"
-        {%endif %}>
-
-    <div class="col-xs-10 text">
-        <div class="info">
-            <span class="author">
-                <a href="{% url "member_profile" comment.user.username %}">
-                    {% firstof comment.user.get_full_name comment.user.username %}
-                </a>
-            </span>
-            <span class="date">{{ comment.submit_date|naturalday }}</span>
-            {% if perms.django_comments.can_moderate %}
-                (<a href="{% url "comments-delete" comment.id %}">fjern</a>)
-            {% endif %}
-        </div>
-        {{ comment.comment|striptags|markdown }}
-    </div>
-</div>
+{% include "comments/comment_line.html" with user=comment.user comment_content=comment.comment%}
 
 {% endfor %}
