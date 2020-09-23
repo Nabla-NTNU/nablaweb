@@ -89,6 +89,19 @@ class MainView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
 
+        if not Channel.objects.exists():
+            Channel.objects.create(name="Nablafeed", is_feed=True)
+
+        # Class channel
+        print(
+            Channel.objects.filter(group__in=user.groups.all())
+            .filter(is_class=True)
+            .exists()
+        )
+        class_channel = Channel.objects.filter(group__in=user.groups.all()).filter(
+            is_class=True
+        )
+
         # All channels belonging to users group
         group_channels = (
             Channel.objects.filter(group__in=user.groups.all())
@@ -104,22 +117,12 @@ class MainView(LoginRequiredMixin, TemplateView):
             .exclude(is_class=True)
         )
 
-        # Class channel
-        class_channel = Channel.objects.filter(group__in=user.groups.all()).filter(
-            is_class=True
-        )
-
         # Feeds
         feeds = Channel.objects.filter(is_feed=True)
 
         # get chosen channel and belonging threads
         chosen_channel_id = self.kwargs["channel_id"]
-        if chosen_channel_id == "1":
-            chosen_channel = Channel.objects.get_or_create(
-                pk=chosen_channel_id, name="Nablafeed", is_feed=True
-            )
-        else:
-            chosen_channel = Channel.objects.get(pk=chosen_channel_id)
+        chosen_channel = Channel.objects.get(pk=chosen_channel_id)
         channel_threads = Thread.objects.filter(channel__id=chosen_channel_id).order_by(
             "-pk"
         )
