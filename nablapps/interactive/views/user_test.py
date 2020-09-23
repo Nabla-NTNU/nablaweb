@@ -43,7 +43,8 @@ def test_result(request, pk):
     scores = Counter()
     for target, weight in weighted_res:
         scores[target] += weight
-
+    if scores.most_common(1) == []:
+        return redirect("user_test", pk=pk)
     ((result, _),) = scores.most_common(1)
     context = {
         "base_template": test.template,
@@ -51,3 +52,4 @@ def test_result(request, pk):
         "content": result.content,
     }
     return TemplateResponse(request, "interactive/user_test_result.html", context)
+
