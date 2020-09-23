@@ -2,6 +2,8 @@
 Views for meeting records
 """
 from django.views.generic import DetailView, ListView
+from django.views.generic.dates import YearArchiveView
+from django.core.paginator import EmptyPage, Paginator
 
 from .models import MeetingRecord
 
@@ -21,11 +23,15 @@ class MeetingRecordDetailView(DetailView):
         return context
 
 
-class MeetingRecordListView(ListView):
+class MeetingRecordListView(YearArchiveView):
     """
     View listing all meeting records
     """
 
-    model = MeetingRecord
+    queryset = MeetingRecord.objects.all()
     context_object_name = "meeting_record_list"
     template_name = "meeting_records/meeting_record_list.html"
+    date_field = "pub_date"
+    make_object_list = True
+    allow_future = False
+    allow_empty = False

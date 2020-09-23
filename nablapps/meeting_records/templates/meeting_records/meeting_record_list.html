@@ -6,6 +6,7 @@
 
 <h2>Møtereferater</h2>
 <p>Denne siden inneholder møtereferater fra styremøter i Nabla, og fra Nablas årlige Store Kanoniske Ensemble.</p>
+<p>Møtereferater fra {{ year|date:"Y" }}.</p>
 
 <table style="table-layout:fixed;"class="table table-striped">
 {% for m in meeting_record_list %}
@@ -21,6 +22,22 @@
     <p>Ingen møtereferater er blitt publisert på nettsiden hittil.</p>
 {% endfor %}
 </table>
+
+<nav>
+    <ul class="pagination d-flex justify-content-between">
+        <li class="page-item">
+            {% if previous_year %}
+                <a class="page-link" href="../{{ previous_year|date:'Y' }}"><span aria-hidden="true">&larr;</span> {{ previous_year|date:'Y' }}</a>
+            {% endif %}
+        </li>
+
+        <li class="page-item">
+            {% if next_year %}
+                <a class="page-link" href="../{{ next_year|date:'Y' }}">{{ next_year|date:'Y' }} <span aria-hidden="true">&rarr;</span></a>
+            {% endif %}
+        </li>
+    </ul>
+</nav>
 
 {% endblock content %}
 
