@@ -148,13 +148,13 @@ class FrontPageView(FlatPageMixin, TemplateView):
             context["new_forum_messages"] = new_forum_messages
 
             if FysmatClass.objects.filter(user=self.request.user).exists():
-                fysmat_class = FysmatClass.objects.filter(user=self.request.user)[
-                    0
-                ]  # If multiple classes, use first entry
+                # If multiple classes, use first entry
+                fysmat_class = FysmatClass.objects.filter(
+                    user=self.request.user
+                ).first()
                 class_channel, created = Channel.objects.get_or_create(
                     group=fysmat_class, is_class=True, name=fysmat_class.name
                 )
-                print(class_channel)
                 latest_class = Thread.objects.filter(channel=class_channel).order_by(
                     "-pk"
                 )[:4]

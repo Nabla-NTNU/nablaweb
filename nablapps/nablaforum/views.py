@@ -93,11 +93,6 @@ class MainView(LoginRequiredMixin, TemplateView):
             Channel.objects.create(name="Nablafeed", is_feed=True)
 
         # Class channel
-        print(
-            Channel.objects.filter(group__in=user.groups.all())
-            .filter(is_class=True)
-            .exists()
-        )
         class_channel = Channel.objects.filter(group__in=user.groups.all()).filter(
             is_class=True
         )

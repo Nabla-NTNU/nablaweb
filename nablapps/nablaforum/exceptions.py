@@ -1,6 +1,4 @@
-"""
-Exceptions for forum
-"""
+"""Exceptions for forum"""
 
 
 class ForumException(Exception):
@@ -8,18 +6,12 @@ class ForumException(Exception):
 
 
 class ThreadCreationException(ForumException):
-    """
-    Raised when creation of a new forum thread fails.
-    """
+    """Raised when creation of a new forum thread fails."""
 
 
 class MessageCreationException(ForumException):
-    """
-    Raised when creation of a new forum message fails.
-    """
+    """Raised when creation of a new forum message fails."""
 
 
 class ChannelCreationException(ForumException):
-    """
-    Raised when creation of a new forum channel fails.
-    """
+    """Raised when creation of a new forum channel fails."""
