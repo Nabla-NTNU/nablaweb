@@ -147,15 +147,20 @@ class FrontPageView(FlatPageMixin, TemplateView):
                         break
             context["new_forum_messages"] = new_forum_messages
 
-            try:
-                fysmat_class = FysmatClass.objects.get(user=self.request.user)
-                class_channel = Channel.objects.get(group=fysmat_class, is_class=True)
+            if FysmatClass.objects.filter(user=self.request.user).exists():
+                fysmat_class = FysmatClass.objects.filter(user=self.request.user)[
+                    0
+                ]  # If multiple classes, use first entry
+                class_channel, created = Channel.objects.get_or_create(
+                    group=fysmat_class, is_class=True, name=fysmat_class.name
+                )
+                print(class_channel)
                 latest_class = Thread.objects.filter(channel=class_channel).order_by(
                     "-pk"
                 )[:4]
                 context["fysmat_class"] = fysmat_class
                 context["latest_class"] = latest_class
-            except:  # noqa: E722   TODO: @kaprests must fix this
+            else:
                 messages.add_message(
                     self.request,
                     messages.INFO,
