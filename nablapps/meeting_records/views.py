@@ -1,9 +1,9 @@
 """
 Views for meeting records
 """
+from django.core.paginator import EmptyPage, Paginator
 from django.views.generic import DetailView, ListView
 from django.views.generic.dates import YearArchiveView
-from django.core.paginator import EmptyPage, Paginator
 
 from .models import MeetingRecord
 
