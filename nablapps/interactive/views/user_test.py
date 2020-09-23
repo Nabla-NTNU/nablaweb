@@ -52,4 +52,3 @@ def test_result(request, pk):
         "content": result.content,
     }
     return TemplateResponse(request, "interactive/user_test_result.html", context)
-
