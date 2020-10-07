@@ -129,6 +129,8 @@ INSTALLED_APPS = [
     "sekizai",  # http://django-sekizai.readthedocs.org/en/latest/#
     "qr_code",
     "multi_email_field",
+    "ckeditor",
+    'ckeditor_uploader',
     "rest_framework",
     # Djangoting
     "django.contrib.admin",
@@ -161,6 +163,27 @@ TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
 
 FILEBROWSER_DIRECTORY = ""
+
+# ckeditor
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': None,
+    },
+    'basic': {
+    'toolbar': 'Basic',
+    'skin': 'moono',
+    'toolbar_Basic': [
+        ['Bold', 'Italic', 'Underline', 'Smiley', 'Mathjax', 'CodeSnippet'],
+    ],
+    'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
+    'extraPlugins': ','.join([
+            'mathjax',
+            'codesnippet',
+        ]),
+    },
+}
 
 # django.contrib.auth
 LOGIN_URL = "/login/"

@@ -1,12 +1,12 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 
 
 class Category(models.Model):
     name = models.CharField(
         max_length=30, verbose_name="Kategorisk navn", default="Kategori"
     )
-    description = models.TextField(
-        verbose_name="Beskrivelse", default="Her ligger masse rart"
+    description = RichTextField(
     )
 
     def __str__(self):
@@ -19,10 +19,8 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255, verbose_name="Navn", default="Produkt")
-    description_short = models.TextField(
-        verbose_name="Kort beskrivelse", default="Ting"
-    )
-    description = models.TextField(verbose_name="Beskrivelse", default="Ting")
+    description_short = RichTextField()
+    description = RichTextField(config_name='basic')
     pub_date = models.DateTimeField(auto_now_add=True)
     photo = models.ImageField(
         upload_to="product_photo", blank=False, verbose_name="bilde"
