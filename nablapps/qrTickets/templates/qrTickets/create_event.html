@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Opprett qr-event</h1>
+
+
+<form method="POST">
+    {% csrf_token %}
+    <h4>Tilhørende arrangement (ikke påkrevd):</h4>
+    {{ event_form.nabla_event_field }}
+    <br>
+    <h4>Navn:</h4>
+    {{ event_form.event_name_field }}
+    <br>
+    <button type="submit">send</button>
+</form>
+
+{% endblock %}
