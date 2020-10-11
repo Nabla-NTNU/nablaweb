@@ -1,10 +1,12 @@
 from django.db import models
+from nablapps.events.models.event import Event
 
 # Create your models here.
 
 
 class QrEvent(models.Model):
     name = models.CharField(max_length=100)
+    nabla_event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="qr_event_set", blank=True, null=True)
 
     def __str__(self):
         return self.name
