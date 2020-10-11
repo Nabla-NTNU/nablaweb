@@ -25,6 +25,7 @@ markdown = "*"
 django-qr-code = "*"
 django-multi-email-field = "*"
 django-bootstrap4 = "*"
+djangorestframework = "*"
 
 [dev-packages]
 faker = "*"               # Fake data generator, used in tests.

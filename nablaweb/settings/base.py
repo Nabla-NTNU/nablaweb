@@ -129,6 +129,7 @@ INSTALLED_APPS = [
     "sekizai",  # http://django-sekizai.readthedocs.org/en/latest/#
     "qr_code",
     "multi_email_field",
+    "rest_framework",
     # Djangoting
     "django.contrib.admin",
     "django.contrib.auth",
