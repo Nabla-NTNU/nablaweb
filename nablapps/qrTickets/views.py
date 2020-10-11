@@ -6,15 +6,14 @@ from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
+from django.views.generic import ListView
 
-from .forms import EmailForm
+from .forms import EmailForm, EventForm
 from .models import QrEvent, QrTicket
 
-
-def test(request):
-    string_list = ["aaa", "bbb", "ccc"]
-    context = {"hehe": 3, "string_list": string_list}
-    return render(request, "qrTickets/test.html", context)
+from rest_framework import generics
+from nablapps.qrTickets.serializers import QrTicketSerializer
+from rest_framework import permissions
 
 
 def render_ticket(request, qr_event_id, qr_ticket_id):
@@ -26,20 +25,52 @@ def render_ticket(request, qr_event_id, qr_ticket_id):
     return render(request, "qrTickets/render.html", context)
 
 
-class GenerateTicketsView(PermissionRequiredMixin, View):
+class QrEventListView(ListView):
+    model = QrEvent
+    template_name = "qrTickets/event_list.html"
+    paginate_by = 100
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+
+class CreateEventView(PermissionRequiredMixin, View):
     permission_required = "qrTickets.generate_tickets"
 
     def get(self, request):
+        event_form = EventForm()
+        context = {"event_form": event_form}
+        return render(request, "qrTickets/create_event.html", context)
+        
+    def post(self, request):
+        event_form = EventForm(request.POST)
+        if event_form.is_valid():
+            nabla_event = event_form.get_nabla_event()
+            event_name = event_form.get_event_name()
+
+            # Create qr event
+            event = QrEvent.objects.create(name=event_name, nabla_event=nabla_event)
+            event.save()
+        return HttpResponse("QrEvent successfully created!")
+
+
+class EventDetailView(PermissionRequiredMixin, View):
+    permission_required = "qrTickets.generate_tickets"
+
+    def get(self, request, pk):
         email_form = EmailForm()
         context = {"email_form": email_form}
+        context['event'] = QrEvent.objects.get(pk=pk)
         return render(request, "qrTickets/generate.html", context)
 
-    def post(self, request):
+    def post(self, request, pk):
         email_form = EmailForm(request.POST)
         if email_form.is_valid():
             emails = email_form.get_emails()
             email_list = emails.splitlines()
-            qr_event = email_form.get_qr_event()
+            qr_event = QrEvent.objects.get(pk=pk)
             for email in email_list:
                 # Generates a random string of uppercase letters and numbers, stolen from stack overflow :))
                 randstr = "".join(
@@ -94,3 +125,31 @@ class RegisterTicketsView(PermissionRequiredMixin, View):
         except QrTicket.DoesNotExist:
             return HttpResponse("Ikke en gyldig billett!")
         return HttpResponse("Billett registrert!")
+
+
+class TicketList(generics.ListCreateAPIView):
+    queryset = QrTicket.objects.all()
+    serializer_class = QrTicketSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class TicketDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update or delete ticket.
+    """
+    queryset = QrTicket.objects.all()
+    serializer_class = QrTicketSerializer
+    lookup_field = 'ticket_id'
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class UpdateTicketsView(generics.UpdateAPIView):
+    """
+    API endpoint that allows tickets to be updated.
+    """
+    queryset = QrTicket.objects.all()
+    serializer_class = QrTicketSerializer
+    lookup_field = 'ticket_id'
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+

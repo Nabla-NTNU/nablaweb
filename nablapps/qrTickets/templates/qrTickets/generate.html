@@ -1,13 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Generer billetter</h1>
 
+<h1>Administrerer billetter for: {{ event }}</h1>
 
 <form method="POST">
-    {% csrf_token %}
-    {{ email_form.qr_event_field }}
-    <br>
+    <h4>Eposter:</h4>
     {{ email_form.email_field }}
     <br>
     <button type="submit">send</button>
