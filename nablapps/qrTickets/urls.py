@@ -3,9 +3,9 @@ from django.urls import path
 from .views import EventDetailView, RegisterTicketsView, render_ticket, UpdateTicketsView, TicketList, TicketDetail, CreateEventView, QrEventListView
 
 urlpatterns = [
-    path("event-list/", QrEventListView.as_view(), name="qr-event-list"),
-    path("detail/<int:pk>", EventDetailView.as_view(), name="qr-event-detail"),
-    path("create-qrevent/", CreateEventView.as_view(), name="create_qr_event"),
+    path("", QrEventListView.as_view(), name="qr-event-list"),
+    path("detail/<int:pk>/", EventDetailView.as_view(), name="qr-event-detail"),
+    path("create-qrevent/", CreateEventView.as_view(), name="create-qr-event"),
     path(
         "register/<int:qr_event_id>/<str:qr_ticket_id>/",
         RegisterTicketsView.as_view(),

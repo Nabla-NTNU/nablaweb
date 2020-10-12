@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .qr-ticket-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 50px;
+    }
+
+    .qr-email {
+        text-align: left;
+    }
+
+    .qr-registered {
+        text-align: right;
+    }
+</style>
+
+<h1>Administrerer billetter for: {{ event }}</h1>
+
+<button><a href="{% url 'qr-event-list' %}">Tilbake til listen over qr-arrangementer</a></button>
+
+<h4>Det har allerede blitt sendt ut billett til:</h4>
+<div class="qr-ticket-container">
+    <p class="qr-email"><b>Epost:</b></p>
+    <p class="qr-registered"><b>Registrert:</b></p>
+</div>
+{% for email in email_list %}
+    <div class="qr-ticket-container">
+        <p class="qr-email">{{ email }}</p>
+        <p class="qr-registered">{{ email.registered }}</p>
+    </div>
+{% endfor %}
+
+
+<h4>Generer og send nye billetter:</h4>
+<p>
+Når du trykker "send" opprettes det og sendes ut billetter til 
+{% if event.nabla_event %}
+alle som er påmeldt det korresponderende "Nabla-arrangementet" {{ event.nabla_event }}.
+<br>
+<br>
+I tillegg kan det også opprettes billetter til eksterne, ved å skrive inn epost-addresser i feltet "Nye eposter" under. Feltet aksepterer flere e-poster, men de må stå på hver sin linje.
+{% else %}
+de e-postadressene som fylles inn i feltet "Nye eposter" under. Feltet aksepterer flere e-poster, men de må stå på hver sin linje.
+{% endif %}
+<br>
+<br>
+NB! Kun én billett sendes ut per epost. Hvis du forsøker å sende inn skjemaet med en e-postadresse som allerede er i listen over, blir det ikke opprettet noen ny billett.
+</p>
+<form method="POST">
+    {% csrf_token %}
+    <b>Nye eposter (ikke påkrevd):</b>
+    <br>
+    {{ email_form.email_field }}
+    <br>
+    <button type="submit">send</button>
+</form>
+
+{% endblock %}

@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>QR-events</h1>
+<h1>Administrer QR-billetter</h1>
 
+<button><a href="{% url 'create-qr-event' %}">Opprett nytt QR-arrangement</a></button>
+
+<h4>Arrangementer med QR-billetter:</h4>
 {% for event in object_list %}
     <div>
         <a href="{% url 'qr-event-detail' event.id %}">{{ event }}</a>
