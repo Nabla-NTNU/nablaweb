@@ -6,7 +6,7 @@ from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 from django.urls import reverse
 
 from .forms import EmailForm, EventForm
@@ -16,6 +16,10 @@ from rest_framework import generics
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from nablapps.qrTickets.serializers import QrTicketSerializer
+
+
+class ScanTicketView(TemplateView):
+    template_name = "qrTickets/scan.html"
 
 
 def render_ticket(request, qr_event_id, qr_ticket_id):
@@ -132,22 +136,6 @@ class RegisterTicketsView(PermissionRequiredMixin, View):
         except QrTicket.DoesNotExist:
             return HttpResponse("Ikke en gyldig billett!")
         return HttpResponse("Billett registrert!")
-
-
-class TicketList(generics.ListCreateAPIView):
-    queryset = QrTicket.objects.all()
-    serializer_class = QrTicketSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-
-class TicketDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Retrieve, update or delete ticket.
-    """
-    queryset = QrTicket.objects.all()
-    serializer_class = QrTicketSerializer
-    lookup_field = 'ticket_id'
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class UpdateTicketsView(generics.UpdateAPIView):

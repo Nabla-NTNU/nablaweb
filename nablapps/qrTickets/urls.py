@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import EventDetailView, RegisterTicketsView, render_ticket, UpdateTicketsView, TicketList, TicketDetail, CreateEventView, QrEventListView
+from .views import EventDetailView, RegisterTicketsView, render_ticket, UpdateTicketsView, CreateEventView, QrEventListView, ScanTicketView
 
 urlpatterns = [
     path("", QrEventListView.as_view(), name="qr-event-list"),
@@ -16,7 +16,6 @@ urlpatterns = [
         render_ticket,
         name="render",
     ),
-    path("scan/<str:ticket_id>", UpdateTicketsView.as_view(), name="scan"),
-    path("ticket-list/", TicketList.as_view(), name="ticket-list"),
-    path("ticket-detail/<str:ticket_id>", TicketDetail.as_view(), name="ticket-detail"),
+    path("scan/", ScanTicketView.as_view(), name="scan"),
+    path("scan/<str:ticket_id>", UpdateTicketsView.as_view(), name="register"),
 ]
