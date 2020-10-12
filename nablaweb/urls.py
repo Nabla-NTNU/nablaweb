@@ -75,7 +75,7 @@ urlpatterns = [
     path("media/nabladet/<path:path>/", serve_nablad),
     path("media/<path:path>/", serve, {"document_root": settings.MEDIA_ROOT}),
     path("static/<path:path>/", serve, {"document_root": settings.STATIC_ROOT}),
-    path("api-auth/", include('rest_framework.urls')),
+    path("api-auth/", include("rest_framework.urls")),
 ]
 
 
