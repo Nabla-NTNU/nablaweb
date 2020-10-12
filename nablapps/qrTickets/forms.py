@@ -1,9 +1,11 @@
 from django import forms
 
-from .models import QrEvent
 from nablapps.events.models.event import Event
 
+from .models import QrEvent
+
 # from multi_email_field.forms import MultiEmailField
+
 
 class EventForm(forms.Form):
     nabla_event_field = forms.ModelChoiceField(queryset=Event.objects.all())
@@ -18,7 +20,6 @@ class EventForm(forms.Form):
         cd = self.cleaned_data
         qr_event_name = cd["event_name_field"]
         return qr_event_name
-        
 
 
 class EmailForm(forms.Form):

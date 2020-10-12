@@ -1,6 +1,14 @@
 from django.urls import path
 
-from .views import EventDetailView, RegisterTicketsView, render_ticket, UpdateTicketsView, CreateEventView, QrEventListView, ScanTicketView
+from .views import (
+    CreateEventView,
+    EventDetailView,
+    QrEventListView,
+    RegisterTicketsView,
+    ScanTicketView,
+    UpdateTicketsView,
+    render_ticket,
+)
 
 urlpatterns = [
     path("", QrEventListView.as_view(), name="qr-event-list"),

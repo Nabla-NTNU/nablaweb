@@ -4,18 +4,18 @@ import string
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.views import View
-from django.views.generic import ListView, DetailView, TemplateView
+from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.views import View
+from django.views.generic import DetailView, ListView, TemplateView
+
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
+
+from nablapps.qrTickets.serializers import QrTicketSerializer
 
 from .forms import EmailForm, EventForm
 from .models import QrEvent, QrTicket
-
-from rest_framework import generics
-from rest_framework import permissions, status
-from rest_framework.response import Response
-from nablapps.qrTickets.serializers import QrTicketSerializer
 
 
 class ScanTicketView(TemplateView):
@@ -48,7 +48,7 @@ class CreateEventView(PermissionRequiredMixin, View):
         event_form = EventForm()
         context = {"event_form": event_form}
         return render(request, "qrTickets/create_event.html", context)
-        
+
     def post(self, request):
         event_form = EventForm(request.POST)
         if event_form.is_valid():
@@ -58,7 +58,7 @@ class CreateEventView(PermissionRequiredMixin, View):
             # Create qr event
             event = QrEvent.objects.create(name=event_name, nabla_event=nabla_event)
             event.save()
-        return redirect(reverse('qr-event-list'))
+        return redirect(reverse("qr-event-list"))
 
 
 class EventDetailView(PermissionRequiredMixin, DetailView):
@@ -68,8 +68,8 @@ class EventDetailView(PermissionRequiredMixin, DetailView):
         email_form = EmailForm()
         context = {"email_form": email_form}
         qr_event = QrEvent.objects.get(pk=pk)
-        context['event'] = qr_event
-        context['email_list'] = qr_event.ticket_set.all()
+        context["event"] = qr_event
+        context["email_list"] = qr_event.ticket_set.all()
         return render(request, "qrTickets/qr_event_detail.html", context)
 
     def post(self, request, pk):
@@ -81,7 +81,9 @@ class EventDetailView(PermissionRequiredMixin, DetailView):
         if email_form.is_valid():
             emails = email_form.get_emails()
             email_list += emails.splitlines()
-        already_recieved_list = [ticket.__str__() for ticket in qr_event.ticket_set.all()]
+        already_recieved_list = [
+            ticket.__str__() for ticket in qr_event.ticket_set.all()
+        ]
         for email in email_list:
             if email not in already_recieved_list:
                 randstr = "".join(
@@ -112,7 +114,7 @@ class EventDetailView(PermissionRequiredMixin, DetailView):
                     )
                 except BadHeaderError:
                     return HttpResponse("Invalid header found")
-        return redirect(reverse(f'qr-event-detail', kwargs={'pk': pk}))
+        return redirect(reverse(f"qr-event-detail", kwargs={"pk": pk}))
 
 
 class RegisterTicketsView(PermissionRequiredMixin, View):
@@ -142,10 +144,11 @@ class UpdateTicketsView(generics.UpdateAPIView):
     """
     API endpoint that allows tickets to be updated.
     """
+
     queryset = QrTicket.objects.all()
     serializer_class = QrTicketSerializer
-    lookup_field = 'ticket_id'
-    #permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    lookup_field = "ticket_id"
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def put(self, request, ticket_id):
         ticket = QrTicket.objects.get(ticket_id=ticket_id)
