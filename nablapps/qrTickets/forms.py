@@ -23,7 +23,7 @@ class EventForm(forms.Form):
 
 class EmailForm(forms.Form):
     email_field = forms.CharField(
-        required=True, widget=forms.Textarea
+        required=False, widget=forms.Textarea
     )  # MultiEmailField()
 
     def get_emails(self):

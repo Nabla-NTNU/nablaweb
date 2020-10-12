@@ -4,16 +4,18 @@ import string
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
+from django.urls import reverse
 
 from .forms import EmailForm, EventForm
 from .models import QrEvent, QrTicket
 
 from rest_framework import generics
+from rest_framework import permissions, status
+from rest_framework.response import Response
 from nablapps.qrTickets.serializers import QrTicketSerializer
-from rest_framework import permissions
 
 
 def render_ticket(request, qr_event_id, qr_ticket_id):
@@ -35,7 +37,6 @@ class QrEventListView(ListView):
         return context
 
 
-
 class CreateEventView(PermissionRequiredMixin, View):
     permission_required = "qrTickets.generate_tickets"
 
@@ -53,29 +54,35 @@ class CreateEventView(PermissionRequiredMixin, View):
             # Create qr event
             event = QrEvent.objects.create(name=event_name, nabla_event=nabla_event)
             event.save()
-        return HttpResponse("QrEvent successfully created!")
+        return redirect(reverse('qr-event-list'))
 
 
-class EventDetailView(PermissionRequiredMixin, View):
+class EventDetailView(PermissionRequiredMixin, DetailView):
     permission_required = "qrTickets.generate_tickets"
 
     def get(self, request, pk):
         email_form = EmailForm()
         context = {"email_form": email_form}
-        context['event'] = QrEvent.objects.get(pk=pk)
-        return render(request, "qrTickets/generate.html", context)
+        qr_event = QrEvent.objects.get(pk=pk)
+        context['event'] = qr_event
+        context['email_list'] = qr_event.ticket_set.all()
+        return render(request, "qrTickets/qr_event_detail.html", context)
 
     def post(self, request, pk):
+        qr_event = QrEvent.objects.get(pk=pk)
+        email_list = []
+        if qr_event.nabla_event:
+            email_list += qr_event.nabla_event.users_attending_emails()
         email_form = EmailForm(request.POST)
         if email_form.is_valid():
             emails = email_form.get_emails()
-            email_list = emails.splitlines()
-            qr_event = QrEvent.objects.get(pk=pk)
-            for email in email_list:
-                # Generates a random string of uppercase letters and numbers, stolen from stack overflow :))
+            email_list += emails.splitlines()
+        already_recieved_list = [ticket.__str__() for ticket in qr_event.ticket_set.all()]
+        for email in email_list:
+            if email not in already_recieved_list:
                 randstr = "".join(
                     random.SystemRandom().choice(string.ascii_uppercase + string.digits)
-                    for _ in range(10)
+                    for _ in range(11)
                 )
                 ticket = QrTicket.objects.create(event=qr_event, email=email)
                 ticket.ticket_id = str(ticket.id) + randstr
@@ -101,7 +108,7 @@ class EventDetailView(PermissionRequiredMixin, View):
                     )
                 except BadHeaderError:
                     return HttpResponse("Invalid header found")
-            return HttpResponse("Billetter generert og send på epost!")
+        return redirect(reverse(f'qr-event-detail', kwargs={'pk': pk}))
 
 
 class RegisterTicketsView(PermissionRequiredMixin, View):
@@ -150,6 +157,14 @@ class UpdateTicketsView(generics.UpdateAPIView):
     queryset = QrTicket.objects.all()
     serializer_class = QrTicketSerializer
     lookup_field = 'ticket_id'
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    #permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-
+    def put(self, request, ticket_id):
+        ticket = QrTicket.objects.get(ticket_id=ticket_id)
+        serializer = QrTicketSerializer(ticket, data=request.data)
+        if ticket.registered:
+            return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
