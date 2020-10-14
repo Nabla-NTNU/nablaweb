@@ -1,12 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1> Scan QR tickets </h1>
+<!-- Temporarily using cdn for js imports -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
-<template>
-    <div>
-    qr scanner
-    </div>
-</template>
+
+<!-- Scanner app -->
+<div id="app">
+    <h1>Her kommer scannefelt.</h1>
+    [[ description ]]
+</div>
+
+<!-- JS/Vue code -->
+<script>
+    const app = new Vue({
+        el: '#app',
+        delimiters: ['[[', ']]'],
+        data: {
+            description: 'Scan field'
+        }
+    })
+</script>
 {% endblock content %}
-
