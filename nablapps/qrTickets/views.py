@@ -31,7 +31,8 @@ def render_ticket(request, qr_event_id, qr_ticket_id):
     return render(request, "qrTickets/render.html", context)
 
 
-class QrEventListView(ListView):
+class QrEventListView(PermissionRequiredMixin, ListView):
+    permission_required = "qrTickets.generate_tickets"
     model = QrEvent
     template_name = "qrTickets/event_list.html"
     paginate_by = 100
@@ -148,7 +149,7 @@ class UpdateTicketsView(generics.UpdateAPIView):
     queryset = QrTicket.objects.all()
     serializer_class = QrTicketSerializer
     lookup_field = "ticket_id"
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def put(self, request, ticket_id):
         ticket = QrTicket.objects.get(ticket_id=ticket_id)
