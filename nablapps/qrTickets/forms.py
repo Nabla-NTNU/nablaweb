@@ -6,7 +6,9 @@ from .models import QrEvent
 
 
 class EventForm(forms.Form):
-    nabla_event_field = forms.ModelChoiceField(queryset=Event.objects.all(), required=False)
+    nabla_event_field = forms.ModelChoiceField(
+        queryset=Event.objects.all(), required=False
+    )
     event_name_field = forms.CharField(required=True)
 
     def get_nabla_event(self):
