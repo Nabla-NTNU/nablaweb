@@ -4,11 +4,9 @@ from nablapps.events.models.event import Event
 
 from .models import QrEvent
 
-# from multi_email_field.forms import MultiEmailField
-
 
 class EventForm(forms.Form):
-    nabla_event_field = forms.ModelChoiceField(queryset=Event.objects.all())
+    nabla_event_field = forms.ModelChoiceField(queryset=Event.objects.all(), required=False)
     event_name_field = forms.CharField(required=True)
 
     def get_nabla_event(self):

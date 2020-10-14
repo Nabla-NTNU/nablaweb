@@ -2,8 +2,6 @@ from django.db import models
 
 from nablapps.events.models.event import Event
 
-# Create your models here.
-
 
 class QrEvent(models.Model):
     name = models.CharField(max_length=100)
