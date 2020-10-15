@@ -4,6 +4,7 @@
 {% block content %}
 <!-- Temporarily using cdn for js imports -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <!-- Temporarily using file in static -->
 <script src={% static "qrTickets/VueQrcodeReader.umd.min.js" %}></script>
 <!--
@@ -11,31 +12,116 @@ Unlike my peers, I am no front-end-guy yet, and I have yet to figure out how to 
 the npm packagages (Vue and QrCodeReader).
 -->
 
-<!-- Scanner app -->
+
 <div id="app">
-    <h1>Her kommer scannefelt.</h1>
-    [[ description ]]
-    [[ result ]]
-    <button v-on:click="setResult">Push me!</button>
-    <qrcode-stream></qrcode-stream>
+    <h1>Scanning av QR-billetter</h1>
+    <p>
+        <b>
+            TIL ADMIN:
+            Denne scanneren er helt nyutviklet, og derfor ikke veldig utprøvd ennå.
+            Dersom dere får problemer, prøv gjerne å scanne billetten med en annen 
+            QR-scanner og forsøkt å registrere billetten via linken som da dukker opp.
+        </b>
+    </p>
+    <p class="error">[[ error ]]</p>
+    <p class="success">[[ success ]]</p>
+    <p class="fail">[[ fail ]]</p>
+    <qrcode-stream @decode="onDecode" @init="onInit" />
 </div>
 
+
 <!-- JS/Vue code -->
+<!--
+The basic implementation of the QR-scanner is from the live demo of the Vue Qrcode Reader:
+https://gruhn.github.io/vue-qrcode-reader/demos/DecodeAll.html
+
+Which this Vue app builds atop of.
+-->
 <script>
+    axios.defaults.xsrfCookieName = 'csrftoken'
+    axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+
+
     const app = new Vue({
         el: '#app',
         delimiters: ['[[', ']]'],
         data: {
-            description: 'Scan field',
+            message: 'Scan field',
+            error: '',
+            success: '',
+            fail: '',
             result: '',
+            status: '',
         },
 
         methods: {
-            setResult: function () {
-                this.result = "HAHA"
-            }
-        }
-    })
+            onDecode (result) {
+                split_result = result.split("/");
+                ticket_id = split_result[split_result.length - 1];
+                this.result = ticket_id;
+                axios.put('/qrTickets/scan/'+ticket_id, {
+                                                        registered: true
+                                                        })
+                    .then((response) => {
+                        console.log(response)
+                        this.status = response.status;
+                        if (response.status === 200) {
+                            this.success = "Godkjent! Billett registrert."
+                        } else if (response.status === 208) {
+                            this.fail = "Ops! Denne billetten er registrert fra før!"
+                        } else {
+                            this.fail = "Ukjent feil, det var rart. Meld til WebKom."
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err.response);
+                        console.log(err.response.status);
+                        this.status = err.response.status;
+                        if (response.status !== 405) {
+                            this.fail = "Ugyldig billett! Ta kontakt med WebKom dersom du mener at dette er en feil."
+                        }
+                    })
+            },
 
+            async onInit (promise) {
+                try {
+                    await promise
+                } catch (error) {
+                    if (error.name === 'NotAllowedError') {
+                        this.error = "ERROR: you need to grant camera access permisson"
+                    } else if (error.name === 'NotFoundError') {
+                        this.error = "ERROR: no camera on this device"
+                    } else if (error.name === 'NotSupportedError') {
+                        this.error = "ERROR: secure context required (HTTPS, localhost)"
+                    } else if (error.name === 'NotReadableError') {
+                        this.error = "ERROR: is the camera already in use?"
+                    } else if (error.name === 'OverconstrainedError') {
+                        this.error = "ERROR: installed cameras are not suitable"
+                    } else if (error.name === 'StreamApiNotSupportedError') {
+                        this.error = "ERROR: Stream API is not supported in this browser"
+                    }
+                }
+            }       
+        }
+
+    })
 </script>
+
+
+<style>
+    .error {
+        font-weight: bold;
+        color: red;
+    }
+
+    .fail {
+        font-weight: bold;
+        color: red;
+    }
+
+    .success {
+        font-weight: bold;
+        color: green;
+    }
+</style>
 {% endblock content %}
