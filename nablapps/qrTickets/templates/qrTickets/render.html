@@ -2,10 +2,15 @@
 {% load qr_code %}
 
 {% block content %}
+<style>
+    img {
+        max-width: 90%;
+    }
+</style>
 <h1> Din billett: </h1>
 
 {% for url in url_list %}
-    {% qr_from_text url size="M" image_format="png" %}
+    {% qr_from_text url size="s" image_format="png" %}
 {% endfor %}
 
 <h3>{{ ticket_url }}</h3>
