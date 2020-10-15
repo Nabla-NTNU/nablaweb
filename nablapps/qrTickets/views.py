@@ -4,7 +4,7 @@ import string
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
@@ -152,7 +152,10 @@ class UpdateTicketsView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def put(self, request, ticket_id):
-        ticket = QrTicket.objects.get(ticket_id=ticket_id)
+        try:
+            ticket = QrTicket.objects.get(ticket_id=ticket_id)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = QrTicketSerializer(ticket, data=request.data)
         if ticket.registered:
             return Response(status=status.HTTP_208_ALREADY_REPORTED)

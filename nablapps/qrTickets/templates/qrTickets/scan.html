@@ -26,6 +26,7 @@ the npm packagages (Vue and QrCodeReader).
     <p class="error">[[ error ]]</p>
     <p class="success">[[ success ]]</p>
     <p class="fail">[[ fail ]]</p>
+    <p class="ticket-id">Siste scannede billett: <b>[[ result ]]</b></p>
     <qrcode-stream @decode="onDecode" @init="onInit" />
 </div>
 
@@ -56,6 +57,8 @@ Which this Vue app builds atop of.
 
         methods: {
             onDecode (result) {
+                this.success = '';
+                this.fail = '';
                 split_result = result.split("/");
                 ticket_id = split_result[split_result.length - 1];
                 this.result = ticket_id;
@@ -77,8 +80,12 @@ Which this Vue app builds atop of.
                         console.log(err.response);
                         console.log(err.response.status);
                         this.status = err.response.status;
-                        if (response.status !== 405) {
+                        if (err.response.status === 404) {
                             this.fail = "Ugyldig billett! Ta kontakt med WebKom dersom du mener at dette er en feil."
+                        } else if (err.response.status === 400) {
+                            this.fail = "Feil i request. Forsøk manuell registrering."
+                        } else {
+                            this.fail = "Ops! Noe gikk galt. Meld ifra til WebKom!"
                         }
                     })
             },
@@ -101,7 +108,7 @@ Which this Vue app builds atop of.
                         this.error = "ERROR: Stream API is not supported in this browser"
                     }
                 }
-            }       
+            }        
         }
 
     })
