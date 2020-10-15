@@ -1,14 +1,23 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <!-- Temporarily using cdn for js imports -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
+<!-- Temporarily using file in static -->
+<script src={% static "qrTickets/VueQrcodeReader.umd.min.js" %}></script>
+<!--
+Unlike my peers, I am no front-end-guy yet, and I have yet to figure out how to use 
+the npm packagages (Vue and QrCodeReader).
+-->
 
 <!-- Scanner app -->
 <div id="app">
     <h1>Her kommer scannefelt.</h1>
     [[ description ]]
+    [[ result ]]
+    <button v-on:click="setResult">Push me!</button>
+    <qrcode-stream></qrcode-stream>
 </div>
 
 <!-- JS/Vue code -->
@@ -17,8 +26,16 @@
         el: '#app',
         delimiters: ['[[', ']]'],
         data: {
-            description: 'Scan field'
+            description: 'Scan field',
+            result: '',
+        },
+
+        methods: {
+            setResult: function () {
+                this.result = "HAHA"
+            }
         }
     })
+
 </script>
 {% endblock content %}
