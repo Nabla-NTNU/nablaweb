@@ -84,7 +84,7 @@ Which this Vue app builds atop of.
                             this.fail = "Ugyldig billett! Ta kontakt med WebKom dersom du mener at dette er en feil."
                         } else if (err.response.status === 400) {
                             this.fail = "Feil i request. Forsøk manuell registrering."
-                        } else {
+                        } else if (err.response.status !== 405 ) {
                             this.fail = "Ops! Noe gikk galt. Meld ifra til WebKom!"
                         }
                     })
