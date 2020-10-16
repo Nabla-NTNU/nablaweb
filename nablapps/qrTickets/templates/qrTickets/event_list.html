@@ -3,13 +3,13 @@
 {% block content %}
 <h1>Administrer QR-billetter</h1>
 
-<button><a href="{% url 'create-qr-event' %}">Opprett nytt QR-arrangement</a></button>
+<a href="{% url 'create-qr-event' %}" class="btn btn-outline-primary">Opprett nytt QR-arrangement</a>
 
 <h4>Arrangementer med QR-billetter:</h4>
+<ul class="list-group">
 {% for event in object_list %}
-    <div>
-        <a href="{% url 'qr-event-detail' event.id %}">{{ event }}</a>
-    </div>
+    <li class="list-group-item"><a href="{% url 'qr-event-detail' event.id %}">{{ event }}</a></li>
 {% endfor %}
+</ul>
 
 {% endblock %}
