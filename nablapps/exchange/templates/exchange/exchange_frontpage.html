@@ -11,7 +11,6 @@
 {% endaddtoblock %}
 
 
-
 <div class="row" style="margin-left: 2px; margin-right: 5px">
     <h1>Nablas "internasjonale seksjon"</h1>
     <p>
@@ -23,7 +22,7 @@
     
 </div>
 
-<h1 class="row" style="margin-left: 2px">Siste nyheter</h1>
+{% include "./include/ex_list.html" %}
 <div class="col-md-12 box row" style="margin-left: 2px">
         {% for news in news_list %}
             {% with newsurl=news.get_absolute_url %}
@@ -48,23 +47,7 @@
 <div class="col-md-12 box sidebar_box">
     <h1 >Navigasjon</h1>
     <ul>
-        <li><a href="{{ ex_news_url }}">Alle internasjonale nyheter</a> </li>
-        <li><a href="{{ ex_list_url }}">Liste over universiteter</a> </li>
+        <li><a href="{{ ex_news_url }}">Nyheter om utveksling</a> </li>
     </ulid=">
 </div>
-
-<div class="col-md-12 box sidebar_box">
-    <div>
-        <h1>Nyttige lenker</h1>
-        <p style="color: blue">Denne seksjonen er ny og om du har noen tips til hva som bør lenkes til her, si gjerne ifra til WebKom!</p>
-        <ul>
-            <li>elem</li>
-            <li>elem</li>
-            <li>elem</li>
-        </ul>
-    </div>
-</div>
-
 {% endblock %}
-
-
