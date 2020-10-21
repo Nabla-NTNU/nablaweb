@@ -4,13 +4,14 @@
 {% load static %}
 
 
-{% block content %}
+{% block main %}
 
 {% addtoblock "css" %}
     <link rel="stylesheet" href="{% static "exchange/exchange.css" %}">
 {% endaddtoblock %}
 
 <h1>Internasjonale nyheter</h1>
+<a href="{{ ex_frontpage_url }}"><b>Til liste over universiteter</b></a>
 <div class="col-md-12 box row">
         {% for news in news_list %}
             {% with newsurl=news.get_absolute_url %}
@@ -42,15 +43,4 @@
 {% include "includes/pagination.html" %}
 
 
-{% endblock content %}
-
-
-{% block sidebar %}
-<div class="col-md-12 box sidebar_box">
-    <h1>Navigasjon</h1>
-    <ul>
-        <li><a href="{{ ex_frontpage_url }}">Tilbake til forside for utveksling</a> </li>
-    </ul>
-</div>
-
-{% endblock %}
+{% endblock main %}
