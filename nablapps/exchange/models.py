@@ -79,7 +79,12 @@ class Exchange(models.Model):
 
     fag = models.TextField(blank=True, null=True, help_text="Fag du tok.")
     annet = models.TextField(blank=True, null=True, help_text="Annet.")
-    facebook = models.CharField(blank=True, null=True, max_length=100, help_text="Link til din facebookprofil (valgfritt).")
+    facebook = models.CharField(
+        blank=True,
+        null=True,
+        max_length=100,
+        help_text="Link til din facebookprofil (valgfritt).",
+    )
 
     class Meta:
         verbose_name = "utveksling"
