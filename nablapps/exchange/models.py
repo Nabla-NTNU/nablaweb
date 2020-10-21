@@ -29,6 +29,14 @@ class University(models.Model):
         default="",
     )
 
+    by = models.CharField(
+        max_length=30,
+        verbose_name="by",
+        blank=False,
+        help_text="Byen universitetet ligger i",
+        default="",
+    )
+
     class Meta:
         verbose_name = "universitet"
         verbose_name_plural = "universiteter"
