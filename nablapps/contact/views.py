@@ -25,13 +25,13 @@ def contact(request):
                     email = "noreply@anonym.nabla.no"
                 try:
                     if contact_form.get_reciever() == "PostKom":
-                        mailadress = "forslagskasse.postkom@nabla.ntnu.no"
+                        mailadress = "forslagskasse.postkom@nabla.no"
                     elif contact_form.get_reciever() == "ITV ved IFY":
                         mailadress = "fysikk@sr-nv.no"
                     elif contact_form.get_reciever() == "ITV ved IMF":
                         mailadress = "imf@sr-ie.no"
                     else:
-                        mailadress = "forslagskasse.styret@nabla.ntnu.no"
+                        mailadress = "forslagskasse.styret@nabla.no"
 
                     send_mail(
                         subject, message, email, [mailadress], fail_silently=False
@@ -46,7 +46,7 @@ def contact(request):
                 return render(request, "contact/contact.html", context)
 
 
-def feedback(request, template="feedback.html", send_to="webkom@nabla.ntnu.no"):
+def feedback(request, template="feedback.html", send_to="webkom@nabla.no"):
     spam_check = False
     if request.method != "POST":
         test_val = random.randint(0, 20)

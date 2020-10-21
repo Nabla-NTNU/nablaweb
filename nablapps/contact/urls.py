@@ -8,7 +8,7 @@ urlpatterns = [
     path(
         "gullkorn/",
         views.feedback,
-        {"template": "gullkorn.html", "send_to": "redaktor@nabla.ntnu.no"},
+        {"template": "gullkorn.html", "send_to": "redaktor@nabla.no"},
         name="gullkorn",
     ),
     path("success/", views.success, name="success"),
