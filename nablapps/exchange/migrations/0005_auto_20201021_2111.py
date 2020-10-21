@@ -6,23 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange', '0004_university_by'),
+        ("exchange", "0004_university_by"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='exchange',
-            name='annet',
-            field=models.TextField(blank=True, help_text='Annet.', null=True),
+            model_name="exchange",
+            name="annet",
+            field=models.TextField(blank=True, help_text="Annet.", null=True),
         ),
         migrations.AddField(
-            model_name='exchange',
-            name='facebook',
-            field=models.CharField(blank=True, help_text='Link til din facebookprofil (valgfritt).', max_length=100, null=True),
+            model_name="exchange",
+            name="facebook",
+            field=models.CharField(
+                blank=True,
+                help_text="Link til din facebookprofil (valgfritt).",
+                max_length=100,
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='exchange',
-            name='fag',
-            field=models.TextField(blank=True, help_text='Fag du tok.', null=True),
+            model_name="exchange",
+            name="fag",
+            field=models.TextField(blank=True, help_text="Fag du tok.", null=True),
         ),
     ]
