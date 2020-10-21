@@ -12,24 +12,25 @@
         <thead>
         <tr>
             <th data-header-id="tabel-uni" data-type="string" data-sort-by="uni:asc">Universitet</th>
+            <th data-header-id="tabel-country" data-type="string" data-sort-by="country:asc,uni:asc">Land</th>
+            <th data-header-id="tabel-city" data-type="string" data-sort-by="city:asc,uni:asc">By</th>
             {% for retn in retninger %}
             <th data-header-id="tabel-{{ retn | slice:'3' }}" data-type="boolean" data-sort-by="{{ retn | slice:'3' }}:asc,uni:asc">{{ retn }}</th>
             {% endfor %}
-            <th data-header-id="tabel-country" data-type="string" data-sort-by="country:asc,uni:asc">Land</th>
         </tr>
         </thead>
         <tbody>
         {% for obj in ex_list %}
             <tr>
                 <td><a href="{% url 'ex_detail_list' obj.id %}">{{obj.univ_navn}}</a></td>
+                <td>{{obj.land}}</td>
+                <td>{{obj.by}}</td>
                 {% for retn in obj.get_has_retning_list %}
                     <td>{% if retn %}<span class="fa fa-check"></span>{% endif %}</td>
                 {% endfor %}
-                <td>{{obj.land}}</td>
             </tr>
         {% endfor %}
         </tbody>
         </table>
     </div>
-
 </div>

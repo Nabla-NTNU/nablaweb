@@ -4,7 +4,7 @@
 {% load static %}
 
 
-{% block content %}
+{% block main %}
 
 {% addtoblock "css" %}
     <link rel="stylesheet" href="{% static "exchange/exchange.css" %}">
@@ -19,6 +19,8 @@
     internasjonal sekjson ved NTNU, samt en oversikt over universiteter hvor
     FysMat-ere har utvekslet til før med tilhørende informasjon.
     </p>
+
+    <a href="{{ ex_news_url }}">Nyheter om utveksling</a>
     
 </div>
 
@@ -40,14 +42,4 @@
         {% endfor %}
 </div>
 
-{% endblock content %}
-
-
-{% block sidebar %}
-<div class="col-md-12 box sidebar_box">
-    <h1 >Navigasjon</h1>
-    <ul>
-        <li><a href="{{ ex_news_url }}">Nyheter om utveksling</a> </li>
-    </ulid=">
-</div>
-{% endblock %}
+{% endblock main %}
