@@ -20,6 +20,8 @@ from image_cropping.fields import ImageRatioField
 
 from nablapps.core.models import TimeStamped, WithPicture
 
+from ckeditor.fields import RichTextField
+
 
 class TextContent(models.Model):
     """
@@ -32,14 +34,10 @@ class TextContent(models.Model):
         blank=True,
         help_text="Vises på forsiden og i artikkelen",
     )
-    body = models.TextField(
+    body = RichTextField(
+        config_name="basic",
         verbose_name="brødtekst",
         blank=True,
-        help_text=(
-            "Vises kun i artikkelen. "
-            'Man kan her bruke <a href="http://en.wikipedia.org/wiki/Markdown" target="_blank">'
-            "markdown</a> for å formatere teksten."
-        ),
     )
 
     slug = models.SlugField(null=True, blank=True)

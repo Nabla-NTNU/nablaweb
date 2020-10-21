@@ -166,18 +166,31 @@ FILEBROWSER_DIRECTORY = ""
 
 # ckeditor
 CKEDITOR_UPLOAD_PATH = "uploads/"
-CKEDITOR_IMAGE_BACKEND = "pillow"
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': None,
+        'toolbar': [],
     },
     'basic': {
     'toolbar': 'Basic',
-    'skin': 'moono',
     'toolbar_Basic': [
-        ['Bold', 'Italic', 'Underline', 'Smiley', 'Mathjax', 'CodeSnippet'],
+    {
+        'name': 'basicstyles',
+        'items': ['Bold', 'Italic', 'Underline', 'Smiley',
+        'SpecialChar', 'Mathjax', 'CodeSnippet'],
+    },
+    {
+        'name': 'paragraph',
+        'items': ['NumberedList', 'BulletedList',
+                  'JustifyLeft', 'JustifyCenter', 'JustifyRight',],
+    },
+    {
+        'name': 'styles',
+        'items': ['Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor'],
+    }
     ],
-    'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
+    'mathJaxLib': 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_SVG',
+    'mathJaxClass': 'mathjax-latex',
+    'tabSpaces': 4,
     'extraPlugins': ','.join([
             'mathjax',
             'codesnippet',
