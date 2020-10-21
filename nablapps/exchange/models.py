@@ -77,6 +77,10 @@ class Exchange(models.Model):
         blank=False, help_text="Dato utveksling sluttet. Kun måned som brukes."
     )
 
+    fag = models.TextField(blank=True, null=True, help_text="Fag du tok.")
+    annet = models.TextField(blank=True, null=True, help_text="Annet.")
+    facebook = models.CharField(blank=True, null=True, max_length=100, help_text="Link til din facebookprofil (valgfritt).")
+
     class Meta:
         verbose_name = "utveksling"
         verbose_name_plural = "utvekslinger"

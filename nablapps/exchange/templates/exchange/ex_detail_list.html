@@ -1,6 +1,6 @@
 {% extends "base.html"%}
 
-{% block content %}
+{% block main %}
 
 <div class="container">
     <h2>{{ object.univ_navn }}</h2>
@@ -15,6 +15,9 @@
                 {% if user.is_authenticated %}
                 <th>Epost</th>
                 {% endif %}
+                <th>Fag</th>
+                <th>Annet</th>
+                <th>Facebookprofil</th>
                 <th>Utveksling start</th>
                 <th>Slutt</th>
             </tr>
@@ -26,6 +29,21 @@
                 <td>{{obj.get_retning_display}}</td>
                 {% if user.is_authenticated %}
                 <td>{{obj.student.email}}</td>
+                {% endif %}
+                {% if obj.fag %}
+                    <td>{{obj.fag }}</td>
+                {% else %}
+                    <td>-</td>
+                {% endif %}
+                {% if obj.annet %}
+                    <td>{{obj.annet }}</td>
+                {% else %}
+                    <td>-</td>
+                {% endif %}
+                {% if obj.facebook %}
+                    <td>{{obj.facebook }}</td>
+                {% else %}
+                    <td>-</td>
                 {% endif %}
                 <td>{{obj.start|date:"F Y"}}</td>
                 <td>{{obj.end|date:"F Y"}}</td>
@@ -58,4 +76,4 @@
 </div>
 
 
-{% endblock content%}
+{% endblock main %}
