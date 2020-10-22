@@ -186,7 +186,8 @@ CKEDITOR_CONFIGS = {
     {
         'name': 'styles',
         'items': ['Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor'],
-    }
+    },
+    {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
     ],
     'mathJaxLib': 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_SVG',
     'mathJaxClass': 'mathjax-latex',
