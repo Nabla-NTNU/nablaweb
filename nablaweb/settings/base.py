@@ -130,7 +130,7 @@ INSTALLED_APPS = [
     "qr_code",
     "multi_email_field",
     "ckeditor",
-    'ckeditor_uploader',
+    "ckeditor_uploader",
     "rest_framework",
     # Djangoting
     "django.contrib.admin",
@@ -167,35 +167,56 @@ FILEBROWSER_DIRECTORY = ""
 # ckeditor
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': [],
+    "default": {
+        "toolbar": [],
     },
-    'basic': {
-    'toolbar': 'Basic',
-    'toolbar_Basic': [
-    {
-        'name': 'basicstyles',
-        'items': ['Bold', 'Italic', 'Underline', 'Smiley',
-        'SpecialChar', 'Mathjax', 'CodeSnippet'],
-    },
-    {
-        'name': 'paragraph',
-        'items': ['NumberedList', 'BulletedList',
-                  'JustifyLeft', 'JustifyCenter', 'JustifyRight',],
-    },
-    {
-        'name': 'styles',
-        'items': ['Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor'],
-    },
-    {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
-    ],
-    'mathJaxLib': 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_SVG',
-    'mathJaxClass': 'mathjax-latex',
-    'tabSpaces': 4,
-    'extraPlugins': ','.join([
-            'mathjax',
-            'codesnippet',
-        ]),
+    "basic": {
+        "toolbar": "Basic",
+        "toolbar_Basic": [
+            {
+                "name": "basicstyles",
+                "items": [
+                    "Bold",
+                    "Italic",
+                    "Underline",
+                    "Smiley",
+                    "SpecialChar",
+                    "Mathjax",
+                    "CodeSnippet",
+                ],
+            },
+            {
+                "name": "paragraph",
+                "items": [
+                    "NumberedList",
+                    "BulletedList",
+                    "JustifyLeft",
+                    "JustifyCenter",
+                    "JustifyRight",
+                ],
+            },
+            {
+                "name": "styles",
+                "items": [
+                    "Styles",
+                    "Format",
+                    "Font",
+                    "FontSize",
+                    "TextColor",
+                    "BGColor",
+                ],
+            },
+            {"name": "links", "items": ["Link", "Unlink", "Anchor"]},
+        ],
+        "mathJaxLib": "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_SVG",
+        "mathJaxClass": "mathjax-latex",
+        "tabSpaces": 4,
+        "extraPlugins": ",".join(
+            [
+                "mathjax",
+                "codesnippet",
+            ]
+        ),
     },
 }
 

@@ -66,7 +66,7 @@ urlpatterns = [
     path("wiki/", wiki.urls.get_pattern()),
     path("om-nabla/", include("nablapps.core.urls")),
     path("forum/", include("nablapps.nablaforum.urls")),
-    path("ckeditor/", include('ckeditor_uploader.urls')),
+    path("ckeditor/", include("ckeditor_uploader.urls")),
     # For å ta i bruk robots.txt
     path(
         "robots.txt",
