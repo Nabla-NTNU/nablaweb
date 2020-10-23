@@ -1,7 +1,6 @@
 {% extends "base.html"%}
 
 {% block main %}
-
 <div class="container">
     <h2>{{ object.univ_navn }}</h2>
     <p>{{ object.desc }}</p>
@@ -12,14 +11,14 @@
             <tr>
                 <th>Navn</th>
                 <th>Retning</th>
+                <th>Start</th>
+                <th>Slutt</th>
+                <th>Fag</th>
                 {% if user.is_authenticated %}
                 <th>Epost</th>
                 {% endif %}
-                <th>Fag</th>
-                <th>Annet</th>
                 <th>Facebookprofil</th>
-                <th>Start</th>
-                <th>Slutt</th>
+                <th>Annet</th>
             </tr>
             </thead>
             <tbody>
@@ -27,11 +26,18 @@
             <tr>
                 <td>{{obj.student.get_full_name}}</td>
                 <td>{{obj.get_retning_display}}</td>
-                {% if user.is_authenticated %}
-                <td>{{obj.student.email}}</td>
-                {% endif %}
+                <td>{{obj.start|date:"F Y"}}</td>
+                <td>{{obj.end|date:"F Y"}}</td>
                 {% if obj.fag %}
                     <td>{{obj.fag }}</td>
+                {% else %}
+                    <td>-</td>
+                {% endif %}
+                {% if user.is_authenticated %}
+                    <td>{{obj.student.email}}</td>
+                {% endif %}
+                {% if obj.facebook %}
+                    <td>{{obj.facebook }}</td>
                 {% else %}
                     <td>-</td>
                 {% endif %}
@@ -40,13 +46,6 @@
                 {% else %}
                     <td>-</td>
                 {% endif %}
-                {% if obj.facebook %}
-                    <td>{{obj.facebook }}</td>
-                {% else %}
-                    <td>-</td>
-                {% endif %}
-                <td>{{obj.start|date:"F Y"}}</td>
-                <td>{{obj.end|date:"F Y"}}</td>
             </tr>
             {% endfor %}
             </tbody>
@@ -54,7 +53,6 @@
     </div>
     {% if info %}
     <h3>Relevante intervjuer og reisebrev:</h3>
-
     <ul style="list-style-type:disc">
         {% for page in info %}
             {% if page.link %}
@@ -72,8 +70,5 @@
             <a class="page-link" href="{% url 'ex_frontpage' %}"><span aria-hidden="true">&larr;</span> Tilbake til oversikten</a>
         </li>
     </ul>
-
 </div>
-
-
 {% endblock main %}
