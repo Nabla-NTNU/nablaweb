@@ -45,7 +45,7 @@ jobs:
     - name: Install dependencies
       if: steps.cache-venv.outputs.cache-hit != 'true'
       run: |
-        # Force copying dependencies into the venv to prevent an error on windows
+        # Use copies instead of symlinks to be more portable
         python -m venv --copies .venv
         # Install dependencies into the newly created venv
         pipenv install --deploy --dev
