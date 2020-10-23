@@ -1,4 +1,5 @@
 from django.db import models
+
 from ckeditor.fields import RichTextField
 
 
@@ -6,8 +7,7 @@ class Category(models.Model):
     name = models.CharField(
         max_length=30, verbose_name="Kategorisk navn", default="Kategori"
     )
-    description = RichTextField(
-    )
+    description = RichTextField()
 
     def __str__(self):
         return self.name
@@ -20,7 +20,7 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255, verbose_name="Navn", default="Produkt")
     description_short = RichTextField()
-    description = RichTextField(config_name='basic')
+    description = RichTextField(config_name="basic")
     pub_date = models.DateTimeField(auto_now_add=True)
     photo = models.ImageField(
         upload_to="product_photo", blank=False, verbose_name="bilde"

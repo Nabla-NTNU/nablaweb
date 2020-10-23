@@ -16,11 +16,10 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 
+from ckeditor.fields import RichTextField
 from image_cropping.fields import ImageRatioField
 
 from nablapps.core.models import TimeStamped, WithPicture
-
-from ckeditor.fields import RichTextField
 
 
 class TextContent(models.Model):
