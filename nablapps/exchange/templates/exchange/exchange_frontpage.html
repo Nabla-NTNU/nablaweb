@@ -1,55 +1,43 @@
-{% extends "base.html" %}    
-{% load easy_thumbnails %}    
-{% load sekizai_tags %}    
+{% extends "base.html" %}
+{% load easy_thumbnails %}
+{% load sekizai_tags %}
 {% load static %}
 
-{% block main %}
-<div class="container">
-    <h1>Utveksling</h1>
-    <div>
-    Her finner du informasjon om utveksling på FysMat. Les oppdateringer og nyheter fra internasjonal Seksjon ved NTNU her:
-    <br>
-    <a href="{{ ex_news_url }}"><b>Til nyheter om utveksling</b></a>
-    <h2>Universiteter</h2>
-    </div>
-    <form method="GET" action="">
-        <input type="text" name="q" placeholder="" value="{{request.GET.q}}"/>
-        <input type="submit" value="Søk"/>
-    </form>
-    <p>Her finner du en liste over noen universiteter hvor fysmattere har vært på utveksling. Et universitet er krysset under en spesialiseringskolonne dersom minst en fysmatter med gitt spesialisering har studert der (og har registrert dette). Trykk på et universitet for å få opp en liste med studenter som har studert på et gitt universitet. Noen av dem har utvekslingsrapporter fra studenter som har studert der.</p>
 
-    <script src="/static/js/tabel.js" defer></script>
-    <div style="overflow: auto">
-        <table class="tabel table" style="border-collapse:separate;">
-        <thead>
-        <tr>
-            <th data-header-id="tabel-uni" data-type="string" data-sort-by="uni:asc">Universitet</th>
-            <th data-header-id="tabel-country" data-type="string" data-sort-by="country:asc,uni:asc">Land</th>
-            <th data-header-id="tabel-city" data-type="string" data-sort-by="city:asc,uni:asc">By</th>
-            {% for retn in retninger %}
-            <th data-header-id="tabel-{{ retn | slice:'3' }}" data-type="boolean" data-sort-by="{{ retn | slice:'3' }}:asc,uni:asc">{{ retn }}</th>
-            {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for obj in ex_list %}
-            <tr>
-                <td><a href="{% url 'ex_detail_list' obj.id %}">{{obj.univ_navn}}</a></td>
-                <td>{{obj.land}}</td>
-                <td>{{obj.by}}</td>
-                {% for retn in obj.get_has_retning_list %}
-                    <td>{% if retn %}<span class="fa fa-check"></span>{% endif %}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-        </tbody>
-        </table>
-    </div>
+{% block main %}
+
+{% addtoblock "css" %}
+    <link rel="stylesheet" href="{% static "exchange/exchange.css" %}">
+{% endaddtoblock %}
+
+
+<div class="row" style="margin-left: 2px; margin-right: 5px">
+    <h1>Nablas "internasjonale seksjon"</h1>
+    <p>
+    Velkommen til Nablas "internasjonale seksjon"! Her finner du informasjon som
+    er relevant for utveksling i form av nyhetsartikler med informasjon fra 
+    internasjonal sekjson ved NTNU, samt en oversikt over universiteter hvor
+    FysMat-ere har utvekslet til før med tilhørende informasjon.
+    </p>
+    <a href="{{ ex_news_url }}"><b>Til nyheter om utveksling</b></a>
 </div>
 
-<style>
-th {
-    cursor: pointer;
-}
-</style>
+{% include "./include/ex_list.html" %}
+<div class="col-md-12 box row" style="margin-left: 2px">
+        {% for news in news_list %}
+            {% with newsurl=news.get_absolute_url %}
+            <a href="{{ newsurl}}" style="color: black" >
+                <header>
+                    <h3>
+                        {{ news.headline }}
+                    </h3>
+                </header>
+                <p> 
+                    {{ news.lead_paragraph}}
+                </p>
+            </a>
+            {% endwith %}
+        {% endfor %}
+</div>
+
 {% endblock main %}
