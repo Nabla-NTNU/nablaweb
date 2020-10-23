@@ -29,12 +29,16 @@ jobs:
         CACHE_NAME: CACHE_VIRTUALENV
       with:
         path: .venv
+        # The cache action does not as of now (Oct. 2020) support clearing the cache.
+        # If the cache becomes stale for any reason one can clear it by changing
+        # the value of the secret `PIPENV_CACHE_VERSION` in the repository settings
         key: >
-          ${{ runner.os }}-${{ env.CACHE_NAME }}-python${{ matrix.python_version }}-${{ hashFiles('Pipfile.lock') }}
+          cache_version_${{ secrets.PIPENV_CACHE_VERSION}}-${{ runner.os }}-${{ env.CACHE_NAME }}-python${{ matrix.python_version }}-${{ hashFiles('Pipfile.lock') }}
         # Fallbacks to partially restore cache
         restore-keys: |
-          ${{ runner.os }}-${{ env.CACHE_NAME }}-python${{ matrix.python_version }}-
-          ${{ runner.os }}-${{ env.CACHE_NAME }}-
+          cache_version_${{ secrets.PIPENV_CACHE_VERSION}}-${{ runner.os }}-${{ env.CACHE_NAME }}-python${{ matrix.python_version }}-
+          cache_version_${{ secrets.PIPENV_CACHE_VERSION}}-${{ runner.os }}-${{ env.CACHE_NAME }}-
+
     - name: Install dependencies
       if: steps.cache-venv.outputs.cache-hit != 'true'
       run: |
