@@ -183,6 +183,7 @@ CKEDITOR_CONFIGS = {
                     "SpecialChar",
                     "Mathjax",
                     "CodeSnippet",
+                    "Embed",
                 ],
             },
             {
@@ -196,6 +197,13 @@ CKEDITOR_CONFIGS = {
                 ],
             },
             {
+                "name": "links", "items": ["Link", "Unlink", "Anchor"],
+            },
+            {
+                'name': 'source',
+                'items': ['Maximize', 'Source', ],
+            },
+            {
                 "name": "styles",
                 "items": [
                     "Styles",
@@ -206,7 +214,6 @@ CKEDITOR_CONFIGS = {
                     "BGColor",
                 ],
             },
-            {"name": "links", "items": ["Link", "Unlink", "Anchor"]},
         ],
         "mathJaxLib": "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_SVG",
         "mathJaxClass": "mathjax-latex",
@@ -215,6 +222,7 @@ CKEDITOR_CONFIGS = {
             [
                 "mathjax",
                 "codesnippet",
+                "embed",
             ]
         ),
     },
