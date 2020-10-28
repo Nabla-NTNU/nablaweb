@@ -384,7 +384,7 @@ class AdministerPenaltiesView(DetailView, MessageMixin, PermissionRequiredMixin)
         context = super().get_context_data(**kwargs)
         event = self.object
         registrations = event.eventregistration_set.filter(attending=True)
-        context["registrations"] = registrations.order_by("user__first_name")
+        context["registrations"] = registrations.order_by("user__last_name")
         return context
 
 
