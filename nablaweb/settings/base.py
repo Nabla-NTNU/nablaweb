@@ -197,11 +197,15 @@ CKEDITOR_CONFIGS = {
                 ],
             },
             {
-                "name": "links", "items": ["Link", "Unlink", "Anchor"],
+                "name": "links",
+                "items": ["Link", "Unlink", "Anchor"],
             },
             {
-                'name': 'source',
-                'items': ['Maximize', 'Source', ],
+                "name": "source",
+                "items": [
+                    "Maximize",
+                    "Source",
+                ],
             },
             {
                 "name": "styles",
