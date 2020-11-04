@@ -78,6 +78,13 @@ class Exchange(models.Model):
     )
 
     annet = models.TextField(blank=True, null=True, help_text="Annet.")
+    optional_email = models.CharField(
+        blank=True,
+        null=True,
+        max_length=100,
+        help_text="Alternativ epost, la stå blank for å bruke studmail.",
+        verbose_name="Alternativ epost",
+    )
     facebook = models.CharField(
         blank=True,
         null=True,
@@ -97,19 +104,18 @@ class Exchange(models.Model):
 class Subject(models.Model):
     exchange = models.ForeignKey(Exchange, on_delete=models.CASCADE)
     code = models.CharField(
-            max_length=50,
-            blank=False,
-            verbose_name="Emnekode",
+        max_length=50,
+        blank=False,
+        verbose_name="Emnekode",
     )
     name = models.CharField(
-            max_length=50,
-            blank=False,
-            verbose_name="Emnenavn",
+        max_length=50,
+        blank=False,
+        verbose_name="Emnenavn",
     )
 
-
     def __str__(self):
-        return f'{self.code} {self.name}'
+        return f"{self.code} {self.name}"
 
 
 def validate_file_extension(value):

@@ -38,7 +38,11 @@
                     <td>-</td>
                 {% endif %}
                 {% if user.is_authenticated %}
-                    <td>{{obj.student.email}}</td>
+                    {% if obj.optional_email %}
+                        <td>{{obj.optional_email}}</td>
+                    {% else %}
+                        <td>{{obj.student.email}}</td>
+                    {% endif %}
                 {% endif %}
                 {% if obj.facebook %}
                     <td><a href="{{obj.facebook }}">Til facebook</a></td>
