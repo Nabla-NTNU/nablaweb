@@ -8,6 +8,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from ckeditor.fields import RichTextField
 
 
 class ComPage(models.Model):
@@ -29,7 +30,8 @@ class ComPage(models.Model):
         default=True,
     )
 
-    description = models.TextField(
+    description = RichTextField(
+        config_name="basic",
         verbose_name="Beskrivelse", help_text="Teksten på komitésiden", blank=True
     )
 
