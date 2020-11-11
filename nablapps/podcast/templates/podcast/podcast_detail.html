@@ -30,7 +30,7 @@
 </div>
 {% endif %}
 
-<p>{{ podcast.description }}</p>
+{{ podcast.description|safe }}
 {% if podcast.file %}
 <div>
 <a class="btn btn-primary btn-large" href="{{ podcast.file.url }}" download>
@@ -38,11 +38,7 @@
 </a>
 </div>
 {% endif %}
-{% if podcast.extra_markdown %}
-<p>
-    {{ podcast.extra_markdown | markdown:"unsafe" }}
-</p>
-{% endif %}
+
 {% include "content/includes/comments.html" with content=podcast %}
 
 

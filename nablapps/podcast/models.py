@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
+from ckeditor.fields import RichTextField
 from image_cropping.fields import ImageRatioField
 
 
@@ -76,8 +77,6 @@ class Podcast(models.Model):
 
     image = models.ImageField(
         upload_to="news_pictures",
-        null=True,
-        blank=True,
         verbose_name="Bilde",
         help_text=(
             "Bilder som er større enn 300x300 px ser best ut. "
@@ -94,7 +93,8 @@ class Podcast(models.Model):
 
     title = models.CharField(verbose_name="tittel", max_length=200, blank=False)
 
-    description = models.TextField(
+    description = RichTextField(
+        config_name="basic",
         verbose_name="beskrivelse",
         help_text="Teksten vil bli kuttet etter 250 tegn på sesongsiden.",
         blank=True,
@@ -105,13 +105,6 @@ class Podcast(models.Model):
         help_text="kort tittel som vises i boksen på forsiden med de fire siste sendingene.",
         max_length=50,
         blank=True,
-    )
-
-    extra_markdown = models.TextField(
-        verbose_name="Ekstra markdown",
-        blank=True,
-        null=True,
-        help_text="Ekstra markdown for å putte inn videoer etc.",
     )
 
     pub_date = models.DateTimeField(
