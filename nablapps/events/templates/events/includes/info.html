@@ -227,7 +227,8 @@
 {% endif %}
 
 <div class="center">
-    <a title="Google Calendar" class="btn" href="https://calendar.google.com/calendar/r/eventedit?text={{ event.headline }}&dates={{event.event_start|date:'Ymd\THis' }}/{{event.event_end|date:'Ymd\THis' }}&details={{ request.build_absolute_uri }}&location={{ event.location }}&sf=true&output=xml&pli=1" target ="_blank">
+    
+    <a title="Google Calendar" class="btn" href="https://calendar.google.com/calendar/r/eventedit?text={{ event.headline }}&dates={{event.event_start|date:'Ymd\THis' }}/{{event.event_end|default_if_none:event.event_start|date:'Ymd\THis' }}&details={{ request.build_absolute_uri }}&location={{ event.location }}&sf=true&output=xml&pli=1" target ="_blank">
 	<img hspace=10 height=32 src="{% static "events/Google_Calendar_icon.svg" %}" alt="iCalendar">
 	</a>
     <a title="iCalendar" class="btn" href="{% url "ical_event" event.pk %}">
