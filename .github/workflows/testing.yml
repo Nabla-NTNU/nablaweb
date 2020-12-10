@@ -55,7 +55,8 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         configure_path=$(convert -list configure | sed -n -e 's/CONFIGURE_PATH[[:space:]]*//p' || true)
-        sudo sed -i -e 's/<policy domain="coder" rights=".*" pattern="PDF" \/>/<policy domain="coder" rights="read | write" pattern="PDF" \/>/' "${configure_path}policy.xml"
+        # sed -i is a gnu extension. Beware
+        sudo sed -i -e 's/<policy domain="coder" rights=".*" pattern="PDF" \/>/<policy domain="coder" rights="read | write" pattern="PDF" \/>/' "$configure_path/policy.xml"
 
     - name: Exclude tests that need ImageMagick (non-linux)
       # ImageMagick does not come pre-installed on mac- and windows runners, so we skip
