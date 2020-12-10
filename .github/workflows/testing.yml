@@ -12,6 +12,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
         python_version: [3.6]
+    defaults:
+      run:
+        shell: bash
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
@@ -52,7 +55,7 @@ jobs:
       # This is needed to create Nablad instances, which is done during testing
       if: runner.os == 'Linux'
       run: |
-        configure_path=$(convert -list configure | sed -n -e 's/CONFIGURE_PATH[[:space:]]*//p')
+        configure_path=$(convert -list configure | sed -n -e 's/CONFIGURE_PATH[[:space:]]*//p' || true)
         sudo sed -i -e 's/<policy domain="coder" rights=".*" pattern="PDF" \/>/<policy domain="coder" rights="read | write" pattern="PDF" \/>/' "${configure_path}policy.xml"
 
     - name: Exclude tests that need ImageMagick (non-linux)
