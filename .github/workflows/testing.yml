@@ -61,7 +61,7 @@ jobs:
       # which is set on the test that needs ImageMagick
       if: runner.os != 'Linux'
       run: |
-        echo '::set-env name=exclude_tag::needs_imagemagick'
+        echo 'exclude_tag=needs_imagemagick' >> $GITHUB_ENV
 
     - name: Run tests
       # Tests are run in parallel, which may cause issues if the tests aren't propertly isolated
