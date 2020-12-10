@@ -39,7 +39,7 @@ pylint-django = "*"
 bandit = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.9"
 
 [scripts]
 production = "gunicorn --config /etc/websites/nablaweb/gunicorn.conf nablaweb.wsgi:application"
