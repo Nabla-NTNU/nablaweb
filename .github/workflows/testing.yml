@@ -66,4 +66,4 @@ jobs:
     - name: Run tests
       # Tests are run in parallel, which may cause issues if the tests aren't propertly isolated
       run: |
-        pipenv run python manage.py test --parallel --exclude-tag=${{ env.exclude_tag }}
+        pipenv run python manage.py test --parallel --exclude-tag="$exclude_tag"
