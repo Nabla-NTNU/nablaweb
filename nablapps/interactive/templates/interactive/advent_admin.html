@@ -18,7 +18,7 @@
     <h1>Finn vinner</h1>
     {% endif %}
     {% if door.is_lottery %}
-        <form action="admin" method="post">
+        <form action="" method="post">
             {% csrf_token %}
             {% if door.is_text_response %}
             <h2>Velg den som fortjener å vinne:</h2>
