@@ -40,7 +40,6 @@ jobs:
         # Fallbacks to partially restore cache
         restore-keys: |
           cache_version_${{ secrets.PIPENV_CACHE_VERSION}}-${{ runner.os }}-${{ env.CACHE_NAME }}-python${{ matrix.python_version }}-
-          cache_version_${{ secrets.PIPENV_CACHE_VERSION}}-${{ runner.os }}-${{ env.CACHE_NAME }}-
 
     - name: Install dependencies
       if: steps.cache-venv.outputs.cache-hit != 'true'
