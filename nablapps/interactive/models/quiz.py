@@ -64,6 +64,14 @@ class Quiz(InteractiveElement):
         verbose_name="Publisert",
     )
 
+    spoiler_html = models.TextField(
+        default="",
+        blank=True,
+        verbose_name="Spoiler HTML",
+        help_text="HTML som vises til brukeren etter den har sendt inn et svar "
+        "på quizen. Vises ikke dersom den står tom.",
+    )
+
     class Meta:
         verbose_name = "Quiz"
         verbose_name_plural = "Quizer"

@@ -16,6 +16,11 @@ Du fikk {{ result.get_correct_count }} av {{ result.get_question_count }} riktig
         </span>
     </div>
 </div>
+{% if quiz.spoiler_html %}
+<div>
+    {{ quiz.spoiler_html | safe }}
+</div>
+{% endif %}
 
 {% for reply in result.questions.all %}
     <h2>{{ forloop.counter }}. {{ reply.question.question|markdown:"unsafe" }}</h2>
