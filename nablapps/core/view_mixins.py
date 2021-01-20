@@ -51,14 +51,14 @@ class AdminLinksMixin(ContextMixin):
         return [
             {
                 "name": "Endre",
-                "glyphicon_symbol": "pencil",
+                "font_awesome": "edit",
                 "url": reverse(
                     f"admin:{app_label}_{model_name}_change", args=[self.object.id]
                 ),
             },
             {
                 "name": "Slett",
-                "glyphicon_symbol": "trash",
+                "font_awesome": "trash",
                 "url": reverse(
                     f"admin:{app_label}_{model_name}_delete", args=[self.object.id]
                 ),

@@ -253,12 +253,12 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
             admin_list += [
                 {
                     "name": "Administrer påmeldinger",
-                    "glyphicon_symbol": "user",
+                    "font_awesome": "user",
                     "url": reverse("event_admin", args=[self.object.id]),
                 },
                 {
                     "name": "Påmeldingsliste",
-                    "glyphicon_symbol": "list",
+                    "font_awesome": "list",
                     "url": reverse("event_registrations", args=[self.object.id]),
                 },
             ]
@@ -266,7 +266,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
             admin_list.append(
                 {
                     "name": "Administrer prikker",
-                    "glyphicon_symbol": "check",
+                    "font_awesome": "check",
                     "url": reverse("event_administer_penalties", args=[self.object.id]),
                 }
             )
@@ -274,7 +274,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
             admin_list.append(
                 {
                     "name": "Registrer oppmøte",
-                    "glyphicon_symbol": "user",
+                    "font_awesome": "user",
                     "url": reverse("event_register_attendance", args=[self.object.id]),
                 }
             )

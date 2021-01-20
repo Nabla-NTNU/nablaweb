@@ -27,30 +27,30 @@ Du fikk {{ result.get_correct_count }} av {{ result.get_question_count }} riktig
     <ul class="list-group">
         <li class="list-group-item">
             {{ reply.question.alternative_1 }}
-            {% if reply.question.correct_alternative == 1 %}<span class="glyphicon glyphicon-ok"></span>
+            {% if reply.question.correct_alternative == 1 %}<span class="fas fa-thumbs-up"></span>
 	    {% else %}
-	    {% if reply.alternative == 1 %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
+	    {% if reply.alternative == 1 %}<span class="fas fa-trash-alt"></span>{% endif %}
 	    {% endif %}
         </li>
         <li class="list-group-item">
             {{ reply.question.alternative_2 }}
-            {% if reply.question.correct_alternative == 2 %}<span class="glyphicon glyphicon-ok"></span>
+            {% if reply.question.correct_alternative == 2 %}<span class="fas fa-thumbs-up"></span>
 	    {% else %}
-	    {% if reply.alternative == 2 %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
+	    {% if reply.alternative == 2 %}<span class="fas fa-trash-alt"></span>{% endif %}
 	    {% endif %}
         </li>
         <li class="list-group-item">
             {{ reply.question.alternative_3 }}
-            {% if reply.question.correct_alternative == 3 %}<span class="glyphicon glyphicon-ok"></span>
+            {% if reply.question.correct_alternative == 3 %}<span class="fas fa-thumbs-up"></span>
 	    {% else %}
-	    {% if reply.alternative == 3 %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
+	    {% if reply.alternative == 3 %}<span class="fas fa-trash-alt"></span>{% endif %}
 	    {% endif %}
         </li>
         <li class="list-group-item">
             {{ reply.question.alternative_4 }}
-            {% if reply.question.correct_alternative == 4 %}<span class="glyphicon glyphicon-ok"></span>
+            {% if reply.question.correct_alternative == 4 %}<span class="fas fa-thumbs-up"></span>
 	    {% else %}
-	    {% if reply.alternative == 4 %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
+	    {% if reply.alternative == 4 %}<span class="fas fa-trash-alt"></span>{% endif %}
 	    {% endif %}
         </li>
     </ul>
@@ -61,7 +61,7 @@ Du fikk {{ result.get_correct_count }} av {{ result.get_question_count }} riktig
 </a>
 {% if view.request.user == result.user %}
 <a class="btn btn-danger" href="{% url "quiz_result_delete" result.id %}">
-    <span class="glyphicon glyphicon-trash"></span>
+    <span class="fas fa-trash-alt"></span>
     Slett resultat
 </a>
 {% endif %}
