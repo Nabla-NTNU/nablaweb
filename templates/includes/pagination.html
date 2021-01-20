@@ -5,13 +5,13 @@ It fits perfectly if you are using the django.views.generic.ListView with pagina
 {% if is_paginated %}
     <nav>
         <ul class="pagination d-flex justify-content-between">
-            {% if page_obj.has_next %}
+            {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}"><span aria-hidden="true">&larr;</span> Eldre</a>
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> Nyere</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
-                    <a class="page-link" ><span aria-hidden="true">&larr;</span> Eldre</a>
+                    <a class="page-link"><span aria-hidden="true">&larr;</span> Nyere</a>
                 </li>
             {% endif %}
 
@@ -19,16 +19,15 @@ It fits perfectly if you are using the django.views.generic.ListView with pagina
                 <a class="page-link" >Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</a>
             </li>
 
-            {% if page_obj.has_previous %}
+            {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Nyere <span aria-hidden="true">&rarr;</span></a>
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Eldre <span aria-hidden="true">&rarr;</span></a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
-                    <a class="page-link">Nyere <span aria-hidden="true">&rarr;</span></a>
+                    <a class="page-link" >Eldre<span aria-hidden="true"> &rarr;</span></a>
                 </li>
             {% endif %}
-
         </ul>
     </nav>
 {% endif %}
