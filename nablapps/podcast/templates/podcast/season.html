@@ -33,7 +33,7 @@
                             <p>{{ podcast.get_short_description }}</p>
                             <span class="date-text">
                                 {% if podcast.has_video %}
-                                <span class="glyphicon glyphicon-film"></span>
+                                <span class="fas fa-film"></span>
                                 {% endif %}
                             {% get_hit_count for podcast %} visninger.
                             {{ podcast.pub_date | date:"d.m.Y" }}

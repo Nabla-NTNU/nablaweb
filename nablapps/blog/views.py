@@ -32,7 +32,7 @@ class BlogPostView(AdminLinksMixin, DetailView):
         return [
             {
                 "name": "Bloggadmin",
-                "glyphicon_symbol": "cog",
+                "font_awesome": "cog",
                 "url": reverse("admin:blog_blog_change", args=[self.object.blog.id]),
             },
             *super().get_admin_links(),
@@ -74,7 +74,7 @@ class BlogView(AdminLinksMixin, ListView):
         return [
             {
                 "name": "Bloggadmin",
-                "glyphicon_symbol": "cog",
+                "font_awesome": "cog",
                 "url": reverse("admin:blog_blog_change", args=[self.blog.id]),
             },
         ]

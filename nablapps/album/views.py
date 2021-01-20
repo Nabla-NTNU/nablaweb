@@ -100,7 +100,7 @@ class AlbumImageView(PermissionToSeeAlbumMixin, TemplateView):
         context["admin_links"] = [
             {
                 "name": "Endre Album",
-                "glyphicon_symbol": "cog",
+                "font_awesome": "cog",
                 "url": reverse("admin:album_album_change", args=[context["album"].id]),
             }
         ]

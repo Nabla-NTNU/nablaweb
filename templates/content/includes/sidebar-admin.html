@@ -6,8 +6,8 @@
     <ul class="nav flex-column">
         {% for link in admin_links %}
             <a class="nav-link" href="{{ link.url }}">
-                {% if link.glyphicon_symbol %}
-                <span class="glyphicon glyphicon-{{ link.glyphicon_symbol }}"></span>
+                {% if link.font_awesome %}
+                <span class="fas fa-{{ link.font_awesome }}"></span>
                 {% endif %}
                 {{ link.name }}
             </a>
