@@ -66,7 +66,7 @@
 <!--Sidebar begin-->
     {% if newuser_message %}
     <!--temporary Eureka promo-->
-    <div class="welcome card card-body card-body-overline justify-content-center">
+    <div class="welcome card card-body card-body-overline">
         {% if eureka %}
             <p>
                 {{ eureka.content | markdown:"unsafe" }}
@@ -95,7 +95,7 @@
     {% endcomment %}
     {% else %}
     <!--temporary Eureka promo-->
-    <div class="forum card card-body card-body-overline justify-content-center">
+    <div class="forum card card-body card-body-overline">
         {% if eureka %}
             <p>
                 {{ eureka.content | markdown:"unsafe" }}
