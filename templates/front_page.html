@@ -65,6 +65,15 @@
 
 <!--Sidebar begin-->
     {% if newuser_message %}
+    <!--temporary Eureka promo-->
+    <div class="welcome card card-body card-body-overline justify-content-center">
+        {% if eureka %}
+            <p>
+                {{ eureka.content | markdown:"unsafe" }}
+            </p>
+        {% endif %}
+    </div>
+    {% comment %}
     <div class="welcome card card-body card-body-overline ">
         <h1>Velkommen til Nabla</h1>
         <p>
@@ -83,8 +92,19 @@
             Sjekk ut <a href="/bedriftskontakten/">bedriftskontakten sine sider</a>, eller ta kontakt med bedriftskontakten på <a href="mailto:bedkom@nabla.no">bedkom@nabla.no</a>.
         </p>
     </div>
+    {% endcomment %}
     {% else %}
+    <!--temporary Eureka promo-->
+    <div class="forum card card-body card-body-overline justify-content-center">
+        {% if eureka %}
+            <p>
+                {{ eureka.content | markdown:"unsafe" }}
+            </p>
+        {% endif %}
+    </div>
+    {% comment %}
         {% include "nablaforum/includes/forum_widget.html" %}
+    {% endcomment %}
     {% endif  %}
     <div class="office">
         <!--Kontoret-->
