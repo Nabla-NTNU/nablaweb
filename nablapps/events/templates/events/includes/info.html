@@ -4,6 +4,15 @@
 
 {% addtoblock "css" %}
 <style>
+
+    .table-fixed{
+        table-layout: fixed;
+    }
+
+    .table-break-word td{
+        word-break: break-all;
+    }
+
     .content-info span.trinn {
         display: inline-block;
         height: 30px;
@@ -45,7 +54,7 @@
 </h3>
 {% endif %}
 
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped table-fixed table-break-word">
 
     <!-- Fra -->
     <tr>
