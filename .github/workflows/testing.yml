@@ -57,8 +57,19 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         configure_path=$(convert -list configure | sed -n -e 's/CONFIGURE_PATH[[:space:]]*//p' || true)
+        temp_file="$(mktemp)"
+
         # sed -i is a gnu extension. Beware
-        sudo sed -i -e 's/<policy domain="coder" rights=".*" pattern="PDF" \/>/<policy domain="coder" rights="read | write" pattern="PDF" \/>/' "$configure_path/policy.xml"
+        sudo sed -i -e 's/<policy domain="coder" rights=".*" pattern="PDF" \/>/<policy domain="coder" rights="read | write" pattern="PDF" \/>/w '"$temp_file" "$configure_path/policy.xml"
+        if [ ! -s "$temp_file" ]; then
+          echo 'Failed to edit policy file to allow reading/writing PDFs!'
+          echo 'Below are the contents of `policy.xml`'
+          echo 'For PDF processing to work it should be edited to have a line like:'
+          echo '  "<policy domain="coder" rights="read | write" pattern="PDF" \/>"'
+          echo
+          cat "$configure_path/policy.xml"
+          exit 1
+        fi
         sudo apt-get install ghostscript
 
     - name: Exclude tests that need ImageMagick (non-linux)
