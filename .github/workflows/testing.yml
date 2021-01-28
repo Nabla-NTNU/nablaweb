@@ -9,6 +9,7 @@ jobs:
       PIPENV_VENV_IN_PROJECT: true
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
         python_version: [3.6]
