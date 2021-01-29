@@ -5,7 +5,7 @@ from django.db import transaction
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
-from .models import Votation, Alternative, UserAlreadyVoted, VotationDeactive
+from .models import Voting, Alternative, UserAlreadyVoted, VotingDeactive
 from .forms import AlternativeFormset
 
 ####################
@@ -14,18 +14,18 @@ from .forms import AlternativeFormset
 # Remeber to make permission requirement
 
 
-class VotationList(ListView):
-    """List of all votations"""
-    model = Votation
-    template_name = "vote/votation_list.html"
+class VotingList(ListView):
+    """List of all votings"""
+    model = Voting
+    template_name = "vote/voting_list.html"
 
 
-class CreateVotation(CreateView):
-    """View for creating new votations"""
-    template_name = "vote/votation_form.html"
-    model = Votation
+class CreateVoting(CreateView):
+    """View for creating new votings"""
+    template_name = "vote/voting_form.html"
+    model = Voting
     fields = ["title", "description"]
-    success_url = reverse_lazy('votation-list')
+    success_url = reverse_lazy('voting-list')
     
 
     def get_context_data(self, **kwargs):
@@ -38,7 +38,7 @@ class CreateVotation(CreateView):
 
 
     def form_valid(self, form):
-        """Called if all forms are valid. Creates votation and associated alternatives"""
+        """Called if all forms are valid. Creates voting and associated alternatives"""
         context = self.get_context_data()
         alternatives = context["alternatives"]
         with transaction.atomic():
@@ -49,23 +49,23 @@ class CreateVotation(CreateView):
         return super().form_valid(form)
 
 
-class VotationDetail(DetailView):
-    model = Votation
-    template_name = "vote/votation_detail.html"
+class VotingDetail(DetailView):
+    model = Voting
+    template_name = "vote/voting_detail.html"
 
 
-def activate_votation(request, pk):
-    votation = Votation.objects.get(pk=pk)
-    votation.is_active = True
-    votation.save()
-    return redirect("votation-detail", pk=pk)
+def activate_voting(request, pk):
+    voting = Voting.objects.get(pk=pk)
+    voting.is_active = True
+    voting.save()
+    return redirect("voting-detail", pk=pk)
 
 
-def deactivate_votation(request, pk):
-    votation = Votation.objects.get(pk=pk)
-    votation.is_active = False
-    votation.save()
-    return redirect("votation-detail", pk=pk)
+def deactivate_voting(request, pk):
+    voting = Voting.objects.get(pk=pk)
+    voting.is_active = False
+    voting.save()
+    return redirect("voting-detail", pk=pk)
 
 
 ###########################################
@@ -74,31 +74,31 @@ def deactivate_votation(request, pk):
 
 
 class Vote(LoginRequiredMixin, DetailView):
-    model = Votation
-    template_name = "vote/votation_vote.html"
+    model = Voting
+    template_name = "vote/voting_vote.html"
 
 
 @login_required
 def submit_vote(request, pk):
-    votation = get_object_or_404(Votation, pk=pk)
+    voting = get_object_or_404(Voting, pk=pk)
     try:
-        alternative = votation.alternatives.get(pk=request.POST["alternative"])
+        alternative = voting.alternatives.get(pk=request.POST["alternative"])
         alternative.add_vote(request.user)
     except (KeyError, Alternative.DoesNotExist):
         messages.warning(request, "Du har ikke valgt et alternativ.")
-        return redirect("votation-vote", pk=pk)
+        return redirect("voting-vote", pk=pk)
     except UserAlreadyVoted:
         messages.error(request, "Du har allerede stemt i denne avstemningen!")
-    except VotationDeactive:
+    except VotingDeactive:
         messages.error(request, "Denne avstemningen er ikke lenger åpen for stemming!")
     else:
-        messages.success(request, f"Suksess! Du har stemt i avstemningen {votation.title}")
-    return redirect("active-votation-list")
+        messages.success(request, f"Suksess! Du har stemt i avstemningen {voting.title}")
+    return redirect("active-voting-list")
 
 
-class ActiveVotationList(ListView):
-    model = Votation
-    template_name = "vote/active_votation_list.html"
+class ActiveVotingList(ListView):
+    model = Voting
+    template_name = "vote/active_voting_list.html"
     
 
     def get_queryset(self):

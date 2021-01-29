@@ -8,20 +8,20 @@ Code heavily boiled.
 
 
 class UserAlreadyVoted(Exception):
-    """Raised if the voting user has already voted on a votation"""
+    """Raised if the voting user has already voted on a voting"""
 
-class VotationDeactive(Exception):
-    """Raised if the user tries to vote on an inactive votation"""
+class VotingDeactive(Exception):
+    """Raised if the user tries to vote on an inactive voting"""
 
 
-class Votation(models.Model):
-    """ Represents a votation """
+class Voting(models.Model):
+    """ Represents a voting """
     title = models.CharField(max_length=100)
     description = models.TextField()
     users_voted = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="users_voted")
     created_by = models.ForeignKey(
             settings.AUTH_USER_MODEL,
-            related_name="Votation_created_by",
+            related_name="Voting_created_by",
             verbose_name="Opprettet av",
             editable=False,
             null=True,
@@ -45,18 +45,18 @@ class Votation(models.Model):
 
 
     def activate(self):
-        """Activates votation and opens for voting"""
+        """Activates voting and opens for voting"""
         self.is_active = True
     
 
     def deactivate(self):
-        """Deactivates votation and closes for voting"""
+        """Deactivates voting and closes for voting"""
         self.is_active = False
 
 
 class Alternative(models.Model):
     """ Represents an alternative """
-    votation = models.ForeignKey(Votation, on_delete=models.CASCADE, related_name="alternatives")
+    voting = models.ForeignKey(Voting, on_delete=models.CASCADE, related_name="alternatives")
     text = models.CharField(max_length=250)
     votes = models.IntegerField("Antall stemmer", blank=False, default=0)
 
@@ -67,19 +67,19 @@ class Alternative(models.Model):
 
     def add_vote(self, user):
         """ Add users vote """
-        if self.votation.user_already_voted(user):
-            raise UserAlreadyVoted(f"{user} has already voted on {self.votation}.")
-        elif not self.votation.is_active:
-            raise VotationDeactive(f"This votation is no longer open for voting.")
+        if self.voting.user_already_voted(user):
+            raise UserAlreadyVoted(f"{user} has already voted on {self.voting}.")
+        elif not self.voting.is_active:
+            raise VotingDeactive(f"This voting is no longer open for voting.")
         else:
             self.votes =+ 1
             self.save()
-            self.votation.users_voted.add(user)
+            self.voting.users_voted.add(user)
 
 
     def get_vote_percentage(self):
         """Return the percentage of the total votes this alternative got"""
-        if self.votation.get_total_votes() == 0:
+        if self.voting.get_total_votes() == 0:
             return 0
         else:
-            return 100*self.votes/self.votation.get_total_votes()
+            return 100*self.votes/self.voting.get_total_votes()
