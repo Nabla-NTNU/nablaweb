@@ -1,0 +1,31 @@
+{% extends "base.html"%}
+
+{% block content %}
+<h1>{{ object.title }}</h1>
+<p>{{ object.description }}</p>
+
+{% for alternative in object.alternatives.all %}
+<p>{{ alternative }}</p>
+{% endfor %}
+
+
+<form action="{% url "submit-vote" pk=object.pk %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{% firstof next request.path %}#{{ object.pk }}">
+    {% for alternative in object.alternatives.all %}
+        <div class="radio">
+            <label>
+                <input type="radio" name="alternative" value="{{ alternative.pk }}">
+                <span class="alternative">{{ alternative.text }}</span>
+            </label>
+        </div>
+    {% endfor %}
+    <button class="btn btn-default btn-block" type="submit">Stem</button>
+</form>
+
+
+<a href="{% url "active-votation-list" %}">Tilbake til liste over aktive avstemninger</a>
+{% endblock %}
+
+
+

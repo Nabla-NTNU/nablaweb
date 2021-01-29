@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, TemplateView, DetailView, CreateView
 from django.urls import reverse_lazy
 from django.db import transaction
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from .models import Votation
+from django.contrib.auth.decorators import login_required, permission_required
+from .models import Votation, Alternative, UserAlreadyVoted, VotationDeactive
 from .forms import AlternativeFormset
 
 ####################
@@ -66,8 +68,43 @@ def deactivate_votation(request, pk):
     return redirect("votation-detail", pk=pk)
 
 
+###########################################
+### Non admin vies, only login required ###
+###########################################
+
+
 class Vote(LoginRequiredMixin, DetailView):
     model = Votation
     template_name = "vote/votation_vote.html"
 
+
+@login_required
+def submit_vote(request, pk):
+    votation = get_object_or_404(Votation, pk=pk)
+    try:
+        alternative = votation.alternatives.get(pk=request.POST["alternative"])
+        alternative.add_vote(request.user)
+    except (KeyError, Alternative.DoesNotExist):
+        messages.warning(request, "Du har ikke valgt et alternativ.")
+        return redirect("votation-vote", pk=pk)
+    except UserAlreadyVoted:
+        messages.error(request, "Du har allerede stemt i denne avstemningen!")
+    except VotationDeactive:
+        messages.error(request, "Denne avstemningen er ikke lenger åpen for stemming!")
+    else:
+        messages.success(request, f"Suksess! Du har stemt i avstemningen {votation.title}")
+    return redirect("active-votation-list")
+
+
+class ActiveVotationList(ListView):
+    model = Votation
+    template_name = "vote/active_votation_list.html"
+    
+
+    def get_queryset(self):
+        return self.model.objects.exclude(is_active=False)
+
+
+def main_redirect(request):
+    pass
 
