@@ -1,0 +1,17 @@
+<form action="{% url "poll_vote" poll.id %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{% firstof next request.path %}#{{ poll.id }}">
+    {% for choice in poll.choices.all %}
+        <div class="radio">
+            <label>
+                <input type="radio" name="choice" value="{{ choice.id }}">
+                <span class="choice">{{ choice.choice }}</span>
+            </label>
+        </div>
+    {% endfor %}
+    {% if user.is_authenticated %}
+        <button class="btn btn-default btn-block" type="submit">Stem</button>
+    {% else %}
+        <div class="center" style="color:#999;">Logg inn for å stemme</div>
+    {% endif %}
+</form>

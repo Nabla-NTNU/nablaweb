@@ -17,7 +17,7 @@
 {% endif %}
 <p>{{ object.description }}</p>
 {% for alternative in object.alternatives.all %}
-<p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }} </p>
+<p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>
 {% endfor %}
 <a href="{% url "votation-list" %}">Tilbake til liste over avstemninger</a>
 {% endblock %}

@@ -10,6 +10,9 @@ Code heavily boiled.
 class UserAlreadyVoted(Exception):
     """Raised if the voting user has already voted on a votation"""
 
+class VotationDeactive(Exception):
+    """Raised if the user tries to vote on an inactive votation"""
+
 
 class Votation(models.Model):
     """ Represents a votation """
@@ -33,7 +36,7 @@ class Votation(models.Model):
 
     def user_already_voted(self, user):
         """ returns true if the given user has already voted """
-        return user in self.users_voted
+        return user in self.users_voted.all()
 
 
     def get_total_votes(self):
@@ -66,6 +69,8 @@ class Alternative(models.Model):
         """ Add users vote """
         if self.votation.user_already_voted(user):
             raise UserAlreadyVoted(f"{user} has already voted on {self.votation}.")
+        elif not self.votation.is_active:
+            raise VotationDeactive(f"This votation is no longer open for voting.")
         else:
             self.votes =+ 1
             self.save()
