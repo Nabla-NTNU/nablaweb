@@ -11,14 +11,14 @@
     {% endif %}
 </h4>
 {% if object.is_active %}
-    <a href="{% url "deactivate-votation" pk=object.pk %}">Deaktiver avstemningen</a>
+    <a href="{% url "deactivate-voting" pk=object.pk %}">Deaktiver avstemningen</a>
 {% else %}
-    <a href="{% url "activate-votation" pk=object.pk %}">Aktiver avstemningen</a>
+    <a href="{% url "activate-voting" pk=object.pk %}">Aktiver avstemningen</a>
 {% endif %}
 <p>{{ object.description }}</p>
 {% for alternative in object.alternatives.all %}
 <p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>
 {% endfor %}
-<a href="{% url "votation-list" %}">Tilbake til liste over avstemninger</a>
+<a href="{% url "voting-list" %}">Tilbake til liste over avstemninger</a>
 {% endblock %}
 

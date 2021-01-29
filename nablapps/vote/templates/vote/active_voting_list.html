@@ -4,7 +4,7 @@
 <h1>Avstemninger</h1>
 <ul>
     {% for object in object_list %}
-    <li><a href="{% url "votation-vote" pk=object.pk %}">{{ object.title }}<a></li>
+    <li><a href="{% url "voting-vote" pk=object.pk %}">{{ object.title }}<a></li>
     {% empty %}
        Ingen aktive avstemninger
     {% endfor %}

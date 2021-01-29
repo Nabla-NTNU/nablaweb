@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Votation, Alternative
+from .models import Voting, Alternative
 
-admin.site.register(Votation)
+admin.site.register(Voting)
 admin.site.register(Alternative)
