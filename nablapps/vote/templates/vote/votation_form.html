@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Opprett avstemning</h1>
+<a href="{% url "votation-list" %}">Tilbake til liste over avstemninger</a>
+<form method="POST">
+    {% csrf_token %}
+    <br>
+    {{ form.as_p }}
+    <br>
+
+    <table class="table">
+        {{ alternatives.management_form }}
+
+        {% for form in alternatives.forms %}
+            {% if forloop.first %}
+                <thead>
+                <tr>
+                    {% for field in form.visible_fields %}
+                        <th>{{ field.label|capfirst }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+            {% endif %}
+            <tr class="formset_row">
+                {% for field in form.visible_fields %}
+                    <td>
+                        {# Include the hidden fields in the form #}
+                        {% if forloop.first %}
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ field.errors.as_ul }}
+                        {{ field }}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    <button type="submit" value="save">send</button>
+</form>
+<script src="{% static "poll/jquery.formset.js" %}"></script>
+<script type="text/javascript">
+    $('.formset_row').formset({
+        addText: 'legg til alternativ',
+        deleteText: 'fjern',
+        prefix: 'alternative_set'
+    });
+</script>
+
+{% endblock %}

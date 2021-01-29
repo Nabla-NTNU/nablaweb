@@ -113,6 +113,7 @@ INSTALLED_APPS = [
     "nablapps.podcast",
     "nablapps.poll",
     "nablapps.qrTickets",
+    "nablapps.vote",
     "nablaweb",
     ###########################
     # Eksternt utviklede apps #
