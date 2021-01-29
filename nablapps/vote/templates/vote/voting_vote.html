@@ -9,7 +9,7 @@
 {% endfor %}
 
 
-<form action="{% url "submit-vote" pk=object.pk %}" method="post">
+<form action="{% url "submit-vote" pk=object.pk event_id=event_id %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="next" value="{% firstof next request.path %}#{{ object.pk }}">
     {% for alternative in object.alternatives.all %}
@@ -24,8 +24,5 @@
 </form>
 
 
-<a href="{% url "active-voting-list" %}">Tilbake til liste over aktive avstemninger</a>
+<a href="{% url "active-voting-list" pk=event_id %}">Tilbake til liste over aktive avstemninger</a>
 {% endblock %}
-
-
-

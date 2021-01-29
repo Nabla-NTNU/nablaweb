@@ -2,10 +2,12 @@
 
 {% block content %}
 <h1>Avstemninger</h1>
-<a href="{% url "create-voting" %}">Opprett ny avstemning<a>
+<a href="{% url "voting-event-list" %}">Tilbake til avstemningsarrangementer<a>
+<br>
+<a href="{% url "create-voting" pk=event_id %}">Opprett ny avstemning<a>
 <ul>
     {% for object in object_list %}
-    <li><a href="{% url "voting-detail" pk=object.pk %}">{{ object.title }}<a></li>
+    <li><a href="{% url "voting-detail" pk=object.pk event_id=event_id %}">{{ object.title }}<a></li>
     {% empty %}
         <li>Ingen avstemninger</li>
     {% endfor %}
