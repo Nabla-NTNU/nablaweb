@@ -31,7 +31,6 @@ class FrontPageView(FlatPageMixin, TemplateView):
     flatpages = [
         ("frontpageinfo", "/forsideinfo/"),
         ("sidebarinfo", "/sidebarinfo/"),
-        ("eureka", "/eureka/"),
     ]
 
     def get_context_data(self, **kwargs):
