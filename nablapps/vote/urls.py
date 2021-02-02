@@ -16,15 +16,13 @@ urlpatterns = [
     path("admin/<int:pk>/list/", VotingList.as_view(), name="voting-list"),
     path("admin/<int:pk>/create_voting/", CreateVoting.as_view(), name="create-voting"),
     path(
-        "admin/detail/<int:pk>/",
+        "admin/detail/<int:pk>/<int:event_id>/",
         VotingDetail.as_view(),
         name="voting-detail",
     ),
+    path("activate/<int:pk>/<int:event_id>/", activate_voting, name="activate-voting"),
     path(
-        "activate/<int:pk>/<path:redirect_to>/", activate_voting, name="activate-voting"
-    ),
-    path(
-        "deactivate/<int:pk>/<path:redirect_to>/",
+        "deactivate/<int:pk>/<int:event_id>/",
         deactivate_voting,
         name="deactivate-voting",
     ),
