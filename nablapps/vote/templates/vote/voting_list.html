@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Avstemninger</h1>
-<a href="{% url "voting-event-list" %}">Tilbake til avstemningsarrangementer<a>
+<a href="{% url "voting-event-list" %}"><i class="fas fa-arrow-left"></i> Tilbake til avstemningsarrangementer<a>
 <br>
 <a href="{% url "create-voting" pk=object.pk %}">Opprett ny avstemning<a>
     <table>
@@ -10,9 +10,9 @@
         <tr>
             <td>
                 {% if vote.is_active %}
-                <a href="{% url "deactivate-voting" pk=vote.pk redirect_to=request.path %}" class="text-success fas fa-toggle-on btn"></a>
+                <a href="{% url "deactivate-voting" pk=vote.pk redirect_to=request.path %}" class="text-success fas fa-lg fa-toggle-on btn"></a>
                 {% else %}
-                <a href="{% url "activate-voting" pk=vote.pk redirect_to=request.path %}" class="text-danger fas fa-toggle-off btn"></a>
+                <a href="{% url "activate-voting" pk=vote.pk redirect_to=request.path %}" class="text-danger fas fa-lg fa-toggle-off btn"></a>
                 {% endif %}
             </td>
             <td><a href="{% url "voting-detail" pk=vote.pk %}">{{ vote.title }}</a></td>
