@@ -2,9 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db import transaction
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, TemplateView
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import CreateView, DetailView, ListView
 
 from .forms import AlternativeFormset
 from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, VotingEvent
@@ -12,24 +11,25 @@ from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, Votin
 ####################
 ### Admin views ####
 ####################
-# Remeber to make permission requirement - yes yes
 
 
-class VotingEventList(ListView):
+class VotingEventList(PermissionRequiredMixin, ListView):
+    permission_required = "vote.vote_admin"
     model = VotingEvent
     template_name = "vote/voting_event_list.html"
 
 
-class VotingList(DetailView):
+class VotingList(PermissionRequiredMixin, DetailView):
     """List of all votings in a voting event"""
-
+    permission_required = "vote.vote_admin"
     model = VotingEvent
     template_name = "vote/voting_list.html"
 
 
-class CreateVoting(CreateView):
+class CreateVoting(PermissionRequiredMixin, CreateView):
     """View for creating new votings"""
 
+    permission_required = "vote.vote_admin"
     template_name = "vote/voting_form.html"
     model = Voting
     fields = ["event", "title", "description"]
@@ -66,13 +66,16 @@ class CreateVoting(CreateView):
         return super().form_valid(form)
 
 
-class VotingDetail(DetailView):
+class VotingDetail(PermissionRequiredMixin, DetailView):
     """Display details such as alternatives and results"""
 
+    permission_required = "vote.vote_admin"
     model = Voting
     template_name = "vote/voting_detail.html"
 
 
+@login_required
+@permission_required("vote.vote_admin", raise_exception=True)
 def activate_voting(request, pk, redirect_to):
     """Open voting"""
     voting = Voting.objects.get(pk=pk)
@@ -80,7 +83,8 @@ def activate_voting(request, pk, redirect_to):
     voting.save()
     return redirect(redirect_to)
 
-
+@login_required
+@permission_required("vote.vote_admin", raise_exception=True)
 def deactivate_voting(request, pk, redirect_to):
     """Close voting"""
     voting = Voting.objects.get(pk=pk)
