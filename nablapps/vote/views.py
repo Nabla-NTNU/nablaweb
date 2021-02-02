@@ -9,7 +9,6 @@ from django.views.generic import CreateView, DetailView, ListView, TemplateView
 from .forms import AlternativeFormset
 from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, VotingEvent
 
-
 ####################
 ### Admin views ####
 ####################
@@ -23,6 +22,7 @@ class VotingEventList(ListView):
 
 class VotingList(ListView):
     """List of all votings"""
+
     model = Voting
     template_name = "vote/voting_list.html"
 
@@ -39,6 +39,7 @@ class VotingList(ListView):
 
 class CreateVoting(CreateView):
     """View for creating new votings"""
+
     template_name = "vote/voting_form.html"
     model = Voting
     fields = ["event", "title", "description"]
@@ -77,6 +78,7 @@ class CreateVoting(CreateView):
 
 class VotingDetail(DetailView):
     """Display details such as alternatives and results"""
+
     model = Voting
     template_name = "vote/voting_detail.html"
 
@@ -110,6 +112,7 @@ def deactivate_voting(request, pk, event_id):
 
 class ActiveVotingList(LoginRequiredMixin, ListView):
     """Display list of active votings"""
+
     model = Voting
     template_name = "vote/active_voting_list.html"
 
@@ -119,6 +122,7 @@ class ActiveVotingList(LoginRequiredMixin, ListView):
 
 class Vote(LoginRequiredMixin, DetailView):
     """Display alternatives and lets users vote"""
+
     model = Voting
     template_name = "vote/voting_vote.html"
 
@@ -135,7 +139,9 @@ class Vote(LoginRequiredMixin, DetailView):
         except UserAlreadyVoted:
             messages.error(request, "Du har allerede stemt i denne avstemningen!")
         except VotingDeactive:
-            messages.error(request, "Denne avstemningen er ikke lenger åpen for stemming!")
+            messages.error(
+                request, "Denne avstemningen er ikke lenger åpen for stemming!"
+            )
         else:
             messages.success(
                 request, f"Suksess! Du har stemt i avstemningen {voting.title}"
