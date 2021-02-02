@@ -15,13 +15,19 @@
                 <i class="text-danger fas fa-toggle-off"></i>
                 {% endif %}
             </td>
-            <td><a href="{% url "voting-detail" pk=vote.pk %}">{{ vote.title }}<a></td>
+            <td><a href="{% url "voting-detail" pk=vote.pk %}">{{ vote.title }}</a></td>
             <td>
                 {% if vote.is_active %}
                 <a href="{% url "deactivate-voting" pk=vote.pk redirect_to=request.path %}">(Deaktiver)</a>
                 {% else %}
                 <a href="{% url "activate-voting" pk=vote.pk redirect_to=request.path %}">(Aktiver)</a>
                 {% endif %}
+            </td>
+            <td>
+                {% for alternative in vote.alternatives.all %}
+                    <span>{{ alternative }}: {{ alternative.votes }} ({{ alternative.get_vote_percentage }}%)|</span>
+                {% endfor %}
+               </div>
             </td>
         </tr>
         {% endfor %}
