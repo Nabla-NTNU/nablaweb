@@ -4,10 +4,9 @@
 <h1>Avstemninger</h1>
 <a href="{% url "voting-event-list" %}">Tilbake til avstemningsarrangementer<a>
 <br>
-<a href="{% url "create-voting" pk=event_id %}">Opprett ny avstemning<a>
-
+<a href="{% url "create-voting" pk=object.pk %}">Opprett ny avstemning<a>
     <table>
-        {% for vote in object_list %}
+        {% for vote in object.votings.all %}
         <tr>
             <td>
                 {% if vote.is_active %}
