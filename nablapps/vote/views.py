@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
@@ -18,9 +18,10 @@ class VotingEventList(PermissionRequiredMixin, ListView):
     model = VotingEvent
     template_name = "vote/voting_event_list.html"
 
-    
+
 class VotingList(PermissionRequiredMixin, DetailView):
     """List of all votings in a voting event"""
+
     permission_required = "vote.vote_admin"
     model = VotingEvent
     template_name = "vote/voting_list.html"
