@@ -1,10 +1,9 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db import transaction
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, TemplateView
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import CreateView, DetailView, ListView
 
 from .forms import AlternativeFormset
 from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, VotingEvent
@@ -12,17 +11,18 @@ from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, Votin
 ####################
 ### Admin views ####
 ####################
-# Remeber to make permission requirement
 
 
-class VotingEventList(ListView):
+class VotingEventList(PermissionRequiredMixin, ListView):
+    permission_required = "vote.vote_admin"
     model = VotingEvent
     template_name = "vote/voting_event_list.html"
 
 
-class VotingList(ListView):
+class VotingList(PermissionRequiredMixin, ListView):
     """List of all votings"""
 
+    permission_required = "vote.vote_admin"
     model = Voting
     template_name = "vote/voting_list.html"
 
@@ -37,9 +37,10 @@ class VotingList(ListView):
         return context
 
 
-class CreateVoting(CreateView):
+class CreateVoting(PermissionRequiredMixin, CreateView):
     """View for creating new votings"""
 
+    permission_required = "vote.vote_admin"
     template_name = "vote/voting_form.html"
     model = Voting
     fields = ["event", "title", "description"]
@@ -76,9 +77,10 @@ class CreateVoting(CreateView):
         return super().form_valid(form)
 
 
-class VotingDetail(DetailView):
+class VotingDetail(PermissionRequiredMixin, DetailView):
     """Display details such as alternatives and results"""
 
+    permission_required = "vote.vote_admin"
     model = Voting
     template_name = "vote/voting_detail.html"
 
@@ -89,20 +91,30 @@ class VotingDetail(DetailView):
         return context
 
 
+@login_required
 def activate_voting(request, pk, event_id):
     """Open voting"""
-    voting = Voting.objects.get(pk=pk)
-    voting.is_active = True
-    voting.save()
-    return redirect("voting-detail", pk=pk, event_id=event_id)
+    if request.user.has_perm("vote.vote_admin"):
+        voting = Voting.objects.get(pk=pk)
+        voting.is_active = True
+        voting.save()
+        return redirect("voting-detail", pk=pk, event_id=event_id)
+    else:
+        messages.error(request, "Du har ikke adminrettigheter for avstemninger.")
+        return redirect("active-voting-list")
 
 
+@login_required
 def deactivate_voting(request, pk, event_id):
     """Close voting"""
-    voting = Voting.objects.get(pk=pk)
-    voting.is_active = False
-    voting.save()
-    return redirect("voting-detail", pk=pk, event_id=event_id)
+    if request.user.has_perm("vote.vote_admin"):
+        voting = Voting.objects.get(pk=pk)
+        voting.is_active = False
+        voting.save()
+        return redirect("voting-detail", pk=pk, event_id=event_id)
+    else:
+        messages.error(request, "Du har ikke adminrettigheter for avstemninger.")
+        return redirect("active-voting-list")
 
 
 ###########################################
