@@ -11,15 +11,15 @@
     {% endif %}
 </h4>
 {% if object.is_active %}
-    <a href="{% url "deactivate-voting" pk=object.pk event_id=event_id %}">Deaktiver avstemningen</a>
+    <a href="{% url "deactivate-voting" pk=object.pk redirect_to=request.path %}">Deaktiver avstemningen</a>
 {% else %}
-    <a href="{% url "activate-voting" pk=object.pk event_id=event_id %}">Aktiver avstemningen</a>
+    <a href="{% url "activate-voting" pk=object.pk redirect_to=request.path %}">Aktiver avstemningen</a>
 {% endif %}
 <p>{{ object.description }}</p>
 <b>Totalt antall stemmer: {{ object.get_total_votes }}</b>
 {% for alternative in object.alternatives.all %}
 <p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>
 {% endfor %}
-<a href="{% url "voting-list" pk=event_id %}">Tilbake til liste over avstemninger</a>
+<a href="{% url "voting-list" pk=object.event.pk %}"><i class="fas fa-arrow-left"></i> Tilbake til liste over avstemninger</a>
 {% endblock %}
 

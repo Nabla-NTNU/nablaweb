@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
@@ -19,22 +19,12 @@ class VotingEventList(PermissionRequiredMixin, ListView):
     template_name = "vote/voting_event_list.html"
 
 
-class VotingList(PermissionRequiredMixin, ListView):
-    """List of all votings"""
+class VotingList(PermissionRequiredMixin, DetailView):
+    """List of all votings in a voting event"""
 
     permission_required = "vote.vote_admin"
-    model = Voting
+    model = VotingEvent
     template_name = "vote/voting_list.html"
-
-    def get_queryset(self, **kwargs):
-        event_id = self.kwargs["pk"]
-        event = get_object_or_404(VotingEvent, pk=event_id)
-        return self.model.objects.filter(event=event)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["event_id"] = self.kwargs["pk"]
-        return context
 
 
 class CreateVoting(PermissionRequiredMixin, CreateView):
@@ -84,37 +74,25 @@ class VotingDetail(PermissionRequiredMixin, DetailView):
     model = Voting
     template_name = "vote/voting_detail.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        event_id = self.kwargs["event_id"]
-        context["event_id"] = event_id
-        return context
-
 
 @login_required
-def activate_voting(request, pk, event_id):
+@permission_required("vote.vote_admin", raise_exception=True)
+def activate_voting(request, pk, redirect_to):
     """Open voting"""
-    if request.user.has_perm("vote.vote_admin"):
-        voting = Voting.objects.get(pk=pk)
-        voting.is_active = True
-        voting.save()
-        return redirect("voting-detail", pk=pk, event_id=event_id)
-    else:
-        messages.error(request, "Du har ikke adminrettigheter for avstemninger.")
-        return redirect("active-voting-list")
+    voting = Voting.objects.get(pk=pk)
+    voting.is_active = True
+    voting.save()
+    return redirect(redirect_to)
 
 
 @login_required
-def deactivate_voting(request, pk, event_id):
+@permission_required("vote.vote_admin", raise_exception=True)
+def deactivate_voting(request, pk, redirect_to):
     """Close voting"""
-    if request.user.has_perm("vote.vote_admin"):
-        voting = Voting.objects.get(pk=pk)
-        voting.is_active = False
-        voting.save()
-        return redirect("voting-detail", pk=pk, event_id=event_id)
-    else:
-        messages.error(request, "Du har ikke adminrettigheter for avstemninger.")
-        return redirect("active-voting-list")
+    voting = Voting.objects.get(pk=pk)
+    voting.is_active = False
+    voting.save()
+    return redirect(redirect_to)
 
 
 ###########################################
