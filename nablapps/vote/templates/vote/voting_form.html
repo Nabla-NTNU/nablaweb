@@ -3,7 +3,7 @@
 
 {% block content %}
 <h1>Opprett avstemning</h1>
-<a href="{% url "voting-list" pk=event_id %}">Tilbake til liste over avstemninger</a>
+<a href="{% url "voting-list" pk=event_id %}"><i class="fas fa-arrow-left"></i> Tilbake til liste over avstemninger</a>
 <form method="POST">
     {% csrf_token %}
     <br>
