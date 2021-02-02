@@ -12,7 +12,7 @@ from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, Votin
 ####################
 ### Admin views ####
 ####################
-# Remeber to make permission requirement
+# Remeber to make permission requirement - yes yes
 
 
 class VotingEventList(ListView):
@@ -84,25 +84,24 @@ class VotingDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        event_id = self.kwargs["event_id"]
-        context["event_id"] = event_id
+        context["event_id"] = self.object.event.pk
         return context
 
 
-def activate_voting(request, pk, event_id):
+def activate_voting(request, pk, redirect_to):
     """Open voting"""
     voting = Voting.objects.get(pk=pk)
     voting.is_active = True
     voting.save()
-    return redirect("voting-detail", pk=pk, event_id=event_id)
+    return redirect(redirect_to)
 
 
-def deactivate_voting(request, pk, event_id):
+def deactivate_voting(request, pk, redirect_to):
     """Close voting"""
     voting = Voting.objects.get(pk=pk)
     voting.is_active = False
     voting.save()
-    return redirect("voting-detail", pk=pk, event_id=event_id)
+    return redirect(redirect_to)
 
 
 ###########################################
