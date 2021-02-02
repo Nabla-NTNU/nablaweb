@@ -14,6 +14,11 @@ class VotingEvent(models.Model):
         settings.AUTH_USER_MODEL, related_name="checked_in_users"
     )
 
+    class Meta:
+        permissions = [
+            ("vote_admin", "can administer voting"),
+        ]
+
     def __str__(self):
         return self.title
 
