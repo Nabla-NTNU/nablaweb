@@ -20,21 +20,11 @@ class VotingEventList(ListView):
     template_name = "vote/voting_event_list.html"
 
 
-class VotingList(ListView):
-    """List of all votings"""
+class VotingList(DetailView):
+    """List of all votings in a voting event"""
 
-    model = Voting
+    model = VotingEvent
     template_name = "vote/voting_list.html"
-
-    def get_queryset(self, **kwargs):
-        event_id = self.kwargs["pk"]
-        event = get_object_or_404(VotingEvent, pk=event_id)
-        return self.model.objects.filter(event=event)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["event_id"] = self.kwargs["pk"]
-        return context
 
 
 class CreateVoting(CreateView):
@@ -81,11 +71,6 @@ class VotingDetail(DetailView):
 
     model = Voting
     template_name = "vote/voting_detail.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["event_id"] = self.object.event.pk
-        return context
 
 
 def activate_voting(request, pk, redirect_to):

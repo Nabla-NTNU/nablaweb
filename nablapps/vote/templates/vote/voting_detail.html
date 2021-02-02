@@ -20,6 +20,6 @@
 {% for alternative in object.alternatives.all %}
 <p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>
 {% endfor %}
-<a href="{% url "voting-list" pk=event_id %}">Tilbake til liste over avstemninger</a>
+<a href="{% url "voting-list" pk=object.event.pk %}">Tilbake til liste over avstemninger</a>
 {% endblock %}
 
