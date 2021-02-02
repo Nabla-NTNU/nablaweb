@@ -20,9 +20,8 @@ urlpatterns = [
         VotingDetail.as_view(),
         name="voting-detail",
     ),
-    path("activate/<int:pk>/<path:redirect_to>/",
-         activate_voting,
-         name="activate-voting"
+    path(
+        "activate/<int:pk>/<path:redirect_to>/", activate_voting, name="activate-voting"
     ),
     path(
         "deactivate/<int:pk>/<path:redirect_to>/",

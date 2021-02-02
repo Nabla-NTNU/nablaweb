@@ -21,6 +21,7 @@ class VotingEventList(PermissionRequiredMixin, ListView):
 
 class VotingList(PermissionRequiredMixin, DetailView):
     """List of all votings in a voting event"""
+
     permission_required = "vote.vote_admin"
     model = VotingEvent
     template_name = "vote/voting_list.html"
@@ -82,6 +83,7 @@ def activate_voting(request, pk, redirect_to):
     voting.is_active = True
     voting.save()
     return redirect(redirect_to)
+
 
 @login_required
 @permission_required("vote.vote_admin", raise_exception=True)
