@@ -5,12 +5,27 @@
 <a href="{% url "voting-event-list" %}">Tilbake til avstemningsarrangementer<a>
 <br>
 <a href="{% url "create-voting" pk=event_id %}">Opprett ny avstemning<a>
-<ul>
-    {% for object in object_list %}
-    <li><a href="{% url "voting-detail" pk=object.pk event_id=event_id %}">{{ object.title }}<a></li>
-    {% empty %}
-        <li>Ingen avstemninger</li>
-    {% endfor %}
-</ul>
+
+    <table>
+        {% for vote in object_list %}
+        <tr>
+            <td>
+                {% if vote.is_active %}
+                <i class="text-success fas fa-toggle-on"></i>
+                {% else %}
+                <i class="text-danger fas fa-toggle-off"></i>
+                {% endif %}
+            </td>
+            <td><a href="{% url "voting-detail" pk=vote.pk %}">{{ vote.title }}<a></td>
+            <td>
+                {% if vote.is_active %}
+                <a href="{% url "deactivate-voting" pk=vote.pk redirect_to=request.path %}">(Deaktiver)</a>
+                {% else %}
+                <a href="{% url "activate-voting" pk=vote.pk redirect_to=request.path %}">(Aktiver)</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
 
