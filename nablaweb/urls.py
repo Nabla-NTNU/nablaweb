@@ -51,7 +51,7 @@ urlpatterns = [
     path("poll/", include("nablapps.poll.urls")),
     path("referater/", include("nablapps.meeting_records.urls")),
     path("qrTickets/", include("nablapps.qrTickets.urls")),
-    path("vote/", include("nablapps.vote.urls")),
+    path("stem/", include("nablapps.vote.urls")),
     path(
         "search/",
         search_view_factory(

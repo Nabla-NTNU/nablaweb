@@ -10,20 +10,19 @@ from .forms import AlternativeFormset
 from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, VotingEvent
 
 
-class VotingEventList(ListView):
-    model = VotingEvent
-    template_name = "vote/voting_event_list.html"
-
-
 ####################
 ### Admin views ####
 ####################
 # Remeber to make permission requirement
 
 
+class VotingEventList(ListView):
+    model = VotingEvent
+    template_name = "vote/voting_event_list.html"
+
+
 class VotingList(ListView):
     """List of all votings"""
-
     model = Voting
     template_name = "vote/voting_list.html"
 
@@ -40,7 +39,6 @@ class VotingList(ListView):
 
 class CreateVoting(CreateView):
     """View for creating new votings"""
-
     template_name = "vote/voting_form.html"
     model = Voting
     fields = ["event", "title", "description"]
@@ -78,6 +76,7 @@ class CreateVoting(CreateView):
 
 
 class VotingDetail(DetailView):
+    """Display details such as alternatives and results"""
     model = Voting
     template_name = "vote/voting_detail.html"
 
@@ -89,6 +88,7 @@ class VotingDetail(DetailView):
 
 
 def activate_voting(request, pk, event_id):
+    """Open voting"""
     voting = Voting.objects.get(pk=pk)
     voting.is_active = True
     voting.save()
@@ -96,6 +96,7 @@ def activate_voting(request, pk, event_id):
 
 
 def deactivate_voting(request, pk, event_id):
+    """Close voting"""
     voting = Voting.objects.get(pk=pk)
     voting.is_active = False
     voting.save()
@@ -107,53 +108,36 @@ def deactivate_voting(request, pk, event_id):
 ###########################################
 
 
-class Vote(LoginRequiredMixin, DetailView):
-    model = Voting
-    template_name = "vote/voting_vote.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        event_id = self.kwargs["event_id"]
-        context["event_id"] = event_id
-        return context
-
-
-@login_required
-def submit_vote(request, pk, event_id):
-    voting = get_object_or_404(Voting, pk=pk)
-    context = {
-        "event_id": event_id,
-    }
-    try:
-        alternative = voting.alternatives.get(pk=request.POST["alternative"])
-        alternative.add_vote(request.user)
-    except (KeyError, Alternative.DoesNotExist):
-        messages.warning(request, "Du har ikke valgt et alternativ.")
-        return redirect("voting-vote", pk=pk, event_id=event_id)
-    except UserAlreadyVoted:
-        messages.error(request, "Du har allerede stemt i denne avstemningen!")
-    except VotingDeactive:
-        messages.error(request, "Denne avstemningen er ikke lenger åpen for stemming!")
-    else:
-        messages.success(
-            request, f"Suksess! Du har stemt i avstemningen {voting.title}"
-        )
-    return redirect("active-voting-list", pk=event_id)
-
-
-class ActiveVotingList(ListView):
+class ActiveVotingList(LoginRequiredMixin, ListView):
+    """Display list of active votings"""
     model = Voting
     template_name = "vote/active_voting_list.html"
 
     def get_queryset(self):
         return self.model.objects.exclude(is_active=False)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        event_id = self.kwargs["pk"]
-        context["event_id"] = event_id
-        return context
 
+class Vote(LoginRequiredMixin, DetailView):
+    """Display alternatives and lets users vote"""
+    model = Voting
+    template_name = "vote/voting_vote.html"
 
-def main_redirect(request):
-    pass
+    def post(self, request, **kwargs):
+        """Submit a vote from chosen alternative"""
+        voting_id = kwargs["pk"]
+        voting = get_object_or_404(Voting, pk=voting_id)
+        try:
+            alternative = voting.alternatives.get(pk=request.POST["alternative"])
+            alternative.add_vote(request.user)
+        except (KeyError, Alternative.DoesNotExist):
+            messages.warning(request, "Du har ikke valgt et alternativ.")
+            return redirect("voting-vote", pk=voting_id)
+        except UserAlreadyVoted:
+            messages.error(request, "Du har allerede stemt i denne avstemningen!")
+        except VotingDeactive:
+            messages.error(request, "Denne avstemningen er ikke lenger åpen for stemming!")
+        else:
+            messages.success(
+                request, f"Suksess! Du har stemt i avstemningen {voting.title}"
+            )
+        return redirect("active-voting-list")
