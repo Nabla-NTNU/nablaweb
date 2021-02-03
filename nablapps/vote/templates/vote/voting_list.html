@@ -2,9 +2,9 @@
 
 {% block content %}
 <h1>Avstemninger</h1>
-<a href="{% url "voting-event-list" %}"><i class="fas fa-arrow-left"></i> Tilbake til avstemningsarrangementer<a>
+<a href="{% url "voting-event-list" %}"><i class="fas fa-arrow-left"></i> Tilbake til avstemningsarrangementer</a>
 <br>
-<a href="{% url "create-voting" pk=object.pk %}">Opprett ny avstemning<a>
+<a href="{% url "create-voting" pk=object.pk %}">Opprett ny avstemning</a>
     <table>
         {% for vote in object.votings.all %}
         <tr>
