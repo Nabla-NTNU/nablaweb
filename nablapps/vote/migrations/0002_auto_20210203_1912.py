@@ -8,17 +8,19 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('vote', '0001_initial'),
+        ("vote", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='votingevent',
-            options={'permissions': [('vote_admin', 'can administer voting')]},
+            name="votingevent",
+            options={"permissions": [("vote_admin", "can administer voting")]},
         ),
         migrations.AlterField(
-            model_name='voting',
-            name='users_voted',
-            field=models.ManyToManyField(blank=True, related_name='users_voted', to=settings.AUTH_USER_MODEL),
+            model_name="voting",
+            name="users_voted",
+            field=models.ManyToManyField(
+                blank=True, related_name="users_voted", to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]
