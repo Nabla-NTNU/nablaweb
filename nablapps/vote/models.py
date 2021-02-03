@@ -40,7 +40,7 @@ class Voting(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     users_voted = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="users_voted"
+        settings.AUTH_USER_MODEL, related_name="users_voted", blank=True,
     )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
