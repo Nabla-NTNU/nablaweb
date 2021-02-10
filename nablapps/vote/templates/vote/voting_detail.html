@@ -1,4 +1,5 @@
 {% extends "base.html"%}
+{% load markdown %}
 
 {% block content %}
 <h1>{{ object.title }}</h1>
@@ -15,7 +16,7 @@
 {% else %}
     <a href="{% url "activate-voting" pk=object.pk redirect_to=request.path %}">Aktiver avstemningen</a>
 {% endif %}
-<p>{{ object.description }}</p>
+<p>{{ object.description|markdown }}</p>
 <b>Totalt antall stemmer: {{ object.get_total_votes }}</b>
 {% for alternative in object.alternatives.all %}
 <p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>

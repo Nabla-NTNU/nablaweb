@@ -1,8 +1,9 @@
 {% extends "base.html"%}
+{% load markdown %}
 
 {% block content %}
 <h1>{{ object.title }}</h1>
-<p>{{ object.description }}</p>
+<p>{{ object.description|markdown }}</p>
 
 {% for alternative in object.alternatives.all %}
 <p>{{ alternative }}</p>
