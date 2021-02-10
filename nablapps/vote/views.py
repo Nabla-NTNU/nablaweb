@@ -14,14 +14,20 @@ from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, Votin
 
 
 class VotingEventList(PermissionRequiredMixin, ListView):
-    permission_required = "vote.vote_admin"
+    permission_required = ("vote.vote_admin", "vote.vote_inspector")
     model = VotingEvent
     template_name = "vote/voting_event_list.html"
+
+    def has_permission(self):
+        perms = self.get_permission_required()
+        for perm in perms:
+            if self.request.user.has_perm(perm):
+                return True
+        return False
 
 
 class VotingList(PermissionRequiredMixin, DetailView):
     """List of all votings in a voting event"""
-
     permission_required = ("vote.vote_admin", "vote.vote_inspector")
     model = VotingEvent
     template_name = "vote/voting_list.html"
