@@ -28,6 +28,7 @@ class VotingEventList(PermissionRequiredMixin, ListView):
 
 class VotingList(PermissionRequiredMixin, DetailView):
     """List of all votings in a voting event"""
+
     permission_required = ("vote.vote_admin", "vote.vote_inspector")
     model = VotingEvent
     template_name = "vote/voting_list.html"
