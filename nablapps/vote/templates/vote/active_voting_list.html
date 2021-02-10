@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Avstemninger</h1>
 {% if admin_rights %}
-<a href="{% url "voting-event-list" %}">(Admin)</a>
+<a href="{% url "voting-event-list" %}">(Til admin-side)</a>
 {% endif %}
 <ul>
     {% for object in object_list %}
