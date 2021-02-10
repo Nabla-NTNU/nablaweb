@@ -72,7 +72,7 @@ class VotingEdit(PermissionRequiredMixin, UpdateView):
     model = Voting
     template_name = "vote/edit_voting.html"
     fields = ["event", "title", "description"]
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
@@ -93,7 +93,10 @@ class VotingEdit(PermissionRequiredMixin, UpdateView):
                     alternatives.save()
             return redirect("voting-detail", pk=self.kwargs["pk"])
         else:
-            messages.error(self.request, "OBS! Denne avstemningen har allerede blitt stemt på, endring ikke gyldig")
+            messages.error(
+                self.request,
+                "OBS! Denne avstemningen har allerede blitt stemt på, endring ikke gyldig",
+            )
             return redirect("voting-detail", pk=self.kwargs["pk"])
 
 
