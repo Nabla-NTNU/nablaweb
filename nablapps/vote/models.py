@@ -93,7 +93,7 @@ class Alternative(models.Model):
         elif not self.voting.is_active:
             raise VotingDeactive(f"This voting is no longer open for voting.")
         else:
-            self.votes =+ 1
+            self.votes += 1
             self.save()
             self.voting.users_voted.add(user)
 
