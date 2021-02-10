@@ -5,6 +5,7 @@
 <h1>{{ object.title }}</h1>
 <p>{{ object.description|markdown }}</p>
 
+{% if not has_voted %}
 <form method="post">
     {% csrf_token %}
     <input type="hidden" name="next" value="{% firstof next request.path %}#{{ object.pk }}">
@@ -18,7 +19,9 @@
     {% endfor %}
     <button class="btn btn-primary btn-block" type="submit">Stem</button>
 </form>
-
+{% else %}
+<h2>Du har allerede stemt!</h2>
+{% endif %}
 
 <a href="{% url "active-voting-list" %}"><i class="fas fa-arrow-left"></i> Tilbake til liste over aktive avstemninger</a>
 {% endblock %}

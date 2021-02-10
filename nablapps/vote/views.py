@@ -139,6 +139,11 @@ class ActiveVotingList(LoginRequiredMixin, ListView):
     model = Voting
     template_name = "vote/active_voting_list.html"
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["admin_rights"] = self.request.user.has_perm("vote_admin")
+        return context
+
     def get_queryset(self):
         return self.model.objects.exclude(is_active=False)
 
@@ -148,6 +153,11 @@ class Vote(LoginRequiredMixin, DetailView):
 
     model = Voting
     template_name = "vote/voting_vote.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["has_voted"] = self.object.user_already_voted(self.request.user)
+        return context
 
     def post(self, request, **kwargs):
         """Submit a vote from chosen alternative"""

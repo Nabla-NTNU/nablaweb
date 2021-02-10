@@ -2,6 +2,9 @@
 
 {% block content %}
 <h1>Avstemninger</h1>
+{% if admin_rights %}
+<a href="{% url "voting-event-list" %}">(Admin)</a>
+{% endif %}
 <ul>
     {% for object in object_list %}
     <li><a href="{% url "voting-vote" pk=object.pk %}">{{ object.title }}</a></li>
