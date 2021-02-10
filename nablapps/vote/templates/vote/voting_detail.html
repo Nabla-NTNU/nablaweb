@@ -22,5 +22,12 @@
 {% endfor %}
 <a href="{% url "voting-edit" pk=object.pk %}"><i class="fas fa-pencil-alt"></i> Endre avstemning</a><br>
 <a href="{% url "voting-list" pk=object.event.pk %}"><i class="fas fa-arrow-left"></i> Tilbake til liste over avstemninger</a>
+
+<h4> Brukere som har stemt </h4>
+<ul>
+{% for user in object.users_voted.all %}
+    <li>{{ user.get_full_name }}</li>
+{% endfor %}
+</ul>
 {% endblock %}
 
