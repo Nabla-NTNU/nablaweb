@@ -9,10 +9,12 @@
         {% for vote in object.votings.all %}
         <tr>
             <td>
-                {% if vote.is_active %}
-                <a href="{% url "deactivate-voting" pk=vote.pk redirect_to=request.path %}" class="text-success fas fa-lg fa-toggle-on btn"></a>
-                {% else %}
-                <a href="{% url "activate-voting" pk=vote.pk redirect_to=request.path %}" class="text-danger fas fa-lg fa-toggle-off btn"></a>
+                {% if is_admin %}
+                    {% if vote.is_active %}
+                    <a href="{% url "deactivate-voting" pk=vote.pk redirect_to=request.path %}" class="text-success fas fa-lg fa-toggle-on btn"></a>
+                    {% else %}
+                    <a href="{% url "activate-voting" pk=vote.pk redirect_to=request.path %}" class="text-danger fas fa-lg fa-toggle-off btn"></a>
+                    {% endif %}
                 {% endif %}
             </td>
             <td><a href="{% url "voting-detail" pk=vote.pk %}">{{ vote.title }}</a></td>

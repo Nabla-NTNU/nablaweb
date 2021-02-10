@@ -11,17 +11,21 @@
         Inaktiv - Stengt for stemming
     {% endif %}
 </h4>
-{% if object.is_active %}
-    <a href="{% url "deactivate-voting" pk=object.pk redirect_to=request.path %}">Deaktiver avstemningen</a>
-{% else %}
-    <a href="{% url "activate-voting" pk=object.pk redirect_to=request.path %}">Aktiver avstemningen</a>
+{% if is_admin %}
+    {% if object.is_active %}
+        <a href="{% url "deactivate-voting" pk=object.pk redirect_to=request.path %}">Deaktiver avstemningen</a>
+    {% else %}
+        <a href="{% url "activate-voting" pk=object.pk redirect_to=request.path %}">Aktiver avstemningen</a>
+    {% endif %}
 {% endif %}
 <p>{{ object.description|markdown }}</p>
 <b>Totalt antall stemmer: {{ object.get_total_votes }}</b>
 {% for alternative in object.alternatives.all %}
 <p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>
 {% endfor %}
-<a href="{% url "voting-edit" pk=object.pk %}"><i class="fas fa-pencil-alt"></i> Endre avstemning</a><br>
+{% if is_admin %}
+    <a href="{% url "voting-edit" pk=object.pk %}"><i class="fas fa-pencil-alt"></i> Endre avstemning</a><br>
+{% endif %}
 <a href="{% url "voting-list" pk=object.event.pk %}"><i class="fas fa-arrow-left"></i> Tilbake til liste over avstemninger</a>
 
 <h4> Brukere som har stemt </h4>

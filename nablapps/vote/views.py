@@ -22,9 +22,21 @@ class VotingEventList(PermissionRequiredMixin, ListView):
 class VotingList(PermissionRequiredMixin, DetailView):
     """List of all votings in a voting event"""
 
-    permission_required = "vote.vote_admin"
+    permission_required = ("vote.vote_admin", "vote.vote_inspector")
     model = VotingEvent
     template_name = "vote/voting_list.html"
+
+    def has_permission(self):
+        perms = self.get_permission_required()
+        for perm in perms:
+            if self.request.user.has_perm(perm):
+                return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_admin"] = self.request.user.has_perm("vote.vote_admin")
+        return context
 
 
 class CreateVoting(PermissionRequiredMixin, CreateView):
@@ -103,9 +115,21 @@ class VotingEdit(PermissionRequiredMixin, UpdateView):
 class VotingDetail(PermissionRequiredMixin, DetailView):
     """Display details such as alternatives and results"""
 
-    permission_required = "vote.vote_admin"
+    permission_required = ("vote.vote_admin", "vote.vote_inspector")
     model = Voting
     template_name = "vote/voting_detail.html"
+
+    def has_permission(self):
+        perms = self.get_permission_required()
+        for perm in perms:
+            if self.request.user.has_perm(perm):
+                return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_admin"] = self.request.user.has_perm("vote.vote_admin")
+        return context
 
 
 @login_required

@@ -17,6 +17,7 @@ class VotingEvent(models.Model):
     class Meta:
         permissions = [
             ("vote_admin", "can administer voting"),
+            ("vote_inspector", "can inspect voting"),
         ]
 
     def __str__(self):
