@@ -57,7 +57,7 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         configure_path=$(convert -list configure | sed -n -e 's/CONFIGURE_PATH[[:space:]]*//p' || true)
-        temp_file="$(mktemp)"
+        temp_file="$(sudo mktemp)"
 
         # sed -i is a gnu extension. Beware
         sudo sed -i -e 's/<policy domain="coder" rights=".*" pattern="PDF" \/>/<policy domain="coder" rights="read | write" pattern="PDF" \/>/w '"$temp_file" "$configure_path/policy.xml"
