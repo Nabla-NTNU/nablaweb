@@ -20,6 +20,7 @@
 {% for alternative in object.alternatives.all %}
 <p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>
 {% endfor %}
+<a href="{% url "voting-edit" pk=object.pk %}"><i class="fas fa-pencil-alt"></i> Endre avstemning</a><br>
 <a href="{% url "voting-list" pk=object.event.pk %}"><i class="fas fa-arrow-left"></i> Tilbake til liste over avstemninger</a>
 {% endblock %}
 

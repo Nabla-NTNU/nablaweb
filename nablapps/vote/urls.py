@@ -5,6 +5,7 @@ from .views import (  # submit_vote,
     CreateVoting,
     Vote,
     VotingDetail,
+    VotingEdit,
     VotingEventList,
     VotingList,
     activate_voting,
@@ -19,6 +20,11 @@ urlpatterns = [
         "admin/detail/<int:pk>/",
         VotingDetail.as_view(),
         name="voting-detail",
+    ),
+    path(
+        "admin/edit/<int:pk>/",
+        VotingEdit.as_view(),
+        name="voting-edit",
     ),
     path(
         "activate/<int:pk>/<path:redirect_to>/", activate_voting, name="activate-voting"

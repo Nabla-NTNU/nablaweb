@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from .forms import AlternativeFormset
 from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, VotingEvent
@@ -65,6 +65,36 @@ class CreateVoting(PermissionRequiredMixin, CreateView):
                 alternatives.save()
         return redirect("voting-list", pk=event_id)
         return super().form_valid(form)
+
+
+class VotingEdit(PermissionRequiredMixin, UpdateView):
+    permission_required = "vote.vote_admin"
+    model = Voting
+    template_name = "vote/edit_voting.html"
+    fields = ["event", "title", "description"]
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context["alternatives"] = AlternativeFormset(self.request.POST)
+        else:
+            context["alternatives"] = AlternativeFormset()
+        return context
+
+    def form_valid(self, form, **kwargs):
+        """Called if all forms are valid. Creates voting and associated alternatives"""
+        if self.object.get_total_votes() == 0:
+            context = self.get_context_data()
+            alternatives = context["alternatives"]
+            with transaction.atomic():
+                self.object = form.save()
+                if alternatives.is_valid():
+                    alternatives.instance = self.object
+                    alternatives.save()
+            return redirect("voting-detail", pk=self.kwargs["pk"])
+        else:
+            messages.error(self.request, "OBS! Denne avstemningen har allerede blitt stemt på, endring ikke gyldig")
+            return redirect("voting-detail", pk=self.kwargs["pk"])
 
 
 class VotingDetail(PermissionRequiredMixin, DetailView):
