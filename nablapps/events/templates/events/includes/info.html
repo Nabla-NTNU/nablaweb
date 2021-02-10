@@ -95,7 +95,7 @@
         <td>Registrering åpner</td>
         <td>
             <time datetime="{{ event.registration_start|date:"c" }}">
-                {{ event.registration_start|naturalday|title }} kl. {{ event.registration_start|date:"H:i" }}
+                {{ event.registration_start|naturalday|capfirst }} kl. {{ event.registration_start|date:"H:i" }}
             </time>
         </td>
     </tr>
