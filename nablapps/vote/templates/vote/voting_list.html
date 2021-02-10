@@ -12,9 +12,9 @@
         <tr>
             <td>
                {% if vote.is_active %}
-               <a href="{% url "deactivate-voting" pk=vote.pk redirect_to=request.path %}" class="text-success fas fa-lg fa-toggle-on btn{% if is_admin %} disabled{% endif %}"></a>
+               <a href="{% url "deactivate-voting" pk=vote.pk redirect_to=request.path %}" class="text-success fas fa-lg fa-toggle-on btn{% if not is_admin %} disabled{% endif %}"></a>
                {% else %}
-               <a href="{% url "activate-voting" pk=vote.pk redirect_to=request.path %}" class="text-danger fas fa-lg fa-toggle-off btn{% if is_admin %} disabled{% endif %}"></a>
+               <a href="{% url "activate-voting" pk=vote.pk redirect_to=request.path %}" class="text-danger fas fa-lg fa-toggle-off btn{% if not is_admin %} disabled{% endif %}"></a>
                {% endif %}
             </td>
             <td><a href="{% url "voting-detail" pk=vote.pk %}">{{ vote.title }}</a></td>
