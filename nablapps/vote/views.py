@@ -173,7 +173,9 @@ class ActiveVotingList(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         admin_rights = ["vote.vote_admin", "vote.vote_inspector"]
-        context["admin_rights"] = any([self.request.user.has_perm(right) for right in admin_rights])
+        context["admin_rights"] = any(
+            [self.request.user.has_perm(right) for right in admin_rights]
+        )
         return context
 
     def get_queryset(self):
