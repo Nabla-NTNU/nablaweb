@@ -20,7 +20,8 @@
 </style>
 <tr>
     <td>{{ application.applicant.get_full_name }} ({{ application.applicant.get_class_number }}. klasse){% if application.anonymous %} <i>(Anonym søknad)</i>{% endif %}</td>
-    <td>{{ application.applicant.email }}</td>
+    <td>{{ application.applicant.email }} </td>
+    <td>;Prioritet: {{ application.priority }}</td>
     <td>
         {% if application.application_text %}<div class="application_text">{{ application.application_text }}</div>{% endif %}
     </td>
