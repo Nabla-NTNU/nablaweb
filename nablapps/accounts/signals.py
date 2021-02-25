@@ -25,4 +25,3 @@ def register_signals():
     user_logged_in.connect(login_message)
     user_logged_out.connect(logout_message)
 
-
