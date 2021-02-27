@@ -1,6 +1,7 @@
 {% load humanize %}
 {% load markdown %}
 
+Vis utløpte: <a href="{{ toggle_expired_link }}" class="text-success fas fa-lg {% if exclude %}fa-toggle-off{% else %}fa-toggle-on{% endif %} btn"></a>
 {% if years%}
 <p>Se stillingsannonser relevant for {% for year in years %}<a href="{% url "relevant_for_year_list" year=year.year %}">{{ year }}</a>, {% endfor %}
 {% for choice in choices %}<a href="{% url "relevant_for_linje_list" linje=choice.studieretning %}">{{ choice.studieretning|lower }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>

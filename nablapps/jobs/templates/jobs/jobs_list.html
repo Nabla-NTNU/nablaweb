@@ -14,18 +14,14 @@
 {% block main-blank %}
 
 <div class="row">
-    <div class="col-md-8">
-        <div class="row">
-            {% for row in jobs_rows %}
-                {% for job in row %}
-                <div class="col-md-6 pb-4">
-                    {%  include "includes/info_card.html" with content=job show_details=True header_size="h4" class="h-100 "%}
-                </div>
-                {% endfor %}
-            {% empty %}
-                <p>Vi har for øyeblikket ingen stillingsannonser som matcher dine kriterier.</p>
-            {% endfor %}
+    <div class="d-flex flex-wrap col-md-8">
+        {% for job in jobs_list %}
+        <div class="col-md-6 pb-4">
+            {%  include "includes/info_card.html" with content=job show_details=True header_size="h4" class="h-100 "%}
         </div>
+        {% empty %}
+        <p>Vi har for øyeblikket ingen stillingsannonser som matcher dine kriterier.</p>
+        {% endfor %}
         {% include "includes/pagination.html" %}
     </div>
     <div class="col-md-4">

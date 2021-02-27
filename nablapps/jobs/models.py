@@ -103,14 +103,6 @@ class Company(WithPicture):
         return self.name
 
 
-class AdvertManager(models.Manager):
-    """Model manager for Advert model"""
-
-    def active(self):
-        """Get only active adverts"""
-        return self.exclude(removal_date__lte=datetime.now())
-
-
 class Advert(TimeStamped, TextContent):
     """
     Model representing an advert for a job.
@@ -169,8 +161,6 @@ class Advert(TimeStamped, TextContent):
         ordering = ("-created_date", "headline")
         verbose_name = "stillingsannonse"
         verbose_name_plural = "stillingsannonser"
-
-    objects = AdvertManager()
 
     def __str__(self):
         return self.headline

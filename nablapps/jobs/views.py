@@ -1,6 +1,8 @@
 """
 Views for jobs app
 """
+from datetime import datetime
+
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, ListView
@@ -15,6 +17,21 @@ def split_into_rows(jobs):
     return row_split(jobs, 2) if jobs else None
 
 
+def _change_args(request, **kwargs):
+    url = request.path
+    args = request.GET.copy()
+    for key in kwargs.keys():
+        args.pop(key, None)
+        args.update(kwargs)
+        url += "?" + "&".join([f"{key}={value}" for key, value in args.items()])
+    return url
+
+
+def _toggle_exclude(request):
+    exclude = request.GET.get("exclude", "false") == "true"
+    return _change_args(request, exclude=str(not exclude).lower())
+
+
 class GenericJobsList(FlatPageMixin, ListView):
     """Abstrakt rotklasse som håndterer info for sidebaren."""
 
@@ -24,9 +41,18 @@ class GenericJobsList(FlatPageMixin, ListView):
     model = Advert
     flatpages = [("jobsidebarinfo", "/jobsidebarinfo/")]
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        exclude_expired = self.request.GET.get("exclude", "false")
+        if exclude_expired == "true":
+            queryset = queryset.exclude(deadline_date__lte=datetime.now())
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        context["toggle_expired_link"] = _toggle_exclude(self.request)
+        context["exclude"] = self.request.GET.get("exclude", "false") == "true"
         context["years"] = YearChoices.objects.all()
         context["choices"] = RelevantForChoices.objects.all()
         context["tags"] = TagChoices.objects.all()
@@ -50,7 +76,7 @@ class EverythingList(GenericJobsList):
     """Alle aktive stillingsannonser."""
 
     def get_queryset(self):
-        return Advert.objects.active()
+        return super().get_queryset().exclude(removal_date__lte=datetime.now())
 
 
 class CompanyList(GenericJobsList):
