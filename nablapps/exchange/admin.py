@@ -5,19 +5,11 @@ from image_cropping import ImageCroppingMixin
 from nablapps.core.admin import ChangedByMixin
 from nablapps.news.admin import add_to_frontpage
 
-from .models import Exchange, ExchangeNewsArticle, Info, Subject, University
-
-
-class SubjectInline(admin.TabularInline):
-    model = Subject
-    extra = 4
+from .models import Exchange, ExchangeNewsArticle, Info, University
 
 
 class ExchangeAdmin(admin.ModelAdmin):
     list_display = ("get_full_name", "univ")
-    inlines = [
-        SubjectInline,
-    ]
 
     def get_full_name(self, obj):
         return obj.student.get_full_name()
