@@ -28,16 +28,24 @@
                 <td>{{obj.get_retning_display}}</td>
                 <td>{{obj.start|date:"F Y"}}</td>
                 <td>{{obj.end|date:"F Y"}}</td>
-                {% if obj.fag %}
-                    <td>{{obj.fag }}</td>
+                {% if obj.subject_set.exists %}
+                    <td>
+                    {% for subject in obj.subject_set.all %}
+                        <p>{{ subject.code }} {{ subject.name }}</p>
+                    {% endfor %}
+                    </td>
                 {% else %}
                     <td>-</td>
                 {% endif %}
                 {% if user.is_authenticated %}
-                    <td>{{obj.student.email}}</td>
+                    {% if obj.optional_email %}
+                        <td>{{obj.optional_email}}</td>
+                    {% else %}
+                        <td>{{obj.student.email}}</td>
+                    {% endif %}
                 {% endif %}
                 {% if obj.facebook %}
-                    <td>{{obj.facebook }}</td>
+                    <td><a href="{{obj.facebook }}">Til facebook</a></td>
                 {% else %}
                     <td>-</td>
                 {% endif %}
