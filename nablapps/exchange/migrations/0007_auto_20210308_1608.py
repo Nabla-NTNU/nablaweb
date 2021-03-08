@@ -7,26 +7,46 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange', '0006_merge_20201023_1226'),
+        ("exchange", "0006_merge_20201023_1226"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='exchange',
-            name='fag',
+            model_name="exchange",
+            name="fag",
         ),
         migrations.AddField(
-            model_name='exchange',
-            name='optional_email',
-            field=models.CharField(blank=True, help_text='Alternativ epost, la stå blank for å bruke studmail.', max_length=100, null=True, verbose_name='Alternativ epost'),
+            model_name="exchange",
+            name="optional_email",
+            field=models.CharField(
+                blank=True,
+                help_text="Alternativ epost, la stå blank for å bruke studmail.",
+                max_length=100,
+                null=True,
+                verbose_name="Alternativ epost",
+            ),
         ),
         migrations.CreateModel(
-            name='Subject',
+            name="Subject",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('code', models.CharField(max_length=50, verbose_name='Emnekode')),
-                ('name', models.CharField(max_length=50, verbose_name='Emnenavn')),
-                ('exchange', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='exchange.Exchange')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("code", models.CharField(max_length=50, verbose_name="Emnekode")),
+                ("name", models.CharField(max_length=50, verbose_name="Emnenavn")),
+                (
+                    "exchange",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="exchange.Exchange",
+                    ),
+                ),
             ],
         ),
     ]
