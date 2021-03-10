@@ -5,7 +5,12 @@ from image_cropping import ImageCroppingMixin
 from nablapps.core.admin import ChangedByMixin
 from nablapps.news.admin import add_to_frontpage
 
-from .models import Exchange, ExchangeNewsArticle, Info, University
+from .models import Exchange, ExchangeNewsArticle, Info, Subject, University
+
+
+class SubjectInline(admin.TabularInline):
+    model = Subject
+    extra = 4
 
 
 class ExchangeAdmin(admin.ModelAdmin):
