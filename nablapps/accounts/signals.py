@@ -13,7 +13,7 @@ def login_message(sender, request, user, **kwargs):
         messages.info(request, mark_safe(msg))
 
     with suppress(MessageFailure):
-        msg = f"Vil du få sjansen til å vinne gavekort på 250 kr, og mange andre kule premier? Sjekk ut innkallingen til eSKE da vel! "  # reklame eSKE/SKE - kan også brukes til annet
+        msg = f"Er du på Campus? Bidra med å holde Campus åpent ved å skanne QR-koden på rommet du befinner deg i <3"  # reklame eSKE/SKE - kan også brukes til annet
         messages.error(request, mark_safe(msg))
 
 
@@ -23,7 +23,7 @@ def logout_message(sender, request, user, **kwargs):
         messages.info(request, mark_safe(msg))
 
     with suppress(MessageFailure):
-        msg = f"Vil du få sjansen til å vinne gavekort på 250 kr, og mange andre kule premier? Sjekk ut innkallingen til eSKE da vel! "  # reklame eSKE/SKE - kan også brukes til annet
+        msg = f"Er du på Campus? Bidra med å holde Campus åpent ved å skanne QR-koden på rommet du befinner deg i <3"  # reklame eSKE/SKE - kan også brukes til annet
         messages.error(request, mark_safe(msg))
 
 
