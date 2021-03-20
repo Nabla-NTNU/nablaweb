@@ -30,7 +30,7 @@
                         {% endif %}
 
                             <h2>{{ podcast.title }}</h2>
-                            <p>{{ podcast.get_short_description }}</p>
+                            <p>{{ podcast.get_short_description|safe }}</p>
                             <span class="date-text">
                                 {% if podcast.has_video %}
                                 <span class="fas fa-film"></span>
