@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "==3.0.7"
+django = "==3.1.7"
 # Templatetags for bootstrap3
 django-braces = "*"       # Extra mixinclasses for models and views
 django-contrib-comments = "*"
@@ -19,7 +19,7 @@ gunicorn = "*"              # Web-server used to run django
 pymysql = "*"               # Database bindings for mysql
 wand = "*"                  # Python bindings for ImageMagick. Needs ImageMagick installed
 whoosh = "*"                # Backend for django-haystack
-wiki = "==0.6"
+wiki = "==0.7"
 django-node-assets = "*"
 markdown = "*"
 django-qr-code = "*"
