@@ -48,9 +48,7 @@ class ApplicationForm(ModelForm):
         model = Application
         exclude = ["application_round", "applicant", "priority"]
         widgets = {
-            "application_text": TextInput(
-                attrs={"placeholder": "Fritekst"}
-            ),
+            "application_text": TextInput(attrs={"placeholder": "Fritekst"}),
         }
 
         labels = {
