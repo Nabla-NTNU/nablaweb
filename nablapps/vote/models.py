@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
 
+from nablapps.accounts.models import NablaGroup
+
 """
 These models are esentially the same as in poll/models.
 Code heavily boiled.
@@ -12,6 +14,13 @@ class VotingEvent(models.Model):
     creation_date = models.DateTimeField("Opprettet", auto_now_add=True)
     checked_in_users = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="checked_in_users"
+    )
+    eligible_group = models.ForeignKey(
+        NablaGroup,
+        on_delete=models.CASCADE,
+        related_name="voting_events",
+        blank=True,
+        null=True,
     )
 
     class Meta:

@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -179,7 +181,13 @@ class ActiveVotingList(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        return self.model.objects.exclude(is_active=False)
+        all_user_votings = self.model.objects.exclude(is_active=False).filter(
+            event__eligible_group=None
+        )
+        user_group_votings = self.model.objects.exclude(is_active=False).filter(
+            event__eligible_group__in=self.request.user.groups.all()
+        )
+        return chain(all_user_votings, user_group_votings)
 
 
 class Vote(LoginRequiredMixin, DetailView):
