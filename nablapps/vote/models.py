@@ -37,6 +37,10 @@ class UserAlreadyVoted(Exception):
     """Raised if the voting user has already voted on a voting"""
 
 
+class UserNotEligible(Exception):
+    """Raised if the voting user is not eligible to vote """
+
+
 class VotingDeactive(Exception):
     """Raised if the user tries to vote on an inactive voting"""
 
@@ -83,6 +87,15 @@ class Voting(models.Model):
         """Deactivates voting and closes for voting"""
         self.is_active = False
 
+    def user_not_eligible(self, user):
+        if self.event.eligible_group != None:
+            if user.groups.all().filter(name=self.event.eligible_group).exists():
+                return False
+            else:
+                return True
+        else:
+            return False
+
 
 class Alternative(models.Model):
     """ Represents an alternative """
@@ -100,6 +113,8 @@ class Alternative(models.Model):
         """ Add users vote """
         if self.voting.user_already_voted(user):
             raise UserAlreadyVoted(f"{user} has already voted on {self.voting}.")
+        elif self.voting.user_not_eligible(user):
+            raise UserNotEligible(f"{user} is not eligible to vote on {self.voting}")
         elif not self.voting.is_active:
             raise VotingDeactive(f"This voting is no longer open for voting.")
         else:
