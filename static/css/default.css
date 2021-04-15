@@ -12,7 +12,8 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
     --nabla-blue: #1a237e;
     --nabla-blue-dark: #000051;
     --nabla-blue-light: #534bae;
-    --nabla-background: #f7f7f7
+    --nabla-blue-alt: #0E4082;
+    --nabla-background: #F3F8FF;/*#f7f7f7*/
 }
 
 a{
@@ -52,7 +53,7 @@ padding: 7px;
 }
 
 nav.navbar {
-    background: var(--gray-dark);
+    background: var(--nabla-blue-alt);
     box-shadow: 0 1px 4px rgba(0,0,0,.05);
 
 }
@@ -265,7 +266,7 @@ nav.navbar {
 
     .nabla-footer {
         /* TODO: Add cross-browser support */
-        background-color: var(--gray-dark);
+        background-color: var(--nabla-blue-alt);
         color: var(--white);
         padding-top: 30px;
         width: 100%;
