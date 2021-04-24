@@ -440,8 +440,3 @@ Overflow-x: hidden;
 .nounderline{
     text-decoration: none !important
 }
-
-/* Temporary for server maintenance banner */
-.server-maintenance {
-    font-size: 20px; 
-}
