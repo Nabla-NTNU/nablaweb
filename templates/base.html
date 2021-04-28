@@ -250,13 +250,12 @@
                             <a class="dropdown-item" href="{% url "albums" %}">Bildealbum</a>
                             <a class="dropdown-item" href="{% url "code_golf_menu" %}">Kodegolf</a>
                             <a class="dropdown-item" href="{% url "wiki:root" %}">Wiki</a>
+                            <a class="dropdown-item" href="{% url "news_list" %}">Nyheter</a>
                             <a class="dropdown-item" href="{% url "blog" %}">Blogg</a>
                             <a class="dropdown-item" href="/julekalender/2020/">Julekalender 2020</a>
 {% comment %}
                             <a class="dropdown-item" href="{% url "advent_calendar" "2020" %}">Julekalender 2020</a>
 {% endcomment %}
-                        </div>
-                    </li>
                     <li class="nav-item mr-1">
                         <a class="nav-link text-light" href="{% url "om-nabla" %}">Om Nabla</a></li>
                     <li class="nav-item mr-1 dropdown ">
@@ -267,6 +266,19 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
                             <a class="dropdown-item" href="/contact/">Kontakt oss</a>
                             <a class="dropdown-item" href="/varsling/">Varsling</a>
+                        </div>
+                    </li>
+                    <li class="nav-item mr-1 dropdown">
+                        <a href="#ting" class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown5" role="button"  aria-haspopup="true" aria-expanded="false">
+                            Diverse
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown5">
+                            {# Lenker under Diverse #}
+                            <a class="dropdown-item" href="{% url 'nablashop:index' %}">Nablashop</a>
+                            <a class="dropdown-item" href="/nystudent/">For nye studenter</a>
+                            <a class="dropdown-item" href="http://bokskap.nabla.no/">Bokskap</a>
+                            <a class="dropdown-item" href="{% url "ex_frontpage" %}">Utveksling</a>
+                            <a class="dropdown-item" href="https://drive.google.com/drive/u/0/folders/0AIfT2N9gx5wOUk9PVA">Nablabanken</a>
                         </div>
                     </li>
                 </ul>
