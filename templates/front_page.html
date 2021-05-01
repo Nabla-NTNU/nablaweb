@@ -10,7 +10,7 @@
 <link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
 {% endblock %}
 
-{% block main-blank %}
+inn{% block main-blank %}
 {% addtoblock "css" %}
     <link  rel="stylesheet" href="{% static "css/front_page.css" %}">
 {% endaddtoblock %}
@@ -84,7 +84,17 @@
         </p>
     </div>
     {% else %}
-        {% include "nablaforum/includes/forum_widget.html" %}
+    <div class="social card card-body card-body-overline ">
+        <h1>Sosiale medier:</h1>
+        <div style="display: inline; margin-bottom: 2em">
+        <a href="https://www.facebook.com/nablantnu/" class="fab fa-facebook-f fa-2x social-icon"></a>
+        <a href="https://www.youtube.com/user/LinjeforeningenNabla" class="fab fa-youtube fa-2x social-icon"></a>
+        <a href="https://www.instagram.com/nablalinjeforening/" class="fab fa-instagram fa-2x social-icon"></a>
+        <a href="https://nablantnu.slack.com/" class="fab fa-slack fa-2x social-icon"></a>
+        <a href="https://github.com/Nabla-NTNU/nablaweb" class="fab fa-github fa-2x social-icon"></a>
+        </div>
+        <a href="/contact/gullkorn/" class="btn btn-primary" >Lyst til å melde inn et gullkorn eller sitat?</a>
+    </div>
     {% endif  %}
     <div class="office">
         <!--Kontoret-->
