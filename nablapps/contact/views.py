@@ -92,6 +92,7 @@ def make_contact_context(request, spam_check, test_val):
         ("Ambassadør", "ambassador"),
         ("Websjef", "websjef"),
         ("Redaktør", "redaktor"),
+        ("PR-sjef", "leder.prokom")
     )
     nabla_pos_emails = (
         ("Alle gruppeledere", "gruppeledere"),
