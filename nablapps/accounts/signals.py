@@ -12,19 +12,11 @@ def login_message(sender, request, user, **kwargs):
         msg = f"Velkommen inn <strong>{escape(user.username)}</strong>"
         messages.info(request, mark_safe(msg))
 
-    with suppress(MessageFailure):
-        msg = f"Er du på Campus? Bidra med å holde Campus åpent ved å skanne QR-koden på rommet du befinner deg i <3"  # reklame eSKE/SKE - kan også brukes til annet
-        messages.error(request, mark_safe(msg))
-
 
 def logout_message(sender, request, user, **kwargs):
     with suppress(MessageFailure):
         msg = f"<strong>{escape(user.username)} </strong> ble logget ut"
         messages.info(request, mark_safe(msg))
-
-    with suppress(MessageFailure):
-        msg = f"Er du på Campus? Bidra med å holde Campus åpent ved å skanne QR-koden på rommet du befinner deg i <3"  # reklame eSKE/SKE - kan også brukes til annet
-        messages.error(request, mark_safe(msg))
 
 
 def register_signals():
