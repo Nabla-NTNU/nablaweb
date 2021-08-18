@@ -37,7 +37,7 @@ class ContactForm(forms.Form):
         ("PostKom", "PostKom"),
         ("ITV ved IFY", "ITV ved IFY"),
         ("ITV ved IMF", "ITV ved IMF"),
-        ("Websjef", "Websjef")
+        ("BedKom", "BedKom"),
     )
 
     your_name = forms.CharField(label="Ditt navn:", max_length=100, required=False)
