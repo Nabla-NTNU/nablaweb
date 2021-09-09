@@ -29,17 +29,17 @@ random.seed()  # Initialize random seed generator
 
 
 def g():
-    """ A lot of random text """
+    """A lot of random text"""
     return fake.text()
 
 
 def s():
-    """ Short random string """
+    """Short random string"""
     return textwrap.shorten(fake.sentence(), width=40)
 
 
 def ss():
-    """ Longer random string """
+    """Longer random string"""
     return textwrap.shorten(fake.sentence(), width=20)
 
 

@@ -38,7 +38,7 @@ class UserAlreadyVoted(Exception):
 
 
 class UserNotEligible(Exception):
-    """Raised if the voting user is not eligible to vote """
+    """Raised if the voting user is not eligible to vote"""
 
 
 class VotingDeactive(Exception):
@@ -46,7 +46,7 @@ class VotingDeactive(Exception):
 
 
 class Voting(models.Model):
-    """ Represents a voting """
+    """Represents a voting"""
 
     event = models.ForeignKey(
         VotingEvent, on_delete=models.CASCADE, related_name="votings"
@@ -72,7 +72,7 @@ class Voting(models.Model):
         return self.title
 
     def user_already_voted(self, user):
-        """ returns true if the given user has already voted """
+        """returns true if the given user has already voted"""
         return user in self.users_voted.all()
 
     def get_total_votes(self):
@@ -98,7 +98,7 @@ class Voting(models.Model):
 
 
 class Alternative(models.Model):
-    """ Represents an alternative """
+    """Represents an alternative"""
 
     voting = models.ForeignKey(
         Voting, on_delete=models.CASCADE, related_name="alternatives"
@@ -110,7 +110,7 @@ class Alternative(models.Model):
         return self.text
 
     def add_vote(self, user):
-        """ Add users vote """
+        """Add users vote"""
         if self.voting.user_already_voted(user):
             raise UserAlreadyVoted(f"{user} has already voted on {self.voting}.")
         elif self.voting.user_not_eligible(user):
