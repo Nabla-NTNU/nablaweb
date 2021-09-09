@@ -19,7 +19,7 @@ gunicorn = "*"              # Web-server used to run django
 pymysql = "*"               # Database bindings for mysql
 wand = "*"                  # Python bindings for ImageMagick. Needs ImageMagick installed
 whoosh = "*"                # Backend for django-haystack
-wiki = "==0.7"
+wiki = "==0.7.4"
 django-node-assets = "*"
 markdown = "*"
 django-qr-code = "*"
