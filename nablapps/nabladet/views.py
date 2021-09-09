@@ -1,6 +1,8 @@
 """
 Views for nablad apps
 """
+from datetime import datetime
+
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.http import HttpResponse
@@ -93,5 +95,7 @@ class NabladList(TemplateView):
             ).append(nablad)
 
         context["nablad_archive"] = nablad_archive
-        context["current_year"] = max(nablad_archive.keys())
+        context["current_year"] = max(
+            nablad_archive.keys(), default=datetime.now().year
+        )
         return context
