@@ -13,7 +13,7 @@ For å komme i gang med Nablaweb, sjekk [wikien.](https://github.com/NablaWebkom
 
 ## Systemavhengigheter (ufullstendig)
 
-* python 3.6 (eller nyere)
+* python 3.9
 * pipenv
 * npm (nodejs)
 * libmagickwand-dev (ImageMagick) (trenges kun dersom du lager et nablad-objekt)
