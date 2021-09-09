@@ -95,7 +95,7 @@ class RegistrationInfoMixin(models.Model):
     places = models.PositiveIntegerField(
         verbose_name="antall plasser", null=True, blank=True
     )
-    has_queue = models.NullBooleanField(
+    has_queue = models.BooleanField(
         verbose_name="har venteliste",
         null=True,
         blank=True,

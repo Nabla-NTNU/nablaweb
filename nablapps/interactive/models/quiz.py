@@ -59,7 +59,8 @@ class Quiz(InteractiveElement):
         to="QuizScoreboard", related_name="quiz", on_delete=models.CASCADE, null=True
     )
 
-    published = models.NullBooleanField(
+    published = models.BooleanField(
+        null=True,
         default=True,
         verbose_name="Publisert",
     )

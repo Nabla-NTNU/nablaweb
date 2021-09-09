@@ -18,7 +18,8 @@ class Test(InteractiveElement):
         help_text="Tittel på brukertesten",
     )
 
-    published = models.NullBooleanField(
+    published = models.BooleanField(
+        null=True,
         default=True,
         verbose_name="Publisert",
     )
