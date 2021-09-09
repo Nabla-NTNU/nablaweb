@@ -119,7 +119,7 @@ class CreateUserPollView(UserPollCRUDMixin, CreateView):  # pylint: disable=R090
     template_name = "poll/poll_create.html"
 
     def get(self, request, *args, **kwargs):
-        """ Handles GET requests and instantiates blank versions of the form and its inline formsets. """
+        """Handles GET requests and instantiates blank versions of the form and its inline formsets."""
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)

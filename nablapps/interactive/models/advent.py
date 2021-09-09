@@ -101,7 +101,7 @@ class AdventDoor(InteractiveElement):
 
     @property
     def is_previous(self):
-        """ Returns True if the door is published but is not todays door"""
+        """Returns True if the door is published but is not todays door"""
         return self.is_published and not self.is_today
 
     @property

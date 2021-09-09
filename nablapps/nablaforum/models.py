@@ -5,7 +5,7 @@ from nablapps.accounts.models import NablaGroup, NablaUser
 
 
 class Channel(models.Model):
-    """ Represents a channel in the forum """
+    """Represents a channel in the forum"""
 
     group = models.ForeignKey(
         NablaGroup, on_delete=models.CASCADE, blank=True, null=True
@@ -27,7 +27,7 @@ class Channel(models.Model):
 
 
 class Thread(models.Model):
-    """ Represents a thread in a channel"""
+    """Represents a thread in a channel"""
 
     channel = models.ForeignKey(
         Channel, on_delete=models.CASCADE
@@ -49,7 +49,7 @@ class Thread(models.Model):
 
 
 class Message(models.Model):
-    """ Represents a message in a thread """
+    """Represents a message in a thread"""
 
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
     user = models.ForeignKey(
