@@ -19,7 +19,7 @@ from .models import Channel, Message, Thread
 
 
 class MainView(LoginRequiredMixin, TemplateView):
-    """ Main view displaying forum content """
+    """Main view displaying forum content"""
 
     template_name = "nablaforum/forum.html"
     paginate_thread_by = 5
@@ -181,7 +181,7 @@ class MainView(LoginRequiredMixin, TemplateView):
 
 
 class CreateChannelView(LoginRequiredMixin, FormView):
-    """ View for creating new channels """
+    """View for creating new channels"""
 
     model = Channel
     template_name = "nablaforum/create_channel.html"

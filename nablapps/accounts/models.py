@@ -156,7 +156,7 @@ class NablaGroup(Group):
 
 
 class FysmatClass(NablaGroup):
-    """ Gruppe for kull """
+    """Gruppe for kull"""
 
     class Meta:
         verbose_name = "Kull"
