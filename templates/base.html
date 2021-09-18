@@ -261,10 +261,25 @@
 {% comment %}
                             <a class="dropdown-item" href="{% url "advent_calendar" "2020" %}">Julekalender 2020</a>
 {% endcomment %}
-                    <li class="nav-item mr-1">
-                        <a class="nav-link text-light" href="{% url "om-nabla" %}">Om Nabla</a></li>
                     <li class="nav-item mr-1 dropdown ">
+                        <a href="#ting" class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown1" role="button"  aria-haspopup="true" aria-expanded="false">
+                            Om Nabla
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                            {# Faste lenker om Nabla #}
+                            <a class="dropdown-item" href="/om-nabla/">Generelt om Nabla</a>
+                            <a class="dropdown-item" href="/komite/om/styret/">Styret</a>
+                            <a class="dropdown-item" href="/komite/komiteer">Undergrupper</a>
+                            <a class="dropdown-item" href="/wiki/lovverk/nablas-lover/">Nablas lover</a>
+                            <a class="dropdown-item" href="/wiki/lovverk/nablas-forskrifter/">Nablas forskrifter</a>
+                            <a class="dropdown-item" href="https://nabla.no/om/forretningsorden/">Nablas forretningsorden</a>
+                            <a class="dropdown-item" href="/om/kompendier/">Kompendier</a>
+                            <a class="dropdown-item" href="/om/Kontortider/">Kontortider</a>
+                            <a class="dropdown-item" href="/om/nablas-fond/">Nablas fond</a>
+                            <a class="dropdown-item" href="/om/nablas-fond/">Stillingsbeskrivelser</a>
+                            <a class="dropdown-item" href="/om/tillitsvalgte/">Nablas fond</a>
 
+                    <li class="nav-item mr-1 dropdown ">
                         <a href="#Om" class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown2" role="button"  aria-haspopup="true" aria-expanded="false">
                             Kontakt og varsling
                         </a>
