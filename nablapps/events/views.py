@@ -350,7 +350,7 @@ class RegisterUserView(LoginRequiredMixin, MessageMixin, DetailView):
         return "Du er meldt av arrangementet."
 
 
-class AdministerPenaltiesView(DetailView, MessageMixin, PermissionRequiredMixin):
+class AdministerPenaltiesView(PermissionRequiredMixin, DetailView, MessageMixin):
     """Used by event admins to register attendance"""
 
     model = Event
@@ -388,7 +388,7 @@ class AdministerPenaltiesView(DetailView, MessageMixin, PermissionRequiredMixin)
         return context
 
 
-class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
+class RegisterAttendanceView(PermissionRequiredMixin, DetailView, MessageMixin):
     """Used by event admins to register attendance"""
 
     model = Event
@@ -502,7 +502,7 @@ class RegisterAttendanceView(DetailView, MessageMixin, PermissionRequiredMixin):
             registration.save()
 
 
-class RegisterNoshowPenaltiesView(DetailView, MessageMixin, PermissionRequiredMixin):
+class RegisterNoshowPenaltiesView(PermissionRequiredMixin, DetailView, MessageMixin):
     """
     Når en post blir sendt hit gis det prikk til til dem som ikke er registrert
     """
