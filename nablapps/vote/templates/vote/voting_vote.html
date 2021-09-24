@@ -9,14 +9,29 @@
 <form method="post">
     {% csrf_token %}
     <input type="hidden" name="next" value="{% firstof next request.path %}#{{ object.pk }}">
-    {% for alternative in object.alternatives.all %}
-        <div class="radio">
-            <label>
-                <input type="radio" name="alternative" value="{{ alternative.pk }}">
-                <span class="alternative">{{ alternative.text }}</span>
-            </label>
-        </div>
-    {% endfor %}
+    {% if object.is_multi_winner %}
+        <h1>TODO: JS magic to hide already selected alternatives</h1>
+        {% for priority in priorities %}
+        <h3>Prioritet nr {{ priority }}:</h3>
+            {% for alternative in object.alternatives.all %}
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="priority{{priority}}" value="{{ alternative.pk }}">
+                        <span class="alternative">{{ alternative.text }}</span>
+                    </label>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+        {% for alternative in object.alternatives.all %}
+            <div class="radio">
+                <label>
+                    <input type="radio" name="alternative" value="{{ alternative.pk }}">
+                    <span class="alternative">{{ alternative.text }}</span>
+                </label>
+            </div>
+        {% endfor %}
+    {% endif  %}
     <button class="btn btn-primary btn-block" type="submit">Stem</button>
 </form>
 {% else %}

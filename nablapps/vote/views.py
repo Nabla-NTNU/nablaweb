@@ -54,7 +54,7 @@ class CreateVoting(PermissionRequiredMixin, CreateView):
     permission_required = "vote.vote_admin"
     template_name = "vote/voting_form.html"
     model = Voting
-    fields = ["event", "title", "description"]
+    fields = ["event", "title", "is_multi_winner", "description"]
 
     def get_initial(self):
         event_id = self.kwargs["pk"]
@@ -92,7 +92,7 @@ class VotingEdit(PermissionRequiredMixin, UpdateView):
     permission_required = "vote.vote_admin"
     model = Voting
     template_name = "vote/edit_voting.html"
-    fields = ["event", "title", "description"]
+    fields = ["event", "title","is_multi_winner", "description"]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -199,26 +199,42 @@ class Vote(LoginRequiredMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["has_voted"] = self.object.user_already_voted(self.request.user)
+        context["priorities"] = [i for i in range(1, self.object.get_num_alternatives())]
         return context
 
     def post(self, request, **kwargs):
         """Submit a vote from chosen alternative"""
         voting_id = kwargs["pk"]
         voting = get_object_or_404(Voting, pk=voting_id)
-        try:
-            alternative = voting.alternatives.get(pk=request.POST["alternative"])
-            alternative.add_vote(request.user)
-        except (KeyError, Alternative.DoesNotExist):
-            messages.warning(request, "Du har ikke valgt et alternativ.")
-            return redirect("voting-vote", pk=voting_id)
-        except UserAlreadyVoted:
-            messages.error(request, "Du har allerede stemt i denne avstemningen!")
-        except VotingDeactive:
-            messages.error(
-                request, "Denne avstemningen er ikke lenger åpen for stemming!"
-            )
+
+        if voting.is_multi_winner:
+            # Single transferable vote
+            # Get list/dictonary of alternatives and priorities
+            # Pass to voting.svt or something
+            print("PRIORITIES")
+            print(request.POST["priority1"])
+            print(request.POST["priority2"])
+            print(request.POST["priority3"])
+            priorities = [i for i in range(1, voting.get_num_alternatives())]
+            ballot = {pri: request.POST["priority"+str(pri)] for pri in priorities}
+            print(ballot)
+            voting.submit_stv_votes(request.user, ballot)
         else:
-            messages.success(
-                request, f"Suksess! Du har stemt i avstemningen {voting.title}"
-            )
+            # Normal voting, first past the post(?)
+            try:
+                alternative = voting.alternatives.get(pk=request.POST["alternative"])
+                alternative.add_vote(request.user)
+            except (KeyError, Alternative.DoesNotExist):
+                messages.warning(request, "Du har ikke valgt et alternativ.")
+                return redirect("voting-vote", pk=voting_id)
+            except UserAlreadyVoted:
+                messages.error(request, "Du har allerede stemt i denne avstemningen!")
+            except VotingDeactive:
+                messages.error(
+                    request, "Denne avstemningen er ikke lenger åpen for stemming!"
+                )
+            else:
+                messages.success(
+                    request, f"Suksess! Du har stemt i avstemningen {voting.title}"
+                )
         return redirect("active-voting-list")

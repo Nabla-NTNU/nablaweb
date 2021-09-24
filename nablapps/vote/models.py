@@ -52,6 +52,7 @@ class Voting(models.Model):
         VotingEvent, on_delete=models.CASCADE, related_name="votings"
     )
     title = models.CharField(max_length=100)
+    is_multi_winner = models.BooleanField(blank=False, default=False)
     description = models.TextField()
     users_voted = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
@@ -79,6 +80,10 @@ class Voting(models.Model):
         """Return the sum of votes for all belonging alternatives"""
         return sum([alt.votes for alt in self.alternatives.all()])
 
+    def get_num_alternatives(self):
+        """ Returns the number of related/belinging alternatives"""
+        return len(self.alternatives.all())
+
     def activate(self):
         """Activates voting and opens for voting"""
         self.is_active = True
@@ -95,6 +100,10 @@ class Voting(models.Model):
                 return True
         else:
             return False
+
+    def submit_stv_votes(self, user, ballot):
+        """ Submits transferable votes """
+        pass
 
 
 class Alternative(models.Model):
