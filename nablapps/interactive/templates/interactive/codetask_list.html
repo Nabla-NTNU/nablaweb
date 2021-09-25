@@ -5,7 +5,12 @@
 <p><i>Innenfor programmering finnes det mange ulike "sportsgrener". Noen handler om å løse en oppgave på kortest mulig tid, det vil si tiden det tar å skrive et fungerende program. Andre om å løse en oppgave på kortest mulig kjøretid, det vil si tiden programmet bruker på å løse oppgaven. En tredje kategori handler om å løse en oppgave på færrest mulig tegn; kodegolfing. Ordet kommer av at man i golf forsøker å komme seg rundt banen på færrest mulig slag.</i></p>
 <h4> 
 	<b> 
-		Nyeste oppgave: <a href="{% url 'code_golf' object_list.last.id %}">{{object_list.last.title}}</a> 
+		Nyeste oppgave:
+		{% if object_list.last == None %}
+		ingen oppgaver...
+		{% else %}
+		<a href="{% url 'code_golf' object_list.last.id %}">{{object_list.last.title}}</a> 
+		{% endif %}
 	</b> 
 </h4>
 
