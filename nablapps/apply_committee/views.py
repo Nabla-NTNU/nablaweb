@@ -216,12 +216,13 @@ class ConfirmView(LoginRequiredMixin, TemplateView):
         context["applications"] = applications
         return context
 
+
 @staff_member_required
 def generate_csv(http_request):
-    response = HttpResponse(content_type='text/csv', charset='latin-1')
-    response['Content-Disposition'] = 'attachment; filename="export.csv"'
+    response = HttpResponse(content_type="text/csv", charset="latin-1")
+    response["Content-Disposition"] = 'attachment; filename="export.csv"'
 
-    writer = csv.writer(response, dialect='excel')
+    writer = csv.writer(response, dialect="excel")
 
     table = list()
 
@@ -233,7 +234,7 @@ def generate_csv(http_request):
         templst = committee[1]
         antall = len(templst)
         for i in range(antall):
-            ntnu_username = re.sub("'s",'',((str(templst[i])).split())[0])
+            ntnu_username = re.sub("'s", "", ((str(templst[i])).split())[0])
             row.append(ntnu_username)
         table.append(row)
 
