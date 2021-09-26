@@ -1,4 +1,8 @@
 import logging
+import csv
+from nablapps.core.templatetags.listutil import row_split
+import re
+from nablapps.com.views import CommitteeOverview
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import (
@@ -11,10 +15,13 @@ from django.forms import (
 from django.shortcuts import redirect
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import FormView
+from django.http import HttpResponse
 
 from nablapps.accounts.models import NablaGroup
 
-from .models import Application, ApplicationRound
+from .models import Application, ApplicationRound, Committee
+
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 class BaseApplicationFormSet(BaseFormSet):
@@ -48,7 +55,7 @@ class ApplicationForm(ModelForm):
         model = Application
         exclude = ["application_round", "applicant", "priority"]
         widgets = {
-            "application_text": TextInput(attrs={"placeholder": "Fritekst"}),
+            "application_text": TextInput(attrs={"placeholder": "Fritekst/Instrument"}),
         }
 
         labels = {
@@ -208,3 +215,31 @@ class ConfirmView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data()
         context["applications"] = applications
         return context
+
+@staff_member_required
+def generate_csv(http_request):
+    response = HttpResponse(content_type='text/csv', charset='latin-1')
+    response['Content-Disposition'] = 'attachment; filename="export.csv"'
+
+    writer = csv.writer(response, dialect='excel')
+
+    table = list()
+
+    committee_list = BaseApplicationListView().get_queryset()
+
+    for committee in committee_list.items():
+        row = list()
+        row.append(committee[0])
+        templst = committee[1]
+        antall = len(templst)
+        for i in range(antall):
+            ntnu_username = re.sub("'s",'',((str(templst[i])).split())[0])
+            row.append(ntnu_username)
+        table.append(row)
+
+    table = map(list, zip(table))
+
+    for row in table:
+        writer.writerow(row)
+
+    return response
