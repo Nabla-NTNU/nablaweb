@@ -56,7 +56,7 @@ class Voting(models.Model):
         VotingEvent, on_delete=models.CASCADE, related_name="votings"
     )
     title = models.CharField(max_length=100)
-    is_multi_winner = models.BooleanField(blank=False, default=False)
+    num_winners = models.IntegerField(blank=False, default=1)
     description = models.TextField()
     users_voted = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
@@ -110,16 +110,17 @@ class Voting(models.Model):
         alt_pks = [int(ballot[pri]) for pri in ballot]
         if len(alt_pks) != len(set(alt_pks)):
             raise DuplicatePriorities(f"Ballot contains duplicate(s) of candidates")
-        for alt_pk in alt_pks:
+        for (alt_pk, pri) in zip(alt_pks, ballot):
             alternative = self.alternatives.get(pk=alt_pk)
-            priority_count = alternative.priority_dict.entries.get(priority=priority)
+            priority_count = alternative.priority_dict.entries.get(priority=pri)
             priority_count.raise_count(user)
             self.users_voted.add(user)
 
     def get_multi_winner_result(self):
         # STV
-        pass
-
+        alternatives = self.alternatives.all()
+        priorities = range(1, alternatives.count()+1)
+            
 
 class Alternative(models.Model):
     """Represents an alternative"""

@@ -9,7 +9,7 @@
 <form method="post">
     {% csrf_token %}
     <input type="hidden" name="next" value="{% firstof next request.path %}#{{ object.pk }}">
-    {% if object.is_multi_winner %}
+    {% if object.num_winners > 1 %}
         <h1>TODO: JS magic to hide already selected alternatives</h1>
         {% for priority in priorities %}
         <h3>Prioritet nr {{ priority }}:</h3>

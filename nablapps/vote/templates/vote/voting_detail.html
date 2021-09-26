@@ -21,7 +21,7 @@
 <p>{{ object.description|markdown }}</p>
 <b>Totalt antall stemmer: {{ object.get_total_votes }}</b>
 {% for alternative in object.alternatives.all %}
-    {% if object.is_multi_winner %}
+    {% if object.num_winners > 1 %}
         <h2>{{ alternative }}</h2>
         {% for entry in alternative.priority_dict.entries.all %}
         {{ entry.priority }} : {{ entry.count }} <br>

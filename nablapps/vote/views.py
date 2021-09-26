@@ -54,7 +54,7 @@ class CreateVoting(PermissionRequiredMixin, CreateView):
     permission_required = "vote.vote_admin"
     template_name = "vote/voting_form.html"
     model = Voting
-    fields = ["event", "title", "is_multi_winner", "description"]
+    fields = ["event", "title", "num_winners", "description"]
 
     def get_initial(self):
         event_id = self.kwargs["pk"]
@@ -85,7 +85,7 @@ class CreateVoting(PermissionRequiredMixin, CreateView):
                 event_id = alternatives.instance.event.pk
                 alternatives.save()
         print("TESTING")
-        if form.cleaned_data["is_multi_winner"]:
+        if form.cleaned_data["num_winners"]:
             for alternative in self.object.alternatives.all():
                 print(alternative.pk)
                 print(alternative)
@@ -220,7 +220,7 @@ class Vote(LoginRequiredMixin, DetailView):
         voting_id = kwargs["pk"]
         voting = get_object_or_404(Voting, pk=voting_id)
 
-        if voting.is_multi_winner:
+        if voting.num_winners > 1:
             # Single transferable vote
             # Get list/dictonary of alternatives and priorities
             try:
