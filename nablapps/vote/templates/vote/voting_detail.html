@@ -23,9 +23,7 @@
 {% for alternative in object.alternatives.all %}
     {% if object.num_winners > 1 %}
         <h2>{{ alternative }}</h2>
-        {% for entry in alternative.priority_dict.entries.all %}
-        {{ entry.priority }} : {{ entry.count }} <br>
-        {% endfor %}
+
     {% else %}
         <p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>
     {% endif %}

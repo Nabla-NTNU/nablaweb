@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from .forms import AlternativeFormset
-from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, VotingEvent, PriorityDict, PriorityCount, DuplicatePriorities
+from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, VotingEvent, DuplicatePriorities
 
 ####################
 ### Admin views ####
@@ -84,19 +84,6 @@ class CreateVoting(PermissionRequiredMixin, CreateView):
                 alternatives.instance = self.object
                 event_id = alternatives.instance.event.pk
                 alternatives.save()
-        print("TESTING")
-        if form.cleaned_data["num_winners"]:
-            for alternative in self.object.alternatives.all():
-                print(alternative.pk)
-                print(alternative)
-                # Create PriorityDict
-                print("created pridict for an alternative")
-                new_pd = PriorityDict.objects.create(alternative=alternative)
-                new_pd.save()
-                for priority in range(1, self.object.get_num_alternatives()+1):
-                    # create dictonary initial entries {priority: 0}
-                    new_entry = PriorityCount(dictionary=new_pd, priority=priority, count=0)
-                    new_entry.save()
         return redirect("voting-list", pk=event_id)
         return super().form_valid(form)
 

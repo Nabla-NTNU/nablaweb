@@ -110,17 +110,51 @@ class Voting(models.Model):
         alt_pks = [int(ballot[pri]) for pri in ballot]
         if len(alt_pks) != len(set(alt_pks)):
             raise DuplicatePriorities(f"Ballot contains duplicate(s) of candidates")
+        new_ballot = BallotContainer.objects.create(voting=self)
+        new_ballot.save()
         for (alt_pk, pri) in zip(alt_pks, ballot):
-            alternative = self.alternatives.get(pk=alt_pk)
-            priority_count = alternative.priority_dict.entries.get(priority=pri)
-            priority_count.raise_count(user)
+            alt = Alternative.objects.get(pk=alt_pk)
+            new_entry = BallotEntry.objects.create(container=new_ballot, priority=pri, alternative=alt)
+            new_entry.save()
             self.users_voted.add(user)
 
     def get_multi_winner_result(self):
         # STV
         alternatives = self.alternatives.all()
+        ballots = self.ballots.all()
         priorities = range(1, alternatives.count()+1)
-            
+        win_requirement = int(self.get_total_votes()/alternatives.count())
+        winners = []
+        losers = []
+        while len(winners) < self.num_winners:
+            for pri in priorities:
+                for ballot in ballots:
+                    pass
+#            for pri in priorities:
+#                remaining_vote_counts = {}
+#                for alt in alternatives:
+#                    if alt in winners or alt in losers:
+#                        break
+#                    vote_count = alt.priority_dict.entries.get(priority=pri).count
+#                    if vote_count >= win_requirement:
+#                        winners.append(alt)
+#                        num_surplus_votes = vote_count - win_requirement
+#                        for next_pri in range(pri, alternatives.count()+1):
+#                            # Transfer surplus votes
+#                    else:
+#                        remaining_vote_counts[alt] = vote_count
+#                if len(winners) >= self.num_winners:
+#                    break
+#                else:
+#                    # Eliminate first loser
+#                    loser = min(remaining_vote_counts, key=remaining_vote_counts.get)
+#                    losers.append(loser)
+#                    # Transfer loser votes
+#                    for next_pri in range(pri, alternatives.count()+1):
+#                        next_pri_count = loser.priority_dict.entries.get(priority=next_pri)
+#                        
+#        return winners
+
 
 class Alternative(models.Model):
     """Represents an alternative"""
@@ -155,27 +189,22 @@ class Alternative(models.Model):
             return 100 * self.votes / self.voting.get_total_votes()
 
 
-class PriorityDict(models.Model):
+class BallotContainer(models.Model):
     """ 
-    Dictonary like model storing priority and # times the given alternative received that priority
+    Dictonary like model storing ballot with priority and alternative
 
     E.g. for
 
-    Person A:
-        {1: 5, 2:3, 3:5}
+    Voter A:
+        {1: alt2, 2:alt1, 3:alt3}
 
-    Five people have given Person A priority 1, 3 people priority 2, and five people priority 3
+    has alt2 as first choice, alt1 as second choice and alt3 as third choice
     """
-    alternative = models.OneToOneField(
-            Alternative, on_delete=models.CASCADE, related_name="priority_dict")
+    voting = models.ForeignKey(Voting, on_delete=models.CASCADE, related_name="ballots")
 
 
-class PriorityCount(models.Model):
+class BallotEntry(models.Model):
     """ priority and # 'votes' as key:value """
-    dictionary = models.ForeignKey(PriorityDict, on_delete=models.CASCADE, related_name="entries")
+    container = models.ForeignKey(BallotContainer, on_delete=models.CASCADE, related_name="entries")
     priority = models.IntegerField()
-    count = models.IntegerField()
-
-    def raise_count(self, user):
-        self.count += 1
-        self.save()
+    alternative = models.ForeignKey(Alternative, on_delete=models.CASCADE)
