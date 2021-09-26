@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from .forms import AlternativeFormset
-from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, VotingEvent
+from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, VotingEvent, PriorityDict, PriorityCount, DuplicatePriorities
 
 ####################
 ### Admin views ####
@@ -84,6 +84,19 @@ class CreateVoting(PermissionRequiredMixin, CreateView):
                 alternatives.instance = self.object
                 event_id = alternatives.instance.event.pk
                 alternatives.save()
+        print("TESTING")
+        if form.cleaned_data["is_multi_winner"]:
+            for alternative in self.object.alternatives.all():
+                print(alternative.pk)
+                print(alternative)
+                # Create PriorityDict
+                print("created pridict for an alternative")
+                new_pd = PriorityDict.objects.create(alternative=alternative)
+                new_pd.save()
+                for priority in range(1, self.object.get_num_alternatives()+1):
+                    # create dictonary initial entries {priority: 0}
+                    new_entry = PriorityCount(dictionary=new_pd, priority=priority, count=0)
+                    new_entry.save()
         return redirect("voting-list", pk=event_id)
         return super().form_valid(form)
 
@@ -92,7 +105,7 @@ class VotingEdit(PermissionRequiredMixin, UpdateView):
     permission_required = "vote.vote_admin"
     model = Voting
     template_name = "vote/edit_voting.html"
-    fields = ["event", "title","is_multi_winner", "description"]
+    fields = ["event", "title", "description"]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -199,7 +212,7 @@ class Vote(LoginRequiredMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["has_voted"] = self.object.user_already_voted(self.request.user)
-        context["priorities"] = [i for i in range(1, self.object.get_num_alternatives())]
+        context["priorities"] = [i for i in range(1, self.object.get_num_alternatives()+1)]
         return context
 
     def post(self, request, **kwargs):
@@ -210,15 +223,27 @@ class Vote(LoginRequiredMixin, DetailView):
         if voting.is_multi_winner:
             # Single transferable vote
             # Get list/dictonary of alternatives and priorities
-            # Pass to voting.svt or something
-            print("PRIORITIES")
-            print(request.POST["priority1"])
-            print(request.POST["priority2"])
-            print(request.POST["priority3"])
-            priorities = [i for i in range(1, voting.get_num_alternatives())]
-            ballot = {pri: request.POST["priority"+str(pri)] for pri in priorities}
-            print(ballot)
-            voting.submit_stv_votes(request.user, ballot)
+            try:
+                priorities = [i for i in range(1, voting.get_num_alternatives()+1)]
+                # ballot : {pri#:alternative.pk}
+                ballot = {pri: request.POST["priority"+str(pri)] for pri in priorities}
+                voting.submit_stv_votes(request.user, ballot)
+            except (KeyError, Alternative.DoesNotExist):
+                messages.warning(request, "Du har ikke valgt en kandidat til hver prioritet.")
+                return redirect("voting-vote", pk=voting_id)
+            except UserAlreadyVoted:
+                messages.error(request, "Du har allerede stemt i denne avstemningen!")
+            except VotingDeactive:
+                messages.error(
+                    request, "Denne avstemningen er ikke lenger åpen for stemming!"
+                )
+            except DuplicatePriorities:
+                messages.warning(request, "Du kan ikke velge samme kandidat flere ganger!")
+                return redirect("voting-vote", pk=voting_id)
+            else:
+                messages.success(
+                    request, f"Suksess! Du har stemt i avstemningen {voting.title}"
+                )
         else:
             # Normal voting, first past the post(?)
             try:

@@ -45,6 +45,10 @@ class VotingDeactive(Exception):
     """Raised if the user tries to vote on an inactive voting"""
 
 
+class DuplicatePriorities(Exception):
+    """Raised if users tries to submit a STV ballot with dubplicate canditate(s) accross priorities"""
+
+
 class Voting(models.Model):
     """Represents a voting"""
 
@@ -78,7 +82,7 @@ class Voting(models.Model):
 
     def get_total_votes(self):
         """Return the sum of votes for all belonging alternatives"""
-        return sum([alt.votes for alt in self.alternatives.all()])
+        return self.users_voted.all().count()
 
     def get_num_alternatives(self):
         """ Returns the number of related/belinging alternatives"""
@@ -103,6 +107,17 @@ class Voting(models.Model):
 
     def submit_stv_votes(self, user, ballot):
         """ Submits transferable votes """
+        alt_pks = [int(ballot[pri]) for pri in ballot]
+        if len(alt_pks) != len(set(alt_pks)):
+            raise DuplicatePriorities(f"Ballot contains duplicate(s) of candidates")
+        for alt_pk in alt_pks:
+            alternative = self.alternatives.get(pk=alt_pk)
+            priority_count = alternative.priority_dict.entries.get(priority=priority)
+            priority_count.raise_count(user)
+            self.users_voted.add(user)
+
+    def get_multi_winner_result(self):
+        # STV
         pass
 
 
@@ -137,3 +152,29 @@ class Alternative(models.Model):
             return 0
         else:
             return 100 * self.votes / self.voting.get_total_votes()
+
+
+class PriorityDict(models.Model):
+    """ 
+    Dictonary like model storing priority and # times the given alternative received that priority
+
+    E.g. for
+
+    Person A:
+        {1: 5, 2:3, 3:5}
+
+    Five people have given Person A priority 1, 3 people priority 2, and five people priority 3
+    """
+    alternative = models.OneToOneField(
+            Alternative, on_delete=models.CASCADE, related_name="priority_dict")
+
+
+class PriorityCount(models.Model):
+    """ priority and # 'votes' as key:value """
+    dictionary = models.ForeignKey(PriorityDict, on_delete=models.CASCADE, related_name="entries")
+    priority = models.IntegerField()
+    count = models.IntegerField()
+
+    def raise_count(self, user):
+        self.count += 1
+        self.save()

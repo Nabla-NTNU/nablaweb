@@ -21,7 +21,14 @@
 <p>{{ object.description|markdown }}</p>
 <b>Totalt antall stemmer: {{ object.get_total_votes }}</b>
 {% for alternative in object.alternatives.all %}
-<p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>
+    {% if object.is_multi_winner %}
+        <h2>{{ alternative }}</h2>
+        {% for entry in alternative.priority_dict.entries.all %}
+        {{ entry.priority }} : {{ entry.count }} <br>
+        {% endfor %}
+    {% else %}
+        <p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>
+    {% endif %}
 {% endfor %}
 {% if is_admin %}
     <a href="{% url "voting-edit" pk=object.pk %}"><i class="fas fa-pencil-alt"></i> Endre avstemning</a><br>
@@ -35,4 +42,3 @@
 {% endfor %}
 </ul>
 {% endblock %}
-
