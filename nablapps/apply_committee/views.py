@@ -1,9 +1,8 @@
-import logging
 import csv
-from nablapps.core.templatetags.listutil import row_split
+import logging
 import re
-from nablapps.com.views import CommitteeOverview
 
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import (
     BaseFormSet,
@@ -12,16 +11,16 @@ from django.forms import (
     ValidationError,
     formset_factory,
 )
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import FormView
-from django.http import HttpResponse
 
 from nablapps.accounts.models import NablaGroup
+from nablapps.com.views import CommitteeOverview
+from nablapps.core.templatetags.listutil import row_split
 
 from .models import Application, ApplicationRound, Committee
-
-from django.contrib.admin.views.decorators import staff_member_required
 
 
 class BaseApplicationFormSet(BaseFormSet):
