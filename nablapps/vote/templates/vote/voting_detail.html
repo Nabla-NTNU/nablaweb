@@ -20,10 +20,15 @@
 {% endif %}
 <p>{{ object.description|markdown }}</p>
 <b>Totalt antall stemmer: {{ object.get_total_votes }}</b>
+<br>
+<b>Antall vinnere: {{ object.num_winners }}</b>
+<br>
+<b>quota(vinnergrense): {{ quota }}</b>
+
 {% for alternative in object.alternatives.all %}
     {% if object.num_winners > 1 %}
         <h2>{{ alternative }}</h2>
-
+        <p>Antall (fordelte) stemmer: {{ alternative.ballots.count }}</p>
     {% else %}
         <p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>
     {% endif %}

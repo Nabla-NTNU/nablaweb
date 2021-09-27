@@ -138,7 +138,15 @@ class VotingDetail(PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["is_admin"] = self.request.user.has_perm("vote.vote_admin")
+        if self.object.num_winners > 1:
+            context["quota"] = int(self.object.get_total_votes()/self.object.alternatives.all().count()+1) + 1
         return context
+
+
+@login_required
+@permission_required("vote.vote_admin", raise_exception=True)
+def get_multi_winner_result(request):
+    pass
 
 
 @login_required

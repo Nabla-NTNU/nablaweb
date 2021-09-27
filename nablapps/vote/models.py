@@ -48,6 +48,9 @@ class VotingDeactive(Exception):
 class DuplicatePriorities(Exception):
     """Raised if users tries to submit a STV ballot with dubplicate canditate(s) accross priorities"""
 
+class UnableToSelectWinners(Exception):
+    """Raised if unable to select winners in multi winner election"""
+
 
 class Voting(models.Model):
     """Represents a voting"""
@@ -110,7 +113,9 @@ class Voting(models.Model):
         alt_pks = [int(ballot[pri]) for pri in ballot]
         if len(alt_pks) != len(set(alt_pks)):
             raise DuplicatePriorities(f"Ballot contains duplicate(s) of candidates")
-        new_ballot = BallotContainer.objects.create(voting=self)
+        alt1_pk = int(ballot[1])
+        alt1 = self.alternatives.get(pk=alt1_pk)
+        new_ballot = BallotContainer.objects.create(voting=self, alternative=alt1)
         new_ballot.save()
         for (alt_pk, pri) in zip(alt_pks, ballot):
             alt = Alternative.objects.get(pk=alt_pk)
@@ -119,41 +124,56 @@ class Voting(models.Model):
             self.users_voted.add(user)
 
     def get_multi_winner_result(self):
-        # STV
+        """Declare multples winners using a single transferable votes system"""
         alternatives = self.alternatives.all()
-        ballots = self.ballots.all()
-        priorities = range(1, alternatives.count()+1)
-        win_requirement = int(self.get_total_votes()/alternatives.count())
+        quota = int(self.get_total_votes()/alternatives.count()+1) + 1 # Droop quota
         winners = []
         losers = []
-        while len(winners) < self.num_winners:
-            for pri in priorities:
-                for ballot in ballots:
-                    pass
-#            for pri in priorities:
-#                remaining_vote_counts = {}
-#                for alt in alternatives:
-#                    if alt in winners or alt in losers:
-#                        break
-#                    vote_count = alt.priority_dict.entries.get(priority=pri).count
-#                    if vote_count >= win_requirement:
-#                        winners.append(alt)
-#                        num_surplus_votes = vote_count - win_requirement
-#                        for next_pri in range(pri, alternatives.count()+1):
-#                            # Transfer surplus votes
-#                    else:
-#                        remaining_vote_counts[alt] = vote_count
-#                if len(winners) >= self.num_winners:
-#                    break
-#                else:
-#                    # Eliminate first loser
-#                    loser = min(remaining_vote_counts, key=remaining_vote_counts.get)
-#                    losers.append(loser)
-#                    # Transfer loser votes
-#                    for next_pri in range(pri, alternatives.count()+1):
-#                        next_pri_count = loser.priority_dict.entries.get(priority=next_pri)
-#                        
-#        return winners
+        if self.get_total_votes() > quota:
+            while len(winners) < self.num_winners:
+                new_winners = {}
+                # Find alternatives passing quota, add to winners
+                for alt in alternatives:
+                    if alt in winners:
+                        break
+                    if alt.ballots.all().count() >= quota:
+                        num_surplus_votes = alt.ballots.all().count() - quota
+                        new_winners[alt] = num_surplus_votes
+                        winners.append[alt]
+                # Sort winners and surpluses in order of descending surplus
+                new_winners_sorted = sorted(new_winners.items(), key=lambda x:x[1], reverse=True)
+                for winner, surplus in new_winners_sorted:
+                    # For winners, distribute surplus votes of winners in order of descending surplus
+                    # number of ballots equal to the surplus draw at random from winners ballots
+                    # and redistributed
+                    ballots = winner.ballots.all()
+                    redist_indices = random.sample(range(ballots.count()), surplus)
+                    for i in redist_indices:
+                        # For each selected ballot, transfer it to next priority alternative
+                        ballot = ballots[i]
+                        pri = ballot.entries.get(alternative=winner).priority
+                        next_prioritezed_alt = ballot.entries.get(priority=pri+1).alternative
+                        ballot.alternative = next_prioritezed_alt
+                if len(winners) < self.num_winners and self.get_total_votes() > quota:
+                    # Find loser
+                    loser = alternatives[0]
+                    i = 1
+                    while loser in losers:
+                        loser = alternatives[i]
+                        i+=1
+                    for alt in alternatives[i:]:
+                        if loser.ballots.all().count() > alt.ballots.all().count():
+                            if not alt in losers:
+                                loser = alt
+                    losers.append(loser)
+                    # Redistribute all losers votes
+                    for ballot in loser.ballots.all():
+                        pri = ballot.entries.get(alternative=loser).priority
+                        next_prioritezed_alt = ballot.entries.get(priority=pri+1).alternative
+                        ballot.alternative = next_prioritezed_alt
+                if len(losers) + len(winners) >= alternatives.count() and len(winners) < self.num_winners:
+                    break
+        return winners
 
 
 class Alternative(models.Model):
@@ -201,6 +221,7 @@ class BallotContainer(models.Model):
     has alt2 as first choice, alt1 as second choice and alt3 as third choice
     """
     voting = models.ForeignKey(Voting, on_delete=models.CASCADE, related_name="ballots")
+    alternative = models.ForeignKey(Alternative, on_delete=models.CASCADE, related_name="ballots")
 
 
 class BallotEntry(models.Model):
