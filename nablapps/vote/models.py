@@ -1,3 +1,5 @@
+import random
+
 from django.conf import settings
 from django.db import models
 
@@ -48,8 +50,13 @@ class VotingDeactive(Exception):
 class DuplicatePriorities(Exception):
     """Raised if users tries to submit a STV ballot with dubplicate canditate(s) accross priorities"""
 
+
 class UnableToSelectWinners(Exception):
     """Raised if unable to select winners in multi winner election"""
+
+
+class VoteDistributionError(Exception):
+    """Raised if unable to find winners"""
 
 
 class Voting(models.Model):
@@ -88,7 +95,7 @@ class Voting(models.Model):
         return self.users_voted.all().count()
 
     def get_num_alternatives(self):
-        """ Returns the number of related/belinging alternatives"""
+        """Returns the number of related/belinging alternatives"""
         return len(self.alternatives.all())
 
     def activate(self):
@@ -109,7 +116,7 @@ class Voting(models.Model):
             return False
 
     def submit_stv_votes(self, user, ballot):
-        """ Submits transferable votes """
+        """Submits transferable votes"""
         alt_pks = [int(ballot[pri]) for pri in ballot]
         if len(alt_pks) != len(set(alt_pks)):
             raise DuplicatePriorities(f"Ballot contains duplicate(s) of candidates")
@@ -119,17 +126,26 @@ class Voting(models.Model):
         new_ballot.save()
         for (alt_pk, pri) in zip(alt_pks, ballot):
             alt = Alternative.objects.get(pk=alt_pk)
-            new_entry = BallotEntry.objects.create(container=new_ballot, priority=pri, alternative=alt)
+            new_entry = BallotEntry.objects.create(
+                container=new_ballot, priority=pri, alternative=alt
+            )
             new_entry.save()
             self.users_voted.add(user)
 
     def get_multi_winner_result(self):
         """Declare multples winners using a single transferable votes system"""
         alternatives = self.alternatives.all()
-        quota = int(self.get_total_votes()/alternatives.count()+1) + 1 # Droop quota
+        quota = (
+            int(self.get_total_votes() / (alternatives.count() + 1)) + 1
+        )  # Droop quota
         winners = []
         losers = []
-        if self.get_total_votes() > quota:
+        for ballot in self.ballots.all():
+            # Reset all distribution
+            alt1 = ballot.entries.get(priority=1).alternative
+            ballot.alternative = alt1
+            ballot.save()
+        if self.get_total_votes() >= quota * self.num_winners:
             while len(winners) < self.num_winners:
                 new_winners = {}
                 # Find alternatives passing quota, add to winners
@@ -139,9 +155,11 @@ class Voting(models.Model):
                     if alt.ballots.all().count() >= quota:
                         num_surplus_votes = alt.ballots.all().count() - quota
                         new_winners[alt] = num_surplus_votes
-                        winners.append[alt]
+                        winners.append(alt)
                 # Sort winners and surpluses in order of descending surplus
-                new_winners_sorted = sorted(new_winners.items(), key=lambda x:x[1], reverse=True)
+                new_winners_sorted = sorted(
+                    new_winners.items(), key=lambda x: x[1], reverse=True
+                )
                 for winner, surplus in new_winners_sorted:
                     # For winners, distribute surplus votes of winners in order of descending surplus
                     # number of ballots equal to the surplus draw at random from winners ballots
@@ -152,15 +170,18 @@ class Voting(models.Model):
                         # For each selected ballot, transfer it to next priority alternative
                         ballot = ballots[i]
                         pri = ballot.entries.get(alternative=winner).priority
-                        next_prioritezed_alt = ballot.entries.get(priority=pri+1).alternative
+                        next_prioritezed_alt = ballot.entries.get(
+                            priority=pri + 1
+                        ).alternative
                         ballot.alternative = next_prioritezed_alt
+                        ballot.save()
                 if len(winners) < self.num_winners and self.get_total_votes() > quota:
                     # Find loser
                     loser = alternatives[0]
                     i = 1
                     while loser in losers:
                         loser = alternatives[i]
-                        i+=1
+                        i += 1
                     for alt in alternatives[i:]:
                         if loser.ballots.all().count() > alt.ballots.all().count():
                             if not alt in losers:
@@ -169,11 +190,22 @@ class Voting(models.Model):
                     # Redistribute all losers votes
                     for ballot in loser.ballots.all():
                         pri = ballot.entries.get(alternative=loser).priority
-                        next_prioritezed_alt = ballot.entries.get(priority=pri+1).alternative
+                        next_prioritezed_alt = ballot.entries.get(
+                            priority=pri + 1
+                        ).alternative
                         ballot.alternative = next_prioritezed_alt
-                if len(losers) + len(winners) >= alternatives.count() and len(winners) < self.num_winners:
+                        ballot.save()
+                if (
+                    len(losers) + len(winners) >= alternatives.count()
+                    and len(winners) < self.num_winners
+                ):
                     break
-        return winners
+        if len(winners) == self.num_winners:
+            return winners
+        elif len(winners) == 0:
+            return []
+        else:
+            raise VoteDistributionError(f"Error distributing STV votes: {winners}")
 
 
 class Alternative(models.Model):
@@ -210,7 +242,7 @@ class Alternative(models.Model):
 
 
 class BallotContainer(models.Model):
-    """ 
+    """
     Dictonary like model storing ballot with priority and alternative
 
     E.g. for
@@ -220,12 +252,18 @@ class BallotContainer(models.Model):
 
     has alt2 as first choice, alt1 as second choice and alt3 as third choice
     """
+
     voting = models.ForeignKey(Voting, on_delete=models.CASCADE, related_name="ballots")
-    alternative = models.ForeignKey(Alternative, on_delete=models.CASCADE, related_name="ballots")
+    alternative = models.ForeignKey(
+        Alternative, on_delete=models.CASCADE, related_name="ballots"
+    )
 
 
 class BallotEntry(models.Model):
-    """ priority and # 'votes' as key:value """
-    container = models.ForeignKey(BallotContainer, on_delete=models.CASCADE, related_name="entries")
+    """priority and # 'votes' as key:value"""
+
+    container = models.ForeignKey(
+        BallotContainer, on_delete=models.CASCADE, related_name="entries"
+    )
     priority = models.IntegerField()
     alternative = models.ForeignKey(Alternative, on_delete=models.CASCADE)

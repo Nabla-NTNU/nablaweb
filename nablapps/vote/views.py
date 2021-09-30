@@ -8,7 +8,14 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from .forms import AlternativeFormset
-from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, VotingEvent, DuplicatePriorities
+from .models import (
+    Alternative,
+    DuplicatePriorities,
+    UserAlreadyVoted,
+    Voting,
+    VotingDeactive,
+    VotingEvent,
+)
 
 ####################
 ### Admin views ####
@@ -138,9 +145,23 @@ class VotingDetail(PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["is_admin"] = self.request.user.has_perm("vote.vote_admin")
+        if self.request.method == "POST":
+            context["winners"] = self.object.get_multi_winner_result()
+            print(self.object.get_multi_winner_result())
         if self.object.num_winners > 1:
-            context["quota"] = int(self.object.get_total_votes()/self.object.alternatives.all().count()+1) + 1
+            context["quota"] = (
+                int(
+                    self.object.get_total_votes()
+                    / (self.object.alternatives.all().count() + 1)
+                )
+                + 1
+            )
         return context
+
+    def post(self, request, *args, **kwargs):
+        # self.winners = self.get_object().get_multi_winner_result()
+        # return redirect("voting-detail", pk=kwargs['pk'])
+        return super().get(request, *args, **kwargs)
 
 
 @login_required
@@ -207,7 +228,9 @@ class Vote(LoginRequiredMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["has_voted"] = self.object.user_already_voted(self.request.user)
-        context["priorities"] = [i for i in range(1, self.object.get_num_alternatives()+1)]
+        context["priorities"] = [
+            i for i in range(1, self.object.get_num_alternatives() + 1)
+        ]
         return context
 
     def post(self, request, **kwargs):
@@ -219,12 +242,16 @@ class Vote(LoginRequiredMixin, DetailView):
             # Single transferable vote
             # Get list/dictonary of alternatives and priorities
             try:
-                priorities = [i for i in range(1, voting.get_num_alternatives()+1)]
+                priorities = [i for i in range(1, voting.get_num_alternatives() + 1)]
                 # ballot : {pri#:alternative.pk}
-                ballot = {pri: request.POST["priority"+str(pri)] for pri in priorities}
+                ballot = {
+                    pri: request.POST["priority" + str(pri)] for pri in priorities
+                }
                 voting.submit_stv_votes(request.user, ballot)
             except (KeyError, Alternative.DoesNotExist):
-                messages.warning(request, "Du har ikke valgt en kandidat til hver prioritet.")
+                messages.warning(
+                    request, "Du har ikke valgt en kandidat til hver prioritet."
+                )
                 return redirect("voting-vote", pk=voting_id)
             except UserAlreadyVoted:
                 messages.error(request, "Du har allerede stemt i denne avstemningen!")
@@ -233,7 +260,9 @@ class Vote(LoginRequiredMixin, DetailView):
                     request, "Denne avstemningen er ikke lenger åpen for stemming!"
                 )
             except DuplicatePriorities:
-                messages.warning(request, "Du kan ikke velge samme kandidat flere ganger!")
+                messages.warning(
+                    request, "Du kan ikke velge samme kandidat flere ganger!"
+                )
                 return redirect("voting-vote", pk=voting_id)
             else:
                 messages.success(

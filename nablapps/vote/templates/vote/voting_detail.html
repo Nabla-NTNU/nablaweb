@@ -18,12 +18,33 @@
         <a href="{% url "activate-voting" pk=object.pk redirect_to=request.path %}">Aktiver avstemningen</a>
     {% endif %}
 {% endif %}
+<form method="POST">
+    {% csrf_token %}
+    <button class="btn btn-primary btn-block" type="submit">Distribute votes</button>
+</form>
 <p>{{ object.description|markdown }}</p>
 <b>Totalt antall stemmer: {{ object.get_total_votes }}</b>
 <br>
 <b>Antall vinnere: {{ object.num_winners }}</b>
 <br>
 <b>quota(vinnergrense): {{ quota }}</b>
+<br>
+<br>
+
+<h3> VINNERE: </h3>
+{% if winners %}
+<ul>
+{% for winner in winners %}
+    <li>{{ winner }}</li>
+{% endfor %}
+</ul>
+{% else %}
+    Vinnere ikke beregnet
+{% endif %}
+<br>
+<br>
+
+<h3> Kandidater: </h3>
 
 {% for alternative in object.alternatives.all %}
     {% if object.num_winners > 1 %}
