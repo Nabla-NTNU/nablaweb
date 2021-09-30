@@ -135,9 +135,7 @@ class Voting(models.Model):
     def get_multi_winner_result(self):
         """Declare multples winners using a single transferable votes system"""
         alternatives = self.alternatives.all()
-        quota = (
-            int(self.get_total_votes() / (alternatives.count() + 1)) + 1
-        )  # Droop quota
+        quota = int(self.get_total_votes() / (self.num_winners + 1)) + 1  # Droop quota
         winners = []
         losers = []
         for ballot in self.ballots.all():

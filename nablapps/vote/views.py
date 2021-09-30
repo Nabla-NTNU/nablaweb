@@ -150,11 +150,7 @@ class VotingDetail(PermissionRequiredMixin, DetailView):
             print(self.object.get_multi_winner_result())
         if self.object.num_winners > 1:
             context["quota"] = (
-                int(
-                    self.object.get_total_votes()
-                    / (self.object.alternatives.all().count() + 1)
-                )
-                + 1
+                int(self.object.get_total_votes() / (self.object.num_winners + 1)) + 1
             )
         return context
 
