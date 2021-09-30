@@ -132,7 +132,7 @@ class CodeTaskListView(ListView):
                 user_results.append("--")
 
         tasks = zip(task_list, best_results, user_results)
-        newest_task = task_list[0]
+        newest_task = task_list.first()
 
         context["newest_task"] = newest_task
         context["tasks"] = tasks
