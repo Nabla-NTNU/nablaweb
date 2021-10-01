@@ -41,6 +41,16 @@ class UserForm(forms.ModelForm):
         ),
     )
 
+    ntnu_card_number = forms.CharField(
+        help_text=(
+            "Dette er et 7-10-sifret nummer på baksiden av kortet. "
+            "På nye kort er dette sifrene etter EM. "
+            "På gamle kort er dette sifrene nede til venstre. "
+            "Det kan brukes of å identifisere deg på bedriftspresentasjoner og andre arrangementer. "
+            "<img style='padding-top:10px;' src='/static/img/ntnu_card_number.png' height = 180> </img>"
+        )
+    )
+
 
 class RegistrationForm(forms.Form):
     """Form used to activate a new user or send a registration request."""
