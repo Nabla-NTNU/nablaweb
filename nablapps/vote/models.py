@@ -132,60 +132,88 @@ class Voting(models.Model):
             new_entry.save()
             self.users_voted.add(user)
 
+    def multi_winnner_initial_dist(self):
+        """Initial distribution of votes according to first priority"""
+        for ballot in self.ballots.all():
+            alt1 = ballot.entries.get(priority=1).alternative
+            ballot.alternative = alt1
+            ballot.save()
+
     def get_multi_winner_result(self):
         """Declare multples winners using a single transferable votes system"""
         alternatives = self.alternatives.all()
         quota = int(self.get_total_votes() / (self.num_winners + 1)) + 1  # Droop quota
         winners = []
         losers = []
-        for ballot in self.ballots.all():
-            # Reset all distribution
-            alt1 = ballot.entries.get(priority=1).alternative
-            ballot.alternative = alt1
-            ballot.save()
+
+        self.multi_winnner_initial_dist()
+
+        # Find winners, transfer votes and eliminate losers if necessary
         if self.get_total_votes() >= quota * self.num_winners:
-            while len(winners) < self.num_winners:
-                new_winners = {}
-                # Find alternatives passing quota, add to winners
-                for alt in alternatives:
-                    if alt in winners:
+            # Vote count is sufficient to declare winners
+
+            # Loop through number of losing alternatives
+            for i in range(self.get_total_votes() - self.num_winners):
+                # Find winners, redistribute surpluses until no more winners found
+                # If not enough winners are found, then proceed to loser elimination
+                for j in range(self.num_winners):
+                    new_winners = {}  # New winners found this round {alt: surplus}
+
+                    # Find alternatives passing quota, add to winners
+                    for alt in alternatives:
+                        if alt in winners:
+                            # Can't win twice
+                            pass
+                        elif alt.ballots.all().count() >= quota:
+                            # declare alt as a winner, find surplus
+                            num_surplus_votes = alt.ballots.all().count() - quota
+                            new_winners[alt] = num_surplus_votes
+                            winners.append(alt)
+                    if len(new_winners) == 0:
+                        # No winners, need to eliminate loser
                         break
-                    if alt.ballots.all().count() >= quota:
-                        num_surplus_votes = alt.ballots.all().count() - quota
-                        new_winners[alt] = num_surplus_votes
-                        winners.append(alt)
-                # Sort winners and surpluses in order of descending surplus
-                new_winners_sorted = sorted(
-                    new_winners.items(), key=lambda x: x[1], reverse=True
-                )
-                for winner, surplus in new_winners_sorted:
-                    # For winners, distribute surplus votes of winners in order of descending surplus
-                    # number of ballots equal to the surplus draw at random from winners ballots
-                    # and redistributed
-                    ballots = winner.ballots.all()
-                    redist_indices = random.sample(range(ballots.count()), surplus)
-                    for i in redist_indices:
-                        # For each selected ballot, transfer it to next priority alternative
-                        ballot = ballots[i]
-                        pri = ballot.entries.get(alternative=winner).priority
-                        next_prioritezed_alt = ballot.entries.get(
-                            priority=pri + 1
-                        ).alternative
-                        ballot.alternative = next_prioritezed_alt
-                        ballot.save()
-                if len(winners) < self.num_winners and self.get_total_votes() > quota:
-                    # Find loser
-                    loser = alternatives[0]
-                    i = 1
-                    while loser in losers:
-                        loser = alternatives[i]
-                        i += 1
-                    for alt in alternatives[i:]:
+
+                    # Sort winners and surpluses in order of descending surplus
+                    new_winners_sorted = sorted(
+                        new_winners.items(), key=lambda x: x[1], reverse=True
+                    )
+
+                    # For winners distribute surplus votes in order of descending surplus
+                    for winner, surplus_count in new_winners_sorted:
+                        # Random sample N ballots from winners votes
+                        # N = num_surplus_votes = winner's votes - quota
+                        winner_ballots = winner.ballots.all()
+                        redist_indices = random.sample(
+                            range(winner_ballots.count() - 1), surplus_count
+                        )
+                        for i in redist_indices:
+                            # For each selected ballot, transfer it to next priority alternative
+                            ballot = winner_ballots[i]
+                            pri = ballot.entries.get(alternative=winner).priority
+                            if pri == self.get_num_alternatives():
+                                # May happen if partial ballots are allowed
+                                raise VoteDistributionError(f"Ballot exhausted, allow?")
+                            next_prioritezed_alt = ballot.entries.get(
+                                priority=pri + 1
+                            ).alternative
+                            ballot.alternative = next_prioritezed_alt
+                            ballot.save()
+
+                # If not enough winners, eliminate 'biggest loser' and redistribute votes
+                if len(winners) < self.num_winners:
+                    # First find 'biggest' loser
+                    # probably a more elegant way to do this
+                    remaining_alts = [alt for alt in alternatives if alt not in winners]
+                    remaining_alts = [
+                        alt for alt in remaining_alts if alt not in losers
+                    ]
+                    loser = remaining_alts[0]
+                    for alt in remaining_alts[i:]:
                         if loser.ballots.all().count() > alt.ballots.all().count():
-                            if not alt in losers:
-                                loser = alt
+                            loser = alt
                     losers.append(loser)
-                    # Redistribute all losers votes
+
+                    # Redistribute all losers votes (consider different method?)
                     for ballot in loser.ballots.all():
                         pri = ballot.entries.get(alternative=loser).priority
                         next_prioritezed_alt = ballot.entries.get(
@@ -193,17 +221,29 @@ class Voting(models.Model):
                         ).alternative
                         ballot.alternative = next_prioritezed_alt
                         ballot.save()
-                if (
-                    len(losers) + len(winners) >= alternatives.count()
-                    and len(winners) < self.num_winners
-                ):
+                elif len(winners) == self.num_winners:
                     break
-        if len(winners) == self.num_winners:
-            return winners
-        elif len(winners) == 0:
-            return []
+                elif self.num_winners - len(winners) == alternatives.count() - len(
+                    losers
+                ) - len(winners):
+                    # Declare remainders as winners
+                    remaining_alts = [alt for alt in alternatives if alt not in winners]
+                    remaining_alts = [
+                        alt for alt in remaining_alts if alt not in losers
+                    ]
+                    winners += remaining_alts
+                else:
+                    raise VoteDistributionError(f"To many winners: {winners}")
+            if len(winners) == self.num_winners:
+                return winners
+            elif len(winners) > self.num_winners:
+                raise VoteDistributionError(f"To many winners: {winners}")
+            else:
+                raise VoteDistributionError(
+                    f"To few winners: {winners}, loser: {losers}"
+                )
         else:
-            raise VoteDistributionError(f"Error distributing STV votes: {winners}")
+            return [f"Not enough votes to declare {self.num_winners} winners"]
 
 
 class Alternative(models.Model):

@@ -33,13 +33,18 @@
 
 <h3> VINNERE: </h3>
 {% if winners %}
+<div class="alert alert-success" role="alert">
 <ul>
 {% for winner in winners %}
+
     <li>{{ winner }}</li>
 {% endfor %}
 </ul>
+</div>
 {% else %}
+<div class="alert alert-primary" role="alert">
     Vinnere ikke beregnet
+</div>
 {% endif %}
 <br>
 <br>

@@ -145,9 +145,12 @@ class VotingDetail(PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["is_admin"] = self.request.user.has_perm("vote.vote_admin")
+
         if self.request.method == "POST":
             context["winners"] = self.object.get_multi_winner_result()
             print(self.object.get_multi_winner_result())
+        else:
+            self.object.multi_winnner_initial_dist()
         if self.object.num_winners > 1:
             context["quota"] = (
                 int(self.object.get_total_votes() / (self.object.num_winners + 1)) + 1
@@ -155,8 +158,6 @@ class VotingDetail(PermissionRequiredMixin, DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        # self.winners = self.get_object().get_multi_winner_result()
-        # return redirect("voting-detail", pk=kwargs['pk'])
         return super().get(request, *args, **kwargs)
 
 
