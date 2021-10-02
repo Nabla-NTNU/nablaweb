@@ -47,7 +47,7 @@ class UserForm(forms.ModelForm):
             "På nye kort er dette sifrene etter EM. "
             "På gamle kort er dette sifrene nede til venstre. "
             "Det kan brukes of å identifisere deg på bedriftspresentasjoner og andre arrangementer. "
-            "<img style='padding-top:10px;' src='/static/img/ntnu_card_number.png' height = 180> </img>"
+            "<img style='padding-top:10px;' alt=' ' src='/static/img/ntnu_card_number.png' height = 180> </img>"
         )
     )
 
