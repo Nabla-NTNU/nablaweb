@@ -51,11 +51,16 @@ Nablaweb følger en PEP8 substil som heter Black.
 Vi bruker Black og isort for å formatere koden.
 flake8 brukes til kontroll av formatering.
 
-For å formatere koden din:
- - `make fixme` formaterer feil i koden din.
- - `make check` kontrollerer at du har korrekt formatert kode.
+For å kjøre Black og isort automatisk når du commiter kan du kjøre
+```shell
+pipenv run pre-commit install
+```
 
-Alltid kjør `make check` før du pusher kode.
+Alternativt kan du manuelt kjøre:
+ - `make fixme`: formaterer feil i koden din.
+ - `make check`: kontrollerer at du har korrekt formatert kode.
+
+Pass på at koden er formatert riktig før du pusher den.
 
 
 ## Standard mappestruktur i Django (de fleste Django-apps, f.eks. nablapps/accounts) ##
