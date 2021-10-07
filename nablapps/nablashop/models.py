@@ -42,29 +42,31 @@ class Product(models.Model):
         return self.name
 
     def get_add_to_cart_url(self):
-        return reverse("nablashop:add-to-cart", kwargs={'slug': self.slug})
+        return reverse("nablashop:add-to-cart", kwargs={"slug": self.slug})
 
     def get_remove_from_cart_url(self):
-        return reverse("nablashop:remove-from-cart", kwargs={'slug': self.slug})
+        return reverse("nablashop:remove-from-cart", kwargs={"slug": self.slug})
 
     class Meta:
         verbose_name = "Produkt"
         verbose_name_plural = "Produkter"
+
 
 class OrderProduct(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
     product = models.ForeignKey(Product, on_delete=CASCADE)
     quantity = models.IntegerField(default=1)
-    
+
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"
 
     def get_total_product_price(self):
-        return self.quantity*self.product.price
+        return self.quantity * self.product.price
 
     def get_final_price(self):
         return self.get_total_product_price()
+
 
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -75,7 +77,7 @@ class Order(models.Model):
 
     def __str__(self):
         return self.user.username
-    
+
     def get_total(self):
         total = 0
         for order_product in self.products.all():

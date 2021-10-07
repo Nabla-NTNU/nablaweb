@@ -38,10 +38,13 @@ class CategoryDetailView(DetailView):
         context["products"] = self.object.product_set.order_by("-pub_date")
         return context
 
+
 @login_required
 def add_to_cart(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    order_product, created = OrderProduct.objects.get_or_create(product=product, user=request.user, ordered=False)
+    order_product, created = OrderProduct.objects.get_or_create(
+        product=product, user=request.user, ordered=False
+    )
     order_qs = Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
@@ -61,6 +64,7 @@ def add_to_cart(request, slug):
         messages.info(request, "Varen ble lagt til i handlevognen.")
         return redirect("nablashop:order-summary")
 
+
 @login_required
 def remove_from_cart(request, slug):
     product = get_object_or_404(Product, slug=slug)
@@ -68,7 +72,9 @@ def remove_from_cart(request, slug):
     if order_qs.exists():
         order = order_qs[0]
         if order.products.filter(product__slug=product.slug).exists():
-            order_product = OrderProduct.objects.filter(product=product, user=request.user, ordered=False)[0]
+            order_product = OrderProduct.objects.filter(
+                product=product, user=request.user, ordered=False
+            )[0]
             order.products.remove(order_product)
             messages.info(request, "Varen ble fjernet fra handlevognen")
             return redirect("nablashop:order-summary")
@@ -84,13 +90,12 @@ class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
-            context = {
-                'object': order
-            }
-            return render(self.request, 'order_summary.html', context)
+            context = {"object": order}
+            return render(self.request, "order_summary.html", context)
         except ObjectDoesNotExist:
             messages.error(self.request, "Du har ingen aktiv ordre")
-            return redirect("/") 
+            return redirect("/")
+
 
 @login_required
 def remove_single_product_from_cart(request, slug):
@@ -99,7 +104,9 @@ def remove_single_product_from_cart(request, slug):
     if order_qs.exists():
         order = order_qs[0]
         if order.products.filter(product__slug=product.slug).exists():
-            order_product = OrderProduct.objects.filter(product=product, user=request.user, ordered=False)[0]
+            order_product = OrderProduct.objects.filter(
+                product=product, user=request.user, ordered=False
+            )[0]
             if order_product.quantity > 1:
                 order_product.quantity -= 1
                 order_product.save()

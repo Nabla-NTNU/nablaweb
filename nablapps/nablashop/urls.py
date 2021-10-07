@@ -1,6 +1,14 @@
 from django.urls import path
 
-from .views import CategoryDetailView, IndexView, ProductDetailView, add_to_cart, remove_from_cart, OrderSummaryView, remove_single_product_from_cart 
+from .views import (
+    CategoryDetailView,
+    IndexView,
+    ProductDetailView,
+    add_to_cart,
+    remove_from_cart,
+    OrderSummaryView,
+    remove_single_product_from_cart,
+)
 
 app_name = "nablashop"
 urlpatterns = [
@@ -15,16 +23,12 @@ urlpatterns = [
         view=CategoryDetailView.as_view(),
         name="category_detail",
     ),
+    path("add-to-cart/<slug>/", add_to_cart, name="add-to-cart"),
+    path("remove-from-cart/<slug>/", remove_from_cart, name="remove-from-cart"),
+    path("order-summary/", OrderSummaryView.as_view(), name="order-summary"),
     path(
-        "add-to-cart/<slug>/", add_to_cart, name='add-to-cart'
+        "remove-product-from-cart/<slug>/",
+        remove_single_product_from_cart,
+        name="remove-single-product-from-cart",
     ),
-    path(
-        "remove-from-cart/<slug>/", remove_from_cart, name='remove-from-cart'
-    ),
-    path(
-        "order-summary/", OrderSummaryView.as_view(), name='order-summary'
-    ),
-    path(
-        "remove-product-from-cart/<slug>/", remove_single_product_from_cart, name='remove-single-product-from-cart'
-    )
 ]
