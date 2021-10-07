@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <div class="container" >
+
+        <div class="table-responsive text nowrap">
+        <h2>Oppsummering</h2>
+        <table class="table caption-top">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Produktnavn</th>
+                <th scope="col">Pris</th>
+                <th scope="col">Antall</th>
+                <th scope="col">Total pris</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for order_product in object.products.all %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{order_product.product.name}}</td>
+                <td>{{order_product.product.price}} kr</td>
+                <td>
+                    <a href="{% url 'nablashop:remove-single-product-from-cart' order_product.product.slug %}"><i class="fas fa-minus mr-2"></i></a>
+                    {{order_product.quantity}}
+                    <a href="{% url 'nablashop:add-to-cart' order_product.product.slug %}"><i class="fas fa-plus ml-2"></i></a>
+                </td>
+                <td>{{order_product.get_total_product_price}} kr <a style='color: red' href="{% url 'nablashop:remove-from-cart' order_product.product.slug %}"><i class="fas fa-trash float-right"></i></a></td>
+              </tr>
+              {% empty %}
+              <tr>
+                  <td colspan="5">Handlevognen er tom</td>
+              </tr>
+              <td colspan="5">
+                <a class='btn btn-primary float-right' href='/shop/'>Fortsett å kjøpe</a>
+            </td>
+              {% endfor %}
+
+              <tr>
+                <td colspan="4"><b>Totalt</b></td>
+                <td colspan="5"><b>{{ object.get_total }} kr</b></td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <a class='btn btn-warning float-right ml-2' href='/checkout/'>Betaling</a>
+                    <a class='btn btn-primary float-right' href='/shop/'>Fortsett å kjøpe</a>
+                </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
