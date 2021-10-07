@@ -1,4 +1,5 @@
 from django import template
+
 from nablapps.nablashop.models import Order
 
 register = template.Library()

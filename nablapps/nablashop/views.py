@@ -1,11 +1,12 @@
 from django.contrib import messages
-from django.views.generic import DetailView, ListView, View
-from django.shortcuts import get_object_or_404, redirect, render
-from django.utils import timezone
-from .models import Category, Product, OrderProduct, Order
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+from django.views.generic import DetailView, ListView, View
+
+from .models import Category, Order, OrderProduct, Product
 
 
 class IndexView(ListView):
