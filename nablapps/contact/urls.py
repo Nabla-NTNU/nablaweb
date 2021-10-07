@@ -12,4 +12,5 @@ urlpatterns = [
         name="gullkorn",
     ),
     path("success/", views.success, name="success"),
+    path("success_gullkorn/", views.success_gullkorn, name="success_gullkorn"),
 ]
