@@ -12,12 +12,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="nablad",
-            name="publication_date",
-        ),
-        migrations.RemoveField(
-            model_name="nablad",
-            name="published",
-        ),
+        migrations.RemoveField(model_name="nablad", name="publication_date",),
+        migrations.RemoveField(model_name="nablad", name="published",),
     ]

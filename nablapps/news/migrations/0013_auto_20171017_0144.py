@@ -13,10 +13,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameModel(
-            old_name="News",
-            new_name="FrontPageNews",
-        ),
+        migrations.RenameModel(old_name="News", new_name="FrontPageNews",),
         migrations.AlterModelOptions(
             name="frontpagenews",
             options={
@@ -25,10 +22,7 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "Forsidenyheter",
             },
         ),
-        migrations.AlterModelTable(
-            name="frontpagenews",
-            table=None,
-        ),
+        migrations.AlterModelTable(name="frontpagenews", table=None,),
         migrations.AlterField(
             model_name="frontpagenews",
             name="created_date",

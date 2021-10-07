@@ -7,9 +7,5 @@ from .views import NabladDetailView, NabladList
 
 urlpatterns = [
     path("", NabladList.as_view(), name="nablad_list"),
-    path(
-        "<int:pk>/<str:slug>/",
-        NabladDetailView.as_view(),
-        name="nablad_detail",
-    ),
+    path("<int:pk>/<str:slug>/", NabladDetailView.as_view(), name="nablad_detail",),
 ]

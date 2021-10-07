@@ -33,11 +33,7 @@ class TextContent(models.Model):
         blank=True,
         help_text="Vises på forsiden og i artikkelen",
     )
-    body = RichTextField(
-        config_name="basic",
-        verbose_name="brødtekst",
-        blank=True,
-    )
+    body = RichTextField(config_name="basic", verbose_name="brødtekst", blank=True,)
 
     slug = models.SlugField(null=True, blank=True)
 

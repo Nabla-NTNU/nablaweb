@@ -18,12 +18,7 @@ class Blog(models.Model):
 
     name = models.CharField(max_length=80, verbose_name="Navn")
 
-    slug = models.SlugField(
-        unique=True,
-        blank=True,
-        null=True,
-        editable=True,
-    )
+    slug = models.SlugField(unique=True, blank=True, null=True, editable=True,)
 
     created = models.DateField(auto_now_add=True, verbose_name="Opprettet")
 
@@ -57,11 +52,7 @@ class BlogPost(TimeStamped, models.Model):
 
     title = models.CharField(max_length=80, verbose_name="Tittel")
 
-    slug = models.SlugField(
-        unique=True,
-        blank=True,
-        editable=True,
-    )
+    slug = models.SlugField(unique=True, blank=True, editable=True,)
 
     content = models.TextField(
         verbose_name="Innhold", help_text="Her kan du skrive i Markdown"

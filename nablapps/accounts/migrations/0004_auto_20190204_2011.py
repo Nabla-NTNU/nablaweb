@@ -13,15 +13,11 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelManagers(
             name="fysmatclass",
-            managers=[
-                ("objects", django.contrib.auth.models.GroupManager()),
-            ],
+            managers=[("objects", django.contrib.auth.models.GroupManager()),],
         ),
         migrations.AlterModelManagers(
             name="nablagroup",
-            managers=[
-                ("objects", django.contrib.auth.models.GroupManager()),
-            ],
+            managers=[("objects", django.contrib.auth.models.GroupManager()),],
         ),
         migrations.AlterField(
             model_name="nablauser",

@@ -29,9 +29,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={
-                "abstract": False,
-            },
+            options={"abstract": False,},
         ),
         migrations.CreateModel(
             name="Quiz",
@@ -135,10 +133,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={
-                "verbose_name": "Quiz",
-                "verbose_name_plural": "Quizer",
-            },
+            options={"verbose_name": "Quiz", "verbose_name_plural": "Quizer",},
         ),
         migrations.CreateModel(
             name="QuizQuestion",
@@ -218,10 +213,7 @@ class Migration(migrations.Migration):
                 ("score", models.IntegerField(null=True, blank=True)),
                 ("start", models.DateTimeField(null=True, blank=True)),
             ],
-            options={
-                "verbose_name": "Resultat",
-                "verbose_name_plural": "Resultater",
-            },
+            options={"verbose_name": "Resultat", "verbose_name_plural": "Resultater",},
         ),
         migrations.CreateModel(
             name="QuestionReply",
@@ -619,8 +611,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.AlterUniqueTogether(
-            name="adventdoor",
-            unique_together=set([("number", "calendar")]),
+            name="adventdoor", unique_together=set([("number", "calendar")]),
         ),
         migrations.CreateModel(
             name="AdventParticipation",
@@ -651,8 +642,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={
-                "abstract": False,
-            },
+            options={"abstract": False,},
         ),
     ]

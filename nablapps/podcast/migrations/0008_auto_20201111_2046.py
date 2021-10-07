@@ -12,10 +12,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="podcast",
-            name="extra_markdown",
-        ),
+        migrations.RemoveField(model_name="podcast", name="extra_markdown",),
         migrations.AlterField(
             model_name="podcast",
             name="description",

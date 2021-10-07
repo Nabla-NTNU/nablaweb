@@ -25,9 +25,7 @@ class PlaceGrid(models.Model):
 
     enabled = models.BooleanField(default=True)
 
-    publish_date = models.DateTimeField(
-        verbose_name="Slippdato",
-    )
+    publish_date = models.DateTimeField(verbose_name="Slippdato",)
 
     created = models.DateTimeField(auto_now_add=True)
 

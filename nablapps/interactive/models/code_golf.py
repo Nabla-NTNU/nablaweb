@@ -30,14 +30,8 @@ class Result(models.Model):
     Users solution to a CodeTask
     """
 
-    task = models.ForeignKey(
-        CodeTask,
-        on_delete=models.CASCADE,
-    )
-    user = models.ForeignKey(
-        NablaUser,
-        on_delete=models.CASCADE,
-    )
+    task = models.ForeignKey(CodeTask, on_delete=models.CASCADE,)
+    user = models.ForeignKey(NablaUser, on_delete=models.CASCADE,)
     solution = models.TextField(default="")  # Users code
 
     @property

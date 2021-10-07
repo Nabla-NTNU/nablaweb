@@ -12,24 +12,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="advert",
-            name="cropping",
-        ),
-        migrations.RemoveField(
-            model_name="advert",
-            name="picture",
-        ),
-        migrations.RemoveField(
-            model_name="advert",
-            name="publication_date",
-        ),
-        migrations.RemoveField(
-            model_name="advert",
-            name="published",
-        ),
-        migrations.RemoveField(
-            model_name="advert",
-            name="view_counter",
-        ),
+        migrations.RemoveField(model_name="advert", name="cropping",),
+        migrations.RemoveField(model_name="advert", name="picture",),
+        migrations.RemoveField(model_name="advert", name="publication_date",),
+        migrations.RemoveField(model_name="advert", name="published",),
+        migrations.RemoveField(model_name="advert", name="view_counter",),
     ]

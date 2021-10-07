@@ -48,10 +48,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--delete",
-            dest="delete",
-            default=True,
-            help="Delete existing data",
+            "--delete", dest="delete", default=True, help="Delete existing data",
         )
 
     def handle(self, *args, **options):

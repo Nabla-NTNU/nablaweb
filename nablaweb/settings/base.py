@@ -168,9 +168,7 @@ FILEBROWSER_DIRECTORY = ""
 # ckeditor
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {
-    "default": {
-        "toolbar": [],
-    },
+    "default": {"toolbar": [],},
     "basic": {
         "toolbar": "Basic",
         "toolbar_Basic": [
@@ -197,17 +195,8 @@ CKEDITOR_CONFIGS = {
                     "JustifyRight",
                 ],
             },
-            {
-                "name": "links",
-                "items": ["Link", "Unlink", "Anchor"],
-            },
-            {
-                "name": "source",
-                "items": [
-                    "Maximize",
-                    "Source",
-                ],
-            },
+            {"name": "links", "items": ["Link", "Unlink", "Anchor"],},
+            {"name": "source", "items": ["Maximize", "Source",],},
             {
                 "name": "styles",
                 "items": [
@@ -223,13 +212,7 @@ CKEDITOR_CONFIGS = {
         "mathJaxLib": "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_SVG",
         "mathJaxClass": "mathjax-latex",
         "tabSpaces": 4,
-        "extraPlugins": ",".join(
-            [
-                "mathjax",
-                "codesnippet",
-                "embed",
-            ]
-        ),
+        "extraPlugins": ",".join(["mathjax", "codesnippet", "embed",]),
     },
 }
 

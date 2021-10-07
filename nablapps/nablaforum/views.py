@@ -43,9 +43,7 @@ class MainView(LoginRequiredMixin, TemplateView):
                     )
 
                     new_message = Message.objects.create(
-                        thread=new_thread,
-                        user=user,
-                        message=new_thread.text,
+                        thread=new_thread, user=user, message=new_thread.text,
                     )
                     new_message.read_by_user.add(user)
                 except ThreadCreationException:
