@@ -12,5 +12,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="event", name="view_counter",),
+        migrations.RemoveField(
+            model_name="event",
+            name="view_counter",
+        ),
     ]

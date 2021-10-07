@@ -26,6 +26,11 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(copy_like_presses),
-        migrations.RemoveField(model_name="likepress", name="user",),
-        migrations.DeleteModel(name="LikePress",),
+        migrations.RemoveField(
+            model_name="likepress",
+            name="user",
+        ),
+        migrations.DeleteModel(
+            name="LikePress",
+        ),
     ]

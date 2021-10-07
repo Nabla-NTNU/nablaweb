@@ -129,6 +129,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "valg", "verbose_name_plural": "valg",},
+            options={
+                "verbose_name": "valg",
+                "verbose_name_plural": "valg",
+            },
         ),
     ]

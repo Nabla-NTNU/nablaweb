@@ -64,7 +64,10 @@ class Exchange(models.Model):
     univ = models.ForeignKey(University, on_delete=models.CASCADE)
 
     retning = models.CharField(
-        max_length=6, blank=False, help_text="Retning", choices=RETNINGER,
+        max_length=6,
+        blank=False,
+        help_text="Retning",
+        choices=RETNINGER,
     )
 
     start = models.DateField(
@@ -100,8 +103,16 @@ class Exchange(models.Model):
 
 class Subject(models.Model):
     exchange = models.ForeignKey(Exchange, on_delete=models.CASCADE)
-    code = models.CharField(max_length=50, blank=False, verbose_name="Emnekode",)
-    name = models.CharField(max_length=50, blank=False, verbose_name="Emnenavn",)
+    code = models.CharField(
+        max_length=50,
+        blank=False,
+        verbose_name="Emnekode",
+    )
+    name = models.CharField(
+        max_length=50,
+        blank=False,
+        verbose_name="Emnenavn",
+    )
 
     def __str__(self):
         return f"{self.code} {self.name}"

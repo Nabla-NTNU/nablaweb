@@ -17,6 +17,8 @@ urlpatterns = [
     path("bruker/", UserPollsView.as_view(), name="poll_user"),
     path("bruker/ny/", CreateUserPollView.as_view(), name="poll_user_create"),
     path(
-        "bruker/slett/<int:pk>/", DeleteUserPollView.as_view(), name="poll_user_delete",
+        "bruker/slett/<int:pk>/",
+        DeleteUserPollView.as_view(),
+        name="poll_user_delete",
     ),
 ]

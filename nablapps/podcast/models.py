@@ -10,7 +10,10 @@ def get_season_count():
 
 
 class Season(models.Model):
-    number = models.IntegerField(verbose_name="Sesongnummer", unique=True,)
+    number = models.IntegerField(
+        verbose_name="Sesongnummer",
+        unique=True,
+    )
 
     banner = models.ImageField(
         upload_to="podcast/images",
@@ -104,7 +107,11 @@ class Podcast(models.Model):
         blank=True,
     )
 
-    pub_date = models.DateTimeField(verbose_name="publisert", blank=False, null=True,)
+    pub_date = models.DateTimeField(
+        verbose_name="publisert",
+        blank=False,
+        null=True,
+    )
 
     file = models.FileField(
         upload_to="podcast",

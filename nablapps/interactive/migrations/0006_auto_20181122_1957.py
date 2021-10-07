@@ -37,6 +37,11 @@ class Migration(migrations.Migration):
                 ),
             ],
         ),
-        migrations.RemoveField(model_name="codegolfresult", name="task",),
-        migrations.DeleteModel(name="CodeGolfResult",),
+        migrations.RemoveField(
+            model_name="codegolfresult",
+            name="task",
+        ),
+        migrations.DeleteModel(
+            name="CodeGolfResult",
+        ),
     ]

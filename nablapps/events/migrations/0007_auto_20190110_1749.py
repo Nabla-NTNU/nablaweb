@@ -15,7 +15,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterUniqueTogether(
-            name="eventregistration", unique_together=set([("event", "user")]),
+            name="eventregistration",
+            unique_together=set([("event", "user")]),
         ),
         migrations.AlterModelOptions(
             name="eventregistration",
@@ -25,5 +26,8 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "påmeldte",
             },
         ),
-        migrations.RemoveField(model_name="eventregistration", name="number",),
+        migrations.RemoveField(
+            model_name="eventregistration",
+            name="number",
+        ),
     ]
