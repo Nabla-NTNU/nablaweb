@@ -35,7 +35,7 @@
                                 {% if podcast.has_video %}
                                 <span class="fas fa-film"></span>
                                 {% endif %}
-                            {% get_hit_count for podcast %} visninger.
+                            {% get_hit_count for podcast %} visninger | Utgitt:
                             {{ podcast.pub_date | date:"d.m.Y" }}
                             </span>
                         </a>
