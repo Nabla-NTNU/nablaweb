@@ -27,6 +27,7 @@ class PollAdmin(admin.ModelAdmin):
         "question",
         "answer",
         "is_current",
+        "randomise",
         "users_voted",
     ]
     readonly_fields = ["users_voted", "created_by"]

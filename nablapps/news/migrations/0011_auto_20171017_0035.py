@@ -13,23 +13,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name="news",
-            old_name="cropping",
-            new_name="cropping_override",
+            model_name="news", old_name="cropping", new_name="cropping_override",
         ),
         migrations.RenameField(
-            model_name="news",
-            old_name="picture",
-            new_name="picture_override",
+            model_name="news", old_name="picture", new_name="picture_override",
         ),
         migrations.RenameField(
-            model_name="news",
-            old_name="lead_paragraph",
-            new_name="text_override",
+            model_name="news", old_name="lead_paragraph", new_name="text_override",
         ),
         migrations.RenameField(
-            model_name="news",
-            old_name="headline",
-            new_name="title_override",
+            model_name="news", old_name="headline", new_name="title_override",
         ),
     ]

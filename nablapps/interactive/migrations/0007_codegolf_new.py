@@ -14,19 +14,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="result",
-            name="length",
-        ),
+        migrations.RemoveField(model_name="result", name="length",),
         migrations.AddField(
-            model_name="result",
-            name="solution",
-            field=models.TextField(default=""),
+            model_name="result", name="solution", field=models.TextField(default=""),
         ),
         migrations.AlterField(
-            model_name="codetask",
-            name="task",
-            field=models.TextField(),
+            model_name="codetask", name="task", field=models.TextField(),
         ),
         migrations.AlterField(
             model_name="result",

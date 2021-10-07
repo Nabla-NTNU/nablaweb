@@ -13,9 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name="channel",
-            old_name="is_pinned",
-            new_name="is_class",
+            model_name="channel", old_name="is_pinned", new_name="is_class",
         ),
         migrations.AlterField(
             model_name="thread",

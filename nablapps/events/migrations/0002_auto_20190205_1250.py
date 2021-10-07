@@ -10,12 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="event",
-            name="publication_date",
-        ),
-        migrations.RemoveField(
-            model_name="event",
-            name="published",
-        ),
+        migrations.RemoveField(model_name="event", name="publication_date",),
+        migrations.RemoveField(model_name="event", name="published",),
     ]

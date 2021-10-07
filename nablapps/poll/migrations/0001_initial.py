@@ -41,10 +41,7 @@ class Migration(migrations.Migration):
                     models.CharField(max_length=100, verbose_name="Lagt til av"),
                 ),
             ],
-            options={
-                "verbose_name": "valg",
-                "verbose_name_plural": "valg",
-            },
+            options={"verbose_name": "valg", "verbose_name_plural": "valg",},
             bases=(models.Model,),
         ),
         migrations.CreateModel(

@@ -12,34 +12,13 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="company",
-            name="created_by",
-        ),
-        migrations.RemoveField(
-            model_name="company",
-            name="created_date",
-        ),
-        migrations.RemoveField(
-            model_name="company",
-            name="last_changed_by",
-        ),
-        migrations.RemoveField(
-            model_name="company",
-            name="last_changed_date",
-        ),
-        migrations.RemoveField(
-            model_name="company",
-            name="publication_date",
-        ),
-        migrations.RemoveField(
-            model_name="company",
-            name="published",
-        ),
-        migrations.RemoveField(
-            model_name="company",
-            name="view_counter",
-        ),
+        migrations.RemoveField(model_name="company", name="created_by",),
+        migrations.RemoveField(model_name="company", name="created_date",),
+        migrations.RemoveField(model_name="company", name="last_changed_by",),
+        migrations.RemoveField(model_name="company", name="last_changed_date",),
+        migrations.RemoveField(model_name="company", name="publication_date",),
+        migrations.RemoveField(model_name="company", name="published",),
+        migrations.RemoveField(model_name="company", name="view_counter",),
         migrations.AlterField(
             model_name="company",
             name="slug",

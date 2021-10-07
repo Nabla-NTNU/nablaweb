@@ -1,6 +1,7 @@
 <form action="{% url "poll_vote" poll.id %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="next" value="{% firstof next request.path %}#{{ poll.id }}">
+    {% if poll.randomise %}
     {{ poll.randomise_poll }}
     {% for choice in poll.shuffled %}
         <div class="radio">
@@ -10,6 +11,16 @@
             </label>
         </div>
     {% endfor %}
+    {% else %}
+    {% for choice in poll.choices.all %}
+        <div class="radio">
+            <label>
+                <input type="radio" name="choice" value="{{ choice.id }}">
+                <span class="choice">{{ choice.choice }}</span>
+            </label>
+        </div>
+    {% endfor %}
+    {% endif %}
     {% if user.is_authenticated %}
         <button class="btn btn-default btn-block" type="submit">Stem</button>
     {% else %}

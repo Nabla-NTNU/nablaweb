@@ -85,10 +85,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(to="exchange.Exchange", on_delete=models.CASCADE),
                 ),
             ],
-            options={
-                "verbose_name_plural": "info",
-                "verbose_name": ("info",),
-            },
+            options={"verbose_name_plural": "info", "verbose_name": ("info",),},
         ),
         migrations.CreateModel(
             name="University",

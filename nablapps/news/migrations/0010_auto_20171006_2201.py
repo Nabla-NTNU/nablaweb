@@ -32,52 +32,24 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "nyheter",
             },
         ),
-        migrations.RemoveField(
-            model_name="news",
-            name="body",
-        ),
-        migrations.RemoveField(
-            model_name="news",
-            name="created_by",
-        ),
-        migrations.RemoveField(
-            model_name="news",
-            name="last_changed_by",
-        ),
-        migrations.RemoveField(
-            model_name="news",
-            name="last_changed_date",
-        ),
-        migrations.RemoveField(
-            model_name="news",
-            name="publication_date",
-        ),
-        migrations.RemoveField(
-            model_name="news",
-            name="published",
-        ),
-        migrations.RemoveField(
-            model_name="news",
-            name="slug",
-        ),
-        migrations.RemoveField(
-            model_name="news",
-            name="view_counter",
-        ),
+        migrations.RemoveField(model_name="news", name="body",),
+        migrations.RemoveField(model_name="news", name="created_by",),
+        migrations.RemoveField(model_name="news", name="last_changed_by",),
+        migrations.RemoveField(model_name="news", name="last_changed_date",),
+        migrations.RemoveField(model_name="news", name="publication_date",),
+        migrations.RemoveField(model_name="news", name="published",),
+        migrations.RemoveField(model_name="news", name="slug",),
+        migrations.RemoveField(model_name="news", name="view_counter",),
         migrations.AddField(
             model_name="news",
             name="bump_time",
             field=models.DateTimeField(default=timezone.now),
         ),
         migrations.AddField(
-            model_name="news",
-            name="visible",
-            field=models.BooleanField(default=True),
+            model_name="news", name="visible", field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name="news",
-            name="sticky",
-            field=models.BooleanField(default=False),
+            model_name="news", name="sticky", field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
             model_name="news",

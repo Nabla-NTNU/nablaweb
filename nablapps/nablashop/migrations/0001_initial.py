@@ -36,10 +36,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={
-                "verbose_name": "Kategori",
-                "verbose_name_plural": "Kategorier",
-            },
+            options={"verbose_name": "Kategori", "verbose_name_plural": "Kategorier",},
         ),
         migrations.CreateModel(
             name="Product",
@@ -91,9 +88,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={
-                "verbose_name": "Produkt",
-                "verbose_name_plural": "Produkter",
-            },
+            options={"verbose_name": "Produkt", "verbose_name_plural": "Produkter",},
         ),
     ]

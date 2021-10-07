@@ -56,9 +56,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={
-                "verbose_name": "Komité",
-                "verbose_name_plural": "Komitéer",
-            },
+            options={"verbose_name": "Komité", "verbose_name_plural": "Komitéer",},
         ),
     ]

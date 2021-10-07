@@ -125,10 +125,7 @@ class CreateUserPollView(UserPollCRUDMixin, CreateView):  # pylint: disable=R090
         form = self.get_form(form_class)
         choice_form = ChoiceFormSet()
         return self.render_to_response(
-            self.get_context_data(
-                form=form,
-                choice_form=choice_form,
-            )
+            self.get_context_data(form=form, choice_form=choice_form,)
         )
 
     def post(self, request, *args, **kwargs):

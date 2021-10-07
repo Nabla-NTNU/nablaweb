@@ -13,14 +13,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="choice",
-            name="added_by",
-        ),
-        migrations.RemoveField(
-            model_name="poll",
-            name="added_by",
-        ),
+        migrations.RemoveField(model_name="choice", name="added_by",),
+        migrations.RemoveField(model_name="poll", name="added_by",),
         migrations.AddField(
             model_name="choice",
             name="created_by",

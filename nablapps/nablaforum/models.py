@@ -52,10 +52,7 @@ class Message(models.Model):
     """Represents a message in a thread"""
 
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
-    user = models.ForeignKey(
-        NablaUser,
-        on_delete=models.CASCADE,
-    )
+    user = models.ForeignKey(NablaUser, on_delete=models.CASCADE,)
     message = models.TextField()
     read_by_user = models.ManyToManyField(NablaUser, related_name="read_by_user")
     created = models.DateTimeField(editable=False)

@@ -14,9 +14,10 @@ Some design info for the models
   which means it is the one to be shown on the front page.
 
 """
+from random import shuffle
+
 from django.conf import settings
 from django.db import models
-from random import shuffle
 
 
 class UserHasVoted(Exception):
@@ -58,6 +59,8 @@ class Poll(models.Model):
 
     is_current = models.BooleanField("Nåværende avstemning?", default=True)
 
+    randomise = models.BooleanField("Tilfeldig rekkefølge på valg?", default=True)
+
     users_voted = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         verbose_name="Brukere som har stemt",
@@ -90,7 +93,7 @@ class Poll(models.Model):
     def randomise_poll(self):
         self.shuffled = list(self.choices.all())
         shuffle(self.shuffled)
-        return ''
+        return ""
 
     class Meta:
         verbose_name = "Avstemning"

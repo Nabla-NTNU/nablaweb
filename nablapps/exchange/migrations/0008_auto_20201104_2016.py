@@ -11,10 +11,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="exchange",
-            name="fag",
-        ),
+        migrations.RemoveField(model_name="exchange", name="fag",),
         migrations.AddField(
             model_name="subject",
             name="exchange",
