@@ -151,7 +151,7 @@ class Command(BaseCommand):
         print("Creating %d Events" % count)
         for i in range(count):
             start = fake.date_time_between_dates(
-                datetime_start=dt.now(), datetime_end=(dt.now() + td(30))
+                datetime_start=dt.now() + td(days=2), datetime_end=(dt.now() + td(30))
             )
 
             event = Event.objects.create(
@@ -164,8 +164,8 @@ class Command(BaseCommand):
                 organizer=fake.name(),
                 location=fake.address(),
                 registration_required=True,
-                registration_deadline=(dt.now() + td(30)),
                 registration_start=dt.now(),
+                registration_deadline=(dt.now() + td(days=2)),
                 places=10,
             )
             f = FrontPageNews()

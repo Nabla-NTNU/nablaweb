@@ -1,20 +1,36 @@
 {% load markdown %}
 {% load easy_thumbnails %}
 
+{% if content.company%}
+{%if content.company.website%}
+     <a href="{{job.company.website}}">
+     {% if content.company.picture  and content.company.ignoreCrop%}
+          <img src="{% thumbnail content.company.picture 770x300 upscale=True detail=True quality=95 background="white" %}">
+     {% elif content.company.picture  and content.company.cropping %}
+          <img src="{% thumbnail content.company.picture 770x300 box=content.company.cropping upscale=True detail=True quality=95 %}">
+     {% elif content.company.picture  %}
+          <img src="{% thumbnail content.company.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}">
+     {%endif%}
+     </a>
+{%else%}
+     {% if content.company.picture  and content.company.ignoreCrop%}
+          <img src="{% thumbnail content.company.picture 770x300 upscale=True detail=True quality=95 background="white" %}">
+     {% elif content.company.picture  and content.company.cropping %}
+          <img src="{% thumbnail content.company.picture 770x300 box=content.company.cropping upscale=True detail=True quality=95 %}">
+     {% elif content.company.picture  %}
+          <img src="{% thumbnail content.company.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}">
+{%endif%}
+{% endif %}
+{%else%}
     <img alt=""
          class="img-fluid"
     {% if content.picture and content.cropping %}
          src="{% thumbnail content.picture 770x300 box=content.cropping upscale=True detail=True quality=95 %}"
     {% elif content.picture %}
          src="{% thumbnail content.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
-    {% elif content.company.picture  and content.company.ignoreCrop %}
-         src="{% thumbnail content.company.picture 770x300 upscale=True detail=True quality=95 background="white" %}"
-    {% elif content.company.picture  and content.company.cropping %}
-         src="{% thumbnail content.company.picture 770x300 box=content.company.cropping upscale=True detail=True quality=95 %}"
-    {% elif content.company.picture  %}
-         src="{% thumbnail content.company.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
     {% endif %}
-    >
-    <header><h2>{{ content.headline }}</h2></header>
+    >  
+{%endif%}
+    <header><h2>{{ content.headline }}</h2></header> 
     <p><strong>{{ content.lead_paragraph}}</strong></p>
     <div style="overflow: hidden;">{{ content.body|markdown}}</div>

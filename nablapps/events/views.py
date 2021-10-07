@@ -9,6 +9,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.template import loader
 from django.urls import reverse
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.views.generic import DetailView, ListView, TemplateView
 
@@ -241,6 +242,27 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
                 event._assert_user_allowed_to_register(user)
             except UserRegistrationException as e:
                 context["reason_for_registration_failure"] = str(e)
+
+        # notify users if their card number is missing when registered for an event where it could be used
+        if (
+            event.get_noshow_penalty() is not None
+            and event.get_noshow_penalty()
+            and user.ntnu_card_number in [None, ""]
+            and event.is_registered(user)
+        ):
+            card_warning = (
+                "Kortnummer ikke registrert. Du kan få problemer med å registrere oppmøte på arrangementet. "
+                "Registrer kortnummeret ditt "
+            )
+
+            # include her link
+            register_card_warning = format_html(
+                "{} <a href='{}'>her</a>.",
+                card_warning,
+                reverse("edit_profile"),
+            )
+
+            self.messages.warning(register_card_warning)
 
         context["type"] = (
             "bedpres" if event.is_bedpres else "event"
