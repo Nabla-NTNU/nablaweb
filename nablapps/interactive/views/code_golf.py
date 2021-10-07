@@ -65,7 +65,7 @@ def markdownify_code(code):
     As of now, it is to add tabs in front of each line, but this is not very pretty...
     """
 
-    return "\n".join(["\t" + l for l in code.split("\n")])
+    return "\n".join(["\t" + line for line in code.split("\n")])
 
 
 def code_golf_score(request, task_id):

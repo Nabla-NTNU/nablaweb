@@ -3,6 +3,7 @@ import os
 
 # Import all common settings
 from .base import *  # noqa: F401, F403
+from .base import VARIABLE_CONTENT
 
 DEBUG = True
 

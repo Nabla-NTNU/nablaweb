@@ -115,7 +115,7 @@ class EventDetailView(PermissionRequiredMixin, DetailView):
                     )
                 except BadHeaderError:
                     return HttpResponse("Invalid header found")
-        return redirect(reverse(f"qr-event-detail", kwargs={"pk": pk}))
+        return redirect(reverse("qr-event-detail", kwargs={"pk": pk}))
 
 
 class RegisterTicketsView(PermissionRequiredMixin, View):
@@ -154,7 +154,7 @@ class UpdateTicketsView(generics.UpdateAPIView):
     def put(self, request, ticket_id):
         try:
             ticket = QrTicket.objects.get(ticket_id=ticket_id)
-        except:
+        except QrTicket.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = QrTicketSerializer(ticket, data=request.data)
         if ticket.registered:

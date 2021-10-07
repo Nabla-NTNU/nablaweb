@@ -1,4 +1,5 @@
 from itertools import chain
+from random import shuffle
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
@@ -10,7 +11,6 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from .forms import AlternativeFormset
 from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, VotingEvent
 
-from random import shuffle
 ####################
 ### Admin views ####
 ####################

@@ -86,7 +86,7 @@ class Voting(models.Model):
         self.is_active = False
 
     def user_not_eligible(self, user):
-        if self.event.eligible_group != None:
+        if self.event.eligible_group is not None:
             if user.groups.all().filter(name=self.event.eligible_group).exists():
                 return False
             else:
@@ -114,7 +114,7 @@ class Alternative(models.Model):
         elif self.voting.user_not_eligible(user):
             raise UserNotEligible(f"{user} is not eligible to vote on {self.voting}")
         elif not self.voting.is_active:
-            raise VotingDeactive(f"This voting is no longer open for voting.")
+            raise VotingDeactive(f"The voting {self.voting} is no longer open.")
         else:
             self.votes += 1
             self.save()
