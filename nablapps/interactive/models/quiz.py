@@ -59,7 +59,11 @@ class Quiz(InteractiveElement):
         to="QuizScoreboard", related_name="quiz", on_delete=models.CASCADE, null=True
     )
 
-    published = models.BooleanField(null=True, default=True, verbose_name="Publisert",)
+    published = models.BooleanField(
+        null=True,
+        default=True,
+        verbose_name="Publisert",
+    )
 
     spoiler_html = models.TextField(
         default="",
@@ -96,7 +100,10 @@ class QuestionReply(models.Model):
     Reply to a single question
     """
 
-    question = models.ForeignKey("QuizQuestion", on_delete=models.CASCADE,)
+    question = models.ForeignKey(
+        "QuizQuestion",
+        on_delete=models.CASCADE,
+    )
 
     alternative = models.PositiveIntegerField(unique=False)
 
@@ -168,7 +175,11 @@ class QuizReply(InteractionResult):
             raise QuizReplyTimeout
         for q, alternative in replies:
             QuestionReply.objects.update_or_create(
-                question=q, quiz_reply=self, defaults={"alternative": alternative,},
+                question=q,
+                quiz_reply=self,
+                defaults={
+                    "alternative": alternative,
+                },
             )
 
 

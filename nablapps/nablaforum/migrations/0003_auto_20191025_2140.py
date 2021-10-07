@@ -13,7 +13,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="channel", name="is_common",),
+        migrations.RemoveField(
+            model_name="channel",
+            name="is_common",
+        ),
         migrations.AddField(
             model_name="channel",
             name="members",

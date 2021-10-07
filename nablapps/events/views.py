@@ -257,7 +257,9 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
 
             # include her link
             register_card_warning = format_html(
-                "{} <a href='{}'>her</a>.", card_warning, reverse("edit_profile"),
+                "{} <a href='{}'>her</a>.",
+                card_warning,
+                reverse("edit_profile"),
             )
 
             self.messages.warning(register_card_warning)

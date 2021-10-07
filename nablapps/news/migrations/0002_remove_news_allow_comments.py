@@ -12,5 +12,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="news", name="allow_comments",),
+        migrations.RemoveField(
+            model_name="news",
+            name="allow_comments",
+        ),
     ]

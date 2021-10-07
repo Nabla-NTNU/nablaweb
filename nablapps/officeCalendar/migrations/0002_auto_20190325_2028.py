@@ -9,7 +9,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="officeevent", name="duration",),
+        migrations.RemoveField(
+            model_name="officeevent",
+            name="duration",
+        ),
         migrations.AddField(
             model_name="officeevent",
             name="end_time",

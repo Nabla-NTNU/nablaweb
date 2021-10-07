@@ -10,5 +10,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="album", name="view_counter",),
+        migrations.RemoveField(
+            model_name="album",
+            name="view_counter",
+        ),
     ]

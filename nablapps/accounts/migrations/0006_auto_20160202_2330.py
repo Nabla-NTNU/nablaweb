@@ -15,6 +15,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelManagers(
             name="nablauser",
-            managers=[("objects", nablapps.accounts.models.NablaUserManager()),],
+            managers=[
+                ("objects", nablapps.accounts.models.NablaUserManager()),
+            ],
         ),
     ]

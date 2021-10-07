@@ -15,7 +15,8 @@ def forwards_func(apps, schema_editor):
     podcasts = Podcast.objects.all()
     for p in podcasts:
         hit_count, created = HitCount.objects.get_or_create(
-            content_type=ctype, object_pk=p.pk,
+            content_type=ctype,
+            object_pk=p.pk,
         )
         if created:
             hit_count.hits = p.view_counter
@@ -35,5 +36,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(forwards_func, reverse_func),
-        migrations.RemoveField(model_name="podcast", name="view_counter",),
+        migrations.RemoveField(
+            model_name="podcast",
+            name="view_counter",
+        ),
     ]

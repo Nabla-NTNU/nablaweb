@@ -30,7 +30,9 @@ password_change_patterns = [
 password_reset_patterns = [
     path("", auth_views.PasswordResetView.as_view(), name="password_reset"),
     path(
-        "done/", auth_views.PasswordResetDoneView.as_view(), name="password_reset_done",
+        "done/",
+        auth_views.PasswordResetDoneView.as_view(),
+        name="password_reset_done",
     ),
     re_path(
         r"^confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$",

@@ -12,6 +12,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="podcast", name="allow_comments",),
-        migrations.RemoveField(model_name="podcast", name="content_type",),
+        migrations.RemoveField(
+            model_name="podcast",
+            name="allow_comments",
+        ),
+        migrations.RemoveField(
+            model_name="podcast",
+            name="content_type",
+        ),
     ]

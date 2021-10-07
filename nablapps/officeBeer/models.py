@@ -29,7 +29,10 @@ class Transaction(models.Model):
 
     amount = models.IntegerField("Penger")
 
-    account = models.ForeignKey(Account, on_delete=models.CASCADE,)
+    account = models.ForeignKey(
+        Account,
+        on_delete=models.CASCADE,
+    )
 
     date = models.DateTimeField("Dato", default=now)
 
@@ -49,7 +52,10 @@ class DepositRequest(models.Model):
 
     amount = models.IntegerField("Beløp")
 
-    account = models.ForeignKey(Account, on_delete=models.CASCADE,)
+    account = models.ForeignKey(
+        Account,
+        on_delete=models.CASCADE,
+    )
 
     created = models.DateTimeField(auto_now_add=True)
 

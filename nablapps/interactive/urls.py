@@ -69,7 +69,11 @@ urlpatterns = [
         name="quiz_result_delete",
     ),
     path("quiz/resultat/<int:pk>/", QuizResultView.as_view(), name="quiz_result"),
-    path("quiz/highscore/<int:pk>/", QuizScoreboardView.as_view(), name="quiz_score",),
+    path(
+        "quiz/highscore/<int:pk>/",
+        QuizScoreboardView.as_view(),
+        name="quiz_score",
+    ),
     path("brukertest/<int:pk>/", TestView.as_view(), name="user_test"),
     path("brukertest/<int:pk>/resultat/", test_result, name="test_result"),
     path("kodegolf/", CodeTaskListView.as_view(), name="code_golf_menu"),

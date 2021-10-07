@@ -91,7 +91,10 @@ class ComPage(models.Model):
 class ComMembership(models.Model):
     """Komitemedlemskap (many to many)"""
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
     com = models.ForeignKey(
         "auth.Group", verbose_name="Komité", on_delete=models.CASCADE
     )
