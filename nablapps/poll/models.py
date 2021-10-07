@@ -16,6 +16,7 @@ Some design info for the models
 """
 from django.conf import settings
 from django.db import models
+from random import shuffle
 
 
 class UserHasVoted(Exception):
@@ -85,6 +86,11 @@ class Poll(models.Model):
     def user_has_voted(self, user):
         """Return whether the given user has voted on the poll"""
         return user in self.users_voted.all()
+
+    def randomise_poll(self):
+        self.shuffled = list(self.choices.all())
+        shuffle(self.shuffled)
+        return ''
 
     class Meta:
         verbose_name = "Avstemning"
