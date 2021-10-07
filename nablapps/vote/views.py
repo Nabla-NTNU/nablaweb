@@ -10,6 +10,7 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from .forms import AlternativeFormset
 from .models import Alternative, UserAlreadyVoted, Voting, VotingDeactive, VotingEvent
 
+from random import shuffle
 ####################
 ### Admin views ####
 ####################
@@ -198,6 +199,10 @@ class Vote(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        alternatives = self.object.alternatives.all()
+        alternatives = [alt for alt in alternatives]
+        shuffle(alternatives)
+        context["randomized_alternatives"] = alternatives
         context["has_voted"] = self.object.user_already_voted(self.request.user)
         return context
 

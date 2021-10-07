@@ -9,7 +9,7 @@
 <form method="post">
     {% csrf_token %}
     <input type="hidden" name="next" value="{% firstof next request.path %}#{{ object.pk }}">
-    {% for alternative in object.alternatives.all %}
+    {% for alternative in randomized_alternatives %}
         <div class="radio">
             <label>
                 <input type="radio" name="alternative" value="{{ alternative.pk }}">
