@@ -1,4 +1,6 @@
 # Models for code_golf
+import json
+
 from django import template
 from django.db import models
 
@@ -23,6 +25,17 @@ class CodeTask(models.Model):
             return sorted(self.result_set.all(), key=lambda result: result.length)[0]
         else:
             return None
+
+    @property
+    def correct_output_json(self):
+        """
+        JSON repr of the list of lines in the correct output
+
+        Used to transfer the correct output to the template
+        """
+        return json.dumps(
+            [line.rstrip("\r") for line in self.correct_output.split("\n")]
+        )
 
 
 class Result(models.Model):

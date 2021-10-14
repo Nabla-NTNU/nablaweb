@@ -14,6 +14,33 @@
 
 {% block content %}
 <script type="text/javascript">
+{% autoescape off %}
+const correctOutputLines = JSON.parse('{{ task.correct_output_json }}');
+{% endautoescape %}
+
+const outputLinesEquality = (lines, correctLines) => {
+    // Check for equality of the two arrays
+    // Ignores the last element of an array if it is empty
+    const checkedLength = Math.min(lines.length, correctLines.length);
+
+    if (lines.length > checkedLength + 1)
+        return false;
+    if (correctLines.length > checkedLength + 1)
+        return false;
+
+    for (let i=0; i < checkedLength; i++) {
+        if (lines[i] !== correctLines[i])
+            return false;
+    }
+
+    if (correctLines.length === checkedLength + 1 && correctLines[correctLines.length - 1] !== "")
+        return false
+    else if (lines.length === checkedLength + 1 && lines[lines.length - 1] !== "")
+        return false
+
+    return true;
+}
+
 // output functions are configurable.  This one just appends some text
 // to a pre element.
 function outf(text) {
@@ -46,13 +73,27 @@ function runit() {
     });
     myPromise
         .then(() => {
-            setError("")
+            // Clear the error text-box
+            setError("");
+
+            const correctnessIndicator = document.getElementById("correctnessIndicator");
+            const output = mypre.innerHTML;
+
+            // Update the form
+            document.getElementById("id_submitted_code").value = prog;
+            document.getElementById("id_submitted_output").value = output;
+
+            // Set the checkmark or the x based on correctness of output
+            const outputLines = output.split("\n");
+            if (outputLinesEquality(outputLines, correctOutputLines)) {
+                correctnessIndicator.className = "fas fa-check";
+            } else {
+                correctnessIndicator.className = "fas fa-times";
+            }
         })
         .catch((error) => {
-            setError(error)
+            setError(error);
         });
-    document.getElementById("id_submitted_code").value = prog;
-    document.getElementById("id_submitted_output").value = mypre.innerHTML;
 }
 </script>
 
@@ -80,6 +121,7 @@ function runit() {
     <p id="submitted_code">{{ code_golf_form.submitted_code }}</p>
     <p id="submitted_output">{{ code_golf_form.submitted_output }}</p>
     <button type="submit">Send</button>
+    <i id="correctnessIndicator" class=""></i>
 </form >
 
  {% endblock %}
