@@ -101,10 +101,11 @@ class EventRegistration(models.Model):
             )
             self.user.email_user(subject, message)
 
-
     def register_user_attendance(self):
         if self.attendance_registration is not None:
-            raise UserAlreadyRegistered("Your attendance is already registered!", eventregistration=self)
+            raise UserAlreadyRegistered(
+                "Your attendance is already registered!", eventregistration=self
+            )
         else:
             self.attendance_registration = datetime.now()
             # Her sjekker man at det ikke finnes prikkregistrering på påmeldingen fra før

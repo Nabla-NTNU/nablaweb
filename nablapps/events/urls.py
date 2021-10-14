@@ -11,10 +11,10 @@ from .views import (
     EventMainPage,
     EventRegistrationsView,
     RegisterAttendanceView,
-    UserRegisterAttendanceView,
     RegisterNoshowPenaltiesView,
     RegisterUserView,
     UserEventView,
+    UserRegisterAttendanceView,
     calendar,
     ical_event,
 )
