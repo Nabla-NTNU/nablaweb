@@ -11,6 +11,7 @@ from .views import (
     EventMainPage,
     EventRegistrationsView,
     RegisterAttendanceView,
+    UserRegisterAttendanceView,
     RegisterNoshowPenaltiesView,
     RegisterUserView,
     UserEventView,
@@ -33,6 +34,11 @@ urlpatterns = [
         "<int:pk>/register_attendance/",
         RegisterAttendanceView.as_view(),
         name="event_register_attendance",
+    ),
+    path(
+        "<int:pk>/<str:signature>/user_register_attendance/",
+        UserRegisterAttendanceView.as_view(),
+        name="event_user_register_attendance",
     ),
     path(
         "<int:pk>/register_attendance/noshow_penalties",

@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.views.generic import DetailView, ListView, TemplateView
+from django.core.signing import Signer, BadSignature
 
 from braces.views import (
     LoginRequiredMixin,
@@ -411,6 +412,50 @@ class AdministerPenaltiesView(PermissionRequiredMixin, DetailView, MessageMixin)
         return context
 
 
+class UserRegisterAttendanceView(LoginRequiredMixin, DetailView):
+    """TODO: write good docstring
+    
+    TODO:
+    - There should probably be some limitation on when this view
+    is open, ie. so that people cannot use it at any time, only when 
+    opened by the people in charge of the event.
+
+    Discussion:
+    ---
+    We use Django's sign feature to sing the pk, and then use this to create 
+    a 'secret' URL. We do this so that people cannot easily reverse engineer
+    what the URL for the user registration page will be, as this would allow
+    them to register their attendance even when they did not attend.
+    It is still of course possible to get the URL from someone else, but 
+    now we have at least some obstacle.
+
+    On the implementation: would it be better to use for example hashids?
+    """
+    model = Event
+    template_name = "events/user_register_attendance.html"
+
+    def get(self, request, *args, **kwargs):
+        # Verify the signature of the URL
+        signature = kwargs.get("signature")
+        pk = kwargs.get("pk")
+        try:
+            signer = Signer().unsign(f"{pk}:{signature}")
+        except BadSignature:
+            raise Http404("This seems like a bad URL")
+        
+        # Register the user to the event
+        self.object = self.get_object()
+        try:
+            registration = self.object.eventregistration_set.get(
+                user=self.request.user,
+            )
+        except EventRegistration.DoesNotExist as e:
+            # TODO: This probably should be done in something else
+            # than get. Maybe in get_object
+            raise Http404("It looks like the user might not be registered to this event.")
+        registration.register_user_attendance()
+        return self.render_to_response(self.get_context_data())
+
 class RegisterAttendanceView(PermissionRequiredMixin, DetailView, MessageMixin):
     """Used by event admins to register attendance"""
 
@@ -475,6 +520,12 @@ class RegisterAttendanceView(PermissionRequiredMixin, DetailView, MessageMixin):
         context["registrations_not_registered"] = registrations.filter(
             attendance_registration=None
         ).count()
+        # To be used as a QR code in case the card scanner malfunctions
+        signature = Signer().signature(event.pk)
+        context["url_to_user_registration"] = self.request.build_absolute_uri(
+            reverse("event_user_register_attendance",
+                    kwargs={"pk":event.pk, "signature":signature})
+            )
         return context
 
     def get_registration_by_identification_string(

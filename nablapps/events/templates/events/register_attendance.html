@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
+{% load qr_code %}
 {% block body %}
 <style>
     body{
@@ -71,6 +72,10 @@
     </div>
 </form>
 </div>
+
+{% qr_from_text url_to_user_registration size="s" image_format="png" %}
+
+
 <form method="post"  class="py-3 d-flex justify-content-between align-items-center" action="{% url "event_noshow_penalties" event.pk %}">{% csrf_token %}
     <a href="{%  url "event_administer_penalties" pk=event.pk %}" class="{% firstof text_type "text-muted"%}">Ikke registrert: {{ registrations_not_registered }}</a>
 
