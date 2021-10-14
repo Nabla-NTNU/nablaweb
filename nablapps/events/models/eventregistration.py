@@ -8,6 +8,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.template import loader
 
+from ..exceptions import UserAlreadyRegistered
+
 
 class EventRegistration(models.Model):
     """Modell for påmelding på arrangementer.
@@ -98,3 +100,19 @@ class EventRegistration(models.Model):
                 {"event": self.event, "name": self.user.get_full_name()}
             )
             self.user.email_user(subject, message)
+
+
+    def register_user_attendance(self):
+        if self.attendance_registration is not None:
+            raise UserAlreadyRegistered("Your attendance is already registered!", eventregistration=self)
+        else:
+            self.attendance_registration = datetime.now()
+            # Her sjekker man at det ikke finnes prikkregistrering på påmeldingen fra før
+            # Det kan også være en løsning at vi setter antall prikekr til maksimalt antall
+
+            if self.event.get_is_started() and self.penalty is None:
+                self.penalty = self.event.get_late_penalty()
+            else:
+                self.penalty = self.event.get_show_penalty()
+            self.full_clean()
+            self.save()

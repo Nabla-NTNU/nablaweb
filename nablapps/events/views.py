@@ -443,7 +443,8 @@ class RegisterAttendanceView(PermissionRequiredMixin, DetailView, MessageMixin):
             context["status_type"] = "danger"
         else:
             try:
-                self.register_user_attendance(registration=registration)
+                # self.register_user_attendance(registration=registration)
+                registration.register_user_attendance()
                 context[
                     "attendance_message"
                 ] = f"Velkommen {registration.user.first_name}"
@@ -508,21 +509,6 @@ class RegisterAttendanceView(PermissionRequiredMixin, DetailView, MessageMixin):
                 )
             return registration
         raise UserAttendanceException(identification_string=identification_string)
-
-    def register_user_attendance(self, registration):
-        if registration.attendance_registration is not None:
-            raise UserAlreadyRegistered(eventregistration=registration)
-        else:
-            registration.attendance_registration = datetime.datetime.now()
-            # Her sjekker man at det ikke finnes prikkregistrering på påmeldingen fra før
-            # Det kan også være en løsning at vi setter antall prikekr til maksimalt antall
-
-            if registration.event.get_is_started() and registration.penalty is None:
-                registration.penalty = registration.event.get_late_penalty()
-            else:
-                registration.penalty = registration.event.get_show_penalty()
-            registration.full_clean()
-            registration.save()
 
 
 class RegisterNoshowPenaltiesView(PermissionRequiredMixin, DetailView, MessageMixin):
