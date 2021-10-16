@@ -62,6 +62,8 @@ function builtinRead(x) {
 // configure the output function
 // call Sk.importMainWithBody()
 function runit() {
+    const correctnessIndicator = document.getElementById("correctnessIndicator");
+    correctnessIndicator.className = "fas fa-spinner fa-pulse";
     var prog = document.getElementById("yourcode").value;
     var mypre = document.getElementById("output");
     mypre.innerHTML = '';
@@ -76,7 +78,6 @@ function runit() {
             // Clear the error text-box
             setError("");
 
-            const correctnessIndicator = document.getElementById("correctnessIndicator");
             const output = mypre.innerHTML;
 
             // Update the form
@@ -121,7 +122,7 @@ function runit() {
     <p id="submitted_code">{{ code_golf_form.submitted_code }}</p>
     <p id="submitted_output">{{ code_golf_form.submitted_output }}</p>
     <button type="submit">Send</button>
-    <i id="correctnessIndicator" class=""></i>
+    <i id="correctnessIndicator" class="" style="margin-left:0.5em"></i>
 </form >
 
  {% endblock %}
