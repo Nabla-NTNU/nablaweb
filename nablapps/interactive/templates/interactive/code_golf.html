@@ -94,6 +94,7 @@ function runit() {
         })
         .catch((error) => {
             setError(error);
+            correctnessIndicator.className = "fas fa-times";
         });
 }
 </script>
