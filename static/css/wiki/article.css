@@ -1,131 +1,140 @@
 div.table-responsive {
-	display: inline;
+  display: inline;
 }
 
 div.table-responsive table {
-
-	width: 50%;
-	float: right;
-	margin: 6px 10px 10px 10px;
-	border-collapse: collapse;
-	font-size: 13px;
-	border: 1px solid #a5afa8;
+  width: 50%;
+  float: right;
+  margin: 6px 10px 10px 10px;
+  border-collapse: collapse;
+  font-size: 13px;
+  border: 1px solid #a5afa8;
 }
 
 @media screen and (max-width: 480px) {
-	div.table-responsive table {
-		width: 100%;
-	}
+  div.table-responsive table {
+    width: 100%;
+  }
 }
 
 div.table-responsive td {
-	padding: .3em 1em;
-	border-right: 1px solid #a5afa8;
+  padding: 0.3em 1em;
+  border-right: 1px solid #a5afa8;
 }
 div.table-responsive th {
-	padding: .3em 1em;
-	border-right: 1px solid #a5afa8;
-	border-bottom: 1px solid #a5afa8;
-	font-size: large;
-	background: #f4f9fe;
-	text-align: center;
+  padding: 0.3em 1em;
+  border-right: 1px solid #a5afa8;
+  border-bottom: 1px solid #a5afa8;
+  font-size: large;
+  background: #f4f9fe;
+  text-align: center;
 }
 
-div.table-responsive td:first-child, div.tableresponsive th:first-child {
-	font-weight: bold;
+div.table-responsive td:first-child,
+div.tableresponsive th:first-child {
+  font-weight: bold;
 }
 
 .linknotfound {
-	color: #aa3333;
+  color: #aa3333;
 }
 
 div#article-container {
-	padding-bottom: 5em;
+  padding-bottom: 5em;
 }
 
 .article_list {
-	/*background: #000000;*/
+  /*background: #000000;*/
 }
-.article-list ul{
-	padding-left: 40px;
+.article-list ul {
+  padding-left: 40px;
 }
 .list_header {
-	font-size: large;
-	font-weight: bold;
+  font-size: large;
+  font-weight: bold;
 }
 
 .article-index-element a {
-	color: #000;
+  color: #000;
 }
 
-.article-index-element { 
-	list-style-type: none;
-	margin: 0;
-	position: relative; 
-	display: list-item;
+.article-index-element {
+  list-style-type: none;
+  margin: 0;
+  position: relative;
+  display: list-item;
 }
 
 li .article-index-element {
-	display: none;
+  display: none;
 }
 
 .article-index-element input {
-	position: absolute;
-	left: 0;
-	z-index: 2;
-	cursor: pointer;
-	opacity: 0;
-	height: 1em;
-	width: 1em;
-	top: 0;
+  position: absolute;
+  left: 0;
+  z-index: 2;
+  cursor: pointer;
+  opacity: 0;
+  height: 1em;
+  width: 1em;
+  top: 0;
 }
 
 .article-index-element label {
-	padding-left: 1.5em;
-	background: url("/static/img/wiki/toggle-small-expand.png") no-repeat;
-	cursor: pointer;
+  padding-left: 1.5em;
+  background: url("/static/img/wiki/toggle-small-expand.png") no-repeat;
+  cursor: pointer;
 }
 
 .article-index-container {
-	border: 1px solid silver;
-	padding: 0;
+  border: 1px solid silver;
+  padding: 0;
 }
 
-.article-index-element ul, .article-index-container {
-	background-color: gainsboro;
+.article-index-element ul,
+.article-index-container {
+  background-color: gainsboro;
 }
 
 .article-index-element input:checked + label {
-	background: url("/static/img/wiki/toggle-small.png") no-repeat;
+  background: url("/static/img/wiki/toggle-small.png") no-repeat;
 }
 
 .article-index-element input:checked + label + ul {
-	height: auto;
-	border: 1px solid silver;
-	border-right: 0;
+  height: auto;
+  border: 1px solid silver;
+  border-right: 0;
 }
 input:checked + label + ul > li.article-index-element {
-	display: list-item;
+  display: list-item;
 }
 
 .article-index-element p {
-	display: none;
+  display: none;
 }
 
 .article-index-element:not(ul) {
-	background-color: whitesmoke;
+  background-color: whitesmoke;
 }
 
 .article-index-element li {
-	padding-top: 0.3em;
-	padding-bottom: 0.3em;
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
 }
 
 .article-index-element a {
-	padding-left: 1.0em;
+  padding-left: 1em;
 }
 
 #id_parent {
-	width: 100%;
-	margin-bottom: 0.2em;
+  width: 100%;
+  margin-bottom: 0.2em;
+}
+
+#article-body {
+  overflow: hidden;
+}
+
+#article-body img {
+  max-width: 100%;
 }
