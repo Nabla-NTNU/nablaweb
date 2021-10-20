@@ -440,24 +440,29 @@ class UserRegisterAttendanceView(LoginRequiredMixin, DetailView):
         signature = kwargs.get("signature")
         pk = kwargs.get("pk")
         try:
-            signer = Signer().unsign(f"{pk}:{signature}")
+            # Will raise exception on errenous signature.
+            Signer().unsign(f"{pk}:{signature}")
         except BadSignature:
             raise Http404("This seems like a bad URL")
 
         # Register the user to the event
         self.object = self.get_object()
+        context = self.get_context_data()
         try:
             registration = self.object.eventregistration_set.get(
                 user=self.request.user,
             )
-        except EventRegistration.DoesNotExist as e:
+        except EventRegistration.DoesNotExist:
             # TODO: This probably should be done in something else
             # than get. Maybe in get_object
             raise Http404(
                 "It looks like the user might not be registered to this event."
             )
-        registration.register_user_attendance()
-        return self.render_to_response(self.get_context_data())
+        try:
+            registration.register_user_attendance()
+        except UserAlreadyRegistered:
+            context["already_registered"] = True
+        return self.render_to_response(context)
 
 
 class RegisterAttendanceView(PermissionRequiredMixin, DetailView, MessageMixin):

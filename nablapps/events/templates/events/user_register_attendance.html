@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-{{ event }}
+{% if not already_registered %}
+Du ble meldt på!
+{% else %}
+Du er allerede meldt på!
+{% endif %}
 {% endblock content %}
