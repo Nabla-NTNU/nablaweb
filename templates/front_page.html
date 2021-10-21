@@ -25,7 +25,9 @@ inn{% block main-blank %}
 
     <!-- Front page news -->
     {% for news in news_list %}
-    {% include "includes/article_widget.html" with number=forloop.counter margin="mb-0" %}
+    {% include "includes/article_widget.html" with number=1 margin="mb-0" %}
+    {% include "includes/article_widget.html" with number=2 margin="mb-0" %}
+    {% include "includes/article_widget.html" with number=3 margin="mb-0" %}
     {% endfor %}{# news_list #}
 
     <button onclick="location.href='{% url "news_list" %}'" type="button" class="more-news-btn btn btn-outline-secondary btn-block">Flere nyheter</button>
