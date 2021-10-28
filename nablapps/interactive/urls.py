@@ -16,6 +16,7 @@ from .views.advent import (
 )
 from .views.code_golf import CodeGolf, CodeTaskListView, code_golf_score
 from .views.color_picker import submitColorChoice
+from .views.games import GamesList
 from .views.place import (
     NewestPlaceView,
     PlaceView,
@@ -27,7 +28,6 @@ from .views.place import (
 )
 from .views.quiz import QuizResultDeleteView, QuizScoreboardView, quiz_reply
 from .views.user_test import TestView, test_result
-from .views.games import GamesList
 
 urlpatterns = [
     path(
