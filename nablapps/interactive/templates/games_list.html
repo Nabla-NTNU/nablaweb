@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load markdown %}
+{% load listutil %}
+{% load easy_thumbnails %}
+{% load sekizai_tags %}
+{% load static %}
+
+
+{% block more_head %}
+<link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
+{% endblock %}
+
+{% block main %}
+
+<h1>Spill</h1>
+
+<div class="card-deck">
+    {% for game in games_list %}
+        <div class="card {{ margin|default:"mb-2" }}" style="flex-basis: 30rem; flex-grow: 0.5; flex-shrink: 0.5">
+            <img alt="" class="card-img-top" src="{% get_media_prefix %}{{ game.picture }}">
+            <div class="card-body card-body-overline">
+                <h3 class="card-title"><a href="/{{ game.url }}" class="text-dark stretched-link" >{{ game.title }}</a></h3>
+            </div>
+        </div>
+    {% empty %}
+        <h3>Ingen spill...</h3>
+    {% endfor %}
+    <div class="card {{ margin|default:"mb-2" }}" style="flex-basis: 30rem; flex-grow: 0.5; flex-shrink: 0.5; opacity: 0;">
+        <div class="search-placeholder"></div>
+    </div>
+</div>
+
+
+{% include "includes/pagination.html" %}
+{% endblock main %}
