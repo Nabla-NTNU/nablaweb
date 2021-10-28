@@ -27,6 +27,7 @@ from .views.place import (
 )
 from .views.quiz import QuizResultDeleteView, QuizScoreboardView, quiz_reply
 from .views.user_test import TestView, test_result
+from .views.games import GamesList
 
 urlpatterns = [
     path(
@@ -74,6 +75,7 @@ urlpatterns = [
         QuizScoreboardView.as_view(),
         name="quiz_score",
     ),
+    path("spill/", GamesList.as_view(), name="games_list"),
     path("brukertest/<int:pk>/", TestView.as_view(), name="user_test"),
     path("brukertest/<int:pk>/resultat/", test_result, name="test_result"),
     path("kodegolf/", CodeTaskListView.as_view(), name="code_golf_menu"),

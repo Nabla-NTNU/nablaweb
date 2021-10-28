@@ -17,6 +17,7 @@ from .models import (
 from .models.advent import Santa
 from .models.code_golf import CodeTask, Result
 from .models.place import PlaceGrid
+from .models.games import Game
 
 
 class AdventDoorInline(admin.TabularInline):
@@ -169,3 +170,4 @@ admin.site.register(Result)
 admin.site.register(Santa)
 admin.site.register(ColorChoice)
 admin.site.register(PlaceGrid, PlaceGridAdmin)
+admin.site.register(Game)
