@@ -2,7 +2,6 @@
 from django import template
 from django.db import models
 
-
 register = template.Library()
 
 

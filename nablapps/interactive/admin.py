@@ -16,8 +16,8 @@ from .models import (
 )
 from .models.advent import Santa
 from .models.code_golf import CodeTask, Result
-from .models.place import PlaceGrid
 from .models.games import Game
+from .models.place import PlaceGrid
 
 
 class AdventDoorInline(admin.TabularInline):
