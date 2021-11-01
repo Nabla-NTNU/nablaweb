@@ -161,12 +161,24 @@ class PlaceGridAdmin(admin.ModelAdmin):
         verbose_name_plural = "Place grids"
 
 
+class ResultAdmin(admin.ModelAdmin):
+    model = Result
+    search_fields = ("user__username", "user__first_name", "user__last_name")
+    list_display = ("task", "user", "length")
+    list_select_related = ("task", "user")
+    list_filter = ("task",)
+    readonly_fields = ("task", "user", "solution")
+
+    def length(self, obj):
+        return obj.length
+
+
 admin.site.register(AdventCalendar, AdventCalendarAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Test, TestAdmin)
 admin.site.register(TestQuestion, TestQuestionAdmin)
 admin.site.register(CodeTask)
-admin.site.register(Result)
+admin.site.register(Result, ResultAdmin)
 admin.site.register(Santa)
 admin.site.register(ColorChoice)
 admin.site.register(PlaceGrid, PlaceGridAdmin)
