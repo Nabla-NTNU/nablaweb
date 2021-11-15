@@ -46,7 +46,7 @@ class LogEntryAdmin(admin.ModelAdmin):
     )
     list_select_related = ("user", "content_type")
     search_fields = ("user__username", "user__first_name", "user__last_name")
-    list_filter = ("content_type",)
+    list_filter = ("action_flag", "content_type")
     date_hierarchy = "action_time"
 
 
