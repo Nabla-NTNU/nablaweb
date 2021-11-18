@@ -31,27 +31,27 @@ from .views.user_test import TestView, test_result
 
 urlpatterns = [
     path(
-        "julekalender/<int:year>/",
+        "joulekalender/<int:year>/",
         AdventCalendarView.as_view(),
         name="advent_calendar",
     ),
     path(
-        "julekalender/<int:year>/<int:number>/",
+        "joulekalender/<int:year>/<int:number>/",
         AdventDoorView.as_view(),
         name="advent_door",
     ),
     path(
-        "julekalender/<int:year>/<int:number>/delta/",
+        "joulekalender/<int:year>/<int:number>/delta/",
         participate_in_competition,
         name="advent_participate",
     ),
     path(
-        "julekalender/<int:year>/<int:number>/admin/",
+        "joulekalender/<int:year>/<int:number>/admin/",
         AdventDoorAdminView.as_view(),
         name="advent_admin",
     ),
     path(
-        "julekalender/<int:year>/<int:number>/admin/reset/",
+        "joulekalender/<int:year>/<int:number>/admin/reset/",
         reset_door,
         name="advent_admin_reset",
     ),
