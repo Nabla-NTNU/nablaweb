@@ -3,6 +3,7 @@ import json
 
 from django import template
 from django.db import models
+from django.utils import timezone
 
 from nablapps.accounts.models import NablaUser
 
@@ -52,10 +53,18 @@ class Result(models.Model):
         on_delete=models.CASCADE,
     )
     solution = models.TextField(default="")  # Users code
+    submitted_at = models.DateTimeField(
+        default=timezone.now,
+        help_text="The time that the user first submitted code with this score (worse submissions do not update this field)",
+    )
+
+    @staticmethod
+    def compute_length(submission: str) -> int:
+        return len(submission.strip())
 
     @property
     def length(self):
-        return len(self.solution.strip())
+        return self.compute_length(self.solution.strip())
 
     def __str__(self):
         return f"{self.user}'s solution to CodeTask #{self.task.id}"

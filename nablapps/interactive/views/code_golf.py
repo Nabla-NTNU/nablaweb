@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.views import View
 from django.views.generic.list import ListView
 
@@ -27,6 +28,8 @@ class CodeGolf(LoginRequiredMixin, View):
         return render(request, "interactive/code_golf.html", context)
 
     def post(self, request, task_id):
+        submitted_at = timezone.now()
+
         # Submit output, check answer and count length
         form = CodeGolfForm(request.POST)
 
@@ -44,18 +47,37 @@ class CodeGolf(LoginRequiredMixin, View):
         We cannot know if the user has sent a code that matches the output they
         say that they got. The best we can do is to verify the output sent in the request.
         """
+
         if output != correct_output:
             correct = str(correct_output)
             context = {"correct": correct, "output": output, "task_id": task_id}
             return render(request, "interactive/code_golf_error.html", context)
 
-        # Only one result per user
+        score = Result.compute_length(code)
+
+        try:
+            previous_result = Result.objects.get(user=request.user, task=task)
+        except Result.DoesNotExist:
+            new_best_score = True
+            store_new_code = True
+        else:
+            new_best_score = score < previous_result.length
+            store_new_code = score <= previous_result.length
+
+        updates = {}
+
+        if store_new_code:
+            # The user has tied (or better) their old score -> update the stored code
+            updates["solution"] = code
+
+            if new_best_score:
+                # The user has achieved a new best score -> update the submission time
+                updates["submitted_at"] = submitted_at
+
         Result.objects.update_or_create(
             user=request.user,
             task=task,
-            defaults={
-                "solution": code,
-            },
+            defaults=updates,
         )
 
         return redirect("/kodegolf/score/" + str(task_id))
@@ -80,8 +102,11 @@ def code_golf_score(request, task_id):
 
     task = get_object_or_404(CodeTask, pk=task_id)
     result_list = task.result_set.all()
+
     # Cannot use .sorted_by since length is a property, not a db field
-    sorted_result_list = sorted(result_list, key=lambda x: x.length)
+    sorted_result_list = sorted(
+        result_list, key=lambda result: (result.length, result.submitted_at)
+    )
 
     output = task.correct_output
     output = markdownify_code(output)
