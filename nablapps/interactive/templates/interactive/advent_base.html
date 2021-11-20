@@ -11,7 +11,7 @@
     <meta charset="utf-8">
 
     <title>
-        Nabla - Julekalender {{ calendar.year}}
+        Nabla - Joulekalender {{ calendar.year}}
     </title>
     <meta name="description"
           content="Hjemmesiden til linjeforeningen Nabla, for studentene på
@@ -73,7 +73,7 @@
     <script src="{% static "interactive/js/advent_calendar.js" %}"></script>
     {% endaddtoblock %}
 
-    <h1>Nablas julekalender {{ calendar.year }}</h1>
+    <h1 style="font-size: 75px">Nablas Joulekalender {{ calendar.year }}</h1>
     <div class="advent-table">
         {% for row in doors|row_split:4 %}
             {% for door in row %}

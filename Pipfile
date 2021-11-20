@@ -29,11 +29,13 @@ django-ckeditor = "*"
 djangorestframework = "*"
 
 [dev-packages]
+pre-commit = "*"
 faker = "*"               # Fake data generator, used in tests.
 factory-boy = "*"         # For creating many objects for testing (seed)
-black = "==21.8b0"
-isort = ">=5.0"
-flake8 = "*"
+# Linting tools
+black = "==21.9b0"
+isort = "5.9.3"
+flake8 = "3.9.2"
 pylint = ">=2.6"
 pylint-django = "*"
 bandit = "*"

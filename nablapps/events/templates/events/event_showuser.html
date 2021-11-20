@@ -19,54 +19,75 @@
     <tfoot>
         <tr>
             <td colspan="10" class="muted">
-                {% if is_attending_an_event %}<i class="icon-ok-sign"></i> Du er påmeldt arrangementet.{% endif %}
-                {% if is_on_a_waiting_list %}<br/><sup>1</sup> Du kan alltid trekke deg fra ventelisten.{% endif %}
+                {% if is_on_a_waiting_list %}<br/> Du kan alltid trekke deg fra ventelister.{% endif %}
             </td>
         </tr> 
     </tfoot>
     <tbody>
     {% for eventregistration in eventregistration_list %}
-    {% if eventregistration.attending %}
-        <tr class="success">
-    {% else %}
-        <tr class="warning">
-    {% endif %}
-    <td>
-        <a href="{{ eventregistration.event.get_absolute_url }}" style="text-decoration:none;">
-            {% if eventregistration.event.short_name %}
-                {{ eventregistration.event.short_name }}
-            {% else %}
-                {{ eventregistration.event.headline|truncatechars:20 }}
-            {% endif %}
-        </a></td>
-            <td>
-                <time datetime="{{ eventregistration.event.event_start|date:"c" }}">
-                    {{ eventregistration.event.event_start.date|naturalday }} kl. {{ eventregistration.event.event_start|date:"H:i" }}
-                </time>
-            </td>
-            <td>
-            {% if eventregistration.event.deregistration_closed %}
-                Utløpt{% if eventregistration.waiting %}<sup>1</sup>{% endif %}
-            {% else %}
-                {% if eventregistration.event.deregistration_deadline %}
-                    <time datetime="{{ eventregistration.event.deregistration_deadline|date:"c" }}">
-                        {{ eventregistration.event.deregistration_deadline.date|naturalday }} kl. {{ eventregistration.event.deregistration_deadline|date:"H:i" }}
-                    </time>
-                    {%if eventregistration.waiting %}<sup>1</sup>{% endif %}
+        {% if eventregistration.attending %}
+            <tr class="success">
+        {% else %}
+            <tr class="warning">
+        {% endif %}
+        <td>
+            <a href="{{ eventregistration.event.get_absolute_url }}" style="text-decoration:none;">
+                {% if eventregistration.event.short_name %}
+                    {{ eventregistration.event.short_name }}
                 {% else %}
-                  Ingen
+                    {{ eventregistration.event.headline|truncatechars:20 }}
                 {% endif %}
-            {% endif %}
-            </td>
-            <td style="text-align:right;">
-            {% if eventregistration.attending %}
-                <span class="fas fa-thumbs-up"></span>
-            {% else %}
-                Ventelisteplass: {{ eventregistration.waiting_list_place }}
-            {% endif %}
-
-            </td>
-        </tr>
+            </a></td>
+                <td>
+                    <time datetime="{{ eventregistration.event.event_start|date:"c" }}">
+                        {{ eventregistration.event.event_start.date|naturalday }} kl. {{ eventregistration.event.event_start|date:"H:i" }}
+                    </time>
+                </td>
+                <td>
+                {% if eventregistration.event.deregistration_closed %}
+                    Utløpt{% if eventregistration.waiting %}<sup>1</sup>{% endif %}
+                {% else %}
+                    {% if eventregistration.event.deregistration_deadline %}
+                        <time datetime="{{ eventregistration.event.deregistration_deadline|date:"c" }}">
+                            {{ eventregistration.event.deregistration_deadline.date|naturalday }} kl. {{ eventregistration.event.deregistration_deadline|date:"H:i" }}
+                        </time>
+                        {%if eventregistration.waiting %}<sup>1</sup>{% endif %}
+                    {% else %}
+                    Ingen
+                    {% endif %}
+                {% endif %}
+                </td>
+                <td style="text-align:right;">
+                {% now "Y-m-d" as todays_date %}
+                {% if eventregistration.event.has_finished %}
+                    {% if eventregistration.attendance_registration %}
+                        <span class="fas fa-thumbs-up"></span> Du ble registrert på arrangementet
+                    {% else %}
+                        {%if eventregistration.penalty%}
+                            Prikk! Du fikk {{eventregistration.penalty}} prikk(er).
+                        {%else%}
+                            {%if eventregistration.event.penalty == 1%}
+                                Prikk! Eller du kommer til å få det....
+                            {%elif  eventregistration.event.penalty == 2%}
+                                Oppmøte var ikke registrert
+                            {%elif  eventregistration.event.penalty == 3%}
+                                Prikk! Eller du kommer til å få det....
+                            {%else%}
+                                Oppmøte var ikke registrert
+                            {%endif%}
+                        {%endif%}
+                    {%endif%}
+                {%elif eventregistration.event.has_started %}
+                    Arrangementet pågår
+                {%else%}
+                    {%if eventregistration.attending%}
+                        Du har plass på arrangementet {{eventregistration.event.event_date}}                        
+                    {%else%}
+                        Ventelisteplass: {{ eventregistration.waiting_list_place }}
+                    {%endif%}
+                {%endif %}
+                </td>
+            </tr>
     {% endfor %}
     </tbody>
 </table>

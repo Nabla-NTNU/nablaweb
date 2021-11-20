@@ -1,7 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.views import View
 from django.views.generic.list import ListView
 
@@ -17,7 +19,9 @@ class CodeGolf(LoginRequiredMixin, View):
         code_golf_form = CodeGolfForm()
         result_list = task.result_set.all()
         # Cannot use .sorted_by since length is a property, not a db field
-        sorted_result_list = sorted(result_list, key=lambda x: x.length)
+        sorted_result_list = sorted(
+            result_list, key=lambda result: (result.length, result.submitted_at)
+        )
         context = {
             "task": task,
             "code_golf_form": code_golf_form,
@@ -27,6 +31,8 @@ class CodeGolf(LoginRequiredMixin, View):
         return render(request, "interactive/code_golf.html", context)
 
     def post(self, request, task_id):
+        submitted_at = timezone.now()
+
         # Submit output, check answer and count length
         form = CodeGolfForm(request.POST)
 
@@ -44,18 +50,37 @@ class CodeGolf(LoginRequiredMixin, View):
         We cannot know if the user has sent a code that matches the output they
         say that they got. The best we can do is to verify the output sent in the request.
         """
+
         if output != correct_output:
             correct = str(correct_output)
             context = {"correct": correct, "output": output, "task_id": task_id}
             return render(request, "interactive/code_golf_error.html", context)
 
-        # Only one result per user
+        score = Result.compute_length(code)
+
+        try:
+            previous_result = Result.objects.get(user=request.user, task=task)
+        except Result.DoesNotExist:
+            new_best_score = True
+            store_new_code = True
+        else:
+            new_best_score = score < previous_result.length
+            store_new_code = score <= previous_result.length
+
+        updates = {}
+
+        if store_new_code:
+            # The user has tied (or better) their old score -> update the stored code
+            updates["solution"] = code
+
+            if new_best_score:
+                # The user has achieved a new best score -> update the submission time
+                updates["submitted_at"] = submitted_at
+
         Result.objects.update_or_create(
             user=request.user,
             task=task,
-            defaults={
-                "solution": code,
-            },
+            defaults=updates,
         )
 
         return redirect("/kodegolf/score/" + str(task_id))
@@ -69,9 +94,10 @@ def markdownify_code(code):
     As of now, it is to add tabs in front of each line, but this is not very pretty...
     """
 
-    return "\n".join(["\t" + l for l in code.split("\n")])
+    return "\n".join(["\t" + line for line in code.split("\n")])
 
 
+@login_required
 def code_golf_score(request, task_id):
     """
     Show user list with number of chars for their code.
@@ -80,26 +106,22 @@ def code_golf_score(request, task_id):
 
     task = get_object_or_404(CodeTask, pk=task_id)
     result_list = task.result_set.all()
-    # Cannot use .sorted_by since length is a property, not a db field
-    sorted_result_list = sorted(result_list, key=lambda x: x.length)
 
-    output = task.correct_output
-    output = markdownify_code(output)
+    # Cannot use .sorted_by since length is a property, not a db field
+    sorted_result_list = sorted(
+        result_list, key=lambda result: (result.length, result.submitted_at)
+    )
+
+    output = markdownify_code(task.correct_output)
 
     context = {"output": output, "result_list": sorted_result_list}
 
-    # True if the user has a solution, false if not
-    try:
-        user_has_solution = result_list.filter(user=request.user).exists
-        print(user_has_solution)
-    except Exception as e:
-        print(e)
-        user_has_solution = False  # If user is anonymous
+    user_result = result_list.filter(user=request.user).first()
+    user_has_solution = user_result is not None
 
     context["has_solution"] = user_has_solution
 
     if user_has_solution:
-        user_result = result_list.get(user=request.user)
         length = user_result.length
         code = user_result.solution  # Add #!python for markdown
         code = markdownify_code(code)

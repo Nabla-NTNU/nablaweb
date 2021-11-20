@@ -6,23 +6,54 @@
 
 {% block more_head %}
 
-<script src="{% static "interactive/js/skulpt.min.js" %}" type="text/javascript"></script> 
-<script src="{% static "interactive/js/skulpt-stdlib.js" %}" type="text/javascript"></script> 
+<script src="{% static "interactive/js/skulpt.min.js" %}" type="text/javascript"></script>
+<script src="{% static "interactive/js/skulpt-stdlib.js" %}" type="text/javascript"></script>
 
 {% endblock %}
 
 
 {% block content %}
-<script type="text/javascript"> 
+<script type="text/javascript">
+{% autoescape off %}
+const correctOutputLines = JSON.parse('{{ task.correct_output_json }}');
+{% endautoescape %}
+
+const outputLinesEquality = (lines, correctLines) => {
+    // Check for equality of the two arrays
+    // Ignores the last element of an array if it is empty
+    const checkedLength = Math.min(lines.length, correctLines.length);
+
+    if (lines.length > checkedLength + 1)
+        return false;
+    if (correctLines.length > checkedLength + 1)
+        return false;
+
+    for (let i=0; i < checkedLength; i++) {
+        if (lines[i] !== correctLines[i])
+            return false;
+    }
+
+    if (correctLines.length === checkedLength + 1 && correctLines[correctLines.length - 1] !== "")
+        return false
+    else if (lines.length === checkedLength + 1 && lines[lines.length - 1] !== "")
+        return false
+
+    return true;
+}
+
 // output functions are configurable.  This one just appends some text
 // to a pre element.
-function outf(text) { 
-    var mypre = document.getElementById("output"); 
-    mypre.innerHTML = mypre.innerHTML + text; 
-} 
+function outf(text) {
+    var mypre = document.getElementById("output");
+    mypre.innerHTML = mypre.innerHTML + text;
+}
+function setError(text) {
+    var mypre = document.getElementById("error");
+    mypre.innerHTML = text;
+}
 function builtinRead(x) {
     if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
-            throw "File not found: '" + x + "'";
+        throw "File not found: '" + x + "'";
     return Sk.builtinFiles["files"][x];
 }
 // Here's everything you need to run a python program in skulpt
@@ -30,49 +61,69 @@ function builtinRead(x) {
 // get a reference to your pre element for output
 // configure the output function
 // call Sk.importMainWithBody()
-function runit() { 
-   var prog = document.getElementById("yourcode").value; 
-   var mypre = document.getElementById("output"); 
-   mypre.innerHTML = ''; 
-   Sk.pre = "output";
-   Sk.configure({output:outf, read:builtinRead}); 
-   (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
-   var myPromise = Sk.misceval.asyncToPromise(function() {
-       return Sk.importMainWithBody("<stdin>", false, prog, true);
-   });
-   myPromise.then(function(mod) {
-       console.log('success');
-   },
-       function(err) {
-       console.log(err.toString());
-   });
-   document.getElementById("id_submitted_code").value = prog;
-   document.getElementById("id_submitted_output").value = mypre.innerHTML;
-} 
-</script> 
+function runit() {
+    const correctnessIndicator = document.getElementById("correctnessIndicator");
+    correctnessIndicator.className = "fas fa-spinner fa-pulse";
+    var prog = document.getElementById("yourcode").value;
+    var mypre = document.getElementById("output");
+    mypre.innerHTML = '';
+    Sk.pre = "output";
+    Sk.configure({output: outf, read: builtinRead});
+    (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+    var myPromise = Sk.misceval.asyncToPromise(function() {
+        return Sk.importMainWithBody("<stdin>", false, prog, true);
+    });
+    myPromise
+        .then(() => {
+            // Clear the error text-box
+            setError("");
 
-<h3>{{ task }}</h3> 
+            const output = mypre.innerHTML;
+
+            // Update the form
+            document.getElementById("id_submitted_code").value = prog;
+            document.getElementById("id_submitted_output").value = output;
+
+            // Set the checkmark or the x based on correctness of output
+            const outputLines = output.split("\n");
+            if (outputLinesEquality(outputLines, correctOutputLines)) {
+                correctnessIndicator.className = "fas fa-check";
+            } else {
+                correctnessIndicator.className = "fas fa-times";
+            }
+        })
+        .catch((error) => {
+            setError(error);
+            correctnessIndicator.className = "fas fa-times";
+        });
+}
+</script>
+
+<h3>{{ task }}</h3>
 
 <p>{{ task_text|markdown }}</p>
 
-<form> 
+<form>
 <textarea id="yourcode" cols="40" rows="10">
 #Kode her (tips: fjern disse kommentarene for å få færre tegn)
 #Whitepaces blir telt
 
-</textarea><br />
+</textarea>
+<br />
 
 {{ form.shown_code }}
-<button type="button" onclick="runit()">Run</button> 
-</form> 
-<pre id="output" style="max-height:300px" ></pre> 
-<!-- If you want turtle graphics include a canvas -->
+<button type="button" onclick="runit()">Run</button>
+</form>
+
+<pre id="output" style="max-height:300px;margin-top:1em;padding:0.5em;border-style:solid" ></pre>
+<pre id="error" style="max-height:300px;color:red" ></pre>
 
 <form method="POST">
     {% csrf_token %}
-    <p id="submitted_code">{{ code_golf_form.submitted_code }}</p> 
+    <p id="submitted_code">{{ code_golf_form.submitted_code }}</p>
     <p id="submitted_output">{{ code_golf_form.submitted_output }}</p>
     <button type="submit">Send</button>
+    <i id="correctnessIndicator" class="" style="margin-left:0.5em"></i>
 </form >
 
  {% endblock %}
@@ -89,4 +140,3 @@ function runit() {
       {% endfor %}
     </table>
 {% endblock  %}
-

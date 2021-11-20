@@ -16,6 +16,7 @@ from .views.advent import (
 )
 from .views.code_golf import CodeGolf, CodeTaskListView, code_golf_score
 from .views.color_picker import submitColorChoice
+from .views.games import GamesList
 from .views.place import (
     NewestPlaceView,
     PlaceView,
@@ -30,27 +31,27 @@ from .views.user_test import TestView, test_result
 
 urlpatterns = [
     path(
-        "julekalender/<int:year>/",
+        "joulekalender/<int:year>/",
         AdventCalendarView.as_view(),
         name="advent_calendar",
     ),
     path(
-        "julekalender/<int:year>/<int:number>/",
+        "joulekalender/<int:year>/<int:number>/",
         AdventDoorView.as_view(),
         name="advent_door",
     ),
     path(
-        "julekalender/<int:year>/<int:number>/delta/",
+        "joulekalender/<int:year>/<int:number>/delta/",
         participate_in_competition,
         name="advent_participate",
     ),
     path(
-        "julekalender/<int:year>/<int:number>/admin/",
+        "joulekalender/<int:year>/<int:number>/admin/",
         AdventDoorAdminView.as_view(),
         name="advent_admin",
     ),
     path(
-        "julekalender/<int:year>/<int:number>/admin/reset/",
+        "joulekalender/<int:year>/<int:number>/admin/reset/",
         reset_door,
         name="advent_admin_reset",
     ),
@@ -74,6 +75,7 @@ urlpatterns = [
         QuizScoreboardView.as_view(),
         name="quiz_score",
     ),
+    path("spill/", GamesList.as_view(), name="games_list"),
     path("brukertest/<int:pk>/", TestView.as_view(), name="user_test"),
     path("brukertest/<int:pk>/resultat/", test_result, name="test_result"),
     path("kodegolf/", CodeTaskListView.as_view(), name="code_golf_menu"),

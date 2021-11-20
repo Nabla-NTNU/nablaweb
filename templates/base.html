@@ -3,6 +3,7 @@
 {% load sekizai_tags %}
 {% load bootstrap4 %}
 {% load static %}
+{% load cart_template_tags %}
 <!DOCTYPE html>
 <html lang="no">
    <!--
@@ -253,14 +254,12 @@
                             <a class="dropdown-item" href="{% url "season_view" %}">Skråttcast</a>
                             <a class="dropdown-item" href="/referater/{% now "Y" %}">Styremøtereferater</a>
                             <a class="dropdown-item" href="{% url "albums" %}">Bildealbum</a>
-                            <a class="dropdown-item" href="{% url "code_golf_menu" %}">Kodegolf</a>
+                            <a class="dropdown-item" href="{% url "games_list" %}">Spill</a>
                             <a class="dropdown-item" href="{% url "wiki:root" %}">NablaWiki</a>
                             <a class="dropdown-item" href="{% url "news_list" %}">Nyheter</a>
                             <a class="dropdown-item" href="{% url "blog" %}">Blogg</a>
-                            <a class="dropdown-item" href="/julekalender/2020/">Julekalender 2020</a>
-{% comment %}
-                            <a class="dropdown-item" href="{% url "advent_calendar" "2020" %}">Julekalender 2020</a>
-{% endcomment %}
+                            <a class="dropdown-item" href="{% url "advent_calendar" "2021" %}">Joulekalender 2021</a>
+
                     <li class="nav-item mr-1 dropdown ">
                         <a href="#ting" class="nav-link dropdown-toggle text-light" data-toggle="dropdown" id="navbarDropdown1" role="button"  aria-haspopup="true" aria-expanded="false">
                             Om Nabla
@@ -308,6 +307,15 @@
 {#                    <input name="q" placeholder="Søk..." type="search" class="form-control mr-sm-2">#}
 {#                </form>#}
                 <ul class="nav navbar-nav ">
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'nablashop:order-summary' %}" class="nav-link waves-effect">
+                            <span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="clearfix d-none d-sm-inline-block"> Handlevogn </span>
+                        </a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item mr-1 ">
                         <a class="nav-link text-light" href="/search/">Søk</a>
                     </li>
@@ -456,6 +464,7 @@
                 <p>
                 Organisasjonsnr.: <span class="float-right">992168544</span><br />
                 Hovedkonto: <span class="float-right">1503.13.57338</span><br />
+                Bedriftskontakten-konto: <span class="float-right">1503.13.57311</span><br />
                 Arrkomkonto: <span class="float-right">1503.13.57400</span><br />
                 ProKom-konto: <span class="float-right">1503.13.57338</span><br />
                 Gravitoneskonto: <span class="float-right">1503.65.97965</span><br />

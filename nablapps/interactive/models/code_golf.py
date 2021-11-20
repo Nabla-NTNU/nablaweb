@@ -1,6 +1,9 @@
 # Models for code_golf
+import json
+
 from django import template
 from django.db import models
+from django.utils import timezone
 
 from nablapps.accounts.models import NablaUser
 
@@ -24,11 +27,30 @@ class CodeTask(models.Model):
         else:
             return None
 
+    @property
+    def correct_output_json(self):
+        """
+        JSON repr of the list of lines in the correct output
+
+        Used to transfer the correct output to the template
+        """
+        return json.dumps(
+            [line.rstrip("\r") for line in self.correct_output.split("\n")]
+        )
+
 
 class Result(models.Model):
     """
     Users solution to a CodeTask
     """
+
+    class Meta:
+        # Each user should only have one submission per task
+        constraints = (
+            models.UniqueConstraint(
+                fields=("task", "user"), name="code_golf_result_unique_task_user"
+            ),
+        )
 
     task = models.ForeignKey(
         CodeTask,
@@ -39,10 +61,18 @@ class Result(models.Model):
         on_delete=models.CASCADE,
     )
     solution = models.TextField(default="")  # Users code
+    submitted_at = models.DateTimeField(
+        default=timezone.now,
+        help_text="The time that the user first submitted code with this score (worse submissions do not update this field)",
+    )
+
+    @staticmethod
+    def compute_length(submission: str) -> int:
+        return len(submission.strip())
 
     @property
     def length(self):
-        return len(self.solution.strip())
+        return self.compute_length(self.solution.strip())
 
     def __str__(self):
         return f"{self.user}'s solution to CodeTask #{self.task.id}"

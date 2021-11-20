@@ -2,6 +2,9 @@
 Utilities for admin
 """
 
+from django.contrib import admin
+from django.contrib.admin.models import LogEntry
+
 
 class ChangedByMixin:  # pylint: disable=too-few-public-methods
     """
@@ -28,3 +31,23 @@ class ChangedByMixin:  # pylint: disable=too-few-public-methods
         if getattr(obj, "created_by", None) is None:
             obj.created_by = request.user
         super().save_model(request, obj, form, change)
+
+
+class LogEntryAdmin(admin.ModelAdmin):
+    model = LogEntry
+    readonly_fields = list_display = (
+        "user",
+        "content_type",
+        "object_id",
+        "object_repr",
+        "action_flag",
+        "change_message",
+        "action_time",
+    )
+    list_select_related = ("user", "content_type")
+    search_fields = ("user__username", "user__first_name", "user__last_name")
+    list_filter = ("action_flag", "content_type")
+    date_hierarchy = "action_time"
+
+
+admin.site.register(LogEntry, LogEntryAdmin)

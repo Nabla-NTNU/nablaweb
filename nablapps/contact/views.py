@@ -3,6 +3,7 @@ import random
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import resolve
 
 from .forms import ContactForm, FeedbackForm
 
@@ -63,6 +64,9 @@ def feedback(request, template="feedback.html", send_to="webkom@nabla.no"):
                     send_mail(subject, message, email, [send_to], fail_silently=False)
                 except BadHeaderError:
                     return HttpResponse("Invalid header found")
+                if resolve(request.path_info).url_name == "gullkorn":
+                    return HttpResponseRedirect("/contact/success_gullkorn/")
+                    # sjekker om man leverer et gullkorn
                 return HttpResponseRedirect("/contact/success/")
             else:
                 spam_check = True
@@ -73,6 +77,10 @@ def feedback(request, template="feedback.html", send_to="webkom@nabla.no"):
 
 def success(request):
     return render(request, "contact/success.html")
+
+
+def success_gullkorn(request):
+    return render(request, "contact/success_gullkorn.html")
 
 
 #######################################################################

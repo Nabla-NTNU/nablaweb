@@ -14,6 +14,7 @@
                     <div class="caption">
                         <p>{{ product.name }}</p>
                         <p>{{ product.price }} kr</p>
+                        <p>{{ product.stock }} stk på lager</p>
                         <p><a href="{% url 'nablashop:product_detail' product.id %}" class="btn btn-primary center-block"
                               role="button">Les mer</a>
                     </div>

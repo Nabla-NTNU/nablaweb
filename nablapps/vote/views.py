@@ -1,4 +1,5 @@
 from itertools import chain
+from random import shuffle
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
@@ -198,6 +199,10 @@ class Vote(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        alternatives = self.object.alternatives.all()
+        alternatives = [alt for alt in alternatives]
+        shuffle(alternatives)
+        context["randomized_alternatives"] = alternatives
         context["has_voted"] = self.object.user_already_voted(self.request.user)
         return context
 

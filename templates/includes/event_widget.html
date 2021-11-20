@@ -3,7 +3,8 @@
         <h3 > <a class="text-dark" href="{% url 'event_main_page' %}?type=event">Arrangementer</a> </h3>
         {% include "includes/upcoming_events.html" with upcoming=upcoming_events class="c-event" %}
     </div>
-    <div class="col-md-6">
+
+    <div class="col-md-6"; style = "margin-top: 10px;">
         <h3> <a class="text-dark" href="{% url 'event_main_page' %}?type=bedpres">Bedriftspresentasjoner</a> </h3>
         {% include "includes/upcoming_events.html" with upcoming=upcoming_bedpreses class="c-bedpres"%}
     </div>

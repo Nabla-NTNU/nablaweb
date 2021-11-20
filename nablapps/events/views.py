@@ -247,6 +247,7 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
         if (
             event.get_noshow_penalty() is not None
             and event.get_noshow_penalty()
+            and user.is_authenticated
             and user.ntnu_card_number in [None, ""]
             and event.is_registered(user)
         ):
