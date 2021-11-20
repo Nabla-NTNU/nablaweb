@@ -19,7 +19,9 @@ class CodeGolf(LoginRequiredMixin, View):
         code_golf_form = CodeGolfForm()
         result_list = task.result_set.all()
         # Cannot use .sorted_by since length is a property, not a db field
-        sorted_result_list = sorted(result_list, key=lambda x: x.length)
+        sorted_result_list = sorted(
+            result_list, key=lambda result: (result.length, result.submitted_at)
+        )
         context = {
             "task": task,
             "code_golf_form": code_golf_form,
