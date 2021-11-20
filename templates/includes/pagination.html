@@ -4,7 +4,7 @@ It fits perfectly if you are using the django.views.generic.ListView with pagina
 {% endcomment %}
 {% if is_paginated %}
     <nav>
-        <ul class="pagination d-flex justify-content-between">
+        <ul class="pagination d-flex justify-content-center">
             {% if page_obj.has_previous %}
                 <li class="page-item">
                     <a class="page-link" href="?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> Nyere</a>

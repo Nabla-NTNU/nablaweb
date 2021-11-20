@@ -22,7 +22,9 @@
         {% empty %}
         <p>Vi har for øyeblikket ingen stillingsannonser som matcher dine kriterier.</p>
         {% endfor %}
-        {% include "includes/pagination.html" %}
+        <div class="m-auto">
+            {% include "includes/pagination.html" %}
+        </div>
     </div>
     <div class="col-md-4">
         <div class="card pb-2">

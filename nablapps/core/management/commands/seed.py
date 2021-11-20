@@ -21,6 +21,7 @@ from faker import Factory
 from nablapps.accounts.models import FysmatClass, NablaGroup
 from nablapps.accounts.models import NablaUser as User
 from nablapps.events.models import Event
+from nablapps.jobs.models import Advert, Company
 from nablapps.news.models import FrontPageNews, NewsArticle
 
 fake = Factory.create("no_NO")  # Norwegian sentences
@@ -171,3 +172,19 @@ class Command(BaseCommand):
             f = FrontPageNews()
             f.content_object = event
             f.save()
+
+        print("Creating %d Companies and Adverts" % count)
+        for i in range(count):
+            company = Company.objects.create(
+                website="www.example.com",
+                name=fake.name(),
+                description="company",
+            )
+            start = fake.date_time_between_dates(
+                datetime_start=dt.now() + td(days=2), datetime_end=(dt.now() + td(30))
+            )
+            job = Advert.objects.create(
+                company=company,
+                headline="stilling_" + str(count),
+                removal_date=start + td(days=100),
+            )
