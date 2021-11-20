@@ -99,3 +99,34 @@ class CodeGolfTests(TestCase):
         self.assertEqual(
             self.task.result_set.first().length, Result.compute_length(code_2)
         )
+
+    def test_view_score(self):
+        url = reverse("code_golf_score", kwargs={"task_id": self.task.id})
+        response = self.client.get(url)
+        self.assertEqual(
+            response.status_code,
+            200,
+            "View should return ok when user has not submitted",
+        )
+
+        self.submit_code("print(1)")
+        response = self.client.get(url)
+        self.assertEqual(
+            response.status_code, 200, "View should return ok when user has submitted"
+        )
+
+        self.task.delete()
+        response = self.client.get(url)
+        self.assertEqual(
+            response.status_code,
+            404,
+            "View should return not found when task doesn't exist",
+        )
+
+        self.client.logout()
+        response = self.client.get(url)
+        self.assertEqual(
+            response.status_code,
+            302,
+            "View should redirect to login when user is logged out",
+        )
