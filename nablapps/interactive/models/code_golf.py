@@ -44,6 +44,14 @@ class Result(models.Model):
     Users solution to a CodeTask
     """
 
+    class Meta:
+        # Each user should only have one submission per task
+        constraints = (
+            models.UniqueConstraint(
+                fields=("task", "user"), name="code_golf_result_unique_task_user"
+            ),
+        )
+
     task = models.ForeignKey(
         CodeTask,
         on_delete=models.CASCADE,
