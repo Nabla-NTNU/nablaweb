@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
@@ -94,6 +95,7 @@ def markdownify_code(code):
     return "\n".join(["\t" + line for line in code.split("\n")])
 
 
+@login_required
 def code_golf_score(request, task_id):
     """
     Show user list with number of chars for their code.
@@ -108,23 +110,16 @@ def code_golf_score(request, task_id):
         result_list, key=lambda result: (result.length, result.submitted_at)
     )
 
-    output = task.correct_output
-    output = markdownify_code(output)
+    output = markdownify_code(task.correct_output)
 
     context = {"output": output, "result_list": sorted_result_list}
 
-    # True if the user has a solution, false if not
-    try:
-        user_has_solution = result_list.filter(user=request.user).exists
-        print(user_has_solution)
-    except Exception as e:
-        print(e)
-        user_has_solution = False  # If user is anonymous
+    user_result = result_list.filter(user=request.user).first()
+    user_has_solution = user_result is not None
 
     context["has_solution"] = user_has_solution
 
     if user_has_solution:
-        user_result = result_list.get(user=request.user)
         length = user_result.length
         code = user_result.solution  # Add #!python for markdown
         code = markdownify_code(code)
