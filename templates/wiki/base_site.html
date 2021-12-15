@@ -66,15 +66,6 @@
 {% endblock %}
 {% block main %}
 
-{% if messages %}
-<!-- Messages for this instance -->
-{% for message in messages %}
-<div class="alert alert-{{ message.tags }}">
-    <a class="close" data-dismiss="alert" href="#">&times;</a>
-    {{ message }}
-</div>
-{% endfor %}
-{% endif %}
 
 <!-- Reserved for breadcrumbs -->
 {% block wiki_breadcrumbs %}{% endblock %}
