@@ -1,3 +1,4 @@
+import json
 from itertools import chain
 from random import shuffle
 
@@ -5,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db import transaction
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
@@ -18,9 +20,44 @@ from .models import (
     VotingEvent,
 )
 
+
 ####################
 ### Admin views ####
 ####################
+def voting_to_JSON(voting):
+    json = {}
+    json["pk"] = voting.pk
+    json["title"] = voting.title
+    json["active"] = voting.is_active
+    json["num_voted"] = voting.get_total_votes()
+    json["created_by"] = getattr(voting.created_by, "username", "Admin (aka unknown)")
+    return json
+
+
+class VotingListJSONView(DetailView):
+    """Could possibly do this function based"""
+
+    permission_required = ("vote.vote_admin", "vote.vote_inspector")
+    model = VotingEvent
+
+    def get(self, request, *args, **kwargs):
+        votings = self.get_object().votings.all()
+        return JsonResponse(
+            {"votings": {voting.pk: voting_to_JSON(voting) for voting in votings}}
+        )
+
+    def post(self, request, *args, **kwargs):
+        votings = self.get_object().votings.all()
+        data = json.loads(request.body)
+        # NOTE: there are two pk
+        # data.pk is the POST data referring to a voting
+        # kwargs.pk is the GET data referring to the voting event of the view.
+        to_change = votings.get(pk=data.get("pk"))
+        to_change.is_active = data.get("active")
+        to_change.save()
+        return JsonResponse(
+            {"votings": {voting.pk: voting_to_JSON(voting) for voting in votings}}
+        )
 
 
 class VotingEventList(PermissionRequiredMixin, ListView):

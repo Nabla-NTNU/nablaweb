@@ -1,30 +1,128 @@
 {% extends "base.html"%}
 
+{% block more_head %}
+<style>
+ .voting_item {
+     display: block;
+     padding: 5px 5px;
+     /* border-bottom: 0.4px solid gray; */
+     border-radius: 5px;
+     box-shadow: rgba(0,0,0,0.5) 0 4px 6px -3px;
+     margin-bottom: 15px;
+ }
+
+ .voting_item__metadata {
+     float: right;
+ }
+ 
+ .voting_item__metadata span {
+     color: gray;
+     font-size: small;
+     margin: 0 4px;
+ }
+</style>
+{% endblock %}
+
 {% block main %}
+<!-- <script src="https://unpkg.com/vue@next"></script> -->
+<!-- <script src="https://unpkg.com/axios/dist/axios.js"></script> -->
+<script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script>
+<script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script>
 <h1>Avstemninger</h1>
 <a href="{% url "voting-event-list" %}"><i class="fas fa-arrow-left"></i> Tilbake til avstemningsarrangementer</a>
 <br>
 {% if is_admin %}
 <a href="{% url "create-voting" pk=object.pk %}">Opprett ny avstemning</a>
 {% endif %}
-    <table>
-        {% for vote in object.votings.all %}
-        <tr>
-            <td>
-               {% if vote.is_active %}
-               <a href="{% url "deactivate-voting" pk=vote.pk redirect_to=request.path %}" class="text-success fas fa-lg fa-toggle-on btn{% if not is_admin %} disabled{% endif %}"></a>
-               {% else %}
-               <a href="{% url "activate-voting" pk=vote.pk redirect_to=request.path %}" class="text-danger fas fa-lg fa-toggle-off btn{% if not is_admin %} disabled{% endif %}"></a>
-               {% endif %}
-            </td>
-            <td><a href="{% url "voting-detail" pk=vote.pk %}">{{ vote.title }}</a></td>
-            <td>
-                {% for alternative in vote.alternatives.all %}
-                    <span>{{ alternative }}: {{ alternative.votes }} ({{ alternative.get_vote_percentage }}%)|</span>
-                {% endfor %}
-               </div>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+
+<div id="vote-list" >
+  <vote-item
+    v-for="vote in votes"
+    v-bind:vote="vote"
+    ></vote-item>
+</div>
+<script>
+ const VoteItem = {
+     delimiters: ['[[', ']]'],
+     props: ['vote'],
+     template: `
+         <div class="voting_item">
+         <span
+	     v-on:click="toggleActive"
+             class="fas fa-lg btn"
+             v-bind:class="classObject"
+         ></span>
+	 <a href="{% url "voting-detail" pk=object.pk %}">
+         <span class="voting_item__title">[[ vote.title ]]</span>
+	 </a>
+         <span class="voting_item__metadata">
+         <span><span class="fas fa-users"></span> [[ vote.num_voted ]]</span>
+         <span><span class="fas fa-user"></span> [[ vote.created_by ]]</span>
+         </span>
+         </div>
+     `,
+     data() {
+	 return {
+	     is_admin: {{ is_admin|lower }}
+	 }
+     },
+     computed: {
+	 classObject() {
+	     return [
+	      	 this.vote.active ? 'text-success' : 'text-danger',
+	      	 this.vote.active ? 'fa-toggle-on' : 'fa-toggle-off',
+		 {disabled: !this.is_admin }
+	     ]
+	 }
+     },
+     methods: {
+	 toggleActive() {
+	     if ( !this.is_admin ) { return }
+	     axios
+		 .post("{% url 'api-voting-list' pk=object.pk %}", {pk: this.vote.pk, active: !this.vote.active},
+		       {headers: {
+			   'X-CSRFToken': '{{ csrf_token }}' 
+		 }})
+		 .then(response => {
+		     this.$parent.updateVotes(response.data.votings)
+		 })
+		 .catch(error => {
+		     console.log(error)
+		     alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+		 })
+	 }
+     }
+ }
+
+ const VoteList = {
+     delimiters: ['[[', ']]'],
+     components: {
+	 VoteItem
+     },
+     data() {
+	 return {
+	     votes: null,
+	 }
+     },
+     methods: {
+	 updateVotes(votes) {
+	     this.votes = votes
+	 }
+     },
+     mounted: function() {
+	 axios
+	     .get("{% url 'api-voting-list' pk=object.pk %}")
+	     .then((response) => {
+		 this.updateVotes(response.data.votings)
+	     })
+	     .catch(error => {
+		 console.log(error)
+		 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+	     })
+     },
+ }
+
+ const app = Vue.createApp(VoteList)
+ const vm = app.mount('#vote-list')
+</script>
 {% endblock %}

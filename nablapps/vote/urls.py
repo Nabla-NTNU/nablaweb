@@ -8,6 +8,7 @@ from .views import (  # submit_vote,
     VotingEdit,
     VotingEventList,
     VotingList,
+    VotingListJSONView,
     activate_voting,
     deactivate_voting,
 )
@@ -15,6 +16,9 @@ from .views import (  # submit_vote,
 urlpatterns = [
     path("admin/", VotingEventList.as_view(), name="voting-event-list"),
     path("admin/<int:pk>/list/", VotingList.as_view(), name="voting-list"),
+    path(
+        "admin/<int:pk>/api/list/", VotingListJSONView.as_view(), name="api-voting-list"
+    ),
     path("admin/<int:pk>/create_voting/", CreateVoting.as_view(), name="create-voting"),
     path(
         "admin/detail/<int:pk>/",
