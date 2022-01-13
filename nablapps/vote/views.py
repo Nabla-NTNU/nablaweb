@@ -189,7 +189,7 @@ def deactivate_voting(request, pk, redirect_to):
 
 
 ###########################################
-### Non admin vies, only login required ###
+### Non admin views, only login required ###
 ###########################################
 
 
