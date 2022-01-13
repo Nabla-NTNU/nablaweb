@@ -1,13 +1,14 @@
 {% comment %}
 This template is to be included if you want a pager.
 It fits perfectly if you are using the django.views.generic.ListView with pagination.
+if exclude in url to new pages is for jobs_list and should not affect other lists.
 {% endcomment %}
 {% if is_paginated %}
     <nav>
         <ul class="pagination d-flex justify-content-center">
             {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> Nyere</a>
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if exclude %}&exclude=true{% endif %}"><span aria-hidden="true">&larr;</span> Nyere</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
@@ -18,10 +19,10 @@ It fits perfectly if you are using the django.views.generic.ListView with pagina
             <li class="disabled page-item pager-counter">
                 <a class="page-link" >Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</a>
             </li>
-
+            
             {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Eldre <span aria-hidden="true">&rarr;</span></a>
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if exclude %}&exclude=true{% endif %}">Eldre <span aria-hidden="true">&rarr;</span></a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
