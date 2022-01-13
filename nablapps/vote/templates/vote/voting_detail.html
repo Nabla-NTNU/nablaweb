@@ -18,10 +18,46 @@
         <a href="{% url "activate-voting" pk=object.pk redirect_to=request.path %}">Aktiver avstemningen</a>
     {% endif %}
 {% endif %}
+<form method="POST">
+    {% csrf_token %}
+    <button class="btn btn-primary btn-block" type="submit">Distribute votes</button>
+</form>
 <p>{{ object.description|markdown }}</p>
 <b>Totalt antall stemmer: {{ object.get_total_votes }}</b>
+<br>
+<b>Antall vinnere: {{ object.num_winners }}</b>
+<br>
+<b>quota(vinnergrense): {{ quota }}</b>
+<br>
+<br>
+
+<h3> VINNERE: </h3>
+{% if winners %}
+<div class="alert alert-success" role="alert">
+<ul>
+{% for winner in winners %}
+
+    <li>{{ winner }}</li>
+{% endfor %}
+</ul>
+</div>
+{% else %}
+<div class="alert alert-primary" role="alert">
+    Vinnere ikke beregnet
+</div>
+{% endif %}
+<br>
+<br>
+
+<h3> Kandidater: </h3>
+
 {% for alternative in object.alternatives.all %}
-<p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>
+    {% if object.num_winners > 1 %}
+        <h2>{{ alternative }}</h2>
+        <p>Antall (fordelte) stemmer: {{ alternative.ballots.count }}</p>
+    {% else %}
+        <p>{{ alternative }}, votes: {{ alternative.votes }}, andel: {{ alternative.get_vote_percentage }}%</p>
+    {% endif %}
 {% endfor %}
 {% if is_admin %}
     <a href="{% url "voting-edit" pk=object.pk %}"><i class="fas fa-pencil-alt"></i> Endre avstemning</a><br>
