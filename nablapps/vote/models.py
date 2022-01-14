@@ -25,6 +25,12 @@ class VotingEvent(models.Model):
         null=True,
     )
 
+    def user_eligble(self, user):
+        """Check if user i eligble for voting event."""
+        if self.eligble_group is None:
+            return True  # Empty group means no restrictions.
+        return user.groups.all().union(self.event.eligble_group).exists()
+
     class Meta:
         permissions = [
             ("vote_admin", "can administer voting"),
@@ -111,13 +117,7 @@ class Voting(models.Model):
         self.is_active = False
 
     def user_not_eligible(self, user):
-        if self.event.eligible_group is not None:
-            if user.groups.all().filter(name=self.event.eligible_group).exists():
-                return False
-            else:
-                return True
-        else:
-            return False
+        return not self.event.user_eligble(user)
 
     def submit_stv_votes(self, user, ballot_dict):
         """Submits transferable votes i.e. creates ballot"""
