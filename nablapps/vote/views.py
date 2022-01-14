@@ -78,7 +78,7 @@ def register_attendance(request, event_pk, user_pk):
                     "status": "failure",
                     "reason": reason,
                     "user": None,
-                    "in/out": None,
+                    "inout": None,
                     "currently_checked_in": None,
                 }
             )
@@ -110,7 +110,7 @@ def register_attendance(request, event_pk, user_pk):
             "status": status,
             "reason": reason,
             "user": user.username,
-            "in/out": event.user_checked_in(user),
+            "inout": event.user_checked_in(user),
             "currently_checked_in": [
                 user.username for user in event.checked_in_users.all()
             ],
@@ -129,7 +129,7 @@ def register_attendance_card(request, event_pk, rfid_number):
                 "status": "failure",
                 "reason": "Unknown card",
                 "user": None,
-                "in/out": None,
+                "inout": None,
                 "currently_checked_in": None,
             }
         )
@@ -143,14 +143,19 @@ def register_attendance_username(request, event_pk, username):
         return JsonResponse(
             {
                 "status": "failure",
-                "reason": "Unknown username",
+                "reason": f"Unknown username '{username}'",
                 "user": None,
-                "in/out": None,
+                "inout": None,
                 "currently_checked_in": None,
             }
         )
     else:
         return register_attendance(request, event_pk, user.pk)
+
+
+class RegisterAttendanceView(DetailView):
+    model = VotingEvent
+    template_name = "vote/register_attendance.html"
 
 
 class VotingListJSONView(DetailView):

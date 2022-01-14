@@ -1,0 +1,63 @@
+{% extends "base.html"%}
+
+{% block main %}
+<h1>hei</h1>
+<script src="https://unpkg.com/vue@next"></script>
+<script src="https://unpkg.com/axios/dist/axios.js"></script>
+<!-- <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script> -->
+<!-- <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script> -->
+<div id="attendance-app" >
+  <user-item
+    v-for="user in users"
+   ></user-item>
+</div>
+<script>
+  const UserItem = {
+      delimiters: ['[[', ']]'],
+      template: '<div>[[ user ]]</div>',
+  }
+  
+  const AttendanceApp = {
+      delimiters: ['[[', ']]'],
+      data() {
+	  return {
+	      textField: null,
+	      users: [],
+	      lastUser: null,
+	      lastUserInOut: null,
+	      status: null,
+	  }
+      },
+      template: `<form @submit.prevent="submitForm">
+<input type="text" placeholder="Enter card number" v-model="textField">
+</form>
+<span v-if="this.status=='success'">OK</span>
+<span v-else>Not ok</span>
+<ul>
+<li v-for="user in users">[[ user ]]</li></ul>`,
+      mounted: function() {
+	      axios
+		  .get("/stem/admin/1/api/attendance/username/" + this.textField + "?action=nothing")
+		  .then(response => {
+		      console.log(response.data)
+		      this.users = response.data.currently_checked_in
+		  })
+      },
+      methods: {
+	  submitForm() {
+	      axios
+		  .get("/stem/admin/1/api/attendance/username/" + this.textField)
+		  .then(response => {
+		      this.users = response.data.currently_checked_in
+		      this.lastUser = response.data.user
+		      this.lastUserInOut = response.data.inout
+		      this.status = response.data.status
+		  })
+	  }
+      }
+  }
+
+  const app = Vue.createApp(AttendanceApp)
+  const vm = app.mount('#attendance-app')
+  </script>
+{% endblock main %}
