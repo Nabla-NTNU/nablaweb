@@ -59,6 +59,15 @@
          <span><span class="fas fa-users"></span> [[ vote.num_voted ]]</span>
          <span><span class="fas fa-user"></span> [[ vote.created_by ]]</span>
          </span>
+         <span class="voting_item__results" v-if="vote.num_voted">
+<ul>
+            <li v-for="alternative in vote.alternatives">
+[[ alternative.text ]] | 
+[[ alternative.votes ]] stemmer 
+([[ alternative.percentage ]]%)
+            </li>
+</ul>
+         </span>
          </div>
      `,
      data() {

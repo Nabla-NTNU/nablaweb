@@ -31,6 +31,15 @@ def voting_to_JSON(voting):
     json["active"] = voting.is_active
     json["num_voted"] = voting.get_total_votes()
     json["created_by"] = getattr(voting.created_by, "username", "Admin (aka unknown)")
+    json["alternatives"] = {
+        a.pk: {
+            "pk": a.pk,
+            "text": a.text,
+            "votes": a.votes,
+            "percentage": a.get_vote_percentage(),
+        }
+        for a in voting.alternatives.all()
+    }
     return json
 
 
