@@ -25,11 +25,37 @@ class VotingEvent(models.Model):
         null=True,
     )
 
-    def user_eligble(self, user):
-        """Check if user i eligble for voting event."""
-        if self.eligble_group is None:
+    def user_eligible(self, user):
+        """Check if user i eligible for voting event."""
+        if self.eligible_group is None:
             return True  # Empty group means no restrictions.
-        return user.groups.all().union(self.event.eligble_group).exists()
+        return user.groups.all().union(self.eligible_group).exists()
+
+    def user_checked_in(self, user):
+        return self.checked_in_users.filter(pk=user.pk).exists()
+
+    def check_in_user(self, user, ignore_eligible=False):
+        """Adds the user to the checked_in_users.
+        If ignore_eligible, do not verify user is eligible.
+        Raises UserNotEligible if not elible and ignore_eligible is false"""
+        if ignore_eligible or self.user_eligible(user):
+            self.checked_in_users.add(user)
+            self.save()
+        else:
+            raise UserNotEligible
+
+    def check_out_user(self, user):
+        """Removes user form checked_in_users"""
+        self.checked_in_users.remove(user)
+        self.save()
+
+    def toggle_check_in_user(self, user):
+        """Toggle user checked in status.
+        Throws UserNotEligible if user is not eligible"""
+        if self.user_checked_in(user):
+            self.check_out_user(user)
+        else:
+            self.check_in_user(user)
 
     class Meta:
         permissions = [
@@ -117,7 +143,7 @@ class Voting(models.Model):
         self.is_active = False
 
     def user_not_eligible(self, user):
-        return not self.event.user_eligble(user)
+        return not self.event.user_eligible(user)
 
     def submit_stv_votes(self, user, ballot_dict):
         """Submits transferable votes i.e. creates ballot"""

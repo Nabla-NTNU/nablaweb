@@ -12,12 +12,15 @@ from django.urls import reverse
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
+from nablapps.accounts.models import NablaUser
+
 from .forms import AlternativeFormset
 from .models import (
     Alternative,
     DuplicatePriorities,
     HoleInBallotError,
     UserAlreadyVoted,
+    UserNotEligible,
     Voting,
     VotingDeactive,
     VotingEvent,
@@ -45,6 +48,109 @@ def voting_to_JSON(voting):
         for a in voting.alternatives.all()
     }
     return json
+
+
+# Todo fix permissions
+def register_attendance(request, event_pk, user_pk):
+    """Check in/out user from a voting event.
+    Verify that the user i eligable, and then perform the checkin.
+    Return a status.
+
+    GET paramters:
+      action: String - one of 'toggle', 'in', 'out', 'nothing'. Default: 'toggle'
+
+    Response:
+      Json with the currently attending users."""
+
+    try:
+        event = VotingEvent.objects.get(pk=event_pk)
+        user = NablaUser.objects.get(pk=user_pk)
+    except VotingEvent.DoesNotExist:
+        reason = "Event not found"
+    except NablaUser.DoesNotExist:
+        reason = "User not found"
+    else:
+        reason = None
+    finally:
+        if reason is not None:
+            return JsonResponse(
+                {
+                    "status": "failure",
+                    "reason": reason,
+                    "user": None,
+                    "in/out": None,
+                    "currently_checked_in": None,
+                }
+            )
+
+    actions = {
+        "toggle": event.toggle_check_in_user,
+        "in": event.check_in_user,
+        "out": event.check_out_user,
+        "nothing": lambda user: None,
+    }
+
+    try:
+        action = actions[request.GET.get("action", "toggle")]
+        action(user)
+    except KeyError:
+        status = "failure"
+        reason = (
+            f"Invalid action '{request.GET['action']}'. Must be one of {actions.keys}"
+        )
+    except UserNotEligible:
+        status = "failure"
+        reason = "User is not eligible for this event"
+    else:
+        status = "success"
+        reason = None
+
+    return JsonResponse(
+        {
+            "status": status,
+            "reason": reason,
+            "user": user.username,
+            "in/out": event.user_checked_in(user),
+            "currently_checked_in": [
+                user.username for user in event.checked_in_users.all()
+            ],
+        }
+    )
+
+
+def register_attendance_card(request, event_pk, rfid_number):
+    """Register attendance using card as identifyer"""
+    user = NablaUser.objects.get_from_rfid(rfid_number)
+    if user is not None:
+        return register_attendance(request, event_pk, user.pk)
+    else:
+        return JsonResponse(
+            {
+                "status": "failure",
+                "reason": "Unknown card",
+                "user": None,
+                "in/out": None,
+                "currently_checked_in": None,
+            }
+        )
+
+
+def register_attendance_username(request, event_pk, username):
+    """Register attendance using username as identifyer"""
+    try:
+        user = NablaUser.objects.get(username=username)
+    except:  # noqa: E722 TODO specify
+        return JsonResponse(
+            {
+                "status": "failure",
+                "reason": "Unknown username",
+                "user": None,
+                "in/out": None,
+                "currently_checked_in": None,
+            }
+        )
+    else:
+        return register_attendance(request, event_pk, user.pk)
 
 
 class VotingListJSONView(DetailView):
