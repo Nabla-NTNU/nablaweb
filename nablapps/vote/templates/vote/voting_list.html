@@ -52,7 +52,7 @@
              class="fas fa-lg btn"
              v-bind:class="classObject"
          ></span>
-	 <a href="{% url "voting-detail" pk=object.pk %}">
+	 <a :href="vote.url">
          <span class="voting_item__title">[[ vote.title ]]</span>
 	 </a>
          <span class="voting_item__metadata">

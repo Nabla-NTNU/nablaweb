@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from .forms import AlternativeFormset
@@ -31,6 +32,7 @@ def voting_to_JSON(voting):
     json["active"] = voting.is_active
     json["num_voted"] = voting.get_total_votes()
     json["created_by"] = getattr(voting.created_by, "username", "Admin (aka unknown)")
+    json["url"] = reverse("voting-detail", kwargs={"pk": voting.pk})
     json["alternatives"] = {
         a.pk: {
             "pk": a.pk,
