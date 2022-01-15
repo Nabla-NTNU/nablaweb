@@ -20,14 +20,22 @@
      font-size: small;
      margin: 0 4px;
  }
+
+ .results_list {
+     list-style: none;
+ }
+
+ .results_list li {
+     margin-bottom: 10px;
+ }
 </style>
 {% endblock %}
 
 {% block main %}
-<!-- <script src="https://unpkg.com/vue@next"></script> -->
-<!-- <script src="https://unpkg.com/axios/dist/axios.js"></script> -->
-<script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script>
-<script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script>
+<script src="https://unpkg.com/vue@next"></script>
+<script src="https://unpkg.com/axios/dist/axios.js"></script>
+<!-- <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script> -->
+<!-- <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script> -->
 <h1>Avstemninger</h1>
 <a href="{% url "voting-event-list" %}"><i class="fas fa-arrow-left"></i> Tilbake til avstemningsarrangementer</a>
 <br>
@@ -36,15 +44,18 @@
 {% endif %}
 
 <div id="vote-list" >
+  <input type="checkbox" v-model="show_results" id="show-results">
+  <label for="show-results">Vis resultater</label>
   <vote-item
     v-for="vote in votes"
     v-bind:vote="vote"
+    v-bind:show_results="show_results"
     ></vote-item>
 </div>
 <script>
  const VoteItem = {
      delimiters: ['[[', ']]'],
-     props: ['vote'],
+     props: ['vote', 'show_results'],
      template: `
          <div class="voting_item">
          <span
@@ -59,12 +70,16 @@
          <span><span class="fas fa-users"></span> [[ vote.num_voted ]]</span>
          <span><span class="fas fa-user"></span> [[ vote.created_by ]]</span>
          </span>
-         <span class="voting_item__results" v-if="vote.num_voted">
-<ul>
+         <span class="voting_item__results" v-if="vote.num_voted && show_results">
+<ul class="results_list">
             <li v-for="alternative in vote.alternatives">
-[[ alternative.text ]] | 
-[[ alternative.votes ]] stemmer 
-([[ alternative.percentage ]]%)
+<span>[[ alternative.text ]]</span>
+<span style="float: right">[[ alternative.votes ]] stemmer </span>
+<div class="progress">
+  <div class="progress-bar" role="progressbar" :aria-valuenow="alternative.percentage" :style="{width: alternative.percentage + '%'}" aria-valuemin="0" aria-valuemax="100">
+[[ alternative.percentage ]]% 
+</div>
+</div>
             </li>
 </ul>
          </span>
@@ -72,7 +87,7 @@
      `,
      data() {
 	 return {
-	     is_admin: {{ is_admin|lower }}
+	     is_admin: {{ is_admin|lower }},
 	 }
      },
      computed: {
@@ -111,6 +126,7 @@
      data() {
 	 return {
 	     votes: null,
+         show_results: true,
 	 }
      },
      methods: {
