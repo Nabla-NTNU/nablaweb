@@ -10,7 +10,7 @@
     <link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
 {% endblock %}
 
-inn{% block main-blank %}
+{% block main-blank %}
     {% addtoblock "css" %}
         <link rel="stylesheet" href="{% static "css/front_page.css" %}">
     {% endaddtoblock %}
@@ -101,7 +101,7 @@ inn{% block main-blank %}
             <p></p>
             <a href="https://nabla.no/wiki/" class="btn btn-info">Nablawiki</a>
             <p></p>
-            <a href="mailto:bedriftskontakt@nabla.no" class="btn btn-danger">Bedriftsforslag - send en mail til BN</a>
+            <a href="mailto:bedriftskontakt@nabla.no" class="btn btn-primary">Bedriftsforslag - send en mail til BN</a>
         </div>
 
         <div class="latest-podcast card card-body card-body-overline ">

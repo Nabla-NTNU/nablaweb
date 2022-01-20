@@ -5,8 +5,8 @@
     align-items: stretch;
     grid-template-areas:
         "upcoming-events1 upcoming-events2 office"
-        "latest-nablad    latest-podcast   welcome"
         "more-news-1      more-news-2       social"
+        "latest-nablad    latest-podcast   welcome"
         "more-news-3      more-news-4      more-news-5"
         "more-news-btn    more-news-btn    more-news-btn"
         "sponsors         sponsors         suggestions";
@@ -19,8 +19,8 @@
     align-items: stretch;
     grid-template-areas:
         "upcoming-events1 upcoming-events2 office"
-        "latest-podcast     latest-nablad    poll"
        " more-news-1   more-news-2  social"
+        "latest-podcast     latest-nablad    poll"
         "more-news-3     more-news-4    more-news-5"
         "more-news-btn   more-news-btn   more-news-btn"
         "sponsors        sponsors        suggestions";
