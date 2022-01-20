@@ -70,6 +70,7 @@ jobs:
           cat "$configure_path/policy.xml"
           exit 1
         fi
+        sudo apt-get update
         sudo apt-get install ghostscript
 
     - name: Exclude tests that need ImageMagick (non-linux)
