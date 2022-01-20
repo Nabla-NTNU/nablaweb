@@ -1,79 +1,91 @@
-.maingrid-container{
+.maingrid-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 15px;
     align-items: stretch;
     grid-template-areas:
-        "main-article    main-article    welcome"
-        "upcoming-events upcoming-events office"
-        "more-news-1     more-news-2     more-news-3"
-        "more-news-4     more-news-5     more-news-6"
-        "more-news-btn   more-news-btn   more-news-btn"
-        "latest-nablad   latest-podcast  poll"
-        "sponsors        sponsors        suggestions";
+        "upcoming-events1 upcoming-events2 office"
+        "latest-nablad    latest-podcast   welcome"
+        "more-news-1      more-news-2       social"
+        "more-news-3      more-news-4      more-news-5"
+        "more-news-btn    more-news-btn    more-news-btn"
+        "sponsors         sponsors         suggestions";
 }
-.maingrid-container-authenticated{
+
+.maingrid-container-authenticated {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 15px;
     align-items: stretch;
     grid-template-areas:
-        "main-article    main-article    social"
-        "upcoming-events upcoming-events office"
-        "more-news-1     more-news-2     more-news-3"
-        "more-news-4     more-news-5     more-news-6"
+        "upcoming-events1 upcoming-events2 office"
+        "latest-podcast     latest-nablad    poll"
+       " more-news-1   more-news-2  social"
+        "more-news-3     more-news-4    more-news-5"
         "more-news-btn   more-news-btn   more-news-btn"
-        "latest-nablad   latest-podcast  poll"
         "sponsors        sponsors        suggestions";
 }
 
-@media (max-width: 1000px){
-    .maingrid-container{
-        grid-template-columns: 1fr ;
+@media (max-width: 1000px) {
+    .maingrid-container {
+        grid-template-columns: 1fr;
         grid-template-areas:
-        "main-article   "
-        "upcoming-events "
         "welcome"
-        "more-news-1"
-        "more-news-2"
-        "more-news-3"
+        "upcoming-events1"
+        "upcoming-events2"
         "office"
         "latest-nablad"
         "latest-podcast"
-        "poll"
+        "more-news-1"
+        "more-news-2"
+        "more-news-3"
         "suggestions"
         "sponsors";
     }
 
     .maingrid-container-authenticated {
-        grid-template-columns: 1fr ;
+        grid-template-columns: 1fr;
         grid-template-areas:
-        "main-article   "
-        "upcoming-events "
-        "forum"
+        "upcoming-events1"
+        "upcoming-events2"
+        "office"
+        "poll"
+        "latest-nablad"
+        "latest-podcast"
         "more-news-1"
         "more-news-2"
         "more-news-3"
-        "office"
-        "latest-nablad"
-        "latest-podcast"
-        "poll"
         "suggestions"
         "sponsors";
     }
-    .more-news-4 {display:none}
-    .more-news-5 {display:none}
-    .more-news-6 {display:none}
-    .more-news-btn{display:none}
-    .suggestions {display:none}
+
+    .more-news-4 {
+        display: none
+    }
+
+    .more-news-5 {
+        display: none
+    }
+
+    .more-news-6 {
+        display: none
+    }
+
+    .more-news-btn {
+        display: none
+    }
+
+    .suggestions {
+        display: none
+    }
 }
 
 
-.well{
+.well {
     margin-bottom: 0px;
 }
 
-.main-article{
+.main-article {
     align-self: stretch;
     margin: 0;
     grid-area: main-article;
@@ -86,6 +98,7 @@
 .more-news-2 {
     grid-area: more-news-2;
 }
+
 .more-news-3 {
     grid-area: more-news-3;
 }
@@ -93,16 +106,20 @@
 .more-news-4 {
     grid-area: more-news-4;
 }
+
 .more-news-5 {
     grid-area: more-news-5;
 }
+
 .more-news-6 {
     grid-area: more-news-6;
 }
-.forum{
+
+.forum {
     grid-area: forum;
 
 }
+
 .more-news-btn {
     grid-area: more-news-btn;
     grid-gap: 0;
@@ -140,6 +157,6 @@
     grid-area: suggestions;
 }
 
-.poll.card-body{
+.poll.card-body {
     height: 100%;
 }

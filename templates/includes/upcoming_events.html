@@ -1,24 +1,43 @@
 {% load sekizai_tags %}
+{% load easy_thumbnails %}
+
 {% addtoblock "css" %}
     <link href="{{ STATIC_URL }}events/upcoming_events.css" rel="stylesheet">
 {% endaddtoblock %}
 
-<ul class="list-unstyled nav  " >
-{% for event in upcoming %}
-        <li class=" w-100 d-flex pb-2"; style = "padding-top: 5px; padding-bottom: 5px;" >
-            <a class="text-dark text-decoration-none  mr-2 text-truncate " href="{{ event.get_absolute_url }}" style="overflow: hidden">
+<img alt=""
+     class=""
+        {% if upcoming.first.picture and upcoming.first.cropping %}
+     src="{% thumbnail upcoming.first.picture 770x300 box=upcoming.first.cropping upscale=True detail=True quality=95 %}"
+        {% elif upcoming.first.picture %}
+     src="{% thumbnail upcoming.first.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
+        {% elif upcoming.first.obj.company.picture and upcoming.first.obj.company.ignoreCrop %}
+     src="{% thumbnail upcoming.first.obj.company.picture 770x300 upscale=True detail=True quality=95 background="white" %}"
+        {% elif upcoming.first.obj.company.picture and upcoming.first.obj.company.cropping %}
+     src="{% thumbnail upcoming.first.obj.company.picture 770x300 box=upcoming.first.obj.company.cropping upscale=True detail=True quality=95 %}"
+        {% elif upcoming.first.obj.company.picture %}
+     src="{% thumbnail upcoming.first.obj.company.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
+        {% endif %}
+>
+
+<ul class="list-unstyled nav  ">
+    {% for event in upcoming %}
+        <li class="{% if  forloop.first %}border-bottom {% endif %} {{ border }} w-100 d-flex p-2 pr-3" ;
+            style="padding-top: 5px; padding-bottom: 5px;">
+            <a class="text-dark text-decoration-none  mr-2 text-truncate " href="{{ event.get_absolute_url }}"
+               style="overflow: hidden">
                 <time class="badge badge-pill badge-dark {{ class }}"
                       datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"d.m" }}
                 </time>
                 {{ event.headline }}
             </a>
-            {% if event.registration_required and user.is_authenticated%}
+            {% if event.registration_required and user.is_authenticated %}
                 <span class="text-dark text-decoration-none " title="Ledige plasser / Totalt antall plasser">
                     {{ event.users_attending }}/{{ event.places }}
                 </span>
             {% endif %}
         </li>
-{% empty %}
-    <li>Ingen arrangementer</li>
-{% endfor %}
+    {% empty %}
+        <li>Ingen arrangementer</li>
+    {% endfor %}
 </ul>

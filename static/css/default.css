@@ -5,7 +5,7 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
 */
 
 
-:root{
+:root {
     --nabla-yellow: #ffeb3b;
     --nabla-yellow-dark: #c8b900;
     --nabla-yellow-light: #ffff72;
@@ -13,15 +13,16 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
     --nabla-blue-dark: #000051;
     --nabla-blue-light: #534bae;
     --nabla-blue-alt: #0E4082;
-    --nabla-background: #F3F8FF;/*#f7f7f7*/
+    --nabla-background: #F3F8FF; /*#f7f7f7*/
 }
 
-a{
-    color : var(--nabla-blue);
+a {
+    color: var(--nabla-blue);
 }
 
-a:hover{
-     color : var(--nabla-blue);
+a:hover {
+    color: var(--nabla-blue);
+    text-decoration: none;
 }
 
 /* MAIN */
@@ -36,6 +37,7 @@ html, body {
     min-height: 100vh;
     flex-direction: column;
 }
+
 #full-body {
     flex: 1;
     overflow: hidden;
@@ -49,18 +51,18 @@ html, body {
 }
 
 .logo {
-padding: 7px;
+    padding: 7px;
 }
 
 nav.navbar {
     background: var(--nabla-blue-alt);
-    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
 
 }
 
 
-.card{
-    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+.card {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
 }
 
 .box {
@@ -86,11 +88,13 @@ nav.navbar {
     display: -webkit-flex;
     flex-wrap: wrap;
 }
+
 .row-same-height [class*='col-'] {
     margin-bottom: 20px;
-    flex: 1  1 100%;
+    flex: 1 1 100%;
 }
-.row-same-height [class*='col-'] [class*='box']{
+
+.row-same-height [class*='col-'] [class*='box'] {
     height: 100%;
 }
 
@@ -100,207 +104,218 @@ nav.navbar {
         display: -webkit-flex;
         flex-wrap: wrap;
     }
+
     .row-same-height [class*='col-'] {
         margin-bottom: 20px;
         /*
         * HAAAACK FOR Å FIKSE SAFARI < 11.0.1
          */
-        flex: 1  1 49%;
+        flex: 1 1 49%;
     }
 }
 
 
 .box p {
-    padding-left:   7px;
+    padding-left: 7px;
     padding-right: 7px;
     padding-bottom: 7px;
 }
 
-    /* Div that holds all parts of page except footer */
+/* Div that holds all parts of page except footer */
+#whitebox {
+    background: white url(../img/bgnoise.png);
+    border-bottom: 1px solid black;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+@media (max-width: 767px) {
     #whitebox {
-        background: white url(../img/bgnoise.png);
-        border-bottom: 1px solid black;
-        padding-top: 20px;
-        padding-bottom: 20px;
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-right: 20px;
+        padding-left: 20px;
     }
+}
 
-    @media (max-width: 767px) {
-        #whitebox {
-            margin-left: -20px;
-            margin-right: -20px;
-            padding-right: 20px;
-            padding-left: 20px;
-        }
-    }
+aside h3 {
+    margin-top: 15px;
+}
 
-    aside h3 { margin-top: 15px; }
-    aside h3:first-child { margin-top: 0; }
+aside h3:first-child {
+    margin-top: 0;
+}
 
-    form.dropdown-menu {
-        padding: 15px;
-    }
+form.dropdown-menu {
+    padding: 15px;
+}
 
-    form.dropdown-menu input {
-        width: 15em;
-        margin-bottom: 15px;
-    }
+form.dropdown-menu input {
+    width: 15em;
+    margin-bottom: 15px;
+}
 
-    /* Typography */
+/* Typography */
 
-		.wiki-article h1, .wiki-article h2, .wiki-article h3 {
-			width: 100%;
-			border-bottom: 1px solid #ccc;
-		}
+.wiki-article h1, .wiki-article h2, .wiki-article h3 {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+}
 
-    h1 {
-        margin-bottom: 8px;
-        font-size: 32px;
-        font-weight: bold;
-        line-height: 37px;
-        margin-top: 15px;
-    }
+h1 {
+    margin-bottom: 8px;
+    font-size: 32px;
+    font-weight: bold;
+    line-height: 37px;
+    margin-top: 15px;
+}
 
-    h2 {
-        margin-bottom: 8px;
-        font-size: 30px;
-        font-weight: bold;
-        line-height: 37px;
-        margin-top: 15px;
-    }
+h2 {
+    margin-bottom: 8px;
+    font-size: 30px;
+    font-weight: bold;
+    line-height: 37px;
+    margin-top: 15px;
+}
 
-    h3 {
-        margin-bottom: 8px;
-        font-size: 24px;
-        font-weight: bold;
-        line-height: 28px;
-    }
+h3 {
+    margin-bottom: 8px;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 28px;
+}
 
 
+p {
+    font-size: 14px;
+    line-height: 20px;
+}
 
-    p {
-        font-size: 14px;
-        line-height: 20px;
-    }
+#whitebox p {
+    color: rgb(50, 50, 50);
+}
 
-    #whitebox p {
-        color: rgb(50, 50, 50);
-    }
+/* Registration */
 
-    /* Registration */
+.registrations {
+    margin-top: -5px;
+}
 
-    .registrations {
-        margin-top: -5px;
-    }
+.registrations span {
+    margin-left: 3px;
+}
 
-    .registrations span {
-        margin-left: 3px;
-    }
-
-    .registrations .waiting-place {
-        opacity: 0.5;
-    }
+.registrations .waiting-place {
+    opacity: 0.5;
+}
 
 
 /* Utility classes */
 
-    /* Some floats for articles */
-    img[alt=right] {
-        float: right;
-    }
+/* Some floats for articles */
+img[alt=right] {
+    float: right;
+}
 
-    img[alt=left] {
-        float: left;
-    }
+img[alt=left] {
+    float: left;
+}
 
-    /* Remove code styling from rendered LaTeX */
-    code.jax {
-        background: inherit;
-        border: none;
-        color: inherit;
-        font: inherit;
-        margin: 0;
-    }
+/* Remove code styling from rendered LaTeX */
+code.jax {
+    background: inherit;
+    border: none;
+    color: inherit;
+    font: inherit;
+    margin: 0;
+}
 
-    .pagination {
-        text-align: center;
-    }
+.pagination {
+    text-align: center;
+}
 
-    .center {
-        text-align: center;
-    }
+.center {
+    text-align: center;
+}
 
-    .wide {
-        width: 100%;
-    }
+.wide {
+    width: 100%;
+}
 
-    .clear {
-        clear: both;
-    }
+.clear {
+    clear: both;
+}
 
 /* REKLAME */
-    .ad.box {
-        border-radius: 5px;
-        border-width: 2px;
-        font-size: 90%;
-        padding-bottom: 20px;
-        background-color: #ffffff;
-    }
-    .ad.box p {
-        padding: 5px;
-    }
-    .ad.box img {
-        text-align: center;
-    }
+.ad.box {
+    border-radius: 5px;
+    border-width: 2px;
+    font-size: 90%;
+    padding-bottom: 20px;
+    background-color: #ffffff;
+}
+
+.ad.box p {
+    padding: 5px;
+}
+
+.ad.box img {
+    text-align: center;
+}
 
 
 /* MathJAX customisation */
 
-    .MathJax_Display {
-        margin-bottom:-15px !important;
-        margin-top: 3px !important;
-    }
-
+.MathJax_Display {
+    margin-bottom: -15px !important;
+    margin-top: 3px !important;
+}
 
 
 /* FOOTER */
 
-    .nabla-footer {
-        /* TODO: Add cross-browser support */
-        background-color: var(--nabla-blue-alt);
-        color: var(--white);
-        padding-top: 30px;
-        width: 100%;
-        box-shadow: 0 1px 4px rgba(0,0,0,.05);
+.nabla-footer {
+    /* TODO: Add cross-browser support */
+    background-color: var(--nabla-blue-alt);
+    color: var(--white);
+    padding-top: 30px;
+    width: 100%;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
 
 }
 
 
-    /* h2 is black, so make it white */
-    footer h2 {
-        color: var(--white);
-    }
-    footer a {
-        color: var(--light);
-        font-weight: bold;
+/* h2 is black, so make it white */
+footer h2 {
+    color: var(--white);
+}
 
-    }
-    footer a:hover {
-        color: var(--light);
-        font-weight: bold;
+footer a {
+    color: var(--light);
+    font-weight: bold;
 
-    }
+}
+
+footer a:hover {
+    color: var(--light);
+    font-weight: bold;
+
+}
 
 
-    footer .kontakt table {
-    }
-        footer .kontakt table th {
-        }
-        footer .kontakt table td {
-            border-top: 0;
-        }
-        footer .kontakt table td:first-child {
-            color: white;
-        }
+footer .kontakt table {
+}
+
+footer .kontakt table th {
+}
+
+footer .kontakt table td {
+    border-top: 0;
+}
+
+footer .kontakt table td:first-child {
+    color: white;
+}
 
 
 /* Social icons in footer */
@@ -319,39 +334,63 @@ nav.navbar {
 }
 
 /* COMMENTS */
-    .comments-header {
-        margin-top: 30px;
-    }
-    form.add-comment {
-        margin-top: 20px;
-        margin-left: 0;
-        margin-right: 0;
-    }
-    form.add-comment .control-group:first-of-type { padding-top: 9px;}
-    form.add-comment textarea {
-        width: 100%;
-        height: 5rem;
-    }
-    .comment .text { width: 100%; overflow: hidden; }
-    .comment .info { margin-bottom: 10px; }
-    .comment .author { font-weight: bold; }
-    .comment .date { color: #999; }
+.comments-header {
+    margin-top: 30px;
+}
 
-    #comment-help-buttons {
-        margin-top: 20px;
-    }
+form.add-comment {
+    margin-top: 20px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+form.add-comment .control-group:first-of-type {
+    padding-top: 9px;
+}
+
+form.add-comment textarea {
+    width: 100%;
+    height: 5rem;
+}
+
+.comment .text {
+    width: 100%;
+    overflow: hidden;
+}
+
+.comment .info {
+    margin-bottom: 10px;
+}
+
+.comment .author {
+    font-weight: bold;
+}
+
+.comment .date {
+    color: #999;
+}
+
+#comment-help-buttons {
+    margin-top: 20px;
+}
 
 /* for logo + søkefelt i headeren */
 
-    form#searchtop {
-        display: inline-block;
-        padding-top: 10px;
-        width: 150px;
-    }
+form#searchtop {
+    display: inline-block;
+    padding-top: 10px;
+    width: 150px;
+}
 
 /* Endringer i Bootstrap-farger */
-.navbar-inner {border: 1px solid #c0c0c0;}/* Navbar border */
-.navbar-right.dropdown {margin-right: 0px;}
+.navbar-inner {
+    border: 1px solid #c0c0c0;
+}
+
+/* Navbar border */
+.navbar-right.dropdown {
+    margin-right: 0px;
+}
 
 /* News */
 
@@ -364,11 +403,11 @@ nav.navbar {
 }
 
 .btn-read-more {
-    background-image: linear-gradient(to bottom,#fff 0,#f8f8f8 100%);
+    background-image: linear-gradient(to bottom, #fff 0, #f8f8f8 100%);
 }
 
 .btn-read-more:hover {
-    background-image: linear-gradient(to bottom,#f2f2f2 0,#eaeaea 100%);
+    background-image: linear-gradient(to bottom, #f2f2f2 0, #eaeaea 100%);
 }
 
 li.pager-counter {
@@ -391,52 +430,52 @@ li.pager-counter {
 
 
 .fixed-tab-height {
-height:340px;
-Overflow-y: auto;
-Overflow-x: hidden;
+    height: 340px;
+    Overflow-y: auto;
+    Overflow-x: hidden;
 }
 
 /* Følgende er hentet fra stackoverflow for å fikse bug i headeren. Link: https://www.w3schools.com/cssref/css3_pr_mediaquery.asp */
 
 /*@media (max-width: 1150px) {*/
-    /*.navbar-header {*/
-        /*float: none;*/
-    /*}*/
-    /*.navbar-toggle {*/
-        /*display: block;*/
-    /*}*/
-    /*.navbar-collapse {*/
-        /*border-top: 1px solid transparent;*/
-        /*box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);*/
-    /*}*/
-    /*.navbar-collapse.collapse {*/
-        /*display: none!important;*/
-    /*}*/
-    /*.navbar-nav {*/
-        /*float: none!important;*/
-        /*margin: 7.5px -15px;*/
-    /*}*/
-    /*.navbar-nav>li {*/
-        /*float: none;*/
-    /*}*/
-    /*.navbar-nav>li>a {*/
-        /*padding-top: 10px;*/
-        /*padding-bottom: 10px;*/
-    /*}*/
-    /*.navbar-text {*/
-        /*float: none;*/
-        /*margin: 15px 0;*/
-    /*}*/
-    /*!* since 3.1.0 *!*/
-    /*.navbar-collapse.collapse.in {*/
-        /*display: block!important;*/
-    /*}*/
-    /*.collapsing {*/
-        /*overflow: hidden!important;*/
-    /*}*/
+/*.navbar-header {*/
+/*float: none;*/
+/*}*/
+/*.navbar-toggle {*/
+/*display: block;*/
+/*}*/
+/*.navbar-collapse {*/
+/*border-top: 1px solid transparent;*/
+/*box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);*/
+/*}*/
+/*.navbar-collapse.collapse {*/
+/*display: none!important;*/
+/*}*/
+/*.navbar-nav {*/
+/*float: none!important;*/
+/*margin: 7.5px -15px;*/
+/*}*/
+/*.navbar-nav>li {*/
+/*float: none;*/
+/*}*/
+/*.navbar-nav>li>a {*/
+/*padding-top: 10px;*/
+/*padding-bottom: 10px;*/
+/*}*/
+/*.navbar-text {*/
+/*float: none;*/
+/*margin: 15px 0;*/
+/*}*/
+/*!* since 3.1.0 *!*/
+/*.navbar-collapse.collapse.in {*/
+/*display: block!important;*/
+/*}*/
+/*.collapsing {*/
+/*overflow: hidden!important;*/
+/*}*/
 /*}*/
 
 
-.nounderline{
+.nounderline {
     text-decoration: none !important
 }
