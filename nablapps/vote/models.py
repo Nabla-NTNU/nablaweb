@@ -29,7 +29,7 @@ class VotingEvent(models.Model):
         """Check if user i eligible for voting event."""
         if self.eligible_group is None:
             return True  # Empty group means no restrictions.
-        return user.groups.all().union(self.eligible_group).exists()
+        return user.groups.filter(pk=self.eligible_group.pk).exists()
 
     def user_checked_in(self, user):
         return self.checked_in_users.filter(pk=user.pk).exists()
