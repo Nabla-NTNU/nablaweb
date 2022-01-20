@@ -107,9 +107,11 @@
         <td>Trinn</td>
             <td>
                 {% for group in classnumber %}
-                        <span class = "trinn">
+                        <span class = "trin">
                             {{ group }}
                         </span>
+                {% empty %}
+                        Alle
                 {% endfor %}
             </td>
     </tr>
