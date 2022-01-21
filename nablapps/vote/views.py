@@ -50,7 +50,12 @@ def voting_to_JSON(voting):
     return json
 
 
-# Todo fix permissions
+# TODO fix permissions
+# TODO this shold not be a view from url. Only used to facilitate card, username, etc.
+# TODO either allow return of user list even on failed username (probably bad) or add new endpoint for only getting the number of users
+# TODO Decide on how the endpoints should be designed wrt. using both card number and username.
+#      Should the client send either, and server decide which to use, or must client figure it out, with
+#      server having dedicated endpoints for the various identifiers?
 def register_attendance(request, event_pk, user_pk):
     """Check in/out user from a voting event.
     Verify that the user i eligable, and then perform the checkin.
