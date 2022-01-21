@@ -7,11 +7,20 @@ from nablapps.accounts.models import NablaGroup, NablaUser
 from .models import (
     Alternative,
     UserAlreadyVoted,
+    UserNotCheckedIn,
     UserNotEligible,
     Voting,
     VotingDeactive,
     VotingEvent,
 )
+
+"""Notes for file:
+TODO: Tests of login required and user permissions for endpoints (API and views)
+TODO: Other tests of views. (Now we only test models)
+TODO: Change naming from 'eligible' to 'eligible_group', or similar. Now it
+      can be a source of confusion whether eligible refers to being in the eligible group
+      or also being checked in.
+"""
 
 
 class CheckinTestCase(TestCase):
@@ -166,4 +175,13 @@ class SubmitVoteTestCase(TestCase):
         self.voting0_alternative0.add_vote(self.user0)
         with self.assertRaises(UserAlreadyVoted):
             self.voting0_alternative0.add_vote(self.user0)
+        self.assertEqual(self.voting0_alternative0.votes, 1)
+
+    def test_checkin(self):
+        """Submit a vote, depending on whether checked in or not, should succeed/fail"""
+        self.voting_event0.check_in_user(self.user0)
+        self.voting0_alternative0.add_vote(self.user0)
+        self.assertEqual(self.voting0_alternative0.votes, 1)
+        with self.assertRaises(UserNotCheckedIn):
+            self.voting0_alternative0.add_vote(self.user1)  # Has not checked in
         self.assertEqual(self.voting0_alternative0.votes, 1)

@@ -72,7 +72,13 @@ class UserAlreadyVoted(Exception):
 
 
 class UserNotEligible(Exception):
-    """Raised if the voting user is not eligible to vote"""
+    """Raised if the voting user is not eligible to vote.
+    Note: this should not be used for users not being checked in,
+    in which case UserNotCheckedIn should be used."""
+
+
+class UserNotCheckedIn(Exception):
+    """Raised if the voting user is not checked in for event with checkin"""
 
 
 class VotingDeactive(Exception):
