@@ -89,12 +89,11 @@
                     bedriftskontakten på <a href="mailto:bedkom@nabla.no">bedkom@nabla.no</a>.
                 </p>
             </div>
-        {% else %}
-            <div class="poll ">
-                <!--Poll-->
-                {% include "poll/poll_include.html" %}
-            </div>
         {% endif %}
+        <div class="poll ">
+            <!--Poll-->
+            {% include "poll/poll_include.html" %}
+        </div>
         <div class="office">
             <!--Kontoret-->
             {% include "officeCalendar/includes/list.html" %}
