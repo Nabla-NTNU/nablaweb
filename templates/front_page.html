@@ -111,11 +111,11 @@
         <div class="latest-podcast card card-body card-body-overline ">
             <!--Siste Skråttcast-->
             {% if new_podcast %}
-                <div style="height:300px">
+                <div>
                     <h3><a class="text-dark" href="{% url "season_view" %}">Siste Skråttcast</a></h3>
                     <a href="{{ new_podcast.get_absolute_url }}">
                         <img class="rounded mw-100" src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}"
-                             style="max-width: 100%;"/>
+                             style="max-width: 100%; height:300px"/>
                     </a>
                 </div>
             {% else %}
