@@ -7,41 +7,55 @@
   <!-- <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script> -->
   <!-- <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script> -->
   <div id="attendance-app" >
+  </div>
+  <template id="AttendanceAppTemplate">
+    <form @submit.prevent="submitForm">
+      <input type="text" placeholder="Enter card number" v-model="textField">
+    </form>
+    <span v-if="this.error==null">
+      [[ this.lastUser ]] checked [[ this.lastUserInOut ? "in" : "out"]]
+    </span>
+    <span v-else>Not ok. Error: [[ this.error ]]</span>
     <user-item
       v-for="user in users"
+      v-bind:user="user"
     ></user-item>
-  </div>
+  </template>
   <script>
    const UserItem = {
      delimiters: ['[[', ']]'],
-     template: '<div>[[ user ]]</div>',
+     props: ['user'],
+     template: '<div><span @click="checkOutUser" class="fas fa-times-circle"></span> [[ user ]]</div>',
+     methods: {
+       checkOutUser() {
+         if(!confirm("Do you really want to check out " + this.user + "?")) return
+         axios
+		     .get("/stem/admin/1/api/attendance/username/" + this.user + "?action=out")
+		     .then(response => {
+		       this.$parent.users = response.data.currently_checked_in
+		     })
+       }
+     }
    }
 
    const AttendanceApp = {
      delimiters: ['[[', ']]'],
+     components: {UserItem},
      data() {
 	     return {
-	       textField: null,
-	       users: [],
-	       lastUser: null,
-	       lastUserInOut: null,
-	       status: null,
+	       textField: null,  // Input, either card, username, ...
+	       users: null,  // Currently checked in users
+	       lastUser: null,  // The last user to check in/out
+	       lastUserInOut: null,  // Whether the last user checked in or out
+	       error: null,  // Current errors
 	     }
      },
-     template: `<form @submit.prevent="submitForm">
-       <input type="text" placeholder="Enter card number" v-model="textField">
-     </form>
-     <span v-if="this.status=='success'">
-       [[ this.lastUser ]] checked [[ this.lastUserInOut ? "in" : "out"]]
-     </span>
-     <span v-else>Not ok</span>
-     <ul>
-       <li v-for="user in users">[[ user ]]</li></ul>`,
+     template: "#AttendanceAppTemplate",
      mounted: function() {
 	     axios
 		     .get("/stem/admin/1/api/attendance/username/" + this.textField + "?action=nothing")
 		     .then(response => {
-		       console.log(response.data)
+           console.log(response.data)
 		       this.users = response.data.currently_checked_in
 		     })
      },
@@ -53,7 +67,7 @@
 		         this.users = response.data.currently_checked_in
 		         this.lastUser = response.data.user
 		         this.lastUserInOut = response.data.inout
-		         this.status = response.data.status
+		         this.error = response.data.reason
 		       })
 	     }
      }
