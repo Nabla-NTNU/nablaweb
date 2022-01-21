@@ -69,7 +69,8 @@ class FrontPageView(FlatPageMixin, TemplateView):
         news_list = FrontPageNews.objects.filter(visible=True).filter(
             bump_time__lte=datetime.now()
         )
-        context["news_list"] = news_list[:5]
+        context["main_news"] = news_list.first()
+        context["news_list"] = news_list[1:6]
 
     def _add_nablad(self, context):
         context["new_nablad"] = Nablad.objects.order_by("-pub_date")[:1]
@@ -90,11 +91,11 @@ class FrontPageView(FlatPageMixin, TemplateView):
         context["upcoming_events"] = (
             Event.objects.filter(event_start__gte=now)
             .exclude(is_bedpres=True)
-            .order_by("event_start")[:5]
+            .order_by("event_start")[:4]
         )
         context["upcoming_bedpreses"] = Event.objects.filter(
             event_start__gte=now, is_bedpres=True
-        ).order_by("event_start")[:5]
+        ).order_by("event_start")[:4]
 
     def _add_poll(self, context):
         try:

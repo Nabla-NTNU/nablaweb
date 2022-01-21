@@ -4,9 +4,10 @@
     grid-gap: 15px;
     align-items: stretch;
     grid-template-areas:
+        "main-article main-article welcome"
         "upcoming-events1 upcoming-events2 office"
         "more-news-1      more-news-2       social"
-        "latest-nablad    latest-podcast   welcome"
+        "latest-nablad    latest-podcast   poll"
         "more-news-3      more-news-4      more-news-5"
         "more-news-btn    more-news-btn    more-news-btn"
         "sponsors         sponsors         suggestions";
@@ -18,9 +19,10 @@
     grid-gap: 15px;
     align-items: stretch;
     grid-template-areas:
+        "main-article main-article main-article"
         "upcoming-events1 upcoming-events2 office"
        " more-news-1   more-news-2  social"
-        "latest-podcast     latest-nablad    poll"
+        "latest-podcast  latest-nablad    poll"
         "more-news-3     more-news-4    more-news-5"
         "more-news-btn   more-news-btn   more-news-btn"
         "sponsors        sponsors        suggestions";
@@ -36,6 +38,7 @@
         "office"
         "latest-nablad"
         "latest-podcast"
+        "main-article"
         "more-news-1"
         "more-news-2"
         "more-news-3"
@@ -52,6 +55,7 @@
         "poll"
         "latest-nablad"
         "latest-podcast"
+        "main-article"
         "more-news-1"
         "more-news-2"
         "more-news-3"

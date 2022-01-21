@@ -18,6 +18,10 @@
         <!--main grid container open tag-->
         <!--main content begin-->
 
+        {# Main article #}
+        {% include "includes/info_card.html" with content=main_news class="main-article" header_size="h1" %}
+
+        {# Upcoming events #}
         {% include "includes/event_widget.html" %}
 
         <!-- Front page news -->
@@ -96,18 +100,18 @@
             {% include "officeCalendar/includes/list.html" %}
         </div>
 
-        <div class="social card card-body card-body-overline ">
-            <a href="/contact/gullkorn/" class="btn btn-warning">Lyst til å melde inn et gullkorn eller sitat?</a>
+        <div class="social card card-body card-body-overline">
+            <a href="/contact/gullkorn/" class="btn btn-success">Lyst til å melde inn et gullkorn eller sitat?</a>
             <p></p>
-            <a href="https://nabla.no/wiki/" class="btn btn-info">Nablawiki</a>
+            <a href="mailto:bedriftskontakt@nabla.no" class="btn btn-warning">Bedriftsforslag - send en mail til BN</a>
             <p></p>
-            <a href="mailto:bedriftskontakt@nabla.no" class="btn btn-primary">Bedriftsforslag - send en mail til BN</a>
+            <a href="https://nabla.no/wiki/" class="btn btn-secondary">Nablawiki</a>
         </div>
 
         <div class="latest-podcast card card-body card-body-overline ">
             <!--Siste Skråttcast-->
             {% if new_podcast %}
-                <div height=300px>
+                <div style="height:300px">
                     <h3><a class="text-dark" href="{% url "season_view" %}">Siste Skråttcast</a></h3>
                     <a href="{{ new_podcast.get_absolute_url }}">
                         <img class="rounded mw-100" src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}"

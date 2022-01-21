@@ -5,79 +5,77 @@ office_events is a dictionary with weekday as key and a list of events as value
 {% load sekizai_tags %}
 
 {% if office_events %}
-{% addtoblock "css" %}
-<style>
+    {% addtoblock "css" %}
+        <style>
 
-#office_calendar {
-}
+            #office_calendar {
+            }
 
- /* Office calendar */
- #office_calendar th {
-     border-bottom: 1px solid lightgray;
-     padding-left: 10px;
-     padding-top: 2px;
- }
+            /* Office calendar */
+            #office_calendar th {
+                border-bottom: 1px solid lightgray;
+                padding-left: 10px;
+                padding-top: 2px;
+            }
 
- #office_calendar th.no_border {
-    border: 0;
- }
+            #office_calendar th.no_border {
+                border: 0;
+            }
 
- #office_calendar td {
-    padding-top: 2px;
-    padding-right: 15px;
-    padding-left: 15px;
-    padding-bottom: 2px;
- }
+            #office_calendar td {
+                padding-top: 2px;
+                padding-right: 15px;
+                padding-left: 15px;
+                padding-bottom: 2px;
+            }
 
- #office_calendar tr.event.has_description {
-     cursor: help;
- }
+            #office_calendar tr.event.has_description {
+                cursor: help;
+            }
 
- #office_calendar {
-    table-layout: fixed;
-    width: 100%;
- }
+            #office_calendar {
+                table-layout: fixed;
+                width: 100%;
+            }
 
-#office-cal-container{
-    height: 100%;
-    {#box-shadow:  0 0 2px rgba(0, 0, 0, 0.24);#}
-    {#border-top: 4px solid black;#}
-    {#border-bottom: 1px solid #D0D0D0;#}
-    {#border-left: 1px solid #D0D0D0;#}
-    {#border-right: 1px solid #D0D0D0;#}
+            #office-cal-container {
+                height: 100%;
+            {#box-shadow:  0 0 2px rgba(0, 0, 0, 0.24);#}{#border-top: 4px solid black;#}{#border-bottom: 1px solid #D0D0D0;#}{#border-left: 1px solid #D0D0D0;#}{#border-right: 1px solid #D0D0D0;#}
 
-}
-</style>
-{% endaddtoblock %}
+            }
+        </style>
+    {% endaddtoblock %}
 
-<div class="h-100 card card-body-overline pt-3" style="word-wrap: normal">
-<table id="office_calendar">
-    <col width="20%">
-    <col width="55%">
-    <col width="25%">
-    <tr >
-        <th colspan="3" class="no_border"> <h4><b>Kontoret denne uka:</b></h4> </th>
+    <div class="h-100 card card-body-overline boder border-secondary" style="word-wrap: normal">
+        <table id="office_calendar">
+            <col width="20%">
+            <col width="55%">
+            <col width="25%">
+            <tr>
+                <th colspan="3" class="text-center card-img-top pt-3 pb-2 bg-secondary no_border">
+                    <h4 class="text-light">Kontoret denne uka</h4>
+                </th>
 
-    </tr>
-    {% for event in office_events %}
-    {% ifchanged event.start_time.date|date:"w" %}
-    <tr>
-        <th colspan="2">{{ event.start_time|date:"l"|capfirst }}</th>
-        <th colspan="1">Varighet</th>
-    </tr>
-    {% endifchanged %}
+            </tr>
+            {% for event in office_events %}
+                {% ifchanged event.start_time.date|date:"w" %}
+                    <tr>
+                        <th colspan="2">{{ event.start_time|date:"l"|capfirst }}</th>
+                        <th colspan="1">Varighet</th>
+                    </tr>
+                {% endifchanged %}
 
-    {% if event.description %}
-    <tr title="{{ event.description }}" class="event has_description">
-    {% else %}
-    <tr class="event">
-    {% endif %}
-        <td> {{ event.start_time|date:"H:i"}} </td>
-        <td> {{ event.title }} </td>
-        <td> {{ event.duration_natural  }} </td>
-    </tr>
-    {% endfor %}
-</table>
-</div>
+                {% if event.description %}
+                    <tr title="{{ event.description }}" class="event has_description">
+                        {% else %}
+                    <tr class="event">
+                {% endif %}
+            <td> {{ event.start_time|date:"H:i" }} </td>
+            <td> {{ event.title }} </td>
+            <td> {{ event.duration_natural }} </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 
 {% endif %}
