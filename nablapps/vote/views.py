@@ -10,7 +10,10 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.datastructures import MultiValueDictKeyError
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt  # TODO: remove
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic.detail import BaseDetailView
 
 from nablapps.accounts.models import NablaUser
 
@@ -56,7 +59,9 @@ def voting_to_JSON(voting):
 # TODO Decide on how the endpoints should be designed wrt. using both card number and username.
 #      Should the client send either, and server decide which to use, or must client figure it out, with
 #      server having dedicated endpoints for the various identifiers?
-def register_attendance(request, event_pk, user_pk):
+
+
+def register_attendance(event, user_pk, action):
     """Check in/out user from a voting event.
     Verify that the user i eligable, and then perform the checkin.
     Return a status.
@@ -68,25 +73,18 @@ def register_attendance(request, event_pk, user_pk):
       Json with the currently attending users."""
 
     try:
-        event = VotingEvent.objects.get(pk=event_pk)
         user = NablaUser.objects.get(pk=user_pk)
-    except VotingEvent.DoesNotExist:
-        reason = "Event not found"
     except NablaUser.DoesNotExist:
-        reason = "User not found"
+        error = "User not found"
     else:
-        reason = None
+        error = None
     finally:
-        if reason is not None:
-            return JsonResponse(
-                {
-                    "status": "failure",
-                    "reason": reason,
-                    "user": None,
-                    "inout": None,
-                    "currently_checked_in": None,
-                }
-            )
+        if error is not None:
+            return {
+                "error": error,
+                "user": None,
+                "is_checked_in": None,
+            }
 
     actions = {
         "toggle": event.toggle_check_in_user,
@@ -96,31 +94,20 @@ def register_attendance(request, event_pk, user_pk):
     }
 
     try:
-        action = actions[request.GET.get("action", "toggle")]
-        action(user)
+        action_func = actions[action]
+        action_func(user)
     except KeyError:
-        status = "failure"
-        reason = (
-            f"Invalid action '{request.GET['action']}'. Must be one of {actions.keys}"
-        )
+        error = f"Invalid action '{action}'. Must be one of {actions.keys}"
     except UserNotEligible:
-        status = "failure"
-        reason = "User is not eligible for this event"
+        error = "User is not eligible for this event"
     else:
-        status = "success"
-        reason = None
+        error = None
 
-    return JsonResponse(
-        {
-            "status": status,
-            "reason": reason,
-            "user": user.username,
-            "inout": event.user_checked_in(user),
-            "currently_checked_in": [
-                user.username for user in event.checked_in_users.all()
-            ],
-        }
-    )
+    return {
+        "error": error,
+        "user": _user_serializer(user),
+        "is_checked_in": event.user_checked_in(user),
+    }
 
 
 def register_attendance_card(request, event_pk, rfid_number):
@@ -129,33 +116,143 @@ def register_attendance_card(request, event_pk, rfid_number):
     if user is not None:
         return register_attendance(request, event_pk, user.pk)
     else:
-        return JsonResponse(
-            {
-                "status": "failure",
-                "reason": "Unknown card",
-                "user": None,
-                "inout": None,
-                "currently_checked_in": None,
-            }
-        )
+        return {
+            "error": "Unknown card",
+            "user": None,
+            "is_checked_in": None,
+        }
 
 
-def register_attendance_username(request, event_pk, username):
+def register_attendance_username(event, username, action):
     """Register attendance using username as identifyer"""
     try:
         user = NablaUser.objects.get(username=username)
     except:  # noqa: E722 TODO specify
+        return {
+            "error": f"Unknown username '{username}'",
+            "user": None,
+            "is_checked_in": None,
+        }
+    else:
+        return register_attendance(event, user.pk, action)
+
+
+@method_decorator(csrf_exempt, name="dispatch")  # TODO: Remove this, for tesing only
+class VoteAdminMixin(PermissionRequiredMixin):
+    """Permission mixin for all admin views of vote."""
+
+    permission_required = ("vote.vote_admin", "vote.vote_inspector")
+
+
+def _user_serializer(user):
+    """Returns a dictionary representing a user, for a JSON response"""
+    return {
+        "username": user.username,
+        "name": user.get_full_name(),
+    }
+
+
+def _alternative_serializer(alternative):
+    return {
+        "pk": alternative.pk,
+        "text": alternative.text,
+        "votes": alternative.votes,
+        "percentage": alternative.get_vote_percentage(),
+    }
+
+
+def _voting_serializer(voting, include_alternatives=True):
+    response = {
+        "pk": voting.pk,
+        "title": voting.title,
+        "active": voting.is_active,
+        "num_voted": voting.get_total_votes(),
+        "num_winners": voting.num_winners,
+        # If created_by is empty, assume it was created through admin
+        # interface, and thus we do not know who made it.
+        "created_by": getattr(voting.created_by, "username", "Admin (aka unknown)"),
+    }
+    if include_alternatives:
+        response["alternatives"] = [
+            _alternative_serializer(a) for a in voting.alternatives.all()
+        ]
+    return response
+
+
+class UsersAPIView(VoteAdminMixin, BaseDetailView):
+    """API view for retrieving and updating logged in users
+
+    Response form:
+    {
+        "users": [
+            {"username": ..., ""},
+        ],
+        // If POST request, also include the following
+        "lastAction": {
+            "error": "",  // If empty, success
+            "user": {"username": ..., ""},
+            "is_checked_in": Bool,
+        }
+    }
+    """
+
+    model = VotingEvent
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        users = self.object.checked_in_users.all()
+        return JsonResponse({"users": [_user_serializer(user) for user in users]})
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        data = json.loads(request.body)
+        # TODO: can extend the functionality to cycle through
+        # several possible identifiers, such as ID card, username, etc.
+
+        # TODO: exception handling
+        username = data.get("username")
+        action = data.get("action")
+        attendence_reponse = register_attendance_username(self.object, username, action)
+        print(username)
+        print(attendence_reponse)
+        users = self.object.checked_in_users.all()
+
         return JsonResponse(
             {
-                "status": "failure",
-                "reason": f"Unknown username '{username}'",
-                "user": None,
-                "inout": None,
-                "currently_checked_in": None,
+                "users": [_user_serializer(user) for user in users],
+                "lastAction": attendence_reponse,
             }
         )
-    else:
-        return register_attendance(request, event_pk, user.pk)
+
+
+class VoteEventAPIView(VoteAdminMixin, BaseDetailView):
+    """API view for getting information about voting event"""
+
+    model = VotingEvent
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return JsonResponse(
+            {
+                "title": self.object.title,
+                "eligile_group": self.object.eligible_group,
+            }
+        )
+
+
+class VotingsAPIView(VoteAdminMixin, BaseDetailView):
+    """API view for getting votings belonging to a voting event"""
+
+    model = VotingEvent
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        votings = self.object.votings.all()
+        return JsonResponse(
+            {
+                "votings": [_voting_serializer(voting) for voting in votings],
+            }
+        )
 
 
 class RegisterAttendanceView(DetailView):

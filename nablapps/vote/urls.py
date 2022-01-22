@@ -4,12 +4,15 @@ from .views import (  # submit_vote,
     ActiveVotingList,
     CreateVoting,
     RegisterAttendanceView,
+    UsersAPIView,
     Vote,
+    VoteEventAPIView,
     VotingDetail,
     VotingEdit,
     VotingEventList,
     VotingList,
     VotingListJSONView,
+    VotingsAPIView,
     activate_voting,
     deactivate_voting,
     register_attendance,
@@ -17,14 +20,13 @@ from .views import (  # submit_vote,
     register_attendance_username,
 )
 
-urlpatterns = [
-    path("admin/", VotingEventList.as_view(), name="voting-event-list"),
-    path("admin/<int:pk>/list/", VotingList.as_view(), name="voting-list"),
+apiurlpatterns = [
+    path("api/<int:pk>/", VoteEventAPIView.as_view(), name="api-vote-event"),
+    path("api/<int:pk>/users/", UsersAPIView.as_view(), name="api-users"),
+    path("api/<int:pk>/votings/", VotingsAPIView.as_view(), name="api-votings"),
+    ### Old ###
     path(
         "admin/<int:pk>/api/list/", VotingListJSONView.as_view(), name="api-voting-list"
-    ),
-    path(
-        "admin/<int:pk>/attendance/", RegisterAttendanceView.as_view(), name="register"
     ),
     path(
         "admin/<int:event_pk>/api/attendance/<int:user_pk>/",
@@ -40,6 +42,15 @@ urlpatterns = [
         "admin/<int:event_pk>/api/attendance/username/<username>/",
         register_attendance_username,
         name="api-register-attendance-username",
+    ),
+]
+
+urlpatterns = [
+    *apiurlpatterns,
+    path("admin/", VotingEventList.as_view(), name="voting-event-list"),
+    path("admin/<int:pk>/list/", VotingList.as_view(), name="voting-list"),
+    path(
+        "admin/<int:pk>/attendance/", RegisterAttendanceView.as_view(), name="register"
     ),
     path("admin/<int:pk>/create_voting/", CreateVoting.as_view(), name="create-voting"),
     path(
