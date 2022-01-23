@@ -301,18 +301,17 @@
                         </div>
                     </li>
                 </ul>
-                
+
                 {# end navigasjonslenker #}
 {#                <form class="form-inline mr-5" id="searchtop" method="get" action="{% url "haystack_search" %}">#}
 {#                    <input name="q" placeholder="Søk..." type="search" class="form-control mr-sm-2">#}
 {#                </form>#}
                 <ul class="nav navbar-nav ">
-                    {% if request.user.is_authenticated %}
+                    {% if request.user.is_authenticated and request.user|cart_item_count > 0 %}
                     <li class="nav-item">
                         <a href="{% url 'nablashop:order-summary' %}" class="nav-link waves-effect">
                             <span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>
                             <i class="fas fa-shopping-cart"></i>
-                            <span class="clearfix d-none d-sm-inline-block"> Handlevogn </span>
                         </a>
                     </li>
                     {% endif %}
@@ -340,6 +339,7 @@
                             <a class="dropdown-item" href="{% url "officebeer_account" %}">Office Beer</a>
                             <a class="dropdown-item" href="{% url "users_birthday" %}">Bursdag</a>
                             <a class="dropdown-item" href="{% url "quiz_list" %}">Quiz</a>
+                            <a class="dropdown-item" href="{% url "nablashop:order-summary" %}">Handlevogn</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{% url "user_list" %}">Medlemsliste</a>
                             {% if user.is_staff %}
