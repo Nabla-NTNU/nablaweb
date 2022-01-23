@@ -36,15 +36,15 @@
         <div class="latest-nablad card card-body card-body-overline ">
             <!--Siste Nablad-->
             {% if new_nablad %}
-                <div style="height: 300px">
-                    <h3><a class="text-dark" href="{% url "nablad_list" %}">Siste Nablad</a></h3>
+                <div class="text-center">
+{#                    <h3><a class="text-dark" href="{% url "nablad_list" %}">Siste Nablad</a></h3>#}
                     <div class="row text-center">
 
-                        {#                    This should be revritten #}
+                        {# This should be revritten #}
                         {% for nablad in new_nablad %}
                             <div class="col-md-12{% if not forloop.first %} d-none d-md-block {% endif %}">
                                 <a href="{{ nablad.get_absolute_url }}">
-                                    <img class="rounded w-75" src="{% thumbnail nablad.thumbnail 730x200 %}">
+                                    <img class="rounded mw-100 nabla-media-img" src="{% thumbnail nablad.thumbnail 730x200 quality=100 detail %}">
                                 </a>
                             </div>
                         {% endfor %}
@@ -110,11 +110,11 @@
         <div class="latest-podcast card card-body card-body-overline ">
             <!--Siste Skråttcast-->
             {% if new_podcast %}
-                <div>
-                    <h3><a class="text-dark" href="{% url "season_view" %}">Siste Skråttcast</a></h3>
+                <div class="d-flex flex-column text-center">
+{#                    <h3><a class="text-dark" href="{% url "season_view" %}">Siste Skråttcast</a></h3>#}
                     <a href="{{ new_podcast.get_absolute_url }}">
-                        <img class="rounded mw-100" src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}"
-                             style="max-width: 100%; height:300px"/>
+                        <img class="rounded mw-100 nabla-media-img" src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}"
+                        />
                     </a>
                 </div>
             {% else %}
