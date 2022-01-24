@@ -59,6 +59,8 @@ def voting_to_JSON(voting):
 # TODO Decide on how the endpoints should be designed wrt. using both card number and username.
 #      Should the client send either, and server decide which to use, or must client figure it out, with
 #      server having dedicated endpoints for the various identifiers?
+# TODO Several of the API endpoints, especially the post, should have more error handling.
+#      Right now we will get 500 for invalid requests.
 
 
 def _attendance_response(error=None, user=None, is_checked_in=None):
@@ -267,36 +269,17 @@ class VotingsAPIView(VoteAdminMixin, BaseDetailView):
             }
         )
 
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        to_change = Voting.objects.get(pk=data.get("pk"))
+        to_change.is_active = data.get("active")
+        to_change.save()
+        return self.get(request, *args, **kwargs)
+
 
 class RegisterAttendanceView(DetailView):
     model = VotingEvent
     template_name = "vote/register_attendance2.html"
-
-
-class VotingListJSONView(DetailView):
-    """Could possibly do this function based"""
-
-    permission_required = ("vote.vote_admin", "vote.vote_inspector")
-    model = VotingEvent
-
-    def get(self, request, *args, **kwargs):
-        votings = self.get_object().votings.all()
-        return JsonResponse(
-            {"votings": {voting.pk: voting_to_JSON(voting) for voting in votings}}
-        )
-
-    def post(self, request, *args, **kwargs):
-        votings = self.get_object().votings.all()
-        data = json.loads(request.body)
-        # NOTE: there are two pk
-        # data.pk is the POST data referring to a voting
-        # kwargs.pk is the GET data referring to the voting event of the view.
-        to_change = votings.get(pk=data.get("pk"))
-        to_change.is_active = data.get("active")
-        to_change.save()
-        return JsonResponse(
-            {"votings": {voting.pk: voting_to_JSON(voting) for voting in votings}}
-        )
 
 
 class VotingEventList(PermissionRequiredMixin, ListView):

@@ -11,38 +11,15 @@ from .views import (  # submit_vote,
     VotingEdit,
     VotingEventList,
     VotingList,
-    VotingListJSONView,
     VotingsAPIView,
     activate_voting,
     deactivate_voting,
-    register_attendance,
-    register_attendance_card,
-    register_attendance_username,
 )
 
 apiurlpatterns = [
     path("api/<int:pk>/", VoteEventAPIView.as_view(), name="api-vote-event"),
     path("api/<int:pk>/users/", UsersAPIView.as_view(), name="api-users"),
     path("api/<int:pk>/votings/", VotingsAPIView.as_view(), name="api-votings"),
-    ### Old ###
-    path(
-        "admin/<int:pk>/api/list/", VotingListJSONView.as_view(), name="api-voting-list"
-    ),
-    path(
-        "admin/<int:event_pk>/api/attendance/<int:user_pk>/",
-        register_attendance,
-        name="api-register-attendance",
-    ),
-    path(
-        "admin/<int:event_pk>/api/attendance/card/<rfid_number>/",
-        register_attendance_card,
-        name="api-register-attendance-card",
-    ),
-    path(
-        "admin/<int:event_pk>/api/attendance/username/<username>/",
-        register_attendance_username,
-        name="api-register-attendance-username",
-    ),
 ]
 
 urlpatterns = [

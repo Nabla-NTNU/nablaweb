@@ -103,7 +103,7 @@
 	 toggleActive() {
 	     if ( !this.is_admin ) { return }
 	     axios
-		 .post("{% url 'api-voting-list' pk=object.pk %}", {pk: this.vote.pk, active: !this.vote.active},
+		 .post("{% url 'api-votings' pk=object.pk %}", {pk: this.vote.pk, active: !this.vote.active},
 		       {headers: {
 			   'X-CSRFToken': '{{ csrf_token }}' 
 		 }})
@@ -136,7 +136,7 @@
      },
      mounted: function() {
 	 axios
-	     .get("{% url 'api-voting-list' pk=object.pk %}")
+	     .get("{% url 'api-votings' pk=object.pk %}")
 	     .then((response) => {
 		 this.updateVotes(response.data.votings)
 	     })
