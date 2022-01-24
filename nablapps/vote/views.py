@@ -61,6 +61,15 @@ def voting_to_JSON(voting):
 #      server having dedicated endpoints for the various identifiers?
 
 
+def _attendance_response(error=None, user=None, is_checked_in=None):
+    """Generates the object used to report the success/failure of attendance registration"""
+    return {
+        "error": error,
+        "user": user,
+        "is_checked_in": is_checked_in,
+    }
+
+
 def register_attendance(event, user_pk, action):
     """Check in/out user from a voting event.
     Verify that the user i eligable, and then perform the checkin.
@@ -72,20 +81,7 @@ def register_attendance(event, user_pk, action):
     Response:
       Json with the currently attending users."""
 
-    try:
-        user = NablaUser.objects.get(pk=user_pk)
-    except NablaUser.DoesNotExist:
-        error = "User not found"
-    else:
-        error = None
-    finally:
-        if error is not None:
-            return {
-                "error": error,
-                "user": None,
-                "is_checked_in": None,
-            }
-
+    user = NablaUser.objects.get(pk=user_pk)
     actions = {
         "toggle": event.toggle_check_in_user,
         "in": event.check_in_user,
@@ -97,44 +93,58 @@ def register_attendance(event, user_pk, action):
         action_func = actions[action]
         action_func(user)
     except KeyError:
-        error = f"Invalid action '{action}'. Must be one of {actions.keys}"
+        return _attendance_response(
+            error=f"Invalid action '{action}'. Must be one of {actions.keys}"
+        )
     except UserNotEligible:
-        error = "User is not eligible for this event"
-    else:
-        error = None
+        return _attendance_response(error="User is not eligible for this event")
 
-    return {
-        "error": error,
-        "user": _user_serializer(user),
-        "is_checked_in": event.user_checked_in(user),
-    }
+    return _attendance_response(
+        user=_user_serializer(user), is_checked_in=event.user_checked_in(user)
+    )
 
 
-def register_attendance_card(request, event_pk, rfid_number):
-    """Register attendance using card as identifyer"""
+def _register_attendance_card(event, rfid_number, action):
+    """Register attendance using card as identifyer
+
+    Throws:
+     - NablaUser.DoesNotExist if the card does not correspond to a user
+     - ValueError if rfid_number is not a valid rfid_number format"""
     user = NablaUser.objects.get_from_rfid(rfid_number)
-    if user is not None:
-        return register_attendance(request, event_pk, user.pk)
-    else:
-        return {
-            "error": "Unknown card",
-            "user": None,
-            "is_checked_in": None,
-        }
+    # get_from_rfid does no throw exception if nothing is found, it is simply None if none found
+    if user is None:
+        raise NablaUser.DoesNotExist("Unknown card")
+    return register_attendance(event, user.pk, action)
 
 
-def register_attendance_username(event, username, action):
+def _register_attendance_username(event, username, action):
     """Register attendance using username as identifyer"""
-    try:
-        user = NablaUser.objects.get(username=username)
-    except:  # noqa: E722 TODO specify
-        return {
-            "error": f"Unknown username '{username}'",
-            "user": None,
-            "is_checked_in": None,
-        }
-    else:
-        return register_attendance(event, user.pk, action)
+    # TODO: something with exceptions
+    user = NablaUser.objects.get(username=username)
+    return register_attendance(event, user.pk, action)
+
+
+def register_attendance_any_identifier(event, identifier, action):
+    """Register attendance, attempting several identifiers"""
+    # Prioritized list of identifiers
+    identifiers = [
+        {"name": "card", "function": _register_attendance_card},
+        {"username": "username", "function": _register_attendance_username},
+        # Do not include pk, as it we feel it is bad practice to allow using a sequential identifier.
+    ]
+
+    for identifier_type in identifiers:
+        try:
+            return identifier_type["function"](event, identifier, action)
+        except NablaUser.DoesNotExist:  # Procede to next identifier
+            pass
+        except ValueError as e:  # Thrown by invalid card numbers
+            if "invalid literal for int() with base 10:" not in str(e):
+                raise e
+    return _attendance_response(
+        error="User not found, tried to match with "
+        + ", ".join([i["name"] for i in identifiers])
+    )
 
 
 @method_decorator(csrf_exempt, name="dispatch")  # TODO: Remove this, for tesing only
@@ -204,6 +214,7 @@ class UsersAPIView(VoteAdminMixin, BaseDetailView):
         return JsonResponse({"users": [_user_serializer(user) for user in users]})
 
     def post(self, request, *args, **kwargs):
+        """Post request handler"""
         self.object = self.get_object()
         data = json.loads(request.body)
         # TODO: can extend the functionality to cycle through
@@ -212,7 +223,9 @@ class UsersAPIView(VoteAdminMixin, BaseDetailView):
         # TODO: exception handling
         username = data.get("username")
         action = data.get("action")
-        attendence_reponse = register_attendance_username(self.object, username, action)
+        attendence_reponse = register_attendance_any_identifier(
+            self.object, username, action
+        )
         print(username)
         print(attendence_reponse)
         users = self.object.checked_in_users.all()
@@ -257,7 +270,7 @@ class VotingsAPIView(VoteAdminMixin, BaseDetailView):
 
 class RegisterAttendanceView(DetailView):
     model = VotingEvent
-    template_name = "vote/register_attendance.html"
+    template_name = "vote/register_attendance2.html"
 
 
 class VotingListJSONView(DetailView):
