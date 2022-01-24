@@ -46,6 +46,9 @@
 <div id="vote-list" >
   <input type="checkbox" v-model="show_results" id="show-results">
   <label for="show-results">Vis resultater</label>
+
+  <input type="checkbox" v-model="live_update" id="live-update">
+  <label for="live-update">Vis resultater live. (NB: spammer APIet)</label>
   <vote-item
     v-for="vote in votes"
     v-bind:vote="vote"
@@ -127,24 +130,33 @@
 	 return {
 	     votes: null,
          show_results: true,
+         live_update: false,
+         polling_period: 500,  // Polling interval milliseconds
 	 }
      },
      methods: {
-	 updateVotes(votes) {
-	     this.votes = votes
-	 }
+	     updateVotes(votes) {
+	         this.votes = votes
+	     },
+         fetchUpdate() {
+             axios
+	             .get("{% url 'api-votings' pk=object.pk %}")
+	             .then((response) => {
+		             this.updateVotes(response.data.votings)
+	             })
+	             .catch(error => {
+		             console.log(error)
+		             alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+	             })       
+         }
      },
-     mounted: function() {
-	 axios
-	     .get("{% url 'api-votings' pk=object.pk %}")
-	     .then((response) => {
-		 this.updateVotes(response.data.votings)
-	     })
-	     .catch(error => {
-		 console.log(error)
-		 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
-	     })
-     },
+     mounted() {
+         this.fetchUpdate()
+         this.polling = setInterval(() => {
+             if (this.live_update)
+                 this.fetchUpdate()
+         }, this.polling_period)  // Polling for updates
+     } 
  }
 
  const app = Vue.createApp(VoteList)
