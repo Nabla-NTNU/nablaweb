@@ -1,0 +1,87 @@
+{% extends "base.html"%}
+
+{% block main %}
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/axios/dist/axios.js"></script>
+    <!-- <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script> -->
+    <!-- <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script> -->
+    <div id="attendance-app">
+    </div>
+    <template id="AttendanceAppTemplate">
+        <div v-if="!this.error && this.lastAction.user.username != ''">
+            <h2>[[ greeting ]]</h2>
+        </div>
+        <form @submit.prevent="toggleUser(this.userIdentifier)">
+            <input type="text" name="user-identifier" placeholder="Enter card number" v-model="userIdentifier">
+        </form>
+        <user-item
+            v-for="user in users"
+            v-bind:user="user"></user-item>
+    </template>
+    <script>
+     const usersAPIURL = "/stem/api/{{ object.pk }}/users/"  // TODO: make this dynamic
+     const UserItem = {
+         delimiters: ['[[', ']]'],
+         props: ['user'],
+         template: '<div><span @click="this.$parent.toggleUser(user.username)" class="fas fa-times-circle"></span> [[ user.name ]] ([[ user.username ]])</div>',
+     }
+     const AttendanceApp = {
+         delimiters: ['[[', ']]'],
+         components: {UserItem},
+         data() {
+             return {
+                 voteEvent: null,  // TODO: fix this
+                 userIdentifier: null,
+                 users: null,  // Currently checked in users
+                 lastAction: {
+                     "error": null,
+                     "user": {"username": null,},
+                     "is_checked_in": null,
+                 }, // Last check in/out action
+             }
+         },
+         template: "#AttendanceAppTemplate",
+         mounted: function() {
+             this.getUsers()
+         },
+         methods: {
+             getUsers() {
+                 axios
+                     .get(usersAPIURL)
+                     .then(response => {
+                         this.users = response.data.users
+                     })
+                 // TODO: error handling
+             },
+             toggleUser(username) {
+                 axios
+                     .post(usersAPIURL, {username: username, action: "toggle"})
+                     .then(response => {
+                         console.log(response)
+                         this.users = response.data.users
+                         this.lastAction = response.data.lastAction
+                     })
+                 // TODO: error handling
+             }
+         },
+         computed: {
+             error() {
+                 return this.lastAction.error != null
+             },
+             greeting() {
+                 let greeting = ""
+                 if (this.lastAction.is_checked_in) {
+                     greeting = " checked in"
+                 } else {
+                     greeting = " checked out"
+                 }
+                 return this.lastAction.user.username + greeting
+             }
+         }
+     }
+
+
+     const app = Vue.createApp(AttendanceApp)
+     const vm = app.mount('#attendance-app')
+    </script>
+{% endblock main %}

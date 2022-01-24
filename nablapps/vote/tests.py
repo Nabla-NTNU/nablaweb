@@ -23,6 +23,9 @@ TODO: Change naming from 'eligible' to 'eligible_group', or similar. Now it
 """
 
 
+#################
+## Model tests ##
+#################
 class CheckinTestCase(TestCase):
     """Check functionality related to checkin.
 
@@ -185,3 +188,12 @@ class SubmitVoteTestCase(TestCase):
         with self.assertRaises(UserNotCheckedIn):
             self.voting0_alternative0.add_vote(self.user1)  # Has not checked in
         self.assertEqual(self.voting0_alternative0.votes, 1)
+
+
+################
+## View tests ##
+################
+
+
+class APITestCase(TestCase):
+    pass
