@@ -110,9 +110,14 @@ def _register_attendance_card(event, rfid_number, action):
     """Register attendance using card as identifyer
 
     Throws:
-     - NablaUser.DoesNotExist if the card does not correspond to a user
-     - ValueError if rfid_number is not a valid rfid_number format"""
-    user = NablaUser.objects.get_from_rfid(rfid_number)
+     - NablaUser.DoesNotExist if the card does not correspond to a user"""
+    try:
+        user = NablaUser.objects.get_from_rfid(rfid_number)
+    except ValueError as e:  # Thrown by invalid card numbers
+        if "invalid literal for int() with base 10:" in str(e):
+            raise NablaUser.DoesNotExist("Invalid card format. No user.")
+        else:
+            raise e
     # get_from_rfid does no throw exception if nothing is found, it is simply None if none found
     if user is None:
         raise NablaUser.DoesNotExist("Unknown card")
@@ -131,7 +136,7 @@ def register_attendance_any_identifier(event, identifier, action):
     # Prioritized list of identifiers
     identifiers = [
         {"name": "card", "function": _register_attendance_card},
-        {"username": "username", "function": _register_attendance_username},
+        {"name": "username", "function": _register_attendance_username},
         # Do not include pk, as it we feel it is bad practice to allow using a sequential identifier.
     ]
 
@@ -140,12 +145,9 @@ def register_attendance_any_identifier(event, identifier, action):
             return identifier_type["function"](event, identifier, action)
         except NablaUser.DoesNotExist:  # Procede to next identifier
             pass
-        except ValueError as e:  # Thrown by invalid card numbers
-            if "invalid literal for int() with base 10:" not in str(e):
-                raise e
     return _attendance_response(
         error="User not found, tried to match with "
-        + ", ".join([i["name"] for i in identifiers])
+        + ", ".join([i["name"] for i in identifiers]),
     )
 
 

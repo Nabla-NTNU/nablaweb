@@ -8,22 +8,48 @@
     <div id="attendance-app">
     </div>
     <template id="AttendanceAppTemplate">
-        <div v-if="!this.error && this.lastAction.user.username != ''">
+        <div class="text-center">
+        <div v-if="!this.error">
             <h2>[[ greeting ]]</h2>
         </div>
+        <div v-else>
+            <h2>Error</h2>
+        </div>
         <form @submit.prevent="toggleUser(this.userIdentifier)">
-            <input type="text" name="user-identifier" placeholder="Enter card number" v-model="userIdentifier">
+            <div  class="form-group">
+            <input v-bind:class="{'is-invalid': error}" class="form-control form-control-lg" type="text" name="user-identifier" placeholder="Enter card number" v-model="userIdentifier">
+            <div v-if="this.error" class="invalid-feedback">
+                [[ lastAction.error ]]
+            </div>
+            </div>
         </form>
+        <span>Currently [[ users.length ]] people checked in</span>
+        <ul>
         <user-item
             v-for="user in users"
             v-bind:user="user"></user-item>
+        </ul>
+        </div>
     </template>
     <script>
      const usersAPIURL = "/stem/api/{{ object.pk }}/users/"  // TODO: make this dynamic
      const UserItem = {
          delimiters: ['[[', ']]'],
          props: ['user'],
-         template: '<div><span @click="this.$parent.toggleUser(user.username)" class="fas fa-times-circle"></span> [[ user.name ]] ([[ user.username ]])</div>',
+         template: `
+             <li class="list-group-item d-flex justify-content-between align-items">
+             <!-- <span @click="this.$parent.toggleUser(user.username)" class="fas fa-times-circle"></span>-->
+                 [[ user.name ]] ([[ user.username ]])
+                 <span class="badge badge-pill badge-danger btn" @click="removeUser">Remove</span>
+                 </li>
+         `,
+         methods: {
+             removeUser() {
+                 if (!confirm("Are you sure you want to remove " + [[ this.user.username ]] + " ?"))
+                     return
+                 this.$parent.toggleUser(this.user.username, action="out")
+             }
+         }
      }
      const AttendanceApp = {
          delimiters: ['[[', ']]'],
@@ -32,10 +58,10 @@
              return {
                  voteEvent: null,  // TODO: fix this
                  userIdentifier: null,
-                 users: null,  // Currently checked in users
+                 users: [],  // Currently checked in users
                  lastAction: {
                      "error": null,
-                     "user": {"username": null,},
+                     "user": null,
                      "is_checked_in": null,
                  }, // Last check in/out action
              }
@@ -53,13 +79,14 @@
                      })
                  // TODO: error handling
              },
-             toggleUser(username) {
+             toggleUser(username, action = "toggle") {
                  axios
-                     .post(usersAPIURL, {username: username, action: "toggle"})
+                     .post(usersAPIURL, {username: username, action: action})
                      .then(response => {
-                         console.log(response)
                          this.users = response.data.users
                          this.lastAction = response.data.lastAction
+                         if (this.lastAction.error == null)
+                             this.userIdentifier = null
                      })
                  // TODO: error handling
              }
@@ -69,7 +96,8 @@
                  return this.lastAction.error != null
              },
              greeting() {
-                 let greeting = ""
+                 if (this.lastAction.user == null)
+                     return "Ready!"
                  if (this.lastAction.is_checked_in) {
                      greeting = " checked in"
                  } else {
