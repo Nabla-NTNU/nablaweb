@@ -10,8 +10,10 @@ from .views import (  # submit_vote,
     VotingDetail,
     VotingEdit,
     VotingEventList,
+    VotingEventUserView,
     VotingList,
     VotingsAPIView,
+    VotingsPublicAPIView,
     activate_voting,
     deactivate_voting,
 )
@@ -20,6 +22,11 @@ apiurlpatterns = [
     path("api/<int:pk>/", VoteEventAPIView.as_view(), name="api-vote-event"),
     path("api/<int:pk>/users/", UsersAPIView.as_view(), name="api-users"),
     path("api/<int:pk>/votings/", VotingsAPIView.as_view(), name="api-votings"),
+    path(
+        "api/<int:pk>/public/votings/",
+        VotingsPublicAPIView.as_view(),
+        name="api-public-votings",
+    ),
 ]
 
 urlpatterns = [
@@ -48,6 +55,7 @@ urlpatterns = [
         deactivate_voting,
         name="deactivate-voting",
     ),
+    path("event/<int:pk>", VotingEventUserView.as_view(), name="voting-event-user"),
     path(
         "",
         ActiveVotingList.as_view(),

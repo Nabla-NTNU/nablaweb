@@ -1,0 +1,77 @@
+#+TITLE: Checkin
+
+* TODO Change structure of API endpoints in [[file:views.py][views.py]]
+Should split up the endpoint changing the user status and the one getting list of all users, maybe.
+
+** What we need
+- Endpoint for getting all users
+  Must work also when not checking in/out users
+- Endpoint for checking in/out user
+
+
+When checking in/out a user, we want to also update the list of checked in users.
+We can do this by either client side updating the list, or retrieving the list from the server.
+If we want to retrieve the list from the server, we must decide if it should be returned in the response from updating or if we should send a separate request for getting the list.
+
+** Suggested setup
+- ~/api/<pk:voteEvent>/~
+  GET information about event, but no votings
+
+  Response form:
+  #+begin_src js
+{
+    "title": "[title]",
+    "eligible_group": "[eligible_group]",
+}
+  #+end_src
+  TODO: Consider also having total number of checked in users
+
+- ~/api/<pk:voteEvent>/users~
+  GET request returns all users
+  POST checks in/out user. Should have several possible identifiers.
+
+  Response form:
+  #+begin_src js
+{
+    "users": [
+        {"username": ..., ""},
+    ],
+    // If POST request, also include the following
+    "lastAction": {
+        "error": "",  // If empty, success
+        "user": {"username": ..., ""},
+        "is_checked_in": Bool,
+    }
+}
+  #+end_src
+
+- ~/api/<pk:voteEvent>/votings~
+  GET information about votings in event
+  POST update information about a voting, such as active/not active
+
+  #+begin_src js
+{
+    "votings": [
+        {
+            "pk": "",
+            "title": "[title]",
+            "active": ,
+            "num_voted": "",
+            "created_by": "",
+            "num_winners": "",
+            "description": "",
+            "alternatives": [
+                {
+                    "pk": "",
+                    "text": "",
+                    "votes": "",
+                    "percentage": "",
+                },
+                ...
+            ]
+            ""
+        },
+        ...
+    ]
+}
+  #+end_src

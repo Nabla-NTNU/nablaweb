@@ -1,0 +1,153 @@
+{% extends "base.html"%}
+
+{% block more_head %}
+    <style>
+     .voting_item {
+         display: block;
+         padding: 5px 20px;
+         /* border-bottom: 0.4px solid gray; */
+         border-radius: 5px;
+         box-shadow: rgba(0,0,0,0.5) 0 4px 6px -3px;
+         margin-bottom: 15px;
+     }
+
+     .voting_item__title {
+         font-size: large;
+         font-weight: bold;
+     }
+
+     .voting_item__metadata {
+         float: right;
+     }
+
+     .voting_item__metadata span {
+         color: gray;
+         font-size: small;
+         margin: 0 4px;
+     }
+
+     .results_list {
+         list-style: none;
+     }
+
+     .results_list li {
+         margin-bottom: 10px;
+     }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/axios/dist/axios.js"></script>
+    <!-- <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script> -->
+    <!-- <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script> -->
+    <h1>Avstemninger</h1>
+
+    <div id="vote-list" >
+        <input type="checkbox" v-model="show_results" id="show-results">
+        <label for="show-results">Vis resultater</label>
+
+        <input type="checkbox" v-model="live_update" id="live-update">
+        <label for="live-update">Vis resultater live. (NB: spammer APIet)</label>
+        <vote-item
+            v-for="vote in votes"
+            v-bind:vote="vote"
+            v-bind:show_results="show_results"
+        ></vote-item>
+    </div>
+    <template id="vote-item-template">
+             <div class="voting_item">
+	             <a :href="vote.url">
+                     <span class="voting_item__title">[[ vote.title ]]</span>
+	             </a>
+                 <span class="voting_item__metadata">
+                     <span v-if="vote.has_voted">Stemme sendt <i class="fas fa-check-square"></i></span>
+                     <span v-else><i class="fas fa-square"></i></span>
+                 </span>
+                 <form v-if="!vote.has_voted" @submit.prevent="this.$parent.submitVote(this.selected_alternative)">
+                     <span class="voting_item__results" v-if="show_results">
+                         <div v-for="alternative in vote.alternatives" class="form-check">
+                             <input type="radio" :name="vote.pk + '_alternatives'" :value="alternative.pk" :id="vote.pk + '_alternative_' + alternative.pk" class="form-check-input" v-model="selected_alternative">
+                             <label class="form-check-label" :for="vote.pk + '_alternative_' + alternative.pk">[[ alternative.text ]]</label>
+                         </div>
+                     </span>
+                     <button type="submit" class="btn btn-primary">Submit</button>
+                 </form>
+                 <div v-else>
+                     <i>Stemme sendt inn</i>
+                 </div>
+             </div>
+    </template>
+    <script>
+     const VoteItem = {
+         delimiters: ['[[', ']]'],
+         props: ['vote', 'show_results'],
+         template: '#vote-item-template',
+          data() {
+              return {
+                  selected_alternative: null,
+              }
+          },
+         computed: {
+	         classObject() {
+	             return [
+	      	         this.vote.active ? 'text-success' : 'text-danger',
+	      	         this.vote.active ? 'fa-toggle-on' : 'fa-toggle-off',
+	             ]
+	         }
+         },
+     }
+
+     const VoteList = {
+         delimiters: ['[[', ']]'],
+         components: {
+	         VoteItem
+         },
+         data() {
+	         return {
+	             votes: null,
+                 show_results: true,
+                 live_update: false,
+                 polling_period: 500,  // Polling interval milliseconds
+	         }
+         },
+         methods: {
+	         updateVotes(votes) {
+	             this.votes = votes
+	         },
+             fetchUpdate() {
+                 axios
+	                 .get("{% url 'api-public-votings' pk=object.pk %}")
+	                 .then((response) => {
+		                 this.updateVotes(response.data.votings)
+	                 })
+	                 .catch(error => {
+		                 console.log(error)
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+	                 })
+             },
+             submitVote(alternative_pk) {
+                 axios
+	                 .post("{% url 'api-public-votings' pk=object.pk %}", {alternative_pk: alternative_pk})
+	                 .then((response) => {
+		                 this.updateVotes(response.data.votings)
+	                 })
+	                 .catch(error => {
+		                 console.log(error)
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+	                 })
+             },
+         },
+         mounted() {
+             this.fetchUpdate()
+             this.polling = setInterval(() => {
+                 if (this.live_update)
+                     this.fetchUpdate()
+             }, this.polling_period)  // Polling for updates
+         }
+     }
+
+     const app = Vue.createApp(VoteList)
+     const vm = app.mount('#vote-list')
+    </script>
+{% endblock %}

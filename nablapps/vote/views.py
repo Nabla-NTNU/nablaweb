@@ -30,28 +30,9 @@ from .models import (
     VotingEvent,
 )
 
-
 ####################
 ### Admin views ####
 ####################
-def voting_to_JSON(voting):
-    json = {}
-    json["pk"] = voting.pk
-    json["title"] = voting.title
-    json["active"] = voting.is_active
-    json["num_voted"] = voting.get_total_votes()
-    json["created_by"] = getattr(voting.created_by, "username", "Admin (aka unknown)")
-    json["url"] = reverse("voting-detail", kwargs={"pk": voting.pk})
-    json["alternatives"] = {
-        a.pk: {
-            "pk": a.pk,
-            "text": a.text,
-            "votes": a.votes,
-            "percentage": a.get_vote_percentage(),
-        }
-        for a in voting.alternatives.all()
-    }
-    return json
 
 
 # TODO fix permissions
@@ -446,6 +427,76 @@ def deactivate_voting(request, pk, redirect_to):
 ###########################################
 ### Non admin views, only login required ###
 ###########################################
+def _alternative_public_serializer(alternative):
+    return {
+        "pk": alternative.pk,
+        "text": alternative.text,
+    }
+
+
+def _voting_public_serializer(voting, user, include_alternatives=True):
+    response = {
+        "pk": voting.pk,
+        "title": voting.title,
+        "active": voting.is_active,
+        "has_voted": voting.user_already_voted(user),
+        "num_winners": voting.num_winners,
+    }
+    if include_alternatives:
+        response["alternatives"] = [
+            _alternative_public_serializer(a) for a in voting.alternatives.all()
+        ]
+    return response
+
+
+@method_decorator(csrf_exempt, name="dispatch")  # TODO: Remove this, for tesing only
+class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
+    """API endpoint for votings with only 'public' information, i.e. not including number of votes etc.
+
+    POST submit a vote
+     {'alternative_pk': ...}
+
+    Discussion:
+     Could probably merge this with VotingsAPIView, and dynamically include/exclude data depending on permissions
+     or something similar.
+     However, I did not bother.
+     Feel free to do so if you want.
+    """
+
+    model = VotingEvent
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        votings = self.object.votings.filter(is_active=True)
+        return JsonResponse(
+            {
+                "votings": [
+                    _voting_public_serializer(voting, request.user)
+                    for voting in votings
+                ],
+            }
+        )
+
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        try:
+            alternative_pk = data.get("alternative_pk")
+            alternative = Alternative.objects.get(pk=alternative_pk)
+        except KeyError as e:
+            # Invlaid pk
+            raise e
+        except Alternative.DoesNotExist as e:
+            raise e
+
+        alternative.add_vote(request.user)
+        return self.get(request, *args, **kwargs)
+
+
+class VotingEventUserView(LoginRequiredMixin, DetailView):
+    """Collection of all votings for a given voting event"""
+
+    model = VotingEvent
+    template_name = "vote/voting_event_user_view.html"
 
 
 class ActiveVotingList(LoginRequiredMixin, ListView):
