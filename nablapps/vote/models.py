@@ -20,6 +20,9 @@ class VotingEvent(models.Model):
     users_should_poll = models.BooleanField(
         "Clients should poll for updates", default=False
     )
+    require_checkin = models.BooleanField(
+        "Users must check in to submit votes", default=True
+    )
     eligible_group = models.ForeignKey(
         NablaGroup,
         on_delete=models.CASCADE,
@@ -338,7 +341,10 @@ class Alternative(models.Model):
             raise UserAlreadyVoted(f"{user} has already voted on {self.voting}.")
         elif self.voting.user_not_eligible(user):
             raise UserNotEligible(f"{user} is not eligible to vote on {self.voting}")
-        elif not self.voting.event.user_checked_in(user):
+        elif (
+            self.voting.event.require_checkin
+            and not self.voting.event.user_checked_in(user)
+        ):
             raise UserNotCheckedIn(f"{user} is not checked to event.")
         elif not self.voting.is_active:
             raise VotingDeactive(f"The voting {self.voting} is no longer open.")

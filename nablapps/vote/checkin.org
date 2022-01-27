@@ -1,6 +1,12 @@
 #+TITLE: Checkin
 
-* TODO Change structure of API endpoints in [[file:views.py][views.py]]
+* Unfinished tasks
+
+** TODO Give users error message if they are not checked in when attempting to vote
+
+** DONE Add option to not have checkin for an event
+
+* Change structure of API endpoints in [[file:views.py][views.py]]
 Should split up the endpoint changing the user status and the one getting list of all users, maybe.
 
 ** What we need

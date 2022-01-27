@@ -489,7 +489,10 @@ class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
         except Alternative.DoesNotExist as e:
             raise e
 
-        alternative.add_vote(request.user)
+        try:
+            alternative.add_vote(request.user)
+        except (UserNotCheckedIn, UserAlreadyVoted, UserNotEligible) as e:
+            return JsonResponse({"error": str(e)}, status=403)  # 403 FORBIDDEN
         return self.get(request, *args, **kwargs)
 
 

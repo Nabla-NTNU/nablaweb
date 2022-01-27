@@ -59,7 +59,7 @@
     <script src="https://unpkg.com/axios/dist/axios.js"></script>
     <!-- <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script> -->
     <!-- <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script> -->
-    <h1>Avstemninger</h1>
+    <h1>{{ object.title  }}</h1>
 
     <div id="vote-list" >
         <transition-group name="slide-fade">
@@ -69,6 +69,9 @@
             v-bind:vote="vote"
         ></vote-item>
         </transition-group>
+        <div v-if="!votes.length">
+            Ingen aktive avstemninger.
+        </div>
     </div>
     <template id="vote-item-template">
             <div class="voting_item">
@@ -79,7 +82,8 @@
                     <span v-if="vote.has_voted">Stemme sendt <i class="fas fa-check-square"></i></span>
                     <span v-else><i class="fas fa-square"></i></span>
                 </span>
-                <form v-if="!vote.has_voted" @submit.prevent="this.$parent.submitVote(this.selected_alternative)">
+                <!-- [[ The $parent.$parent is a bit ugly, but if it works it works. It is to mitigate the transition ]]  -->
+                <form v-if="!vote.has_voted" @submit.prevent="this.$parent.$parent.submitVote(this.selected_alternative)">
                     <span class="voting_item__results">
                         <div v-for="alternative in vote.alternatives" class="form-check">
                             <input type="radio" :name="vote.pk + '_alternatives'" :value="alternative.pk" :id="vote.pk + '_alternative_' + alternative.pk" class="form-check-input" v-model="selected_alternative">
@@ -120,7 +124,7 @@
          },
          data() {
 	         return {
-	             votes: null,
+	             votes: [],
                  poll_active: false,
                  polling_period: 2000,  // Polling interval milliseconds
 	         }
@@ -137,7 +141,6 @@
                          this.poll_active = response.data.should_poll
 	                 })
 	                 .catch(error => {
-		                 console.log(error)
 		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
 	                 })
              },
@@ -148,8 +151,8 @@
 		                 this.updateVotes(response.data.votings)
 	                 })
 	                 .catch(error => {
-		                 console.log(error)
-		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+		                 console.log(error.response)
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom. Error was: '" + error.response.data.error + "'")
 	                 })
              },
          },
