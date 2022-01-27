@@ -15,7 +15,10 @@ class VotingEvent(models.Model):
     title = models.CharField(max_length=100)
     creation_date = models.DateTimeField("Opprettet", auto_now_add=True)
     checked_in_users = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="checked_in_users"
+        settings.AUTH_USER_MODEL, related_name="checked_in_users", blank=True
+    )
+    users_should_poll = models.BooleanField(
+        "Clients should poll for updates", default=False
     )
     eligible_group = models.ForeignKey(
         NablaGroup,

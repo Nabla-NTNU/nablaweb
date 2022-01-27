@@ -474,6 +474,7 @@ class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
                     _voting_public_serializer(voting, request.user)
                     for voting in votings
                 ],
+                "should_poll": self.object.users_should_poll,
             }
         )
 

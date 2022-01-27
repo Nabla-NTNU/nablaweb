@@ -33,6 +33,24 @@
      .results_list li {
          margin-bottom: 10px;
      }
+
+     /* Enter and leave animations can use different */
+     /* durations and timing functions.              */
+     .slide-fade-enter-active {
+         transition: all 0.4s ease;
+     }
+
+     .slide-fade-leave-active {
+         transition: all 0.4s ease;
+         /* transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1); */
+     }
+
+     .slide-fade-enter-from,
+     .slide-fade-leave-to {
+         transform: translateY(-20px);
+         opacity: 0;
+     }
+
     </style>
 {% endblock %}
 
@@ -44,44 +62,41 @@
     <h1>Avstemninger</h1>
 
     <div id="vote-list" >
-        <input type="checkbox" v-model="show_results" id="show-results">
-        <label for="show-results">Vis resultater</label>
-
-        <input type="checkbox" v-model="live_update" id="live-update">
-        <label for="live-update">Vis resultater live. (NB: spammer APIet)</label>
-        <vote-item
+        <transition-group name="slide-fade">
+            <vote-item
             v-for="vote in votes"
+            v-bind:key="vote.pk"
             v-bind:vote="vote"
-            v-bind:show_results="show_results"
         ></vote-item>
+        </transition-group>
     </div>
     <template id="vote-item-template">
-             <div class="voting_item">
-	             <a :href="vote.url">
-                     <span class="voting_item__title">[[ vote.title ]]</span>
-	             </a>
-                 <span class="voting_item__metadata">
-                     <span v-if="vote.has_voted">Stemme sendt <i class="fas fa-check-square"></i></span>
-                     <span v-else><i class="fas fa-square"></i></span>
-                 </span>
-                 <form v-if="!vote.has_voted" @submit.prevent="this.$parent.submitVote(this.selected_alternative)">
-                     <span class="voting_item__results" v-if="show_results">
-                         <div v-for="alternative in vote.alternatives" class="form-check">
-                             <input type="radio" :name="vote.pk + '_alternatives'" :value="alternative.pk" :id="vote.pk + '_alternative_' + alternative.pk" class="form-check-input" v-model="selected_alternative">
-                             <label class="form-check-label" :for="vote.pk + '_alternative_' + alternative.pk">[[ alternative.text ]]</label>
-                         </div>
-                     </span>
-                     <button type="submit" class="btn btn-primary">Submit</button>
-                 </form>
-                 <div v-else>
-                     <i>Stemme sendt inn</i>
-                 </div>
-             </div>
+            <div class="voting_item">
+	            <a :href="vote.url">
+                    <span class="voting_item__title">[[ vote.title ]]</span>
+	            </a>
+                <span class="voting_item__metadata">
+                    <span v-if="vote.has_voted">Stemme sendt <i class="fas fa-check-square"></i></span>
+                    <span v-else><i class="fas fa-square"></i></span>
+                </span>
+                <form v-if="!vote.has_voted" @submit.prevent="this.$parent.submitVote(this.selected_alternative)">
+                    <span class="voting_item__results">
+                        <div v-for="alternative in vote.alternatives" class="form-check">
+                            <input type="radio" :name="vote.pk + '_alternatives'" :value="alternative.pk" :id="vote.pk + '_alternative_' + alternative.pk" class="form-check-input" v-model="selected_alternative">
+                            <label class="form-check-label" :for="vote.pk + '_alternative_' + alternative.pk">[[ alternative.text ]]</label>
+                        </div>
+                    </span>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                <div v-else>
+                    <i>Stemme sendt inn</i>
+                </div>
+            </div>
     </template>
     <script>
      const VoteItem = {
          delimiters: ['[[', ']]'],
-         props: ['vote', 'show_results'],
+         props: ['vote',],
          template: '#vote-item-template',
           data() {
               return {
@@ -106,9 +121,8 @@
          data() {
 	         return {
 	             votes: null,
-                 show_results: true,
-                 live_update: false,
-                 polling_period: 500,  // Polling interval milliseconds
+                 poll_active: false,
+                 polling_period: 2000,  // Polling interval milliseconds
 	         }
          },
          methods: {
@@ -120,6 +134,7 @@
 	                 .get("{% url 'api-public-votings' pk=object.pk %}")
 	                 .then((response) => {
 		                 this.updateVotes(response.data.votings)
+                         this.poll_active = response.data.should_poll
 	                 })
 	                 .catch(error => {
 		                 console.log(error)
@@ -141,7 +156,7 @@
          mounted() {
              this.fetchUpdate()
              this.polling = setInterval(() => {
-                 if (this.live_update)
+                 if (this.poll_active)
                      this.fetchUpdate()
              }, this.polling_period)  // Polling for updates
          }
