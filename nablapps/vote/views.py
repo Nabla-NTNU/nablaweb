@@ -23,6 +23,7 @@ from .models import (
     DuplicatePriorities,
     HoleInBallotError,
     UserAlreadyVoted,
+    UserNotCheckedIn,
     UserNotEligible,
     Voting,
     VotingDeactive,
@@ -564,6 +565,8 @@ class Vote(LoginRequiredMixin, DetailView):
                 return redirect("voting-vote", pk=voting_id)
             except UserAlreadyVoted:
                 messages.error(request, "Du har allerede stemt i denne avstemningen!")
+            except UserNotCheckedIn:
+                messages.error(request, "Du har ikke sjekket inn!")
             except VotingDeactive:
                 messages.error(
                     request, "Denne avstemningen er ikke lenger åpen for stemming!"

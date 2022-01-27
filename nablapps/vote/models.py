@@ -335,7 +335,7 @@ class Alternative(models.Model):
             raise UserAlreadyVoted(f"{user} has already voted on {self.voting}.")
         elif self.voting.user_not_eligible(user):
             raise UserNotEligible(f"{user} is not eligible to vote on {self.voting}")
-        elif not self.voting.vote.user_checked_in(user):
+        elif not self.voting.event.user_checked_in(user):
             raise UserNotCheckedIn(f"{user} is not checked to event.")
         elif not self.voting.is_active:
             raise VotingDeactive(f"The voting {self.voting} is no longer open.")
