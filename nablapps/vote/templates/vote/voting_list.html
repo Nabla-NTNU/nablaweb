@@ -73,7 +73,7 @@
          <span><span class="fas fa-users"></span> [[ vote.num_voted ]]</span>
          <span><span class="fas fa-user"></span> [[ vote.created_by ]]</span>
          </span>
-         <span class="voting_item__results" v-if="vote.num_voted && show_results">
+         <span class="voting_item__results" v-if="show_results">
 <ul class="results_list">
             <li v-for="alternative in vote.alternatives">
 <span>[[ alternative.text ]]</span>
