@@ -55,11 +55,6 @@ def voting_to_JSON(voting):
 
 
 # TODO fix permissions
-# TODO this shold not be a view from url. Only used to facilitate card, username, etc.
-# TODO either allow return of user list even on failed username (probably bad) or add new endpoint for only getting the number of users
-# TODO Decide on how the endpoints should be designed wrt. using both card number and username.
-#      Should the client send either, and server decide which to use, or must client figure it out, with
-#      server having dedicated endpoints for the various identifiers?
 # TODO Several of the API endpoints, especially the post, should have more error handling.
 #      Right now we will get 500 for invalid requests.
 
@@ -280,13 +275,12 @@ class VotingsAPIView(VoteAdminMixin, BaseDetailView):
         return self.get(request, *args, **kwargs)
 
 
-class RegisterAttendanceView(DetailView):
+class RegisterAttendanceView(VoteAdminMixin, DetailView):
     model = VotingEvent
     template_name = "vote/register_attendance2.html"
 
 
-class VotingEventList(PermissionRequiredMixin, ListView):
-    permission_required = ("vote.vote_admin", "vote.vote_inspector")
+class VotingEventList(VoteAdminMixin, ListView):
     model = VotingEvent
     template_name = "vote/voting_event_list.html"
 
@@ -298,10 +292,9 @@ class VotingEventList(PermissionRequiredMixin, ListView):
         return False
 
 
-class VotingList(PermissionRequiredMixin, DetailView):
+class VotingList(VoteAdminMixin, DetailView):
     """List of all votings in a voting event"""
 
-    permission_required = ("vote.vote_admin", "vote.vote_inspector")
     model = VotingEvent
     template_name = "vote/voting_list.html"
 
@@ -318,7 +311,7 @@ class VotingList(PermissionRequiredMixin, DetailView):
         return context
 
 
-class CreateVoting(PermissionRequiredMixin, CreateView):
+class CreateVoting(VoteAdminMixin, CreateView):
     """View for creating new votings"""
 
     permission_required = "vote.vote_admin"
@@ -358,7 +351,7 @@ class CreateVoting(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class VotingEdit(PermissionRequiredMixin, UpdateView):
+class VotingEdit(VoteAdminMixin, UpdateView):
     permission_required = "vote.vote_admin"
     model = Voting
     template_name = "vote/edit_voting.html"
@@ -391,7 +384,7 @@ class VotingEdit(PermissionRequiredMixin, UpdateView):
             return redirect("voting-detail", pk=self.kwargs["pk"])
 
 
-class VotingDetail(PermissionRequiredMixin, DetailView):
+class VotingDetail(VoteAdminMixin, DetailView):
     """Display details such as alternatives and results"""
 
     permission_required = ("vote.vote_admin", "vote.vote_inspector")
