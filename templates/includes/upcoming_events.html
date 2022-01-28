@@ -44,13 +44,12 @@
                 </time>
             </div>
         </div>
-        <div class="list-group list-group-flush">
+        <div class="list-group list-group-flush border-bottom border-top">
             {% for event in upcoming %}
                 {% if forloop.first %}
                 {% else %}
                     <a class="list-group-item list-group-item-action d-flex align-items-center "
                        href="{{ event.get_absolute_url }}">
-
                         <span class="text-dark text-decoration-none flex-1 text-truncate mr-auto">
                             {{ event.headline }}
                         </span>
