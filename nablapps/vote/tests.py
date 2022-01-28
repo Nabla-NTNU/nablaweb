@@ -3,6 +3,7 @@ import unittest
 
 from django.contrib.auth.models import Permission
 from django.test import Client, TestCase
+from django.urls import reverse
 
 from nablapps.accounts.models import NablaGroup, NablaUser
 
@@ -197,11 +198,10 @@ class SubmitVoteTestCase(TestCase):
 ################
 
 
-class APITestCase(TestCase):
+class ViewTestCase(TestCase):
     def setUp(self):
         vote_staff = NablaGroup.objects.create(name="vote_staff")
-        vote_insp_perm = Permission.objects.get(codename="vote_inspector")
-        vote_staff.permissions.add(vote_insp_perm)
+        vote_staff.permissions.add(Permission.objects.get(codename="vote_inspector"))
         users = [
             # [username, password, superuser, groups]
             ["admin", "admin", True, None],
@@ -245,7 +245,7 @@ class APITestCase(TestCase):
             text="Third alternative voting 0",
         )
 
-    def test_api_permissions(self):
+    def test_permissions(self):
         admin = Client()
         assert admin.login(
             username=self.admin_user.username, password=self.admin_user.username
@@ -258,13 +258,93 @@ class APITestCase(TestCase):
         assert alice.login(
             username=self.alice_user.username, password=self.alice_user.username
         )
+        not_logged_in = Client()
 
-        # TODO make dynamic urls
-        tests = [
+        # Defines clients with expected status codes
+        # Define one list for each 'type' of permission
+        # class you want to test.
+        clients_admin = [
+            {"user": alice, "expected_code": 403},
+            {"user": bob, "expected_code": 403},
+            {"user": admin, "expected_code": 200},
+            {"user": not_logged_in, "expected_code": 403},
+        ]
+        clients_inspector = [
             {"user": alice, "expected_code": 403},
             {"user": bob, "expected_code": 200},
             {"user": admin, "expected_code": 200},
+            {"user": not_logged_in, "expected_code": 403},
         ]
+        clients_public = [
+            {"user": alice, "expected_code": 200},
+            {"user": bob, "expected_code": 200},
+            {"user": admin, "expected_code": 200},
+            {"user": not_logged_in, "expected_code": 403},
+        ]
+
+        # Make some tests, represented by dicts, which calls various
+        # views, and checks that we get rejected if we do not have
+        # the proper rights.
+
+        api_tests_setup = [
+            ["api-public-votings", clients_public, {"pk": 1}, "get"],
+            ["api-vote-event", clients_inspector, {"pk": 1}, "get"],
+            ["api-users", clients_inspector, {"pk": 1}, "get"],
+            ["api-votings", clients_inspector, {"pk": 1}, "get"],
+        ]
+
+        # I think we will remove some of these views in the future, but for now
+        # we must test them.
+        other_tests_setup = [
+            ["voting-event-list", clients_inspector, {}, "get"],
+            ["voting-list", clients_inspector, {"pk": 1}, "get"],
+            ["register", clients_inspector, {"pk": 1}, "get"],
+            ["create-voting", clients_inspector, {"pk": 1}, "get"],
+            ["create-voting", clients_admin, {"pk": 1}, "post"],
+            ["voting-detail", clients_inspector, {"pk": 1}, "get"],
+            ["voting-edit", clients_inspector, {"pk": 1}, "get"],
+            ["voting-edit", clients_admin, {"pk": 1}, "post"],
+            ["activate-voting", clients_admin, {"pk": 1, "redirect_to": "/"}, "get"],
+            ["deactivate-voting", clients_admin, {"pk": 1, "redirect_to": "/"}, "get"],
+            ["voting-event-user", clients_public, {"pk": 1}, "get"],
+            ["active-voting-list", clients_public, {}, "get"],
+            ["voting-vote", clients_public, {"pk": 1}, "get"],
+        ]
+
+        tests_setup = api_tests_setup + other_tests_setup
+
+        tests = [
+            {
+                "url": reverse(view, kwargs=kwargs),
+                "view_name": view,
+                "method": method,
+                "data": {},
+                "clients": client_group,
+            }
+            for view, client_group, kwargs, method in tests_setup
+        ]
+
         for test in tests:
-            response = test["user"].get("/stem/api/1/votings/")
-            self.assertEqual(response.status_code, test["expected_code"])
+            for client in test["clients"]:
+                method = getattr(client["user"], test["method"])
+                response = method(test["url"])
+                try:
+                    self.assertEqual(
+                        response.status_code,
+                        client["expected_code"],
+                        f"Wrong permissions for view {test['view_name']}. Failed for user {response.wsgi_request.user}.",
+                    )
+                except AssertionError as e:
+                    # If we get a redirect (302) handle that as success if
+                    # we expected to get 200.
+                    if response.status_code == 302 and client["expected_code"] == 200:
+                        pass
+                    # If we get a redirect (302) to login when expecting rejection, it is fine
+                    elif (
+                        response.status_code == 302
+                        and client["expected_code"] == 403
+                        and response.url.startswith("/login/")
+                    ):
+                        pass
+                    else:
+                        raise e

@@ -5,6 +5,7 @@ from random import shuffle
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import ImproperlyConfigured
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -132,7 +133,15 @@ def register_attendance_any_identifier(event, identifier, action):
 class VoteAdminMixin(PermissionRequiredMixin):
     """Permission mixin for all admin views of vote."""
 
-    permission_required = ("vote.vote_admin", "vote.vote_inspector")
+    def get_permission_required(self):
+        get_perms = ("vote.vote_inspector",)
+        post_perms = ("vote.vote_admin",)
+        if self.request.method == "GET":
+            return get_perms
+        elif self.request.method == "POST":
+            return post_perms
+        else:
+            raise ImproperlyConfigured("Method not supported")
 
 
 def _user_serializer(user):
