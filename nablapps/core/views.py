@@ -91,7 +91,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
         context["upcoming_events"] = (
             Event.objects.filter(event_start__gte=now)
             .exclude(is_bedpres=True)
-            .order_by("event_start")[:4]
+            .order_by("event_start")[:5]
         )
         context["upcoming_bedpreses"] = Event.objects.filter(
             event_start__gte=now, is_bedpres=True
