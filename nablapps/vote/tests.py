@@ -1,6 +1,8 @@
+import json
 import unittest
 
-from django.test import TestCase
+from django.contrib.auth.models import Permission
+from django.test import Client, TestCase
 
 from nablapps.accounts.models import NablaGroup, NablaUser
 
@@ -196,4 +198,73 @@ class SubmitVoteTestCase(TestCase):
 
 
 class APITestCase(TestCase):
-    pass
+    def setUp(self):
+        vote_staff = NablaGroup.objects.create(name="vote_staff")
+        vote_insp_perm = Permission.objects.get(codename="vote_inspector")
+        vote_staff.permissions.add(vote_insp_perm)
+        users = [
+            # [username, password, superuser, groups]
+            ["admin", "admin", True, None],
+            ["bob", "bob", False, [vote_staff]],
+            ["alice", "alice", False, None],
+        ]
+        for user in users:
+            username, password, superuser, groups = user
+            new_user = NablaUser.objects.create_user(
+                username=username,
+                password=password,
+                is_superuser=superuser,
+                is_staff=superuser,
+            )
+            if groups is not None:
+                new_user.groups.add(*groups)
+            setattr(self, f"{username}_user", new_user)
+
+        self.voting_event0 = VotingEvent.objects.create(
+            title="Voting event for all",
+        )
+        self.voting0 = Voting.objects.create(
+            event=self.voting_event0,
+            is_active=True,
+        )
+        self.voting1 = Voting.objects.create(
+            event=self.voting_event0,
+            is_active=True,
+        )
+
+        self.voting0_alternative0 = Alternative.objects.create(
+            voting=self.voting0,
+            text="First alternative voting 0",
+        )
+        self.voting0_alternative1 = Alternative.objects.create(
+            voting=self.voting0,
+            text="Second alternative voting 0",
+        )
+        self.voting0_alternative1 = Alternative.objects.create(
+            voting=self.voting0,
+            text="Third alternative voting 0",
+        )
+
+    def test_api_permissions(self):
+        admin = Client()
+        assert admin.login(
+            username=self.admin_user.username, password=self.admin_user.username
+        )
+        bob = Client()  # Inspector
+        assert bob.login(
+            username=self.bob_user.username, password=self.bob_user.username
+        )
+        alice = Client()
+        assert alice.login(
+            username=self.alice_user.username, password=self.alice_user.username
+        )
+
+        # TODO make dynamic urls
+        tests = [
+            {"user": alice, "expected_code": 403},
+            {"user": bob, "expected_code": 200},
+            {"user": admin, "expected_code": 200},
+        ]
+        for test in tests:
+            response = test["user"].get("/stem/api/1/votings/")
+            self.assertEqual(response.status_code, test["expected_code"])
