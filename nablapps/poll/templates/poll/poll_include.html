@@ -4,24 +4,22 @@
 {% load static %}
 
 
-{% if poll %}
-
 {% addtoblock "css" %}
     <link href="{% static "poll/poll_sidebar.css" %}" rel="stylesheet">
 {% endaddtoblock %}
-
-<div class="poll h-100 card card-body card-body-overline">
-    <h4>{{ poll.question }}</h4>
-
-    {% if poll_has_voted %}
-        {% include "poll/includes/poll_result.html" %}
+<h5 class="nabla-frontpage-header">
+    Siste forsideavstemning
+</h5>
+<div class="flex-grow-1 card card-body card-body-overline">
+    {% if poll %}
+        <h4>{{ poll.question }}</h4>
+        {% if poll_has_voted %}
+            {% include "poll/includes/poll_result.html" %}
+        {% else %}
+            {% include "poll/includes/vote_form.html" %}
+        {% endif %}
     {% else %}
-        {% include "poll/includes/vote_form.html" %}
+        <h1>Siste forsideavstemning</h1>
+        <h4>...vil dukke opp her når det kommer!</h4>
     {% endif %}
 </div>
-{% else %}
-    <div class="card card-body card-body-overline h-100 ">
-        <h1>Siste forsideavstemning</h1>
-        <h4>...dukker opp her når den kommer!</h4>
-    </div>
-{% endif %}

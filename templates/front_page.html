@@ -12,7 +12,7 @@
 
 {% block main-blank %}
     {% addtoblock "css" %}
-        <link rel="stylesheet" href="{% static "css/front_page.css" %}?version=1.1">
+        <link rel="stylesheet" href="{% static "css/front_page.css" %}?version=1.2">
     {% endaddtoblock %}
     <div class="maingrid-container{% if not newuser_message %}-authenticated{% endif %}">
         <!--main grid container open tag-->
@@ -21,30 +21,42 @@
         {# Main article #}
         {% include "includes/info_card.html" with content=main_news class="main-article" header_size="h1" %}
 
-        {# Upcoming events #}
-        {% include "includes/event_widget.html" %}
+        {# Upcoming events and bedpres #}
+        {% include "includes/upcoming_events.html" with upcoming=upcoming_events class="upcoming-events-1" %}
+        {% include "includes/upcoming_events.html" with upcoming=upcoming_bedpreses class="upcoming-events-2" %}
 
+        <!--Kontoret-->
+        <div class="office d-flex flex-column">
+            <h5 class="nabla-frontpage-header" >
+                Kontoret denne uka
+            </h5>
+            {% include "officeCalendar/includes/list.html" %}
+        </div>
         <!-- Front page news -->
         {% for news in news_list %}
-            {% include "includes/article_widget.html" with number=forloop.counter margin="mb-0" %}
+            {% include "includes/info_card.html" with content=news class="news more-news-" number=forloop.counter %}
         {% endfor %}{# news_list #}
 
         <button onclick="location.href='{% url "news_list" %}'" type="button"
-                class="more-news-btn btn btn-outline-secondary btn-block">Flere nyheter
+                class="more-news-btn btn btn-nabla-blue btn-block">Flere nyheter
         </button>
 
-        <div class="latest-nablad card card-body card-body-overline ">
+        <div class="latest-nablad d-flex flex-column">
+            <h5 class="nabla-frontpage-header">
+                Siste Nablad
+            </h5>
+        <div class="flex-grow-1 card card-body card-body-overline">
             <!--Siste Nablad-->
             {% if new_nablad %}
-                <div style="height: 300px">
-                    <h3><a class="text-dark" href="{% url "nablad_list" %}">Siste Nablad</a></h3>
+                <div class="text-center">
+{#                    <h3><a class="text-dark" href="{% url "nablad_list" %}">Siste Nablad</a></h3>#}
                     <div class="row text-center">
 
-                        {#                    This should be revritten #}
+                        {# This should be revritten #}
                         {% for nablad in new_nablad %}
                             <div class="col-md-12{% if not forloop.first %} d-none d-md-block {% endif %}">
                                 <a href="{{ nablad.get_absolute_url }}">
-                                    <img class="rounded w-75" src="{% thumbnail nablad.thumbnail 730x200 %}">
+                                    <img class="rounded mw-100 nabla-media-img" src="{% thumbnail nablad.thumbnail 730x200 quality=100 detail %}">
                                 </a>
                             </div>
                         {% endfor %}
@@ -54,6 +66,66 @@
                 <h1>Siste utgave av Nabladet</h1>
                 <h4>...vil dukke opp her når det kommer!</h4>
             {% endif %}
+            </div>
+        </div>
+
+
+        <!--Sidebar begin-->
+        {% if newuser_message %}
+            <div class="welcome card card-body card-body-overline ">
+                <h1 class="text-nabla">Velkommen til Nabla</h1>
+                <p>
+                    Nabla er linjeforeningen for studenter ved sivilingeniørstudiet Fysikk og Matematikk ved NTNU, og
+                    har
+                    som formål å være en sosial arena, i tillegg til å fremme studentenes faglige interesser. Gjennom
+                    året
+                    arrangerer Nabla et mangfold av ulike arrangementer, og har 25 ulike undergrupper som studentene kan
+                    engasjere seg i.
+                </p>
+                <h4 class="text-nabla">Ny student?</h4>
+                <p>
+                    Følg oss på <a href="https://www.instagram.com/nablalinjeforening/">instagram</a> da vel!<br>
+                    Les vår informasjon for nye studenter <a href="/nystudent/">her</a>.
+                </p>
+                <h4 class="text-nabla">Bedrift?</h4>
+                <p>
+                    Sjekk ut <a href="/bedriftskontakten/">bedriftskontakten sine sider</a>, eller ta kontakt med
+                    bedriftskontakten på <a href="mailto:bedkom@nabla.no">bedkom@nabla.no</a>.
+                </p>
+            </div>
+        {% endif %}
+        <div class="poll d-flex flex-column ">
+            <!--Poll-->
+            {% include "poll/poll_include.html" %}
+        </div>
+
+        <div class="social card card-body card-body-overline">
+            <a href="mailto:bedriftskontakt@nabla.no" class="btn btn-nabla-blue" >Bedriftsforslag - send en mail til BN</a>
+            <p></p>
+            <a href="/contact/gullkorn/" class="btn btn-nabla-yellow" >Lyst til å melde inn et gullkorn eller sitat?</a>
+            <p></p>
+            <a href="https://nabla.no/wiki/" class="btn btn-nabla-blue">Nablawiki</a>
+        </div>
+
+        <div class="latest-podcast d-flex flex-column">
+            <h5 class="nabla-frontpage-header">
+                Siste Skråttcast
+            </h5>
+            <div class="card card-body card-body-overline">
+                <!--Siste Skråttcast-->
+                {% if new_podcast %}
+                    <div class="d-flex flex-column text-center">
+                        {#                    <h3><a class="text-dark" href="{% url "season_view" %}">Siste Skråttcast</a></h3>#}
+                        <a href="{{ new_podcast.get_absolute_url }}">
+                            <img class="rounded mw-100 nabla-media-img" src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}"
+                            />
+                        </a>
+                    </div>
+                {% else %}
+                    <h1>Siste Skråttcast</h1>
+                    <h4>...vil dukke opp her når den kommer!</h4>
+                {% endif %}
+            </div>
         </div>
 
         <div class="sponsors card card-body card-body-overline justify-content-center">
@@ -64,65 +136,6 @@
                 </p>
             {% endif %}
         </div>
-        <!--main content-->
-
-        <!--Sidebar begin-->
-        {% if newuser_message %}
-            <div class="welcome card card-body card-body-overline ">
-                <h1>Velkommen til Nabla</h1>
-                <p>
-                    Nabla er linjeforeningen for studenter ved sivilingeniørstudiet Fysikk og Matematikk ved NTNU, og
-                    har
-                    som formål å være en sosial arena, i tillegg til å fremme studentenes faglige interesser. Gjennom
-                    året
-                    arrangerer Nabla et mangfold av ulike arrangementer, og har 25 ulike undergrupper som studentene kan
-                    engasjere seg i.
-                </p>
-                <h4>Ny student?</h4>
-                <p>
-                    Følg oss på <a href="https://www.instagram.com/nablalinjeforening/">instagram</a> da vel!<br>
-                    Les vår informasjon for nye studenter <a href="/nystudent/">her</a>.
-                </p>
-                <h4>Bedrift?</h4>
-                <p>
-                    Sjekk ut <a href="/bedriftskontakten/">bedriftskontakten sine sider</a>, eller ta kontakt med
-                    bedriftskontakten på <a href="mailto:bedkom@nabla.no">bedkom@nabla.no</a>.
-                </p>
-            </div>
-        {% endif %}
-        <div class="poll ">
-            <!--Poll-->
-            {% include "poll/poll_include.html" %}
-        </div>
-        <div class="office">
-            <!--Kontoret-->
-            {% include "officeCalendar/includes/list.html" %}
-        </div>
-
-        <div class="social card card-body card-body-overline">
-            <a href="/contact/gullkorn/" class="btn btn-success">Lyst til å melde inn et gullkorn eller sitat?</a>
-            <p></p>
-            <a href="mailto:bedriftskontakt@nabla.no" class="btn btn-warning">Bedriftsforslag - send en mail til BN</a>
-            <p></p>
-            <a href="https://nabla.no/wiki/" class="btn btn-secondary">Nablawiki</a>
-        </div>
-
-        <div class="latest-podcast card card-body card-body-overline ">
-            <!--Siste Skråttcast-->
-            {% if new_podcast %}
-                <div>
-                    <h3><a class="text-dark" href="{% url "season_view" %}">Siste Skråttcast</a></h3>
-                    <a href="{{ new_podcast.get_absolute_url }}">
-                        <img class="rounded mw-100" src="{{ new_podcast.image.url }}" alt="{{ new_podcast.title }}"
-                             style="max-width: 100%; height:300px"/>
-                    </a>
-                </div>
-            {% else %}
-                <h1>Siste Skråttcast</h1>
-                <h4>...vil dukke opp her når den kommer!</h4>
-            {% endif %}
-        </div>
-
         <div class="suggestions card card-body card-body-overline">
             <!--Send inn ellernoe?-->
             {% if sidebarinfo %}
