@@ -23,13 +23,14 @@
              src="{% thumbnail upcoming.first.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
                 {% endif %}
         >
-        <div class="card-body flex-grow-0 list-group-item-action" style="position: relative;">
+        <div class="card-body flex-grow-0 list-group-item-action"
+             style="position: relative; padding-bottom: .75rem;">
             <h5 class="card-title">
                 <a class="text-nabla stretched-link" href="{{ upcoming.first.get_absolute_url }}">
                     {{ upcoming.first.headline }}
                 </a>
             </h5>
-            <p class="card-text mb-1">{{ upcoming.first.lead_paragraph }}</p>
+            <p class="card-text mb-2">{{ upcoming.first.lead_paragraph }}</p>
             <div class="float-right">
                 {#        <span class="fas fa-user-check text-dark"></span>#}
                 {% if upcoming.first.registration_required and user.is_authenticated %}
