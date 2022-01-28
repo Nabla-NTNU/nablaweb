@@ -56,7 +56,7 @@
                         {% for nablad in new_nablad %}
                             <div class="col-md-12{% if not forloop.first %} d-none d-md-block {% endif %}">
                                 <a href="{{ nablad.get_absolute_url }}">
-                                    <img class="rounded mw-100 nabla-media-img" src="{% thumbnail nablad.thumbnail 730x200 quality=100 detail %}">
+                                    <img class="rounded mw-100 nabla-media-img" src="{% thumbnail nablad.thumbnail 300x770 upscale=True detail=True quality=95 detail %}">
                                 </a>
                             </div>
                         {% endfor %}

@@ -11,16 +11,16 @@
     <div class="card flex-grow-1 {{ margin|default:"mb-0" }}" style="border-color: var(--nabla-blue-alt)">
         <img alt=""
              class="card-img-top"
-                {% if upcoming.first.picture and upcoming.first.cropping %}
+                {% if upcoming.first.company.picture and upcoming.first.company.ignoreCrop %}
+             src="{% thumbnail upcoming.first.company.picture 770x300 upscale=True detail=True quality=95 background="white" %}"
+                {% elif upcoming.first.company.picture and upcoming.first.company.cropping %}
+             src="{% thumbnail upcoming.first.company.picture 770x300 box=upcoming.first.company.cropping upscale=True detail=True quality=95 %}"
+                {% elif upcoming.first.company.picture %}
+             src="{% thumbnail upcoming.first.company.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
+                {% elif upcoming.first.picture and upcoming.first.cropping %}
              src="{% thumbnail upcoming.first.picture 770x300 box=upcoming.first.cropping upscale=True detail=True quality=95 %}"
                 {% elif upcoming.first.picture %}
              src="{% thumbnail upcoming.first.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
-                {% elif upcoming.first.obj.company.picture and upcoming.first.obj.company.ignoreCrop %}
-             src="{% thumbnail upcoming.first.obj.company.picture 770x300 upscale=True detail=True quality=95 background="white" %}"
-                {% elif upcoming.first.obj.company.picture and upcoming.first.obj.company.cropping %}
-             src="{% thumbnail upcoming.first.obj.company.picture 770x300 box=upcoming.first.obj.company.cropping upscale=True detail=True quality=95 %}"
-                {% elif upcoming.first.obj.company.picture %}
-             src="{% thumbnail upcoming.first.obj.company.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
                 {% endif %}
         >
         <div class="card-body flex-grow-0 list-group-item-action" style="position: relative;">
