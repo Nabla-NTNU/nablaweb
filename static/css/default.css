@@ -444,7 +444,7 @@ li.pager-counter {
 }
 
 .btn-nabla-blue:hover {
-    background: var(--nabla-blue);
+    background: var(--nabla-blue-dark);
     color: #f8f9fa;
 }
 
