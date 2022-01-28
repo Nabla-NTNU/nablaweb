@@ -17,7 +17,7 @@
     {# Hacky løsning, men bruker subject for å få hvem som sa gullkornet #}
     {% bootstrap_field feedback_form.message show_label=False placeholder="Skriv gullkornet her" %}
     {% bootstrap_label "Hvem sa dette?" label_for="id_subject"%}
-    {% bootstrap_field feedback_form.subject show_label=False %}
+    {% bootstrap_field feedback_form.subject show_label=False placeholder="Skriv navnet her" %}
     {% bootstrap_field feedback_form.spam_check placeholder="Svar" %}
     {% bootstrap_field feedback_form.right_answer %}
     {% bootstrap_button "Send" button_type="submit" %}

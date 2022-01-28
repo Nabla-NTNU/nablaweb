@@ -1,4 +1,5 @@
 import random
+import datetime
 
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse, HttpResponseRedirect
@@ -60,10 +61,16 @@ def feedback(request, template="feedback.html", send_to="webkom@nabla.no"):
             if feedback_form.get_right_answer() == feedback_form.get_answer():
                 # Sends mail
                 subject, message, email = feedback_form.process()
+                if resolve(request.path_info).url_name == "gullkorn":
+                    # remove "your_name" from message
+                    message = "\n".join(message.split("\n")[:-1])
+                    message = f"<<{message}>> -{subject}"
+                    subject = "Sitat " + datetime.date.today().strftime("%d.%m.%y")
+
                 try:
                     send_mail(subject, message, email, [send_to], fail_silently=False)
                 except BadHeaderError:
-                    return HttpResponse("Invalid header found")
+                    return HttpResponse("Ivalid header found")
                 if resolve(request.path_info).url_name == "gullkorn":
                     return HttpResponseRedirect("/contact/success_gullkorn/")
                     # sjekker om man leverer et gullkorn
