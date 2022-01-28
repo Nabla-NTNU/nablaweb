@@ -6,21 +6,20 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
 
 
 :root {
-    --nabla-yellow: #ffeb3b;
-    --nabla-yellow-dark: #c8b900;
+    --nabla-yellow: #FFD500;
+    --nabla-yellow-dark: #FDC500;
     --nabla-yellow-light: #ffff72;
-    --nabla-blue: #1a237e;
-    --nabla-blue-dark: #000051;
-    --nabla-blue-light: #534bae;
-    --nabla-blue-alt: #0E4082;
-    --nabla-background: #F3F8FF; /*#f7f7f7*/
+    --nabla-blue: #003F88;
+    --nabla-blue-dark: #00296B;
+    --nabla-blue-light: #00509D;
+    --nabla-background: rgba(0, 80, 157, 0.05);
 
     --event: #5cb85c;
     --bedpres: #f5b507;
 }
 
 a {
-    color: var(--nabla-blue-alt);
+    color: var(--nabla-blue);
 }
 
 a:hover {
@@ -29,7 +28,11 @@ a:hover {
 }
 
 /* MAIN */
-html, body {
+html {
+    height: 100%;
+}
+
+body {
     height: 100%;
     background-color: var(--nabla-background);
 }
@@ -58,7 +61,7 @@ html, body {
 }
 
 nav.navbar {
-    background: var(--nabla-blue-alt);
+    background: var(--nabla-blue);
     box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
 
 }
@@ -279,7 +282,7 @@ code.jax {
 
 .nabla-footer {
     /* TODO: Add cross-browser support */
-    background-color: var(--nabla-blue-alt);
+    background-color: var(--nabla-blue);
     color: var(--white);
     padding-top: 30px;
     width: 100%;
@@ -431,7 +434,7 @@ li.pager-counter {
     background-color: #f5b507;
 }
 
-
+/* Classes the mimic boostrap (primary ...)*/
 .fixed-tab-height {
     height: 340px;
     Overflow-y: auto;
@@ -439,7 +442,7 @@ li.pager-counter {
 }
 
 .btn-nabla-blue {
-    background: var(--nabla-blue-alt);
+    background: var(--nabla-blue);
     color: #f8f9fa;
 }
 
@@ -454,12 +457,48 @@ li.pager-counter {
 }
 
 .btn-nabla-yellow:hover {
-    background: var(--nabla-yellow-light);
+    background: var(--nabla-yellow-dark);
     color: #121416;
 }
 
-.text-nabla {
-    color: var(--nabla-blue-alt);
+.btn-outline-nabla-blue {
+    background-color: transparent;
+    background-image: none;
+    border-color: var(--nabla-blue);
+    color: var(--nabla-blue);
+}
+
+.btn-outline-nabla-blue:hover {
+    background: var(--nabla-blue);
+    color: #f8f9fa;
+}
+
+.btn-outline-nabla-yellow {
+    background-color: transparent;
+    background-image: none;
+    border-color: var(--nabla-yellow);
+    color: var(--nabla-yellow);
+}
+
+.btn-outline-nabla-yellow:hover {
+    background: var(--nabla-yellow);
+    color: #343a40;
+}
+
+.border-nabla-blue {
+    border-color: var(--nabla-blue) !important;
+}
+
+.border-nabla-yellow {
+    border-color: var(--nabla-yellow) !important;
+}
+
+.text-nabla-blue {
+    color: var(--nabla-blue);
+}
+
+.text-nabla-yellow {
+    color: var(--nabla-yellow);
 }
 
 .nounderline {

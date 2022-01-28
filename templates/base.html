@@ -109,7 +109,7 @@
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/brands.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/solid.min.css" %}">
 
-        <link href="{% static "css/default.css" %}?version=1" rel="stylesheet">
+        <link href="{% static "css/default.css" %}?version=1.2" rel="stylesheet">
 
         {% if custom_color %}
         <style>
@@ -266,8 +266,8 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                             {# Faste lenker om Nabla #}
                             <a class="dropdown-item" href="/om-nabla/">Generelt om Nabla</a>
-                            <a class="dropdown-item" href="https://nabla.no/om/forretningsorden/">Nablas forretningsorden</a>
-                            <a class="dropdown-item" href="/shop/">Kompendier</a>
+                            <a class="dropdown-item" href="{% url "committee_overview" %}">Undergrupper</a>
+{#                            <a class="dropdown-item" href="https://nabla.no/om/forretningsorden/">Nablas forretningsorden</a>#}
                             <a class="dropdown-item" href="{% url "wiki:root" %}">NablaWiki</a>
                             <a class="dropdown-item" href="/om/tillitsvalgte/">Tillitsvalgte</a>
                             <a class="dropdown-item" href="/nystudent/">For nye studenter</a>
@@ -490,10 +490,10 @@
                 {# end om nabla #}
 
                 {# nablalogo #}
-                <div class="col-lg-3 center" id="nablafooter">
+                <div class="col-lg-3 center text-nowrap">
                     <img src="{% static "img/nabla-white.svg" %}" alt="nabla logo">
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
                     <a href="https://www.facebook.com/nablantnu/" class="fab fa-facebook-f fa-2x social-icon"></a>
                     <a href="https://www.youtube.com/user/LinjeforeningenNabla" class="fab fa-youtube fa-2x social-icon"></a>
                     <a href="https://www.instagram.com/nablalinjeforening/" class="fab fa-instagram fa-2x social-icon"></a>

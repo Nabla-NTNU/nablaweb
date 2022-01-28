@@ -8,7 +8,7 @@
             <a class="nabla-frontpage-header" href="{% url 'event_main_page' %}?type=event">Arrangementer</a>
         {% endif %}
     </h5>
-    <div class="card flex-grow-1 {{ margin|default:"mb-0" }}" style="border-color: var(--nabla-blue-alt)">
+    <div class="card flex-grow-1 border border-nabla-blue {{ margin|default:"mb-0" }}">
         <img alt=""
              class="card-img-top"
                 {% if upcoming.first.company.picture and upcoming.first.company.ignoreCrop %}
@@ -26,7 +26,7 @@
         <div class="card-body flex-grow-0 list-group-item-action"
              style="position: relative; padding-bottom: .75rem;">
             <h5 class="card-title">
-                <a class="text-nabla stretched-link" href="{{ upcoming.first.get_absolute_url }}">
+                <a class="text-nabla-blue stretched-link" href="{{ upcoming.first.get_absolute_url }}">
                     {{ upcoming.first.headline }}
                 </a>
             </h5>
@@ -40,7 +40,7 @@
                 </span>
                 {% endif %}
                 {#        <span class="fas fa-calendar-day text-dark"></span>#}
-                <time class="text-nowrap text-nabla pl-1" datetime="{{ upcoming.first.event_start|date:"c" }}">
+                <time class="text-nowrap text-nabla-blue pl-1" datetime="{{ upcoming.first.event_start|date:"c" }}">
                     {{ upcoming.first.event_start|date:"D d.m" }}
                 </time>
             </div>
@@ -61,7 +61,7 @@
                             {{ event.users_attending }}/{{ event.places }}
                             </span>
                             {% endif %}
-                            <time class="text-nowrap text-nabla pl-1" datetime="{{ event.event_start|date:"c" }}">
+                            <time class="text-nowrap text-nabla-blue pl-1" datetime="{{ event.event_start|date:"c" }}">
                                 {{ event.event_start|date:"D d.m" }}
                             </time>
                         </div>

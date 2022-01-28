@@ -1,6 +1,6 @@
 .maingrid-container {
     display: grid;
-    grid-auto-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
     grid-gap: 15px;
     align-items: stretch;
     grid-template-areas:
@@ -11,19 +11,24 @@
         "more-news-3       more-news-4       more-news-5"
         "more-news-btn     more-news-btn     more-news-btn"
         "sponsors          sponsors          suggestions";
+
+}
+
+.maingrid-container > .more-news-6 {
+    display: none;
 }
 
 .maingrid-container-authenticated {
     display: grid;
-    grid-auto-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
     grid-gap: 15px;
     align-items: stretch;
     grid-template-areas:
-        "main-article      main-article      main-article"
+        "main-article      main-article      social"
         "upcoming-events-1 upcoming-events-2 office"
         "latest-podcast    latest-nablad     poll"
-        "more-news-1       more-news-2       social"
-        "more-news-3       more-news-4       more-news-5"
+        "more-news-1       more-news-2       more-news-3"
+        "more-news-4       more-news-5       more-news-6"
         "more-news-btn     more-news-btn     more-news-btn"
         "sponsors          sponsors          suggestions";
 }
@@ -54,6 +59,7 @@
         "upcoming-events-1"
         "upcoming-events-2"
         "office"
+        "social"
         "poll"
         "latest-nablad"
         "latest-podcast"
@@ -134,8 +140,12 @@
     grid-area: welcome;
 }
 
-.upcoming-events {
-    grid-area: upcoming-events;
+.upcoming-events-1 {
+    grid-area: upcoming-events-1;
+}
+
+.upcoming-events-2 {
+    grid-area: upcoming-events-2;
 }
 
 .office {
@@ -167,7 +177,7 @@
 }
 
 .nabla-frontpage-header {
-    color: var(--nabla-blue-alt);
+    color: var(--nabla-blue);
 }
 
 h5.nabla-frontpage-header {

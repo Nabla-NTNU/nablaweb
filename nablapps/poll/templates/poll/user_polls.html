@@ -6,40 +6,44 @@
 {% load bootstrap4 %}
 
 {% block title %}
-Mine avstemninger
+    Mine avstemninger
 {% endblock %}
 
 {% block content %}
-<br>
-<h3><a class="btn btn-primary" href="{% url "poll_user_create" %}">Lag en ny avstemning</a></h3>
+    <br>
+    <div class="d-flex justify-content-between">
+        <h3><a class="btn btn-primary" href="{% url "poll_user_create" %}">Lag en ny avstemning</a></h3>
+        <h3 class="float-right"><a class="btn btn-outline-info" href="/admin/poll/poll">
+            Legg til avstemningen på forsiden her
+        </a></h3></div>
 
-<h1>Mine avstemninger</h1>
+    <h1>Mine avstemninger</h1>
 
-{% for poll in poll_list %}
-<div class="btn-group">
-    <form style="display: inline" method="POST" action="{% url "poll_user_delete" poll.id %}">
-        <button class="btn btn-danger" type="submit">
-            <span class="fas fa-trash"></span>
-            Slett
-        </button>
-        {% csrf_token %}
-    </form>
-</div>
+    {% for poll in poll_list %}
 
-<div class="poll card card-body card-body-overline bg-light">
-    <h4>{{ poll.question }}</h4>
+        <div class="poll card card-body card-body-overline">
+            <h4>{{ poll.question }}</h4>
 
-    {% if poll.voted %}
-        {% include "poll/includes/poll_result.html" %}
-    {% else %}
-        {% include "poll/includes/vote_form.html" %}
-    {% endif %}
-</div>
-{% empty %}
-Ingen brukeravstemninger her enda.
-{% endfor %}
+            {% if poll.voted %}
+                {% include "poll/includes/poll_result.html" %}
+            {% else %}
+                {% include "poll/includes/vote_form.html" %}
+            {% endif %}
+        </div>
+        <div class="btn-group pt-2 pb-4">
+            <form style="display: inline" method="POST" action="{% url "poll_user_delete" poll.id %}">
+                <button class="btn btn-danger" type="submit">
+                    <span class="fas fa-trash"></span>
+                    Slett
+                </button>
+                {% csrf_token %}
+            </form>
+        </div>
+    {% empty %}
+        Ingen brukeravstemninger her enda.
+    {% endfor %}
 
-{% include "includes/pagination.html" %}
+    {% include "includes/pagination.html" %}
 
 
 {% endblock %}
