@@ -4,13 +4,13 @@
     grid-gap: 15px;
     align-items: stretch;
     grid-template-areas:
-        "main-article main-article welcome"
+        "main-article      main-article      welcome"
         "upcoming-events-1 upcoming-events-2 office"
-        "latest-nablad    latest-podcast   poll"
-        "more-news-1      more-news-2       social"
-        "more-news-3      more-news-4      more-news-5"
-        "more-news-btn    more-news-btn    more-news-btn"
-        "sponsors         sponsors         suggestions";
+        "latest-nablad     latest-podcast    poll"
+        "more-news-1       more-news-2       social"
+        "more-news-3       more-news-4       more-news-5"
+        "more-news-btn     more-news-btn     more-news-btn"
+        "sponsors          sponsors          suggestions";
 }
 
 .maingrid-container-authenticated {
@@ -19,14 +19,13 @@
     grid-gap: 15px;
     align-items: stretch;
     grid-template-areas:
-        "main-article main-article main-article"
-        /*"title-a        title-b                title-o"*/
+        "main-article      main-article      main-article"
         "upcoming-events-1 upcoming-events-2 office"
-        "latest-podcast  latest-nablad    poll"
-        "more-news-1   more-news-2  social"
-        "more-news-3     more-news-4    more-news-5"
-        "more-news-btn   more-news-btn   more-news-btn"
-        "sponsors        sponsors        suggestions";
+        "latest-podcast    latest-nablad     poll"
+        "more-news-1       more-news-2       social"
+        "more-news-3       more-news-4       more-news-5"
+        "more-news-btn     more-news-btn     more-news-btn"
+        "sponsors          sponsors          suggestions";
 }
 
 @media (max-width: 1000px) {
@@ -34,13 +33,13 @@
         grid-template-columns: minmax(0, 1fr);
         grid-template-areas:
         "welcome"
+        "main-article"
         "upcoming-events-1"
         "upcoming-events-2"
         "office"
         "latest-nablad"
         "latest-podcast"
         "poll"
-        "main-article"
         "more-news-1"
         "more-news-2"
         "more-news-3"
@@ -51,13 +50,13 @@
     .maingrid-container-authenticated {
         grid-template-columns: minmax(0, 1fr);
         grid-template-areas:
+        "main-article"
         "upcoming-events-1"
         "upcoming-events-2"
         "office"
         "poll"
         "latest-nablad"
         "latest-podcast"
-        "main-article"
         "more-news-1"
         "more-news-2"
         "more-news-3"
