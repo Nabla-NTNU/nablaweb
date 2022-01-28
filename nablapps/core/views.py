@@ -61,6 +61,9 @@ class FrontPageView(FlatPageMixin, TemplateView):
         context["newuser_message"] = (
             False if self.request.user.is_authenticated else True
         )
+        context["logged_in"] = (
+            True if self.request.user.is_authenticated else False
+        )
         # Uncomment when fadderperiode to display new student popup.
         # context["newuser_popup"] = False if self.request.user.is_authenticated else True
         return context
@@ -70,7 +73,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
             bump_time__lte=datetime.now()
         )
         context["main_news"] = news_list.first()
-        context["news_list"] = news_list[1:6]
+        context["news_list"] = news_list[1:7]
 
     def _add_nablad(self, context):
         context["new_nablad"] = Nablad.objects.order_by("-pub_date")[:1]
