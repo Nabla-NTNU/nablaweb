@@ -1,43 +1,75 @@
 {% load sekizai_tags %}
 {% load easy_thumbnails %}
-
-{% addtoblock "css" %}
-    <link href="{{ STATIC_URL }}events/upcoming_events.css" rel="stylesheet">
-{% endaddtoblock %}
-
-<img alt=""
-     class=""
-        {% if upcoming.first.picture and upcoming.first.cropping %}
-     src="{% thumbnail upcoming.first.picture 770x300 box=upcoming.first.cropping upscale=True detail=True quality=95 %}"
-        {% elif upcoming.first.picture %}
-     src="{% thumbnail upcoming.first.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
-        {% elif upcoming.first.obj.company.picture and upcoming.first.obj.company.ignoreCrop %}
-     src="{% thumbnail upcoming.first.obj.company.picture 770x300 upscale=True detail=True quality=95 background="white" %}"
-        {% elif upcoming.first.obj.company.picture and upcoming.first.obj.company.cropping %}
-     src="{% thumbnail upcoming.first.obj.company.picture 770x300 box=upcoming.first.obj.company.cropping upscale=True detail=True quality=95 %}"
-        {% elif upcoming.first.obj.company.picture %}
-     src="{% thumbnail upcoming.first.obj.company.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
+<div class=" d-flex flex-column  {{ class }}">
+    <h5 class="nabla-frontpage-header">
+        {% if upcoming.first.is_bedpres %}
+            <a class="nabla-frontpage-header" href="{% url 'event_main_page' %}?type=bedpres">Bedriftspresentasjoner</a>
+        {% else %}
+            <a class="nabla-frontpage-header" href="{% url 'event_main_page' %}?type=event">Arrangementer</a>
         {% endif %}
->
-
-<ul class="list-unstyled nav  ">
-    {% for event in upcoming %}
-        <li class="{% if  forloop.first %}border-bottom {% endif %} {{ border }} w-100 d-flex p-2 pr-3" ;
-            style="padding-top: 5px; padding-bottom: 5px;">
-            <a class="text-dark text-decoration-none  mr-2 text-truncate " href="{{ event.get_absolute_url }}"
-               style="overflow: hidden">
-                <time class="badge badge-pill badge-dark {{ class }}"
-                      datetime="{{ event.event_start|date:"c" }}">{{ event.event_start|date:"d.m" }}
-                </time>
-                {{ event.headline }}
-            </a>
-            {% if event.registration_required and user.is_authenticated %}
-                <span class="text-dark text-decoration-none " title="Ledige plasser / Totalt antall plasser">
-                    {{ event.users_attending }}/{{ event.places }}
+    </h5>
+    <div class="card flex-grow-1 {{ margin|default:"mb-0" }}" style="border-color: var(--nabla-blue-alt)">
+        <img alt=""
+             class="card-img-top w-100"
+                {% if upcoming.first.picture and upcoming.first.cropping %}
+             src="{% thumbnail upcoming.first.picture 770x300 box=upcoming.first.cropping upscale=True detail=True quality=95 %}"
+                {% elif upcoming.first.picture %}
+             src="{% thumbnail upcoming.first.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
+                {% elif upcoming.first.obj.company.picture and upcoming.first.obj.company.ignoreCrop %}
+             src="{% thumbnail upcoming.first.obj.company.picture 770x300 upscale=True detail=True quality=95 background="white" %}"
+                {% elif upcoming.first.obj.company.picture and upcoming.first.obj.company.cropping %}
+             src="{% thumbnail upcoming.first.obj.company.picture 770x300 box=upcoming.first.obj.company.cropping upscale=True detail=True quality=95 %}"
+                {% elif upcoming.first.obj.company.picture %}
+             src="{% thumbnail upcoming.first.obj.company.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
+                {% endif %}
+        >
+        <div class="card-body flex-grow-0 list-group-item-action" style="position: relative;">
+            <h5 class="card-title">
+                <a class="text-nabla stretched-link" href="{{ upcoming.first.get_absolute_url }}">
+                    {{ upcoming.first.headline }}
+                </a>
+            </h5>
+            <p class="card-text mb-1">{{ upcoming.first.lead_paragraph }}</p>
+            <div class="float-right">
+                {#        <span class="fas fa-user-check text-dark"></span>#}
+                {% if upcoming.first.registration_required and user.is_authenticated %}
+                    {#                        <span class="fas fa-user-check text-dark"></span>#}
+                    <span class="text-muted text-decoration-none pl-1" title="Ledige plasser / Totalt antall plasser">
+                {{ upcoming.first.users_attending }}/{{ upcoming.first.places }}
                 </span>
-            {% endif %}
-        </li>
-    {% empty %}
-        <li>Ingen arrangementer</li>
-    {% endfor %}
-</ul>
+                {% endif %}
+                {#        <span class="fas fa-calendar-day text-dark"></span>#}
+                <time class="text-nowrap text-nabla pl-1" datetime="{{ upcoming.first.event_start|date:"c" }}">
+                    {{ upcoming.first.event_start|date:"D d.m" }}
+                </time>
+            </div>
+        </div>
+        <div class="list-group list-group-flush">
+            {% for event in upcoming %}
+                {% if forloop.first %}
+                {% else %}
+                    <a class="list-group-item list-group-item-action d-flex align-items-center "
+                       href="{{ event.get_absolute_url }}">
+
+                        <span class="text-dark text-decoration-none flex-1 text-truncate mr-auto">
+                            {{ event.headline }}
+                        </span>
+                        <div class="text-nowrap">
+                            {% if event.registration_required and user.is_authenticated %}
+                                <span class="text-muted text-decoration-none pl-1"
+                                      title="Ledige plasser / Totalt antall plasser">
+                            {{ event.users_attending }}/{{ event.places }}
+                            </span>
+                            {% endif %}
+                            <time class="text-nowrap text-nabla pl-1" datetime="{{ event.event_start|date:"c" }}">
+                                {{ event.event_start|date:"D d.m" }}
+                            </time>
+                        </div>
+                    </a>
+                {% endif %}
+            {% empty %}
+                <li class="list-group-item">Ingen arrangementer</li>
+            {% endfor %}
+        </div>
+    </div>
+</div>

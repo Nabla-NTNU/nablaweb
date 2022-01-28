@@ -14,14 +14,17 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
     --nabla-blue-light: #534bae;
     --nabla-blue-alt: #0E4082;
     --nabla-background: #F3F8FF; /*#f7f7f7*/
+
+    --event: #5cb85c;
+    --bedpres: #f5b507;
 }
 
 a {
-    color: var(--nabla-blue);
+    color: var(--nabla-blue-alt);
 }
 
 a:hover {
-    color: var(--nabla-blue);
+    color: var(--nabla-blue-dark);
     text-decoration: none;
 }
 
@@ -435,46 +438,29 @@ li.pager-counter {
     Overflow-x: hidden;
 }
 
-/* Følgende er hentet fra stackoverflow for å fikse bug i headeren. Link: https://www.w3schools.com/cssref/css3_pr_mediaquery.asp */
+.btn-nabla-blue {
+    background: var(--nabla-blue-alt);
+    color: #f8f9fa;
+}
 
-/*@media (max-width: 1150px) {*/
-/*.navbar-header {*/
-/*float: none;*/
-/*}*/
-/*.navbar-toggle {*/
-/*display: block;*/
-/*}*/
-/*.navbar-collapse {*/
-/*border-top: 1px solid transparent;*/
-/*box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);*/
-/*}*/
-/*.navbar-collapse.collapse {*/
-/*display: none!important;*/
-/*}*/
-/*.navbar-nav {*/
-/*float: none!important;*/
-/*margin: 7.5px -15px;*/
-/*}*/
-/*.navbar-nav>li {*/
-/*float: none;*/
-/*}*/
-/*.navbar-nav>li>a {*/
-/*padding-top: 10px;*/
-/*padding-bottom: 10px;*/
-/*}*/
-/*.navbar-text {*/
-/*float: none;*/
-/*margin: 15px 0;*/
-/*}*/
-/*!* since 3.1.0 *!*/
-/*.navbar-collapse.collapse.in {*/
-/*display: block!important;*/
-/*}*/
-/*.collapsing {*/
-/*overflow: hidden!important;*/
-/*}*/
-/*}*/
+.btn-nabla-blue:hover {
+    background: var(--nabla-blue);
+    color: #f8f9fa;
+}
 
+.btn-nabla-yellow {
+    background: var(--nabla-yellow);
+    color: #343a40;
+}
+
+.btn-nabla-yellow:hover {
+    background: var(--nabla-yellow-light);
+    color: #121416;
+}
+
+.text-nabla {
+    color: var(--nabla-blue-alt);
+}
 
 .nounderline {
     text-decoration: none !important
