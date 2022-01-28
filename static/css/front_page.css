@@ -31,7 +31,7 @@
 
 @media (max-width: 1000px) {
     .maingrid-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         grid-template-areas:
         "welcome"
         "upcoming-events-1"
@@ -49,7 +49,7 @@
     }
 
     .maingrid-container-authenticated {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         grid-template-areas:
         "upcoming-events-1"
         "upcoming-events-2"
