@@ -33,7 +33,7 @@ pre-commit = "*"
 faker = "*"               # Fake data generator, used in tests.
 factory-boy = "*"         # For creating many objects for testing (seed)
 # Linting tools
-black = "==21.9b0"
+black = "*"
 isort = "5.9.3"
 flake8 = "3.9.2"
 pylint = ">=2.6"
