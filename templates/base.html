@@ -376,8 +376,8 @@
                         <form class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown4" action="{% url "auth_login" %}" method="post">
                             {% csrf_token %}
                             <input type='hidden' name='next' value='{{ request.path }}' />
-                            <input class="form-control" type="text" placeholder="Brukernavn" name="username" />
-                            <input class="form-control" type="password"  placeholder="Passord" name="password" />
+                            <input class="form-control w-100" type="text" placeholder="Brukernavn" name="username" />
+                            <input class="form-control w-100" type="password"  placeholder="Passord" name="password" />
                             <button class="submit btn btn-primary btn-block" type="submit">Logg inn</button>
                         </form>
                     </li>
