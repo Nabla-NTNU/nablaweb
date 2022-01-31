@@ -26,6 +26,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pipenv
+    # Cache the venv between runs. Duplicated from linting.yaml
     - name: Cache virtualenv
       id: cache-venv
       uses: actions/cache@v2
