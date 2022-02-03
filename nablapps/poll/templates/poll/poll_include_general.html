@@ -1,0 +1,21 @@
+{% load humanize %}
+{% load cache %}
+{% load sekizai_tags %}
+{% load static %}
+
+
+{% addtoblock "css" %}
+    <link href="{% static "poll/poll_sidebar.css" %}" rel="stylesheet">
+{% endaddtoblock %}
+<div class="card card-body card-body-overline {{ class|default:"" }}">
+    {% if poll %}
+        <h4>{{ poll.question }}</h4>
+        {% if poll_has_voted %}
+            {% include "poll/includes/poll_result.html" %}
+        {% else %}
+            {% include "poll/includes/vote_form.html" %}
+        {% endif %}
+    {% else %}
+        <h4>Ingen avstemning</h4>
+    {% endif %}
+</div>

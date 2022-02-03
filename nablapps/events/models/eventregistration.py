@@ -37,7 +37,11 @@ class EventRegistration(models.Model):
         "på arrangementet ellers er det en ventelisteplass.",
     )
     penalty = models.IntegerField(
-        verbose_name="Prikk", blank=True, null=True, default=None
+        verbose_name="Prikk",
+        blank=True,
+        null=True,
+        default=None,
+        help_text="Antall prikker burkeren har fått",
     )
     attendance_registration = models.DateTimeField(
         verbose_name="Første regisreringstidspunkt",

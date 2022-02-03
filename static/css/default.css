@@ -451,6 +451,27 @@ li.pager-counter {
     color: #f8f9fa;
 }
 
+.btn-nabla-blue-light {
+    background: var(--nabla-blue-light);
+    color: #f8f9fa;
+}
+
+.btn-nabla-blue-light:hover {
+    background: var(--nabla-blue);
+    color: #f8f9fa;
+}
+.btn-nabla-blue-dark {
+    background: var(--nabla-blue-dark);
+    color: #f8f9fa;
+}
+
+.btn-nabla-blue-dark:hover {
+    background: black;
+    color: #f8f9fa;
+}
+
+
+
 .btn-nabla-yellow {
     background: var(--nabla-yellow);
     color: #343a40;
@@ -460,6 +481,17 @@ li.pager-counter {
     background: var(--nabla-yellow-dark);
     color: #121416;
 }
+
+.btn-nabla-yellow-dark {
+    background: var(--nabla-yellow-dark);
+    color: #343a40;
+}
+
+.btn-nabla-yellow-dark:hover {
+    background: #f3ab01;
+    color: #121416;
+}
+
 
 .btn-outline-nabla-blue {
     background-color: transparent;

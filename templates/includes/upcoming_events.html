@@ -9,42 +9,45 @@
         {% endif %}
     </h5>
     <div class="card flex-grow-1 border border-nabla-blue {{ margin|default:"mb-0" }}">
-        <img alt=""
-             class="card-img-top"
-                {% if upcoming.first.company.picture and upcoming.first.company.ignoreCrop %}
-             src="{% thumbnail upcoming.first.company.picture 770x300 upscale=True detail=True quality=95 background="white" %}"
-                {% elif upcoming.first.company.picture and upcoming.first.company.cropping %}
-             src="{% thumbnail upcoming.first.company.picture 770x300 box=upcoming.first.company.cropping upscale=True detail=True quality=95 %}"
-                {% elif upcoming.first.company.picture %}
-             src="{% thumbnail upcoming.first.company.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
-                {% elif upcoming.first.picture and upcoming.first.cropping %}
-             src="{% thumbnail upcoming.first.picture 770x300 box=upcoming.first.cropping upscale=True detail=True quality=95 %}"
-                {% elif upcoming.first.picture %}
-             src="{% thumbnail upcoming.first.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
-                {% endif %}
-        >
-        <div class="card-body flex-grow-0 list-group-item-action"
-             style="position: relative; padding-bottom: .75rem;">
-            <h5 class="card-title">
-                <a class="text-nabla-blue stretched-link" href="{{ upcoming.first.get_absolute_url }}">
-                    {{ upcoming.first.headline }}
-                </a>
-            </h5>
-            <p class="card-text mb-2">{{ upcoming.first.lead_paragraph }}</p>
-            <div class="float-right">
-                {#        <span class="fas fa-user-check text-dark"></span>#}
-                {% if upcoming.first.registration_required and user.is_authenticated %}
-                    {#                        <span class="fas fa-user-check text-dark"></span>#}
-                    <span class="text-muted text-decoration-none pl-1" title="Ledige plasser / Totalt antall plasser">
+        {% if upcoming.first %}
+            <img alt=""
+                 class="card-img-top"
+                    {% if upcoming.first.company.picture and upcoming.first.company.ignoreCrop %}
+                 src="{% thumbnail upcoming.first.company.picture 770x300 upscale=True detail=True quality=95 background="white" %}"
+                    {% elif upcoming.first.company.picture and upcoming.first.company.cropping %}
+                 src="{% thumbnail upcoming.first.company.picture 770x300 box=upcoming.first.company.cropping upscale=True detail=True quality=95 %}"
+                    {% elif upcoming.first.company.picture %}
+                 src="{% thumbnail upcoming.first.company.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
+                    {% elif upcoming.first.picture and upcoming.first.cropping %}
+                 src="{% thumbnail upcoming.first.picture 770x300 box=upcoming.first.cropping upscale=True detail=True quality=95 %}"
+                    {% elif upcoming.first.picture %}
+                 src="{% thumbnail upcoming.first.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
+                    {% endif %}
+            >
+            <div class="card-body flex-grow-0 list-group-item-action"
+                 style="position: relative; padding-bottom: .75rem;">
+                <h5 class="card-title">
+                    <a class="text-nabla-blue stretched-link" href="{{ upcoming.first.get_absolute_url }}">
+                        {{ upcoming.first.headline }}
+                    </a>
+                </h5>
+                <p class="card-text mb-2">{{ upcoming.first.lead_paragraph }}</p>
+                <div class="float-right">
+                    {#        <span class="fas fa-user-check text-dark"></span>#}
+                    {% if upcoming.first.registration_required and user.is_authenticated %}
+                        {#                        <span class="fas fa-user-check text-dark"></span>#}
+                        <span class="text-muted text-decoration-none pl-1"
+                              title="Ledige plasser / Totalt antall plasser">
                 {{ upcoming.first.users_attending }}/{{ upcoming.first.places }}
                 </span>
-                {% endif %}
-                {#        <span class="fas fa-calendar-day text-dark"></span>#}
-                <time class="text-nowrap text-nabla-blue pl-1" datetime="{{ upcoming.first.event_start|date:"c" }}">
-                    {{ upcoming.first.event_start|date:"D d.m" }}
-                </time>
+                    {% endif %}
+                    {#        <span class="fas fa-calendar-day text-dark"></span>#}
+                    <time class="text-nowrap text-nabla-blue pl-1" datetime="{{ upcoming.first.event_start|date:"c" }}">
+                        {{ upcoming.first.event_start|date:"D d.m" }}
+                    </time>
+                </div>
             </div>
-        </div>
+        {% endif %}
         <div class="list-group list-group-flush border-top">
             {% for event in upcoming %}
                 {% if forloop.first %}

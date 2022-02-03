@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load markdown %}
+{% load listutil %}
+{% load easy_thumbnails %}
+{% load hitcount_tags %}
+{% load static %}
+{% load sekizai_tags %}
+
+{% block more_head %}
+    <link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
+{% endblock %}
+
+{% block main-blank %}
+
+    <button onclick="location.href='{% url "feedback" %}'" type="button" class="btn btn-nabla-blue btn-block my-4">
+        Send inn forslag til intersiden
+    </button>
+    <h5 class="text-nabla-blue">Brukeravstemninger</h5>
+    <div class="row flex-grow-1">
+    {% for poll, poll_has_voted in polls_context %}
+            <div class="col-lg-6 mb-4">
+                {% include "poll/poll_include_general.html" with class="h-100"%}
+            </div>
+    {% empty %}
+        Ingen brukeravstemninger
+    {% endfor %}
+    </div>
+    <h5 class="text-dark text-center pt-2">Mer innhold kommer... </h5>
+{% endblock main-blank %}

@@ -14,7 +14,7 @@ from haystack.query import SearchQuerySet
 from haystack.views import SearchView, search_view_factory
 
 from nablapps.accounts.urls import login_urls
-from nablapps.core.views import FrontPageView
+from nablapps.core.views import FrontPageView, InternView
 from nablapps.nabladet.views import serve_nablad
 from nablapps.news.feeds import RecentNews
 
@@ -42,6 +42,7 @@ urlpatterns = [
         ),
     ),
     path("feed/", RecentNews()),
+    path("intern/", InternView.as_view(), name="intern_page"),
     path("komite/", include("nablapps.com.urls")),
     path("kommentarer/", include("django_comments.urls")),
     path("nabladet/", include("nablapps.nabladet.urls")),

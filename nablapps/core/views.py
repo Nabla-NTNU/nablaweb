@@ -8,6 +8,8 @@ from django.contrib import messages
 from django.utils import timezone
 from django.views.generic import TemplateView
 
+from braces.views import LoginRequiredMixin
+
 from nablapps.album.models import Album
 from nablapps.blog.models import BlogPost
 
@@ -177,9 +179,22 @@ class FrontPageView(FlatPageMixin, TemplateView):
 
 
 class AboutView(TemplateView):
-
     template_name = "core/general_about.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class InternView(LoginRequiredMixin, TemplateView):
+    template_name = "intern.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self._add_polls(context)
+        return context
+
+    def _add_polls(self, context):
+        polls = Poll.objects.order_by("-creation_date")[:6]
+        has_voted_on = [poll.user_has_voted(self.request.user) for poll in polls]
+        context["polls_context"] = zip(polls, has_voted_on)
