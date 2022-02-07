@@ -9,12 +9,14 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from .forms import AlternativeFormset
 from .models import (
     Alternative,
     DuplicatePriorities,
+    HoleInBallotError,
     UserAlreadyVoted,
     Voting,
     VotingDeactive,
@@ -266,7 +268,21 @@ class ActiveVotingList(LoginRequiredMixin, ListView):
 
 
 class Vote(LoginRequiredMixin, DetailView):
-    """Display alternatives and lets users vote"""
+    """
+    Display alternatives and lets users vote
+
+    The form for voting is a little shabby(TM),
+    probably smoother with formset. Didn't want to bother with big rewrite,
+    so leaving that for future-improvement(TM) :^)
+
+    The creation of the Ballot (container and entries) can probably also be
+    written in a much nicer way. I think ultimately if all votations in the future will
+    be using STV, then this view as a CreateView together with a formset for the
+    priorities/alternatives is probably nice.
+
+    Disclaimer: possible misuse of docstring
+    Disclaimer2: possible misuse of the (TM) joke
+    """
 
     model = Voting
     template_name = "vote/voting_vote.html"
@@ -294,15 +310,24 @@ class Vote(LoginRequiredMixin, DetailView):
             try:
                 priorities = [i for i in range(1, voting.get_num_alternatives() + 1)]
                 # ballot : {pri#:alternative.pk}
-                ballot = {
-                    pri: request.POST["priority" + str(pri)] for pri in priorities
+                ballot_dict = {}
+                for pri in priorities:
+                    try:
+                        ballot_dict[pri] = request.POST["priority" + str(pri)]
+                        if pri > 1:
+                            if ballot_dict[pri - 1] is None:
+                                raise HoleInBallotError("Hole in ballot")
+                    except MultiValueDictKeyError:
+                        ballot_dict[pri] = None
+                    except HoleInBallotError:
+                        messages.warning(
+                            request, "Ikke tillatt med hull i stemmeseddelen"
+                        )
+                        return redirect("voting-vote", pk=voting_id)
+                ballot_dict = {
+                    pri: v for pri, v in ballot_dict.items() if v is not None
                 }
-                voting.submit_stv_votes(request.user, ballot)
-            except (KeyError, Alternative.DoesNotExist):
-                messages.warning(
-                    request, "Du har ikke valgt en kandidat til hver prioritet."
-                )
-                return redirect("voting-vote", pk=voting_id)
+                voting.submit_stv_votes(request.user, ballot_dict)
             except UserAlreadyVoted:
                 messages.error(request, "Du har allerede stemt i denne avstemningen!")
             except VotingDeactive:

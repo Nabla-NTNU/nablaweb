@@ -31,16 +31,6 @@
                 </label>
             </div>
         {% endfor %}
-{#
-        {% for alternative in object.alternatives.all %}
-            <div class="radio">
-                <label>
-                    <input type="radio" name="alternative" value="{{ alternative.pk }}">
-                    <span class="alternative">{{ alternative.text }}</span>
-                </label>
-            </div>
-        {% endfor %}
-#}
     {% endif  %}
     <button class="btn btn-primary btn-block" type="submit">Stem</button>
 </form>
