@@ -1,0 +1,123 @@
+{% extends "base.html"%}
+
+{% block main %}
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/axios/dist/axios.js"></script>
+    <!-- <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script> -->
+    <!-- <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script> -->
+    <div id="attendance-app">
+    </div>
+    <template id="AttendanceAppTemplate">
+        <div class="text-center">
+        <div v-if="!this.error">
+            <h2>[[ greeting ]]</h2>
+        </div>
+        <div v-else>
+            <h2>Error</h2>
+        </div>
+        <form @submit.prevent="toggleUser(this.userIdentifier)">
+            <div  class="form-group">
+            <input v-bind:class="{'is-invalid': error}" autofocus class="form-control form-control-lg" type="text" name="user-identifier" placeholder="Enter card number" v-model="userIdentifier">
+            <div v-if="this.error" class="invalid-feedback">
+                [[ lastAction.error ]]
+            </div>
+            </div>
+        </form>
+        <span>Currently [[ users.length ]] people checked in</span>
+        <ul>
+        <user-item
+            v-for="user in users"
+            v-bind:user="user"></user-item>
+        </ul>
+        </div>
+    </template>
+    <script>
+     axios.defaults.xsrfCookieName = 'csrftoken'
+     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+     const usersAPIURL = "/stem/api/{{ object.pk }}/users/"  // TODO: make this dynamic
+     const UserItem = {
+         delimiters: ['[[', ']]'],
+         props: ['user'],
+         template: `
+             <li class="list-group-item d-flex justify-content-between align-items">
+             <!-- <span @click="this.$parent.toggleUser(user.username)" class="fas fa-times-circle"></span>-->
+                 [[ user.name ]] ([[ user.username ]])
+                 <span class="badge badge-pill badge-danger btn" @click="removeUser">Remove</span>
+                 </li>
+         `,
+         methods: {
+             removeUser() {
+                 if (!confirm("Are you sure you want to remove " + [[ this.user.username ]] + " ?"))
+                     return
+                 this.$parent.toggleUser(this.user.username, action="out")
+             }
+         }
+     }
+     const AttendanceApp = {
+         delimiters: ['[[', ']]'],
+         components: {UserItem},
+         data() {
+             return {
+                 voteEvent: null,  // TODO: fix this
+                 userIdentifier: null,
+                 users: [],  // Currently checked in users
+                 lastAction: {
+                     "error": null,
+                     "user": null,
+                     "is_checked_in": null,
+                 }, // Last check in/out action
+             }
+         },
+         template: "#AttendanceAppTemplate",
+         mounted: function() {
+             this.getUsers()
+         },
+         methods: {
+             getUsers() {
+                 axios
+                     .get(usersAPIURL)
+                     .then(response => {
+                         this.users = response.data.users
+                     })
+		             .catch(error => {
+		                 console.log(error)
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+		             })
+             },
+             toggleUser(username, action = "toggle") {
+                 axios
+                     .post(usersAPIURL, {username: username, action: action})
+                     .then(response => {
+                         this.users = response.data.users
+                         this.lastAction = response.data.lastAction
+                         if (this.lastAction.error == null)
+                             this.userIdentifier = null
+                     })
+		             .catch(error => {
+		                 console.log(error)
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+		             })
+             }
+         },
+         computed: {
+             error() {
+                 return this.lastAction.error != null
+             },
+             greeting() {
+                 if (this.lastAction.user == null)
+                     return "Ready!"
+                 if (this.lastAction.is_checked_in) {
+                     greeting = " checked in"
+                 } else {
+                     greeting = " checked out"
+                 }
+                 return this.lastAction.user.username + greeting
+             }
+         }
+     }
+
+
+     const app = Vue.createApp(AttendanceApp)
+     const vm = app.mount('#attendance-app')
+    </script>
+{% endblock main %}

@@ -1,153 +1,222 @@
 {% extends "base.html"%}
 
 {% block more_head %}
-<style>
- .voting_item {
-     display: block;
-     padding: 5px 5px;
-     /* border-bottom: 0.4px solid gray; */
-     border-radius: 5px;
-     box-shadow: rgba(0,0,0,0.5) 0 4px 6px -3px;
-     margin-bottom: 15px;
- }
+    <style>
+     .voting_item {
+         display: block;
+         padding: 5px 5px;
+         /* border-bottom: 0.4px solid gray; */
+         border-radius: 5px;
+         box-shadow: rgba(0,0,0,0.5) 0 4px 6px -3px;
+         margin-bottom: 15px;
+     }
 
- .voting_item__metadata {
-     float: right;
- }
- 
- .voting_item__metadata span {
-     color: gray;
-     font-size: small;
-     margin: 0 4px;
- }
+     .voting_item__metadata {
+         float: right;
+     }
 
- .results_list {
-     list-style: none;
- }
+     .voting_item__metadata span {
+         color: gray;
+         font-size: small;
+         margin: 0 4px;
+     }
 
- .results_list li {
-     margin-bottom: 10px;
- }
-</style>
+     .results_list {
+         list-style: none;
+     }
+
+     .results_list li {
+         margin-bottom: 10px;
+     }
+    </style>
 {% endblock %}
 
 {% block main %}
-<!-- <script src="https://unpkg.com/vue@next"></script> -->
-<!-- <script src="https://unpkg.com/axios/dist/axios.js"></script> -->
-<script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script>
-<script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script>
-<h1>Avstemninger</h1>
-<a href="{% url "voting-event-list" %}"><i class="fas fa-arrow-left"></i> Tilbake til avstemningsarrangementer</a>
-<br>
-{% if is_admin %}
-<a href="{% url "create-voting" pk=object.pk %}">Opprett ny avstemning</a>
-{% endif %}
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/axios/dist/axios.js"></script>
+    <!-- <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script> -->
+    <!-- <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script> -->
+    <h1>Avstemninger</h1>
+    <a href="{% url "voting-event-list" %}"><i class="fas fa-arrow-left"></i> Tilbake til avstemningsarrangementer</a>
+    <br>
+    {% if is_admin %}
+        <a href="{% url "create-voting" pk=object.pk %}">Opprett ny avstemning</a>
+    {% endif %}
 
-<div id="vote-list" >
-  <input type="checkbox" v-model="show_results" id="show-results">
-  <label for="show-results">Vis resultater</label>
-  <vote-item
-    v-for="vote in votes"
-    v-bind:vote="vote"
-    v-bind:show_results="show_results"
-    ></vote-item>
-</div>
-<script>
- const VoteItem = {
-     delimiters: ['[[', ']]'],
-     props: ['vote', 'show_results'],
-     template: `
-         <div class="voting_item">
-         <span
-	     v-on:click="toggleActive"
-             class="fas fa-lg btn"
-             v-bind:class="classObject"
-         ></span>
-	 <a :href="vote.url">
-         <span class="voting_item__title">[[ vote.title ]]</span>
-	 </a>
-         <span class="voting_item__metadata">
-         <span><span class="fas fa-users"></span> [[ vote.num_voted ]]</span>
-         <span><span class="fas fa-user"></span> [[ vote.created_by ]]</span>
-         </span>
-         <span class="voting_item__results" v-if="vote.num_voted && show_results">
-<ul class="results_list">
-            <li v-for="alternative in vote.alternatives">
-<span>[[ alternative.text ]]</span>
-<span style="float: right">[[ alternative.votes ]] stemmer </span>
-<div class="progress">
-  <div class="progress-bar" role="progressbar" :aria-valuenow="alternative.percentage" :style="{width: alternative.percentage + '%'}" aria-valuemin="0" aria-valuemax="100">
-[[ alternative.percentage ]]% 
-</div>
-</div>
-            </li>
-</ul>
-         </span>
-         </div>
-     `,
-     data() {
-	 return {
-	     is_admin: {{ is_admin|lower }},
-	 }
-     },
-     computed: {
-	 classObject() {
-	     return [
-	      	 this.vote.active ? 'text-success' : 'text-danger',
-	      	 this.vote.active ? 'fa-toggle-on' : 'fa-toggle-off',
-		 {disabled: !this.is_admin }
-	     ]
-	 }
-     },
-     methods: {
-	 toggleActive() {
-	     if ( !this.is_admin ) { return }
-	     axios
-		 .post("{% url 'api-voting-list' pk=object.pk %}", {pk: this.vote.pk, active: !this.vote.active},
-		       {headers: {
-			   'X-CSRFToken': '{{ csrf_token }}' 
-		 }})
-		 .then(response => {
-		     this.$parent.updateVotes(response.data.votings)
-		 })
-		 .catch(error => {
-		     console.log(error)
-		     alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
-		 })
-	 }
+    <div id="vote-list" >
+        <span>Antall sjekket inn: [[ num_checked_in ]]</span><br />
+
+        <input type="checkbox" v-model="show_results" id="show-results">
+        <label for="show-results">Vis resultater</label>
+
+        <input type="checkbox" v-model="live_update" id="live-update">
+        <label for="live-update">Vis resultater live. (NB: spammer APIet)</label>
+
+        <input type="checkbox" v-model="users_should_poll" id="users-should-poll" @change="postEventDetail">
+        <label for="users-should-poll">Klienter skal polle. (NB: spammer APIet)</label>
+        <vote-item
+            v-for="vote in votes"
+            v-bind:vote="vote"
+            v-bind:show_results="show_results"
+        ></vote-item>
+    </div>
+    <template id="vote-item-template">
+             <div class="voting_item">
+                 <span
+	                 v-on:click="toggleActive"
+                      class="fas fa-lg btn"
+                     v-bind:class="classObject"
+                     ></span>
+	             <a :href="vote.url">
+                     <span class="voting_item__title">[[ vote.title ]]</span>
+	             </a>
+                 <span class="btn btn-secondary" v-if="vote.is_preference_vote" @click="distributeVotes">Distribute votes</span>
+                 <span class="voting_item__metadata">
+                     <span><span class="fas fa-users"></span> [[ vote.num_voted ]]</span>
+                     <span><span class="fas fa-user"></span> [[ vote.created_by ]]</span>
+                 </span>
+                 <span class="voting_item__results" v-if="show_results">
+                     <ul class="results_list">
+                         <li v-for="alternative in vote.alternatives">
+                             <span>[[ alternative.text ]]</span>
+                             <span style="float: right">[[ alternative.votes ]] stemmer </span>
+                             <div class="progress">
+                                 <div class="progress-bar" role="progressbar" :aria-valuenow="alternative.percentage" :style="{width: alternative.percentage + '%'}" aria-valuemin="0" aria-valuemax="100">
+                                     [[ alternative.percentage ]]%
+                                 </div>
+                             </div>
+                         </li>
+                     </ul>
+                 </span>
+                 <div v-if="errors.length" class="alert alert-warning">
+                     <ul>
+                         <li v-for="error in errors">[[ error ]]</li>
+                     </ul>
+                 </div>
+             </div>
+    </template>
+    <script>
+     axios.defaults.xsrfCookieName = 'csrftoken'
+     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+     const VoteItem = {
+         delimiters: ['[[', ']]'],
+         props: ['vote', 'show_results'],
+         template: '#vote-item-template',
+         data() {
+	         return {
+	             is_admin: {{ is_admin|lower }},
+                 errors: [],
+	         }
+         },
+         computed: {
+	         classObject() {
+	             return [
+	      	         this.vote.active ? 'text-success' : 'text-danger',
+	      	         this.vote.active ? 'fa-toggle-on' : 'fa-toggle-off',
+		             {disabled: !this.is_admin }
+	             ]
+	         }
+         },
+         methods: {
+	         toggleActive() {
+	             if ( !this.is_admin ) { return }
+	             axios
+		             .post("{% url 'api-votings' pk=object.pk %}", {pk: this.vote.pk, active: !this.vote.active})
+		             .then(response => {
+		                 this.$parent.updateVotes(response.data.votings)
+		             })
+		             .catch(error => {
+		                 console.log(error)
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+		             })
+	         },
+             distributeVotes() {
+                 if ( !this.is_admin ) { return }
+	             axios
+		             .post("{% url 'api-votings' pk=object.pk %}", {pk: this.vote.pk, distribute_preferences: true})
+		             .then(response => {
+		                 this.$parent.updateVotes(response.data.votings)
+                         this.errors = []
+		             })
+		             .catch(error => {
+                         if (error.response.status == 409) {
+                             this.errors.push("Unable to distribute votes")
+                         } else {
+		                     console.log(error)
+		                     alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+                         }
+		             })
+             }
+         }
      }
- }
 
- const VoteList = {
-     delimiters: ['[[', ']]'],
-     components: {
-	 VoteItem
-     },
-     data() {
-	 return {
-	     votes: null,
-         show_results: true,
-	 }
-     },
-     methods: {
-	 updateVotes(votes) {
-	     this.votes = votes
-	 }
-     },
-     mounted: function() {
-	 axios
-	     .get("{% url 'api-voting-list' pk=object.pk %}")
-	     .then((response) => {
-		 this.updateVotes(response.data.votings)
-	     })
-	     .catch(error => {
-		 console.log(error)
-		 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
-	     })
-     },
- }
+     const VoteList = {
+         delimiters: ['[[', ']]'],
+         components: {
+	         VoteItem
+         },
+         data() {
+	         return {
+	             votes: null,
+                 show_results: true,
+                 live_update: false,
+                 polling_period: 500,  // Polling interval milliseconds
+                 users_should_poll: null,
+                 num_checked_in: null,
+	         }
+         },
+         methods: {
+	         updateVotes(votes) {
+	             this.votes = votes
+	         },
+             fetchUpdate() {
+                 axios
+	                 .get("{% url 'api-votings' pk=object.pk %}")
+	                 .then((response) => {
+		                 this.updateVotes(response.data.votings)
+	                 })
+	                 .catch(error => {
+		                 console.log(error)
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+	                 })
+             },
+             fetchEventDetail() {
+                 axios
+	                 .get("{% url 'api-vote-event' pk=object.pk %}")
+	                 .then((response) => {
+                         this.users_should_poll = response.data.users_should_poll
+                         this.num_checked_in = response.data.num_checked_in
+	                 })
+	                 .catch(error => {
+		                 console.log(error)
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+	                 })
+             },
+             postEventDetail() {
+                 axios
+	                 .post("{% url 'api-vote-event' pk=object.pk %}", {users_should_poll: this.users_should_poll})
+	                 .then((response) => {
+                         this.users_should_poll = response.data.users_should_poll
+	                 })
+	                 .catch(error => {
+		                 console.log(error)
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+	                 })
+             }
+         },
+         mounted() {
+             this.fetchUpdate()
+             this.fetchEventDetail()
+             this.polling = setInterval(() => {
+                 if (this.live_update) {
+                     this.fetchUpdate()
+                     this.fetchEventDetail()
+                 }
+             }, this.polling_period)  // Polling for updates
+         }
+     }
 
- const app = Vue.createApp(VoteList)
- const vm = app.mount('#vote-list')
-</script>
+     const app = Vue.createApp(VoteList)
+     const vm = app.mount('#vote-list')
+    </script>
 {% endblock %}
