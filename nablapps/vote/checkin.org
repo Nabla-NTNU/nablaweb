@@ -81,3 +81,41 @@ If we want to retrieve the list from the server, we must decide if it should be 
     ]
 }
   #+end_src
+
+- ~/api/<int:pk>/public/votings/~
+  Public access point for voting users
+
+  GET non-restricted information about votings
+  POST submit the vote of a user
+
+  #+begin_src js
+{
+    "votings": [
+        {
+            "pk": "",
+            "title": "[title]",
+            "active": ,
+            "is_preference": "",
+            "num_winners": "",
+            "alternatives": [
+                {
+                    "pk": "",
+                    "text": "",
+                },
+                ...
+            ]
+            ""
+        },
+        ...
+    ]
+}
+  #+end_src
+
+POST message:
+  #+begin_src js
+// Single vote
+{voting_pk: '', alternative_pk: ''}
+
+// Preference vote
+{voting_pk: '', priority_order: [3, 2, 4, null, null]}
+  #+end_src

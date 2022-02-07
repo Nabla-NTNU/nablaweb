@@ -60,67 +60,152 @@
     <!-- <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script> -->
     <!-- <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script> -->
     <h1>{{ object.title  }}</h1>
-
     <div id="vote-list" >
         <transition-group name="slide-fade">
             <vote-item
-            v-for="vote in votes"
-            v-bind:key="vote.pk"
-            v-bind:vote="vote"
-        ></vote-item>
+                v-for="vote in votes"
+                v-bind:key="vote.pk"
+                v-bind:vote="vote"
+                @voted="fetchUpdate"
+            ></vote-item>
         </transition-group>
         <div v-if="!votes.length">
             Ingen aktive avstemninger.
         </div>
     </div>
     <template id="vote-item-template">
-            <div class="voting_item">
-	            <a :href="vote.url">
-                    <span class="voting_item__title">[[ vote.title ]]</span>
-	            </a>
-                <span class="voting_item__metadata">
-                    <span v-if="vote.has_voted">Stemme sendt <i class="fas fa-check-square"></i></span>
-                    <span v-else><i class="fas fa-square"></i></span>
-                </span>
-                <!-- [[ The $parent.$parent is a bit ugly, but if it works it works. It is to mitigate the transition ]]  -->
-                <form v-if="!vote.has_voted" @submit.prevent="this.$parent.$parent.submitVote(this.selected_alternative)">
-                    <span class="voting_item__results">
-                        <div v-for="alternative in vote.alternatives" class="form-check">
-                            <input type="radio" :name="vote.pk + '_alternatives'" :value="alternative.pk" :id="vote.pk + '_alternative_' + alternative.pk" class="form-check-input" v-model="selected_alternative">
-                            <label class="form-check-label" :for="vote.pk + '_alternative_' + alternative.pk">[[ alternative.text ]]</label>
-                        </div>
-                    </span>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-                <div v-else>
-                    <i>Stemme sendt inn</i>
-                </div>
+        <div class="voting_item">
+	        <a :href="vote.url">
+                <span class="voting_item__title">[[ vote.title ]]</span>
+	        </a>
+            <span class="voting_item__metadata">
+                <span v-if="vote.has_voted">Stemme sendt <i class="fas fa-check-square"></i></span>
+                <span v-else><i class="fas fa-square"></i></span>
+            </span>
+            <!-- [[ The $parent.$parent is a bit ugly, but if it works it works. It is to mitigate the transition ]]  -->
+            <priority-select
+                v-if="vote.is_preference"
+                :options="vote.alternatives"
+                @submit-vote="submitVote"
+            ></priority-select>
+            <radio-select
+                v-else
+                :vote="vote"
+                @submit-vote="submitVote"
+            ></radio-select>
+        </div>
+    </template>
+    <template id="pri-select-template">
+        <form @submit.prevent="onSubmit">
+            <div class="form-group" v-for="index in options.length">
+                <label>Priority [[ index ]]</label>
+                <select v-model="priorities[index-1]" @change="validate" class="form-control mb-2">
+                    <option v-for="option in options" :value="option.pk" :disabled="priorities.includes(option.pk)">[[ option.text ]]</option>
+                    <option :value="null">Blank</option>
+                </select>
             </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <span v-if="errors.length" class="text-danger">
+            <ul>
+                <li v-for="error in errors">
+                    [[ error ]]
+                </li>
+            </ul>
+        </span>
     </template>
     <script>
+     const PrioritySelect = {
+         delimiters: ['[[', ']]'],
+         template: '#pri-select-template',
+         props: ['options'],
+         data() {
+             return {
+                 priorities: [],
+                 errors: [],
+             }
+         },
+         emits: {submitVote: null},
+         mounted: function() {
+             this.priorities = new Array(this.options.length).fill(null)
+         },
+         methods: {
+             onSubmit(event) {
+                 if (this.validate()) {
+                     this.$emit('submitVote', {priority_order: this.priorities})
+                 }
+             },
+             validate() {
+                 this.errors = []
+                 // Find the first blank (null) option
+                 // All priorities after that should be null as well.
+                 let firstNull = this.priorities.indexOf(null)
+                 let correctOrder = true
+                 if (firstNull != -1) {
+                     let afterNull = this.priorities.slice(firstNull+1)
+                     correctOrder = afterNull.every(el => el === null)
+                 }
+                 if (! correctOrder) {
+                     this.errors.push("After the first blank, all others must also be blank")
+                 }
+                 return this.errors.length == 0
+             },
+         },
+     }
+
+     const RadioSelect = {
+         delimiters: ['[[', ']]'],
+         props: ['vote'],
+         emits: {submitVote: null},
+         // TODO: verify something selected
+         data() {
+             return {
+                 selected_alternative: null,
+             }
+         },
+         template: `
+            <form v-if="!vote.has_voted" @submit.prevent="$emit('submitVote', {alternative_pk: this.selected_alternative})">
+                <span class="voting_item__results">
+                    <div v-for="alternative in vote.alternatives" class="form-check">
+                        <input type="radio" :name="vote.pk + '_alternatives'" :value="alternative.pk" :id="vote.pk + '_alternative_' + alternative.pk" class="form-check-input" v-model="selected_alternative">
+                        <label class="form-check-label" :for="vote.pk + '_alternative_' + alternative.pk">[[ alternative.text ]]</label>
+                    </div>
+                </span>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+            <div v-else>
+                <i>Stemme sendt inn</i>
+            </div>
+         `,
+     }
+
      const VoteItem = {
          delimiters: ['[[', ']]'],
+         components: {RadioSelect, PrioritySelect},
          props: ['vote',],
          template: '#vote-item-template',
-          data() {
-              return {
-                  selected_alternative: null,
-              }
-          },
-         computed: {
-	         classObject() {
-	             return [
-	      	         this.vote.active ? 'text-success' : 'text-danger',
-	      	         this.vote.active ? 'fa-toggle-on' : 'fa-toggle-off',
-	             ]
-	         }
+         emits: {voted: null},
+         methods: {
+             submitVote(data) {
+                 axios
+	                 .post("{% url 'api-public-votings' pk=object.pk %}", {voting_pk: this.vote.pk, ...data})
+	                 .then((response) => {
+                         this.$emit('voted')
+	                 })
+	                 .catch(error => {
+		                 console.log(error.response)
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom. Error was: '" + error.response.data.error + "'")
+	                 })
+             },
          },
      }
 
      const VoteList = {
          delimiters: ['[[', ']]'],
          components: {
-	         VoteItem
+	         VoteItem,
+             PrioritySelect,
          },
          data() {
 	         return {
@@ -142,17 +227,6 @@
 	                 })
 	                 .catch(error => {
 		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
-	                 })
-             },
-             submitVote(alternative_pk) {
-                 axios
-	                 .post("{% url 'api-public-votings' pk=object.pk %}", {alternative_pk: alternative_pk})
-	                 .then((response) => {
-		                 this.updateVotes(response.data.votings)
-	                 })
-	                 .catch(error => {
-		                 console.log(error.response)
-		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom. Error was: '" + error.response.data.error + "'")
 	                 })
              },
          },

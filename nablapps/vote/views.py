@@ -21,6 +21,8 @@ from nablapps.accounts.models import NablaUser
 from .forms import AlternativeFormset
 from .models import (
     Alternative,
+    BallotContainer,
+    BallotEntry,
     DuplicatePriorities,
     HoleInBallotError,
     UserAlreadyVoted,
@@ -449,6 +451,7 @@ def _voting_public_serializer(voting, user, include_alternatives=True):
         "title": voting.title,
         "active": voting.is_active,
         "has_voted": voting.user_already_voted(user),
+        "is_preference": voting.is_preference_vote(),
         "num_winners": voting.num_winners,
     }
     if include_alternatives:
@@ -470,6 +473,10 @@ class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
      or something similar.
      However, I did not bother.
      Feel free to do so if you want.
+
+    TODO:
+     Several places there are exceptions we catch, and then simply raise straight away.
+     This is done simply to remind us where we probably should add some error handling.
     """
 
     model = VotingEvent
@@ -487,8 +494,7 @@ class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
             }
         )
 
-    def post(self, request, *args, **kwargs):
-        data = json.loads(request.body)
+    def _submit_single_vote(self, request, data):
         try:
             alternative_pk = data.get("alternative_pk")
             alternative = Alternative.objects.get(pk=alternative_pk)
@@ -498,9 +504,47 @@ class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
         except Alternative.DoesNotExist as e:
             raise e
 
+        alternative.add_vote(request.user)
+
+    def _submit_preference_vote(self, request, data):
         try:
-            alternative.add_vote(request.user)
-        except (UserNotCheckedIn, UserAlreadyVoted, UserNotEligible) as e:
+            priorities = data.get("priority_order")
+
+        except KeyError as e:
+            # Invlaid pk
+            raise e
+
+        # first_alt = Alternative.objects.get(pk=priorities[0])  # TODO should we change BallotContainer.alternative to blank=True?
+        # ballot = BallotContainer(voting=self.voting, alternative=first_alt)
+        # ballot.save()
+        # for pri, alternative_pk in enumerate(priorities):
+        #     if alternative_pk is None:
+        #         break
+        #     alt = Alternative.objects.get(pk=alternative_pk)
+        #     entry = BallotEntry(container=ballot, priority=pri, alternative=alt)
+        #     entry.save()
+        self.voting.submit_stv_votes(self.request.user, priorities)
+
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        try:
+            self.voting = Voting.objects.get(pk=data.get("voting_pk"))
+        except KeyError as e:
+            raise e
+        except Voting.DoesNotExist as e:
+            raise e
+
+        try:
+            if self.voting.is_preference_vote():
+                self._submit_preference_vote(request, data)
+            else:
+                self._submit_single_vote(request, data)
+        except (
+            UserNotCheckedIn,
+            UserAlreadyVoted,
+            UserNotEligible,
+            VotingDeactive,
+        ) as e:
             return JsonResponse({"error": str(e)}, status=403)  # 403 FORBIDDEN
         return self.get(request, *args, **kwargs)
 

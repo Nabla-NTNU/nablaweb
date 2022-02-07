@@ -1,6 +1,7 @@
 import random
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from nablapps.accounts.models import NablaGroup
@@ -156,6 +157,10 @@ class Voting(models.Model):
 
     def user_not_eligible(self, user):
         return not self.event.user_eligible(user)
+
+    def is_preference_vote(self):
+        """The voting uses preference vote, not 'radio' select"""
+        return self.num_winners > 1
 
     def submit_stv_votes(self, user, ballot_dict):
         """Submits transferable votes i.e. creates ballot"""
@@ -381,6 +386,12 @@ class BallotContainer(models.Model):
         null=True,
         blank=True,
     )
+
+    def clean(self):
+        # Make sure all alternatives belong to voting
+        votings = self.entries.values_list("alternative__voting", flat=True)
+        if votings.filter(pk=self.voting.pk).Count() != votings.Count():
+            raise ValidationError("All entries must belong to the voting.")
 
 
 class BallotEntry(models.Model):
