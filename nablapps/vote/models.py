@@ -59,6 +59,10 @@ class VoteDistributionError(Exception):
     """Raised if unable to find winners"""
 
 
+class HoleInBallotError(Exception):
+    """Raised empty priority in vote ballot followed by non empty entry encountered"""
+
+
 class Voting(models.Model):
     """Represents a voting"""
 
@@ -115,16 +119,20 @@ class Voting(models.Model):
         else:
             return False
 
-    def submit_stv_votes(self, user, ballot):
-        """Submits transferable votes"""
-        alt_pks = [int(ballot[pri]) for pri in ballot]
+    def submit_stv_votes(self, user, ballot_dict):
+        """Submits transferable votes i.e. creates ballot"""
+        alt_pks = [int(ballot_dict[pri]) for pri in ballot_dict]
         if len(alt_pks) != len(set(alt_pks)):
             raise DuplicatePriorities("Ballot contains duplicate(s) of candidates")
-        alt1_pk = int(ballot[1])
+        alt1_pk = int(ballot_dict[1])
         alt1 = self.alternatives.get(pk=alt1_pk)
-        new_ballot = BallotContainer.objects.create(voting=self, alternative=alt1)
+        # create BallotContainer instance
+        new_ballot = BallotContainer.objects.create(
+            voting=self, current_alternative=alt1
+        )
         new_ballot.save()
-        for (alt_pk, pri) in zip(alt_pks, ballot):
+        # Create BallotEntry instances
+        for (alt_pk, pri) in zip(alt_pks, ballot_dict):
             alt = Alternative.objects.get(pk=alt_pk)
             new_entry = BallotEntry.objects.create(
                 container=new_ballot, priority=pri, alternative=alt
@@ -292,8 +300,12 @@ class BallotContainer(models.Model):
     """
 
     voting = models.ForeignKey(Voting, on_delete=models.CASCADE, related_name="ballots")
-    alternative = models.ForeignKey(
-        Alternative, on_delete=models.CASCADE, related_name="ballots"
+    current_alternative = models.ForeignKey(
+        Alternative,
+        on_delete=models.CASCADE,
+        related_name="ballots",
+        null=True,
+        blank=True,
     )
 
 
