@@ -44,6 +44,8 @@
     {% endif %}
 
     <div id="vote-list" >
+        <span>Antall sjekket inn: [[ num_checked_in ]]</span><br />
+
         <input type="checkbox" v-model="show_results" id="show-results">
         <label for="show-results">Vis resultater</label>
 
@@ -137,6 +139,7 @@
                  live_update: false,
                  polling_period: 500,  // Polling interval milliseconds
                  users_should_poll: null,
+                 num_checked_in: null,
 	         }
          },
          methods: {
@@ -159,6 +162,7 @@
 	                 .get("{% url 'api-vote-event' pk=object.pk %}")
 	                 .then((response) => {
                          this.users_should_poll = response.data.users_should_poll
+                         this.num_checked_in = response.data.num_checked_in
 	                 })
 	                 .catch(error => {
 		                 console.log(error)
