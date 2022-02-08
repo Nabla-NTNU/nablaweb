@@ -1,5 +1,6 @@
 import json
 import unittest
+from contextlib import nullcontext
 
 from django.contrib.auth.models import Permission
 from django.test import Client, TestCase
@@ -9,6 +10,7 @@ from nablapps.accounts.models import NablaGroup, NablaUser
 
 from .models import (
     Alternative,
+    DuplicatePriorities,
     UserAlreadyVoted,
     UserNotCheckedIn,
     UserNotEligible,
@@ -134,10 +136,12 @@ class SubmitVoteTestCase(TestCase):
         self.user1.groups.add(self.group1)
         self.voting_event0 = VotingEvent.objects.create(
             title="Voting event for all",
+            require_checkin=False,
         )
         self.voting_event1 = VotingEvent.objects.create(
             title="Voting event for group1",
             eligible_group=self.group1,
+            require_checkin=False,
         )
 
         self.voting0 = Voting.objects.create(
@@ -158,10 +162,80 @@ class SubmitVoteTestCase(TestCase):
             text="First alternative voting 1",
         )
 
+        self.preference_voting = Voting.objects.create(
+            event=self.voting_event1,
+            num_winners=2,  # TODO: change this if we add dedicated field for preference vote
+            is_active=True,
+        )
+        assert (
+            self.preference_voting.is_preference_vote()
+        ), "This should be a preference vote"
+        for i in range(3):
+            setattr(
+                self,
+                f"preference_vote_alternative{i}",
+                Alternative.objects.create(
+                    voting=self.preference_voting, text=f"Preference vote alt {i}"
+                ),
+            )
+
     def test_submit_vote(self):
         """Submit a vote, check that counter increases"""
         self.voting0_alternative0.add_vote(self.user0)
         self.assertEqual(self.voting0_alternative0.votes, 1)
+
+    def test_submit_preference_vote(self):
+        """Submit a preference vote"""
+        # TODO check that we get the correct result?
+
+        cases = [
+            {
+                # Partially filled preferences
+                "preferences": {
+                    1: self.preference_vote_alternative0,
+                    2: self.preference_vote_alternative2,
+                },
+                "expected_exception": None,
+            },
+            {
+                # Duplicate "preferences"
+                "preferences": {
+                    1: self.preference_vote_alternative0,
+                    2: self.preference_vote_alternative0,
+                },
+                "expected_exception": DuplicatePriorities,
+            },
+            {
+                # Same priority repeated
+                "preferences": {
+                    1: self.preference_vote_alternative0,  # noqa: F601
+                    1: self.preference_vote_alternative1,  # noqa: F601
+                },
+                "expected_exception": DuplicatePriorities,
+            },
+        ]
+        for case in cases:
+            exception = case["expected_exception"]
+            # If we do not expect exception, make a null context manager as a placeholder
+            contextManager = (
+                nullcontext() if exception is None else self.assertRaises(exception)
+            )
+            with contextManager:
+                ballot = {
+                    pri: alternative.pk
+                    for pri, alternative in case["preferences"].items()
+                }
+                self.preference_voting.submit_stv_votes(self.user1, ballot)
+
+    def _submit_preference_vote(self, user=None):
+        """Submit a partial ballot for user"""
+        if user is None:
+            user = self.user1
+        preferences = {
+            1: self.preference_vote_alternative0.pk,
+            2: self.preference_vote_alternative2.pk,
+        }
+        self.preference_voting.submit_stv_votes(user, preferences)
 
     def test_submit_non_active_vote(self):
         """Submit a vote on non-open voting"""
@@ -170,11 +244,22 @@ class SubmitVoteTestCase(TestCase):
             self.voting0_alternative0.add_vote(self.user0)
         self.assertEqual(self.voting0_alternative0.votes, 0)
 
+        self.preference_voting.is_active = False
+        with self.assertRaises(VotingDeactive):
+            self._submit_preference_vote()
+        # Make sure no ballot was created
+        self.assertFalse(self.preference_voting.ballots.exists())
+
     def test_submit_noneligible_vote(self):
         """Submit a vote for which the user is not eligible"""
         with self.assertRaises(UserNotEligible):
             self.voting1_alternative0.add_vote(self.user0)
         self.assertEqual(self.voting1_alternative0.votes, 0)
+
+        with self.assertRaises(UserNotEligible):
+            self._submit_preference_vote()
+        # Make sure no ballot was created
+        self.assertFalse(self.preference_voting.ballots.exists())
 
     def test_submit_second_vote(self):
         """Submit a second vote"""
@@ -183,14 +268,42 @@ class SubmitVoteTestCase(TestCase):
             self.voting0_alternative0.add_vote(self.user0)
         self.assertEqual(self.voting0_alternative0.votes, 1)
 
+        self._submit_preference_vote()
+        with self.assertRaises(UserAlreadyVoted):
+            self._submit_preference_vote()
+        # Make sure no extra ballot was created
+        self.assertEqual(
+            self.preference_voting.ballots.count(),
+            1,
+        )
+
     def test_checkin(self):
         """Submit a vote, depending on whether checked in or not, should succeed/fail"""
+        self.voting_event0.require_checkin = True
+        self.voting_event0.save()
         self.voting_event0.check_in_user(self.user0)
         self.voting0_alternative0.add_vote(self.user0)
+        self._submit_preference_vote()
         self.assertEqual(self.voting0_alternative0.votes, 1)
         with self.assertRaises(UserNotCheckedIn):
             self.voting0_alternative0.add_vote(self.user1)  # Has not checked in
         self.assertEqual(self.voting0_alternative0.votes, 1)
+
+        self.voting_event1.require_checkin = True
+        self.voting_event1.save()
+        self.voting_event1.check_in_user(self.user1)
+        self._submit_preference_vote()
+        self.assertEqual(
+            self.preference_voting.ballots.count(),
+            1,
+        )
+        self.voting_event1.check_out_user(self.user1)
+        with self.assertRaises(UserNotCheckedIn):
+            self._submit_preference_vote()
+        self.assertEqual(
+            self.preference_voting.ballots.count(),
+            1,
+        )
 
 
 ################
