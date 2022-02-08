@@ -523,7 +523,8 @@ class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
         #     alt = Alternative.objects.get(pk=alternative_pk)
         #     entry = BallotEntry(container=ballot, priority=pri, alternative=alt)
         #     entry.save()
-        self.voting.submit_stv_votes(self.request.user, priorities)
+        ballot = {i + 1: priority for i, priority in enumerate(priorities)}
+        self.voting.submit_stv_votes(self.request.user, ballot)
 
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
