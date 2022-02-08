@@ -56,6 +56,11 @@ class VotingEvent(models.Model):
         self.checked_in_users.remove(user)
         self.save()
 
+    def check_out_all(self):
+        """Check out all usesrs"""
+        for user in self.checked_in_users.all():
+            self.check_out_user(user)
+
     def toggle_check_in_user(self, user):
         """Toggle user checked in status.
         Throws UserNotEligible if user is not eligible"""

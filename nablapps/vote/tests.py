@@ -108,13 +108,13 @@ class CheckinTestCase(TestCase):
         self.voting_event0.toggle_check_in_user(self.user0)
         self.assertNotIn(self.user0, self.voting_event0.checked_in_users.all())
 
-    @unittest.skip("check_out_all not implemented yet")
     def test_check_out_all(self):
         """Check that check out all users work"""
-        for user in [self.user0, self.user1, self.user2]:
-            # self.voting_event0.check_in_user(user)
-            pass
+        self.voting_event0.check_out_all()  # Check out with empty event should not cause exception
 
+        # Add some users
+        for user in [self.user0, self.user1, self.user2]:
+            self.voting_event0.check_in_user(user)
         self.voting_event0.check_out_all()
         # Check for empty. exists False when empty..
         self.assertFalse(self.voting_event0.checked_in_users.exists())

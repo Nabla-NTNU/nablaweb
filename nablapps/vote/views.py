@@ -218,8 +218,6 @@ class UsersAPIView(VoteAdminMixin, BaseDetailView):
         attendence_reponse = register_attendance_any_identifier(
             self.object, username, action
         )
-        print(username)
-        print(attendence_reponse)
         users = self.object.checked_in_users.all()
 
         return JsonResponse(
