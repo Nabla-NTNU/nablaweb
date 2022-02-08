@@ -90,6 +90,8 @@
              </div>
     </template>
     <script>
+     axios.defaults.xsrfCookieName = 'csrftoken'
+     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
      const VoteItem = {
          delimiters: ['[[', ']]'],
          props: ['vote', 'show_results'],
@@ -112,10 +114,7 @@
 	         toggleActive() {
 	             if ( !this.is_admin ) { return }
 	             axios
-		             .post("{% url 'api-votings' pk=object.pk %}", {pk: this.vote.pk, active: !this.vote.active},
-		                   {headers: {
-			                   'X-CSRFToken': '{{ csrf_token }}'
-		             }})
+		             .post("{% url 'api-votings' pk=object.pk %}", {pk: this.vote.pk, active: !this.vote.active})
 		             .then(response => {
 		                 this.$parent.updateVotes(response.data.votings)
 		             })

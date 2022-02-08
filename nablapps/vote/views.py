@@ -131,7 +131,7 @@ def register_attendance_any_identifier(event, identifier, action):
     )
 
 
-@method_decorator(csrf_exempt, name="dispatch")  # TODO: Remove this, for tesing only
+# @method_decorator(csrf_exempt, name="dispatch")  # TODO: Remove this, for tesing only
 class VoteAdminMixin(PermissionRequiredMixin):
     """Permission mixin for all admin views of vote."""
 

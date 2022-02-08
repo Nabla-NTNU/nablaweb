@@ -120,6 +120,8 @@
         </span>
     </template>
     <script>
+     axios.defaults.xsrfCookieName = 'csrftoken'
+     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
      const PrioritySelect = {
          delimiters: ['[[', ']]'],
          template: '#pri-select-template',
