@@ -239,8 +239,19 @@ class VoteEventAPIView(VoteAdminMixin, BaseDetailView):
             {
                 "title": self.object.title,
                 "eligile_group": self.object.eligible_group,
+                "num_checked_in": self.object.num_checked_in(),
+                "users_should_poll": self.object.users_should_poll,
             }
         )
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        data = json.loads(request.body)
+        should_poll = data.get("users_should_poll")
+        print(should_poll)
+        self.object.users_should_poll = should_poll
+        self.object.save()
+        return self.get(request, *args, **kwargs)
 
 
 class VotingsAPIView(VoteAdminMixin, BaseDetailView):

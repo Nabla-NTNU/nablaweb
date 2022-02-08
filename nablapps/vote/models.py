@@ -41,6 +41,9 @@ class VotingEvent(models.Model):
     def user_checked_in(self, user):
         return self.checked_in_users.filter(pk=user.pk).exists()
 
+    def num_checked_in(self):
+        return self.checked_in_users.count()
+
     def check_in_user(self, user, ignore_eligible=False):
         """Adds the user to the checked_in_users.
         If ignore_eligible, do not verify user is eligible.

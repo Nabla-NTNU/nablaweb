@@ -32,10 +32,10 @@
 {% endblock %}
 
 {% block main %}
-    <!-- <script src="https://unpkg.com/vue@next"></script> -->
-    <!-- <script src="https://unpkg.com/axios/dist/axios.js"></script> -->
-    <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script>
-    <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/axios/dist/axios.js"></script>
+    <!-- <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script> -->
+    <!-- <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script> -->
     <h1>Avstemninger</h1>
     <a href="{% url "voting-event-list" %}"><i class="fas fa-arrow-left"></i> Tilbake til avstemningsarrangementer</a>
     <br>
@@ -49,6 +49,9 @@
 
         <input type="checkbox" v-model="live_update" id="live-update">
         <label for="live-update">Vis resultater live. (NB: spammer APIet)</label>
+
+        <input type="checkbox" v-model="users_should_poll" id="users-should-poll" @change="postEventDetail">
+        <label for="users-should-poll">Klienter skal polle. (NB: spammer APIet)</label>
         <vote-item
             v-for="vote in votes"
             v-bind:vote="vote"
@@ -133,6 +136,7 @@
                  show_results: true,
                  live_update: false,
                  polling_period: 500,  // Polling interval milliseconds
+                 users_should_poll: null,
 	         }
          },
          methods: {
@@ -149,13 +153,38 @@
 		                 console.log(error)
 		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
 	                 })
+             },
+             fetchEventDetail() {
+                 axios
+	                 .get("{% url 'api-vote-event' pk=object.pk %}")
+	                 .then((response) => {
+                         this.users_should_poll = response.data.users_should_poll
+	                 })
+	                 .catch(error => {
+		                 console.log(error)
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+	                 })
+             },
+             postEventDetail() {
+                 axios
+	                 .post("{% url 'api-vote-event' pk=object.pk %}", {users_should_poll: this.users_should_poll})
+	                 .then((response) => {
+                         this.users_should_poll = response.data.users_should_poll
+	                 })
+	                 .catch(error => {
+		                 console.log(error)
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+	                 })
              }
          },
          mounted() {
              this.fetchUpdate()
+             this.fetchEventDetail()
              this.polling = setInterval(() => {
-                 if (this.live_update)
+                 if (this.live_update) {
                      this.fetchUpdate()
+                     this.fetchEventDetail()
+                 }
              }, this.polling_period)  // Polling for updates
          }
      }

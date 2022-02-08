@@ -22,15 +22,25 @@ If we want to retrieve the list from the server, we must decide if it should be 
 ** Suggested setup
 - ~/api/<pk:voteEvent>/~
   GET information about event, but no votings
+  POST update should poll
 
   Response form:
   #+begin_src js
 {
     "title": "[title]",
     "eligible_group": "[eligible_group]",
+    "users_should_poll": bool,
+    "num_checked_in": int,
 }
   #+end_src
   TODO: Consider also having total number of checked in users
+
+POST message:
+  #+begin_src js
+{
+    "users_should_poll": bool,
+}
+  #+end_src
 
 - ~/api/<pk:voteEvent>/users~
   GET request returns all users
