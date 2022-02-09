@@ -2,6 +2,7 @@ import random
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from nablapps.accounts.models import NablaGroup
@@ -172,6 +173,8 @@ class Voting(models.Model):
 
     def submit_stv_votes(self, user, ballot_dict):
         """Submits transferable votes i.e. creates ballot"""
+        assert self.is_preference_vote(), "Only preference votes can have ballots"
+
         alt_pks = [int(ballot_dict[pri]) for pri in ballot_dict]
         if len(alt_pks) != len(set(alt_pks)):
             raise DuplicatePriorities("Ballot contains duplicate(s) of candidates")
@@ -205,6 +208,8 @@ class Voting(models.Model):
 
     def get_multi_winner_result(self):
         """Declare multples winners using a single transferable votes system"""
+        assert self.is_preference_vote(), "Only preference votes can distribute votes"
+
         alternatives = self.alternatives.all()
         quota = self.get_quota()
         winners = []
@@ -415,5 +420,5 @@ class BallotEntry(models.Model):
     container = models.ForeignKey(
         BallotContainer, on_delete=models.CASCADE, related_name="entries"
     )
-    priority = models.IntegerField()
+    priority = models.IntegerField(validators=[MinValueValidator(1)])
     alternative = models.ForeignKey(Alternative, on_delete=models.CASCADE)
