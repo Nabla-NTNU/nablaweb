@@ -25,6 +25,7 @@ from .models import (
     BallotEntry,
     DuplicatePriorities,
     HoleInBallotError,
+    UnableToSelectWinners,
     UserAlreadyVoted,
     UserNotCheckedIn,
     UserNotEligible,
@@ -404,14 +405,16 @@ class VotingDetail(VoteAdminMixin, DetailView):
         context["is_admin"] = self.request.user.has_perm("vote.vote_admin")
 
         if self.request.method == "POST":
-            context["winners"] = self.object.get_multi_winner_result()
-            print(self.object.get_multi_winner_result())
+            try:
+                context["winners"] = self.object.get_multi_winner_result()
+                print(self.object.get_multi_winner_result())  # Nice
+            except UnableToSelectWinners as e:
+                context["winners"] = None
+                context["errors"] = [f"Kunne ikke beregne vinner: '{e}'"]
         else:
             self.object.multi_winnner_initial_dist()
-        if self.object.num_winners > 1:
-            context["quota"] = (
-                int(self.object.get_total_votes() / (self.object.num_winners + 1)) + 1
-            )
+        if self.object.is_preference_vote():
+            context["quota"] = self.object.get_quota()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -627,7 +630,7 @@ class Vote(LoginRequiredMixin, DetailView):
         voting_id = kwargs["pk"]
         voting = get_object_or_404(Voting, pk=voting_id)
 
-        if voting.num_winners > 1:
+        if voting.is_preference_vote():
             # Single transferable vote
             # Get list/dictonary of alternatives and priorities
             try:

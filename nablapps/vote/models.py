@@ -198,10 +198,15 @@ class Voting(models.Model):
             ballot.alternative = alt1
             ballot.save()
 
+    def get_quota(self):
+        """Returns the droop quota for a preference vote"""
+        assert self.is_preference_vote(), "Only preference votes have quotas"
+        return int(self.get_total_votes() / (self.num_winners + 1)) + 1
+
     def get_multi_winner_result(self):
         """Declare multples winners using a single transferable votes system"""
         alternatives = self.alternatives.all()
-        quota = int(self.get_total_votes() / (self.num_winners + 1)) + 1  # Droop quota
+        quota = self.get_quota()
         winners = []
         losers = []
 
@@ -212,7 +217,9 @@ class Voting(models.Model):
         if self.get_total_votes() < quota * self.num_winners:
             # Innsufficient vote count
             # Consider raising exception
-            return [f"Not enough votes to declare {self.num_winners} winners"]
+            raise UnableToSelectWinners(
+                f"Not enough votes to declare {self.num_winners} winners"
+            )
         else:
             # Vote count is sufficient to declare winners
 

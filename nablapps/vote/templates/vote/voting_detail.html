@@ -49,6 +49,15 @@
     <div class="alert alert-primary" role="alert">
         Vinnere ikke beregnet
     </div>
+    {% if errors %}
+    <div class="alert alert-danger" role="alert">
+        <ul>
+        {% for error in errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
     {% endif %}
 {# Kan eventuelt legge til en else som viser vinneren i envinneravstemning også #}
 {% endif %}
