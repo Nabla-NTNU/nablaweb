@@ -67,7 +67,12 @@
                 v-bind:key="vote.pk"
                 v-bind:vote="vote"
                 @voted="fetchUpdate"
+                v-if="checked_in"
             ></vote-item>
+            <div v-else class="alert alert-warning">
+                <h4 class="alert-heading">Ikke sjekket inn!</h4>
+                Gå til innsjekking.
+            </div>
         </transition-group>
         <div v-if="!votes.length">
             Ingen aktive avstemninger.
@@ -215,6 +220,7 @@
 	             votes: [],
                  poll_active: false,
                  polling_period: 2000,  // Polling interval milliseconds
+                 checked_in: true,
 	         }
          },
          methods: {
@@ -222,6 +228,17 @@
 	             this.votes = votes
 	         },
              fetchUpdate() {
+                 // Get event details
+                 axios
+	                 .get("{% url 'api-public-vote-event' pk=object.pk %}")
+	                 .then((response) => {
+                         this.checked_in = response.data.checked_in
+	                 })
+	                 .catch(error => {
+		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+	                 })
+
+                 // Get votings
                  axios
 	                 .get("{% url 'api-public-votings' pk=object.pk %}")
 	                 .then((response) => {

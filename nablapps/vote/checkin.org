@@ -121,11 +121,22 @@ POST message:
 }
   #+end_src
 
-POST message:
+  POST message:
   #+begin_src js
 // Single vote
 {voting_pk: '', alternative_pk: ''}
 
 // Preference vote
 {voting_pk: '', priority_order: [3, 2, 4, null, null]}
+  #+end_src
+
+- ~/api/<int:voteEventpk>/public/~
+  Public access point for vote event
+  GET
+
+  #+begin_src js
+{
+    "title": "[title]",
+    "checked_in": bool,
+}
   #+end_src

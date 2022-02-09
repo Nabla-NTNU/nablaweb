@@ -473,7 +473,6 @@ def _voting_public_serializer(voting, user, include_alternatives=True):
     return response
 
 
-@method_decorator(csrf_exempt, name="dispatch")  # TODO: Remove this, for tesing only
 class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
     """API endpoint for votings with only 'public' information, i.e. not including number of votes etc.
 
@@ -559,7 +558,26 @@ class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
             VotingDeactive,
         ) as e:
             return JsonResponse({"error": str(e)}, status=403)  # 403 FORBIDDEN
+        except TypeError:  # Raised by preference vote if ballot invalid
+            return JsonResponse({"error": "Do not include null priorities"}, status=400)
         return self.get(request, *args, **kwargs)
+
+
+class VoteEventPublicAPIView(LoginRequiredMixin, BaseDetailView):
+    """Public API view for getting information about voting event"""
+
+    model = VotingEvent
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return JsonResponse(
+            {
+                "title": self.object.title,
+                # Report always checked in for events without checkin
+                "checked_in": not self.object.require_checkin
+                or self.object.user_checked_in(request.user),
+            }
+        )
 
 
 class VotingEventUserView(LoginRequiredMixin, DetailView):

@@ -7,6 +7,7 @@ from .views import (  # submit_vote,
     UsersAPIView,
     Vote,
     VoteEventAPIView,
+    VoteEventPublicAPIView,
     VotingDetail,
     VotingEdit,
     VotingEventList,
@@ -26,6 +27,11 @@ apiurlpatterns = [
         "api/<int:pk>/public/votings/",
         VotingsPublicAPIView.as_view(),
         name="api-public-votings",
+    ),
+    path(
+        "api/<int:pk>/public/",
+        VoteEventPublicAPIView.as_view(),
+        name="api-public-vote-event",
     ),
 ]
 
