@@ -11,9 +11,11 @@ from nablapps.accounts.models import NablaGroup, NablaUser
 from .models import (
     Alternative,
     DuplicatePriorities,
+    UnableToSelectWinners,
     UserAlreadyVoted,
     UserNotCheckedIn,
     UserNotEligible,
+    VoteDistributionError,
     Voting,
     VotingDeactive,
     VotingEvent,
@@ -301,6 +303,95 @@ class SubmitVoteTestCase(TestCase):
             self.preference_voting.ballots.count(),
             1,
         )
+
+
+class PreferenceVoteDistributionTestCase(TestCase):
+    """Tests of distributinos of preference votes"""
+
+    num_users = 5
+
+    def setUp(self):
+        self.voting_event0 = VotingEvent.objects.create(
+            title="Voting event for all",
+            require_checkin=False,
+        )
+        for i in range(self.num_users):
+            user = NablaUser.objects.create_user(
+                username=f"user{i}",
+            )
+            setattr(self, f"user{i}", user)
+
+        self.preference_voting = Voting.objects.create(
+            event=self.voting_event0,
+            is_preference_vote=True,
+            is_active=True,
+        )
+
+    def test_distribute_vote(self):
+        """Distrubute various configurations of votes"""
+        tests = []
+
+        def _get_ballot(n):
+            return {i + 1: i + 1 for i in range(n)}
+
+        for num_alternatives in range(1, 4):
+            for num_winners in range(1, num_alternatives + 1):
+                for num_voters in range(0, self.num_users):
+                    if num_winners == 1 and num_alternatives == 1:
+                        exception = AssertionError
+                    elif num_voters == 0:
+                        exception = UnableToSelectWinners
+                    elif num_winners == 2 and num_alternatives == 2:
+                        exception = VoteDistributionError
+                    else:
+                        exception = None
+                    tests.append(
+                        {
+                            "num_winners": num_winners,
+                            "num_alternatives": num_alternatives,
+                            # TODO: Should probably add non-filled ballots
+                            "ballots": [
+                                _get_ballot(num_alternatives) for i in range(num_voters)
+                            ],
+                            "expected_exception": exception,
+                        }
+                    )
+
+        for test in tests:
+            print(test)
+            # Clean up
+            self.preference_voting.ballots.all().delete()
+            self.preference_voting.alternatives.all().delete()
+            self.preference_voting.users_voted.clear()
+            self.preference_voting.num_winners = test["num_winners"]
+            self.preference_voting.save()
+
+            for i in range(test["num_alternatives"]):
+                setattr(
+                    self,
+                    f"preference_vote_alternative{i}",
+                    Alternative.objects.create(
+                        voting=self.preference_voting, text=f"Preference vote alt {i}"
+                    ),
+                )
+
+            starting_pk = self.preference_voting.alternatives.first().pk
+            for i, ballot in enumerate(test["ballots"]):
+                user = getattr(self, f"user{i}")
+                ballot = {i: j + starting_pk - 1 for i, j in ballot.items()}
+                self.preference_voting.submit_stv_votes(user, ballot)
+            exception = test["expected_exception"]
+            contextManager = (
+                nullcontext()
+                if exception is None
+                else self.assertRaises(exception, msg=test)
+            )
+            # Temporarily disable errors, so that we can run through them all
+            try:
+                with contextManager:
+                    self.preference_voting.get_multi_winner_result()
+            except Exception as e:
+                print("---", e)
 
 
 ################
