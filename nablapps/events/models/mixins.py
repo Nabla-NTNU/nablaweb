@@ -58,6 +58,9 @@ class EventInfoMixin(models.Model):
         """Is the event finished?"""
         return self.event_end and self.event_end < datetime.now()
 
+    def has_enddate(self):
+        return self.event_end!=None
+
     def clean(self):
         self.clean_facebook_url()
         super().clean()
