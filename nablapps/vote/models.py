@@ -175,6 +175,10 @@ class Voting(models.Model):
         """Submits transferable votes i.e. creates ballot"""
         assert self.is_preference_vote(), "Only preference votes can have ballots"
 
+        if ballot_dict == {}:
+            # Empty ballot == blank vote
+            pass
+
         alt_pks = [int(ballot_dict[pri]) for pri in ballot_dict]
         if len(alt_pks) != len(set(alt_pks)):
             raise DuplicatePriorities("Ballot contains duplicate(s) of candidates")
@@ -229,7 +233,9 @@ class Voting(models.Model):
             # Vote count is sufficient to declare winners
 
             # Loop through number of losing alternatives (max number of loser to eliminate)
-            for i in range(len(alternatives) - self.num_winners):
+            num_losers = len(alternatives) - self.num_winners
+
+            for i in range(max(num_losers, 1)):
                 # Find winners, redistribute surpluses until no more winners found
                 # If not enough winners are found, then proceed to loser elimination
                 for j in range(self.num_winners):
@@ -347,6 +353,10 @@ class Voting(models.Model):
                     f"To few winners: {winners}, loser: {losers}"
                 )
 
+    @property
+    def winners(self):
+        return self.alternatives.filter(is_winner=True)
+
 
 class Alternative(models.Model):
     """Represents an alternative"""
@@ -356,6 +366,7 @@ class Alternative(models.Model):
     )
     text = models.CharField(max_length=250)
     votes = models.IntegerField("Antall stemmer", blank=False, default=0)
+    is_winner = models.BooleanField("Alternative is declared winner", default=False)
 
     def __str__(self):
         return self.text
