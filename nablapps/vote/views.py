@@ -547,6 +547,13 @@ class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
         #     alt = Alternative.objects.get(pk=alternative_pk)
         #     entry = BallotEntry(container=ballot, priority=pri, alternative=alt)
         #     entry.save()
+
+        # TODO: Maybe check that the priorities submitted
+        # only included actually selected options. i.e.
+        # if only the two of four are prioritized, we want
+        # [pri1, pri2], not [pri1, pri2, None, None].
+        if None in priorities:
+            raise TypeError
         ballot = {i + 1: priority for i, priority in enumerate(priorities)}
         self.voting.submit_stv_votes(self.request.user, ballot)
 
