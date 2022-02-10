@@ -61,24 +61,23 @@
                 {% now "Y-m-d" as todays_date %}
                 {% if eventregistration.event.has_finished %}
                     {% if eventregistration.attendance_registration %}
-                        <span class="fas fa-thumbs-up"></span> Du ble registrert på arrangementet
+                        <span class="fas fa-thumbs-up"></span> Du ble registrert på arrangementet.
                     {% else %}
                         {%if eventregistration.penalty%}
                             Prikk! Du fikk {{eventregistration.penalty}} prikk(er).
+                        {%elif eventregistration.event.get_noshow_penalty%}
+                            Oppmøteregistrering er ikke ferdig.
                         {%else%}
-                            {%if eventregistration.event.penalty == 1%}
-                                Prikk! Eller du kommer til å få det....
-                            {%elif  eventregistration.event.penalty == 2%}
-                                Oppmøte var ikke registrert
-                            {%elif  eventregistration.event.penalty == 3%}
-                                Prikk! Eller du kommer til å få det....
-                            {%else%}
-                                Oppmøte var ikke registrert
-                            {%endif%}
+                            Du møtte kanskje ikke opp, men det går fint.
                         {%endif%}
                     {%endif%}
                 {%elif eventregistration.event.has_started %}
-                    Arrangementet pågår
+                    {%if eventregistration.event.has_enddate%}
+                        Arrangementet pågår.
+                    {%else%}
+                        {{evenregistration.event.}}
+                        Arrangementet kan være slutt.
+                    {%endif%}
                 {%else%}
                     {%if eventregistration.attending%}
                         Du har plass på arrangementet {{eventregistration.event.event_date}}                        
