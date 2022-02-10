@@ -170,7 +170,7 @@ def _voting_serializer(voting, include_alternatives=True):
         "title": voting.title,
         "active": voting.is_active,
         "num_voted": voting.get_total_votes(),
-        "is_preference_vote": voting.is_preference_vote(),
+        "is_preference_vote": voting.is_preference_vote,
         "num_winners": voting.num_winners,
         # If created_by is empty, assume it was created through admin
         # interface, and thus we do not know who made it.
@@ -275,7 +275,7 @@ class VotingsAPIView(VoteAdminMixin, BaseDetailView):
         to_change = Voting.objects.get(pk=data.get("pk"))
         to_change.is_active = data.get("active", to_change.is_active)
         if data.get("distribute_preferences", False):
-            if not to_change.is_preference_vote():
+            if not to_change.is_preference_vote:
                 return JsonResponse(
                     {
                         "error": "Cannot distribute preference votes for non-preference vote"
@@ -426,7 +426,7 @@ class VotingDetail(VoteAdminMixin, DetailView):
                 context["errors"] = [f"Kunne ikke beregne vinner: '{e}'"]
         else:
             self.object.multi_winnner_initial_dist()
-        if self.object.is_preference_vote():
+        if self.object.is_preference_vote:
             context["quota"] = self.object.get_quota()
         return context
 
@@ -476,7 +476,7 @@ def _voting_public_serializer(voting, user, include_alternatives=True):
         "title": voting.title,
         "active": voting.is_active,
         "has_voted": voting.user_already_voted(user),
-        "is_preference": voting.is_preference_vote(),
+        "is_preference": voting.is_preference_vote,
         "num_winners": voting.num_winners,
     }
     if include_alternatives:
@@ -567,7 +567,7 @@ class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
             raise e
 
         try:
-            if self.voting.is_preference_vote():
+            if self.voting.is_preference_vote:
                 self._submit_preference_vote(request, data)
             else:
                 self._submit_single_vote(request, data)
@@ -668,7 +668,7 @@ class Vote(LoginRequiredMixin, DetailView):
         voting_id = kwargs["pk"]
         voting = get_object_or_404(Voting, pk=voting_id)
 
-        if voting.is_preference_vote():
+        if voting.is_preference_vote:
             # Single transferable vote
             # Get list/dictonary of alternatives and priorities
             try:

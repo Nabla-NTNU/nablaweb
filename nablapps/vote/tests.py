@@ -164,12 +164,9 @@ class SubmitVoteTestCase(TestCase):
 
         self.preference_voting = Voting.objects.create(
             event=self.voting_event1,
-            num_winners=2,  # TODO: change this if we add dedicated field for preference vote
+            is_preference_vote=True,
             is_active=True,
         )
-        assert (
-            self.preference_voting.is_preference_vote()
-        ), "This should be a preference vote"
         for i in range(3):
             setattr(
                 self,
