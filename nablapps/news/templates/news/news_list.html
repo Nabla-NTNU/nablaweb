@@ -10,7 +10,7 @@
 <link rel="alternate" type="application/rss+xml" href="/feed/" title="RSS feed">
 {% endblock %}
 
-{% block main %}
+{% block main-blank%}
 {% addtoblock "css" %}
 <!-- Style for news list -->
 <style>
@@ -56,4 +56,4 @@
 {% endfor %}
 </div>
 {% include "includes/pagination.html" %}
-{% endblock main %}
+{% endblock main-blank %}
