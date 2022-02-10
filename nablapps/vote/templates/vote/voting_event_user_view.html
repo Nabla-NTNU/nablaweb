@@ -144,7 +144,9 @@
          methods: {
              onSubmit(event) {
                  if (this.validate()) {
-                     this.$emit('submitVote', {priority_order: this.priorities})
+                     // Submit only the non-null priorities
+                     priorities = this.priorities.slice(0, this.priorities.indexOf(null))
+                     this.$emit('submitVote', {priority_order: priorities})
                  }
              },
              validate() {

@@ -70,6 +70,7 @@
 	             <a :href="vote.url">
                      <span class="voting_item__title">[[ vote.title ]]</span>
 	             </a>
+                 <span class="btn btn-secondary" v-if="vote.is_preference_vote" @click="distributeVotes">Distribute votes</span>
                  <span class="voting_item__metadata">
                      <span><span class="fas fa-users"></span> [[ vote.num_voted ]]</span>
                      <span><span class="fas fa-user"></span> [[ vote.created_by ]]</span>
@@ -87,6 +88,11 @@
                          </li>
                      </ul>
                  </span>
+                 <div v-if="errors.length" class="alert alert-warning">
+                     <ul>
+                         <li v-for="error in errors">[[ error ]]</li>
+                     </ul>
+                 </div>
              </div>
     </template>
     <script>
@@ -99,6 +105,7 @@
          data() {
 	         return {
 	             is_admin: {{ is_admin|lower }},
+                 errors: [],
 	         }
          },
          computed: {
@@ -122,7 +129,24 @@
 		                 console.log(error)
 		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
 		             })
-	         }
+	         },
+             distributeVotes() {
+                 if ( !this.is_admin ) { return }
+	             axios
+		             .post("{% url 'api-votings' pk=object.pk %}", {pk: this.vote.pk, distribute_preferences: true})
+		             .then(response => {
+		                 this.$parent.updateVotes(response.data.votings)
+                         this.errors = []
+		             })
+		             .catch(error => {
+                         if (error.response.status == 409) {
+                             this.errors.push("Unable to distribute votes")
+                         } else {
+		                     console.log(error)
+		                     alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
+                         }
+		             })
+             }
          }
      }
 

@@ -362,6 +362,8 @@ class Alternative(models.Model):
 
     def add_vote(self, user):
         """Add users vote"""
+        assert not self.voting.is_preference_vote()
+
         if self.voting.user_already_voted(user):
             raise UserAlreadyVoted(f"{user} has already voted on {self.voting}.")
         elif self.voting.user_not_eligible(user):
@@ -378,12 +380,22 @@ class Alternative(models.Model):
             self.save()
             self.voting.users_voted.add(user)
 
+    def get_num_votes(self):
+        """Returns the number of received votes
+
+        Works for both preference and non-preference votes, and should
+        be used instead of accessing the votes field directly."""
+        if self.voting.is_preference_vote():
+            return self.voting.ballots.filter(current_alternative=self).count()
+        else:
+            return self.votes
+
     def get_vote_percentage(self):
         """Return the percentage of the total votes this alternative got"""
-        if self.voting.get_total_votes() == 0:
+        try:
+            return 100 * self.get_num_votes() / self.voting.get_total_votes()
+        except ZeroDivisionError:
             return 0
-        else:
-            return 100 * self.votes / self.voting.get_total_votes()
 
 
 class BallotContainer(models.Model):

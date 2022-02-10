@@ -159,7 +159,7 @@ def _alternative_serializer(alternative):
     return {
         "pk": alternative.pk,
         "text": alternative.text,
-        "votes": alternative.votes,
+        "votes": alternative.get_num_votes(),
         "percentage": alternative.get_vote_percentage(),
     }
 
@@ -170,6 +170,7 @@ def _voting_serializer(voting, include_alternatives=True):
         "title": voting.title,
         "active": voting.is_active,
         "num_voted": voting.get_total_votes(),
+        "is_preference_vote": voting.is_preference_vote(),
         "num_winners": voting.num_winners,
         # If created_by is empty, assume it was created through admin
         # interface, and thus we do not know who made it.
@@ -272,7 +273,19 @@ class VotingsAPIView(VoteAdminMixin, BaseDetailView):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
         to_change = Voting.objects.get(pk=data.get("pk"))
-        to_change.is_active = data.get("active")
+        to_change.is_active = data.get("active", to_change.is_active)
+        if data.get("distribute_preferences", False):
+            if not to_change.is_preference_vote():
+                return JsonResponse(
+                    {
+                        "error": "Cannot distribute preference votes for non-preference vote"
+                    },
+                    status=400,
+                )
+            try:
+                to_change.get_multi_winner_result()
+            except UnableToSelectWinners as e:
+                return JsonResponse({"error": str(e)}, status=409)  # 409 Conflict
         to_change.save()
         return self.get(request, *args, **kwargs)
 
