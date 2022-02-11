@@ -246,18 +246,33 @@
 	                 .then((response) => {
 		                 this.updateVotes(response.data.votings)
                          this.poll_active = response.data.should_poll
+                         this.polling_period = response.data.polling_period
 	                 })
 	                 .catch(error => {
 		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
 	                 })
              },
+             resetPoller() {
+                 clearInterval(this.poller)
+                 this.poller = setInterval(() => this.fetchUpdate(), this.polling_period)
+             }
+         },
+         watch: {
+             poll_active(newState, oldState) {
+                 console.log("pollwatch")
+                 if (newState) {
+                     this.resetPoller()
+                 } else {
+                     clearInterval(this.poller)
+                 }
+             },
+             polling_period(newPeriod, oldPeriod) {
+                 console.log("periodpollwatch")
+                 this.resetPoller()
+             }
          },
          mounted() {
              this.fetchUpdate()
-             this.polling = setInterval(() => {
-                 if (this.poll_active)
-                     this.fetchUpdate()
-             }, this.polling_period)  // Polling for updates
          }
      }
 

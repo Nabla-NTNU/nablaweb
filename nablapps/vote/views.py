@@ -517,6 +517,7 @@ class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
                     for voting in votings
                 ],
                 "should_poll": self.object.users_should_poll,
+                "polling_period": self.object.polling_period,
             }
         )
 

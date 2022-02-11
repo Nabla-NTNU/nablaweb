@@ -22,6 +22,7 @@ class VotingEvent(models.Model):
     users_should_poll = models.BooleanField(
         "Clients should poll for updates", default=False
     )
+    polling_period = models.IntegerField("Polling interval", default=2000)
     require_checkin = models.BooleanField(
         "Users must check in to submit votes", default=True
     )
