@@ -59,20 +59,16 @@ class AlbumOverview(PermissionToSeeAlbumMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         if self.request.user.is_authenticated:
             context["children"] = self.object.get_children().exclude(visibility="h")
         else:
             context["children"] = self.object.get_children().exclude(visibility="h")
         context["is_user"] = self.request.user.is_authenticated
-        parent = self.object.get_ancestors(ascending=False, include_self=False).first()
-        if parent is None:
-            parent_url = reverse("albums")
-            parent_name = "Til oversikt"
-        else:
-            parent_url = parent.get_absolute_url()
-            parent_name = parent.title
-        context["parent_url"] = parent_url
-        context["parent_name"] = parent_name
+        context["ancestors"] = self.object.get_ancestors(
+            ascending=False, include_self=True
+        )
+        context["overview_url"] = reverse("albums")
         return context
 
 
@@ -85,17 +81,23 @@ class AlbumImageView(PermissionToSeeAlbumMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context["album"] = get_object_or_404(Album, pk=kwargs["pk"])
 
         images = context["album"].images.order_by("num").all()
         paginator = Paginator(images, 1)
-        try:
-            context["page_obj"] = paginator.page(kwargs["num"])
-        except EmptyPage:
-            raise Http404("Bildet finnes ikke")
+        page = self.request.GET.get("page")
+        if page is not None:
+            context["page_obj"] = paginator.get_page(page)
+        else:
+            try:
+                context["page_obj"] = paginator.get_page(kwargs["num"])
+            except EmptyPage:
+                raise Http404("Bildet finnes ikke")
 
         if context["page_obj"].object_list:
             context["image"] = context["page_obj"].object_list[0]
+        context["overview_url"] = reverse("albums")
 
         context["admin_links"] = [
             {
