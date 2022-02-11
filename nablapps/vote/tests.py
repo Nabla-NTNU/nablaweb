@@ -136,6 +136,10 @@ class SubmitVoteTestCase(TestCase):
             username="user1",
         )
         self.user1.groups.add(self.group1)
+        self.user2 = NablaUser.objects.create_user(
+            username="user2",
+        )
+        self.user2.groups.add(self.group1)
         self.voting_event0 = VotingEvent.objects.create(
             title="Voting event for all",
             require_checkin=False,
@@ -189,6 +193,11 @@ class SubmitVoteTestCase(TestCase):
 
         cases = [
             {
+                # Unfilled, i.e. blank
+                "preferences": {},
+                "expected_exception": None,
+            },
+            {
                 # Partially filled preferences
                 "preferences": {
                     1: self.preference_vote_alternative0,
@@ -214,6 +223,9 @@ class SubmitVoteTestCase(TestCase):
             },
         ]
         for case in cases:
+            # Clean
+            self.preference_voting.users_voted.clear()
+            self.preference_voting.ballots.all().delete()
             exception = case["expected_exception"]
             # If we do not expect exception, make a null context manager as a placeholder
             contextManager = (
@@ -256,7 +268,7 @@ class SubmitVoteTestCase(TestCase):
         self.assertEqual(self.voting1_alternative0.votes, 0)
 
         with self.assertRaises(UserNotEligible):
-            self._submit_preference_vote()
+            self._submit_preference_vote(user=self.user0)
         # Make sure no ballot was created
         self.assertFalse(self.preference_voting.ballots.exists())
 
@@ -282,7 +294,6 @@ class SubmitVoteTestCase(TestCase):
         self.voting_event0.save()
         self.voting_event0.check_in_user(self.user0)
         self.voting0_alternative0.add_vote(self.user0)
-        self._submit_preference_vote()
         self.assertEqual(self.voting0_alternative0.votes, 1)
         with self.assertRaises(UserNotCheckedIn):
             self.voting0_alternative0.add_vote(self.user1)  # Has not checked in
@@ -296,9 +307,8 @@ class SubmitVoteTestCase(TestCase):
             self.preference_voting.ballots.count(),
             1,
         )
-        self.voting_event1.check_out_user(self.user1)
         with self.assertRaises(UserNotCheckedIn):
-            self._submit_preference_vote()
+            self._submit_preference_vote(self.user2)
         self.assertEqual(
             self.preference_voting.ballots.count(),
             1,

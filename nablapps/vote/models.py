@@ -166,11 +166,30 @@ class Voting(models.Model):
         self.is_active = False
 
     def user_not_eligible(self, user):
+        """User is not in the eligible group
+
+        Note: this is *not* a full check that the users should be allowed to vote.
+        For that, use `user_can_vote_now`"""
         return not self.event.user_eligible(user)
+
+    def user_can_vote_now(self, user):
+        """Do all checks necessary for asserting user can submit vote
+
+        Raises appropriate exceptions on failure
+        Returns nothing"""
+        if self.user_already_voted(user):
+            raise UserAlreadyVoted(f"{user} has already voted on {self}.")
+        elif self.user_not_eligible(user):
+            raise UserNotEligible(f"{user} is not eligible to vote on {self}")
+        elif self.event.require_checkin and not self.event.user_checked_in(user):
+            raise UserNotCheckedIn(f"{user} is not checked to event.")
+        elif not self.is_active:
+            raise VotingDeactive(f"The voting {self} is no longer open.")
 
     def submit_stv_votes(self, user, ballot_dict):
         """Submits transferable votes i.e. creates ballot"""
         assert self.is_preference_vote, "Only preference votes can have ballots"
+        self.user_can_vote_now(user)
 
         if ballot_dict == {}:
             # Empty ballot == blank vote
@@ -365,21 +384,10 @@ class Alternative(models.Model):
         """Add users vote"""
         assert not self.voting.is_preference_vote
 
-        if self.voting.user_already_voted(user):
-            raise UserAlreadyVoted(f"{user} has already voted on {self.voting}.")
-        elif self.voting.user_not_eligible(user):
-            raise UserNotEligible(f"{user} is not eligible to vote on {self.voting}")
-        elif (
-            self.voting.event.require_checkin
-            and not self.voting.event.user_checked_in(user)
-        ):
-            raise UserNotCheckedIn(f"{user} is not checked to event.")
-        elif not self.voting.is_active:
-            raise VotingDeactive(f"The voting {self.voting} is no longer open.")
-        else:
-            self.votes += 1
-            self.save()
-            self.voting.users_voted.add(user)
+        self.voting.user_can_vote_now(user)
+        self.votes += 1
+        self.save()
+        self.voting.users_voted.add(user)
 
     def get_num_votes(self):
         """Returns the number of received votes
