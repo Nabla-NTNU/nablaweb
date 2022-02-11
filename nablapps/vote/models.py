@@ -229,40 +229,66 @@ class Voting(models.Model):
             raise UnableToSelectWinners(
                 f"Not enough votes to declare {self.num_winners} winners"
             )
-        # Loop through number of losing alternatives (max number of loser to eliminate)
+
         num_losers = len(alternatives) - self.num_winners
 
+        if num_losers == 0:
+            # Add all alternatives/canditates to winners
+            # If all alternatives pass the quota -> end voting, don't transfer votes
+            # If only some are past the quota -> redistribute surplus(es)
+            # If no one is past the quota -> no surpluses -> end voting
+            winners_default = list(
+                alternatives
+            )  # Not sure if needed or sensible to convert to list
+            num_past_quota = 0
+            num_below_quota = 0
+            for winner in winners_default:
+                if winner.ballots.all().count() < quota:
+                    num_below_quota += 1
+                else:
+                    num_past_quota += 1
+            # If both if test below are false only some are past quota -> transfer surplus
+            if num_below_quota == 0:
+                # Everyone past quota after inital distribution, nice, no transfer
+                # assert num_past_quota == self.num_winners
+                return winners_default
+            elif num_past_quota == 0:
+                # assert num_below_quota == self.num_winners
+                # No one passes quota, not nice, but still no transfer
+                return winners_default
+        # Loop through number of losing alternatives (max number of loser to eliminate)
+        # If num_losers == 0, run loop one time to distribute surplus votes
         for i in range(max(num_losers, 1)):
             # Find winners, redistribute surpluses until no more winners found
             # If not enough winners are found, then proceed to loser elimination
             for j in range(self.num_winners):
-                new_winners = {}  # New winners found this round {alt: surplus}
-                # Find alternatives passing quota, add to winners
+                past_quota_votes = {}  # {alt: votes} # votes at the time of counting
+                found_new_winners = False
+                # Find alternatives passing quota, add to winners (if not already winner)
                 for alt in alternatives:
-                    if alt in winners:
-                        # Can't win twice
-                        pass
-                    elif alt.ballots.all().count() >= quota:
-                        # declare alt as a winner, find surplus
-                        num_surplus_votes = alt.ballots.all().count() - quota
-                        new_winners[alt] = num_surplus_votes
-                        winners.append(alt)
+                    if alt.ballots.all().count() >= quota:
+                        # add to past quoata dict for future surplus transfer
+                        # if not already winner, add to winners and new_winners
+                        past_quota_votes[alt] = alt.ballots.all()
+                        if alt not in winners:
+                            # Can't win twice, only add to winner if not already winner
+                            winners.append(alt)
+                            found_new_winners = True
                 if len(winners) == self.num_winners:
                     # All winners found
+                    # All winners past quota
+                    # Voting procedure is done
                     return winners
-                if len(new_winners) == 0:
-                    # No winners, need to eliminate loser
+                elif len(winners) > self.num_winners:
+                    raise VoteDistributionError(f"Too many winners: {winners}")
+                if not found_new_winners:
+                    # No new winners, still free 'seats', need to eliminate loser
                     break
-
-                # Sort winners and surpluses in order of descending surplus
-                # Does this sorting matter?
-                new_winners_sorted = sorted(
-                    new_winners.items(), key=lambda x: x[1], reverse=True
-                )  # List of tuples [(alt, num_surplus_votes),...]
-
-                for winner, surplus_count in new_winners_sorted:
-                    # First find all transferable votes (non exhausted ballots)
-                    winner_ballots = winner.ballots.all()
+                # Transfer surplus of all winners, old and new
+                for winner, winner_ballots in past_quota_votes.items():
+                    # Find size of surplus and the transferable votes at time of counting
+                    # Distribute surplus from the votes at the time of counting
+                    surplus_count = winner_ballots.count() - quota
                     transferable_ballots = []
                     for ballot in winner_ballots:
                         pri = ballot.entries.get(alternative=winner).priority
@@ -282,7 +308,7 @@ class Voting(models.Model):
                             ballot.current_alternative = next_prioritezed_alt
                             ballot.save()
                     else:
-                        # Random sample N ballots from winners votes
+                        # Random sample N ballots from winners transferable_ballots
                         redist_indices = random.sample(
                             range(len(transferable_ballots)), surplus_count
                         )
@@ -297,6 +323,10 @@ class Voting(models.Model):
                             ballot.save()
             # out of inner loop
             # If not enough winners, eliminate 'biggest loser' and redistribute votes
+            if num_losers == 0:
+                # No one to eliminate, declare everyone as winners
+                # Surpluses has been transfered
+                return list(alternatives)  # again, maybe list conversion is stupid
             if len(winners) < self.num_winners:
                 # First find 'biggest' loser
                 # probably a more elegant way to do this
@@ -307,8 +337,7 @@ class Voting(models.Model):
                     if loser.ballots.all().count() > alt.ballots.all().count():
                         loser = alt
                 losers.append(loser)
-
-                # Redistribute all losers votes (consider different method?)
+                # Redistribute all losers votes
                 for ballot in loser.ballots.all():
                     pri = ballot.entries.get(alternative=loser).priority
                     if pri == ballot.entries.all().count():
