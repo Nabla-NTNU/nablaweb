@@ -30,7 +30,7 @@
         <h5 class="h5">Album:</h5>
         <div class="row" >
             {% for album in children %}
-                <div class="col-xs-4 col-md-3 pb-2">
+                <div class="col-xs-4 col-md-3 pb-3">
                     {% include "includes/info_card.html" with content=album  img_file=album.first.file header_size="h5" class=" h-100" %}
                 </div>
             {% endfor %}
@@ -40,7 +40,7 @@
     <h5 class="h5">Bilder:</h5>
     <div class="row">
         {% for image in album.images.all %}
-            <div class="col-xs-4 col-md-3 mb-2">
+            <div class="col-xs-4 col-md-3 mb-3">
                 <a href="{{ image.get_absolute_url }}">
                     <img class="w-100 rounded" src="{% thumbnail image.file 350x350 crop="smart" %}"/>
                 </a>
