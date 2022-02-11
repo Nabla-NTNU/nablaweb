@@ -173,6 +173,7 @@ def _voting_serializer(voting, include_alternatives=True):
         "is_preference_vote": voting.is_preference_vote,
         "winners_pk": list(voting.winners.values_list("pk", flat=True)),
         "num_winners": voting.num_winners,
+        "url": reverse("voting-detail", kwargs={"pk": voting.pk}),
         # If created_by is empty, assume it was created through admin
         # interface, and thus we do not know who made it.
         "created_by": getattr(voting.created_by, "username", "Admin (aka unknown)"),
@@ -333,7 +334,7 @@ class CreateVoting(VoteAdminMixin, CreateView):
     permission_required = "vote.vote_admin"
     template_name = "vote/voting_form.html"
     model = Voting
-    fields = ["event", "title", "num_winners", "description"]
+    fields = ["event", "title", "num_winners", "is_preference_vote"]
 
     def get_initial(self):
         event_id = self.kwargs["pk"]
