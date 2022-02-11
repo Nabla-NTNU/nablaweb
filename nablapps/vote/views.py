@@ -533,25 +533,10 @@ class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
     def _submit_preference_vote(self, request, data):
         try:
             priorities = data.get("priority_order")
-
         except KeyError as e:
             # Invlaid pk
             raise e
 
-        # first_alt = Alternative.objects.get(pk=priorities[0])  # TODO should we change BallotContainer.alternative to blank=True?
-        # ballot = BallotContainer(voting=self.voting, alternative=first_alt)
-        # ballot.save()
-        # for pri, alternative_pk in enumerate(priorities):
-        #     if alternative_pk is None:
-        #         break
-        #     alt = Alternative.objects.get(pk=alternative_pk)
-        #     entry = BallotEntry(container=ballot, priority=pri, alternative=alt)
-        #     entry.save()
-
-        # TODO: Maybe check that the priorities submitted
-        # only included actually selected options. i.e.
-        # if only the two of four are prioritized, we want
-        # [pri1, pri2], not [pri1, pri2, None, None].
         if None in priorities:
             raise TypeError
         ballot = {i + 1: priority for i, priority in enumerate(priorities)}
@@ -561,8 +546,6 @@ class VotingsPublicAPIView(LoginRequiredMixin, BaseDetailView):
         data = json.loads(request.body)
         try:
             self.voting = Voting.objects.get(pk=data.get("voting_pk"))
-        except KeyError as e:
-            raise e
         except Voting.DoesNotExist as e:
             raise e
 
