@@ -30,6 +30,9 @@
             v-bind:user="user"></user-item>
         </ul>
         </div>
+        <div @click="check_out_all" class="btn btn-warning">
+            Sjekk ut alle brukere
+        </div>
     </template>
     <script>
      axios.defaults.xsrfCookieName = 'csrftoken'
@@ -97,6 +100,10 @@
 		                 console.log(error)
 		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
 		             })
+             },
+             check_out_all() {
+                 if(confirm("Are you sure you want to remove *all* users??"))
+                     this.toggleUser(null, action="check_out_all")
              }
          },
          computed: {

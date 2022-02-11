@@ -213,18 +213,23 @@ class UsersAPIView(VoteAdminMixin, BaseDetailView):
         """Post request handler"""
         self.object = self.get_object()
         data = json.loads(request.body)
-        # TODO: exception handling
-        identifier = data.get("identifier")
         action = data.get("action")
-        attendence_reponse = register_attendance_any_identifier(
-            self.object, identifier, action
-        )
+        attendance_response = None
+        if action == "check_out_all":
+            self.object.check_out_all()
+            attendance_response = _attendance_response()
+        else:
+            # TODO: exception handling
+            identifier = data.get("identifier")
+            attendance_response = register_attendance_any_identifier(
+                self.object, identifier, action
+            )
         users = self.object.checked_in_users.all()
 
         return JsonResponse(
             {
                 "users": [_user_serializer(user) for user in users],
-                "lastAction": attendence_reponse,
+                "lastAction": attendance_response,
             }
         )
 

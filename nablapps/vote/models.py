@@ -63,8 +63,7 @@ class VotingEvent(models.Model):
 
     def check_out_all(self):
         """Check out all usesrs"""
-        for user in self.checked_in_users.all():
-            self.check_out_user(user)
+        self.checked_in_users.clear()
 
     def toggle_check_in_user(self, user):
         """Toggle user checked in status.
