@@ -169,12 +169,23 @@ class Voting(models.Model):
         return not self.event.user_eligible(user)
 
     def submit_stv_votes(self, user, ballot_dict):
-        """Submits transferable votes i.e. creates ballot"""
+        """
+        Submits transferable votes i.e. creates ballot
+
+        parameters:
+            user: NablaUser (who sumbitted the vote)
+            ballot_dict: dictionary with priority as keys, alternative.pk (id) as values
+
+        ballot_dict = {} => Empty ballot (blank vote)
+        """
         assert self.is_preference_vote, "Only preference votes can have ballots"
 
+        self.users_voted.add(user)
         if ballot_dict == {}:
             # Empty ballot == blank vote
-            pass
+            # Then adding user to self.users_voted is sufficient
+            # Blank votes affects the quota
+            return
 
         alt_pks = [int(ballot_dict[pri]) for pri in ballot_dict]
         if len(alt_pks) != len(set(alt_pks)):
@@ -193,7 +204,6 @@ class Voting(models.Model):
                 container=new_ballot, priority=pri, alternative=alt
             )
             new_entry.save()
-            self.users_voted.add(user)
 
         # Reset ballots/stv-results
         for alt in self.alternatives.all():
