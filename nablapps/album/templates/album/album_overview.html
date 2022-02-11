@@ -6,48 +6,46 @@
 {% block more_head %}
 {% endblock %}
 
-{% block content %}
-<h1>{{ album.title }}</h1>
-
-{% if children %}
-<div class="card card-body card-body-overline bg-light">
-{% for row in children|row_split:4 %}
-<div class="row">
-    {% for album in row %}
-    <div class="col-xs-6 col-md-3">
-        <a href="{{ album.get_absolute_url }}">
-        {% if album.visibility != 'u' or is_user%}
-        <a href="{{ album.get_absolute_url }}">
-            {% if album.first.file %}
-            <img class="img-fluid" src="{% thumbnail album.first.file 350x350 crop="smart" %}"/>
-            {% endif %}
-        {% endif %}
-        <div class="caption" style="word-wrap: break-word; hyphens: auto;">
-            <h3>{{ album.title }}</h3>
+{% block main-blank %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item " aria-current="page">
+                <a href="{{ overview_url }}">Albumoversikt</a>
+            </li>
+            {% for  ancestor in ancestors %}
+                {% if forloop.last %}
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ ancestor.title }}
+                    </li>
+                {% else %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ ancestor.get_absolute_url }}">{{ ancestor.title }}</a>
+                    </li>
+                {% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    </nav>
+    {% if children %}
+        <h5 class="h5">Album:</h5>
+        <div class="row" >
+            {% for album in children %}
+                <div class="col-xs-4 col-md-3 pb-2">
+                    {% include "includes/info_card.html" with content=album  img_file=album.first.file header_size="h5" class=" h-100" %}
+                </div>
+            {% endfor %}
         </div>
-        </a>
+        <hr>
+    {% endif %}
+    <h5 class="h5">Bilder:</h5>
+    <div class="row">
+        {% for image in album.images.all %}
+            <div class="col-xs-4 col-md-3 mb-2">
+                <a href="{{ image.get_absolute_url }}">
+                    <img class="w-100 rounded" src="{% thumbnail image.file 350x350 crop="smart" %}"/>
+                </a>
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
-{% endfor %}
-</div>
-{% endif %}
 
-{% for row in album.images.all|row_split:4 %}
-<div class="row">
-    {% for image in row %}
-    <div class="col-xs-6 col-md-3" style="margin-bottom: 10px">
-        <a href="{{ image.get_absolute_url }}">
-        <img class="img-fluid" src="{% thumbnail image.file 350x350 crop="smart" %}"/>
-        </a>
-    </div>
-    {% endfor %}
-</div>
-{% endfor %}
-    <ul class="pagination">
-          <li class="page-item">
-              <a  class="page-link" href="{{ parent_url }}"><span aria-hidden="true">&larr;</span> {{parent_name}}</a>
-          </li>
-    </ul>
-
-{% endblock content %}
+{% endblock main-blank %}

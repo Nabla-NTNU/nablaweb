@@ -4,8 +4,8 @@ It fits perfectly if you are using the django.views.generic.ListView with pagina
 if exclude in url to new pages is for jobs_list and should not affect other lists.
 {% endcomment %}
 {% if is_paginated %}
-    <nav>
-        <ul class="pagination d-flex justify-content-center">
+    <nav class="d-flex justify-content-center">
+        <ul class="pagination ">
             {% if page_obj.has_previous %}
                 <li class="page-item">
                     <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if exclude %}&exclude=true{% endif %}"><span aria-hidden="true">&larr;</span> Nyere</a>
@@ -15,7 +15,6 @@ if exclude in url to new pages is for jobs_list and should not affect other list
                     <a class="page-link"><span aria-hidden="true">&larr;</span> Nyere</a>
                 </li>
             {% endif %}
-
             <li class="disabled page-item pager-counter">
                 <a class="page-link" >Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</a>
             </li>
