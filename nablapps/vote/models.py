@@ -214,6 +214,12 @@ class Voting(models.Model):
             new_entry.save()
             self.users_voted.add(user)
 
+        # Reset ballots/stv-results
+        for alt in self.alternatives.all():
+            alt.is_winner = False
+            # Inital dist is called in the stv procedure, but could perhaps
+            # consider calling it here too
+
     def multi_winnner_initial_dist(self):
         """Initial distribution of votes according to first priority"""
         for ballot in self.ballots.all():
