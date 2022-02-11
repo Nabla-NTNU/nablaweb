@@ -226,7 +226,13 @@ class Voting(models.Model):
         assert self.is_preference_vote, "Only preference votes have quotas"
         return int(self.get_total_votes() / (self.num_winners + 1)) + 1
 
-    def get_multi_winner_result(self):
+    def _set_winners(self, winners):
+        """Takes a list of winners, sets is_winner true for the winner"""
+        for winner in winners:
+            assert winner.voting == self  # make sure we don't alter another voting
+            self.winner.is_winner = True
+
+    def stv_find_winners(self):
         """Declare multples winners using a single transferable votes system"""
         assert self.is_preference_vote, "Only preference votes can distribute votes"
 
@@ -345,7 +351,8 @@ class Voting(models.Model):
             if num_losers == 0:
                 # No one to eliminate, declare everyone as winners
                 # Surpluses has been transfered
-                return list(alternatives)  # again, maybe list conversion is stupid
+                winners = list(alternatives)  # again, maybe list conversion is stupid
+                return winners
             if len(winners) < self.num_winners:
                 # First find 'biggest' loser
                 # probably a more elegant way to do this
@@ -390,6 +397,13 @@ class Voting(models.Model):
             raise VoteDistributionError(f"To many winners: {winners}")
         else:
             raise VoteDistributionError(f"To few winners: {winners}, loser: {losers}")
+
+    # Maybe rename since it can be used also when there is one winner
+    # Property decorator?
+    def get_multi_winner_result(self):
+        winners = self.stv_find_winners()
+        self._set_winners(winners)
+        return winners
 
     @property
     def winners(self):
