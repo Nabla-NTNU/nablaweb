@@ -84,9 +84,9 @@
 		                 alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
 		             })
              },
-             toggleUser(username, action = "toggle") {
+             toggleUser(identifier, action = "toggle") {
                  axios
-                     .post(usersAPIURL, {username: username, action: action})
+                     .post(usersAPIURL, {identifier: identifier, action: action})
                      .then(response => {
                          this.users = response.data.users
                          this.lastAction = response.data.lastAction

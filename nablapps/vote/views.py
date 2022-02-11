@@ -213,14 +213,11 @@ class UsersAPIView(VoteAdminMixin, BaseDetailView):
         """Post request handler"""
         self.object = self.get_object()
         data = json.loads(request.body)
-        # TODO: can extend the functionality to cycle through
-        # several possible identifiers, such as ID card, username, etc.
-
         # TODO: exception handling
-        username = data.get("username")
+        identifier = data.get("identifier")
         action = data.get("action")
         attendence_reponse = register_attendance_any_identifier(
-            self.object, username, action
+            self.object, identifier, action
         )
         users = self.object.checked_in_users.all()
 
@@ -252,7 +249,6 @@ class VoteEventAPIView(VoteAdminMixin, BaseDetailView):
         self.object = self.get_object()
         data = json.loads(request.body)
         should_poll = data.get("users_should_poll")
-        print(should_poll)
         self.object.users_should_poll = should_poll
         self.object.save()
         return self.get(request, *args, **kwargs)
