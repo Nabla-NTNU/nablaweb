@@ -171,6 +171,7 @@ def _voting_serializer(voting, include_alternatives=True):
         "active": voting.is_active,
         "num_voted": voting.get_total_votes(),
         "is_preference_vote": voting.is_preference_vote,
+        "winners_pk": list(voting.winners.values_list("pk", flat=True)),
         "num_winners": voting.num_winners,
         # If created_by is empty, assume it was created through admin
         # interface, and thus we do not know who made it.

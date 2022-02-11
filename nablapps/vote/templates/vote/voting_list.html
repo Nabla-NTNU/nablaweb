@@ -88,6 +88,12 @@
                          </li>
                      </ul>
                  </span>
+                 <div v-if="winners.length" class="alert alert-primary">
+                     <h4 class="alert-heading">Vinnere:</h4>
+                     <ul>
+                         <li v-for="winner in winners">[[ winner.text ]]</li>
+                     </ul>
+                 </div>
                  <div v-if="errors.length" class="alert alert-warning">
                      <ul>
                          <li v-for="error in errors">[[ error ]]</li>
@@ -115,7 +121,16 @@
 	      	         this.vote.active ? 'fa-toggle-on' : 'fa-toggle-off',
 		             {disabled: !this.is_admin }
 	             ]
-	         }
+	         },
+             winners() {
+                 winners = this.vote.alternatives.filter(
+                     alternative => this.vote.winners_pk.includes(alternative.pk)
+                 )
+                 if (winners.length != this.vote.winners_pk) {
+                     this.errors.push("Server error! Winners with mismaching pk given.")
+                 }
+                 return winners
+             }
          },
          methods: {
 	         toggleActive() {
