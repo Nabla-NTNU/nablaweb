@@ -39,7 +39,7 @@
             </tr>
         {% endfor %}
     </table>
-    <a href="{% url "voting-list" pk=object.pk %}"><i class="fas fa-arrow-left"></i> Tilbake </a><br>
+    <a href="{% url "voting-list" pk=object.event.pk %}"><i class="fas fa-arrow-left"></i> Tilbake </a><br>
     <button type="submit" value="save">send</button>
 </form>
 <script src="{% static "poll/jquery.formset.js" %}"></script>
