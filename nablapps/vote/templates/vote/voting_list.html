@@ -73,7 +73,6 @@
                  <span class="btn btn-secondary" v-if="vote.is_preference_vote" @click="distributeVotes">Distribute votes</span>
                  <span class="voting_item__metadata">
                      <span><span class="fas fa-users"></span> [[ vote.num_voted ]]</span>
-                     <span><span class="fas fa-user"></span> [[ vote.created_by ]]</span>
                  </span>
                  <span class="voting_item__results" v-if="show_results">
                      <ul class="results_list">
