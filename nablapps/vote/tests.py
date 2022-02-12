@@ -512,14 +512,10 @@ class ViewTestCase(TestCase):
             ["register", clients_inspector, {"pk": 1}, "get"],
             ["create-voting", clients_inspector, {"pk": 1}, "get"],
             ["create-voting", clients_admin, {"pk": 1}, "post"],
-            ["voting-detail", clients_inspector, {"pk": 1}, "get"],
             ["voting-edit", clients_inspector, {"pk": 1}, "get"],
             ["voting-edit", clients_admin, {"pk": 1}, "post"],
-            ["activate-voting", clients_admin, {"pk": 1, "redirect_to": "/"}, "get"],
-            ["deactivate-voting", clients_admin, {"pk": 1, "redirect_to": "/"}, "get"],
             ["voting-event-user", clients_public, {"pk": 1}, "get"],
-            ["active-voting-list", clients_public, {}, "get"],
-            ["voting-vote", clients_public, {"pk": 1}, "get"],
+            ["vote-event-list", clients_public, {}, "get"],
         ]
 
         tests_setup = api_tests_setup + other_tests_setup

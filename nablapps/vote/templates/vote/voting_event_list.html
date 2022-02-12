@@ -4,11 +4,24 @@
 <h1>Voteringsarrangementer</h1>
 <ul>
     {% for object in object_list %}
-    <li><a href="{% url "voting-list" pk=object.pk %}">{{ object.title }}</a></li>
+        {% if is_admin_view %}
+            <li><a href="{% url "voting-list" pk=object.pk %}">{{ object.title }}</a></li>
+        {% else %}
+            <li><a href="{% url "voting-event-user" pk=object.pk %}">{{ object.title }}</a></li>
+        {% endif %}
     {% empty %}
         <li>Ingen arrangementer</li>
     {% endfor %}
 </ul>
 
-<a href="{% url "active-voting-list" %}"><i class="fas fa-arrow-left"></i>Gå ut av administrasjonssiden.</a>
+{% if is_admin_view %}
+<a href="{% url "vote-event-list" %}"><i class="fas fa-arrow-left"></i>Gå ut av administrasjonssiden.</a>
+<div class="alert alert-warning">
+    Du ser denne siden som administrator, ikke bruker
+</div>
+{% else %}
+{% if admin_rights %}
+<a href="{% url "voting-event-list" %}">(Til admin-side)</a>
+{% endif %}
+{% endif %}
 {% endblock %}

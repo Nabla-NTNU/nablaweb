@@ -173,7 +173,7 @@ def _voting_serializer(voting, include_alternatives=True):
         "is_preference_vote": voting.is_preference_vote,
         "winners_pk": list(voting.winners.values_list("pk", flat=True)),
         "num_winners": voting.num_winners,
-        "url": reverse("voting-detail", kwargs={"pk": voting.pk}),
+        "url": reverse("voting-edit", kwargs={"pk": voting.pk}),
         # If created_by is empty, assume it was created through admin
         # interface, and thus we do not know who made it.
         "created_by": getattr(voting.created_by, "username", "Admin (aka unknown)"),
@@ -295,7 +295,7 @@ class VotingsAPIView(VoteAdminMixin, BaseDetailView):
 
 class RegisterAttendanceView(VoteAdminMixin, DetailView):
     model = VotingEvent
-    template_name = "vote/register_attendance2.html"
+    template_name = "vote/register_attendance.html"
 
 
 class VotingEventList(VoteAdminMixin, ListView):
@@ -332,7 +332,6 @@ class VotingList(VoteAdminMixin, DetailView):
 class CreateVoting(VoteAdminMixin, CreateView):
     """View for creating new votings"""
 
-    permission_required = "vote.vote_admin"
     template_name = "vote/voting_form.html"
     model = Voting
     fields = ["event", "title", "num_winners", "is_preference_vote"]
@@ -370,7 +369,6 @@ class CreateVoting(VoteAdminMixin, CreateView):
 
 
 class VotingEdit(VoteAdminMixin, UpdateView):
-    permission_required = "vote.vote_admin"
     model = Voting
     template_name = "vote/edit_voting.html"
     fields = ["event", "title", "description"]
@@ -385,82 +383,22 @@ class VotingEdit(VoteAdminMixin, UpdateView):
 
     def form_valid(self, form, **kwargs):
         """Called if all forms are valid. Creates voting and associated alternatives"""
-        if self.object.get_total_votes() == 0:
-            context = self.get_context_data()
-            alternatives = context["alternatives"]
-            with transaction.atomic():
-                self.object = form.save()
-                if alternatives.is_valid():
-                    alternatives.instance = self.object
-                    alternatives.save()
-            return redirect("voting-detail", pk=self.kwargs["pk"])
-        else:
+        # Yes, could probably have modified form, but culd not be bothered
+        if self.object.get_total_votes() != 0:
             messages.error(
                 self.request,
                 "OBS! Denne avstemningen har allerede blitt stemt på, endring ikke gyldig",
             )
-            return redirect("voting-detail", pk=self.kwargs["pk"])
+            return self.form_invalid(form, **kwargs)
 
-
-class VotingDetail(VoteAdminMixin, DetailView):
-    """Display details such as alternatives and results"""
-
-    permission_required = ("vote.vote_admin", "vote.vote_inspector")
-    model = Voting
-    template_name = "vote/voting_detail.html"
-
-    def has_permission(self):
-        perms = self.get_permission_required()
-        for perm in perms:
-            if self.request.user.has_perm(perm):
-                return True
-        return False
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["is_admin"] = self.request.user.has_perm("vote.vote_admin")
-
-        if self.request.method == "POST":
-            try:
-                context["winners"] = self.object.get_multi_winner_result()
-                print(self.object.get_multi_winner_result())  # Nice
-            except UnableToSelectWinners as e:
-                context["winners"] = None
-                context["errors"] = [f"Kunne ikke beregne vinner: '{e}'"]
-        else:
-            self.object.multi_winnner_initial_dist()
-        if self.object.is_preference_vote:
-            context["quota"] = self.object.get_quota()
-        return context
-
-    def post(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
-
-@login_required
-@permission_required("vote.vote_admin", raise_exception=True)
-def get_multi_winner_result(request):
-    pass
-
-
-@login_required
-@permission_required("vote.vote_admin", raise_exception=True)
-def activate_voting(request, pk, redirect_to):
-    """Open voting"""
-    voting = Voting.objects.get(pk=pk)
-    voting.is_active = True
-    voting.save()
-    return redirect(redirect_to)
-
-
-@login_required
-@permission_required("vote.vote_admin", raise_exception=True)
-def deactivate_voting(request, pk, redirect_to):
-    """Close voting"""
-    voting = Voting.objects.get(pk=pk)
-    voting.is_active = False
-    voting.save()
-    return redirect(redirect_to)
+        context = self.get_context_data()
+        alternatives = context["alternatives"]
+        with transaction.atomic():
+            self.object = form.save()
+            if alternatives.is_valid():
+                alternatives.instance = self.object
+                alternatives.save()
+        return redirect("voting-list", pk=self.kwargs["pk"])
 
 
 ###########################################
@@ -594,11 +532,11 @@ class VotingEventUserView(LoginRequiredMixin, DetailView):
     template_name = "vote/voting_event_user_view.html"
 
 
-class ActiveVotingList(LoginRequiredMixin, ListView):
-    """Display list of active votings"""
+class VoteEventList(LoginRequiredMixin, ListView):
+    """Display list of active vote events"""
 
-    model = Voting
-    template_name = "vote/active_voting_list.html"
+    model = VotingEvent
+    template_name = "vote/voting_event_list.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -609,109 +547,20 @@ class ActiveVotingList(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        all_user_votings = self.model.objects.exclude(is_active=False).filter(
-            event__eligible_group=None
+        all_user_events = VotingEvent.objects.filter(eligible_group=None)
+        user_group_events = VotingEvent.objects.filter(
+            eligible_group__in=self.request.user.groups.all()
         )
-        user_group_votings = self.model.objects.exclude(is_active=False).filter(
-            event__eligible_group__in=self.request.user.groups.all()
-        )
-        return chain(all_user_votings, user_group_votings)
+        return chain(all_user_events, user_group_events)
 
 
-class Vote(LoginRequiredMixin, DetailView):
-    """
-    Display alternatives and lets users vote
-
-    The form for voting is a little shabby(TM),
-    probably smoother with formset. Didn't want to bother with big rewrite,
-    so leaving that for future-improvement(TM) :^)
-
-    The creation of the Ballot (container and entries) can probably also be
-    written in a much nicer way. I think ultimately if all votations in the future will
-    be using STV, then this view as a CreateView together with a formset for the
-    priorities/alternatives is probably nice.
-
-    Disclaimer: possible misuse of docstring
-    Disclaimer2: possible misuse of the (TM) joke
-    """
-
-    model = Voting
-    template_name = "vote/voting_vote.html"
+class AdminVoteEventList(VoteAdminMixin, VoteEventList):
+    """Displays all vote events for admin"""
 
     def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        alternatives = self.object.alternatives.all()
-        alternatives = [alt for alt in alternatives]
-        shuffle(alternatives)
-        context["randomized_alternatives"] = alternatives
-        context["has_voted"] = self.object.user_already_voted(self.request.user)
-        context["priorities"] = [
-            i for i in range(1, self.object.get_num_alternatives() + 1)
-        ]
+        context = super().get_context_data()
+        context["is_admin_view"] = True
         return context
 
-    def post(self, request, **kwargs):
-        """Submit a vote from chosen alternative"""
-        voting_id = kwargs["pk"]
-        voting = get_object_or_404(Voting, pk=voting_id)
-
-        if voting.is_preference_vote:
-            # Single transferable vote
-            # Get list/dictonary of alternatives and priorities
-            try:
-                priorities = [i for i in range(1, voting.get_num_alternatives() + 1)]
-                # ballot : {pri#:alternative.pk}
-                ballot_dict = {}
-                for pri in priorities:
-                    try:
-                        ballot_dict[pri] = request.POST["priority" + str(pri)]
-                        if pri > 1:
-                            if ballot_dict[pri - 1] is None:
-                                raise HoleInBallotError("Hole in ballot")
-                    except MultiValueDictKeyError:
-                        ballot_dict[pri] = None
-                    except HoleInBallotError:
-                        messages.warning(
-                            request, "Ikke tillatt med hull i stemmeseddelen"
-                        )
-                        return redirect("voting-vote", pk=voting_id)
-                ballot_dict = {
-                    pri: v for pri, v in ballot_dict.items() if v is not None
-                }
-                voting.submit_stv_votes(request.user, ballot_dict)
-            except UserAlreadyVoted:
-                messages.error(request, "Du har allerede stemt i denne avstemningen!")
-            except VotingDeactive:
-                messages.error(
-                    request, "Denne avstemningen er ikke lenger åpen for stemming!"
-                )
-            except DuplicatePriorities:
-                messages.warning(
-                    request, "Du kan ikke velge samme kandidat flere ganger!"
-                )
-                return redirect("voting-vote", pk=voting_id)
-            else:
-                messages.success(
-                    request, f"Suksess! Du har stemt i avstemningen {voting.title}"
-                )
-        else:
-            # Normal voting, first past the post(?)
-            try:
-                alternative = voting.alternatives.get(pk=request.POST["alternative"])
-                alternative.add_vote(request.user)
-            except (KeyError, Alternative.DoesNotExist):
-                messages.warning(request, "Du har ikke valgt et alternativ.")
-                return redirect("voting-vote", pk=voting_id)
-            except UserAlreadyVoted:
-                messages.error(request, "Du har allerede stemt i denne avstemningen!")
-            except UserNotCheckedIn:
-                messages.error(request, "Du har ikke sjekket inn!")
-            except VotingDeactive:
-                messages.error(
-                    request, "Denne avstemningen er ikke lenger åpen for stemming!"
-                )
-            else:
-                messages.success(
-                    request, f"Suksess! Du har stemt i avstemningen {voting.title}"
-                )
-        return redirect("active-voting-list")
+    def get_queryset(self):
+        return VotingEvent.objects.all()
