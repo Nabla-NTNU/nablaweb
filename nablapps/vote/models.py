@@ -264,7 +264,7 @@ class Voting(models.Model):
         ballot.current_alternative = next_prioritezed_alt
         ballot.save()
 
-    def stv_find_winners(self):
+    def _stv_find_winners(self):
         """Declare multples winners using a single transferable votes system"""
         assert self.is_preference_vote, "Only preference votes can distribute votes"
 
@@ -395,13 +395,10 @@ class Voting(models.Model):
                 second_loser_vote_count = second_loser.ballots.all().count()
                 if first_loser_vote_count < second_loser_vote_count:
                     # First loser is the sole loser, eliminate
-                    print("Found unique loser")
                     loser = first_loser
                 elif first_loser_vote_count == second_loser_vote_count:
                     # Two or more losers with same amount of votes
                     # End procedure, return the already found winners
-                    print("Cannot eliminate")
-                    print("Exiting")
                     return winners
                 else:
                     # Should not happen
@@ -437,7 +434,7 @@ class Voting(models.Model):
 
     # Maybe rename since it can be used also when there is one winner
     def get_multi_winner_result(self):
-        winners = self.stv_find_winners()
+        winners = self._stv_find_winners()
         self._set_winners(winners)
         return winners
 
