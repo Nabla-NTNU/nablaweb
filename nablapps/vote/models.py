@@ -203,6 +203,7 @@ class Voting(models.Model):
         if ballot_dict == {}:
             # Empty ballot == blank vote
             # Then adding user to self.users_voted is sufficient
+            # Do not create BallotContainer instance
             # Blank votes affects the quota
             return
 
@@ -271,6 +272,7 @@ class Voting(models.Model):
         quota = self.get_quota()  # Number of votes to be declared winner
         winners = []  # Alternatives that are declared winners
         losers = []  # Alternatives that are eliminated as losers
+        num_non_blank_ballots = self.ballots.all().count()
 
         assert not (
             len(alternatives) == 1 and self.num_winners == 1
@@ -288,7 +290,7 @@ class Voting(models.Model):
         elif num_losers > 0:
             # More candidates than winners
             # Need enough votes declare by passing quota or by elimination
-            if self.get_total_votes() < self.num_winners:
+            if num_non_blank_ballots < self.num_winners:
                 # Then at least one seat will be ambigous
                 raise UnableToSelectWinners(
                     f"Not enough votes to declare {self.num_winners} winners"
