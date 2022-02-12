@@ -249,14 +249,28 @@ class Voting(models.Model):
             winner.is_winner = True
             winner.save()
 
+    def _transfer_ballot(self, ballot, current_alt):
+        """
+        Transfers vote to next priority on the ballot
+        the given ballot must be transferable, i.e. not exhausted
+        i.e. not already be assigned to it's last priority
+        """
+        assert ballot.voting == self  # Don't mess with other's alternatives!
+        pri = ballot.entries.get(alternative=current_alt).priority
+        if pri == ballot.entries.all().count():
+            return
+        next_prioritezed_alt = ballot.entries.get(priority=pri + 1).alternative
+        ballot.current_alternative = next_prioritezed_alt
+        ballot.save()
+
     def stv_find_winners(self):
         """Declare multples winners using a single transferable votes system"""
         assert self.is_preference_vote, "Only preference votes can distribute votes"
 
         alternatives = self.alternatives.all()
-        quota = self.get_quota()
-        winners = []
-        losers = []
+        quota = self.get_quota()  # Number of votes to be declared winner
+        winners = []  # Alternatives that are declared winners
+        losers = []  # Alternatives that are eliminated as losers
 
         assert not (
             len(alternatives) == 1 and self.num_winners == 1
@@ -350,12 +364,7 @@ class Voting(models.Model):
                     if len(transferable_ballots) <= surplus_count:
                         # transfer all transferable_ballots
                         for ballot in transferable_ballots:
-                            pri = ballot.entries.get(alternative=winner).priority
-                            next_prioritezed_alt = ballot.entries.get(
-                                priority=pri + 1
-                            ).alternative
-                            ballot.current_alternative = next_prioritezed_alt
-                            ballot.save()
+                            self._transfer_ballot(ballot, winner)
                     else:
                         # Random sample N ballots from winners transferable_ballots
                         redist_indices = random.sample(
@@ -363,13 +372,7 @@ class Voting(models.Model):
                         )
                         for i in redist_indices:
                             # For each selected ballot, transfer it to next priority alternative
-                            ballot = transferable_ballots[i]
-                            pri = ballot.entries.get(alternative=winner).priority
-                            next_prioritezed_alt = ballot.entries.get(
-                                priority=pri + 1
-                            ).alternative
-                            ballot.alternative = next_prioritezed_alt
-                            ballot.save()
+                            self._transfer_ballot(transferable_ballots[i], winner)
             # out of inner loop
             # If not enough winners, eliminate 'biggest loser' and redistribute votes
             if num_losers == 0:
@@ -382,23 +385,31 @@ class Voting(models.Model):
                 # probably a more elegant way to do this
                 remaining_alts = [alt for alt in alternatives if alt not in winners]
                 remaining_alts = [alt for alt in remaining_alts if alt not in losers]
-                loser = remaining_alts[0]
-                for alt in remaining_alts[1:]:
-                    if loser.ballots.all().count() > alt.ballots.all().count():
-                        loser = alt
+                vote_counts = {alt: alt.ballots.all().count() for alt in remaining_alts}
+                sorted_by_vote_counts = sorted(vote_counts, key=vote_counts.get)
+                first_loser = sorted_by_vote_counts[0]
+                second_loser = sorted_by_vote_counts[1]
+                first_loser_vote_count = first_loser.ballots.all().count()
+                second_loser_vote_count = second_loser.ballots.all().count()
+                if first_loser_vote_count < second_loser_vote_count:
+                    # First loser is the sole loser, eliminate
+                    print("Found unique loser")
+                    loser = first_loser
+                elif first_loser_vote_count == second_loser_vote_count:
+                    # Two or more losers with same amount of votes
+                    # End procedure, return the already found winners
+                    print("Cannot eliminate")
+                    print("Exiting")
+                    return winners
+                else:
+                    # Should not happen
+                    raise VoteDistributionError(
+                        "First loser has more votes than second. Error in implementation."
+                    )
                 losers.append(loser)
                 # Redistribute all losers votes
                 for ballot in loser.ballots.all():
-                    pri = ballot.entries.get(alternative=loser).priority
-                    if pri == ballot.entries.all().count():
-                        # Ballot exhausted, not transferable
-                        pass
-                    else:
-                        next_prioritezed_alt = ballot.entries.get(
-                            priority=pri + 1
-                        ).alternative
-                        ballot.alternative = next_prioritezed_alt
-                        ballot.save()
+                    self._transfer_ballot(ballot, loser)
                 if self.num_winners - len(winners) == alternatives.count() - len(
                     losers
                 ) - len(winners):
