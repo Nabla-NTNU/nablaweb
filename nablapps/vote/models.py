@@ -227,7 +227,8 @@ class Voting(models.Model):
         """Takes a list of winners, sets is_winner true for the winner"""
         for winner in winners:
             assert winner.voting == self  # make sure we don't alter another voting
-            self.winner.is_winner = True
+            winner.is_winner = True
+            winner.save()
 
     def stv_find_winners(self):
         """Declare multples winners using a single transferable votes system"""
@@ -245,17 +246,22 @@ class Voting(models.Model):
         # Initial ballot/vote distribution according to first priority
         self.multi_winnner_initial_dist()
 
-        # Find winners, transfer votes and eliminate losers if necessary
-        if self.get_total_votes() < quota * self.num_winners:
-            # Innsufficient vote count
-            raise UnableToSelectWinners(
-                f"Not enough votes to declare {self.num_winners} winners"
-            )
-
         num_losers = len(alternatives) - self.num_winners
-
-        if num_losers == 0:
-            # Add all alternatives/canditates to winners
+        if num_losers < 0:
+            # Not enough alternatives/candidates
+            raise UnableToSelectWinners(
+                f"Not enough alternatives(candidates) to declare {self.num_winners} winners"
+            )
+        elif num_losers > 0:
+            # More candidates than winners
+            # Need enough votes declare by passing quota or by elimination
+            if self.get_total_votes() < self.num_winners:
+                # Then at least one seat will be ambigous
+                raise UnableToSelectWinners(
+                    f"Not enough votes to declare {self.num_winners} winners"
+                )
+        else:  # num_losers == 0:
+            # Everyone wins, regardless of vote count
             # If all alternatives pass the quota -> end voting, don't transfer votes
             # If only some are past the quota -> redistribute surplus(es)
             # If no one is past the quota -> no surpluses -> end voting
@@ -278,6 +284,8 @@ class Voting(models.Model):
                 # assert num_below_quota == self.num_winners
                 # No one passes quota, not nice, but still no transfer
                 return winners_default
+
+        # Find winners, transfer votes and eliminate losers if necessary
         # Loop through number of losing alternatives (max number of loser to eliminate)
         # If num_losers == 0, run loop one time to distribute surplus votes
         for i in range(max(num_losers, 1)):
@@ -396,7 +404,6 @@ class Voting(models.Model):
             raise VoteDistributionError(f"To few winners: {winners}, loser: {losers}")
 
     # Maybe rename since it can be used also when there is one winner
-    # Property decorator?
     def get_multi_winner_result(self):
         winners = self.stv_find_winners()
         self._set_winners(winners)
