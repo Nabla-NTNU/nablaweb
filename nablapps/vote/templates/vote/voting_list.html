@@ -126,7 +126,7 @@
                  winners = this.vote.alternatives.filter(
                      alternative => this.vote.winners_pk.includes(alternative.pk)
                  )
-                 if (winners.length != this.vote.winners_pk) {
+                 if (winners.length != this.vote.winners_pk.length) {
                      this.errors.push("Server error! Winners with mismaching pk given.")
                  }
                  return winners
