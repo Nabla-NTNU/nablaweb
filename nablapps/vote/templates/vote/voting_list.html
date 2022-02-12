@@ -16,6 +16,10 @@
      }
 
      .voting_item__metadata span {
+         cursor: help;
+     }
+
+     .voting_item__metadata span {
          color: gray;
          font-size: small;
          margin: 0 4px;
@@ -72,7 +76,9 @@
 	             </a>
                  <span class="btn btn-secondary" v-if="vote.is_preference_vote" @click="distributeVotes">Distribute votes</span>
                  <span class="voting_item__metadata">
-                     <span><span class="fas fa-users"></span> [[ vote.num_voted ]]</span>
+                     <span v-if="vote.is_preference_vote" title="Preference vote" class="fas fa-list-ol"></span>
+                     <span title="Number of users who has voted"><span class="fas fa-users"></span> [[ vote.num_voted ]]</span>
+                     <span title="Number of winners to choose"><span class="fas fa-trophy"></span> [[ vote.num_winners ]]</span>
                  </span>
                  <span class="voting_item__results" v-if="show_results">
                      <ul class="results_list">
