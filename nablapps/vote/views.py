@@ -172,6 +172,7 @@ def _voting_serializer(voting, include_alternatives=True):
         "num_voted": voting.get_total_votes(),
         "is_preference_vote": voting.is_preference_vote,
         "winners_pk": list(voting.winners.values_list("pk", flat=True)),
+        "quota": voting.get_quota() if voting.is_preference_vote else None,
         "num_winners": voting.num_winners,
         "url": reverse("voting-edit", kwargs={"pk": voting.pk}),
         # If created_by is empty, assume it was created through admin
