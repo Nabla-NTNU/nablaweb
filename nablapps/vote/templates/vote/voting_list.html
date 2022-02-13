@@ -45,6 +45,8 @@
     <br>
     {% if is_admin %}
         <a href="{% url "create-voting" pk=object.pk %}">Opprett ny avstemning</a>
+        <br />
+        <a href="{% url "register" pk=object.pk %}">Gå til insjekking</a>
     {% endif %}
 
     <div id="vote-list" >
