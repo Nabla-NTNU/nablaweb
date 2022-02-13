@@ -87,7 +87,7 @@
                              <span style="float: right">[[ alternative.votes ]] stemmer </span>
                              <div class="progress">
                                  <div class="progress-bar" role="progressbar" :aria-valuenow="alternative.percentage" :style="{width: alternative.percentage + '%'}" aria-valuemin="0" aria-valuemax="100">
-                                     [[ alternative.percentage ]]%
+                                     [[ alternative.percentage.toFixed() ]]%
                                  </div>
                              </div>
                          </li>
