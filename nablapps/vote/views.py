@@ -241,10 +241,14 @@ class VoteEventAPIView(VoteAdminMixin, BaseDetailView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
+        try:
+            eligible_group = self.object.eligible_group.name
+        except AttributeError:  # eligible_group is None
+            eligible_group = None
         return JsonResponse(
             {
                 "title": self.object.title,
-                "eligile_group": self.object.eligible_group,
+                "eligible_group": eligible_group,
                 "num_checked_in": self.object.num_checked_in(),
                 "users_should_poll": self.object.users_should_poll,
             }
