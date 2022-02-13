@@ -72,7 +72,7 @@
                      v-bind:class="classObject"
                      ></span>
 	             <a :href="vote.url">
-                     <span class="voting_item__title">[[ vote.title ]]</span>
+                     <span class="voting_item__title">[[ vote.title ]] <span class="fas fa-pencil-alt"></span></span>
 	             </a>
                  <span class="btn btn-secondary" v-if="vote.is_preference_vote" @click="distributeVotes">Distribute votes</span>
                  <span class="voting_item__metadata">
