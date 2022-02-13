@@ -5,7 +5,7 @@ from .models import Alternative, BallotContainer, BallotEntry, Voting
 
 # For adding/editing alternatives (admin)
 AlternativeFormset = inlineformset_factory(
-    Voting, Alternative, fields=("text",), can_delete=False
+    Voting, Alternative, fields=("text",), can_delete=False, extra=10
 )
 
 # class CustomInlineFormset(BaseInlineFormSet):
