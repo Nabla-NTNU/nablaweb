@@ -378,7 +378,6 @@ class PreferenceVoteDistributionTestCase(TestCase):
                     )
 
         for test in tests:
-            print(test)
             # Clean up
             self.preference_voting.ballots.all().delete()
             self.preference_voting.alternatives.all().delete()
@@ -407,11 +406,8 @@ class PreferenceVoteDistributionTestCase(TestCase):
                 else self.assertRaises(exception, msg=test)
             )
             # Temporarily disable errors, so that we can run through them all
-            try:
-                with contextManager:
-                    self.preference_voting.get_multi_winner_result()
-            except Exception as e:
-                print("---", e)
+            with contextManager:
+                self.preference_voting.get_multi_winner_result()
 
 
 ################
