@@ -265,14 +265,14 @@ class Voting(models.Model):
         ballot.save()
 
     def _stv_find_winners(self):
-        """Declare multples winners using a single transferable votes system"""
+        """Declare winner(s) using a single transferable votes system"""
         assert self.is_preference_vote, "Only preference votes can distribute votes"
 
         alternatives = self.alternatives.all()
         quota = self.get_quota()  # Number of votes to be declared winner
         winners = []  # Alternatives that are declared winners
         losers = []  # Alternatives that are eliminated as losers
-        num_non_blank_ballots = self.ballots.all().count()
+        num_losers = len(alternatives) - self.num_winners
 
         assert not (
             len(alternatives) == 1 and self.num_winners == 1
@@ -285,13 +285,12 @@ class Voting(models.Model):
         # Initial ballot/vote distribution according to first priority
         self.multi_winnner_initial_dist()
 
-        num_losers = len(alternatives) - self.num_winners
         if num_losers < 0:
             # Not enough alternatives/candidates
             raise UnableToSelectWinners(
                 f"Not enough alternatives(candidates) to declare {self.num_winners} winners"
             )
-        elif num_losers == 0:  # num_losers == 0:
+        elif num_losers == 0:
             # Everyone wins, regardless of vote count
             # If all alternatives pass the quota -> end voting, don't transfer votes
             # If only some are past the quota -> redistribute surplus(es)
@@ -306,23 +305,15 @@ class Voting(models.Model):
                     num_below_quota += 1
                 else:
                     num_past_quota += 1
-            # If both if test below are false only some are past quota -> transfer surplus
+            # If both if-test below are false only some are past quota -> transfer surplus
             if num_below_quota == 0:
                 # Everyone past quota after inital distribution, nice, no transfer
                 # assert num_past_quota == self.num_winners
                 return winners_default
             elif num_past_quota == 0:
-                # assert num_below_quota == self.num_winners
                 # No one passes quota, not nice, but still no transfer
+                # assert num_below_quota == self.num_winners
                 return winners_default
-        #else:# num_losers > 0:
-        #    # More candidates than winners
-        #    # Need enough votes declare by passing quota or by elimination
-        #    if num_non_blank_ballots < self.num_winners:
-        #        # Then at least one seat will be ambigous
-        #        raise UnableToSelectWinners(
-        #            f"Not enough votes to declare {self.num_winners} winners"
-        #        )
 
         # Find winners, transfer votes and eliminate losers if necessary
         # Loop through number of losing alternatives (max number of loser to eliminate)
