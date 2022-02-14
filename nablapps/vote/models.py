@@ -278,6 +278,10 @@ class Voting(models.Model):
             len(alternatives) == 1 and self.num_winners == 1
         ), "Preference vote should not be used for one alternative and one winner"
 
+        assert not (
+            len(alternatives) == 2 and self.num_winners == 1
+        ), "Preference vote should not be used for two alternatives and one winner"
+
         # Initial ballot/vote distribution according to first priority
         self.multi_winnner_initial_dist()
 
@@ -287,15 +291,7 @@ class Voting(models.Model):
             raise UnableToSelectWinners(
                 f"Not enough alternatives(candidates) to declare {self.num_winners} winners"
             )
-        elif num_losers > 0:
-            # More candidates than winners
-            # Need enough votes declare by passing quota or by elimination
-            if num_non_blank_ballots < self.num_winners:
-                # Then at least one seat will be ambigous
-                raise UnableToSelectWinners(
-                    f"Not enough votes to declare {self.num_winners} winners"
-                )
-        else:  # num_losers == 0:
+        elif num_losers == 0:  # num_losers == 0:
             # Everyone wins, regardless of vote count
             # If all alternatives pass the quota -> end voting, don't transfer votes
             # If only some are past the quota -> redistribute surplus(es)
@@ -319,6 +315,14 @@ class Voting(models.Model):
                 # assert num_below_quota == self.num_winners
                 # No one passes quota, not nice, but still no transfer
                 return winners_default
+        #else:# num_losers > 0:
+        #    # More candidates than winners
+        #    # Need enough votes declare by passing quota or by elimination
+        #    if num_non_blank_ballots < self.num_winners:
+        #        # Then at least one seat will be ambigous
+        #        raise UnableToSelectWinners(
+        #            f"Not enough votes to declare {self.num_winners} winners"
+        #        )
 
         # Find winners, transfer votes and eliminate losers if necessary
         # Loop through number of losing alternatives (max number of loser to eliminate)
@@ -399,6 +403,10 @@ class Voting(models.Model):
                 elif first_loser_vote_count == second_loser_vote_count:
                     # Two or more losers with same amount of votes
                     # End procedure, return the already found winners
+                    if len(winners) == 0:
+                        raise UnableToSelectWinners(
+                            "No alternatives past quota, unable to eliminate loser"
+                        )
                     return winners
                 else:
                     # Should not happen

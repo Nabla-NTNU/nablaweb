@@ -348,11 +348,22 @@ class PreferenceVoteDistributionTestCase(TestCase):
             for num_winners in range(1, num_alternatives + 1):
                 for num_voters in range(0, self.num_users):
                     if num_winners == 1 and num_alternatives == 1:
+                        # Should use normal voting
                         exception = AssertionError
-                    elif num_voters == 0:
+                    elif num_winners == 1 and num_alternatives == 2:
+                        # Should use normal voting
+                        exception = AssertionError
+                    elif num_alternatives < num_winners:
+                        # Not enough alternatives to delcare num_winners winners
                         exception = UnableToSelectWinners
-                    elif num_winners == 2 and num_alternatives == 2:
-                        exception = VoteDistributionError
+                    elif num_winners == num_alternatives:
+                        # More than one winner, same amount of alternatives
+                        # Everyone wins, like an acclamation, but surpluses are transfered
+                        exception = None
+                    elif num_voters == 0:
+                        # num_alternatives > num_winners
+                        # Minimum required (non-blank) votes is num_winners
+                        exception = UnableToSelectWinners
                     else:
                         exception = None
                     tests.append(
