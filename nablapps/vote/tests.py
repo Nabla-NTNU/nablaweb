@@ -362,7 +362,6 @@ class PreferenceVoteDistributionTestCase(TestCase):
                         exception = None
                     elif num_voters == 0:
                         # num_alternatives > num_winners
-                        # Minimum required (non-blank) votes is num_winners
                         exception = UnableToSelectWinners
                     else:
                         exception = None
