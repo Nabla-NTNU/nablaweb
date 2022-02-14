@@ -5,7 +5,7 @@ from django.contrib import admin
 
 from nablapps.core.admin import ChangedByMixin
 
-from .models import Album, AlbumImage
+from .models import Album, AlbumForm, AlbumImage
 
 
 class AlbumImageInline(admin.TabularInline):
@@ -13,12 +13,13 @@ class AlbumImageInline(admin.TabularInline):
 
     model = AlbumImage
     fk_name = "album"
-    fields = ("num", "file", "description", "image_thumb", "is_display_image")
+    fields = ("num", "file", "description", "is_display_image")
     readonly_fields = (
         "num",
         "image_thumb",
     )
     ordering = ("num",)
+    extra = 0
 
 
 @admin.register(Album)
@@ -30,13 +31,18 @@ class AlbumAdmin(ChangedByMixin, admin.ModelAdmin):
         "visibility",
         "created_by",
         "created_date",
-        "image_thumb",
+        # "image_thumb",
         "parent",
     ]
+    form = AlbumForm
     inlines = [AlbumImageInline]
 
-    def response_add(self, request, new_object):
-        obj = self.after_saving_model_and_related_inlines(new_object)
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        form.save_photos(form.instance)
+
+    def response_add(self, request, obj, post_url_continue=None):
+        obj = self.after_saving_model_and_related_inlines(obj)
         return super().response_add(request, obj)
 
     def response_change(self, request, obj):
@@ -44,9 +50,9 @@ class AlbumAdmin(ChangedByMixin, admin.ModelAdmin):
         return super().response_change(request, obj)
 
     def after_saving_model_and_related_inlines(self, obj):
-
         images = AlbumImage.objects.filter(album=obj.pk)
 
+        # give images the correct number
         i = 0
         for img in images:
             img.num = i
