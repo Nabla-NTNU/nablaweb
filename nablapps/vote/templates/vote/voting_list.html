@@ -163,7 +163,7 @@
 		             })
 		             .catch(error => {
                          if (error.response.status == 409) {
-                             this.errors.push("Unable to distribute votes")
+                             this.errors.push("Unable to distribute votes: " + error.response.data.error)
                          } else {
 		                     console.log(error)
 		                     alert("We are sorry, but an error occurred when communicating with the server. Refresh the page, or contact WebKom.")
