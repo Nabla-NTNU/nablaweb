@@ -81,7 +81,7 @@ class Album(MPTTModel, TimeStamped):
         blank=True,
         related_name="children",
         verbose_name="Forelder",
-        help_text="Bildealbum som dette albumet hører til. (Album er relaterte med en trestruktur.)",
+        help_text="Bildealbum som dette albumet hører til. Album er relaterte med en trestruktur.",
     )
 
     class Meta:
@@ -122,7 +122,7 @@ class AlbumForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["parent"].queryset = Album.objects.exclude(
-            pk__in=self.instance.get_children()
+            pk__in=self.instance.get_descendants(include_self=True)
         )
 
     class Meta:
@@ -150,7 +150,7 @@ class AlbumForm(ModelForm):
         print(current_obj.get_children())
         if parent_obj == current_obj:
             raise ValidationError("Et album kan ikke være sin egen forelder")
-        elif parent_obj in current_obj.get_children():
+        elif parent_obj in current_obj.get_descendants(include_self=True):
             raise ValidationError(
                 "En node kan ikke være barn av noen av sine etterkommere."
             )
