@@ -16,6 +16,8 @@ from django.views.decorators.csrf import csrf_exempt  # TODO: remove
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from django.views.generic.detail import BaseDetailView
 
+from markdown_deux import markdown
+
 from nablapps.accounts.models import NablaUser
 
 from .forms import AlternativeFormset
@@ -178,6 +180,7 @@ def _voting_serializer(voting, include_alternatives=True):
         # If created_by is empty, assume it was created through admin
         # interface, and thus we do not know who made it.
         "created_by": getattr(voting.created_by, "username", "Admin (aka unknown)"),
+        "description": markdown(voting.description),
     }
     if include_alternatives:
         response["alternatives"] = [
@@ -425,6 +428,7 @@ def _voting_public_serializer(voting, user, include_alternatives=True):
         "has_voted": voting.user_already_voted(user),
         "is_preference": voting.is_preference_vote,
         "num_winners": voting.num_winners,
+        "description": markdown(voting.description),
     }
     if include_alternatives:
         response["alternatives"] = [

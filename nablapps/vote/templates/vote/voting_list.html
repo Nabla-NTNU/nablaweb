@@ -25,6 +25,16 @@
          margin: 0 4px;
      }
 
+     .voting_item__description .description {
+         padding: 5px 10px;
+         border: 1px solid gray;
+         border-radius: 5px;
+     }
+
+     .voting_item__description .toggle {
+         color: gray;
+     }
+
      .results_list {
          list-style: none;
      }
@@ -107,6 +117,10 @@
                          <li v-for="error in errors">[[ error ]]</li>
                      </ul>
                  </div>
+                 <div class="voting_item__description">
+                     <span class="fas toggle" :class="show_description ? 'fa-minus' : 'fa-plus'" @click="show_description=!show_description"></span>
+                     <div class="description" v-html="vote.description" v-if="show_description"></div>
+                 </div>
              </div>
     </template>
     <script>
@@ -120,6 +134,7 @@
 	         return {
 	             is_admin: {{ is_admin|lower }},
                  errors: [],
+                 show_description: false,
 	         }
          },
          computed: {

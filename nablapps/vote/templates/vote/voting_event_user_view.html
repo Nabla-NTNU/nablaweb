@@ -26,6 +26,16 @@
          margin: 0 4px;
      }
 
+     .voting_item__description .description {
+         padding: 5px 10px;
+         border: 1px solid gray;
+         border-radius: 5px;
+     }
+
+     .voting_item__description .toggle {
+         color: gray;
+     }
+
      .results_list {
          list-style: none;
      }
@@ -102,6 +112,10 @@
             </template>
             <div v-else>
                 <i>Stemme sendt inn</i>
+            </div>
+            <div class="voting_item__description">
+                <span class="fas toggle" :class="show_description ? 'fa-minus' : 'fa-plus'" @click="show_description=!show_description"></span>
+                <div class="description" v-html="vote.description" v-if="show_description"></div>
             </div>
         </div>
     </template>
@@ -196,6 +210,11 @@
          props: ['vote',],
          template: '#vote-item-template',
          emits: {voted: null},
+         data() {
+             return {
+                 show_description: false,
+             }
+         },
          methods: {
              submitVote(data) {
                  axios
