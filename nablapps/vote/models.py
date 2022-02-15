@@ -23,6 +23,9 @@ class VotingEvent(models.Model):
         "Clients should poll for updates", default=False
     )
     polling_period = models.IntegerField("Polling interval", default=2000)
+    display_description_users = models.BooleanField(
+        "Display the description to users", default=True
+    )  # In case load gets too high
     require_checkin = models.BooleanField(
         "Users must check in to submit votes", default=True
     )
@@ -125,7 +128,7 @@ class Voting(models.Model):
     )
     title = models.CharField(max_length=100)
     num_winners = models.IntegerField(blank=False, default=1)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     users_voted = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="users_voted",
