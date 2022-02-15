@@ -3,7 +3,7 @@ import random
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
-from django.db import models
+from django.db import models, transaction
 from django.db.models import F
 
 from nablapps.accounts.models import NablaGroup
@@ -459,14 +459,19 @@ class Alternative(models.Model):
     def __str__(self):
         return self.text
 
+    def get_queryset(self):
+        return self.__class__.objects.filter(id=self.id)
+
     def add_vote(self, user):
         """Add users vote"""
         assert not self.voting.is_preference_vote
 
-        self.voting.user_can_vote_now(user)
-        self.votes = F("votes") + 1
-        self.save()
-        self.voting.users_voted.add(user)
+        with transaction.atomic():
+            alt = self.get_queryset().select_for_update().get()
+            alt.voting.user_can_vote_now(user)
+            alt.votes = F("votes") + 1
+            alt.save()
+            alt.voting.users_voted.add(user)
 
     def get_num_votes(self):
         """Returns the number of received votes
