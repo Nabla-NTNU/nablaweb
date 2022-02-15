@@ -342,7 +342,7 @@ class CreateVoting(VoteAdminMixin, CreateView):
 
     template_name = "vote/voting_form.html"
     model = Voting
-    fields = ["event", "title", "num_winners", "is_preference_vote"]
+    fields = ["event", "title", "description", "num_winners", "is_preference_vote"]
 
     def get_initial(self):
         event_id = self.kwargs["pk"]
