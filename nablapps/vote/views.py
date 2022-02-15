@@ -403,7 +403,8 @@ class VotingEdit(VoteAdminMixin, UpdateView):
             if alternatives.is_valid():
                 alternatives.instance = self.object
                 alternatives.save()
-        return redirect("voting-list", pk=self.kwargs["pk"])
+        event_pk = self.object.event.pk
+        return redirect("voting-list", pk=event_pk)
 
 
 ###########################################
