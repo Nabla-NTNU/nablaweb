@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import F
 
 from nablapps.accounts.models import NablaGroup
 
@@ -463,7 +464,7 @@ class Alternative(models.Model):
         assert not self.voting.is_preference_vote
 
         self.voting.user_can_vote_now(user)
-        self.votes += 1
+        self.votes = F("votes") + 1
         self.save()
         self.voting.users_voted.add(user)
 
