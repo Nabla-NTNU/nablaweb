@@ -42,6 +42,19 @@
      .results_list li {
          margin-bottom: 10px;
      }
+
+     .count_bubble {
+         height: 40px;
+         width: 40px;
+         border: 1px solid black;
+         border-radius: 40px;
+         line-height: 20px;
+         position: fixed;
+         box-shadow: 0px 2px 3px 0px black;
+         background: white;
+         text-align: center;
+         left: 74px;
+     }
     </style>
 {% endblock %}
 
@@ -60,6 +73,9 @@
     {% endif %}
 
     <div id="vote-list" >
+        <div class="count_bubble">
+            [[ num_checked_in ]]
+        </div>
         <span>Antall sjekket inn: [[ num_checked_in ]]</span><br />
 
         <input type="checkbox" v-model="show_results" id="show-results">
