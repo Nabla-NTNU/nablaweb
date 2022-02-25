@@ -109,11 +109,11 @@
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/brands.min.css" %}">
         <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/solid.min.css" %}">
 
-        <link href="{% static "css/default.css" %}?version=1.2" rel="stylesheet">
+        <link href="{% static "css/default.css" %}?version=1.3" rel="stylesheet">
 
         {% if custom_color %}
         <style>
-         nav.navbar {
+         nav.nabla-navbar {
              background: {{ custom_color }};
          }
         </style>
@@ -223,7 +223,7 @@
     <div  id = "content">
         <!-- Navigation -->
         <header>
-            <nav class="navbar navbar-dark navbar-expand-lg" role="navigation">
+            <nav class="navbar navbar-dark navbar-expand-lg nabla-navbar" role="navigation">
             <a class="navbar-brand" href="/">
                     {% block header_logo %}
                     <img width="125" src="{% static "img/nabla_logo_white.svg" %}" alt="Nabla">
@@ -406,6 +406,7 @@
 
         {% block main-blank %}
         <style>
+            {# Extends  #mainContent so that main is different from main_blank. Hack? #}
             #mainContent {
                 padding: 1rem;
                 background-color: var(--white);

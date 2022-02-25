@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static sekizai_tags i18n wiki_tags %}
+
+{#  This is a hack so that the block "body" will include "wiki_body". #}
+{#  The wiki preview needs a block of the web page body to be called "wiki_body" to function as intended. #}
+{#  If someone finds a better way to do this, please do that. #}
+{% block body %}
+    {% addtoblock "css" %}
+        <link href="{% static "wiki/bootstrap/css/wiki-bootstrap.min.css" %}" rel="stylesheet">
+    {% endaddtoblock %}
+    {% with  block.super as boyd_content %}
+        {% block wiki_body %}
+            {{ boyd_content }}
+        {% endblock wiki_body %}
+    {% endwith %}
+{% endblock body %}
+
+{% block main %}
+    {% wiki_messages %}
+    <!-- Reserved for breadcrumbs -->
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            {% block wiki_breadcrumbs %}
+            {% endblock %}
+        </div>
+        {%  if "_search" not in request.path %}
+            {# Custom searchbar. Might be a better way #}
+            {% include "wiki/includes/searchbar.html" %}
+        {% endif %}
+    </div>
+    <!-- Main page contents go here -->
+    {% block wiki_contents %}{% endblock %}
+{% endblock main %}
