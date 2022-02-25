@@ -1,0 +1,28 @@
+{% load static sekizai_tags i18n wiki_tags %}
+
+<form class="form-search pr-3" method="GET" action="{% spaceless %}
+                                                    {% if article or urlpath %}
+                                                        {% url 'wiki:search' article_id=article.id path=urlpath.path %}
+                                                    {% else %}
+                                                        {% url 'wiki:search' %}
+                                                    {% endif %}
+                                                {% endspaceless %}"
+>
+    <div class="float-right">
+        <div class="input-group">
+            <input type="search" class="form-control" aria-label="Search" name="q"
+                   placeholder="{% spaceless %}
+                                    {% if article or urlpath %}
+                                        {% trans "Search from current article..." %}
+                                    {% else %}
+                                        {% trans "Search whole wiki..." %}
+                                    {% endif %}
+                                {% endspaceless %}"/>
+            <span class="input-group-append">
+                <button class="btn btn-secondary" type="submit"><span class="fa fa-search"></span>
+                </button>
+              </span>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</form>

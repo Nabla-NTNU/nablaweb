@@ -42,6 +42,7 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    background-color: var(--nabla-background);
 }
 
 #full-body {
@@ -60,7 +61,7 @@ body {
     padding: 7px;
 }
 
-nav.navbar {
+nav.nabla-navbar {
     background: var(--nabla-blue);
     box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
 
@@ -162,11 +163,6 @@ form.dropdown-menu input {
 }
 
 /* Typography */
-
-.wiki-article h1, .wiki-article h2, .wiki-article h3 {
-    width: 100%;
-    border-bottom: 1px solid #ccc;
-}
 
 h1 {
     margin-bottom: 8px;
