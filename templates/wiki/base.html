@@ -18,14 +18,16 @@
 {% block main %}
     {% wiki_messages %}
     <!-- Reserved for breadcrumbs -->
-    <div class="d-flex align-items-center">
-        <div class="mr-auto">
+    <div class="d-flex flex-wrap align-items-center pb-3">
+        <div class="mr-auto flex-grow-1 pb-3">
             {% block wiki_breadcrumbs %}
             {% endblock %}
         </div>
         {%  if "_search" not in request.path %}
             {# Custom searchbar. Might be a better way #}
+            <div class="flex-grow-1 pb-3">
             {% include "wiki/includes/searchbar.html" %}
+            </div>
         {% endif %}
     </div>
     <!-- Main page contents go here -->
