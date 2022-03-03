@@ -75,7 +75,7 @@ class ComMembershipAdmin(admin.ModelAdmin):
     list_display = ("full_user_name", "user", "com", "joined_date", "short_description")
     list_select_related = ("user", "com")
     ordering = ["-com"]
-    list_filter = ["com"]
+    list_filter = ["is_active", "com"]
     actions = [export_all_active_members]
 
 
