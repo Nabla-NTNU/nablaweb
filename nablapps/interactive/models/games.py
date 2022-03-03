@@ -11,9 +11,7 @@ class Game(models.Model):
 
     index = models.IntegerField(help_text="Bruk helst 10, 20, 30 osv.")
     title = models.TextField()
-    url = models.TextField(
-        help_text="Denne lenken må være relativ ettersom den settes sammen med url-en vår. Altså: hvis man vil lenke til https://nabla.no/kodegolf/ må man skrive inn 'kodegolf/' (uten fnutter). (Ikke hele lenken, da får man: https://nabla.no/https://nabla.no/kodegolf/, som ikke fungerer."
-    )
+    url = models.TextField()
     picture = models.ImageField(
         upload_to="uploads/game_pictures",
         null=True,
