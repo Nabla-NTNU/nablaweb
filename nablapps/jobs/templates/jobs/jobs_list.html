@@ -14,9 +14,9 @@
 {% block main-blank %}
 
 <div class="row">
-    <div class="d-flex flex-wrap col-md-8">
+    <div class="d-flex flex-wrap col-md-8 px-0">
         {% for job in jobs_list %}
-        <div class="col-md-6 pb-4">
+        <div class="col-md-6 pb-4 px-2">
             {%  include "includes/info_card.html" with content=job show_details=True header_size="h4" class="h-100 "%}
         </div>
         {% empty %}

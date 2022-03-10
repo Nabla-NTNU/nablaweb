@@ -2,7 +2,10 @@
 Models for album app
 """
 from django.contrib.auth.models import AnonymousUser
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_image_file_extension
 from django.db import models
+from django.forms import ClearableFileInput, FileField, ModelChoiceField, ModelForm
 from django.urls import reverse
 
 from mptt.models import MPTTModel, TreeForeignKey
@@ -72,7 +75,13 @@ class Album(MPTTModel, TimeStamped):
     )
 
     parent = TreeForeignKey(
-        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="children",
+        verbose_name="Forelder",
+        help_text="Bildealbum som dette albumet hører til. Album er relaterte med en trestruktur.",
     )
 
     class Meta:
@@ -106,3 +115,54 @@ class Album(MPTTModel, TimeStamped):
 
     def __str__(self):
         return self.title
+
+
+class AlbumForm(ModelForm):
+    # model = Album
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["parent"].queryset = Album.objects.exclude(
+            pk__in=self.instance.get_descendants(include_self=True)
+        )
+
+    class Meta:
+        model = Album
+        fields = ("title", "visibility", "parent")
+
+    parent = ModelChoiceField(
+        Album.objects.all(),
+        required=False,
+        label="Forelder",
+        help_text="Bildealbum som dette albumet hører til. (Album er relaterte med en trestruktur.)",
+    )
+    photos = FileField(
+        widget=ClearableFileInput(attrs={"multiple": True}),
+        label="Legg til flere bilder",
+        help_text="Last opp flere bilder her. Når du lagrer dukker de opp i oversikten under",
+        required=False,
+    )
+
+    # def clean_parent(self):
+    #     super()
+    def clean_parent(self):
+        parent_obj = self.cleaned_data["parent"]
+        current_obj = self.instance
+        print(current_obj.get_children())
+        if parent_obj == current_obj:
+            raise ValidationError("Et album kan ikke være sin egen forelder")
+        elif parent_obj in current_obj.get_descendants(include_self=True):
+            raise ValidationError(
+                "En node kan ikke være barn av noen av sine etterkommere."
+            )
+        return parent_obj
+
+    def clean_photos(self):
+        """Make sure only images can be uploaded."""
+        for upload in self.files.getlist("photos"):
+            validate_image_file_extension(upload)
+
+    def save_photos(self, album):
+        """Process each uploaded image."""
+        for file in self.files.getlist("photos"):
+            photo = AlbumImage(album=album, file=file)
+            photo.save()

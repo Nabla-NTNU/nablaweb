@@ -5,9 +5,10 @@
 
 
 <div class="card {{ class|default:" " }}{{ number|default:"" }}">
-    <img alt=""
-         class="card-img-top"
-            {% if content.picture and content.cropping %}
+    <img alt="" class="card-img-top"
+            {% if img_file  %}
+         src="{% thumbnail img_file 300x300 crop="smart" upscale=True detail=True quality=95 %}"
+            {% elif content.picture and content.cropping %}
          src="{% thumbnail content.picture 770x300 box=content.cropping upscale=True detail=True quality=95 %}"
             {% elif content.picture %}
          src="{% thumbnail content.picture 770x300 crop="smart" upscale=True detail=True quality=95 %}"
@@ -26,15 +27,17 @@
             {% endif %}
     >
     <div class="card-body card-body-overline">
-        <{{ header_size|default:"h5" }} class="card-title">
+        <h5 class="{{ header_size|default:"h5" }} card-title">
         <a href="{{ content.get_absolute_url }}" class="text-nabla stretched-link">
             {% if content.print_headline and show_details|default:False %}
                 {{ content.print_headline }}
-            {% else %}
+            {% elif content.headline %}
                 {{ content.headline }}
+            {% elif content.title %}
+                {{ content.title }}
             {% endif %}
         </a>
-    </{{ header_size|default:"h5" }}>
+    </h5>
     <p class="card-text">{{ content.lead_paragraph|markdown:"unsafe" }}</p>
 
 </div>

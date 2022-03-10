@@ -15,6 +15,7 @@ DATABASES = {
         "NAME": os.path.join(
             VARIABLE_CONTENT, os.environ.get("NABLAWEB_DB", "sqlite.db")
         ),  # noqa: F405
+        "TEST": {"NAME": os.path.join(VARIABLE_CONTENT, "testdb.sqlite3")},
     }
 }
 

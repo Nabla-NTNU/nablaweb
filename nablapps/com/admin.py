@@ -64,6 +64,14 @@ class ComMembershipAdmin(admin.ModelAdmin):
         ] = "attachment; filename=active_committee_members.txt"
         return response
 
+    def set_active(modeladmin, request, queryset):
+        """Set all selected members as active"""
+        queryset.update(is_active=True)
+
+    def set_inactive(modeladmin, request, queryset):
+        """Set all selected members as inactive"""
+        queryset.update(is_active=False)
+
     def short_description(self, com):
         return (com.story[:23] + "...") if len(com.story) > 25 else com.story
 
@@ -71,12 +79,14 @@ class ComMembershipAdmin(admin.ModelAdmin):
         return com.user.get_full_name()
 
     export_all_active_members.short_name = "Eksportér alle aktive medlemmer"
+    set_active.short_name = "Markér som aktiv"
+    set_inactive.short_name = "Markér som inaktiv"
 
     list_display = ("full_user_name", "user", "com", "joined_date", "short_description")
     list_select_related = ("user", "com")
     ordering = ["-com"]
-    list_filter = ["com"]
-    actions = [export_all_active_members]
+    list_filter = ["is_active", "com"]
+    actions = [set_active, set_inactive, export_all_active_members]
 
 
 class CommitteeAdmin(admin.ModelAdmin):

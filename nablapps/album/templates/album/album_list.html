@@ -1,49 +1,23 @@
 {% extends "base.html" %}
-{% load listutil %}
+{% load bootstrap4 %}
 {% load easy_thumbnails %}
 {% block title %}Bilder{% endblock %}
-
 {% block more_head %}
 {% endblock %}
 
-{% block content %}
-<h1>Bildealbum</h1>
-
-{% for row in albums|row_split:4 %}
-<div class="row">
-    {% for album in row %}
-    <div class="col-xs-6 col-md-3">
-        <a href="{{ album.get_absolute_url }}">
-        {% if album.visibility != 'u' or is_user %}
-        <a href="{{ album.get_absolute_url }}">
-            {% if album.first.file %}
-            <img class="img-fluid" src="{% thumbnail album.first.file 350x350 crop="smart" %}"/>
-            {% endif %}
-        {% endif %}
-        <div class="caption" style="word-wrap: break-word; hyphens: auto;">
-            <h3>{{ album.title }}</h3>
-        </div>
-        </a>
+{% block main-blank %}
+    <h1>Bildealbum</h1>
+    <div class="row">
+        {% for album in albums %}
+            <div class="col-xs-6 col-md-3 pb-3">
+                {% include "includes/info_card.html" with content=album  img_file=album.first.file header_size="h4" class="h-100" %}
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
-{% endfor %}
-<nav>
-    <ul class="pagination d-flex justify-content-between">
-      {% if page_obj.has_previous %}
-          <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> forrige</a>
-      {% endif %}
-
-        <li class="disabled page-item">
-            Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
-        </li>
-
-        {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}">neste  <span aria-hidden="true">&rarr;</span></a>
-            </li>
+    <nav class="d-flex justify-content-center">
+        {% if is_paginated %}
+            {% bootstrap_pagination page_obj %}
         {% endif %}
-    </ul>
-</nav>
-{% endblock content %}
+    </nav>
+
+{% endblock main-blank %}

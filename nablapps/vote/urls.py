@@ -1,48 +1,62 @@
 from django.urls import path
 
 from .views import (  # submit_vote,
-    ActiveVotingList,
+    AdminVoteEventList,
     CreateVoting,
-    Vote,
-    VotingDetail,
+    RegisterAttendanceView,
+    UsersAPIView,
+    VoteEventAPIView,
+    VoteEventList,
+    VoteEventPublicAPIView,
     VotingEdit,
     VotingEventList,
+    VotingEventUserView,
     VotingList,
-    VotingListJSONView,
-    activate_voting,
-    deactivate_voting,
+    VotingsAPIView,
+    VotingsPublicAPIView,
 )
 
+apiurlpatterns = [
+    path("api/<int:pk>/", VoteEventAPIView.as_view(), name="api-vote-event"),
+    path("api/<int:pk>/users/", UsersAPIView.as_view(), name="api-users"),
+    path("api/<int:pk>/votings/", VotingsAPIView.as_view(), name="api-votings"),
+    path(
+        "api/<int:pk>/public/votings/",
+        VotingsPublicAPIView.as_view(),
+        name="api-public-votings",
+    ),
+    path(
+        "api/<int:pk>/public/",
+        VoteEventPublicAPIView.as_view(),
+        name="api-public-vote-event",
+    ),
+]
+
 urlpatterns = [
-    path("admin/", VotingEventList.as_view(), name="voting-event-list"),
-    path("admin/<int:pk>/list/", VotingList.as_view(), name="voting-list"),
+    *apiurlpatterns,
+    ### Admin views ###
+    path("admin/", AdminVoteEventList.as_view(), name="voting-event-list"),
+    path("admin/event/<int:pk>/list/", VotingList.as_view(), name="voting-list"),
     path(
-        "admin/<int:pk>/api/list/", VotingListJSONView.as_view(), name="api-voting-list"
-    ),
-    path("admin/<int:pk>/create_voting/", CreateVoting.as_view(), name="create-voting"),
-    path(
-        "admin/detail/<int:pk>/",
-        VotingDetail.as_view(),
-        name="voting-detail",
+        "admin/event/<int:pk>/attendance/",
+        RegisterAttendanceView.as_view(),
+        name="register",
     ),
     path(
-        "admin/edit/<int:pk>/",
+        "admin/event/<int:pk>/create_voting/",
+        CreateVoting.as_view(),
+        name="create-voting",
+    ),
+    path(
+        "admin/voting/<int:pk>/edit/",
         VotingEdit.as_view(),
         name="voting-edit",
     ),
-    path(
-        "activate/<int:pk>/<path:redirect_to>/", activate_voting, name="activate-voting"
-    ),
-    path(
-        "deactivate/<int:pk>/<path:redirect_to>/",
-        deactivate_voting,
-        name="deactivate-voting",
-    ),
+    ### Public views ###
+    path("event/<int:pk>", VotingEventUserView.as_view(), name="voting-event-user"),
     path(
         "",
-        ActiveVotingList.as_view(),
-        name="active-voting-list",
+        VoteEventList.as_view(),
+        name="vote-event-list",
     ),
-    path("<int:pk>/", Vote.as_view(), name="voting-vote"),
-    # path("<int:voting_id>/", submit_vote, name="submit-vote"),
 ]

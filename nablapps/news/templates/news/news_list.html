@@ -52,7 +52,7 @@
 
 <div class="news-list">
 {% for news in news_list %}
-            {% include "includes/info_card.html" with content=news class="news mb-3 more-news-" number=forloop.counter %}
+    {% include "includes/info_card.html" with content=news class="news mb-3 more-news-" number=forloop.counter %}
 {% endfor %}
 </div>
 {% include "includes/pagination.html" %}

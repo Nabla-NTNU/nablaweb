@@ -1,7 +1,10 @@
 import random
 
 from django.conf import settings
-from django.db import models
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
+from django.db import models, transaction
+from django.db.models import F
 
 from nablapps.accounts.models import NablaGroup
 
@@ -15,7 +18,17 @@ class VotingEvent(models.Model):
     title = models.CharField(max_length=100)
     creation_date = models.DateTimeField("Opprettet", auto_now_add=True)
     checked_in_users = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="checked_in_users"
+        settings.AUTH_USER_MODEL, related_name="checked_in_users", blank=True
+    )
+    users_should_poll = models.BooleanField(
+        "Clients should poll for updates", default=False
+    )
+    polling_period = models.IntegerField("Polling interval", default=2000)
+    display_description_users = models.BooleanField(
+        "Display the description to users", default=True
+    )  # In case load gets too high
+    require_checkin = models.BooleanField(
+        "Users must check in to submit votes", default=True
     )
     eligible_group = models.ForeignKey(
         NablaGroup,
@@ -24,6 +37,45 @@ class VotingEvent(models.Model):
         blank=True,
         null=True,
     )
+
+    def user_eligible(self, user):
+        """Check if user i eligible for voting event."""
+        if self.eligible_group is None:
+            return True  # Empty group means no restrictions.
+        return user.groups.filter(pk=self.eligible_group.pk).exists()
+
+    def user_checked_in(self, user):
+        return self.checked_in_users.filter(pk=user.pk).exists()
+
+    def num_checked_in(self):
+        return self.checked_in_users.count()
+
+    def check_in_user(self, user, ignore_eligible=False):
+        """Adds the user to the checked_in_users.
+        If ignore_eligible, do not verify user is eligible.
+        Raises UserNotEligible if not elible and ignore_eligible is false"""
+        if ignore_eligible or self.user_eligible(user):
+            self.checked_in_users.add(user)
+            self.save()
+        else:
+            raise UserNotEligible
+
+    def check_out_user(self, user):
+        """Removes user form checked_in_users"""
+        self.checked_in_users.remove(user)
+        self.save()
+
+    def check_out_all(self):
+        """Check out all usesrs"""
+        self.checked_in_users.clear()
+
+    def toggle_check_in_user(self, user):
+        """Toggle user checked in status.
+        Throws UserNotEligible if user is not eligible"""
+        if self.user_checked_in(user):
+            self.check_out_user(user)
+        else:
+            self.check_in_user(user)
 
     class Meta:
         permissions = [
@@ -40,7 +92,13 @@ class UserAlreadyVoted(Exception):
 
 
 class UserNotEligible(Exception):
-    """Raised if the voting user is not eligible to vote"""
+    """Raised if the voting user is not eligible to vote.
+    Note: this should not be used for users not being checked in,
+    in which case UserNotCheckedIn should be used."""
+
+
+class UserNotCheckedIn(Exception):
+    """Raised if the voting user is not checked in for event with checkin"""
 
 
 class VotingDeactive(Exception):
@@ -59,6 +117,10 @@ class VoteDistributionError(Exception):
     """Raised if unable to find winners"""
 
 
+class HoleInBallotError(Exception):
+    """Raised empty priority in vote ballot followed by non empty entry encountered"""
+
+
 class Voting(models.Model):
     """Represents a voting"""
 
@@ -67,7 +129,7 @@ class Voting(models.Model):
     )
     title = models.CharField(max_length=100)
     num_winners = models.IntegerField(blank=False, default=1)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     users_voted = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="users_voted",
@@ -82,6 +144,7 @@ class Voting(models.Model):
         on_delete=models.CASCADE,
     )
     is_active = models.BooleanField("Åpen for avtemning?", default=False)
+    is_preference_vote = models.BooleanField("Preferansevalg", default=False)
 
     def __str__(self):
         return self.title
@@ -107,123 +170,249 @@ class Voting(models.Model):
         self.is_active = False
 
     def user_not_eligible(self, user):
-        if self.event.eligible_group is not None:
-            if user.groups.all().filter(name=self.event.eligible_group).exists():
-                return False
-            else:
-                return True
-        else:
-            return False
+        """User is not in the eligible group
 
-    def submit_stv_votes(self, user, ballot):
-        """Submits transferable votes"""
-        alt_pks = [int(ballot[pri]) for pri in ballot]
+        Note: this is *not* a full check that the users should be allowed to vote.
+        For that, use `user_can_vote_now`"""
+        return not self.event.user_eligible(user)
+
+    def user_can_vote_now(self, user):
+        """Do all checks necessary for asserting user can submit vote
+
+        Raises appropriate exceptions on failure
+        Returns nothing"""
+        if self.user_already_voted(user):
+            raise UserAlreadyVoted(f"{user} has already voted on {self}.")
+        elif self.user_not_eligible(user):
+            raise UserNotEligible(f"{user} is not eligible to vote on {self}")
+        elif self.event.require_checkin and not self.event.user_checked_in(user):
+            raise UserNotCheckedIn(f"{user} is not checked to event.")
+        elif not self.is_active:
+            raise VotingDeactive(f"The voting {self} is no longer open.")
+
+    def submit_stv_votes(self, user, ballot_dict):
+        """
+        Submits transferable votes i.e. creates ballot
+
+        parameters:
+            user: NablaUser (who sumbitted the vote)
+            ballot_dict: dictionary with priority as keys, alternative.pk (id) as values
+
+        ballot_dict = {} => Empty ballot (blank vote)
+        """
+        assert self.is_preference_vote, "Only preference votes can have ballots"
+        self.user_can_vote_now(user)
+
+        self.users_voted.add(user)
+        if ballot_dict == {}:
+            # Empty ballot == blank vote
+            # Then adding user to self.users_voted is sufficient
+            # Do not create BallotContainer instance
+            # Blank votes affects the quota
+            return
+
+        alt_pks = [int(ballot_dict[pri]) for pri in ballot_dict]
         if len(alt_pks) != len(set(alt_pks)):
             raise DuplicatePriorities("Ballot contains duplicate(s) of candidates")
-        alt1_pk = int(ballot[1])
+        alt1_pk = int(ballot_dict[1])
         alt1 = self.alternatives.get(pk=alt1_pk)
-        new_ballot = BallotContainer.objects.create(voting=self, alternative=alt1)
+        # create BallotContainer instance
+        new_ballot = BallotContainer.objects.create(
+            voting=self, current_alternative=alt1
+        )
         new_ballot.save()
-        for (alt_pk, pri) in zip(alt_pks, ballot):
+        # Create BallotEntry instances
+        for (alt_pk, pri) in zip(alt_pks, ballot_dict):
             alt = Alternative.objects.get(pk=alt_pk)
             new_entry = BallotEntry.objects.create(
                 container=new_ballot, priority=pri, alternative=alt
             )
             new_entry.save()
-            self.users_voted.add(user)
+
+        # Reset ballots/stv-results
+        for alt in self.alternatives.all():
+            alt.is_winner = False
+            # Inital dist is called in the stv procedure, but could perhaps
+            # consider calling it here too
 
     def multi_winnner_initial_dist(self):
         """Initial distribution of votes according to first priority"""
         for ballot in self.ballots.all():
             alt1 = ballot.entries.get(priority=1).alternative
-            ballot.alternative = alt1
+            ballot.current_alternative = alt1
             ballot.save()
 
-    def get_multi_winner_result(self):
-        """Declare multples winners using a single transferable votes system"""
-        alternatives = self.alternatives.all()
-        quota = int(self.get_total_votes() / (self.num_winners + 1)) + 1  # Droop quota
-        winners = []
-        losers = []
+    def get_quota(self):
+        """Returns the droop quota for a preference vote"""
+        assert self.is_preference_vote, "Only preference votes have quotas"
+        return int(self.get_total_votes() / (self.num_winners + 1)) + 1
 
+    def _set_winners(self, winners):
+        """Takes a list of winners, sets is_winner true for the winner"""
+        for winner in winners:
+            assert winner.voting == self  # make sure we don't alter another voting
+            winner.is_winner = True
+            winner.save()
+
+    def _transfer_ballot(self, ballot, current_alt):
+        """
+        Transfers vote to next priority on the ballot
+        the given ballot must be transferable, i.e. not exhausted
+        i.e. not already be assigned to it's last priority
+        """
+        assert ballot.voting == self  # Don't mess with other's alternatives!
+        pri = ballot.entries.get(alternative=current_alt).priority
+        if pri == ballot.entries.all().count():
+            return
+        next_prioritezed_alt = ballot.entries.get(priority=pri + 1).alternative
+        ballot.current_alternative = next_prioritezed_alt
+        ballot.save()
+
+    def _stv_find_winners(self):
+        """Declare winner(s) using a single transferable votes system"""
+        assert self.is_preference_vote, "Only preference votes can distribute votes"
+
+        alternatives = self.alternatives.all()
+        quota = self.get_quota()  # Number of votes to be declared winner
+        winners = []  # Alternatives that are declared winners
+        losers = []  # Alternatives that are eliminated as losers
+        num_losers = len(alternatives) - self.num_winners
+
+        assert not (
+            len(alternatives) == 1 and self.num_winners == 1
+        ), "Preference vote should not be used for one alternative and one winner"
+
+        assert not (
+            len(alternatives) == 2 and self.num_winners == 1
+        ), "Preference vote should not be used for two alternatives and one winner"
+
+        # Initial ballot/vote distribution according to first priority
         self.multi_winnner_initial_dist()
 
+        if num_losers < 0:
+            # Not enough alternatives/candidates
+            raise UnableToSelectWinners(
+                f"Not enough alternatives(candidates) to declare {self.num_winners} winners"
+            )
+        elif num_losers == 0:
+            # Everyone wins, regardless of vote count
+            # If all alternatives pass the quota -> end voting, don't transfer votes
+            # If only some are past the quota -> redistribute surplus(es)
+            # If no one is past the quota -> no surpluses -> end voting
+            winners_default = list(
+                alternatives
+            )  # Not sure if needed or sensible to convert to list
+            num_past_quota = 0
+            num_below_quota = 0
+            for winner in winners_default:
+                if winner.ballots.all().count() < quota:
+                    num_below_quota += 1
+                else:
+                    num_past_quota += 1
+            # If both if-test below are false only some are past quota -> transfer surplus
+            if num_below_quota == 0:
+                # Everyone past quota after inital distribution, nice, no transfer
+                # assert num_past_quota == self.num_winners
+                return winners_default
+            elif num_past_quota == 0:
+                # No one passes quota, not nice, but still no transfer
+                # assert num_below_quota == self.num_winners
+                return winners_default
+
         # Find winners, transfer votes and eliminate losers if necessary
-        if self.get_total_votes() >= quota * self.num_winners:
-            # Vote count is sufficient to declare winners
-
-            # Loop through number of losing alternatives
-            for i in range(self.get_total_votes() - self.num_winners):
-                # Find winners, redistribute surpluses until no more winners found
-                # If not enough winners are found, then proceed to loser elimination
-                for j in range(self.num_winners):
-                    new_winners = {}  # New winners found this round {alt: surplus}
-
-                    # Find alternatives passing quota, add to winners
-                    for alt in alternatives:
-                        if alt in winners:
-                            # Can't win twice
-                            pass
-                        elif alt.ballots.all().count() >= quota:
-                            # declare alt as a winner, find surplus
-                            num_surplus_votes = alt.ballots.all().count() - quota
-                            new_winners[alt] = num_surplus_votes
+        # Loop through number of losing alternatives (max number of loser to eliminate)
+        # If num_losers == 0, run loop one time to distribute surplus votes
+        for i in range(max(num_losers, 1)):
+            # Find winners, redistribute surpluses until no more winners found
+            # If not enough winners are found, then proceed to loser elimination
+            for j in range(self.num_winners):
+                past_quota_votes = {}  # {alt: votes} # votes at the time of counting
+                found_new_winners = False
+                # Find alternatives passing quota, add to winners (if not already winner)
+                for alt in alternatives:
+                    if alt.ballots.all().count() >= quota:
+                        # add to past quoata dict for future surplus transfer
+                        # if not already winner, add to winners and new_winners
+                        past_quota_votes[alt] = alt.ballots.all()
+                        if alt not in winners:
+                            # Can't win twice, only add to winner if not already winner
                             winners.append(alt)
-                    if len(new_winners) == 0:
-                        # No winners, need to eliminate loser
-                        break
-
-                    # Sort winners and surpluses in order of descending surplus
-                    new_winners_sorted = sorted(
-                        new_winners.items(), key=lambda x: x[1], reverse=True
-                    )
-
-                    # For winners distribute surplus votes in order of descending surplus
-                    for winner, surplus_count in new_winners_sorted:
-                        # Random sample N ballots from winners votes
-                        # N = num_surplus_votes = winner's votes - quota
-                        winner_ballots = winner.ballots.all()
+                            found_new_winners = True
+                if len(winners) == self.num_winners:
+                    # All winners found
+                    # All winners past quota
+                    # Voting procedure is done
+                    return winners
+                elif len(winners) > self.num_winners:
+                    raise VoteDistributionError(f"Too many winners: {winners}")
+                if not found_new_winners:
+                    # No new winners, still free 'seats', need to eliminate loser
+                    break
+                # Transfer surplus of all winners, old and new
+                for winner, winner_ballots in past_quota_votes.items():
+                    # Find size of surplus and the transferable votes at time of counting
+                    # Distribute surplus from the votes at the time of counting
+                    surplus_count = winner_ballots.count() - quota
+                    transferable_ballots = []
+                    for ballot in winner_ballots:
+                        pri = ballot.entries.get(alternative=winner).priority
+                        if pri == ballot.entries.all().count():
+                            # Ballot exhausted, not transferable
+                            pass
+                        else:
+                            transferable_ballots.append(ballot)
+                    # Then transfer surplus
+                    if len(transferable_ballots) <= surplus_count:
+                        # transfer all transferable_ballots
+                        for ballot in transferable_ballots:
+                            self._transfer_ballot(ballot, winner)
+                    else:
+                        # Random sample N ballots from winners transferable_ballots
                         redist_indices = random.sample(
-                            range(winner_ballots.count() - 1), surplus_count
+                            range(len(transferable_ballots)), surplus_count
                         )
                         for i in redist_indices:
                             # For each selected ballot, transfer it to next priority alternative
-                            ballot = winner_ballots[i]
-                            pri = ballot.entries.get(alternative=winner).priority
-                            if pri == self.get_num_alternatives():
-                                # May happen if partial ballots are allowed
-                                raise VoteDistributionError("Ballot exhausted, allow?")
-                            next_prioritezed_alt = ballot.entries.get(
-                                priority=pri + 1
-                            ).alternative
-                            ballot.alternative = next_prioritezed_alt
-                            ballot.save()
-
-                # If not enough winners, eliminate 'biggest loser' and redistribute votes
-                if len(winners) < self.num_winners:
-                    # First find 'biggest' loser
-                    # probably a more elegant way to do this
-                    remaining_alts = [alt for alt in alternatives if alt not in winners]
-                    remaining_alts = [
-                        alt for alt in remaining_alts if alt not in losers
-                    ]
-                    loser = remaining_alts[0]
-                    for alt in remaining_alts[i:]:
-                        if loser.ballots.all().count() > alt.ballots.all().count():
-                            loser = alt
-                    losers.append(loser)
-
-                    # Redistribute all losers votes (consider different method?)
-                    for ballot in loser.ballots.all():
-                        pri = ballot.entries.get(alternative=loser).priority
-                        next_prioritezed_alt = ballot.entries.get(
-                            priority=pri + 1
-                        ).alternative
-                        ballot.alternative = next_prioritezed_alt
-                        ballot.save()
-                elif len(winners) == self.num_winners:
-                    break
-                elif self.num_winners - len(winners) == alternatives.count() - len(
+                            self._transfer_ballot(transferable_ballots[i], winner)
+            # out of inner loop
+            # If not enough winners, eliminate 'biggest loser' and redistribute votes
+            if num_losers == 0:
+                # No one to eliminate, declare everyone as winners
+                # Surpluses has been transfered
+                winners = list(alternatives)  # again, maybe list conversion is stupid
+                return winners
+            if len(winners) < self.num_winners:
+                # First find 'biggest' loser
+                # probably a more elegant way to do this
+                remaining_alts = [alt for alt in alternatives if alt not in winners]
+                remaining_alts = [alt for alt in remaining_alts if alt not in losers]
+                vote_counts = {alt: alt.ballots.all().count() for alt in remaining_alts}
+                sorted_by_vote_counts = sorted(vote_counts, key=vote_counts.get)
+                first_loser = sorted_by_vote_counts[0]
+                second_loser = sorted_by_vote_counts[1]
+                first_loser_vote_count = first_loser.ballots.all().count()
+                second_loser_vote_count = second_loser.ballots.all().count()
+                if first_loser_vote_count < second_loser_vote_count:
+                    # First loser is the sole loser, eliminate
+                    loser = first_loser
+                elif first_loser_vote_count == second_loser_vote_count:
+                    # Two or more losers with same amount of votes
+                    # End procedure, return the already found winners
+                    if len(winners) == 0:
+                        raise UnableToSelectWinners(
+                            "No alternatives past quota, unable to eliminate loser"
+                        )
+                    return winners
+                else:
+                    # Should not happen
+                    raise VoteDistributionError(
+                        "First loser has more votes than second. Error in implementation."
+                    )
+                losers.append(loser)
+                # Redistribute all losers votes
+                for ballot in loser.ballots.all():
+                    self._transfer_ballot(ballot, loser)
+                if self.num_winners - len(winners) == alternatives.count() - len(
                     losers
                 ) - len(winners):
                     # Declare remainders as winners
@@ -232,18 +421,29 @@ class Voting(models.Model):
                         alt for alt in remaining_alts if alt not in losers
                     ]
                     winners += remaining_alts
-                else:
-                    raise VoteDistributionError(f"To many winners: {winners}")
-            if len(winners) == self.num_winners:
+                    return winners
+            elif len(winners) == self.num_winners:
                 return winners
-            elif len(winners) > self.num_winners:
-                raise VoteDistributionError(f"To many winners: {winners}")
             else:
-                raise VoteDistributionError(
-                    f"To few winners: {winners}, loser: {losers}"
-                )
+                raise VoteDistributionError(f"To many winners: {winners}")
+        # outside of outer loop
+        # Should really not make it here, so maybe throw exception instead
+        if len(winners) == self.num_winners:
+            return winners
+        elif len(winners) > self.num_winners:
+            raise VoteDistributionError(f"To many winners: {winners}")
         else:
-            return [f"Not enough votes to declare {self.num_winners} winners"]
+            raise VoteDistributionError(f"To few winners: {winners}, loser: {losers}")
+
+    # Maybe rename since it can be used also when there is one winner
+    def get_multi_winner_result(self):
+        winners = self._stv_find_winners()
+        self._set_winners(winners)
+        return winners
+
+    @property
+    def winners(self):
+        return self.alternatives.filter(is_winner=True)
 
 
 class Alternative(models.Model):
@@ -254,29 +454,41 @@ class Alternative(models.Model):
     )
     text = models.CharField(max_length=250)
     votes = models.IntegerField("Antall stemmer", blank=False, default=0)
+    is_winner = models.BooleanField("Alternative is declared winner", default=False)
 
     def __str__(self):
         return self.text
 
+    def get_queryset(self):
+        return self.__class__.objects.filter(id=self.id)
+
     def add_vote(self, user):
         """Add users vote"""
-        if self.voting.user_already_voted(user):
-            raise UserAlreadyVoted(f"{user} has already voted on {self.voting}.")
-        elif self.voting.user_not_eligible(user):
-            raise UserNotEligible(f"{user} is not eligible to vote on {self.voting}")
-        elif not self.voting.is_active:
-            raise VotingDeactive(f"The voting {self.voting} is no longer open.")
+        assert not self.voting.is_preference_vote
+
+        with transaction.atomic():
+            alt = self.get_queryset().select_for_update().get()
+            alt.voting.user_can_vote_now(user)
+            alt.votes = F("votes") + 1
+            alt.save()
+            alt.voting.users_voted.add(user)
+
+    def get_num_votes(self):
+        """Returns the number of received votes
+
+        Works for both preference and non-preference votes, and should
+        be used instead of accessing the votes field directly."""
+        if self.voting.is_preference_vote:
+            return self.voting.ballots.filter(current_alternative=self).count()
         else:
-            self.votes += 1
-            self.save()
-            self.voting.users_voted.add(user)
+            return self.votes
 
     def get_vote_percentage(self):
         """Return the percentage of the total votes this alternative got"""
-        if self.voting.get_total_votes() == 0:
+        try:
+            return 100 * self.get_num_votes() / self.voting.get_total_votes()
+        except ZeroDivisionError:
             return 0
-        else:
-            return 100 * self.votes / self.voting.get_total_votes()
 
 
 class BallotContainer(models.Model):
@@ -292,9 +504,19 @@ class BallotContainer(models.Model):
     """
 
     voting = models.ForeignKey(Voting, on_delete=models.CASCADE, related_name="ballots")
-    alternative = models.ForeignKey(
-        Alternative, on_delete=models.CASCADE, related_name="ballots"
+    current_alternative = models.ForeignKey(
+        Alternative,
+        on_delete=models.CASCADE,
+        related_name="ballots",
+        null=True,
+        blank=True,
     )
+
+    def clean(self):
+        # Make sure all alternatives belong to voting
+        votings = self.entries.values_list("alternative__voting", flat=True)
+        if votings.filter(pk=self.voting.pk).Count() != votings.Count():
+            raise ValidationError("All entries must belong to the voting.")
 
 
 class BallotEntry(models.Model):
@@ -303,5 +525,5 @@ class BallotEntry(models.Model):
     container = models.ForeignKey(
         BallotContainer, on_delete=models.CASCADE, related_name="entries"
     )
-    priority = models.IntegerField()
+    priority = models.IntegerField(validators=[MinValueValidator(1)])
     alternative = models.ForeignKey(Alternative, on_delete=models.CASCADE)
