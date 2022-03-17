@@ -183,13 +183,13 @@ class SubmitVoteTestCase(TestCase):
                 ),
             )
 
-    @skip
+    @skip("Test cannot deal with blocking transaction")
     def test_submit_vote(self):
         """Submit a vote, check that counter increases"""
         self.voting0_alternative0.add_vote(self.user0)
         self.assertEqual(self.voting0_alternative0.votes, 1)
 
-    @skip
+    @skip("Test cannot deal with blocking transaction")
     def test_submit_preference_vote(self):
         """Submit a preference vote"""
         # TODO check that we get the correct result?
@@ -251,7 +251,7 @@ class SubmitVoteTestCase(TestCase):
         }
         self.preference_voting.submit_stv_votes(user, preferences)
 
-    @skip
+    @skip("Test cannot deal with blocking transaction")
     def test_submit_non_active_vote(self):
         """Submit a vote on non-open voting"""
         self.voting0.is_active = False
@@ -276,7 +276,7 @@ class SubmitVoteTestCase(TestCase):
         # Make sure no ballot was created
         self.assertFalse(self.preference_voting.ballots.exists())
 
-    @skip
+    @skip("Test cannot deal with blocking transaction")
     def test_submit_second_vote(self):
         """Submit a second vote"""
         self.voting0_alternative0.add_vote(self.user0)
@@ -293,7 +293,7 @@ class SubmitVoteTestCase(TestCase):
             1,
         )
 
-    @skip
+    @skip("Test cannot deal with blocking transaction")
     def test_checkin(self):
         """Submit a vote, depending on whether checked in or not, should succeed/fail"""
         self.voting_event0.require_checkin = True
