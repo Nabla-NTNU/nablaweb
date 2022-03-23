@@ -3,6 +3,7 @@ import json
 
 from django import template
 from django.db import models
+from django.db.models.functions import Length
 from django.utils import timezone
 
 from nablapps.accounts.models import NablaUser
@@ -18,14 +19,12 @@ class CodeTask(models.Model):
     def __str__(self):
         return self.title
 
-    def get_correct_output(self):
-        return self.correct_output
-
     def get_best_result(self):
-        if len(self.result_set.all()) > 0:
-            return sorted(self.result_set.all(), key=lambda result: result.length)[0]
-        else:
-            return None
+        return (
+            self.result_set.annotate(length=Length("solution"))
+            .order_by("length")
+            .last()
+        )
 
     @property
     def correct_output_json(self):
