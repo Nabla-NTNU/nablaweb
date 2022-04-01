@@ -145,7 +145,7 @@ class CheckoutView(TemplateView):
             order = Order.objects.get(user=user)
 
             # Should this rather be in clean form?
-            if account.balance < 1:
+            if account.balance < order.get_total():
                 messages.error(request, "Ikke nok saldo på konto")
                 return redirect(self.request.resolver_match.view_name)
 
