@@ -1,20 +1,19 @@
 from datetime import datetime
-
 from django import forms
+from django.core.exceptions import ValidationError
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from django.views.generic import DetailView, ListView, TemplateView, View
-
-from nablapps.accounts.models import NablaUser
-from nablapps.officeBeer.models import Account
-from nablapps.officeBeer.views import PurchaseForm, Transaction
+from django.views.generic import DetailView, ListView, View, TemplateView
 
 from .models import Category, Order, OrderProduct, Product
-
+from nablapps.officeBeer.models import Account
+from nablapps.officeBeer.views import PurchaseForm, Transaction
+from nablapps.accounts.models import NablaUser
 
 class IndexView(ListView):
     queryset = Product.objects.order_by("-pub_date")
@@ -136,6 +135,8 @@ class CheckoutView(TemplateView):
     def post(self, request, *args, **kwargs):
         purchase_form = PurchaseForm(request.POST)
 
+        html = "templates/order_summary.html"
+
         if purchase_form.is_valid():
             user = NablaUser.objects.get_from_rfid(
                 purchase_form.cleaned_data["user_card_key"]
@@ -148,15 +149,17 @@ class CheckoutView(TemplateView):
                 messages.error(request, "Ikke nok saldo på konto")
                 return redirect(self.request.resolver_match.view_name)
 
-            account.balance -= order.get_final_price()
+            account.balance -= order.get_total()
 
             Transaction(
-                description=f"{0} Nabla-Coin ble trukket fra {account.user.username}'s konto.",
+                description=f"{order.get_total()} Nabla-Coin ble trukket fra {account.user.username}'s konto.",
                 amount=0,
                 account=account,
                 date=datetime.now(),
             ).save()
             account.save()
+
+            
 
             return redirect(self.request.resolver_match.view_name)
 
@@ -171,7 +174,6 @@ class CheckoutView(TemplateView):
             amount__lt=0
         ).order_by("-date")[:3]
         return context
-
 
 class PurchaseForm(forms.Form):
     # product = forms.ChoiceField(widget=forms.RadioSelect)
