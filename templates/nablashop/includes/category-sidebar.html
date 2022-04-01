@@ -1,6 +1,13 @@
 <ul class="nav flex-column">
-    <li class="nav-item"><a class="nav-link active" href="{% url 'nablashop:index' %}">Alt</a></li>
+    <li class="nav-item">Sett inn Nablacoin på din konto:</li>
+    <li class="nav-item"><a class="btn btn-primary btn-sm" href="{% url 'officebeer_deposit' %}">Innskudd Nablacoin</a></li>
+    <p></p>
+    <li class="nav-item">Filtrer varer:</li>
+    <li class="nav-item"><a class="nav-link active" href="{% url 'nablashop:index' %}">Alle</a></li>
     {% for category in category_list %}
     <li class="nav-item"><a class="nav-link "href="{% url 'nablashop:category_detail' category.id %}">{{ category.name }}</a></li>
     {% endfor %}
+    <p></p>
+    <li class="nav-item">Office Beer:</li>
+    <li class="nav-item"><a class="nav-link active" href="/officebeer/purchase/">Officebeer</a></li>
 </ul>
