@@ -1,13 +1,19 @@
+from datetime import datetime
+from django import forms
+from django.core.exceptions import ValidationError
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from django.views.generic import DetailView, ListView, View
+from django.views.generic import DetailView, ListView, View, TemplateView
 
 from .models import Category, Order, OrderProduct, Product
-
+from nablapps.officeBeer.models import Account
+from nablapps.officeBeer.views import PurchaseForm, Transaction
+from nablapps.accounts.models import NablaUser
 
 class IndexView(ListView):
     queryset = Product.objects.order_by("-pub_date")
@@ -121,3 +127,66 @@ def remove_single_product_from_cart(request, slug):
     else:
         messages.info(request, "Du har ingen aktiv ordere.")
         return redirect("nablashop:product_detail", slug=slug)
+
+
+class CheckoutView(TemplateView):
+    template_name = "nablashop/purchase.html"
+
+    def post(self, request, *args, **kwargs):
+        purchase_form = PurchaseForm(request.POST)
+
+        html = "templates/order_summary.html"
+
+        if purchase_form.is_valid():
+            user = NablaUser.objects.get_from_rfid(
+                purchase_form.cleaned_data["user_card_key"]
+            )
+            account = Account.objects.get_or_create(user=user)[0]
+
+            # Should this rather be in clean form?
+            if account.balance < 1:
+                messages.error(request, "Ikke nok saldo på konto")
+                return redirect(self.request.resolver_match.view_name)
+
+            account.balance -= 0
+
+            Transaction(
+                description=f"{0} Nabla-Coin ble trukket fra {account.user.username}'s konto.",
+                amount=0,
+                account=account,
+                date=datetime.now(),
+            ).save()
+            account.save()
+
+            return redirect(self.request.resolver_match.view_name)
+
+        context = {"form": purchase_form}
+
+        return render(request, self.template_name, context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = PurchaseForm()
+        context["last_transactions"] = Transaction.objects.filter(
+            amount__lt=0
+        ).order_by("-date")[:3]
+        return context
+
+class PurchaseForm(forms.Form):
+    # product = forms.ChoiceField(widget=forms.RadioSelect)
+    user_card_key = forms.IntegerField(
+        label="Kortnummer",
+        widget=forms.TextInput(attrs={"placeholder": "Scan kort", "autofocus": "true"}),
+    )
+
+    # todo valid product
+    def clean_user_card_key(self):
+        data = self.cleaned_data["user_card_key"]
+
+        # Check that there is an account with the given card key
+        if not NablaUser.objects.get_from_rfid(data):
+            raise ValidationError(
+                "Det er ingen registrerte kontoer med den kortnøkkelen,\
+                                    brukeren har kanskje ikke registrert NTNU-kortet sitt."
+            )
+        return data

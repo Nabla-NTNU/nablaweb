@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block more_head %}
+
+<script>
+  $(document).ready( function()  {
+  products = document.getElementById("id_product").children;
+  cardField = document.getElementById("id_user_card_key");
+  for( var i = 0; i < products.length; i++) {
+		      products[i].addEventListener("click", function(){
+		      cardField.focus(); cardField.select();
+		      });
+		      }
+  })
+</script>
+{% endblock %}
+
+{% block main %}
+<div class="purchase">
+<h1>Scan NTNU-kortet ditt for å betale</h1>
+<form action="" method="post">
+  {% csrf_token %}
+  {% for field in form %}
+  {{ field.errors }}
+  {{ field }}
+  {% endfor %}
+  <input type="submit" value="Submit">
+</form>
+<div id="last_transactions">
+{% for trans in last_transactions %}
+<p>{{ trans.description }}</p>
+{% endfor %}
+</div>
+</div>
+{% endblock %}
