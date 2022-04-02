@@ -172,6 +172,13 @@ class ResultAdmin(admin.ModelAdmin):
     def length(self, obj):
         return obj.length
 
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .annotate(length=models.functions.Length("solution"))
+        )
+
 
 admin.site.register(AdventCalendar, AdventCalendarAdmin)
 admin.site.register(Quiz, QuizAdmin)

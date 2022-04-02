@@ -14,7 +14,7 @@ from .views.advent import (
     register_found_santa,
     reset_door,
 )
-from .views.code_golf import CodeGolf, CodeTaskListView, code_golf_score
+from .views.code_golf import CodeGolf, CodeGolf2, CodeTaskListView, code_golf_score
 from .views.color_picker import submitColorChoice
 from .views.games import GamesList
 from .views.place import (
@@ -78,7 +78,9 @@ urlpatterns = [
     path("spill/", GamesList.as_view(), name="games_list"),
     path("brukertest/<int:pk>/", TestView.as_view(), name="user_test"),
     path("brukertest/<int:pk>/resultat/", test_result, name="test_result"),
+    ## Code golf
     path("kodegolf/", CodeTaskListView.as_view(), name="code_golf_menu"),
+    path("kodegolf2/<int:task_id>/", CodeGolf2.as_view(), name="code_golf2"),
     path("kodegolf/<int:task_id>/", CodeGolf.as_view(), name="code_golf"),
     path("kodegolf/score/<int:task_id>/", code_golf_score, name="code_golf_score"),
     # Color picker

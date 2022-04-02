@@ -10,6 +10,13 @@
 <p><b>Antall tegn: </b> {{ length }} </p>
 {% endif %}
 
+<h1>Alle forsøk:</h1>
+<ul>
+  {% for result in user_results %}
+    <li>{{ result.length  }} - {{ result.submitted_at  }}</li>
+  {% endfor %}
+</ul>
+
 <h1>Resultatliste:</h1>
 
 <table style="width:100%">

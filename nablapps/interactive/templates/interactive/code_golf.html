@@ -61,10 +61,11 @@ function builtinRead(x) {
 // get a reference to your pre element for output
 // configure the output function
 // call Sk.importMainWithBody()
+const codeElementId = "id_solution"  // The id of the element with the user's code
 function runit() {
     const correctnessIndicator = document.getElementById("correctnessIndicator");
     correctnessIndicator.className = "fas fa-spinner fa-pulse";
-    var prog = document.getElementById("yourcode").value;
+    var prog = document.getElementById(codeElementId).value;
     var mypre = document.getElementById("output");
     mypre.innerHTML = '';
     Sk.pre = "output";
@@ -81,8 +82,7 @@ function runit() {
             const output = mypre.innerHTML;
 
             // Update the form
-            document.getElementById("id_submitted_code").value = prog;
-            document.getElementById("id_submitted_output").value = output;
+            document.getElementById("id_output").value = output;
 
             // Set the checkmark or the x based on correctness of output
             const outputLines = output.split("\n");
@@ -101,30 +101,19 @@ function runit() {
 
 <h3>{{ task }}</h3>
 
-<p>{{ task_text|markdown }}</p>
-
-<form>
-<textarea id="yourcode" cols="40" rows="10">
-#Kode her (tips: fjern disse kommentarene for å få færre tegn)
-#Whitepaces blir telt
-
-</textarea>
-<br />
-
-{{ form.shown_code }}
-<button type="button" onclick="runit()">Run</button>
-</form>
-
-<pre id="output" style="max-height:300px;margin-top:1em;padding:0.5em;border-style:solid" ></pre>
-<pre id="error" style="max-height:300px;color:red" ></pre>
+<p>{{ task.task|markdown }}</p>
 
 <form method="POST">
     {% csrf_token %}
-    <p id="submitted_code">{{ code_golf_form.submitted_code }}</p>
-    <p id="submitted_output">{{ code_golf_form.submitted_output }}</p>
-    <button type="submit">Send</button>
-    <i id="correctnessIndicator" class="" style="margin-left:0.5em"></i>
-</form >
+    {{ form.as_p  }}
+    <button class="btn btn-primary" type="button" onclick="runit()">Run</button>
+    <input class="btn btn-secondary" type="submit" value="Send" />
+<br />
+</form>
+<pre id="output" style="max-height:300px;margin-top:1em;padding:0.5em;border-style:solid" ></pre>
+
+<i id="correctnessIndicator" class="" style="margin-left:0.5em"></i>
+<pre id="error" style="max-height:300px;color:red" ></pre>
 
  {% endblock %}
 

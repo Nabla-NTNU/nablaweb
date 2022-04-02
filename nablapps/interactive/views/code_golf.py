@@ -1,14 +1,83 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db.models.functions import Concat
+from django.forms import CharField, HiddenInput, ModelForm
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.views import View
+from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 
 from ..forms.code_golf import CodeGolfForm
 from ..models.code_golf import CodeTask, Result
+
+
+class ResultForm(ModelForm):
+    """Form for submitting code.
+
+    Discussion:
+        We cannot verify that the user's code actually outputs what he reports, but
+        we might at the very least verify that they include the correct output in
+        their response. We here extend the model form of the Result model to include
+        a field `output`, and verify that that field has the correct output (which
+        is passed to the form through the constructor).
+        Whether this is actually useful, or if a simple client side check is sufficient,
+        can be discussed. Future refactorings of code golf are free to remvoe this
+        server side check if they wish, which will have the benefit of making the
+        code simpler.
+    """
+
+    output = CharField(widget=HiddenInput)  # The ouput of the user's code
+
+    def __init__(self, *args, **kwargs):
+        self.task = kwargs.pop("task")
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = Result
+        fields = ["solution"]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        output = cleaned_data.get("output")
+        if output != self.task.correct_output:
+            raise ValidationError("Output does not match correct output")
+
+
+class CodeGolf2(LoginRequiredMixin, CreateView):
+    """View for writing and submitting solutions"""
+
+    model = Result
+    form_class = ResultForm
+    template_name = "interactive/code_golf.html"
+
+    def get_success_url(self):
+        return reverse("code_golf_score", kwargs={"task_id": self.task.id})
+
+    def dispatch(self, request, *args, **kwargs):
+        self.task = get_object_or_404(CodeTask, pk=self.kwargs.get("task_id"))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["task"] = self.task
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["task"] = self.task
+        context["result_list"] = Result.objects.best_by_user(full_object=True)
+        print(context["result_list"])
+        return context
+
+    def form_valid(self, form):
+        """Set other fields"""
+        form.instance.user = self.request.user
+        form.instance.task = self.task
+        return super().form_valid(form)
 
 
 class CodeGolf(LoginRequiredMixin, View):
@@ -107,14 +176,9 @@ def code_golf_score(request, task_id):
     task = get_object_or_404(CodeTask, pk=task_id)
     result_list = task.result_set.all()
 
-    # Cannot use .sorted_by since length is a property, not a db field
-    sorted_result_list = sorted(
-        result_list, key=lambda result: (result.length, result.submitted_at)
-    )
-
     output = markdownify_code(task.correct_output)
 
-    context = {"output": output, "result_list": sorted_result_list}
+    context = {"output": output, "result_list": result_list}
 
     user_result = result_list.filter(user=request.user).first()
     user_has_solution = user_result is not None
@@ -122,11 +186,16 @@ def code_golf_score(request, task_id):
     context["has_solution"] = user_has_solution
 
     if user_has_solution:
-        length = user_result.length
-        code = user_result.solution  # Add #!python for markdown
+        user_results = (
+            Result.objects.with_length().filter(user=request.user).order_by("length")
+        )
+        best_result = user_results.first()
+        length = best_result.length
+        code = best_result.solution  # Add #!python for markdown
         code = markdownify_code(code)
         context["code"] = code
         context["length"] = length
+        context["user_results"] = user_results
 
     return render(request, "interactive/code_golf_score.html", context)
 
