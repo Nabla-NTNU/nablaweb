@@ -21,6 +21,7 @@ from faker import Factory
 from nablapps.accounts.models import FysmatClass, NablaGroup
 from nablapps.accounts.models import NablaUser as User
 from nablapps.events.models import Event
+from nablapps.interactive.models.code_golf import CodeTask, Result
 from nablapps.jobs.models import Advert, Company
 from nablapps.news.models import FrontPageNews, NewsArticle
 
@@ -42,6 +43,25 @@ def s():
 def ss():
     """Longer random string"""
     return textwrap.shorten(fake.sentence(), width=20)
+
+
+def _seed_code_golf():
+    assert User.objects.exists(), "code golf seed requires at least one user"
+    task = CodeTask.objects.create(title="Print j", task="print j", correct_output="j")
+    user = User.objects.first()
+    Result.objects.create(
+        task=task, user=user, solution="print('j') # Prints j", python_version="myVer"
+    )
+    Result.objects.create(
+        task=task, user=user, solution="print('j')", python_version="myVer"
+    )
+    if User.objects.last() != user:  # Let's have another user submit as well
+        Result.objects.create(
+            task=task,
+            user=User.objects.last(),
+            solution="print('j') # Print j",
+            python_version="myVer",
+        )
 
 
 class Command(BaseCommand):
@@ -183,8 +203,11 @@ class Command(BaseCommand):
             start = fake.date_time_between_dates(
                 datetime_start=dt.now() + td(days=2), datetime_end=(dt.now() + td(30))
             )
-            job = Advert.objects.create(
+            Advert.objects.create(
                 company=company,
                 headline="stilling_" + str(count),
                 removal_date=start + td(days=100),
             )
+
+        print("Creating gode golf challenges")
+        _seed_code_golf()
