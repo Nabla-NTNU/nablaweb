@@ -62,6 +62,7 @@ function builtinRead(x) {
 // configure the output function
 // call Sk.importMainWithBody()
 const codeElementId = "id_solution"  // The id of the element with the user's code
+let output_correct = false  // Indicates if the generated output is correct
 function runit() {
     const correctnessIndicator = document.getElementById("correctnessIndicator");
     correctnessIndicator.className = "fas fa-spinner fa-pulse";
@@ -88,8 +89,10 @@ function runit() {
             const outputLines = output.split("\n");
             if (outputLinesEquality(outputLines, correctOutputLines)) {
                 correctnessIndicator.className = "fas fa-check";
+                output_correct = true
             } else {
                 correctnessIndicator.className = "fas fa-times";
+                output_correct = false
             }
         })
         .catch((error) => {
@@ -97,13 +100,23 @@ function runit() {
             correctnessIndicator.className = "fas fa-times";
         });
 }
+
+ function validateForm() {
+     // Recall that output_correct is updated when running the cod
+     if (output_correct) {
+         return true;
+     } else {
+         setError("Cannot send. Output does not match the correct output!")
+         return false;
+     }
+ }
 </script>
 
 <h3>{{ task }}</h3>
 
 <p>{{ task.task|markdown }}</p>
 
-<form method="POST">
+<form method="POST" onsubmit="return validateForm(this.id_solution.value)">
     {% csrf_token %}
     {{ form.as_p  }}
     <button class="btn btn-primary" type="button" onclick="runit()">Run</button>
@@ -113,7 +126,7 @@ function runit() {
 <pre id="output" style="max-height:300px;margin-top:1em;padding:0.5em;border-style:solid" ></pre>
 
 <i id="correctnessIndicator" class="" style="margin-left:0.5em"></i>
-<pre id="error" style="max-height:300px;color:red" ></pre>
+<pre class="alert alert-warning" id="error"></pre>
 
  {% endblock %}
 

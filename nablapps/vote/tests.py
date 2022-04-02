@@ -4,7 +4,7 @@ from contextlib import nullcontext
 from unittest import skip
 
 from django.contrib.auth.models import Permission
-from django.test import Client, TestCase
+from django.test import Client, TestCase, TransactionTestCase
 from django.urls import reverse
 
 from nablapps.accounts.models import NablaGroup, NablaUser
@@ -125,7 +125,7 @@ class CheckinTestCase(TestCase):
         self.assertFalse(self.voting_event0.checked_in_users.exists())
 
 
-class SubmitVoteTestCase(TestCase):
+class SubmitVoteTestCase(TransactionTestCase):
     """Tests of submitting votes"""
 
     def setUp(self):
@@ -300,6 +300,7 @@ class SubmitVoteTestCase(TestCase):
         self.voting_event0.save()
         self.voting_event0.check_in_user(self.user0)
         self.voting0_alternative0.add_vote(self.user0)
+        self.voting0_alternative0.refresh_from_db()
         self.assertEqual(self.voting0_alternative0.votes, 1)
         with self.assertRaises(UserNotCheckedIn):
             self.voting0_alternative0.add_vote(self.user1)  # Has not checked in

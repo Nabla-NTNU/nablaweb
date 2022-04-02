@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models.functions import Concat
-from django.forms import CharField, HiddenInput, ModelForm
+from django.forms import CharField, HiddenInput, ModelForm, Textarea
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -39,6 +39,12 @@ class ResultForm(ModelForm):
     class Meta:
         model = Result
         fields = ["solution"]
+        labels = {
+            "solution": "",  # Drop the label
+        }
+        widgets = {
+            "solution": Textarea(attrs={"placeholder": "Your solution"}),
+        }
 
     def clean(self):
         cleaned_data = super().clean()
@@ -64,6 +70,7 @@ class CodeGolf2(LoginRequiredMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["task"] = self.task
+        # kwargs["auto_id"] = False
         return kwargs
 
     def get_context_data(self, **kwargs):
