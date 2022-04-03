@@ -47,27 +47,18 @@ function builtinRead(x) {
         throw "File not found: '" + x + "'";
     return Sk.builtinFiles["files"][x];
 }
-
- function validateForm() {
-     // Recall that output_correct is updated when running the cod
-     if (output_correct) {
-         return true;
-     } else {
-         setError("Cannot send. Output does not match the correct output!")
-         return false;
-     }
- }
 </script>
 
 <div id="app">
 <h3>{{ task }}</h3>
+<hr />
 
 <p>{{ task.task|markdown }}</p>
 
-<form method="POST" onsubmit="return validateForm(this.id_solution.value)">
+<form method="POST">
     {% csrf_token %}
     {{ form.as_p  }}
-    <button class="btn btn-primary" type="button" @click="runit">Run</button>
+    <button class="btn btn-primary mr-1" type="button" @click="runit">Kjør</button>
     <input class="btn btn-secondary" type="submit" value="Send" :disabled="status!='correct'" />
 <br />
 </form>

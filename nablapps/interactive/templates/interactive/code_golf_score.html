@@ -21,7 +21,7 @@
 <a href="{% url 'code_golf' task.pk %}">Tilbake til oppgaven</a>
 <h1>Alle forsøk:</h1>
   {% for result in user_results %}
-    <div class="card">
+    <div class="card mb-2">
       <div class="card-header">
           <a class="btn d-block text-left" data-toggle="collapse" href="#solution-{{ result.pk  }}">
           {{ result.length  }} tegn
