@@ -79,7 +79,9 @@ class CodeGolf(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["task"] = self.task
-        context["result_list"] = Result.objects.best_by_user(task=self.task)
+        context["result_list"] = Result.objects.best_by_user(task=self.task).order_by(
+            "length"
+        )
         return context
 
     def form_valid(self, form):
@@ -111,7 +113,7 @@ def code_golf_score(request, task_id):
     """
 
     task = get_object_or_404(CodeTask, pk=task_id)
-    result_list = Result.objects.best_by_user(task=task)
+    result_list = Result.objects.best_by_user(task=task).order_by("length")
 
     output = markdownify_code(task.correct_output)
 
