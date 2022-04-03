@@ -72,6 +72,9 @@ class Result(models.Model):
     - TODO consider making user+solution unique together, thus not accepting multiple equal solutions
     """
 
+    class Meta:
+        ordering = ("length",)
+
     objects = ResultManager()
     task = models.ForeignKey(
         CodeTask,
@@ -94,11 +97,6 @@ class Result(models.Model):
         self.solution = self.solution.strip()
         self.length = len(self.solution)
         super().save(*args, **kwargs)
-
-    @staticmethod
-    def compute_length(submission: str) -> int:
-        raise Exception("This should not be used. Use SQL annotations instead.")
-        return len(submission.strip())
 
     def __str__(self):
         return f"{self.user}'s solution to CodeTask #{self.task.id}"
