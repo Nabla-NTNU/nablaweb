@@ -129,6 +129,8 @@ function builtinRead(x) {
 
 {% block sidebar %}
     <h1>Resultatliste:</h1>
+    <a href="{% url 'code_golf_score' task.pk %}">Se dine resultater</a><br />
+    <a href="{% url 'code_golf_menu' %}">Se andre oppgaver</a>
     <table style="width:100%">
       <tr><th>Bruker</th><th>Resultat(antall tegn)</th></tr>
       {% for t in result_list %}

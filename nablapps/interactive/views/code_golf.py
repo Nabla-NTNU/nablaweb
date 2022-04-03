@@ -57,7 +57,7 @@ class ResultForm(ModelForm):
             raise ValidationError("Output does not match correct output")
 
 
-class CodeGolf2(LoginRequiredMixin, CreateView):
+class CodeGolf(LoginRequiredMixin, CreateView):
     """View for writing and submitting solutions"""
 
     model = Result
@@ -91,81 +91,6 @@ class CodeGolf2(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class CodeGolf(LoginRequiredMixin, View):
-    def get(self, request, task_id):
-        # Display code task
-        task = get_object_or_404(CodeTask, pk=task_id)
-        task_text = task.task
-        code_golf_form = CodeGolfForm()
-        result_list = task.result_set.all()
-        # Cannot use .sorted_by since length is a property, not a db field
-        sorted_result_list = sorted(
-            result_list, key=lambda result: (result.length, result.submitted_at)
-        )
-        context = {
-            "task": task,
-            "code_golf_form": code_golf_form,
-            "task_text": task_text,
-            "result_list": sorted_result_list,
-        }
-        return render(request, "interactive/code_golf.html", context)
-
-    def post(self, request, task_id):
-        submitted_at = timezone.now()
-
-        # Submit output, check answer and count length
-        form = CodeGolfForm(request.POST)
-
-        if not form.is_valid():
-            return HttpResponse(
-                'Oi, noe gikk galt. Husk å trykke "run", og sjekk at koden skriver ut noe før du trykker send!'
-            )
-
-        code = form.get_submitted_code()
-        output = form.get_submitted_output()
-        task = get_object_or_404(CodeTask, pk=task_id)
-        correct_output = task.correct_output
-
-        """
-        We cannot know if the user has sent a code that matches the output they
-        say that they got. The best we can do is to verify the output sent in the request.
-        """
-
-        if output != correct_output:
-            correct = str(correct_output)
-            context = {"correct": correct, "output": output, "task_id": task_id}
-            return render(request, "interactive/code_golf_error.html", context)
-
-        score = Result.compute_length(code)
-
-        try:
-            previous_result = Result.objects.get(user=request.user, task=task)
-        except Result.DoesNotExist:
-            new_best_score = True
-            store_new_code = True
-        else:
-            new_best_score = score < previous_result.length
-            store_new_code = score <= previous_result.length
-
-        updates = {}
-
-        if store_new_code:
-            # The user has tied (or better) their old score -> update the stored code
-            updates["solution"] = code
-
-            if new_best_score:
-                # The user has achieved a new best score -> update the submission time
-                updates["submitted_at"] = submitted_at
-
-        Result.objects.update_or_create(
-            user=request.user,
-            task=task,
-            defaults=updates,
-        )
-
-        return redirect("/kodegolf/score/" + str(task_id))
-
-
 def markdownify_code(code):
     """
     Takes a code as a string and converts it to a form where it will be
@@ -185,11 +110,11 @@ def code_golf_score(request, task_id):
     """
 
     task = get_object_or_404(CodeTask, pk=task_id)
-    result_list = task.result_set.all()
+    result_list = task.result_set.with_length()
 
     output = markdownify_code(task.correct_output)
 
-    context = {"output": output, "result_list": result_list}
+    context = {"output": output, "result_list": result_list, "task": task}
 
     user_result = result_list.filter(user=request.user).first()
     user_has_solution = user_result is not None

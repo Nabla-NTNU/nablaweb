@@ -5,11 +5,17 @@
 
 {% block content %}
 {% if has_solution %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
 <h1>Din kode: </h1>
-{{ code|markdown }}
+<pre><code class="language-python">
+{{ code }}
+</code></pre>
 <p><b>Antall tegn: </b> {{ length }} </p>
 {% endif %}
 
+<a href="{% url 'code_golf' task.pk %}">Tilbake til oppgaven</a>
 <h1>Alle forsøk:</h1>
 <ul>
   {% for result in user_results %}
