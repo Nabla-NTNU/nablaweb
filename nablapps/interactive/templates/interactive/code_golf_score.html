@@ -12,9 +12,7 @@
 
 </style>
 <h1>Din kode: </h1>
-<pre><code class="language-python">
-{{ code }}
-</code></pre>
+<pre><code>{% autoescape off %}{{ code }}{% endautoescape %}</code></pre>
 <p><b>Antall tegn: </b> {{ length }} </p>
 {% endif %}
 
@@ -29,9 +27,7 @@
           </a>
       </div>
       <div id="solution-{{ result.pk }}" class="collapse">
-        <pre class="m-3 border" style="border-width: 2px !important"><code>
-        {{ result.solution  }}
-        </code></pre>
+        <pre class="m-3 border" style="border-width: 2px !important"><code>{% autoescape off %}{{ result.solution }}{% endautoescape %}</code></pre>
       </div>
     </div>
   {% endfor %}

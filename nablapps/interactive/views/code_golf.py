@@ -129,7 +129,6 @@ def code_golf_score(request, task_id):
         best_result = user_results.first()
         length = best_result.length
         code = best_result.solution  # Add #!python for markdown
-        code = markdownify_code(code)
         context["code"] = code
         context["length"] = length
         context["user_results"] = user_results
