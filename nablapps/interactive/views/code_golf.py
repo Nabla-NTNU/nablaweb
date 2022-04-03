@@ -217,18 +217,22 @@ class CodeTaskListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        task_list = CodeTask.objects.all()
+        task_list = CodeTask.objects.prefetch_related("result_set").order_by("-pk")
         best_results = []
         user_results = []
 
         for obj in task_list:
             best_results.append(obj.get_best_result)
             if self.request.user.is_authenticated:
-                try:
-                    user_results.append(
-                        obj.result_set.get(user=self.request.user).length
-                    )
-                except ObjectDoesNotExist:
+                user_result = (
+                    obj.result_set.with_length()
+                    .filter(user=self.request.user)
+                    .order_by("length")
+                    .first()
+                )
+                if user_result is not None:
+                    user_results.append(user_result.length)
+                else:
                     user_results.append("--")
             else:
                 user_results.append("--")

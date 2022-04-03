@@ -20,7 +20,7 @@ class CodeTask(models.Model):
         return self.title
 
     def get_best_result(self):
-        return self.result_set.with_length().order_by("length").last()
+        return self.result_set.with_length().order_by("length").first()
 
     @property
     def correct_output_json(self):
