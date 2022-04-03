@@ -3,7 +3,7 @@ import json
 
 from django import template
 from django.db import models
-from django.db.models.functions import Length
+from django.db.models.functions import Concat
 from django.utils import timezone
 
 from nablapps.accounts.models import NablaUser
@@ -39,7 +39,7 @@ class ResultManager(models.Manager):
 
     Adds often used queries like best form user etc"""
 
-    def best_by_user(self, full_object=False):
+    def best_by_user(self, task, full_object=False):
         """Get best submission by each user
 
         full_object: Bool
@@ -47,7 +47,16 @@ class ResultManager(models.Manager):
           If True, return a full queryset with the shortest result from each user.
         """
         if not full_object:
-            return self.values("user").annotate(models.Min("length"))
+            return (
+                self.filter(task=task)
+                .values(
+                    "user",
+                    full_name=Concat(
+                        "user__first_name", models.Value(" "), "user__last_name"
+                    ),
+                )
+                .annotate(length=models.Min("length"))
+            )
         else:
             # This is an advanced query. If you know a shorter way, feel free to
             # change it. We use the OuterRef and Subquery here. In the last
@@ -57,6 +66,7 @@ class ResultManager(models.Manager):
             # of a "hack" to make the expression legal. [0] will attempt to
             # evaluate the query, resulting in Django complaining we are not
             # inside of a subquery.
+            raise Exception("there is something wrong with this implementation")
             min_pk = (
                 Result.objects.filter(user=models.OuterRef("user"))
                 .order_by("length")

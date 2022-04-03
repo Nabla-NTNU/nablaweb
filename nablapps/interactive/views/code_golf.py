@@ -79,8 +79,7 @@ class CodeGolf(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["task"] = self.task
-        context["result_list"] = Result.objects.best_by_user(full_object=True)
-        print(context["result_list"])
+        context["result_list"] = Result.objects.best_by_user(task=self.task)
         return context
 
     def form_valid(self, form):
@@ -112,19 +111,19 @@ def code_golf_score(request, task_id):
     """
 
     task = get_object_or_404(CodeTask, pk=task_id)
-    result_list = Result.objects.best_by_user(full_object=True).filter(task=task)
+    result_list = Result.objects.best_by_user(task=task)
 
     output = markdownify_code(task.correct_output)
 
     context = {"output": output, "result_list": result_list, "task": task}
 
-    user_result = result_list.filter(user=request.user).first()
-    user_has_solution = user_result is not None
-
+    user_has_solution = Result.objects.filter(user=request.user, task=task).exists()
     context["has_solution"] = user_has_solution
 
     if user_has_solution:
-        user_results = Result.objects.filter(user=request.user).order_by("length")
+        user_results = Result.objects.filter(user=request.user, task=task).order_by(
+            "length"
+        )
         best_result = user_results.first()
         length = best_result.length
         code = best_result.solution  # Add #!python for markdown

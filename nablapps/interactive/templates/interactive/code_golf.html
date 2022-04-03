@@ -129,7 +129,7 @@ function builtinRead(x) {
       <tr><th>Bruker</th><th>Resultat(antall tegn)</th></tr>
       {% for t in result_list %}
       <tr>
-        <td>{{ t.user.get_full_name }}</td>
+        <td>{{ t.full_name }}</td>
         <td>{{ t.length }}</td>
       </tr>
       {% endfor %}
