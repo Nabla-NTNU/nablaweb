@@ -95,6 +95,9 @@ function builtinRead(x) {
              this.status = "spinning"
              this.output = ""
              Sk.pre = "output";
+             // NB!! If changing skulpt version to python 3,
+             // remember to change backend to store submission's python
+             // version as python 3 as well.
              Sk.configure({
                  // We have to append, not replace, as s
                  // Skulpt will print to output several times

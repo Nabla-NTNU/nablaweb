@@ -11,7 +11,6 @@ from django.views import View
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 
-from ..forms.code_golf import CodeGolfForm
 from ..models.code_golf import CodeTask, Result
 
 
@@ -88,6 +87,9 @@ class CodeGolf(LoginRequiredMixin, CreateView):
         """Set other fields"""
         form.instance.user = self.request.user
         form.instance.task = self.task
+        form.instance.python_version = (
+            "python2.7"  # NB! Change if changing Skulpt version
+        )
         return super().form_valid(form)
 
 
@@ -110,7 +112,7 @@ def code_golf_score(request, task_id):
     """
 
     task = get_object_or_404(CodeTask, pk=task_id)
-    result_list = task.result_set.with_length()
+    result_list = Result.objects.best_by_user(full_object=True)
 
     output = markdownify_code(task.correct_output)
 
@@ -122,9 +124,7 @@ def code_golf_score(request, task_id):
     context["has_solution"] = user_has_solution
 
     if user_has_solution:
-        user_results = (
-            Result.objects.with_length().filter(user=request.user).order_by("length")
-        )
+        user_results = Result.objects.filter(user=request.user).order_by("length")
         best_result = user_results.first()
         length = best_result.length
         code = best_result.solution  # Add #!python for markdown
@@ -150,8 +150,7 @@ class CodeTaskListView(ListView):
             best_results.append(obj.get_best_result)
             if self.request.user.is_authenticated:
                 user_result = (
-                    obj.result_set.with_length()
-                    .filter(user=self.request.user)
+                    obj.result_set.filter(user=self.request.user)
                     .order_by("length")
                     .first()
                 )

@@ -8,6 +8,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+<style>
+
+</style>
 <h1>Din kode: </h1>
 <pre><code class="language-python">
 {{ code }}
@@ -17,21 +20,33 @@
 
 <a href="{% url 'code_golf' task.pk %}">Tilbake til oppgaven</a>
 <h1>Alle forsøk:</h1>
-<ul>
   {% for result in user_results %}
-    <li>{{ result.length  }} - {{ result.submitted_at  }}</li>
+    <div class="card">
+      <div class="card-header">
+          <a class="btn d-block text-left" data-toggle="collapse" href="#solution-{{ result.pk  }}">
+          {{ result.length  }} tegn
+        <div class="float-right text-muted">{{ result.submitted_at|date:"d/m/Y H:i"  }}</div>
+          </a>
+      </div>
+      <div id="solution-{{ result.pk }}" class="collapse">
+        <pre class="m-3 border" style="border-width: 2px !important"><code>
+        {{ result.solution  }}
+        </code></pre>
+      </div>
+    </div>
   {% endfor %}
-</ul>
+{% endblock  %}
 
-<h1>Resultatliste:</h1>
 
-<table style="width:100%">
-  <tr><th>Bruker</th><th>Resultat(antall tegn)</th></tr>
-  {% for t in result_list %}
-  <tr>
-    <td>{{ t.user.get_full_name }}</td>
-    <td>{{ t.length }}</td>
-  </tr>
-  {% endfor %}
-</table>
+{% block sidebar %}
+    <h1>Resultatliste:</h1>
+    <table style="width:100%">
+      <tr><th>Bruker</th><th>Resultat(antall tegn)</th></tr>
+      {% for t in result_list %}
+      <tr>
+        <td>{{ t.user.get_full_name }}</td>
+        <td>{{ t.length }}</td>
+      </tr>
+      {% endfor %}
+    </table>
 {% endblock  %}

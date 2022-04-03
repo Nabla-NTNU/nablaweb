@@ -20,7 +20,7 @@ class CodeTask(models.Model):
         return self.title
 
     def get_best_result(self):
-        return self.result_set.with_length().order_by("length").first()
+        return self.result_set.order_by("length").first()
 
     @property
     def correct_output_json(self):
@@ -39,10 +39,6 @@ class ResultManager(models.Manager):
 
     Adds often used queries like best form user etc"""
 
-    def with_length(self):
-        """Annotate data with submission length"""
-        return self.annotate(length=models.functions.Length("solution"))
-
     def best_by_user(self, full_object=False):
         """Get best submission by each user
 
@@ -51,7 +47,7 @@ class ResultManager(models.Manager):
           If True, return a full queryset with the shortest result from each user.
         """
         if not full_object:
-            return self.with_length().values("user").annotate(models.Min("length"))
+            return self.values("user").annotate(models.Min("length"))
         else:
             # This is an advanced query. If you know a shorter way, feel free to
             # change it. We use the OuterRef and Subquery here. In the last
@@ -62,23 +58,17 @@ class ResultManager(models.Manager):
             # evaluate the query, resulting in Django complaining we are not
             # inside of a subquery.
             min_pk = (
-                Result.objects.with_length()
-                .filter(user=models.OuterRef("user"))
+                Result.objects.filter(user=models.OuterRef("user"))
                 .order_by("length")
                 .values("pk")[:1]
             )
-            return (
-                Result.objects.with_length()
-                .filter(pk=models.Subquery(min_pk))
-                .order_by("length")
-            )
+            return Result.objects.filter(pk=models.Subquery(min_pk)).order_by("length")
 
 
 class Result(models.Model):
     """
     Users solution to a CodeTask
 
-    - TODO run split on solution before storing
     - TODO consider making user+solution unique together, thus not accepting multiple equal solutions
     """
 
@@ -92,11 +82,18 @@ class Result(models.Model):
         on_delete=models.CASCADE,
     )
     solution = models.TextField(default="")  # Users code
-    python_version = models.TextField()
+    length = models.IntegerField()
+    python_version = models.CharField(max_length=15)
     submitted_at = models.DateTimeField(
         default=timezone.now,
         help_text="The time that the user first submitted code with this score (worse submissions do not update this field)",
     )
+
+    def save(self, *args, **kwargs):
+        # Drop newlines etc.
+        self.solution = self.solution.strip()
+        self.length = len(self.solution)
+        super().save(*args, **kwargs)
 
     @staticmethod
     def compute_length(submission: str) -> int:
