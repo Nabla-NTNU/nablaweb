@@ -13,6 +13,7 @@
 
 
 {% block content %}
+<script src="https://unpkg.com/vue@3"></script>
 <script type="text/javascript">
 {% autoescape off %}
 const correctOutputLines = JSON.parse('{{ task.correct_output_json }}');
@@ -41,64 +42,10 @@ const outputLinesEquality = (lines, correctLines) => {
     return true;
 }
 
-// output functions are configurable.  This one just appends some text
-// to a pre element.
-function outf(text) {
-    var mypre = document.getElementById("output");
-    mypre.innerHTML = mypre.innerHTML + text;
-}
-function setError(text) {
-    var mypre = document.getElementById("error");
-    mypre.innerHTML = text;
-}
 function builtinRead(x) {
     if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
         throw "File not found: '" + x + "'";
     return Sk.builtinFiles["files"][x];
-}
-// Here's everything you need to run a python program in skulpt
-// grab the code from your textarea
-// get a reference to your pre element for output
-// configure the output function
-// call Sk.importMainWithBody()
-const codeElementId = "id_solution"  // The id of the element with the user's code
-let output_correct = false  // Indicates if the generated output is correct
-function runit() {
-    const correctnessIndicator = document.getElementById("correctnessIndicator");
-    correctnessIndicator.className = "fas fa-spinner fa-pulse";
-    var prog = document.getElementById(codeElementId).value;
-    var mypre = document.getElementById("output");
-    mypre.innerHTML = '';
-    Sk.pre = "output";
-    Sk.configure({output: outf, read: builtinRead});
-    (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
-    var myPromise = Sk.misceval.asyncToPromise(function() {
-        return Sk.importMainWithBody("<stdin>", false, prog, true);
-    });
-    myPromise
-        .then(() => {
-            // Clear the error text-box
-            setError("");
-
-            const output = mypre.innerHTML;
-
-            // Update the form
-            document.getElementById("id_output").value = output;
-
-            // Set the checkmark or the x based on correctness of output
-            const outputLines = output.split("\n");
-            if (outputLinesEquality(outputLines, correctOutputLines)) {
-                correctnessIndicator.className = "fas fa-check";
-                output_correct = true
-            } else {
-                correctnessIndicator.className = "fas fa-times";
-                output_correct = false
-            }
-        })
-        .catch((error) => {
-            setError(error);
-            correctnessIndicator.className = "fas fa-times";
-        });
 }
 
  function validateForm() {
@@ -112,6 +59,7 @@ function runit() {
  }
 </script>
 
+<div id="app">
 <h3>{{ task }}</h3>
 
 <p>{{ task.task|markdown }}</p>
@@ -119,14 +67,63 @@ function runit() {
 <form method="POST" onsubmit="return validateForm(this.id_solution.value)">
     {% csrf_token %}
     {{ form.as_p  }}
-    <button class="btn btn-primary" type="button" onclick="runit()">Run</button>
-    <input class="btn btn-secondary" type="submit" value="Send" />
+    <button class="btn btn-primary" type="button" @click="runit">Run</button>
+    <input class="btn btn-secondary" type="submit" value="Send" :disabled="status!='correct'" />
 <br />
 </form>
-<pre id="output" style="max-height:300px;margin-top:1em;padding:0.5em;border-style:solid" ></pre>
 
-<i id="correctnessIndicator" class="" style="margin-left:0.5em"></i>
-<pre class="alert alert-warning" id="error"></pre>
+<pre v-if="errors" class="alert alert-warning" id="error">[[ errors ]]</pre>
+<div v-if="status=='correct'" class="alert alert-success">Output corrrect!</div>
+<pre v-if="output" class="alert alert-primary">
+    <h4 class="alert-heading">Output:</h4>
+[[ output ]]
+</pre>
+</div>  <!-- #solution-app -->
+<script>
+ Vue.createApp({
+     compilerOptions: {delimiters: ['[[', ']]']},
+     data() {
+         return {
+             errors: null,
+             status: null,  // One of "correct", "incorrect", "spinning"
+             user_code: null,
+             output: null,
+         }
+     },
+     methods: {
+         runit() {
+             this.status = "spinning"
+             this.output = ""
+             Sk.pre = "output";
+             Sk.configure({
+                 // We have to append, not replace, as s
+                 // Skulpt will print to output several times
+                 // (for newlines, I think)
+                 output: (output) => {this.output += output;},
+                 read: builtinRead
+             });
+             var myPromise = Sk.misceval.asyncToPromise(() => {
+                 return Sk.importMainWithBody("<stdin>", false, this.user_code, true);
+             });
+             myPromise
+                 .then(() => {
+                     const outputLines = this.output.split("\n");
+                     if (outputLinesEquality(outputLines, correctOutputLines)) {
+                         this.status = "correct"
+                         this.errors = null
+                     } else {
+                         this.status = "incorrect"
+                         this.errors = "Output does not match correct output."
+                     }
+                 })
+                 .catch((error) => {
+                     this.status = "incorrect"
+                     this.errors = error
+                 });
+         }
+     }
+ }).mount('#app')
+</script>
 
  {% endblock %}
 

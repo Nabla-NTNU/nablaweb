@@ -30,7 +30,9 @@ class ResultForm(ModelForm):
         code simpler.
     """
 
-    output = CharField(widget=HiddenInput)  # The ouput of the user's code
+    output = CharField(
+        widget=HiddenInput(attrs={"v-model": "output"})
+    )  # The ouput of the user's code
 
     def __init__(self, *args, **kwargs):
         self.task = kwargs.pop("task")
@@ -43,7 +45,9 @@ class ResultForm(ModelForm):
             "solution": "",  # Drop the label
         }
         widgets = {
-            "solution": Textarea(attrs={"placeholder": "Your solution"}),
+            "solution": Textarea(
+                attrs={"placeholder": "Your solution", "v-model": "user_code"}
+            ),
         }
 
     def clean(self):
