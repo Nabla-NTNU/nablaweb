@@ -112,7 +112,7 @@ def code_golf_score(request, task_id):
     """
 
     task = get_object_or_404(CodeTask, pk=task_id)
-    result_list = Result.objects.best_by_user(full_object=True)
+    result_list = Result.objects.filter(task=task).best_by_user(full_object=True)
 
     output = markdownify_code(task.correct_output)
 
