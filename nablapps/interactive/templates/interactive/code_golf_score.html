@@ -18,6 +18,12 @@
 
 <a href="{% url 'code_golf' task.pk %}">Tilbake til oppgaven</a>
 <h1>Alle forsøk:</h1>
+<div class="alert alert-secondary">
+  <span class="fas fa-question-circle"></span>
+  Har resultatet ditt endret seg?<br />
+  Vi i WebKom har nylig endret måten vi teller tegn på, for å hindre at man skal få ulikt svar avhengig av hvilket OS man kjører på.
+  Om noe så har du fått en bedre score nå enn før:)
+</div>
   {% for result in user_results %}
     <div class="card mb-2">
       <div class="card-header">

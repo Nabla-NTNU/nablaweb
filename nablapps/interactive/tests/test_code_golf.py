@@ -64,7 +64,9 @@ class CodeGolfTests(TestCase):
             1,
             "The task should have one submission after the user submitted",
         )
-        self.assertEqual(self.task.result_set.first().length, len(code_1.strip()))
+        self.assertEqual(
+            self.task.result_set.first().length, Result.solution_length(code_1)
+        )
         last_submitted_at = self.task.result_set.first().submitted_at
 
         # Submit better code
@@ -75,7 +77,9 @@ class CodeGolfTests(TestCase):
             2,
             "A new solution should be added.",
         )
-        self.assertEqual(self.task.result_set.first().length, len(code_2.strip()))
+        self.assertEqual(
+            self.task.result_set.first().length, Result.solution_length(code_2)
+        )
         new_submitted_at = self.task.result_set.first().submitted_at
 
         self.assertNotEqual(
@@ -84,7 +88,9 @@ class CodeGolfTests(TestCase):
             "The submitted at timestamp should be updated as the user submitted a new solution",
         )
 
-        self.assertEqual(self.task.result_set.first().length, len(code_2.strip()))
+        self.assertEqual(
+            self.task.result_set.first().length, Result.solution_length(code_2)
+        )
 
         self.submit_code(code_3)
         self.assertEqual(

@@ -105,8 +105,16 @@ class Result(models.Model):
     def save(self, *args, **kwargs):
         # Drop newlines etc.
         self.solution = self.solution.strip()
-        self.length = len(self.solution)
+        self.length = self.solution_length(self.solution)
         super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.user}'s solution to CodeTask #{self.task.id}"
+
+    @staticmethod
+    def solution_length(solution: str) -> int:
+        """Count cleaned solution, i.e. after removing 'extra' characters.
+
+        Remove trailing whitespace, replaces \r\n with \n etc, to make the
+        competition as fair as possible."""
+        return len(solution.strip().replace("\r\n", "\n"))
