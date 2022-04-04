@@ -39,6 +39,7 @@ flake8 = "3.9.2"
 pylint = ">=2.6"
 pylint-django = "*"
 bandit = "*"
+bpython = "*"
 
 [requires]
 python_version = "3.9"
