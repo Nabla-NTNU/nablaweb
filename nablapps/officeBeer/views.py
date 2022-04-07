@@ -17,8 +17,10 @@ class AccountView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Todo what if user does not have an account? Is get_or_create appropriate fix?
         context["account"] = Account.objects.get_or_create(user=self.request.user)[0]
+        context["permission_required"] = self.request.user.has_perm(
+            "officeBeer.sell_product"
+        )
         context["transaction_list"] = Transaction.objects.filter(
             account=context["account"], amount__lt=0
         ).order_by("-date")

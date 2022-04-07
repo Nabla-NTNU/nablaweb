@@ -19,4 +19,10 @@
   <li>{{ deposit.date }} - {{ deposit.description }} - {{ deposit.amount }}NOK
   {% endfor %}  
 </ul>
+
+{% if permission_required %} 
+  <h2>Lenke til purchase:</h2>
+  <a href="{% url 'officebeer_purchase' %}"><button type="button" class="btn btn-outline-nabla-blue">Purchase</button></a>
+{% endif %}
+
 {% endblock %}
