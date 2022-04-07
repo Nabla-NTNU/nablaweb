@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import (
     CategoryDetailView,
+    CheckoutView,
     IndexView,
     OrderSummaryView,
     ProductDetailView,
@@ -31,4 +32,5 @@ urlpatterns = [
         remove_single_product_from_cart,
         name="remove-single-product-from-cart",
     ),
+    path("checkout/", view=CheckoutView.as_view(), name="checkout"),
 ]

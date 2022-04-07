@@ -13,6 +13,7 @@
 
 
 {% block content %}
+<script src="https://unpkg.com/vue@3"></script>
 <script type="text/javascript">
 {% autoescape off %}
 const correctOutputLines = JSON.parse('{{ task.correct_output_json }}');
@@ -41,100 +42,94 @@ const outputLinesEquality = (lines, correctLines) => {
     return true;
 }
 
-// output functions are configurable.  This one just appends some text
-// to a pre element.
-function outf(text) {
-    var mypre = document.getElementById("output");
-    mypre.innerHTML = mypre.innerHTML + text;
-}
-function setError(text) {
-    var mypre = document.getElementById("error");
-    mypre.innerHTML = text;
-}
 function builtinRead(x) {
     if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
         throw "File not found: '" + x + "'";
     return Sk.builtinFiles["files"][x];
 }
-// Here's everything you need to run a python program in skulpt
-// grab the code from your textarea
-// get a reference to your pre element for output
-// configure the output function
-// call Sk.importMainWithBody()
-function runit() {
-    const correctnessIndicator = document.getElementById("correctnessIndicator");
-    correctnessIndicator.className = "fas fa-spinner fa-pulse";
-    var prog = document.getElementById("yourcode").value;
-    var mypre = document.getElementById("output");
-    mypre.innerHTML = '';
-    Sk.pre = "output";
-    Sk.configure({output: outf, read: builtinRead});
-    (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
-    var myPromise = Sk.misceval.asyncToPromise(function() {
-        return Sk.importMainWithBody("<stdin>", false, prog, true);
-    });
-    myPromise
-        .then(() => {
-            // Clear the error text-box
-            setError("");
-
-            const output = mypre.innerHTML;
-
-            // Update the form
-            document.getElementById("id_submitted_code").value = prog;
-            document.getElementById("id_submitted_output").value = output;
-
-            // Set the checkmark or the x based on correctness of output
-            const outputLines = output.split("\n");
-            if (outputLinesEquality(outputLines, correctOutputLines)) {
-                correctnessIndicator.className = "fas fa-check";
-            } else {
-                correctnessIndicator.className = "fas fa-times";
-            }
-        })
-        .catch((error) => {
-            setError(error);
-            correctnessIndicator.className = "fas fa-times";
-        });
-}
 </script>
 
+<div id="app">
 <h3>{{ task }}</h3>
+<hr />
 
-<p>{{ task_text|markdown }}</p>
-
-<form>
-<textarea id="yourcode" cols="40" rows="10">
-#Kode her (tips: fjern disse kommentarene for å få færre tegn)
-#Whitepaces blir telt
-
-</textarea>
-<br />
-
-{{ form.shown_code }}
-<button type="button" onclick="runit()">Run</button>
-</form>
-
-<pre id="output" style="max-height:300px;margin-top:1em;padding:0.5em;border-style:solid" ></pre>
-<pre id="error" style="max-height:300px;color:red" ></pre>
+<p>{{ task.task|markdown }}</p>
 
 <form method="POST">
     {% csrf_token %}
-    <p id="submitted_code">{{ code_golf_form.submitted_code }}</p>
-    <p id="submitted_output">{{ code_golf_form.submitted_output }}</p>
-    <button type="submit">Send</button>
-    <i id="correctnessIndicator" class="" style="margin-left:0.5em"></i>
-</form >
+    {{ form.as_p  }}
+    <button class="btn btn-primary mr-1" type="button" @click="runit">Kjør</button>
+    <input class="btn btn-secondary" type="submit" value="Send" :disabled="status!='correct'" />
+<br />
+</form>
+
+<pre v-if="errors" class="alert alert-warning" id="error">[[ errors ]]</pre>
+<div v-if="status=='correct'" class="alert alert-success">Output corrrect!</div>
+<pre v-if="output" class="alert alert-primary">
+    <h4 class="alert-heading">Output:</h4>
+[[ output ]]
+</pre>
+</div>  <!-- #solution-app -->
+<script>
+ Vue.createApp({
+     compilerOptions: {delimiters: ['[[', ']]']},
+     data() {
+         return {
+             errors: null,
+             status: null,  // One of "correct", "incorrect", "spinning"
+             user_code: null,
+             output: null,
+         }
+     },
+     methods: {
+         runit() {
+             this.status = "spinning"
+             this.output = ""
+             Sk.pre = "output";
+             // NB!! If changing skulpt version to python 3,
+             // remember to change backend to store submission's python
+             // version as python 3 as well.
+             Sk.configure({
+                 // We have to append, not replace, as s
+                 // Skulpt will print to output several times
+                 // (for newlines, I think)
+                 output: (output) => {this.output += output;},
+                 read: builtinRead
+             });
+             var myPromise = Sk.misceval.asyncToPromise(() => {
+                 return Sk.importMainWithBody("<stdin>", false, this.user_code, true);
+             });
+             myPromise
+                 .then(() => {
+                     const outputLines = this.output.split("\n");
+                     if (outputLinesEquality(outputLines, correctOutputLines)) {
+                         this.status = "correct"
+                         this.errors = null
+                     } else {
+                         this.status = "incorrect"
+                         this.errors = "Output does not match correct output."
+                     }
+                 })
+                 .catch((error) => {
+                     this.status = "incorrect"
+                     this.errors = error
+                 });
+         }
+     }
+ }).mount('#app')
+</script>
 
  {% endblock %}
 
 {% block sidebar %}
     <h1>Resultatliste:</h1>
+    <a href="{% url 'code_golf_score' task.pk %}">Se dine resultater</a><br />
+    <a href="{% url 'code_golf_menu' %}">Se andre oppgaver</a>
     <table style="width:100%">
       <tr><th>Bruker</th><th>Resultat(antall tegn)</th></tr>
       {% for t in result_list %}
       <tr>
-        <td>{{ t.user.get_full_name }}</td>
+        <td>{{ t.full_name }}</td>
         <td>{{ t.length }}</td>
       </tr>
       {% endfor %}

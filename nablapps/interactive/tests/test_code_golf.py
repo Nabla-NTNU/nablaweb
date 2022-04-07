@@ -28,8 +28,8 @@ class CodeGolfTests(TestCase):
         self.client.post(
             reverse("code_golf", kwargs={"task_id": self.task.id}),
             data={
-                "submitted_code": code,
-                "submitted_output": output or self.correct_output,
+                "solution": code,
+                "output": output or self.correct_output,
             },
         )
 
@@ -39,6 +39,7 @@ class CodeGolfTests(TestCase):
         code_0 = "print(2)"
         code_1 = "# comment\r\nprint(1)\r\n"
         code_2 = "print(1)\r\n"
+        code_3 = "print(1)\n"
 
         self.assertEqual(
             self.task.result_set.count(),
@@ -64,7 +65,7 @@ class CodeGolfTests(TestCase):
             "The task should have one submission after the user submitted",
         )
         self.assertEqual(
-            self.task.result_set.first().length, Result.compute_length(code_1)
+            self.task.result_set.first().length, Result.solution_length(code_1)
         )
         last_submitted_at = self.task.result_set.first().submitted_at
 
@@ -73,31 +74,29 @@ class CodeGolfTests(TestCase):
 
         self.assertEqual(
             self.task.result_set.count(),
-            1,
-            "The user's submission should be overridden, and a new one should not be created",
+            2,
+            "A new solution should be added.",
         )
         self.assertEqual(
-            self.task.result_set.first().length, Result.compute_length(code_2)
+            self.task.result_set.first().length, Result.solution_length(code_2)
         )
         new_submitted_at = self.task.result_set.first().submitted_at
 
         self.assertNotEqual(
             last_submitted_at,
             new_submitted_at,
-            "The submitted at timestamp should be updated as the user got a better score",
-        )
-
-        # Submit worse code
-        self.submit_code(code_1)
-        newest_submitted_at = self.task.result_set.first().submitted_at
-        self.assertEqual(
-            newest_submitted_at,
-            new_submitted_at,
-            "The submitted at timestamp should not be updated as the user got a worse score",
+            "The submitted at timestamp should be updated as the user submitted a new solution",
         )
 
         self.assertEqual(
-            self.task.result_set.first().length, Result.compute_length(code_2)
+            self.task.result_set.first().length, Result.solution_length(code_2)
+        )
+
+        self.submit_code(code_3)
+        self.assertEqual(
+            self.task.result_set.first().length,
+            self.task.result_set.all()[1].length,
+            "There should be no difference between using \r\n and \n",
         )
 
     def test_view_score(self):

@@ -101,19 +101,19 @@ def make_contact_context(request, spam_check, test_val):
         ("Nestleder", "nestleder"),
         ("Faddersjef/sekretær", "sekretaer"),
         ("Kasserer", "kasserer"),
+        ("Kommunikasjonssjef", "komsjef"),
         ("Bedkomsjef", "bedriftskontakt"),
         ("Arrangementsjef", "arrsjef"),
-        ("Kjellersjef", "kjellersjef"),
-        ("Ambassadør", "ambassador"),
-        ("Websjef", "websjef"),
-        ("Redaktør", "redaktor"),
-        ("PR-sjef", "leder.prokom"),
+        ("Jubileumssjef", "jubileumssjef"),
     )
     nabla_pos_emails = (
         ("Alle gruppeledere", "gruppeledere"),
+        ("Ambassadør", "ambassador"),
         ("Leder av ProKom", "leder.prokom"),
         ("Leder av QuizKom", "quizkom"),
+        ("Kjellersjef", "kjellersjef"),
         ("Leder av Koreolis", "koreolis.kraften"),
+        ("Redaktør", "redaktor"),
         ("Leder av Reka", "reka"),
         ("Leder av Reven", "reven"),
         ("Leder av Skråttcast", "skraattcast"),
@@ -124,6 +124,7 @@ def make_contact_context(request, spam_check, test_val):
         ("Revysjef", "revy"),
         ("Bryggemester", "bryggemester"),
         ("Leder av KontorKom", "leder.kontorkom"),
+        ("Websjef", "websjef"),
     )
     group_emails = (
         ("PostKom", "postkom"),

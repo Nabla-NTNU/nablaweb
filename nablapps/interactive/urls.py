@@ -78,6 +78,7 @@ urlpatterns = [
     path("spill/", GamesList.as_view(), name="games_list"),
     path("brukertest/<int:pk>/", TestView.as_view(), name="user_test"),
     path("brukertest/<int:pk>/resultat/", test_result, name="test_result"),
+    ## Code golf
     path("kodegolf/", CodeTaskListView.as_view(), name="code_golf_menu"),
     path("kodegolf/<int:task_id>/", CodeGolf.as_view(), name="code_golf"),
     path("kodegolf/score/<int:task_id>/", code_golf_score, name="code_golf_score"),

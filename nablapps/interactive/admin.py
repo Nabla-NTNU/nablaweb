@@ -169,9 +169,6 @@ class ResultAdmin(admin.ModelAdmin):
     list_filter = ("task",)
     readonly_fields = ("task", "user", "solution")
 
-    def length(self, obj):
-        return obj.length
-
 
 admin.site.register(AdventCalendar, AdventCalendarAdmin)
 admin.site.register(Quiz, QuizAdmin)
