@@ -13,4 +13,5 @@ urlpatterns = [
     ),
     path("success/", views.success, name="success"),
     path("success_gullkorn/", views.success_gullkorn, name="success_gullkorn"),
+    path("rombooking/", views.roombooking, name="rombooking"),
 ]

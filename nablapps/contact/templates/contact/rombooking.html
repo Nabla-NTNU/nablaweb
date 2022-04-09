@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% block title %}Rombooking{% endblock %}
+
+{% block content %}
+
+<h1>Rombooking</h1>
+
+<p>Bestill rom ved å fylle ut dette skjemaet :)</p>
+<p>Sørg for at du bestiller i god tid, for da er romutvalget større</p>
+
+
+
+{% if spam_check == True %}
+    {% bootstrap_alert "Forsøk å regne kontrollspørsmål på nytt" alert_type="danger" %}
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    {% bootstrap_form room_form exclude="spam_check" %}
+    {% bootstrap_field room_form.spam_check placeholder="Svar" %}
+    {% bootstrap_button "Send" button_type="submit" %}
+</form>
+{% endblock %}
