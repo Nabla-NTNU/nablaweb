@@ -1,19 +1,21 @@
 from datetime import datetime
-from django import forms
-from django.core.exceptions import ValidationError
 
+from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from django.views.generic import DetailView, ListView, View, TemplateView
+from django.views.generic import DetailView, ListView, TemplateView, View
+
+from nablapps.accounts.models import NablaUser
+from nablapps.officeBeer.models import Account
+from nablapps.officeBeer.views import Transaction  # PurchaseForm
 
 from .models import Category, Order, OrderProduct, Product
-from nablapps.officeBeer.models import Account
-from nablapps.officeBeer.views import PurchaseForm, Transaction
-from nablapps.accounts.models import NablaUser
+
 
 class IndexView(ListView):
     queryset = Product.objects.order_by("-pub_date")
@@ -135,8 +137,6 @@ class CheckoutView(TemplateView):
     def post(self, request, *args, **kwargs):
         purchase_form = PurchaseForm(request.POST)
 
-        html = "templates/order_summary.html"
-
         if purchase_form.is_valid():
             user = NablaUser.objects.get_from_rfid(
                 purchase_form.cleaned_data["user_card_key"]
@@ -146,10 +146,37 @@ class CheckoutView(TemplateView):
 
             # Should this rather be in clean form?
             if account.balance < order.get_total():
-                messages.error(request, "Ikke nok saldo på konto")
-                return redirect(self.request.resolver_match.view_name)
+                messages.error(
+                    request,
+                    "Ikke nok Nabla-Coin på konto. Kunne ikke gjennomføre handel.",
+                )
+                return HttpResponseRedirect("/shop/")
 
             account.balance -= order.get_total()
+
+            products_list = order.products
+            for item in products_list.all():
+                if item.product.stock < item.quantity:
+                    messages.error(
+                        request,
+                        f"Ikke nok {item.product} på lager. Kunne ikke gjennomføre handel.",
+                    )
+                    return HttpResponseRedirect("/shop/")
+                item.product.stock -= item.quantity
+
+                Product(
+                    name=item.product.name,
+                    description_short=item.product.description_short,
+                    description=item.product.description,
+                    pub_date=item.product.pub_date,
+                    photo=item.product.photo,
+                    price=item.product.price,
+                    stock=item.product.stock,
+                    category=item.product.category,
+                    slug=item.product.slug,
+                ).save()
+
+                item.product.delete()
 
             Transaction(
                 description=f"{order.get_total()} Nabla-Coin ble trukket fra {account.user.username}'s konto.",
@@ -159,9 +186,11 @@ class CheckoutView(TemplateView):
             ).save()
             account.save()
 
-            
+            messages.success(
+                request, f"Gjennomført! Nabla-Coin på konto {user}: {account.balance}"
+            )
 
-            return redirect(self.request.resolver_match.view_name)
+            return HttpResponseRedirect("/shop/")
 
         context = {"form": purchase_form}
 
@@ -174,6 +203,7 @@ class CheckoutView(TemplateView):
             amount__lt=0
         ).order_by("-date")[:3]
         return context
+
 
 class PurchaseForm(forms.Form):
     # product = forms.ChoiceField(widget=forms.RadioSelect)

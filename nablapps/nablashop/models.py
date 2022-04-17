@@ -29,11 +29,9 @@ class Product(models.Model):
         upload_to="product_photo", blank=False, verbose_name="bilde"
     )
     price = models.DecimalField(
-        max_digits=5, decimal_places=2, verbose_name="pris", default="123"
+        max_digits=5, decimal_places=2, verbose_name="pris", default=0
     )
-    stock = models.DecimalField(
-        max_digits=5, decimal_places=2, verbose_name="antall", default="100"
-    )
+    stock = models.IntegerField(verbose_name="antall", default=0)
     category = models.ForeignKey(
         Category, blank=True, null=True, on_delete=models.CASCADE
     )

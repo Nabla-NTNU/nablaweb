@@ -84,6 +84,7 @@ def feedback(request, template="feedback.html", send_to="webkom@nabla.no"):
                 context = make_feedback_context(request, spam_check, test_val)
                 return render(request, "contact/" + template, context)
 
+
 def roombooking(request, template="rombooking.html", send_to="nestleder@nabla.no"):
     spam_check = False
     if request.method != "POST":
@@ -116,6 +117,7 @@ def roombooking(request, template="rombooking.html", send_to="nestleder@nabla.no
                 test_val = random.randint(0, 20)
                 context = make_feedback_context(request, spam_check, test_val)
                 return render(request, "contact/" + template, context)
+
 
 def success(request):
     return render(request, "contact/success.html")
@@ -243,6 +245,7 @@ def make_feedback_context(request, spam_check, test_val):
         "test_val": test_val,
     }
     return context
+
 
 def make_roombooking_context(request, spam_check, test_val):
     if request.user.is_authenticated:

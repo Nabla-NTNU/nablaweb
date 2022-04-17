@@ -30,14 +30,21 @@ class FeedbackForm(forms.Form):
         right_answer = cd["right_answer"]
         return right_answer
 
+
 # Utrolig Wack og dårlig løsning - altså er kok av klassen over - bør finne på noe bedre!
 class RoomForm(forms.Form):
     your_name = forms.CharField(label="Ditt navn:", max_length=100, required=False)
     committee_name = forms.CharField(label="Komite:", max_length=100, required=False)
-    start_time = forms.CharField(label="Start tidspunkt:", max_length=100, required=True)
+    start_time = forms.CharField(
+        label="Start tidspunkt:", max_length=100, required=True
+    )
     duration = forms.CharField(label="Varighet:", max_length=100, required=True)
-    num_people = forms.IntegerField(label="Estimert antall:", max_value=400, required=False)
-    purpose = forms.CharField(label="Kort beskrivelse av formål:", widget=forms.Textarea, required=True)
+    num_people = forms.IntegerField(
+        label="Estimert antall:", max_value=400, required=False
+    )
+    purpose = forms.CharField(
+        label="Kort beskrivelse av formål:", widget=forms.Textarea, required=True
+    )
     email = forms.EmailField(label="Din e-post:", max_length=100, required=True)
     spam_check = forms.FloatField(max_value=20, required=True)
     right_answer = forms.FloatField(
