@@ -38,6 +38,10 @@ class FrontPageView(FlatPageMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        messages.warning(
+            self.request,
+            "Serverrommet der vi har våre servere har for tiden noen tekniske problemer. Vi jobber med NTNU for å få dette fikset. Det kan hende at nettsiden er noe ustabil.",
+        )
         # Inject complicated context.
         # This context processing should perhaps be moved to the corresponding apps.
         self._add_news(context)
