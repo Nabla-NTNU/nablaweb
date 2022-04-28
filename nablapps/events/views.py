@@ -3,8 +3,8 @@ Views for events app
 """
 import datetime
 
+from django.contrib.admin.models import ADDITION, DELETION, LogEntry
 from django.contrib.auth import get_user_model
-from django.contrib.admin.models import DELETION, ADDITION, LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.http import Http404, HttpResponse, HttpResponseRedirect
