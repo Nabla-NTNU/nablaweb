@@ -3,7 +3,9 @@ Views for events app
 """
 import datetime
 
+from django.contrib.admin.models import ADDITION, DELETION, LogEntry
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -80,10 +82,21 @@ class AdministerRegistrationsView(
             self.messages.warning("Ingen brukernavn skrevet inn.")
             return
         try:
+
+            event = self.get_object()
             user = User.objects.get(username=username)
 
-            # Legger brukeren i listen.
             self.get_object().register_user(user, ignore_restrictions=regelbryting)
+
+            post_str = ", without respecting the rules." if regelbryting else "."
+            log_eventregistration_change(
+                current_user=self.request.user,
+                user=user,
+                event=event,
+                action=ADDITION,
+                post_str=post_str,
+            )
+
         except (User.DoesNotExist, UserRegistrationException) as ex:
             self.messages.warning(
                 f"Kunne ikke legge til {username} i påmeldingslisten. "
@@ -100,8 +113,20 @@ class AdministerRegistrationsView(
 
         for username in user_list:
             try:
+
+                event = self.get_object()
                 user = User.objects.get(username=username)
+
+                log_eventregistration_change(
+                    current_user=self.request.user,
+                    user=user,
+                    event=event,
+                    action=DELETION,
+                )
+
                 self.get_object().deregister_user(user, respect_closed=False)
+
+                # to log deletion we need registration
             except (User.DoesNotExist, UserRegistrationException) as ex:
                 self.messages.warning(
                     f"Kunne ikke fjerne {username} fra påmeldingslisten. "
@@ -109,6 +134,36 @@ class AdministerRegistrationsView(
                     "Ta kontakt med WebKom, og oppgi denne feilmeldingen "
                     "dersom du tror dette er en feil."
                 )
+
+
+def log_eventregistration_change(
+    current_user: NablaUser, user: NablaUser, event: User, action, post_str: str = "."
+):
+    # we need registration to log this change
+    regs = event.eventregistration_set
+    registration = regs.get(user=user)
+
+    # custom message for log
+    if action == DELETION:
+        action_strs = "removed", "from"
+    elif action == ADDITION:
+        action_strs = "added", "to"
+    else:
+        action_strs = ("?", "?")
+
+    change_message = (
+        f"{current_user.get_short_name()} {action_strs[0]} {user.get_short_name()} {action_strs[1]} {event.short_name}"
+        + post_str
+    )
+
+    LogEntry.objects.log_action(
+        user_id=current_user.pk,
+        content_type_id=ContentType.objects.get_for_model(registration).id,
+        object_id=registration.pk,
+        object_repr=str(registration),
+        action_flag=action,
+        change_message=change_message,
+    )
 
 
 def calendar(request, year=None, month=None):
