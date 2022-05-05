@@ -54,8 +54,26 @@ class RoomForm(forms.Form):
     def process(self):
         cd = self.cleaned_data
         committee_name = cd["committee_name"]
-        purpose = cd["purpose"] + "\n-" + cd["your_name"]
         email = cd["email"]
+        purpose = (
+            "Navn:"
+            + cd["your_name"]
+            + "\n"
+            + "Komite:"
+            + cd["committee_name"]
+            + "\n"
+            + "Start tidspunkt:"
+            + cd["start_time"]
+            + "\n"
+            + "Varighet:"
+            + cd["duration"]
+            + "\n"
+            + "Estimert antall:"
+            + str(cd["num_people"])
+            + "\n"
+            + "Formål:"
+            + cd["purpose"]
+        )
         return committee_name, purpose, email
 
     def get_answer(self):
