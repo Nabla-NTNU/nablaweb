@@ -35,6 +35,7 @@ class FeedbackForm(forms.Form):
 class RoomForm(forms.Form):
     your_name = forms.CharField(label="Ditt navn:", max_length=100, required=False)
     committee_name = forms.CharField(label="Komite:", max_length=100, required=False)
+    date = forms.CharField(label="Dato:", required=True)
     start_time = forms.CharField(
         label="Start tidspunkt:", max_length=100, required=True
     )
@@ -56,22 +57,25 @@ class RoomForm(forms.Form):
         committee_name = cd["committee_name"]
         email = cd["email"]
         purpose = (
-            "Navn:"
+            "Navn: "
             + cd["your_name"]
             + "\n"
-            + "Komite:"
+            + "Komite: "
             + cd["committee_name"]
             + "\n"
-            + "Start tidspunkt:"
+            + "Dato: "
+            + cd["date"]
+            + "\n"
+            + "Start tidspunkt: "
             + cd["start_time"]
             + "\n"
-            + "Varighet:"
+            + "Varighet: "
             + cd["duration"]
             + "\n"
-            + "Estimert antall:"
+            + "Estimert antall: "
             + str(cd["num_people"])
             + "\n"
-            + "Formål:"
+            + "Formål: "
             + cd["purpose"]
         )
         return committee_name, purpose, email
