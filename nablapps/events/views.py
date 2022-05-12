@@ -137,7 +137,7 @@ class AdministerRegistrationsView(
 
 
 def log_eventregistration_change(
-    current_user: NablaUser, user: NablaUser, event: User, action, post_str: str = "."
+    current_user: NablaUser, user: NablaUser, event: Event, action, post_str: str = "."
 ):
     # we need registration to log this change
     regs = event.eventregistration_set
@@ -152,7 +152,7 @@ def log_eventregistration_change(
         action_strs = ("?", "?")
 
     change_message = (
-        f"{current_user.get_short_name()} {action_strs[0]} {user.get_short_name()} {action_strs[1]} {event.short_name}"
+        f"{current_user.get_short_name()} {action_strs[0]} {user.get_short_name()} {action_strs[1]} {event.get_short_name()}"
         + post_str
     )
 
