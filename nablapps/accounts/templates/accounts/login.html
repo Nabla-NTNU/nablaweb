@@ -8,7 +8,7 @@
     {% csrf_token %}
     <input type='hidden' name='next' value='{{ next }}' />
     {% bootstrap_form form %}
-    <button class="btn btn-lg btn-primary" type="submit">Logg inn</button>
+    <button class="btn btn-lg btn-nabla-blue-dark" type="submit">Logg inn</button>
     <p><a href="{% url "password_reset" %}">Har du glemt passordet ditt?</a></p>
 </form>
 {% endblock %}

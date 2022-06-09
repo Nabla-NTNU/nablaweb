@@ -23,14 +23,14 @@
             <ul>
                 {% for podcast in podcast_list %}
                     <li>
-                        <a href="{{ podcast.get_absolute_url }}">
+                        <a href="{{ podcast.get_absolute_url }}" >
                         {% if podcast.image %}
                             <img src="{% thumbnail podcast.image 300x300 box=podcast.cropping quality=95 %}"
                                  alt="{{ podcast.title }}"/>
                         {% endif %}
 
-                            <h2>{{ podcast.title }}</h2>
-                            <p>{{ podcast.get_short_description|safe }}</p>
+                            <h2 class="gtext">{{ podcast.title }}</h2>
+                            <p style="color: black;">{{ podcast.get_short_description|safe }}</p>
                             <span class="date-text">
                                 {% if podcast.has_video %}
                                 <span class="fas fa-film"></span>
@@ -45,7 +45,7 @@
         </div>
 
     {% else %}
-        <p>Ingen podcast tilgjengelig.</p>
+        <p style="color:black;">Ingen podcast tilgjengelig.</p>
     {% endif %}
 <nav>
     <ul class="pagination d-flex justify-content-between" >

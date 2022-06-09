@@ -2,9 +2,9 @@
 
 {% block main %}
 <div class="container">
-    <h2>{{ object.univ_navn }}</h2>
-    <p>{{ object.desc }}</p>
-    <p>Liste over utvekslinger:</p>
+    <h2 style="color: black;">{{ object.univ_navn }}</h2>
+    <p style="color: black;">{{ object.desc }}</p>
+    <p style="color: black;">Liste over utvekslinger:</p>
     <div style="overflow: auto">
         <table class="table table-bordered">
             <thead>
@@ -31,7 +31,7 @@
                 {% if obj.subject_set.exists %}
                     <td>
                     {% for subject in obj.subject_set.all %}
-                        <p>{{ subject.code }} {{ subject.name }}</p>
+                        <p style="color: black;">{{ subject.code }} {{ subject.name }}</p>
                     {% endfor %}
                     </td>
                 {% else %}

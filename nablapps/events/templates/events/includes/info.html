@@ -57,7 +57,7 @@
 <table class="table table-bordered table-striped table-fixed table-break-word">
 
     <!-- Fra -->
-    <tr>
+    <tr class="gtext">
         <td >Starter</td>
         <td>
             <time datetime="{{ event.event_start|date:"c" }}">
@@ -68,7 +68,7 @@
 
     <!-- Til -->
     {% if event.event_end %}
-    <tr>
+    <tr class="gtext">
         <td>Slutter</td>
         <td>
             <time datetime="{{ event.event_end|date:"c" }}">
@@ -79,7 +79,7 @@
     {% endif %}
 
     <!-- Sted -->
-    <tr>
+    <tr class="gtext">
         <td>Sted</td>
         <td>{{ event.location }}</td>
     </tr>
@@ -91,7 +91,7 @@
 {% if event.registration_required %}
     <!-- Registrering åpner -->
     {% if event.registration_start %}
-    <tr>
+    <tr class="gtext">
         <td>Registrering åpner</td>
         <td>
             <time datetime="{{ event.registration_start|date:"c" }}">
@@ -103,7 +103,7 @@
 
     <!-- Åpen for -->
     {% block open_for %}
-    <tr>
+    <tr class="gtext">
         <td>Trinn</td>
             <td>
                 {% for group in classnumber %}
@@ -119,7 +119,7 @@
 
     <!-- Påmeldingsfrist -->
     {% if event.registration_deadline %}
-    <tr>
+    <tr class="gtext">
         <td>Påmeldingsfrist</td>
         <td>
             <time datetime="{{ event.registration_deadline|date:"c" }}">
@@ -131,7 +131,7 @@
 
     <!-- Avmeldingsfrist -->
     {% if event.deregistration_deadline %}
-    <tr>
+    <tr class="gtext">
         <td>Avmeldingsfrist</td>
         <td>
             <time datetime="{{ event.deregistration_deadline|date:"c" }}">
@@ -142,7 +142,7 @@
     {% endif %}
 
     {% if event.penalty%}
-    <tr>
+    <tr class="gtext">
         <td>Prikkregler</td>
         {% if event.penalty == 1%}
         <td><a href={% url 'wiki:get' 'retningslinjer-arrangement/' %}>Bedpres</td>
@@ -156,7 +156,7 @@
     </tr>
     {% endif %}
 
-    <tr>
+    <tr class="gtext">
         <td style="text-align: center;" colspan="2">
             {% if is_attending %}
                 <span class="fas fa-thumbs-up"></span>
@@ -172,11 +172,11 @@
     <!-- På/Avmeldingsknapp -->
     <form name="registration" action="{{ event.get_registration_url }}" method="post">
     {% csrf_token %}
-    <tr><td colspan="2" style="text-align: center;">
+    <tr class="gtext"><td colspan="2" style="text-align: center;">
         {% if not is_registered %} {# Show registration button #}
             <input type="hidden" name="registration_type" value="registration">
             {% if event.registration_open %}
-                <input type="submit" class="btn btn-primary"
+                <input type="submit" class="btn btn-nabla-blue-dark"
                    {% if not allowed_to_attend %} style="cursor: default; background: #aaa; border-color: #aaa;" disabled {% endif %}
                    value="Meld deg på {% if event.has_queue and event.is_full %}ventelisten{% endif %}">
                 <div style="height: 0; width: 0; position: relative; margin: 0 auto;">
@@ -196,13 +196,13 @@
             {% else %}
                 <a href="#"
                    id="meld-av"
-                   class="btn btn-primary">Meld deg av
+                   class="btn btn-nabla-blue-dark">Meld deg av
                     {% if is_waiting %}ventelisten{% endif %}
                 </a>
                 <br>
                 <input type="submit"
                        id="meld-av-confirm"
-                       class="btn btn-primary btn-warning"
+                       class="btn btn-nabla-blue-dark btn-warning"
                        value="Er du sikker?"
                         >
                 <script>
@@ -224,7 +224,7 @@
 
 
 {% if event.registration_required %}
-<h3>{{ event.users_attending }} påmeldt av {{ event.places }} plasser</h3>
+<h3 class="gtext">{{ event.users_attending }} påmeldt av {{ event.places }} plasser</h3>
 <div class="progress">
     <div class="progress-bar
     {% if 80 <= event.percent_full and event.percent_full < 100 %}

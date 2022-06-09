@@ -23,20 +23,20 @@
 
         {# Social buttons #}
         <div class="social card card-body card-body-overline">
-            <a href="mailto:bedriftskontakt@nabla.no" class="btn btn-nabla-yellow">
+            <a href="mailto:bedriftskontakt@nabla.no" class="btn btn-nabla-blue-dark">
                 Bedriftsforslag - send en mail til BN
             </a>
             <p></p>
-            <a href="{% url "gullkorn" %}" class="btn btn-nabla-yellow-dark">
+            <a href="{% url "gullkorn" %}" class="btn btn-nabla-blue-dark">
                 Lyst til å melde inn et gullkorn eller sitat?
             </a>
             <p></p>
             {% if logged_in %}
-                <a href="{% url "poll_user_create" %}" class="btn btn-nabla-blue-light">
+                <a href="{% url "poll_user_create" %}" class="btn btn-nabla-blue-dark">
                     Lag en brukeravstemning
                 </a>
                 <p></p>
-                <a href="{% url "feedback" %}" class="btn btn-nabla-blue">
+                <a href="{% url "feedback" %}" class="btn btn-nabla-blue-dark">
                     Send inn forslag til endring av nettsiden
                 </a>
                 <p></p>

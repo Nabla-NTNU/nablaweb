@@ -9,13 +9,51 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
     --nabla-yellow: #FFD500;
     --nabla-yellow-dark: #FDC500;
     --nabla-yellow-light: #ffff72;
-    --nabla-blue: #003F88;
+    --nabla-blue: #003F88; /* navbar + overskrifter */
     --nabla-blue-dark: #00296B;
     --nabla-blue-light: #00509D;
     --nabla-background: rgba(0, 80, 157, 0.05);
-
     --event: #5cb85c;
     --bedpres: #f5b507;
+    --box-color: #ffffff;
+    --text-color: #000000;
+    --header: #003F88;
+}
+
+.darkmode--activated{
+    --nabla-yellow: #fa9a2c;
+    --nabla-yellow-dark: #fa9a2c;
+    --nabla-yellow-light: #fa9a2c;
+    --nabla-blue: #2277e7; /* navbar + overskrifter */
+    --nabla-blue-dark: #00296B;
+    --nabla-blue-light: #fa9a2c;
+    --nabla-background: rgba(0, 80, 157, 0.05);
+    --event: #5cb85c;
+    --bedpres: #f5b507;
+    --box-color: #000000;
+    --text-color: #ffffff;
+    --header: #ffffff;
+
+}
+
+.list-group-item{
+    background-color: var(--box-color);
+}
+
+.nabla-frontpage-header{
+    color: var(--header);
+}
+
+.gtext{
+    color: var(--text-color);
+}
+
+.list-container{
+    color: var(--text-color);
+}
+
+.pop-up-dark{
+    background-color: var(--box-color);
 }
 
 a {
@@ -35,6 +73,7 @@ html {
 body {
     height: 100%;
     background-color: var(--nabla-background);
+    color: var(--text-color);
 }
 
 #content {
@@ -70,6 +109,7 @@ nav.nabla-navbar {
 
 .card {
     box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+    background-color: var(--box-color);
 }
 
 .box {
@@ -78,6 +118,7 @@ nav.nabla-navbar {
     padding: 0;
     overflow: hidden;
     margin-bottom: 7px;
+    color: var(--box-color);
 }
 
 .box header a {
@@ -306,6 +347,7 @@ footer a:hover {
 
 
 footer .kontakt table {
+    
 }
 
 footer .kontakt table th {
@@ -319,6 +361,9 @@ footer .kontakt table td:first-child {
     color: white;
 }
 
+.footer-info{
+    color: black;
+}
 
 /* Social icons in footer */
 .social-icon {

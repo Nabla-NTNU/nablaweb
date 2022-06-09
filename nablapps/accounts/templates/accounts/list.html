@@ -7,13 +7,13 @@
 
 {% if users %}
     <table id="user_list" class="table table-condensed table-striped table-bordered" width="100%">
-        <tr>
+        <tr class="gtext">
             <th>Brukernavn</th>
             <th>Navn</th>
             <th>Grupper</th>
         </tr>
     {% for user in users %}
-        <tr>
+        <tr class="gtext">
             <td >
             {# Brukernavn med lenke til profilen #}
                 <a href="{% url "member_profile" user.username %}">

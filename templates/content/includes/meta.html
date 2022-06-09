@@ -6,7 +6,7 @@
 
 
     <!-- Publisert -->
-    <tr>
+    <tr class="gtext">
         <td style="width:35%;">Publisert</td>
         <td>
             <time datetime="{{ content.created_date|date:"c" }}">
@@ -17,7 +17,7 @@
     
     <!-- Av -->
     {% if content.created_by %}
-    <tr>
+    <tr class="gtext">
         <td>Av</td>
         <td>
             <a href="{{ content.created_by.get_absolute_url }}">
@@ -30,7 +30,7 @@
     {% if content.has_been_edited %}
 
     <!-- Sist endret -->
-    <tr>
+    <tr class="gtext">
         <td>Sist endret</td>
         <td>
             <time datetime="{{ content.last_changed_date|date:"c" }}">
@@ -41,7 +41,7 @@
 
     <!-- Av -->
     {% if content.last_changed_by %}
-    <tr>
+    <tr class="gtext">
         <td>Av</td>
         <td>
             <a href="{{ content.last_changed_by.get_absolute_url }}">

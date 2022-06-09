@@ -21,7 +21,7 @@
     {% include "interactive/quiz_include.html" with quiz=door.quiz %}
     {% endif %}
     {% if door.user_test %}
-    <p><a href="{{ door.user_test.get_absolute_url }}" class="btn btn-large btn-wide btn-primary">Gå til brukertest!</a></p>
+    <p><a href="{{ door.user_test.get_absolute_url }}" class="btn btn-large btn-wide btn-nabla-blue-dark">Gå til brukertest!</a></p>
     {% endif %}
     {% if door.is_lottery %}
     {% if door.winner %}
@@ -44,7 +44,7 @@
             {% endif %}
         </div>
         {% endif %}
-        <button type="submit" class="btn btn-large btn-primary">
+        <button type="submit" class="btn btn-large btn-nabla-blue-dark">
 	    {% if part %}
 	    Endre svar
 	    {% else %}

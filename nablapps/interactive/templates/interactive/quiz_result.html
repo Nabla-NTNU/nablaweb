@@ -56,7 +56,7 @@ Du fikk {{ result.get_correct_count }} av {{ result.get_question_count }} riktig
     </ul>
 {% endfor %}
 
-<a class="btn btn-primary" href="{% url "quiz_score" result.scoreboard.id %}">
+<a class="btn btn-nabla-blue-dark" href="{% url "quiz_score" result.scoreboard.id %}">
     Highscore
 </a>
 {% if view.request.user == result.user %}

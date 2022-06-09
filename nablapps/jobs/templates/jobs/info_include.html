@@ -5,12 +5,12 @@
     <h3>Informasjon</h3>
     <!-- Fra -->
     {% if job.info_website or job.info_file %}
-    <tr>
+    <tr class="gtext">
         <td colspan=2>
             Søk/mer informasjon
         </td>
     </tr>
-    <tr>
+    <tr class="gtext">
         <td colspan="2">
             <ul style="margin-bottom:0;">
                 {% if job.info_website %}<li><a href="{{ job.info_website }}">Nettside</a></li>{% endif %}
@@ -20,14 +20,14 @@
     </tr>
     {% endif %}
 
-    <tr>
+    <tr class="gtext">
         <td style="width:35%;">Bedrift</td>
         <td>
             {{ job.company.name }}
         </td>
     </tr>
 
-    <tr>
+    <tr class="gtext">
         <td colspan="2">
             <ul style="margin-bottom:0;">
                 {% if job.company.website %}
@@ -39,7 +39,7 @@
     </tr>
 
     {% if job.relevant_for_group and job.relevant_for_year %}
-    <tr>
+    <tr class="gtext">
         <td>Relevant for</td>
         <td>
           {% for group_choice in job.relevant_for_group.all %}
@@ -52,7 +52,7 @@
     {% endif %}
 
     {% if job.deadline_date %}
-    <tr>
+    <tr class="gtext">
         <td>Søknadsfrist</td>
         <td>
             <time datetime="{{ job.deadline_date|date:"c" }}">
