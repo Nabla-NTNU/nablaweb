@@ -9,7 +9,7 @@
 <div id="dash">
     {% if user.is_authenticated %}
     <div id="penalties">
-        <span class="header_like">Prikker:</span> {{ penalties__count }}
+        <span class="header_like" style="color: black;">Prikker: {{ penalties__count }}</span>
         {% if penalties__count %}
         {% if penalties__count >= 4 %}<span class="fa fa-times" style="color: #c64444"></span>{% endif %}
         <div class="penalties__questionmark">?</div>
@@ -22,19 +22,19 @@
     </div>
 
     <div id="user_events">
-        <span class="header_like">Påmeldte arrangementer:</span>
+        <span class="header_like" style="color: black;">Påmeldte arrangementer:</span>
         {% for event in user_events %}
-        <div class="user_events__item">
+        <div style="color: black;" class="user_events__item">
             <a href="{{ event.event.get_absolute_url }}">{{ event.event }}</a>
         </div>
         {% empty %}
-        <div class="user_events__item user_events__item--empty"> Ikke påmeldt noen arrangementer</div>
+        <div class="user_events__item user_events__item--empty" style="color: black;"> Ikke påmeldt noen arrangementer</div>
         {% endfor %}
     </div>
     {% endif %} {# user authenticated #}
 
     <div id="event_list">
-        <div>
+        <div style="color: black;">
             <form method="get" class="filter" onchange="submit(this)">
                 {% for type in filter_form.type %}
                 {{ type }}
@@ -46,7 +46,7 @@
             </form>
         </div>
 
-        <a href="{% url 'event_list' %}">Ta meg til den gamle kalenderen <span class="fa fa-arrow-right"></span></a>
+        <a href="{% url 'event_list' %}" style="color: black;">Ta meg til den gamle kalenderen <span class="fa fa-arrow-right"></span></a>
 
         {% for event in object_list %}
         {% ifchanged %}<h2 class="month__name">{{ event.event_start|date:"F"|title }}</h2>{% endifchanged %}

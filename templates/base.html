@@ -164,20 +164,20 @@
         <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header pop-up-dark">
                         <h5 class="modal-title" id="exampleModalLongTitle">Ny student?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body pop-up-dark">
                         <p>
                             Nabla er linjeforeningen for alle studenter ved sivilingeniørprogrammet i fysikk og matematikk.
                             Vi har et heidundranes fadderopplegg som vi håper du vil ta del i!
                             Det er derfor veldig viktig at du trykker på knappen under og melder deg på!
                         </p>
                         <a href="https://docs.google.com/forms/d/e/1FAIpQLSd2yKA-N1dtutTU_9U07u4xJwddl6NNQC1UrcQmyhAC1hXZpQ/viewform?usp=pp_url"
-                           class="btn btn-primary btn-lg btn-block my-1"
+                           class="btn btn-nabla-blue-dark btn-lg btn-block my-1"
                            style="white-space:normal">
                             Trykk her for påmelding til fadderperioden - <b>2022!</b>
                         </a>
@@ -186,20 +186,19 @@
                             Gjør dette nå, og så kan du lese resten av informasjonen senere.
                         </p>
                         <!--<a href="https://nabla.no/brukere/registrer/"-->
-                               <!--    class="btn btn-warning btn-lg btn-block my-1"-->
+                               <!--    class="btn btn-nabla-blue-dark btn-lg btn-block my-1"-->
                                <!--    style="white-space:normal">-->
                                <!--    Trykk her for å registrere deg en bruker på <b>Nabla.no</b>-->
                         <!--</a>-->
                         <div class="list-group">
                             <a href="https://www.facebook.com/groups/659653052004839/?ref=share"
-                               class="btn btn-warning btn-lg btn-block my-1"
-                               style="color:black">
+                               class="btn btn-nabla-blue-dark btn-lg btn-block my-1">
                                 Meld deg også inn i facebook-gruppen for fadderperioden 2022 ved å trykke her.
                             </a>
-                            <a href="nystudent" class="list-group-item list-group-item-action" style="color:black">
+                            <a href="nystudent" class="btn btn-nabla-blue-dark btn-lg btn-block my-1">
                                 Mer informasjon om fadderopplegget finner du ved å trykke her.
                             </a>
-                            <a href="english" class="list-group-item list-group-item-action"style="color:black">
+                            <a href="english" class="btn btn-nabla-blue-dark btn-lg btn-block my-1">
                                 <b>New international student?</b> Read more about Nabla on our english pages by clicking here.
                             </a>
                         </div>
@@ -213,7 +212,7 @@
                         </small>
                     </div>
 
-                    <div class="modal-footer">
+                    <div class="modal-footer pop-up-dark">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk </button>
                     </div>
                 </div>
@@ -381,7 +380,7 @@
                             <input type='hidden' name='next' value='{{ request.path }}' />
                             <input class="form-control" style="min-width: 100%;"  type="text" placeholder="Brukernavn" name="username" />
                             <input class="form-control" style="min-width: 100%;" type="password"  placeholder="Passord" name="password" />
-                            <button class="submit btn btn-primary btn-block" type="submit">Logg inn</button>
+                            <button class="submit btn btn-nabla-blue-dark btn-block" type="submit">Logg inn</button>
                         </form>
                     </li>
                 {% endif %}
@@ -444,7 +443,7 @@
 
         </div>
         <!-- Footer -->
-        <footer class="nabla-footer" >
+        <footer class="nabla-footer darkmode-ignore"  >
 
             <div class="container">
             <div class="row pb-4">
@@ -510,6 +509,15 @@
         </footer>
         <!-- /.container -->
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+    <script>
+    function addDarkmodeWidget() {
+        new Darkmode().showWidget();
+    }
+    window.addEventListener('load', addDarkmodeWidget);
+    </script>
+    
     {% endblock body%}
     </body>
     {% render_block "js" %}

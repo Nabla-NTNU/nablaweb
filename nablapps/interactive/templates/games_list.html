@@ -12,7 +12,7 @@
 
 {% block main %}
 
-<h1>Spill</h1>
+<h1 style="color: black;">Spill</h1>
 
 <div class="card-deck">
     {% for game in games_list %}
@@ -23,7 +23,7 @@
             </div>
         </div>
     {% empty %}
-        <h3>Ingen spill...</h3>
+        <h3 style="color: black;">Ingen spill...</h3>
     {% endfor %}
     <div class="card {{ margin|default:"mb-2" }}" style="flex-basis: 30rem; flex-grow: 0.5; flex-shrink: 0.5; opacity: 0;">
         <div class="search-placeholder"></div>

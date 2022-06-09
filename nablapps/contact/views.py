@@ -6,6 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import resolve
 
+from click import style
+
 from .forms import ContactForm, FeedbackForm, RoomForm
 
 

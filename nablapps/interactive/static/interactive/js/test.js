@@ -38,7 +38,7 @@ var test = function (questions, people) {
         form.appendChild(e);
     }
     var b = c('button', 'Svar');
-    b.className = "btn btn-primary btn-lg";
+    b.className = "btn btn-nabla-blue-dark btn-lg";
     form.add(b);
     container.add(form);
 

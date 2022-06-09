@@ -63,7 +63,7 @@ class EventCalendar(HTMLCalendar):
             css_classes.append("filled")
 
         day_string = f"""
-            <div class="date">
+            <div class="date" style="color: black;">
                 <span class="day">{self.day_full[weekday]}</span>
                 <span class="num">{day}.</span>
             </div>{html_event_list}\n"""

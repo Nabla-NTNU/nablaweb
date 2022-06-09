@@ -69,11 +69,11 @@
 {% include "content/includes/meta.html" with content=nablad %}
 
 {% if user.is_authenticated and nablad.file_nsfw %}
-<a class="btn btn-primary btn-lg btn-block" href="{{ nablad.file_nsfw.url }}">
+<a class="btn btn-nabla-blue-dark btn-lg btn-block" href="{{ nablad.file_nsfw.url }}">
     Last ned Nabladet {{ nablad.pub_date|date:"F Y" }}
 </a>
 {% else %}
-<a class="btn btn-primary btn-lg btn-block" href="{{ nablad.file.url }}">
+<a class="btn btn-nabla-blue-dark btn-lg btn-block" href="{{ nablad.file.url }}">
     Last ned Nabladet {{ nablad.pub_date|date:"F Y" }}
 </a>
 {% endif %}
