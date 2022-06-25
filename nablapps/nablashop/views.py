@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -136,6 +137,7 @@ class CheckoutView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         purchase_form = PurchaseForm(request.POST)
+        pose = ""
 
         if purchase_form.is_valid():
             user = NablaUser.objects.get_from_rfid(
@@ -156,6 +158,7 @@ class CheckoutView(TemplateView):
 
             products_list = order.products
             for item in products_list.all():
+                pose += str(item) + "; "
                 if item.product.stock < item.quantity:
                     messages.error(
                         request,
@@ -186,8 +189,15 @@ class CheckoutView(TemplateView):
             ).save()
             account.save()
 
+            subject = "[NABLASHOP] Kvittering for handel"
+            message = f"Du har handlet {pose} \n Vis denne kvitteringen på kontoret når du skal hente varene dine"
+            email = "noreply@nabla.no"
+            mailadress = f"{account.user.username}@stud.ntnu.no"
+            send_mail(subject, message, email, [mailadress], fail_silently=False)
+
             messages.success(
-                request, f"Gjennomført! Nabla-Coin på konto {user}: {account.balance}"
+                request,
+                f"Gjennomført! Nabla-Coin på konto {user}: {account.balance}",
             )
 
             return HttpResponseRedirect("/shop/")
