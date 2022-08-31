@@ -95,13 +95,14 @@ class OfficeEvent(models.Model):
 
         now = datetime.now()
 
-        end_of_week = now + timedelta(days=(6 - now.weekday()))
-        end_of_week = end_of_week.date()
+        # This gives a running window of today plus seven days
+        end_of_window = now + timedelta(days=(7))
+        end_of_window = end_of_window.date()
 
         # Find events this week, but ignore those that have happened
         # Also include all repeating events
         office_events = OfficeEvent.objects.filter(
-            models.Q(start_time__date__gte=now, start_time__date__lte=end_of_week)
+            models.Q(start_time__date__gte=now, start_time__date__lte=end_of_window)
             | models.Q(repeating=True)
         )
 
@@ -111,7 +112,7 @@ class OfficeEvent(models.Model):
         # We can not do database sort, because weekday is not a column
         office_events = sorted(
             office_events,
-            key=lambda event: (event.start_time.weekday(), event.start_time.time()),
+            key=lambda event: (event.start_time.date(), event.start_time.time()),
         )
         return office_events
 
