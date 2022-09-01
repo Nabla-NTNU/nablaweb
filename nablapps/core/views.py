@@ -38,10 +38,6 @@ class FrontPageView(FlatPageMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        messages.warning(
-            self.request,
-            "Serverrommet der vi har våre servere har for tiden noen tekniske problemer. Vi jobber med NTNU for å få dette fikset. Det kan hende at nettsiden er noe ustabil.",
-        )
         # Inject complicated context.
         # This context processing should perhaps be moved to the corresponding apps.
         self._add_news(context)
@@ -69,7 +65,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
         )
         context["logged_in"] = True if self.request.user.is_authenticated else False
         # Uncomment when fadderperiode to display new student popup.
-        context["newuser_popup"] = False if self.request.user.is_authenticated else True
+        # context["newuser_popup"] = False if self.request.user.is_authenticated else True
         return context
 
     def _add_news(self, context):
