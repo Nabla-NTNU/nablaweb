@@ -81,6 +81,7 @@ class NablaUser(AbstractUser):
             "Det kan brukes of å identifisere deg på bedriftspresentasjoner og andre arrangementer. "
         ),
     )
+    darkmode = models.BooleanField(verbose_name="darkmode", default=False)
 
     objects = NablaUserManager()
 

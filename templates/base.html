@@ -511,13 +511,15 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+    {% if user.darkmode %}
     <script>
-    function addDarkmodeWidget() {
-        new Darkmode().showWidget();
+    const darkmode = new Darkmode();
+    if (!darkmode.isActivated()) {
+        darkmode.toggle();
     }
-    window.addEventListener('load', addDarkmodeWidget);
     </script>
-    
+    {% endif %}
+
     {% endblock body%}
     </body>
     {% render_block "js" %}
