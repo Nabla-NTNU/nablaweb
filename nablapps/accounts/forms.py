@@ -30,6 +30,7 @@ class UserForm(forms.ModelForm):
             "web_page",
             "birthday",
             "about",
+            "darkmode",
         )
 
     # Use a select widget for picking date of birth
@@ -50,6 +51,13 @@ class UserForm(forms.ModelForm):
             "<img style='padding-top:10px;' alt=' ' src='/static/img/ntnu_card_number.png' height = 180> </img>"
         )
     )
+
+    darkmode = forms.BooleanField(
+        required=False,
+        help_text="Darkmode er fortsatt under utvikling",
+    )
+
+
 
 
 class RegistrationForm(forms.Form):
