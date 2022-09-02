@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0006_auto_20210413_1346'),
+        ("accounts", "0006_auto_20210413_1346"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='nablauser',
-            name='darkmode',
-            field=models.BooleanField(default=False, verbose_name='darkmode'),
+            model_name="nablauser",
+            name="darkmode",
+            field=models.BooleanField(default=False, verbose_name="darkmode"),
         ),
     ]
