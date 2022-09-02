@@ -58,8 +58,6 @@ class UserForm(forms.ModelForm):
     )
 
 
-
-
 class RegistrationForm(forms.Form):
     """Form used to activate a new user or send a registration request."""
 
