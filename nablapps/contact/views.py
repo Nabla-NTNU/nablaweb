@@ -8,7 +8,7 @@ from django.urls import resolve
 
 from click import style
 
-from .forms import ContactForm, FeedbackForm, RoomForm
+from .forms import ContactForm, FeedbackForm, ForCompanyForm, RoomForm
 
 
 def contact(request):
@@ -277,3 +277,7 @@ def make_roombooking_context(request, spam_check, test_val):
         "test_val": test_val,
     }
     return context
+
+
+def for_bedrifter(request, template="for_bedrifter.html", send_to="bedkom@nabla.no"):
+    return render(request, "contact/" + template)
