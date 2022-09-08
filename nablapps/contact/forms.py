@@ -91,20 +91,21 @@ class RoomForm(forms.Form):
         return right_answer
 
 
-class ForCompanyForm(forms.Form):
-    company = forms.CharField(label="Bedrift:", max_length=100, required=True)
-    contact_person = forms.CharField(
-        label="Kontaktperson:", max_length=100, required=True
-    )
-    email = forms.CharField(label="Epost:", required=True)
-    purpose = forms.CharField(label="Kommentar:", widget=forms.Textarea, required=True)
+# Cant remember why I made this abomination... but to afraid to remove it, in case I may need it in the future... :Yawar:
+# class ForCompanyForm(forms.Form):
+#     company = forms.CharField(label="Bedrift:", max_length=100, required=True)
+#     contact_person = forms.CharField(
+#         label="Kontaktperson:", max_length=100, required=True
+#     )
+#     email = forms.CharField(label="Epost:", required=True)
+#     purpose = forms.CharField(label="Kommentar:", widget=forms.Textarea, required=True)
 
-    def process(self):
-        cd = self.cleaned_data
-        company = cd["company"]
-        email = cd["email"]
-        purpose = "Formål: " + cd["purpose"]
-        return company, purpose, email
+#     def process(self):
+#         cd = self.cleaned_data
+#         company = cd["company"]
+#         email = cd["email"]
+#         purpose = "Formål: " + cd["purpose"]
+#         return company, purpose, email
 
 
 class ContactForm(forms.Form):
