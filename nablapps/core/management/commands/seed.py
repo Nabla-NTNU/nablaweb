@@ -10,8 +10,7 @@ Currently creates (11.09.2019):
 """
 import random
 import textwrap
-from datetime import datetime as dt
-from datetime import timedelta as td
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -119,7 +118,7 @@ class Command(BaseCommand):
 
         count = random.randint(7, 10)
         print("Creating %d FysmatClasses" % count)
-        year = dt.now().year
+        year = datetime.now().year
         classes = [
             FysmatClass.objects.create(
                 starting_year=year - i, name="kull%d" % (year - i)
@@ -172,7 +171,8 @@ class Command(BaseCommand):
         print("Creating %d Events" % count)
         for i in range(count):
             start = fake.date_time_between_dates(
-                datetime_start=dt.now() + td(days=2), datetime_end=(dt.now() + td(30))
+                datetime_start=datetime.now() + timedelta(days=2),
+                datetime_end=(datetime.now() + timedelta(days=30)),
             )
 
             event = Event.objects.create(
@@ -181,12 +181,12 @@ class Command(BaseCommand):
                 lead_paragraph=g(),
                 short_name=ss(),
                 event_start=start,
-                event_end=start + td(hours=4),
+                event_end=start + timedelta(hours=4),
                 organizer=fake.name(),
                 location=fake.address(),
                 registration_required=True,
-                registration_start=dt.now(),
-                registration_deadline=(dt.now() + td(days=2)),
+                registration_start=datetime.now(),
+                registration_deadline=(datetime.now() + timedelta(days=2)),
                 places=10,
             )
             f = FrontPageNews()
@@ -201,12 +201,13 @@ class Command(BaseCommand):
                 description="company",
             )
             start = fake.date_time_between_dates(
-                datetime_start=dt.now() + td(days=2), datetime_end=(dt.now() + td(30))
+                datetime_start=datetime.now() + timedelta(days=2),
+                datetime_end=(datetime.now() + timedelta(days=30)),
             )
             Advert.objects.create(
                 company=company,
                 headline="stilling_" + str(count),
-                removal_date=start + td(days=100),
+                removal_date=start + timedelta(days=100),
             )
 
         print("Creating gode golf challenges")
