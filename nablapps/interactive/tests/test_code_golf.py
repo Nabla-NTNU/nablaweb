@@ -67,6 +67,11 @@ class CodeGolfTests(TestCase):
         self.assertEqual(
             self.task.result_set.first().length, Result.solution_length(code_1)
         )
+
+        # Move the old submission back a day to prevent flakyness of the test
+        self.task.result_set.first().submitted_at -= timedelta(days=1)
+        self.task.result_set.first().save()
+
         last_submitted_at = self.task.result_set.first().submitted_at
 
         # Submit better code
