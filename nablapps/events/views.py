@@ -286,17 +286,18 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
             except EventException as e:
                 self.messages.error(e)
 
-        if event.registration_required and self.request.user.is_authenticated:
+        if event.registration_required:
             classnumber = [group.get_class_number() for group in event.open_for.all()]
             classnumber = set(classnumber)
             context["classnumber"] = classnumber
-            context["allowed_to_attend"] = event.allowed_to_attend(
-                user
-            ) and event.user_penalty_limit(user)
-            try:
-                event._assert_user_allowed_to_register(user)
-            except UserRegistrationException as e:
-                context["reason_for_registration_failure"] = str(e)
+            if self.request.user.is_authenticated:
+                context["allowed_to_attend"] = event.allowed_to_attend(
+                    user
+                ) and event.user_penalty_limit(user)
+                try:
+                    event._assert_user_allowed_to_register(user)
+                except UserRegistrationException as e:
+                    context["reason_for_registration_failure"] = str(e)
 
         # notify users if their card number is missing when registered for an event where it could be used
         if (
