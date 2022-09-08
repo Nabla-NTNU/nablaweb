@@ -95,8 +95,9 @@ class OfficeEvent(models.Model):
 
         now = datetime.now()
 
-        # This gives a running window of today plus seven days
-        end_of_window = now + timedelta(days=(7))
+        # This gives a running window of today plus six days
+        # A larger window makes it hard do deal with repeating events
+        end_of_window = now + timedelta(days=(6))
         end_of_window = end_of_window.date()
 
         # Find events this week, but ignore those that have happened
@@ -110,9 +111,14 @@ class OfficeEvent(models.Model):
             office_events = office_events.exclude(public=False)
 
         # We can not do database sort, because weekday is not a column
+        # We need this sorting string to account for repeating events where the date is not in timewindow
+        # and we want to sort from today and to the end of the window
         office_events = sorted(
             office_events,
-            key=lambda event: (event.start_time.date(), event.start_time.time()),
+            key=lambda event: (
+                (event.start_time.weekday() - datetime.now().weekday()) % 7,
+                event.start_time.time(),
+            ),
         )
         return office_events
 
