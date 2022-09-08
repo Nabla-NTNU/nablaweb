@@ -69,8 +69,9 @@ class CodeGolfTests(TestCase):
         )
 
         # Move the old submission back a day to prevent flakyness of the test
-        self.task.result_set.first().submitted_at -= timedelta(days=1)
-        self.task.result_set.first().save()
+        old_submission = self.task.result_set.first()
+        old_submission.submitted_at -= timedelta(days=1)
+        old_submission.save()
 
         last_submitted_at = self.task.result_set.first().submitted_at
 
