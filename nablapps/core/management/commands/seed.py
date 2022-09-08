@@ -29,19 +29,14 @@ fake = Factory.create("no_NO")  # Norwegian sentences
 random.seed()  # Initialize random seed generator
 
 
-def g():
+def random_text():
     """A lot of random text"""
     return fake.text()
 
 
-def s():
+def random_sentence(maxlen=40):
     """Short random string"""
-    return textwrap.shorten(fake.sentence(), width=40)
-
-
-def ss():
-    """Longer random string"""
-    return textwrap.shorten(fake.sentence(), width=20)
+    return textwrap.shorten(fake.sentence(), width=maxlen)
 
 
 def _seed_code_golf():
@@ -158,7 +153,9 @@ class Command(BaseCommand):
         print("Creating %d News" % count)
         for i in range(count):
             article = NewsArticle.objects.create(
-                headline=s(), body=g(), lead_paragraph=g()
+                headline=random_sentence(),
+                body=random_text(),
+                lead_paragraph=random_text(),
             )
             f = FrontPageNews()
             f.content_object = article
@@ -176,10 +173,10 @@ class Command(BaseCommand):
             )
 
             event = Event.objects.create(
-                headline=s(),
-                body=g(),
-                lead_paragraph=g(),
-                short_name=ss(),
+                headline=random_sentence(),
+                body=random_text(),
+                lead_paragraph=random_text(),
+                short_name=random_sentence(20),
                 event_start=start,
                 event_end=start + timedelta(hours=4),
                 organizer=fake.name(),
