@@ -223,23 +223,48 @@ def generate_csv(http_request):
 
     writer = csv.writer(response, dialect="excel")
 
+    current_application_round = ApplicationRound.get_current()
+    committees = list(BaseApplicationListView().get_queryset().keys())
+
     table = list()
+    applicants = list()
+    applicant_texts = list()
+    top_row = list(["Nr", "Navn"])
 
-    committee_list = BaseApplicationListView().get_queryset()
+    for application in current_application_round.get_applicants():
+        if application.applicant not in applicants:
+            applicants.append(application.applicant)
 
-    for committee in committee_list.items():
+    for applicant in applicants:
         row = list()
-        row.append(committee[0])
-        templst = committee[1]
-        antall = len(templst)
-        for i in range(antall):
-            ntnu_username = re.sub("'s", "", ((str(templst[i])).split())[0])
-            row.append(ntnu_username)
-        table.append(row)
+        applicant_text = list()
+        row.append(len(table) + 1)  # Row index
+        row.append(f"{applicant.first_name} {applicant.last_name}")
 
-    table = map(list, zip(table))
+        applications = Application.objects.filter(
+            application_round=ApplicationRound.get_current(),
+            applicant=applicant,
+        ).order_by("priority")
 
-    for row in table:
-        writer.writerow(row)
+        for application in applications:
+            row.append(application.committee)
+            if application.application_text:
+                applicant_text.append(
+                    f"{application.committee}: {application.application_text}"
+                )
+
+        while len(top_row) < len(row):
+            top_row.append(f"{len(top_row) - 1}. valg")
+
+        applicant_texts.append(applicant_text)
+        table.append(
+            row + [""] * (len(committees) - len(applications))
+        )  # Need blanks to fill in applicant texts later
+
+    for i in range(len(table)):
+        table[i].append(", ".join(applicant_texts[i]))
+
+    writer.writerow(top_row + ["Tekst", "Krangel?"] + committees + ["Trukket"])
+    writer.writerows(table)
 
     return response
