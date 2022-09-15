@@ -387,7 +387,7 @@ class Command(BaseCommand):
 
     # The list of seeders in the order the objects should be created
     # E.g. if a seeder depends on users existing, it should come after UserSeeder
-    seeders: tuple[ObjectSeeder, ...] = (
+    seeders: tuple[type[ObjectSeeder], ...] = (
         NablaGroupSeeder,
         FysmatClassSeeder,
         SuperUserSeeder,
