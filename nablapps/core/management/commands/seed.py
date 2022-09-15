@@ -196,13 +196,13 @@ class UserSeeder:
                     ),
                 )
 
-            # Join some groups
-            for nabla_group in random.sample(groups, 5):
-                nabla_group.user_set.add(user)
+                # Join some groups
+                for nabla_group in random.sample(groups, 5):
+                    nabla_group.user_set.add(user)
 
-            # Join a class
-            fysmat_class = random.choice(classes)
-            fysmat_class.user_set.add(user)
+                # Join a class
+                fysmat_class = random.choice(classes)
+                fysmat_class.user_set.add(user)
 
     @classmethod
     def delete(cls) -> None:
