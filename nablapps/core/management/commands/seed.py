@@ -120,7 +120,7 @@ class SuperUserSeeder:
 
     @classmethod
     def exists(cls) -> bool:
-        User.objects.filter(username=cls.admin_name).exists()
+        return User.objects.filter(username=cls.admin_name).exists()
 
     @classmethod
     def create(cls) -> None:
