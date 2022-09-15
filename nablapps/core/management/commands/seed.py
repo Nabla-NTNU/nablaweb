@@ -82,7 +82,9 @@ class NablaGroupSeeder:
     @classmethod
     def create(cls) -> None:
         for i in range(cls.amount):
-            NablaGroup.objects.create(name=f"{fake.word()}-{i}-komitéen")
+            NablaGroup.objects.create(
+                name=f"{fake.word()}-{i}-komitéen", group_type="komite"
+            )
 
     @classmethod
     def delete(cls) -> None:
@@ -124,10 +126,11 @@ class SuperUserSeeder:
 
     @classmethod
     def create(cls) -> None:
-        assert NablaGroup.objects.exists(), "Need groups to create users"
+        committees_qs = NablaGroup.objects.exclude(group_type="kull")
+        assert committees_qs.exists(), "Need committees to create users"
         assert FysmatClass.objects.exists(), "Need classes to create users"
 
-        groups = tuple(NablaGroup.objects.all())
+        committees = tuple(committees_qs)
         classes = tuple(FysmatClass.objects.all())
 
         admin_user = User.objects.create_user(
@@ -145,8 +148,8 @@ class SuperUserSeeder:
             is_staff=True,
         )
 
-        # Join some groups
-        for nabla_group in random.sample(groups, 5):
+        # Join some committees
+        for nabla_group in random.sample(committees, 5):
             nabla_group.user_set.add(admin_user)
 
         # Join a class
@@ -170,10 +173,11 @@ class UserSeeder:
 
     @classmethod
     def create(cls) -> None:
-        assert NablaGroup.objects.exists(), "Need groups to create users"
+        committees_qs = NablaGroup.objects.exclude(group_type="kull")
+        assert committees_qs.exists(), "Need committees to create users"
         assert FysmatClass.objects.exists(), "Need classes to create users"
 
-        groups = tuple(NablaGroup.objects.all())
+        committees = tuple(committees_qs)
         classes = tuple(FysmatClass.objects.all())
 
         # Use a transaction to speed up the creation of users
@@ -196,8 +200,8 @@ class UserSeeder:
                     ),
                 )
 
-                # Join some groups
-                for nabla_group in random.sample(groups, 5):
+                # Join some committees
+                for nabla_group in random.sample(committees, random.randint(0, 5)):
                     nabla_group.user_set.add(user)
 
                 # Join a class
