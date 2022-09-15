@@ -258,11 +258,11 @@ def generate_csv(http_request):
 
         applicant_texts.append(applicant_text)
         table.append(
-            row + [""] * (len(committees) - len(applications))
+            row + [""] * (len(committees) - len(applications) + 1)
         )  # Need blanks to fill in applicant texts later
 
     for i in range(len(table)):
-        table[i].append(", ".join(applicant_texts[i]))
+        table[i][len(top_row)] = ", ".join(applicant_texts[i])
 
     writer.writerow(top_row + ["Tekst", "Krangel?"] + committees + ["Trukket"])
     writer.writerows(table)
