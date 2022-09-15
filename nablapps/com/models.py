@@ -122,7 +122,7 @@ class ComMembership(models.Model):
             self.com.user_set.add(self.user)
         else:
             self.com.user_set.remove(self.user)
-        self.user.is_staff = True
+        self.user.is_staff = True  # Gives users admin access
         self.user.save()
         super().save(*args, **kwargs)
 
