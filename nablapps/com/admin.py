@@ -3,6 +3,7 @@ from functools import partial
 from io import StringIO
 
 from django.contrib import admin
+from django.db import transaction
 from django.http import HttpResponse
 
 from .models import ComMembership, ComPage
@@ -64,13 +65,19 @@ class ComMembershipAdmin(admin.ModelAdmin):
         ] = "attachment; filename=active_committee_members.txt"
         return response
 
+    @transaction.atomic
     def set_active(modeladmin, request, queryset):
-        """Set all selected members as active"""
+        """Set all selected members as active, and add to group"""
         queryset.update(is_active=True)
+        for membership in queryset:
+            membership.com.user_set.add(membership.user)
 
+    @transaction.atomic
     def set_inactive(modeladmin, request, queryset):
-        """Set all selected members as inactive"""
+        """Set all selected members as inactive, and remove from group"""
         queryset.update(is_active=False)
+        for membership in queryset:
+            membership.com.user_set.remove(membership.user)
 
     def short_description(self, com):
         return (com.story[:23] + "...") if len(com.story) > 25 else com.story

@@ -2,6 +2,8 @@
 Modeller for com-appen
 """
 
+from doctest import ELLIPSIS_MARKER
+
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.db import models
@@ -116,7 +118,10 @@ class ComMembership(models.Model):
         verbose_name_plural = "komitemedlemmer"
 
     def save(self, *args, **kwargs):
-        self.com.user_set.add(self.user)
+        if self.is_active:
+            self.com.user_set.add(self.user)
+        else:
+            self.com.user_set.remove(self.user)
         self.user.is_staff = True
         self.user.save()
         super().save(*args, **kwargs)
