@@ -106,8 +106,8 @@ class ImageExtension(markdown.Extension):
     Class defining the extension to markdown for adding images from ContentImage-model
     """
 
-    def extendMarkdown(self, md, md_globals):
-        md.preprocessors.add("dw-images", ImagePreprocessor(md), ">html_block")
+    def extendMarkdown(self, md: markdown.Markdown) -> None:
+        md.preprocessors.register(ImagePreprocessor(md), "dw-images", 5)
 
 
 def content_markdown(text):
