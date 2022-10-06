@@ -59,7 +59,7 @@ class ImagePreprocessor(markdown.preprocessors.Preprocessor):
                 else:
                     html = self.render_html(image_match)
                     html_before, html_after = html.split(self.caption_placeholder)
-                    store = self.markdown.htmlStash.store
+                    store = self.md.htmlStash.store
                     yield "".join(
                         [
                             image_match.group("before"),
