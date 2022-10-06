@@ -15,6 +15,6 @@ def thumbnail_pdf(filename):
     pdf = Image(filename=filename)
     pdf.format = "jpeg"
     thumb_name = filename + ".jpg"
-    image = open(thumb_name, "wb")
-    pdf.save(file=image)
+    with open(thumb_name, "wb") as image:
+        pdf.save(file=image)
     return thumb_name
