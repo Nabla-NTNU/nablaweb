@@ -9,6 +9,11 @@ from easy_thumbnails.conf import Settings as EasyThumbnailSettings
 
 DEBUG = True
 
+# Field used for automatically assigned primary key fields
+# This is the default used in django <3.1, and is a 32-bit int
+# Can be changed to "....BigAutoField" for 64 bits of ids
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 SITE_ID = 1
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "nabla.no"]
 
