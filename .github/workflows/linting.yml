@@ -6,9 +6,9 @@ jobs:
   check-formatting:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.9
     - name: Install pipenv
@@ -18,7 +18,7 @@ jobs:
     # Cache the venv between runs. Duplicated from testing.yaml
     - name: Cache virtualenv
       id: cache-venv
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       env:
         CACHE_NAME: CACHE_VIRTUALENV
       with:
@@ -48,9 +48,9 @@ jobs:
   report-linting:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.9
     - name: Install dependencies
