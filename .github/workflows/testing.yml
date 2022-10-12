@@ -17,9 +17,9 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python_version }}
     - name: Install pipenv
@@ -29,7 +29,7 @@ jobs:
     # Cache the venv between runs. Duplicated from linting.yaml
     - name: Cache virtualenv
       id: cache-venv
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       env:
         CACHE_NAME: CACHE_VIRTUALENV
       with:
