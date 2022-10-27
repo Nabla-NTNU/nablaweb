@@ -461,7 +461,7 @@ class OfficeEventSeeder:
                 end_time=start + timedelta(seconds=30 * 60 * random.randint(1, 8)),
                 repeating=True,
                 contact_person=contact_person,
-                public=random.choice((True, False)),
+                public=i % 2,
                 title=f"Kontortid med {contact_person.first_name}",
                 description="Det blir kaffe og vafler!",
             )
