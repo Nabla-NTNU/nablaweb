@@ -15,6 +15,7 @@ from datetime import datetime, timedelta
 from typing import Protocol
 
 from django.conf import settings
+from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
@@ -48,6 +49,15 @@ def random_text():
 def random_sentence(maxlen=40):
     """Short random string"""
     return textwrap.shorten(fake.sentence(), width=maxlen)
+
+
+def polygon_picture():
+    """
+    Return a django file picture with a random polygon
+
+    Generated pictures are stored to disk in var/media/uploads/news_pictures
+    """
+    return ContentFile(fake.image(), name="seed_polygon.png")
 
 
 class ObjectSeeder(Protocol):
@@ -283,6 +293,7 @@ class EventSeeder:
                     registration_start=datetime.now(),
                     registration_deadline=(datetime.now() + timedelta(days=2)),
                     places=random.randint(10, 50),
+                    picture=polygon_picture(),
                 )
             else:
                 Event.objects.create(
@@ -298,6 +309,7 @@ class EventSeeder:
                     registration_start=datetime.now(),
                     registration_deadline=(datetime.now() + timedelta(days=2)),
                     places=random.randint(10, 100),
+                    picture=polygon_picture(),
                 )
 
     @classmethod
@@ -375,6 +387,7 @@ class CompanyAdvertSeeder:
                 website="www.example.com",
                 name=fake.company(),
                 description=fake.catch_phrase(),
+                picture=polygon_picture(),
             )
             end_date = fake.date_time_between_dates(
                 datetime_start=datetime.now() + timedelta(days=-10),
