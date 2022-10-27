@@ -8,6 +8,7 @@ To add new data for seeding create a class that looks like `ObjectSeeder` and
 add it to the list in `Command`
 """
 
+import functools
 import itertools
 import random
 import textwrap
@@ -34,6 +35,7 @@ from nablapps.jobs.models import (
 )
 from nablapps.news.models import FrontPageNews, NewsArticle
 from nablapps.officeCalendar.models import OfficeEvent
+from nablapps.podcast.models import Podcast, Season
 from nablapps.poll.models import Choice, Poll
 
 fake = Factory.create("no_NO")  # Norwegian sentences
@@ -51,13 +53,15 @@ def random_sentence(maxlen=40):
     return textwrap.shorten(fake.sentence(), width=maxlen)
 
 
-def polygon_picture():
+def polygon_picture(size=(256, 256), image_format="png"):
     """
     Return a django file picture with a random polygon
 
     Generated pictures are stored to disk in var/media/uploads/news_pictures
     """
-    return ContentFile(fake.image(), name="seed_polygon.png")
+    return ContentFile(
+        fake.image(size=size, image_format=image_format), name="seed_polygon.png"
+    )
 
 
 class ObjectSeeder(Protocol):
@@ -549,6 +553,51 @@ class PollSeeder:
         Choice.objects.all().delete()
 
 
+class PodcastSeeder:
+    season_count = 3
+    amount_per_season = 5
+    total = season_count * amount_per_season
+
+    description = f"{total} Podcasts and {season_count} Seasons"
+    short_description = "Podcasts and Seasons"
+
+    @classmethod
+    def exists(cls) -> bool:
+        return (
+            Podcast.objects.count() >= cls.total
+            and Season.objects.count() >= cls.season_count
+        )
+
+    @classmethod
+    def create(cls) -> None:
+        for i in range(cls.season_count):
+            season, created = Season.objects.get_or_create(
+                number=i,
+                defaults={
+                    # Pass the function to only generate image when needed
+                    "logo": polygon_picture,
+                    "banner": functools.partial(polygon_picture, size=(1024, 256)),
+                },
+            )
+
+            for _ in range(cls.amount_per_season):
+                name = fake.first_name()
+
+                Podcast.objects.create(
+                    image=polygon_picture(),
+                    title=f"En kul podcast med {name}",
+                    short_title=f"Podcast med {name}",
+                    description="Vi har en veldig interessant samtale med vår gjest",
+                    season=season,
+                    pub_date=datetime.now(),
+                )
+
+    @classmethod
+    def delete(cls) -> None:
+        Podcast.objects.all().delete()
+        Season.objects.all().delete()
+
+
 # The list of seeders in the order the objects should be created
 # E.g. if a seeder depends on users existing, it should come after UserSeeder
 ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
@@ -563,6 +612,7 @@ ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
     CodeGolfSeeder,
     OfficeEventSeeder,
     PollSeeder,
+    PodcastSeeder,
 )
 
 
