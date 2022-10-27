@@ -32,6 +32,7 @@ from nablapps.jobs.models import (
     YearChoices,
 )
 from nablapps.news.models import FrontPageNews, NewsArticle
+from nablapps.officeCalendar.models import OfficeEvent
 
 fake = Factory.create("no_NO")  # Norwegian sentences
 
@@ -432,6 +433,44 @@ class CodeGolfSeeder:
         CodeTask.objects.all().delete()
 
 
+class OfficeEventSeeder:
+    amount = 7
+
+    description = f"{amount} OfficeEvents"
+    short_description = "OfficeEvents"
+
+    @classmethod
+    def exists(cls) -> bool:
+        return OfficeEvent.objects.count() >= cls.amount
+
+    @classmethod
+    def create(cls) -> None:
+        assert User.objects.exists(), "Need users to create office events"
+
+        all_users = tuple(User.objects.all())
+
+        for i in range(cls.amount):
+            start = fake.date_time_between_dates(
+                datetime_start=datetime.now(),
+                datetime_end=(datetime.now() + timedelta(days=7)),
+            )
+            contact_person = random.choice(all_users)
+
+            OfficeEvent.objects.create(
+                start_time=start,
+                end_time=start + timedelta(seconds=30 * 60 * random.randint(1, 8)),
+                repeating=True,
+                contact_person=contact_person,
+                public=random.choice((True, False)),
+                title=f"Kontortid med {contact_person.first_name}",
+                description="Det blir kaffe og vafler!",
+            )
+
+    @classmethod
+    def delete(cls) -> None:
+        OfficeEvent.objects.all().delete()
+
+
 # The list of seeders in the order the objects should be created
 # E.g. if a seeder depends on users existing, it should come after UserSeeder
 ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
@@ -444,6 +483,7 @@ ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
     FrontPageNewsSeeder,
     CompanyAdvertSeeder,
     CodeGolfSeeder,
+    OfficeEventSeeder,
 )
 
 
