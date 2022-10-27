@@ -386,21 +386,48 @@ class CodeGolfSeeder:
         CodeTask.objects.all().delete()
 
 
+# The list of seeders in the order the objects should be created
+# E.g. if a seeder depends on users existing, it should come after UserSeeder
+ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
+    NablaGroupSeeder,
+    FysmatClassSeeder,
+    SuperUserSeeder,
+    UserSeeder,
+    NewsArticleSeeder,
+    EventSeeder,
+    FrontPageNewsSeeder,
+    CompanyAdvertSeeder,
+)
+
+
+def perform_seed(
+    seeders: tuple[type[ObjectSeeder], ...], *, delete: bool, recreate: bool
+) -> None:
+    assert not (delete and recreate), "Cannot delete and recreate at the same time!"
+
+    if delete or recreate:
+        print("Deleting old data")
+        for seeder in reversed(seeders):
+            print(f"\tDeleting {seeder.short_description}")
+            seeder.delete()
+
+    if not delete:
+        print("Creating new data")
+        for seeder in seeders:
+            if seeder.exists():
+                print(
+                    f"\t{seeder.short_description} already exists: skipping... "
+                    "Use `seed --recreate` to recreate"
+                )
+            else:
+                print(f"\tCreating {seeder.description}")
+                seeder.create()
+
+
 class Command(BaseCommand):
     help = "Populate the database with example data"
 
-    # The list of seeders in the order the objects should be created
-    # E.g. if a seeder depends on users existing, it should come after UserSeeder
-    seeders: tuple[type[ObjectSeeder], ...] = (
-        NablaGroupSeeder,
-        FysmatClassSeeder,
-        SuperUserSeeder,
-        UserSeeder,
-        NewsArticleSeeder,
-        EventSeeder,
-        FrontPageNewsSeeder,
-        CompanyAdvertSeeder,
-    )
+    seeders = ALL_SEEDERS
 
     def add_arguments(self, parser):
         """Add arguments to the argparser for the command"""
@@ -424,25 +451,4 @@ class Command(BaseCommand):
         if not settings.DEBUG:
             raise Exception("Trying to seed in production.")
 
-        delete = options["delete"]
-        recreate = options["recreate"]
-
-        assert not (delete and recreate), "Cannot delete and recreate at the same time!"
-
-        if delete or recreate:
-            print("Deleting old data")
-            for seeder in reversed(self.seeders):
-                print(f"\tDeleting {seeder.short_description}")
-                seeder.delete()
-
-        if not delete:
-            print("Creating new data")
-            for seeder in self.seeders:
-                if seeder.exists():
-                    print(
-                        f"\t{seeder.short_description} already exists: skipping... "
-                        "Use `seed --recreate` to recreate"
-                    )
-                else:
-                    print(f"\tCreating {seeder.description}")
-                    seeder.create()
+        perform_seed(delete=options["delete"], recreate=options["recreate"])
