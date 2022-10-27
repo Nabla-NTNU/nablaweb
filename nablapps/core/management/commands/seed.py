@@ -451,4 +451,6 @@ class Command(BaseCommand):
         if not settings.DEBUG:
             raise Exception("Trying to seed in production.")
 
-        perform_seed(delete=options["delete"], recreate=options["recreate"])
+        perform_seed(
+            ALL_SEEDERS, delete=options["delete"], recreate=options["recreate"]
+        )
