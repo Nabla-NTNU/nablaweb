@@ -516,7 +516,7 @@ class PollSeeder:
 
     @classmethod
     def exists(cls) -> bool:
-        return Poll.objects.exists()
+        return Poll.objects.count() >= cls.amount
 
     @classmethod
     def create(cls) -> None:
