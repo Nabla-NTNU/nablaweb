@@ -188,33 +188,31 @@ class UserSeeder:
         committees = tuple(committees_qs)
         classes = tuple(FysmatClass.objects.all())
 
-        # Use a transaction to speed up the creation of users
         # Could do a bulk_create, but want to make sure .save() is called on each user
-        with transaction.atomic():
-            for i in range(cls.amount):
-                username = f"komponent{i}"
+        for i in range(cls.amount):
+            username = f"komponent{i}"
 
-                user = User.objects.create_user(
-                    username=username,
-                    first_name=fake.first_name(),
-                    last_name=fake.last_name(),
-                    address=fake.address(),
-                    password="password",
-                    email=f"{username}@stud.ntnu.no",
-                    ntnu_card_number=str(random.randint(int(1e7), int(1e10) - 1)),
-                    about=random_text(),
-                    birthday=fake.date_time_between_dates(
-                        datetime_start=None, datetime_end=None, tzinfo=None
-                    ),
-                )
+            user = User.objects.create_user(
+                username=username,
+                first_name=fake.first_name(),
+                last_name=fake.last_name(),
+                address=fake.address(),
+                password="password",
+                email=f"{username}@stud.ntnu.no",
+                ntnu_card_number=str(random.randint(int(1e7), int(1e10) - 1)),
+                about=random_text(),
+                birthday=fake.date_time_between_dates(
+                    datetime_start=None, datetime_end=None, tzinfo=None
+                ),
+            )
 
-                # Join some committees
-                for nabla_group in random.sample(committees, random.randint(0, 5)):
-                    nabla_group.user_set.add(user)
+            # Join some committees
+            for nabla_group in random.sample(committees, random.randint(0, 5)):
+                nabla_group.user_set.add(user)
 
-                # Join a class
-                fysmat_class = random.choice(classes)
-                fysmat_class.user_set.add(user)
+            # Join a class
+            fysmat_class = random.choice(classes)
+            fysmat_class.user_set.add(user)
 
     @classmethod
     def delete(cls) -> None:
@@ -508,7 +506,6 @@ class PollSeeder:
         return Poll.objects.exists()
 
     @classmethod
-    @transaction.atomic
     def create(cls) -> None:
         assert User.objects.exists(), "Need users to create polls"
 
@@ -577,7 +574,9 @@ def perform_seed(
                 )
             else:
                 print(f"\tCreating {seeder.description}")
-                seeder.create()
+                # Do the creation in a transaction to speed it up
+                with transaction.atomic():
+                    seeder.create()
 
 
 class Command(BaseCommand):
