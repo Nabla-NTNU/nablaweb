@@ -33,6 +33,7 @@ from nablapps.jobs.models import (
     TagChoices,
     YearChoices,
 )
+from nablapps.nabladet.models import Nablad
 from nablapps.news.models import FrontPageNews, NewsArticle
 from nablapps.officeCalendar.models import OfficeEvent
 from nablapps.podcast.models import Podcast, Season
@@ -60,7 +61,8 @@ def polygon_picture(size=(256, 256), image_format="png"):
     Generated pictures are stored to disk in var/media/uploads/news_pictures
     """
     return ContentFile(
-        fake.image(size=size, image_format=image_format), name="seed_polygon.png"
+        fake.image(size=size, image_format=image_format),
+        name=f"seed_polygon.{image_format}",
     )
 
 
@@ -598,6 +600,37 @@ class PodcastSeeder:
         Season.objects.all().delete()
 
 
+class NabladSeeder:
+    amount = 10
+
+    description = f"{amount} Nablad"
+    short_description = "Nablad"
+
+    @classmethod
+    def exists(cls) -> bool:
+        return Nablad.objects.count() >= cls.amount
+
+    @classmethod
+    def create(cls) -> None:
+        now = datetime.now()
+        for i in range(cls.amount):
+            nablad = Nablad(
+                pub_date=now + timedelta(days=30 * (i - 5)),
+                file=polygon_picture(size=(500, 1000), image_format="pdf"),
+                is_public=i % 2,
+                headline=f"Nabladet: {random_sentence()}",
+                body=random_text(),
+                lead_paragraph=random_text(),
+                picture=polygon_picture(size=(512, 256)),
+            )
+            # The save method is weird, so we do this to prevent it from crashing
+            nablad.save()
+
+    @classmethod
+    def delete(cls) -> None:
+        Nablad.objects.all().delete()
+
+
 # The list of seeders in the order the objects should be created
 # E.g. if a seeder depends on users existing, it should come after UserSeeder
 ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
@@ -613,6 +646,7 @@ ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
     OfficeEventSeeder,
     PollSeeder,
     PodcastSeeder,
+    NabladSeeder,
 )
 
 
