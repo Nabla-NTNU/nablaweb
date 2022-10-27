@@ -24,7 +24,13 @@ from nablapps.accounts.models import FysmatClass, NablaGroup
 from nablapps.accounts.models import NablaUser as User
 from nablapps.events.models import Event
 from nablapps.interactive.models.code_golf import CodeTask, Result
-from nablapps.jobs.models import Advert, Company
+from nablapps.jobs.models import (
+    Advert,
+    Company,
+    RelevantForChoices,
+    TagChoices,
+    YearChoices,
+)
 from nablapps.news.models import FrontPageNews, NewsArticle
 
 fake = Factory.create("no_NO")  # Norwegian sentences
@@ -308,35 +314,75 @@ class CompanyAdvertSeeder:
     description = f"{amount} Companies and Adverts"
     short_description = "Companies and Adverts"
 
+    amt_classes = 5
+    study_directions = ("Industriell matematikk", "Teknisk fysikk", "Biofysikk")
+    tags = ("sommerjobb", "deltid", "fulltid", "utlandet")
+
     @classmethod
     def exists(cls) -> bool:
         return (
             Company.objects.count() >= cls.amount
             and Advert.objects.count() >= cls.amount
+            and YearChoices.objects.count() >= cls.amt_classes
+            and RelevantForChoices.objects.count() >= len(cls.study_directions)
+            and TagChoices.objects.count() >= len(cls.tags)
         )
 
     @classmethod
     def create(cls) -> None:
-        for i in range(cls.amount):
+        # Create 1.-5. class
+        for year in range(1, cls.amt_classes + 1):
+            YearChoices.objects.get_or_create(year=year)
+
+        # Create study directions
+        for direction in cls.study_directions:
+            RelevantForChoices.objects.get_or_create(studieretning=direction)
+
+        # Create tags
+        for tag in cls.tags:
+            TagChoices.objects.get_or_create(tag=tag)
+
+        years = tuple(YearChoices.objects.all())
+        directions = tuple(RelevantForChoices.objects.all())
+        tags = tuple(TagChoices.objects.all())
+
+        for i in range(cls.amount - 1, -1, -1):
             company = Company.objects.create(
                 website="www.example.com",
                 name=fake.company(),
                 description=fake.catch_phrase(),
             )
-            start = fake.date_time_between_dates(
-                datetime_start=datetime.now() + timedelta(days=i * 2),
-                datetime_end=(datetime.now() + timedelta(days=i * 30)),
-            )
-            Advert.objects.create(
+            end_date = fake.date_time_between_dates(
+                datetime_start=datetime.now() + timedelta(days=-10),
+                datetime_end=datetime.now() + timedelta(days=10),
+            ) + timedelta(days=(i - 2) * 30)
+            advert = Advert.objects.create(
                 company=company,
                 headline=f"Stilling hos {company.name}",
-                removal_date=start + timedelta(days=i * 100),
+                lead_paragraph=f"En veldig kul stilling hos {company.name}!!!!",
+                body=(
+                    f"Har du alltid hatt lyst til å jobbe hos {company.name}? "
+                    "Da er dette muligheten for deg!"
+                ),
+                deadline_date=end_date,
+                removal_date=end_date + timedelta(days=120),
+                info_website="www.example.com",
             )
+            advert.relevant_for_year.set(
+                random.sample(years, random.randint(1, cls.amt_classes))
+            )
+            advert.relevant_for_group.set(
+                random.sample(directions, random.randint(1, len(cls.study_directions)))
+            )
+            advert.tags.set(random.sample(tags, 1))
 
     @classmethod
     def delete(cls) -> None:
         Advert.objects.all().delete()
         Company.objects.all().delete()
+        YearChoices.objects.all().delete()
+        RelevantForChoices.objects.all().delete()
+        TagChoices.objects.all().delete()
 
 
 class CodeGolfSeeder:
