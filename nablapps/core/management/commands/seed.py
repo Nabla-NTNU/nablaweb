@@ -33,6 +33,7 @@ from nablapps.jobs.models import (
 )
 from nablapps.news.models import FrontPageNews, NewsArticle
 from nablapps.officeCalendar.models import OfficeEvent
+from nablapps.poll.models import Choice, Poll
 
 fake = Factory.create("no_NO")  # Norwegian sentences
 
@@ -495,6 +496,49 @@ class OfficeEventSeeder:
         OfficeEvent.objects.all().delete()
 
 
+class PollSeeder:
+    amount = 5
+    amt_votes = 50
+
+    description = f"{amount} Polls with {amt_votes} votes"
+    short_description = "Polls and votes"
+
+    @classmethod
+    def exists(cls) -> bool:
+        return Poll.objects.exists()
+
+    @classmethod
+    @transaction.atomic
+    def create(cls) -> None:
+        assert User.objects.exists(), "Need users to create polls"
+
+        all_users = tuple(User.objects.all())
+
+        for _ in range(cls.amount):
+            user = random.choice(all_users)
+
+            poll = Poll.objects.create(
+                question="Hva er ditt favorittall?",
+                publication_date=datetime.now(),
+                created_by=user,
+            )
+            choices = []
+            for number in range(5):
+                choice = Choice.objects.create(
+                    poll=poll, choice=str(number), created_by=user
+                )
+                choices.append(choice)
+
+            for _, user in zip(range(cls.amt_votes), all_users):
+                choice = random.choice(choices)
+                choice.vote(user)
+
+    @classmethod
+    def delete(cls) -> None:
+        Poll.objects.all().delete()
+        Choice.objects.all().delete()
+
+
 # The list of seeders in the order the objects should be created
 # E.g. if a seeder depends on users existing, it should come after UserSeeder
 ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
@@ -508,6 +552,7 @@ ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
     FrontPageNewsSeeder,
     CodeGolfSeeder,
     OfficeEventSeeder,
+    PollSeeder,
 )
 
 
