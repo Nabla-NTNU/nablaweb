@@ -256,26 +256,50 @@ class EventSeeder:
 
     @classmethod
     def create(cls) -> None:
+        assert Company.objects.exists(), "Need Company to create bedpres Event"
+        companies = tuple(Company.objects.all())
+
         for i in range(cls.amount):
             start = fake.date_time_between_dates(
                 datetime_start=datetime.now() + timedelta(days=2),
                 datetime_end=(datetime.now() + timedelta(days=30)),
             )
 
-            Event.objects.create(
-                headline=random_sentence(),
-                body=random_text(),
-                lead_paragraph=random_text(),
-                short_name=random_sentence(20),
-                event_start=start,
-                event_end=start + timedelta(hours=4),
-                organizer=fake.name(),
-                location=fake.address(),
-                registration_required=True,
-                registration_start=datetime.now(),
-                registration_deadline=(datetime.now() + timedelta(days=2)),
-                places=10,
-            )
+            bedpres = i % 2 == 0
+
+            if bedpres:
+                company = random.choice(companies)
+                Event.objects.create(
+                    headline=f"Bedpres med {company.name}",
+                    is_bedpres=True,
+                    company=company,
+                    body=random_text(),
+                    lead_paragraph=random_text(),
+                    short_name=random_sentence(20),
+                    event_start=start,
+                    event_end=start + timedelta(hours=4),
+                    organizer=fake.name(),
+                    location=fake.address(),
+                    registration_required=True,
+                    registration_start=datetime.now(),
+                    registration_deadline=(datetime.now() + timedelta(days=2)),
+                    places=random.randint(10, 50),
+                )
+            else:
+                Event.objects.create(
+                    headline=random_sentence(),
+                    body=random_text(),
+                    lead_paragraph=random_text(),
+                    short_name=random_sentence(20),
+                    event_start=start,
+                    event_end=start + timedelta(hours=4),
+                    organizer=fake.name(),
+                    location=fake.address(),
+                    registration_required=True,
+                    registration_start=datetime.now(),
+                    registration_deadline=(datetime.now() + timedelta(days=2)),
+                    places=random.randint(10, 100),
+                )
 
     @classmethod
     def delete(cls) -> None:
@@ -478,10 +502,10 @@ ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
     FysmatClassSeeder,
     SuperUserSeeder,
     UserSeeder,
+    CompanyAdvertSeeder,
     NewsArticleSeeder,
     EventSeeder,
     FrontPageNewsSeeder,
-    CompanyAdvertSeeder,
     CodeGolfSeeder,
     OfficeEventSeeder,
 )
