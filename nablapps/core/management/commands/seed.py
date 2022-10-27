@@ -402,7 +402,7 @@ class CodeGolfSeeder:
     def create(cls) -> None:
         assert User.objects.exists(), "Need users to create code golf"
 
-        all_users = User.objects.all()
+        all_users = tuple(User.objects.all())
 
         for i in range(cls.amount):
             participating_users = random.sample(all_users, random.randint(3, 20))
@@ -443,6 +443,7 @@ ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
     EventSeeder,
     FrontPageNewsSeeder,
     CompanyAdvertSeeder,
+    CodeGolfSeeder,
 )
 
 
