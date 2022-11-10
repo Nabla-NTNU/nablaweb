@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import send_mail
+from django.db import models
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -13,7 +14,7 @@ from django.views.generic import DetailView, ListView, TemplateView, View
 
 from nablapps.accounts.models import NablaUser
 from nablapps.officeBeer.models import Account
-from nablapps.officeBeer.views import Transaction  # PurchaseForm
+from nablapps.officeBeer.views import Transaction
 
 from .models import Category, Order, OrderProduct, Product
 
@@ -136,15 +137,17 @@ class CheckoutView(TemplateView):
     template_name = "nablashop/purchase.html"
 
     def post(self, request, *args, **kwargs):
+
         purchase_form = PurchaseForm(request.POST)
         pose = ""
 
         if purchase_form.is_valid():
+            loggedinUser = request.user
             user = NablaUser.objects.get_from_rfid(
                 purchase_form.cleaned_data["user_card_key"]
             )
             account = Account.objects.get_or_create(user=user)[0]
-            order = Order.objects.get(user=user)
+            order = Order.objects.get(user=loggedinUser)
 
             # Should this rather be in clean form?
             if account.balance < order.get_total():
