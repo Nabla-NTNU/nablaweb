@@ -259,6 +259,7 @@ class NewsArticleSeeder:
                 headline=f"Nyhet: {random_sentence()}",
                 body=f"Innhold: {random_text()}",
                 lead_paragraph=f"Første avsnitt: {random_text()}",
+                picture=polygon_picture(),
             )
 
     @classmethod
