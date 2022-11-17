@@ -685,9 +685,6 @@ def perform_seed(
                 except SeederError as e:
                     print(f"\t\tSeeder for {seeder.short_description} failed:")
                     print(f"\t\tFix: {e.how_to_fix}")
-                except Exception as e:
-                    print(f"\t\tUNHANDLED EXCEPTION for {seeder.short_description}")
-                    print(f"\t\tERROR: {e}")
 
 
 class Command(BaseCommand):
