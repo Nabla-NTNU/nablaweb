@@ -66,6 +66,12 @@ def polygon_picture(size=(256, 256), image_format="png"):
     )
 
 
+class SeederError(Exception):
+    def __init__(self, how_to_fix: str) -> None:
+        super().__init__(how_to_fix)
+        self.how_to_fix = how_to_fix
+
+
 class ObjectSeeder(Protocol):
     """Protocol (interface) for seeder functionality"""
 
@@ -614,18 +620,21 @@ class NabladSeeder:
     @classmethod
     def create(cls) -> None:
         now = datetime.now()
-        for i in range(cls.amount):
-            nablad = Nablad(
-                pub_date=now + timedelta(days=30 * (i - 5)),
-                file=polygon_picture(size=(500, 1000), image_format="pdf"),
-                is_public=i % 2,
-                headline=f"Nabladet: {random_sentence()}",
-                body=random_text(),
-                lead_paragraph=random_text(),
-                picture=polygon_picture(size=(512, 256)),
-            )
-            # The save method is weird, so we do this to prevent it from crashing
-            nablad.save()
+        try:
+            for i in range(cls.amount):
+                nablad = Nablad(
+                    pub_date=now + timedelta(days=30 * (i - 5)),
+                    file=polygon_picture(size=(500, 1000), image_format="pdf"),
+                    is_public=i % 2,
+                    headline=f"Nabladet: {random_sentence()}",
+                    body=random_text(),
+                    lead_paragraph=random_text(),
+                    picture=polygon_picture(size=(512, 256)),
+                )
+                # The save method is weird, so we do this to prevent it from crashing
+                nablad.save()
+        except Exception as e:
+            raise SeederError(how_to_fix="Install ImageMagick to create Nablad") from e
 
     @classmethod
     def delete(cls) -> None:
@@ -670,8 +679,15 @@ def perform_seed(
             else:
                 print(f"\tCreating {seeder.description}")
                 # Do the creation in a transaction to speed it up
-                with transaction.atomic():
-                    seeder.create()
+                try:
+                    with transaction.atomic():
+                        seeder.create()
+                except SeederError as e:
+                    print(f"\t\tSeeder for {seeder.short_description} failed:")
+                    print(f"\t\tFix: {e.how_to_fix}")
+                except Exception as e:
+                    print(f"\t\tUNHANDLED EXCEPTION for {seeder.short_description}")
+                    print(f"\t\tERROR: {e}")
 
 
 class Command(BaseCommand):
