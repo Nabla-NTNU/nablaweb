@@ -254,13 +254,28 @@ class NewsArticleSeeder:
 
     @classmethod
     def create(cls) -> None:
+        assert User.objects.exists(), "Need users to create news article"
+
+        all_users = tuple(User.objects.all())
+
         for i in range(cls.amount):
-            NewsArticle.objects.create(
+            created_date = fake.date_time_between_dates(
+                datetime_start=datetime.now() - timedelta(days=30),
+            )
+
+            user = random.choice(all_users)
+
+            article = NewsArticle.objects.create(
                 headline=f"Nyhet: {random_sentence()}",
                 body=f"Innhold: {random_text()}",
                 lead_paragraph=f"Første avsnitt: {random_text()}",
                 picture=polygon_picture(),
+                created_by=user,
+                last_changed_by=user,
             )
+
+            article.created_date = created_date
+            article.save()
 
     @classmethod
     def delete(cls) -> None:
@@ -380,6 +395,10 @@ class CompanyAdvertSeeder:
 
     @classmethod
     def create(cls) -> None:
+        assert User.objects.exists(), "Need users to create Adverts"
+
+        all_users = tuple(User.objects.all())
+
         # Create 1.-5. class
         for year in range(1, cls.amt_classes + 1):
             YearChoices.objects.get_or_create(year=year)
@@ -397,6 +416,8 @@ class CompanyAdvertSeeder:
         tags = tuple(TagChoices.objects.all())
 
         for i in range(cls.amount - 1, -1, -1):
+            user = random.choice(all_users)
+
             company = Company.objects.create(
                 website="https://example.com",
                 name=fake.company(),
@@ -418,6 +439,8 @@ class CompanyAdvertSeeder:
                 deadline_date=end_date,
                 removal_date=end_date + timedelta(days=120),
                 info_website="https://example.com",
+                created_by=user,
+                last_changed_by=user,
             )
             advert.relevant_for_year.set(
                 random.sample(years, random.randint(1, cls.amt_classes))
@@ -426,6 +449,9 @@ class CompanyAdvertSeeder:
                 random.sample(directions, random.randint(1, len(cls.study_directions)))
             )
             advert.tags.set(random.sample(tags, 1))
+
+            advert.created_date = end_date - timedelta(days=30)
+            advert.save()
 
     @classmethod
     def delete(cls) -> None:
@@ -622,8 +648,18 @@ class NabladSeeder:
     @classmethod
     def create(cls) -> None:
         now = datetime.now()
+        assert User.objects.exists(), "Need users to create polls"
+
+        all_users = tuple(User.objects.all())
+
         try:
             for i in range(cls.amount):
+                created_date = fake.date_time_between_dates(
+                    datetime_start=datetime.now() - timedelta(days=30),
+                )
+
+                user = random.choice(all_users)
+
                 nablad = Nablad(
                     pub_date=now + timedelta(days=30 * (i - 5)),
                     file=polygon_picture(size=(500, 1000), image_format="pdf"),
@@ -632,8 +668,14 @@ class NabladSeeder:
                     body=f"Innhold: {random_text()}",
                     lead_paragraph=f"Første avsnitt: {random_text()}",
                     picture=polygon_picture(size=(512, 256)),
+                    created_by=user,
+                    last_changed_by=user,
                 )
+
                 # The save method is weird, so we do this to prevent it from crashing
+                nablad.save()
+
+                nablad.created_date = created_date
                 nablad.save()
         except Exception as e:
             raise SeederError(how_to_fix="Install ImageMagick to create Nablad") from e
