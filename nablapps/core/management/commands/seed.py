@@ -171,7 +171,7 @@ class SuperUserSeeder:
             last_name=fake.last_name(),
             address=fake.address(),
             email="admin@stud.ntnu.no",
-            about=random_text(),
+            about=f"Om meg: {random_text()}",
             birthday=fake.date_time_between_dates(
                 datetime_start=None, datetime_end=None, tzinfo=None
             ),
@@ -223,7 +223,7 @@ class UserSeeder:
                 password="password",
                 email=f"{username}@stud.ntnu.no",
                 ntnu_card_number=str(random.randint(int(1e7), int(1e10) - 1)),
-                about=random_text(),
+                about=f"Om meg: {random_text()}",
                 birthday=fake.date_time_between_dates(
                     datetime_start=None, datetime_end=None, tzinfo=None
                 ),
@@ -256,9 +256,9 @@ class NewsArticleSeeder:
     def create(cls) -> None:
         for i in range(cls.amount):
             NewsArticle.objects.create(
-                headline=random_sentence(),
-                body=random_text(),
-                lead_paragraph=random_text(),
+                headline=f"Nyhet: {random_sentence()}",
+                body=f"Innhold: {random_text()}",
+                lead_paragraph=f"Første avsnitt: {random_text()}",
             )
 
     @classmethod
@@ -295,9 +295,9 @@ class EventSeeder:
                     headline=f"Bedpres med {company.name}",
                     is_bedpres=True,
                     company=company,
-                    body=random_text(),
-                    lead_paragraph=random_text(),
-                    short_name=random_sentence(20),
+                    body=f"Innhold: {random_text()}",
+                    lead_paragraph=f"Første avsnitt: {random_text()}",
+                    short_name=f"Bedpres: {random_sentence(15)}",
                     event_start=start,
                     event_end=start + timedelta(hours=4),
                     organizer=fake.name(),
@@ -310,10 +310,10 @@ class EventSeeder:
                 )
             else:
                 Event.objects.create(
-                    headline=random_sentence(),
-                    body=random_text(),
-                    lead_paragraph=random_text(),
-                    short_name=random_sentence(20),
+                    headline=f"Arrangement: {random_sentence()}",
+                    body=f"Innhold: {random_text()}",
+                    lead_paragraph=f"Første avsnitt: {random_text()}",
+                    short_name=f"Arrangement: {random_sentence(15)}",
                     event_start=start,
                     event_end=start + timedelta(hours=4),
                     organizer=fake.name(),
@@ -628,8 +628,8 @@ class NabladSeeder:
                     file=polygon_picture(size=(500, 1000), image_format="pdf"),
                     is_public=i % 2,
                     headline=f"Nabladet: {random_sentence()}",
-                    body=random_text(),
-                    lead_paragraph=random_text(),
+                    body=f"Innhold: {random_text()}",
+                    lead_paragraph=f"Første avsnitt: {random_text()}",
                     picture=polygon_picture(size=(512, 256)),
                 )
                 # The save method is weird, so we do this to prevent it from crashing
