@@ -3,16 +3,16 @@ from django.test import TestCase
 from nablapps.core.management.commands.seed import ALL_SEEDERS, perform_seed
 
 
-def seed(seeders=ALL_SEEDERS):
-    perform_seed(seeders, delete=False, recreate=False)
+def preserve(seeders=ALL_SEEDERS):
+    perform_seed(seeders, delete=False, create=True)
 
 
 def delete(seeders=ALL_SEEDERS):
-    perform_seed(seeders, delete=True, recreate=False)
+    perform_seed(seeders, delete=True, create=False)
 
 
-def recreate(seeders=ALL_SEEDERS):
-    perform_seed(seeders, delete=False, recreate=True)
+def seed(seeders=ALL_SEEDERS):
+    perform_seed(seeders, delete=True, create=True)
 
 
 def assert_exists(exists: bool, /, seeders=ALL_SEEDERS) -> None:
@@ -28,6 +28,13 @@ class TestSeed(TestCase):
 
         assert_exists(True)
 
+    def test_preserve_from_empty(self):
+        assert_exists(False)
+
+        preserve()
+
+        assert_exists(True)
+
     def test_delete_from_empty(self):
         assert_exists(False)
 
@@ -35,20 +42,13 @@ class TestSeed(TestCase):
 
         assert_exists(False)
 
-    def test_recreate_from_empty(self):
-        assert_exists(False)
-
-        recreate()
-
-        assert_exists(True)
-
     def test_complex(self):
         assert_exists(False)
 
-        seed()
+        preserve()
         assert_exists(True)
 
-        recreate()
+        seed()
         assert_exists(True)
 
         delete()

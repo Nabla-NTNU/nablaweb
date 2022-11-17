@@ -652,24 +652,21 @@ ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
 
 
 def perform_seed(
-    seeders: tuple[type[ObjectSeeder], ...], *, delete: bool, recreate: bool
+    seeders: tuple[type[ObjectSeeder], ...], *, delete: bool, create: bool
 ) -> None:
-    assert not (delete and recreate), "Cannot delete and recreate at the same time!"
+    assert delete or create, "No operation provided"
 
-    if delete or recreate:
+    if delete:
         print("Deleting old data")
         for seeder in reversed(seeders):
             print(f"\tDeleting {seeder.short_description}")
             seeder.delete()
 
-    if not delete:
+    if create:
         print("Creating new data")
         for seeder in seeders:
             if seeder.exists():
-                print(
-                    f"\t{seeder.short_description} already exists: skipping... "
-                    "Use `seed --recreate` to recreate"
-                )
+                print(f"\t{seeder.short_description} already exists: skipping... ")
             else:
                 print(f"\tCreating {seeder.description}")
                 # Do the creation in a transaction to speed it up
@@ -684,7 +681,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         """Add arguments to the argparser for the command"""
-        # Make sure we can't pass --delete and --recreate
+        # Make sure we can't pass --delete and --preserve
         parser.add_mutually_exclusive_group()
 
         parser.add_argument(
@@ -694,16 +691,22 @@ class Command(BaseCommand):
         )
 
         parser.add_argument(
-            "--recreate",
+            "--preserve",
             action="store_true",
-            help="Recreate seeded data",
+            help="Preserve existing data",
         )
 
-    def handle(self, *args, **options):
+    def handle(self, *args, delete: bool, preserve: bool, **options):
         """Handle the command and do the seeding"""
         if not settings.DEBUG:
             raise Exception("Trying to seed in production.")
 
-        perform_seed(
-            ALL_SEEDERS, delete=options["delete"], recreate=options["recreate"]
-        )
+        assert not (delete and preserve), "Cannot both delete and preserve"
+
+        # We recreate (delete+create) by default
+        # delete only with --delete
+        # create only with --preserve
+        perform_delete = not preserve
+        perform_create = not delete
+
+        perform_seed(ALL_SEEDERS, delete=perform_delete, create=perform_create)
