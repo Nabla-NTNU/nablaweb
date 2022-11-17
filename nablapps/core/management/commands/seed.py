@@ -390,7 +390,7 @@ class CompanyAdvertSeeder:
 
         for i in range(cls.amount - 1, -1, -1):
             company = Company.objects.create(
-                website="www.example.com",
+                website="https://example.com",
                 name=fake.company(),
                 description=fake.catch_phrase(),
                 picture=polygon_picture(),
@@ -409,7 +409,7 @@ class CompanyAdvertSeeder:
                 ),
                 deadline_date=end_date,
                 removal_date=end_date + timedelta(days=120),
-                info_website="www.example.com",
+                info_website="https://example.com",
             )
             advert.relevant_for_year.set(
                 random.sample(years, random.randint(1, cls.amt_classes))
