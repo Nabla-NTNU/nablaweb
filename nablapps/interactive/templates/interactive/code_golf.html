@@ -17,6 +17,8 @@
 <script type="text/javascript">
 {% autoescape off %}
 const correctOutputLines = JSON.parse('{{ task.correct_output_json }}');
+let shortestSolution = {{best_attempt}}
+shortestSolution = shortestSolution == -1 ? Infinity : shortestSolution
 {% endautoescape %}
 
 const outputLinesEquality = (lines, correctLines) => {
@@ -64,7 +66,8 @@ function builtinRead(x) {
 </form>
 
 <pre v-if="errors" class="alert alert-warning" id="error">[[ errors ]]</pre>
-<div v-if="status=='correct'" class="alert alert-success">Output corrrect!</div>
+<div v-if="status=='correct'" class="alert alert-success">Riktig output!</div>
+<div v-if="longerThanBest" class="alert alert-warning">Koden din er lengre enn den beste du har sendt inn. Du kan sende den inn, men skåren din vil ikke endres.</div>
 <pre v-if="output" class="alert alert-primary">
     <h4 class="alert-heading">Output:</h4>
 [[ output ]]
@@ -79,12 +82,15 @@ function builtinRead(x) {
              status: null,  // One of "correct", "incorrect", "spinning"
              user_code: null,
              output: null,
+             longerThanBest: null
          }
      },
      methods: {
          runit() {
              this.status = "spinning"
              this.output = ""
+             this.longerThanBest = false
+
              Sk.pre = "output";
              // NB!! If changing skulpt version to python 3,
              // remember to change backend to store submission's python
@@ -102,13 +108,17 @@ function builtinRead(x) {
              myPromise
                  .then(() => {
                      const outputLines = this.output.split("\n");
+                     //Mirroring solutionLength from ../models/code_golf.py
+                     const outputLength = this.user_code.trim().replaceAll('\r\n', '\n').length
+
                      if (outputLinesEquality(outputLines, correctOutputLines)) {
                          this.status = "correct"
                          this.errors = null
+                         this.longerThanBest = outputLength > shortestSolution
                      } else {
                          this.status = "incorrect"
                          this.errors = "Output does not match correct output."
-                     }
+                     }             
                  })
                  .catch((error) => {
                      this.status = "incorrect"

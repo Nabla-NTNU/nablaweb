@@ -80,6 +80,14 @@ class CodeGolf(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["task"] = self.task
         context["result_list"] = Result.objects.best_by_user(task=self.task)
+        best_result = Result.objects.best_specific_user(
+            task=self.task, user=self.request.user
+        )
+        if best_result is None:
+            best_result_length = -1
+        else:
+            best_result_length = best_result.length
+        context["best_attempt"] = best_result_length
         return context
 
     def form_valid(self, form):
