@@ -454,7 +454,7 @@ class CodeGolfSeeder:
 
             task = CodeTask.objects.create(
                 title=f"Print '{goal}'",
-                task="Write a program that prints '{goal}' to stdout",
+                task=f"Write a program that prints '{goal}' to stdout",
                 correct_output=goal,
             )
 
