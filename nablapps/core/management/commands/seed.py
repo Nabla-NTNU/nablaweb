@@ -26,6 +26,7 @@ from nablapps.accounts.models import FysmatClass, NablaGroup
 from nablapps.accounts.models import NablaUser as User
 from nablapps.events.models import Event
 from nablapps.interactive.models.code_golf import CodeTask, Result
+from nablapps.interactive.models.games import Game
 from nablapps.jobs.models import (
     Advert,
     Company,
@@ -641,6 +642,33 @@ class NabladSeeder:
         Nablad.objects.all().delete()
 
 
+class GameSeeder:
+    description = short_description = "Games"
+
+    @classmethod
+    def exists(cls) -> bool:
+        return Game.objects.exists()
+
+    @classmethod
+    def create(cls) -> None:
+        Game.objects.create(
+            index=10,
+            title="Kodegolf",
+            url="kodegolf/",
+            picture=polygon_picture(size=(256, 128)),
+        )
+        Game.objects.create(
+            index=10,
+            title="NablaPlace",
+            url="place/",
+            picture=polygon_picture(size=(256, 128)),
+        )
+
+    @classmethod
+    def delete(cls) -> None:
+        Game.objects.all().delete()
+
+
 # The list of seeders in the order the objects should be created
 # E.g. if a seeder depends on users existing, it should come after UserSeeder
 ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
@@ -657,6 +685,7 @@ ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
     PollSeeder,
     PodcastSeeder,
     NabladSeeder,
+    GameSeeder,
 )
 
 
