@@ -585,6 +585,7 @@ class PodcastSeeder:
             for _ in range(cls.amount_per_season):
                 name = fake.first_name()
 
+                # TODO: Add an audio file
                 Podcast.objects.create(
                     image=polygon_picture(),
                     title=f"En kul podcast med {name}",
