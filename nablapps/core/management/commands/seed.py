@@ -648,7 +648,7 @@ class NabladSeeder:
     @classmethod
     def create(cls) -> None:
         now = datetime.now()
-        assert User.objects.exists(), "Need users to create polls"
+        assert User.objects.exists(), "Need users to create nablad"
 
         all_users = tuple(User.objects.all())
 
