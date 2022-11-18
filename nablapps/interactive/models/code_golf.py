@@ -37,7 +37,7 @@ class CodeTask(models.Model):
 class ResultManager(models.Manager):
     """Manager for Results
 
-    Adds often used queries like best form user etc"""
+    Adds often used queries like best for each user etc"""
 
     def best_by_user(self, task, prefetch_user=True):
         """Get best submission by each user
@@ -65,6 +65,15 @@ class ResultManager(models.Manager):
             return query.prefetch_related("user")
         else:
             return query
+
+    def best_specific_user(self, task, user):
+        """Gets the best result for a specific user. Returns result object"""
+
+        best_result = (
+            Result.objects.filter(user=user, task=task).order_by("length").first()
+        )
+
+        return best_result
 
 
 class Result(models.Model):
