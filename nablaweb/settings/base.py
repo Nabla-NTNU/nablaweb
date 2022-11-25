@@ -285,5 +285,5 @@ NODE_MODULES_ROOT = os.path.join(PROJECT_ROOT, "node_modules")
 # Max upload size in bytes
 # https://django-filebrowser.readthedocs.io/en/latest/settings.html#max-upload-size
 kibi = 1024
-mibi = kibi ** 2
+mibi = kibi**2
 FILEBROWSER_MAX_UPLOAD_SIZE = 100 * mibi  # 100 MiB
