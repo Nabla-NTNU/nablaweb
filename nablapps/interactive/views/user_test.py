@@ -1,3 +1,4 @@
+import random
 from collections import Counter
 from itertools import chain
 
@@ -45,10 +46,27 @@ def test_result(request, pk):
         scores[target] += weight
     if scores.most_common(1) == []:
         return redirect("user_test", pk=pk)
-    ((result, _),) = scores.most_common(1)
+    result = pickRandomWinner(scores)
     context = {
         "base_template": test.template,
         "title": result.title,
         "content": result.content,
     }
     return TemplateResponse(request, "interactive/user_test_result.html", context)
+
+
+def pickRandomWinner(c: Counter):
+    """Returns the most common result, randomizes if more than one alternative has the same score."""
+    winners = []
+    results = c.most_common()
+    first, mostVotes = results[0]
+    winners.append(first)
+
+    i = 1
+    print(results[1][1])
+    while i < len(results) and mostVotes == results[i][1]:
+        winners.append(results[i][0])
+        print(i)
+        i += 1
+    print(winners)
+    return random.choice(winners)
