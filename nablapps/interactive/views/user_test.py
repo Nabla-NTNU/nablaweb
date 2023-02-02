@@ -63,10 +63,7 @@ def pickRandomWinner(c: Counter):
     winners.append(first)
 
     i = 1
-    print(results[1][1])
     while i < len(results) and mostVotes == results[i][1]:
         winners.append(results[i][0])
-        print(i)
         i += 1
-    print(winners)
     return random.choice(winners)
