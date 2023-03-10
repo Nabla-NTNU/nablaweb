@@ -26,8 +26,14 @@ the npm packagages (Vue and QrCodeReader).
     <p class="error">[[ error ]]</p>
     <p class="success">[[ success ]]</p>
     <p class="fail">[[ fail ]]</p>
-    <p class="ticket-id">Siste scannede billett: <b>[[ result ]]</b></p>
-    <qrcode-stream @decode="onDecode" @init="onInit" />
+    <p class="ticket-id" v-if="scan_history.length">Siste scannede billett: <b>[[ scan_history.at(-1).email ]] ([[ scan_history.at(-1).ticket_id ]])</b></p>
+    <qrcode-stream @decode="onDecode" @init="onInit"></qrcode-stream>
+
+    <ul>
+      <li v-for="ticket in scan_history.slice().reverse()">
+        [[ ticket.email ]]
+      </li>
+    </ul>
 </div>
 
 
@@ -52,6 +58,7 @@ Which this Vue app builds atop of.
             success: '',
             fail: '',
             result: '',
+	    scan_history: [],
             status: '',
         },
 
@@ -70,6 +77,7 @@ Which this Vue app builds atop of.
                         this.status = response.status;
                         if (response.status === 200) {
                             this.success = "Godkjent! Billett registrert."
+			    this.scan_history.push(response.data);
                         } else if (response.status === 208) {
                             this.fail = "Ops! Denne billetten er registrert fra før!"
                         } else {
