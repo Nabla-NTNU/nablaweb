@@ -27,15 +27,16 @@ the npm packagages (Vue and QrCodeReader).
     <p class="success">[[ success ]]</p>
     <p class="fail">[[ fail ]]</p>
     <p class="ticket-id" v-if="scan_history.length">Siste scannede billett: <b>[[ scan_history.at(-1).email ]] ([[ scan_history.at(-1).ticket_id ]])</b></p>
+    <div class="card">
     <qrcode-stream @decode="onDecode" @init="onInit"></qrcode-stream>
+    </div>
 
-    <ul>
-      <li v-for="ticket in scan_history.slice().reverse()">
+    <ul class="list-group">
+      <li class="list-group-item" v-for="ticket in scan_history.slice().reverse()">
         [[ ticket.email ]]
       </li>
     </ul>
 </div>
-
 
 <!-- JS/Vue code -->
 <!--
@@ -58,7 +59,7 @@ Which this Vue app builds atop of.
             success: '',
             fail: '',
             result: '',
-	    scan_history: [],
+            scan_history: [],
             status: '',
         },
 
