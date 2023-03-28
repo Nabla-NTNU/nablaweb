@@ -85,7 +85,7 @@ def feedback(request, template="feedback.html", send_to="webkom@nabla.no"):
                 return render(request, "contact/" + template, context)
 
 
-def roombooking(request, template="rombooking.html", send_to="nestleder@nabla.no"):
+def roombooking(request, template="rombooking.html", send_to="komsjef@nabla.no"):
     spam_check = False
     if request.method != "POST":
         test_val = random.randint(0, 20)
