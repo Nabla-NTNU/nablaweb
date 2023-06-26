@@ -65,7 +65,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
         )
         context["logged_in"] = True if self.request.user.is_authenticated else False
         # Uncomment when fadderperiode to display new student popup.
-        # context["newuser_popup"] = False if self.request.user.is_authenticated else True
+        context["newuser_popup"] = False if self.request.user.is_authenticated else True
         return context
 
     def _add_news(self, context):
