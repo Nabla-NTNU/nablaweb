@@ -26,7 +26,9 @@ def send_activation_email(user, password):
 def extract_usernames(string, fysmat_class=None):
     from .models import NablaUser, RegistrationRequest
 
-    m = re.findall("([a-z]+)@", string, re.IGNORECASE)
+    # One username per line. Structure of the usernames is 
+    # 'letters+optional numbers'
+    m = re.findall(r"^([a-zæøå]+[1-9]*)\s*$", string, flags = re.IGNORECASE | re.MULTILINE)
     for u in m:
         requests = RegistrationRequest.objects.filter(username=u)
 
