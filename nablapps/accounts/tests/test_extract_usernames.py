@@ -6,7 +6,7 @@ from nablapps.accounts.utils import extract_usernames
 
 class TestExtractUsername(TestCase):
     def test_extract_usernames(self):
-        s = "brukernavn@stud.ntnu.no\nannetbrukernavn@stud.ntnu.no"
+        s = "brukernavn\nannetbrukernavn"
         extract_usernames(s)
         self.assertTrue(NablaUser.objects.filter(username="brukernavn").exists())
         self.assertTrue(NablaUser.objects.filter(username="annetbrukernavn").exists())
