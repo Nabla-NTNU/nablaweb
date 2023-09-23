@@ -30,7 +30,7 @@ def contact(request):
                         # endret fra forslagskasse.postkom@nabla.no
                         mailadress = "postkom@nabla.no"
                     elif contact_form.get_reciever() == "ITV ved IFY":
-                        mailadress = "fysikk@sr-nv.no"
+                        mailadress = "nv-ftv@studentrad.ntnu.no"
                     elif contact_form.get_reciever() == "ITV ved IMF":
                         mailadress = "imf@sr-ie.no"
                     else:
