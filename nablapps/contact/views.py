@@ -162,6 +162,7 @@ def make_contact_context(request, spam_check, test_val):
         ("Bryggemester", "bryggemester"),
         ("Leder av KontorKom", "leder.kontorkom"),
         ("Websjef", "websjef"),
+        ("Nablas fond", "fondet")
     )
     group_emails = (
         ("PostKom", "postkom"),
