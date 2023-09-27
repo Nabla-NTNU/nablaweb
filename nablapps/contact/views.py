@@ -165,23 +165,24 @@ def make_contact_context(request, spam_check, test_val):
         ("Økonomiansvarlig i bedriftskontakten", "bnokonomi"),
     )
     group_emails = (
-        ("PostKom", "postkom"),
         ("Arrkom", "arrkom"),
         ("BN - Bedriftkontakten Nabla", "bedkom"),
         ("Eurekakom", "eureka"),
         ("Educom", "educom"),
-        ("ProKom", "prokom"),
-        ("Redaksjonen", "nabladet"),
-        ("WebKom", "webkom"),
         ("Excom17", "ekskom2019"),
         ("Excom18", "excom18"),
+        ("Kjellersamarbeidet (Nabla, HC, Janus)", "kjellern.hk18"),
         ("Kontorkom", "kontorkom"),
         ("Koreolis", "koreolis"),
         ("nablarevyen", "revy-alle"),
+        ("PostKom", "postkom"),
+        ("ProKom", "prokom"),
+        ("Redaksjonen", "nabladet"),
+        ("Sportskom", "sportskom"),
         ("the Gravitones", "gravitones"),
         ("the Stokes", "thestokes"),
         ("utfluks", "utfluks"),
-        ("Kjellersamarbeidet (Nabla, HC, Janus)", "kjellern.hk18"),
+        ("WebKom", "webkom"),
     )
 
     if request.user.is_authenticated:
