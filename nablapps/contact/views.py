@@ -161,6 +161,7 @@ def make_contact_context(request, spam_check, test_val):
         ("Nablas fond", "fondet"),
         ("Redaktør", "redaktor"),
         ("Revysjef", "revy"),
+        ("Sportsjef", "sportskom"),
         ("Websjef", "websjef"),
         ("Økonomiansvarlig i bedriftskontakten", "bnokonomi"),
     )
@@ -178,7 +179,6 @@ def make_contact_context(request, spam_check, test_val):
         ("PostKom", "postkom"),
         ("ProKom", "prokom"),
         ("Redaksjonen", "nabladet"),
-        ("Sportskom", "sportskom"),
         ("the Gravitones", "gravitones"),
         ("the Stokes", "thestokes"),
         ("utfluks", "utfluks"),
