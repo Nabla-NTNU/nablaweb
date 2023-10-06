@@ -9,7 +9,7 @@ django = "==3.2.*"
 django-braces = "*"       # Extra mixinclasses for models and views
 django-contrib-comments = "*"
 django-filebrowser-no-grappelli = "*"  # Filebrowser for mediafiles.
-django-haystack = "==3.0b1"     # Search functionality for django models. See whoosh as well
+django-haystack = "*"     # Search functionality for django models. See whoosh as well
 django-hitcount = "*"
 django-image-cropping = "==1.5"
 django-markdown-deux = "*"

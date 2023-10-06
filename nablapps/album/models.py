@@ -138,6 +138,8 @@ class AlbumForm(ModelForm):
         help_text="Bildealbum som dette albumet hører til. (Album er relaterte med en trestruktur.)",
     )
     photos = FileField(
+        # !TODO: https://docs.djangoproject.com/en/4.2/topics/http/file-uploads/#uploading-multiple-files
+        # Possible fix
         widget=ClearableFileInput(attrs={"multiple": True}),
         label="Legg til flere bilder",
         help_text="Last opp flere bilder her. Når du lagrer dukker de opp i oversikten under",
