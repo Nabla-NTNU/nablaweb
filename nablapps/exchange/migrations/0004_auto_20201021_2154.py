@@ -6,7 +6,6 @@ import ckeditor.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("exchange", "0003_exchangenewsarticle"),
     ]

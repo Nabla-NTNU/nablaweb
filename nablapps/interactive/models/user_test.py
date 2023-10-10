@@ -36,7 +36,6 @@ class Test(InteractiveElement):
 
 
 class TestQuestion(models.Model):
-
     text = models.TextField(blank=False, default="", verbose_name="spørsmål")
 
     test = models.ForeignKey(
@@ -83,7 +82,6 @@ def validate_weight_syntax(code):
 
 
 class TestQuestionAlternative(models.Model):
-
     text = models.TextField(blank=False, verbose_name="svaralternativ")
 
     question = models.ForeignKey(
@@ -134,7 +132,6 @@ class TestQuestionAlternative(models.Model):
 
 
 class TestResult(models.Model):
-
     title = models.CharField(max_length=100, blank=False)
 
     content = models.TextField(blank=False, verbose_name="beskrivelse")

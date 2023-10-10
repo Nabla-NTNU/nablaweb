@@ -82,7 +82,6 @@ class AdministerRegistrationsView(
             self.messages.warning("Ingen brukernavn skrevet inn.")
             return
         try:
-
             event = self.get_object()
             user = User.objects.get(username=username)
 
@@ -113,7 +112,6 @@ class AdministerRegistrationsView(
 
         for username in user_list:
             try:
-
                 event = self.get_object()
                 user = User.objects.get(username=username)
 

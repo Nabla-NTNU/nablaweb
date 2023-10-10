@@ -53,7 +53,6 @@ def forwards_func(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("events", "0003_add_fields_from_bedpres_and_penalty"),
     ]

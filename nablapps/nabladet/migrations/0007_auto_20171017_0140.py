@@ -6,7 +6,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("nabladet", "0006_news_ptr_to_id_20171006_1559"),
     ]

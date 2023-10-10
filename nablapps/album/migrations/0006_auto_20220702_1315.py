@@ -7,7 +7,6 @@ import mptt.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("album", "0005_auto_20200630_2211"),
     ]

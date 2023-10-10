@@ -8,7 +8,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     replaces = [
         ("meeting_records", "0001_initial"),
         ("meeting_records", "0002_auto_20150811_1047"),

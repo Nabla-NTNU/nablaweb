@@ -11,7 +11,6 @@ import image_cropping.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("jobs", "0003_auto_20170920_1429"),

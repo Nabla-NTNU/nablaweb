@@ -11,7 +11,6 @@ import image_cropping.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("news", "0005_auto_20171006_0216"),

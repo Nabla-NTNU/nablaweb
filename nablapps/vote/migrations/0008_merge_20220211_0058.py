@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("vote", "0007_voting_is_preference_vote"),
         ("vote", "0007_alternative_is_winner"),

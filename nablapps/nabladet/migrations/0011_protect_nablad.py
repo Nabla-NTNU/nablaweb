@@ -28,7 +28,6 @@ def undo_move_to_protected(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("nabladet", "0010_nablad_file_nsfw"),
     ]

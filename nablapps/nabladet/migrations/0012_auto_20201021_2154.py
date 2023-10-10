@@ -6,7 +6,6 @@ import ckeditor.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("nabladet", "0011_protect_nablad"),
     ]

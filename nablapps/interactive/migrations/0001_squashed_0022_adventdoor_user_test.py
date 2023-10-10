@@ -8,7 +8,6 @@ import nablapps.interactive.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("com", "0003_auto_20151007_1436"),

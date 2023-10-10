@@ -7,7 +7,6 @@ import nablapps.exchange
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("exchange", "0001_initial"),
     ]

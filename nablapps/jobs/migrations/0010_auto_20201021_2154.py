@@ -6,7 +6,6 @@ import ckeditor.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("jobs", "0009_company_ignorecrop"),
     ]

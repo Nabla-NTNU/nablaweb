@@ -222,7 +222,7 @@ class Voting(models.Model):
         )
         new_ballot.save()
         # Create BallotEntry instances
-        for (alt_pk, pri) in zip(alt_pks, ballot_dict):
+        for alt_pk, pri in zip(alt_pks, ballot_dict):
             alt = Alternative.objects.get(pk=alt_pk)
             new_entry = BallotEntry.objects.create(
                 container=new_ballot, priority=pri, alternative=alt

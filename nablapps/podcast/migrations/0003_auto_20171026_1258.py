@@ -28,7 +28,6 @@ def reverse_func(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("podcast", "0002_auto_20170920_1318"),
         ("hitcount", "0002_index_ip_and_session"),

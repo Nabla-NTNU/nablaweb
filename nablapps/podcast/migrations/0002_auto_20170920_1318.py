@@ -6,7 +6,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("podcast", "0001_squashed_0014_podcast_content_type"),
     ]

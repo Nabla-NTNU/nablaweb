@@ -15,7 +15,6 @@ def rebuild_album_tree(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("album", "0001_initial"),
     ]

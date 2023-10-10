@@ -15,7 +15,6 @@ import image_cropping.fields
 
 
 class Migration(migrations.Migration):
-
     replaces = [
         ("events", "0001_initial"),
         ("events", "0002_auto_20171006_1228"),

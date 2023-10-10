@@ -10,7 +10,6 @@ import image_cropping.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("nabladet", "0003_nablad_is_public"),

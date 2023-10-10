@@ -9,7 +9,6 @@ def empty_reverse(*args):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("interactive", "0023_result_python_version"),
     ]

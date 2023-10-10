@@ -24,7 +24,6 @@ class BirthdayTest(TestCase):
             user.save()
 
     def test_view(self):
-
         c = get_client_with_logged_in_user()
         response = c.get(reverse("users_birthday"))
 

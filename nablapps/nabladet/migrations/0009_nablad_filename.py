@@ -16,7 +16,6 @@ def create_filenames(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("nabladet", "0008_remove_nablad_view_counter"),
     ]

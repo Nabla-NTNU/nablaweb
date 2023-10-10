@@ -6,7 +6,6 @@ text = faker.text()
 
 
 def create():
-
     daljer, _ = Category.objects.get_or_create(
         name="Daljer", description="Her er masse daljer", pk=2
     )

@@ -21,7 +21,6 @@ def update_scores(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("interactive", "0010_auto_20190205_1436"),
     ]
