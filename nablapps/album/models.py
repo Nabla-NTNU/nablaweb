@@ -117,6 +117,36 @@ class Album(MPTTModel, TimeStamped):
         return self.title
 
 
+"""
+FIX
+Dette er en fiks som beskrevet her:
+https://docs.djangoproject.com/en/4.2/topics/http/file-uploads/#uploading-multiple-files
+"""
+
+
+class MultipleFileInput(ClearableFileInput):
+    allow_multiple_selected = True
+
+
+class MultipleFileField(FileField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput())
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        single_file_clean = super().clean
+        if isinstance(data, (list, tuple)):
+            result = [single_file_clean(d, initial) for d in data]
+        else:
+            result = single_file_clean(data, initial)
+        return result
+
+
+"""
+END
+"""
+
+
 class AlbumForm(ModelForm):
     model = Album
 
@@ -137,10 +167,10 @@ class AlbumForm(ModelForm):
         label="Forelder",
         help_text="Bildealbum som dette albumet hører til. (Album er relaterte med en trestruktur.)",
     )
-    photos = FileField(
+    photos = MultipleFileField(
         # !TODO: https://docs.djangoproject.com/en/4.2/topics/http/file-uploads/#uploading-multiple-files
         # Possible fix
-        widget=ClearableFileInput(attrs={"multiple": True}),
+        widget=MultipleFileInput(attrs={"multiple": True}),
         label="Legg til flere bilder",
         help_text="Last opp flere bilder her. Når du lagrer dukker de opp i oversikten under",
         required=False,
