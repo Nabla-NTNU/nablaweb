@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "08696e354a7c602a25b79fd2c992704b7213c064bdf607f49dfc390a12fb29fe"
+            "sha256": "76420455b5f9e364a5d0075f29b2137bb7e30aaf263f5425e95cedc01b0474c5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,11 +18,11 @@
     "default": {
         "annotated-types": {
             "hashes": [
-                "sha256:47cdc3490d9ac1506ce92c7aaa76c579dc3509ff11e098fc867e5130ab7be802",
-                "sha256:58da39888f92c276ad970249761ebea80ba544b77acddaa1a4d6cf78287d45fd"
+                "sha256:0641064de18ba7a25dee8f96403ebc39113d0cb953a01429249d5c7564666a43",
+                "sha256:563339e807e53ffd9c267e99fc6d9ea23eb8443c08f112651963e24e22f84a5d"
             ],
-            "markers": "python_version >= '3.7'",
-            "version": "==0.5.0"
+            "markers": "python_version >= '3.8'",
+            "version": "==0.6.0"
         },
         "asgiref": {
             "hashes": [
@@ -139,12 +139,12 @@
         },
         "django-image-cropping": {
             "hashes": [
-                "sha256:429ad2c3ccad5ddeb079fbee24dc1536105b3e9d30beb53d1446fd560da04d5b",
-                "sha256:971d1a92c9ef14f1bf95996dd4eeed0a00dbb2221bfa762290d9525696243232"
+                "sha256:59744e8df88db7e46e37b526fc715fdde665d9efa345922745f50411a6dadb3f",
+                "sha256:81dbcabb6421c5a1e88fac9d96f336d6109a23dcb8fa6c678329d3688c9973c4"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.6'",
-            "version": "==1.7"
+            "markers": "python_version >= '3.5'",
+            "version": "==1.5.0"
         },
         "django-js-asset": {
             "hashes": [
@@ -630,12 +630,12 @@
         },
         "faker": {
             "hashes": [
-                "sha256:8fba91068dc26e3159c1ac9f22444a2338704b0991d86605322e454bda420092",
-                "sha256:d5d5953556b0fb428a46019e03fc2d40eab2980135ddef5a9eb3d054947fdf83"
+                "sha256:5b234b89a9c536a37420f612169b6e58627b823ba1bba2504c0450db3b136620",
+                "sha256:d86cb3150626bd642c6abd8a64107ddb0b154500252f46a56efe527a50594866"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==19.6.2"
+            "version": "==19.8.0"
         },
         "filelock": {
             "hashes": [
