@@ -18,7 +18,6 @@ def fix_missing_season(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("podcast", "0005_auto_20190301_1502"),
     ]

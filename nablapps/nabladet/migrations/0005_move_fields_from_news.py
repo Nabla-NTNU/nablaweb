@@ -43,7 +43,6 @@ def reverse_func(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("nabladet", "0004_auto_20171006_0011"),
         ("news", "0005_auto_20171006_0216"),

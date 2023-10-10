@@ -11,7 +11,6 @@ DEFAULT_COLOR = "FFFFFF"
 
 
 class PlaceGrid(models.Model):
-
     width = models.PositiveIntegerField(
         verbose_name="Bredde", validators=[MinValueValidator(1)]
     )

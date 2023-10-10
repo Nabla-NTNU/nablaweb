@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     replaces = [
         ("apply_committee", "0001_initial"),
         ("apply_committee", "0002_auto_20200125_1306"),

@@ -6,7 +6,6 @@ import image_cropping.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("com", "0004_compage_is_interest_group"),
     ]

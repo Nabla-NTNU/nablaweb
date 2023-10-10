@@ -18,7 +18,6 @@ def copy_like_presses(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("contenttypes", "0002_remove_content_type_name"),
         ("accounts", "0006_auto_20160202_2330"),

@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("events", "0011_auto_20200909_1636"),
         ("qrTickets", "0001_initial"),

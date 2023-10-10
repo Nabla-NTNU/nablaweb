@@ -34,7 +34,6 @@ def remove_empty_quizreplies(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("interactive", "0011_update_quizreply_scores"),
     ]

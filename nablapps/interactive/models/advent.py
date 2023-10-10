@@ -128,7 +128,6 @@ class AdventDoor(InteractiveElement):
 
 
 class AdventCalendar(models.Model):
-
     year = models.IntegerField(verbose_name="År", unique=True)
 
     requires_login = models.BooleanField(
@@ -155,7 +154,6 @@ class AdventCalendar(models.Model):
 
 
 class AdventParticipation(InteractionResult):
-
     text = models.TextField(null=True)
 
     door = models.ForeignKey(

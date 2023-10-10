@@ -74,7 +74,6 @@ class Season(models.Model):
 
 
 class Podcast(models.Model):
-
     image = models.ImageField(
         upload_to="news_pictures",
         verbose_name="Bilde",

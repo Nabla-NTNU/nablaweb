@@ -102,7 +102,6 @@ class AdventCalendarView(ListView):
 
 @login_required
 def participate_in_competition(request, year, number):
-
     calendar = get_object_or_404(AdventCalendar, year=year)
     door = get_object_or_404(AdventDoor, calendar=calendar, number=number)
 

@@ -26,7 +26,6 @@ class RegistrationTest(GeneralEventTest):
             self.assertFalse(self.event.is_registered(user))
 
     def test_register_and_deregister(self):
-
         for user in self.users:
             self.event.register_user(user)
             self.assertTrue(self.event.is_registered(user))

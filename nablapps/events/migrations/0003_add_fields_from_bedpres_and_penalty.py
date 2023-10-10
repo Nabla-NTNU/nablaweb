@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("jobs", "0009_company_ignorecrop"),
         ("events", "0002_auto_20190205_1250"),

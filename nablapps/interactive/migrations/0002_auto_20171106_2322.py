@@ -6,7 +6,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("interactive", "0001_squashed_0022_adventdoor_user_test"),
     ]

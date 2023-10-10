@@ -8,7 +8,6 @@ import image_cropping.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("news", "0014_remove_newsarticle_view_counter"),
     ]

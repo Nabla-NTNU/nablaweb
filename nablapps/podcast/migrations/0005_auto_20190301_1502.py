@@ -14,7 +14,6 @@ def set_has_video(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("podcast", "0004_auto_20190205_1402"),
     ]

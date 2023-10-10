@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("officeCalendar", "0002_auto_20190325_2028"),
     ]

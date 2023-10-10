@@ -9,7 +9,6 @@ import image_cropping.fields
 
 
 class Migration(migrations.Migration):
-
     replaces = [
         ("jobs", "0001_squashed_0012_auto_20151106_1921"),
         ("jobs", "0002_auto_20170920_1310"),

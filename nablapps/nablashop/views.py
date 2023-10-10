@@ -137,7 +137,6 @@ class CheckoutView(TemplateView):
     template_name = "nablashop/purchase.html"
 
     def post(self, request, *args, **kwargs):
-
         purchase_form = PurchaseForm(request.POST)
         pose = ""
 

@@ -18,7 +18,6 @@ import nablapps.accounts.models
 
 
 class Migration(migrations.Migration):
-
     replaces = [
         ("accounts", "0001_initial"),
         ("accounts", "0002_registrationrequest"),

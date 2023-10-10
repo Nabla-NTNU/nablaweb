@@ -18,7 +18,6 @@ def reverse_func(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("news", "0009_set_object_id_from_news_id"),
     ]

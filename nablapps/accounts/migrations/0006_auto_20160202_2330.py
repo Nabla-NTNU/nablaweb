@@ -7,7 +7,6 @@ import nablapps.accounts.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("accounts", "0005_likepress"),
     ]
