@@ -44,9 +44,9 @@
     <tr>
         <td><label for="user_penalty_{{registration.pk}}">{{ registration.user.get_full_name }}</label></td>
         {% for penalty in event.get_penalty_rule_dict.values %}
-        <td><label style="width: 100%"><input type="radio" class="penalty_table_radio" name="user_penalty_{{registration.pk}}" value="{{ penalty }}" {% ifequal registration.penalty penalty %}checked{% endifequal %}></label></td>
+        <td><label style="width: 100%"><input type="radio" class="penalty_table_radio" name="user_penalty_{{registration.pk}}" value="{{ penalty }}" {% if registration.penalty == penalty %}checked{% endif %}></label></td>
         {% endfor %}
-        <td><label style="width: 100%"><input type="radio" class="penalty_table_radio" name="user_penalty_{{registration.pk}}" value="None" {% ifequal registration.penalty None %}checked{% endifequal %}></label></td>
+        <td><label style="width: 100%"><input type="radio" class="penalty_table_radio" name="user_penalty_{{registration.pk}}" value="None" {% if registration.penalty == None %}checked{% endif %}></label></td>
         <td>
         {% if registration.attendance_registration %}
             Ja
