@@ -27,6 +27,7 @@ django-multi-email-field = "*"
 django-bootstrap4 = "*"
 django-ckeditor = "*"
 djangorestframework = "*"
+tzdata = "*"  # django-4.* uses zoneinfo, which in turn relies on tzdata. On windows tzdata is as of now ()13.10.2023) not installed by default 
 
 [dev-packages]
 pre-commit = "*"
