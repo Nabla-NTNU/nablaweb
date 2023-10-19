@@ -4,14 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "==3.2.*"
+django = "==4.0.*"
 # Templatetags for bootstrap3
 django-braces = "*"       # Extra mixinclasses for models and views
 django-contrib-comments = "*"
 django-filebrowser-no-grappelli = "*"  # Filebrowser for mediafiles.
-django-haystack = "==3.0b1"     # Search functionality for django models. See whoosh as well
+django-haystack = "==3.2"     # Search functionality for django models. See whoosh as well
 django-hitcount = "*"
-django-image-cropping = "==1.5"
+django-image-cropping = "==1.7"
 django-markdown-deux = "*"
 django-sekizai = "*"      # Templatetag library for extra block functionality
 easy-thumbnails = "*"     # Thumbnail creator
@@ -27,6 +27,7 @@ django-multi-email-field = "*"
 django-bootstrap4 = "*"
 django-ckeditor = "*"
 djangorestframework = "*"
+tzdata = "*"  # django-4.* uses zoneinfo, which in turn relies on tzdata. On windows tzdata is as of now ()13.10.2023) not installed by default 
 
 [dev-packages]
 pre-commit = "*"
