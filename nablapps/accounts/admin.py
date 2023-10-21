@@ -11,7 +11,7 @@ from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_text
 
 from .forms import NablaUserChangeForm, NablaUserCreationForm
 from .models import FysmatClass, NablaGroup, NablaUser, RegistrationRequest
@@ -30,7 +30,7 @@ class UserFullnameMultipleChoiceField(forms.ModelMultipleChoiceField):
     """
 
     def label_from_instance(self, obj):
-        return smart_str(f"{obj.get_full_name()} - {obj.username}")
+        return smart_text(f"{obj.get_full_name()} - {obj.username}")
 
 
 class GroupAdminForm(forms.ModelForm):

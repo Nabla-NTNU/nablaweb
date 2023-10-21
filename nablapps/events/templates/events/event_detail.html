@@ -23,7 +23,7 @@
     <div class="registrations">
         {% for registration in event.eventregistration_set.all %}
         {% with user=registration.user %}
-        <span class="badge {% if user == request.user %} badge-info {% else %} badge-secondary {% endif %}
+        <span class="badge {% ifequal user request.user %} badge-info {% else %} badge-secondary {% endifequal %}
                      {% if registration.waiting %}
                      waiting-place
                      {% endif %}" style="display: inline-block;">
