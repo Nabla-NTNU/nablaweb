@@ -26,3 +26,6 @@ node_modules
 requirements/build
 sqlite.db
 .vscode
+
+# Local pyenv version file
+.python-version
