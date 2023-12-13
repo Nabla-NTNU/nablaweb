@@ -14,7 +14,7 @@ from .models import (
     TestQuestionAlternative,
     TestResult,
 )
-from .models.advent import Santa
+from .models.advent import AdventParticipation, Santa
 from .models.code_golf import CodeTask, Result
 from .models.games import Game
 from .models.place import PlaceGrid
@@ -45,6 +45,16 @@ class AdventCalendarAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name = "Julekalender"
         verbose_name_plural = "Julekalendere"
+        fields = "__all__"
+
+
+class AdventParticipationAdmin(admin.ModelAdmin):
+    list_filter = ("when",)
+    model = AdventParticipation
+
+    class Meta:
+        verbose_name = "JulekalenderTekstSvar"
+        verbose_name_plural = "JulekalenderTekstSvar"
         fields = "__all__"
 
 
@@ -171,6 +181,7 @@ class ResultAdmin(admin.ModelAdmin):
 
 
 admin.site.register(AdventCalendar, AdventCalendarAdmin)
+admin.site.register(AdventParticipation, AdventParticipationAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Test, TestAdmin)
 admin.site.register(TestQuestion, TestQuestionAdmin)
