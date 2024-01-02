@@ -23,6 +23,12 @@
 
         {# Social buttons #}
         <div class="social card card-body card-body-overline">
+            {% if logged_in %}
+                <a href="https://forms.gle/oocHdHwP728As8W19" class="btn btn-nabla-blue-dark">
+                    Forslag til styret
+                </a>
+                <p></p>
+            {% endif %}
             <a href="mailto:bedriftskontakt@nabla.no" class="btn btn-nabla-blue-dark">
                 Bedriftsforslag - send en mail til BN
             </a>
