@@ -1,4 +1,4 @@
-from .models import MailFeed, Subscription
+from .models import Mailfeed, Subscription
 
 from django.core.mail import BadHeaderError, send_mail
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -13,8 +13,8 @@ from .forms import SubscribeForm, MailFeedForm, EmailForm
 
 
 class MailFeedListView(PermissionRequiredMixin, ListView):
-    permission_required = "mailfeed.generate_feed"
-    model = MailFeed
+    permission_required = "Mailfeed.generate_mailfeeds"
+    model = Mailfeed
     template_name = "mailfeed/mailfeed_list.html"
     paginate_by = 100
 
@@ -24,7 +24,7 @@ class MailFeedListView(PermissionRequiredMixin, ListView):
 
 
 class CreateMailFeedView(PermissionRequiredMixin, View):
-    permission_required = "mailfeed.generate_feed"
+    permission_required = "Mailfeed.generate_mailfeeds"
 
     def get(self, request):
         mailfeed_form = MailFeedForm()
@@ -36,7 +36,7 @@ class CreateMailFeedView(PermissionRequiredMixin, View):
         if mailfeed_form.is_valid():
             mailfeed_name = mailfeed_form.get_name()
 
-            mailfeed = MailFeed.objects.create(name=mailfeed_name)
+            mailfeed = Mailfeed.objects.create(name=mailfeed_name)
             mailfeed.save()
         return redirect(reverse("mailfeed-list"))
 
@@ -45,12 +45,12 @@ class SubscribeView(View):
     def get(self, request, mailfeed_id):
         subscribe_form = SubscribeForm()
         context = {"subscribe_form": subscribe_form}
-        mailfeed = MailFeed.objects.get(pk=mailfeed_id)
+        mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
         context["mailfeed"] = mailfeed
         return render(request, "mailfeed/subscribe_mailfeed.html", context)
 
     def post(self, request, mailfeed_id):
-        mailfeed = MailFeed.objects.get(pk=mailfeed_id)
+        mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
         subscribe_form = SubscribeForm(request.POST)
         if subscribe_form.is_valid():
             email = subscribe_form.get_email()
@@ -72,12 +72,12 @@ class SubscribeView(View):
 
 
 class MailFeedDetailView(PermissionRequiredMixin, DetailView):
-    permission_required = "mailfeed.generate_feed"
+    permission_required = "Mailfeed.generate_mailfeeds"
 
     def get(self, request, mailfeed_id):
         email_form = EmailForm()
         context = {"email_form": email_form}
-        mailfeed = MailFeed.objects.get(pk=mailfeed_id)
+        mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
         context["mailfeed"] = mailfeed
         email_list = mailfeed.get_email_list()
         context["email_list"] = email_list
@@ -85,7 +85,7 @@ class MailFeedDetailView(PermissionRequiredMixin, DetailView):
 
     def post(self, request, mailfeed_id):
         email_form = EmailForm(request.POST)
-        mailfeed = MailFeed.objects.get(pk=mailfeed_id)
+        mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
         email_list = mailfeed.get_email_list()
         if not email_form.is_valid():
             return HttpResponse("Oops! Noe gikk galt.")
