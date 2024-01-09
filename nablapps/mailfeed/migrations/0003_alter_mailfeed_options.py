@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('mailfeed', '0002_auto_20240109_1653'),
+        ("mailfeed", "0002_auto_20240109_1653"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='mailfeed',
-            options={'permissions': [('generate_mailfeeds', 'can generate mailfeeds')]},
+            name="mailfeed",
+            options={"permissions": [("generate_mailfeeds", "can generate mailfeeds")]},
         ),
     ]

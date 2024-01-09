@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('mailfeed', '0001_initial'),
+        ("mailfeed", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='mailfeed',
-            name='created',
-            field=models.DateTimeField(auto_now=True, verbose_name='Opprettet'),
+            model_name="mailfeed",
+            name="created",
+            field=models.DateTimeField(auto_now=True, verbose_name="Opprettet"),
         ),
         migrations.AlterField(
-            model_name='subscription',
-            name='created',
-            field=models.DateTimeField(auto_now=True, verbose_name='Opprettet'),
+            model_name="subscription",
+            name="created",
+            field=models.DateTimeField(auto_now=True, verbose_name="Opprettet"),
         ),
     ]

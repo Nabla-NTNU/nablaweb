@@ -14,9 +14,7 @@ urlpatterns = [
         MailFeedDetailView.as_view(),
         name="mailfeed-detail",
     ),
-    path(
-        "create-mailfeed/", CreateMailFeedView.as_view(), name="create-mailfeed"
-    ),
+    path("create-mailfeed/", CreateMailFeedView.as_view(), name="create-mailfeed"),
     path(
         "subscribe/<int:mailfeed_id>/",
         SubscribeView.as_view(),
