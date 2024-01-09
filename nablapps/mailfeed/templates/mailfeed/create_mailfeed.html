@@ -3,7 +3,10 @@
 {% block content %}
 <h1>Opprett en mailfeed</h1>
 
-
+<a href="{% url 'mailfeed-list' %}" class="btn btn-outline-primary">Tilbake</a>
+<p>
+    <br>
+</p>
 <form method="POST">
     {% csrf_token %}
     <h4>Navn:</h4>
