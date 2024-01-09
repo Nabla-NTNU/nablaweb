@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Opprett MailFeed</h1>
+<h1>Opprett en mailfeed</h1>
 
 
 <form method="POST">
@@ -9,7 +9,7 @@
     <h4>Navn:</h4>
     {{ mailfeed_form.name_field }}
     <br>
-    <button type="submit">send</button>
+    <button class="btn btn-outline-primary" type="submit">send</button>
 </form>
 
 {% endblock %}
