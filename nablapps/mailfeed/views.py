@@ -54,14 +54,24 @@ class SubscribeView(View):
         subscribe_form = SubscribeForm(request.POST)
         if subscribe_form.is_valid():
             email = subscribe_form.get_email()
-            subscription = Subscription.objects.create(mailfeed=mailfeed, email=email)
-            subscription.save()
-            return HttpResponse("Mailadresse registrert!")
-        # TODO Det ser ut som ved ugyldig epostadresse kommer vi her. Utdyp feilmeldingen.
-        return HttpResponse("Noe gikk galt! Prøv igjen senere.")
+            if Subscription.objects.filter(email=email).exists():
+                return render(
+                    request,
+                    "mailfeed/msg.html",
+                    {"msg": "Denne eposten er allerede registrert fra før."},
+                )
+            else:
+                subscription = Subscription.objects.create(
+                    mailfeed=mailfeed, email=email
+                )
+                subscription.save()
+                return render(
+                    request, "mailfeed/msg.html", {"msg": "Mailadressen registrert!"}
+                )
+        return render(request, "mailfeed/invalid_email.html", {"mailfeed": mailfeed})
 
 
-class MailFeedDetailView(DetailView, PermissionRequiredMixin):
+class MailFeedDetailView(PermissionRequiredMixin, DetailView):
     permission_required = "mailfeed.generate_feed"
 
     def get(self, request, mailfeed_id):
