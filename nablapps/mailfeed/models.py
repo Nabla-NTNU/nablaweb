@@ -1,4 +1,5 @@
 from django.db import models
+from uuid import uuid4
 
 
 class Mailfeed(models.Model):
@@ -15,8 +16,16 @@ class Mailfeed(models.Model):
             ("generate_mailfeeds", "can generate mailfeeds"),
         ]
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class Subscription(models.Model):
     mailfeed = models.ForeignKey(Mailfeed, on_delete=models.CASCADE)
     email = models.EmailField(blank=False, null=False)
+    uuid = models.CharField(max_length=150)
     created = models.DateTimeField(auto_now=True, verbose_name="Opprettet")
+
+    def save(self, *args, **kwargs):
+        self.uuid = uuid4()
+        super(Subscription, self).save(*args, **kwargs)

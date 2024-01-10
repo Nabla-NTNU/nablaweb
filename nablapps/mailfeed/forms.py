@@ -19,6 +19,15 @@ class SubscribeForm(forms.Form):
         return email
 
 
+class UnsubscribeForm(forms.Form):
+    checkbox_field = forms.BooleanField()
+
+    def get_result(self) -> bool:
+        cd = self.cleaned_data
+        result = cd["checkbox_field"]
+        return result
+
+
 class EmailForm(forms.Form):
     subject_field = forms.CharField(max_length=80)
     content_field = forms.CharField(required=True, widget=forms.Textarea)

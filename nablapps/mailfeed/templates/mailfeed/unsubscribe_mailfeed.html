@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Slutt å abonner på {{ mailfeed.name }}</h1>
+
+
+<form method="POST">
+    {% csrf_token %}
+    {{ unsubscribe_form.checkbox_field }}
+    <br>
+    <br>
+    <button class="btn btn-outline-primary" type="submit">send</button>
+</form>
+
+{% endblock %}

@@ -3,13 +3,13 @@ from .models import Mailfeed, Subscription
 from django.core.mail import BadHeaderError, send_mail
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import BadHeaderError, send_mail
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, ListView
 
-from .forms import SubscribeForm, MailFeedForm, EmailForm
+from .forms import SubscribeForm, MailFeedForm, EmailForm, UnsubscribeForm
 
 
 class MailFeedListView(PermissionRequiredMixin, ListView):
@@ -71,7 +71,49 @@ class SubscribeView(View):
         return render(request, "mailfeed/invalid_email.html", {"mailfeed": mailfeed})
 
 
-# TODO: Lag unsubscribe view som som kan legges ved som lenke i mailen.
+class UnsubscribeView(View):
+    def get(self, request, mailfeed_id: int, uuid: str):
+        unsubscribe_form = UnsubscribeForm()
+        context = {"unsubscribe_form": unsubscribe_form}
+        mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
+        subscription = Subscription.objects.filter(mailfeed=mailfeed, uuid=uuid).first()
+        if subscription is None:
+            return render(request, "404.html")
+        context["mailfeed"] = mailfeed
+        return render(request, "mailfeed/unsubscribe_mailfeed.html", context)
+
+    def post(self, request, mailfeed_id: int, uuid: str):
+        mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
+        subscription = Subscription.objects.filter(mailfeed=mailfeed, uuid=uuid).first()
+        print(subscription)
+
+        if subscription == None:
+            return render(
+                request,
+                "mailfeed/msg.html",
+                {"msg": f"Denne mailadressen abonnerer ikke på {mailfeed.name}"},
+            )
+
+        unsubscribe_form = UnsubscribeForm(request.POST)
+        if unsubscribe_form.is_valid():
+            result = unsubscribe_form.get_result()
+            if result:
+                subscription.delete()
+                return render(
+                    request,
+                    "mailfeed/msg.html",
+                    {
+                        "msg": f"{subscription.email} har sluttet å abonnere på {mailfeed.name}"
+                    },
+                )
+            else:
+                redirect(
+                    reverse(
+                        "mailfeed/unsubscribe_mailfeed.html",
+                        kwargs={"mailfeed_id": mailfeed_id, "email_hash": uuid},
+                    )
+                )
+        return render(request, "mailfeed/msg.html", {"msg": "Noe gikk galt!"})
 
 
 class MailFeedDetailView(PermissionRequiredMixin, DetailView):
@@ -86,7 +128,7 @@ class MailFeedDetailView(PermissionRequiredMixin, DetailView):
         context["email_list"] = email_list
         return render(request, "mailfeed/mailfeed_detail.html", context)
 
-    def post(self, request, mailfeed_id: int):
+    def post(self, request: HttpRequest, mailfeed_id: int):
         email_form = EmailForm(request.POST)
         mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
         email_list = mailfeed.get_email_list()
@@ -94,8 +136,22 @@ class MailFeedDetailView(PermissionRequiredMixin, DetailView):
             return HttpResponse("Oops! Noe gikk galt.")
 
         subject = email_form.get_subject()
-        content = email_form.get_content()
         for email in email_list:
+            subscription = Subscription.objects.filter(
+                mailfeed=mailfeed, email=email
+            ).first()
+            if subscription is None:
+                return HttpResponse("Noe gikk galt. Prøv igjen senere.")
+            content = email_form.get_content()
+            content += (
+                f"\n\nHvis du vil slutte å abonnere på disse mailene trykk her:\n"
+            )
+            print(request.build_absolute_uri("unsubscribe-mailfeed"))
+            unsubscribe_url = "https://nabla.no" + reverse(
+                "unsubscribe-mailfeed",
+                kwargs={"mailfeed_id": mailfeed_id, "uuid": subscription.uuid},
+            )
+            content += unsubscribe_url
             try:
                 send_mail(
                     subject,

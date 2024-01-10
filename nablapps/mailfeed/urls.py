@@ -5,6 +5,7 @@ from .views import (
     MailFeedDetailView,
     MailFeedListView,
     SubscribeView,
+    UnsubscribeView,
 )
 
 urlpatterns = [
@@ -19,5 +20,10 @@ urlpatterns = [
         "subscribe/<int:mailfeed_id>/",
         SubscribeView.as_view(),
         name="subscribe-mailfeed",
+    ),
+    path(
+        "unsubscribe/<int:mailfeed_id>/<str:uuid>",
+        UnsubscribeView.as_view(),
+        name="unsubscribe-mailfeed",
     ),
 ]
