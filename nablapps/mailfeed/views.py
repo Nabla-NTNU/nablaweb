@@ -42,14 +42,14 @@ class CreateMailFeedView(PermissionRequiredMixin, View):
 
 
 class SubscribeView(View):
-    def get(self, request, mailfeed_id):
+    def get(self, request, mailfeed_id: int):
         subscribe_form = SubscribeForm()
         context = {"subscribe_form": subscribe_form}
         mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
         context["mailfeed"] = mailfeed
         return render(request, "mailfeed/subscribe_mailfeed.html", context)
 
-    def post(self, request, mailfeed_id):
+    def post(self, request, mailfeed_id: int):
         mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
         subscribe_form = SubscribeForm(request.POST)
         if subscribe_form.is_valid():
@@ -71,10 +71,13 @@ class SubscribeView(View):
         return render(request, "mailfeed/invalid_email.html", {"mailfeed": mailfeed})
 
 
+# TODO: Lag unsubscribe view som som kan legges ved som lenke i mailen.
+
+
 class MailFeedDetailView(PermissionRequiredMixin, DetailView):
     permission_required = "Mailfeed.generate_mailfeeds"
 
-    def get(self, request, mailfeed_id):
+    def get(self, request, mailfeed_id: int):
         email_form = EmailForm()
         context = {"email_form": email_form}
         mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
@@ -83,7 +86,7 @@ class MailFeedDetailView(PermissionRequiredMixin, DetailView):
         context["email_list"] = email_list
         return render(request, "mailfeed/mailfeed_detail.html", context)
 
-    def post(self, request, mailfeed_id):
+    def post(self, request, mailfeed_id: int):
         email_form = EmailForm(request.POST)
         mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
         email_list = mailfeed.get_email_list()

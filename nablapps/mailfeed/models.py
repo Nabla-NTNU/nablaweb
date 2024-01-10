@@ -5,7 +5,7 @@ class Mailfeed(models.Model):
     name = models.CharField(max_length=40, blank=False, null=False)
     created = models.DateTimeField(auto_now=True, verbose_name="Opprettet")
 
-    def get_email_list(self):
+    def get_email_list(self) -> list[str]:
         subscription_list = Subscription.objects.filter(mailfeed=self)
         email_list = [sub.email for sub in subscription_list]
         return email_list
