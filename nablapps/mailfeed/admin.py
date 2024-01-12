@@ -9,12 +9,6 @@ class SubscriptionAdmin(admin.ModelAdmin):
         verbose_name = "Subscription"
         verbose_name_plural = "Subscriptions"
 
-    def short_description(self, com):
-        return (com.story[:23] + "...") if len(com.story) > 25 else com.story
-
-    def full_user_name(self, com):
-        return com.user.get_full_name()
-
     list_display = ("mailfeed", "email", "uuid", "created")
     list_select_related = [
         "mailfeed",

@@ -2,6 +2,8 @@ from django import forms
 
 
 class MailFeedForm(forms.Form):
+    """Form for creation of a new mailfeed"""
+
     name_field = forms.CharField(required=True)
 
     def get_name(self) -> str:
@@ -29,6 +31,8 @@ class UnsubscribeForm(forms.Form):
 
 
 class EmailForm(forms.Form):
+    """Form for creating an email"""
+
     subject_field = forms.CharField(max_length=80)
     content_field = forms.CharField(required=True, widget=forms.Textarea)
 
