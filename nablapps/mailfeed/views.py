@@ -109,8 +109,8 @@ class UnsubscribeView(View):
             else:
                 redirect(
                     reverse(
-                        "mailfeed/unsubscribe_mailfeed.html",
-                        kwargs={"mailfeed_id": mailfeed_id, "email_hash": uuid},
+                        "unsubscribe-mailfeed",
+                        kwargs={"mailfeed_id": mailfeed_id, "uuid": uuid},
                     )
                 )
         return render(request, "mailfeed/msg.html", {"msg": "Noe gikk galt!"})
