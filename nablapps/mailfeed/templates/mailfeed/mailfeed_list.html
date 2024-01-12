@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Administrer Mailfeeder</h1>
+
+<a href="{% url 'create-mailfeed' %}" class="btn btn-outline-primary">Opprett ny Mailfeed</a>
+
+<h4>Mailfeeder</h4>
+<ul class="list-group">
+{% for mailfeed in object_list %}
+    <li class="list-group-item"><a href="{% url 'mailfeed-detail' mailfeed.id %}">{{ mailfeed.name }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

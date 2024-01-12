@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Ugyldig mailadresse</h1>
+<p>
+    <br>
+</p>
+<a href="{% url 'subscribe-mailfeed' mailfeed.id %}" class="btn btn-outline-primary">Prøv igjen</a>
+{% endblock %}

@@ -109,6 +109,7 @@ INSTALLED_APPS = [
     "nablapps.interactive",
     "nablapps.jobs",
     "nablapps.meeting_records",
+    "nablapps.mailfeed",
     "nablapps.nabladet",
     "nablapps.nablaforum",
     "nablapps.nablashop",
