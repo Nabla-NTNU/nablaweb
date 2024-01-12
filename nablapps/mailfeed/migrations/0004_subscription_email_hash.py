@@ -4,16 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('mailfeed', '0003_alter_mailfeed_options'),
+        ("mailfeed", "0003_alter_mailfeed_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='subscription',
-            name='email_hash',
-            field=models.CharField(default='asdf', max_length=100),
+            model_name="subscription",
+            name="email_hash",
+            field=models.CharField(default="asdf", max_length=100),
             preserve_default=False,
         ),
     ]

@@ -1,15 +1,13 @@
-from .models import Mailfeed, Subscription
-
-from django.core.mail import BadHeaderError, send_mail
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import BadHeaderError, send_mail
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, ListView
 
-from .forms import SubscribeForm, MailFeedForm, EmailForm, UnsubscribeForm
+from .forms import EmailForm, MailFeedForm, SubscribeForm, UnsubscribeForm
+from .models import Mailfeed, Subscription
 
 
 class MailFeedListView(PermissionRequiredMixin, ListView):
