@@ -11,6 +11,8 @@ from .models import Mailfeed, Subscription
 
 
 class MailFeedListView(PermissionRequiredMixin, ListView):
+    """An overview of all mailfeeeds"""
+
     permission_required = "Mailfeed.generate_mailfeeds"
     model = Mailfeed
     template_name = "mailfeed/mailfeed_list.html"
@@ -22,6 +24,8 @@ class MailFeedListView(PermissionRequiredMixin, ListView):
 
 
 class CreateMailFeedView(PermissionRequiredMixin, View):
+    """Create a new mailfeed"""
+
     permission_required = "Mailfeed.generate_mailfeeds"
 
     def get(self, request):
@@ -40,6 +44,8 @@ class CreateMailFeedView(PermissionRequiredMixin, View):
 
 
 class SubscribeView(View):
+    """Subscribe to a mailfeed by submitting an email adress"""
+
     def get(self, request, mailfeed_id: int):
         subscribe_form = SubscribeForm()
         context = {"subscribe_form": subscribe_form}
@@ -70,6 +76,8 @@ class SubscribeView(View):
 
 
 class UnsubscribeView(View):
+    """Unsubscribe from a mailfeed"""
+
     def get(self, request, mailfeed_id: int, uuid: str):
         unsubscribe_form = UnsubscribeForm()
         context = {"unsubscribe_form": unsubscribe_form}
@@ -82,10 +90,11 @@ class UnsubscribeView(View):
 
     def post(self, request, mailfeed_id: int, uuid: str):
         mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
-        subscription = Subscription.objects.filter(mailfeed=mailfeed, uuid=uuid).first()
-        print(subscription)
+        subscription = Subscription.objects.filter(
+            mailfeed=mailfeed, uuid=uuid
+        ).first()  # Should only be one instance
 
-        if subscription == None:
+        if subscription is None:
             return render(
                 request,
                 "mailfeed/msg.html",
@@ -115,6 +124,8 @@ class UnsubscribeView(View):
 
 
 class MailFeedDetailView(PermissionRequiredMixin, DetailView):
+    """Create and send emails to a mailfeed"""
+
     permission_required = "Mailfeed.generate_mailfeeds"
 
     def get(self, request, mailfeed_id: int):
@@ -130,6 +141,7 @@ class MailFeedDetailView(PermissionRequiredMixin, DetailView):
         email_form = EmailForm(request.POST)
         mailfeed = Mailfeed.objects.get(pk=mailfeed_id)
         email_list = mailfeed.get_email_list()
+
         if not email_form.is_valid():
             return HttpResponse("Oops! Noe gikk galt.")
 
@@ -144,7 +156,6 @@ class MailFeedDetailView(PermissionRequiredMixin, DetailView):
             content += (
                 f"\n\nHvis du vil slutte å abonnere på disse mailene trykk her:\n"
             )
-            print(request.build_absolute_uri("unsubscribe-mailfeed"))
             unsubscribe_url = "https://nabla.no" + reverse(
                 "unsubscribe-mailfeed",
                 kwargs={"mailfeed_id": mailfeed_id, "uuid": subscription.uuid},
