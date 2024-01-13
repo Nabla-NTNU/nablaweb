@@ -13,7 +13,7 @@ from .models import Mailfeed, Subscription
 class MailFeedListView(PermissionRequiredMixin, ListView):
     """An overview of all mailfeeeds"""
 
-    permission_required = "Mailfeed.generate_mailfeeds"
+    permission_required = "mailfeed.generate_mailfeeds"
     model = Mailfeed
     template_name = "mailfeed/mailfeed_list.html"
     paginate_by = 100
@@ -26,7 +26,7 @@ class MailFeedListView(PermissionRequiredMixin, ListView):
 class CreateMailFeedView(PermissionRequiredMixin, View):
     """Create a new mailfeed"""
 
-    permission_required = "Mailfeed.generate_mailfeeds"
+    permission_required = "mailfeed.generate_mailfeeds"
 
     def get(self, request):
         mailfeed_form = MailFeedForm()
@@ -126,7 +126,7 @@ class UnsubscribeView(View):
 class MailFeedDetailView(PermissionRequiredMixin, DetailView):
     """Create and send emails to a mailfeed"""
 
-    permission_required = "Mailfeed.generate_mailfeeds"
+    permission_required = "mailfeed.generate_mailfeeds"
 
     def get(self, request, mailfeed_id: int):
         email_form = EmailForm()
