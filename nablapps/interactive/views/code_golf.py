@@ -142,7 +142,7 @@ def code_golf_score(request, task_id):
     return render(request, "interactive/code_golf_score.html", context)
 
 
-class CodeTaskListView(ListView):
+class CodeTaskListView(LoginRequiredMixin, ListView):
     model = CodeTask
 
     def get_context_data(self, **kwargs):
