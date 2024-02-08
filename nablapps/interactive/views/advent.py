@@ -9,7 +9,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, ListView
 
-from braces.views import PermissionRequiredMixin
+from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
 from nablapps.accounts.models import NablaUser
 
@@ -22,7 +22,7 @@ from ..models.advent import (
 )
 
 
-class AdventDoorView(DetailView):
+class AdventDoorView(LoginRequiredMixin, DetailView):
     model = AdventDoor
     pk_url_kwarg = "number"
     context_object_name = "door"
@@ -63,7 +63,7 @@ class AdventDoorView(DetailView):
         return response
 
 
-class AdventCalendarView(ListView):
+class AdventCalendarView(LoginRequiredMixin, ListView):
     model = AdventDoor
     context_object_name = "doors"
 
