@@ -17,7 +17,7 @@ from ..models.place import (
 )
 
 
-class PlaceView(LoginRequiredMixin, DetailView):
+class PlaceView(DetailView):
     """DetailView displaying the grid with a given pk"""
 
     model = PlaceGrid
