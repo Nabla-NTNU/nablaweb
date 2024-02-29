@@ -138,7 +138,9 @@ def make_contact_context(request, spam_check, test_val):
         ("Nestleder", "nestleder"),
         ("Faddersjef/sekretær", "sekretaer"),
         ("Kasserer", "kasserer"),
-        ("Kommunikasjonssjef", "komsjef"),
+        # ("Kommunikasjonssjef", "komsjef"), # Komsjef has been divided into koordinator and blestesjef
+        ("Koordinator", "koordinator"),
+        ("Blestesjef", "blestesjef"),
         ("Bedkomsjef", "bedriftskontakt"),
         ("Arrangementsjef", "arrsjef"),
         ("Jubileumssjef", "jubileumssjef"),
