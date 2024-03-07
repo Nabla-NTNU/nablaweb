@@ -17,6 +17,7 @@ from typing import Protocol
 
 from django.conf import settings
 from django.core.files.base import ContentFile
+from django.core.files.uploadedfile import UploadedFile
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
@@ -24,6 +25,7 @@ from faker import Factory
 
 from nablapps.accounts.models import FysmatClass, NablaGroup
 from nablapps.accounts.models import NablaUser as User
+from nablapps.album.models import Album, AlbumForm, AlbumImage
 from nablapps.events.models import Event
 from nablapps.interactive.models.code_golf import CodeTask, Result
 from nablapps.interactive.models.games import Game
@@ -685,6 +687,64 @@ class NabladSeeder:
         Nablad.objects.all().delete()
 
 
+class AlbumSeeder:
+    amount_albums = 10
+    amount_child_albums = 3
+    amount_images_per_album = 5
+
+    description = f"{amount_albums} Albums with {amount_child_albums} child Albums. {amount_images_per_album} images per album."
+    short_description = "Albums"
+
+    @classmethod
+    def exists(cls) -> bool:
+        return Album.objects.exists()
+
+    @classmethod
+    def create(cls) -> None:
+        for i in range(cls.amount_albums):
+            parent_album = Album.objects.create(
+                title=f"Parent Album: {i+1}", visibility="p" if i % 2 else "u"
+            )
+
+            sub_albums = [
+                Album.objects.create(
+                    title=f"Child Album: {j+1}",
+                    visibility="p" if j % 2 else "u",
+                    parent=parent_album,
+                )
+                for j in range(cls.amount_child_albums)
+            ]
+
+            all_albums = [parent_album] + sub_albums
+
+            for album in all_albums:
+                # Create form
+                form = AlbumForm()
+
+                # "upload" the images
+                form.files.setlist(
+                    "photos",
+                    [
+                        UploadedFile(file=polygon_picture())
+                        for i in range(cls.amount_images_per_album)
+                    ],
+                )
+
+                form.save_photos(album)
+
+                # Add numbering and description to each image
+                images = AlbumImage.objects.filter(album=album)
+                for j, img in enumerate(images):
+                    img.num = j
+                    img.description = random_text()
+                    img.save()
+
+    @classmethod
+    def delete(cls) -> None:
+        Album.objects.all().delete()
+        AlbumImage.objects.all().delete()
+
+
 class GameSeeder:
     description = short_description = "Games"
 
@@ -729,6 +789,7 @@ ALL_SEEDERS: tuple[type[ObjectSeeder], ...] = (
     PodcastSeeder,
     NabladSeeder,
     GameSeeder,
+    AlbumSeeder,
 )
 
 
