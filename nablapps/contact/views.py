@@ -207,12 +207,14 @@ def make_contact_context(request, spam_check, test_val):
         "spam_check": spam_check,
         "test_val": test_val,
     }
-    contact_form.fields["spam_check"].label = (
+    contact_form.fields[
+        "spam_check"
+    ].label = (
         f"Hva er kvadratroten av {test_val} ganget med kvadratroten av {test_val}? "
     )
-    contact_form.fields["spam_check"].help_text = (
-        "Skriv inn svaret over for å verifisere at du er et menneske"
-    )
+    contact_form.fields[
+        "spam_check"
+    ].help_text = "Skriv inn svaret over for å verifisere at du er et menneske"
     context["board_emails"] = board_emails
     context["nabla_pos_emails"] = nabla_pos_emails
     context["group_emails"] = group_emails
@@ -233,12 +235,14 @@ def make_feedback_context(request, spam_check, test_val):
     else:
         # tomt skjema
         feedback_form = FeedbackForm(initial={"right_answer": test_val})
-    feedback_form.fields["spam_check"].label = (
+    feedback_form.fields[
+        "spam_check"
+    ].label = (
         f"Hva er kvadratroten av {test_val} ganget med kvadratroten av {test_val}? "
     )
-    feedback_form.fields["spam_check"].help_text = (
-        "Skriv inn svaret over for å verifisere at du er et menneske"
-    )
+    feedback_form.fields[
+        "spam_check"
+    ].help_text = "Skriv inn svaret over for å verifisere at du er et menneske"
     context = {
         "feedback_form": feedback_form,
         "spam_check": spam_check,
@@ -261,12 +265,14 @@ def make_roombooking_context(request, spam_check, test_val):
     else:
         # tomt skjema
         room_form = RoomForm(initial={"right_answer": test_val})
-    room_form.fields["spam_check"].label = (
+    room_form.fields[
+        "spam_check"
+    ].label = (
         f"Hva er kvadratroten av {test_val} ganget med kvadratroten av {test_val}? "
     )
-    room_form.fields["spam_check"].help_text = (
-        "Skriv inn svaret over for å verifisere at du er et menneske"
-    )
+    room_form.fields[
+        "spam_check"
+    ].help_text = "Skriv inn svaret over for å verifisere at du er et menneske"
     context = {
         "room_form": room_form,
         "spam_check": spam_check,
