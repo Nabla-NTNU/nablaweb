@@ -4,8 +4,10 @@ Views for events app
 
 import datetime
 
+from django.conf import settings
 from django.contrib.admin.models import ADDITION, DELETION, LogEntry
-from django.contrib.auth import get_user_model
+from django.contrib.auth import REDIRECT_FIELD_NAME, get_user_model
+from django.contrib.auth.views import redirect_to_login
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -270,6 +272,15 @@ class EventDetailView(AdminLinksMixin, MessageMixin, DetailView):
     model = Event
     context_object_name = "event"
     template_name = "events/event_detail.html"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        if not self.object.is_bedpres and not request.user.is_authenticated:
+            return redirect_to_login(
+                request.get_full_path(), settings.LOGIN_URL, REDIRECT_FIELD_NAME
+            )
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
