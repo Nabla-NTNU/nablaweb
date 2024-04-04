@@ -1,6 +1,7 @@
 """
 This module contains the AppConfig for the news app.
 """
+
 from django.apps import AppConfig
 
 

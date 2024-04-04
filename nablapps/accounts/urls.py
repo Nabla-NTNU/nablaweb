@@ -4,6 +4,7 @@ Urls for accounts app.
 Also adds urls from contrib.auth for login, logout,
 password change and password reset.
 """
+
 import django.contrib.auth.views as auth_views
 from django.urls import include, path, re_path
 from django.views.generic import RedirectView

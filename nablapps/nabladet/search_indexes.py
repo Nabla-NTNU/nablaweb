@@ -1,6 +1,7 @@
 """
 Haystack search indexes for nablad
 """
+
 from haystack import indexes
 
 from .models import Nablad

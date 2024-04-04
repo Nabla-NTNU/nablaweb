@@ -1,6 +1,7 @@
 """
 Views for events app
 """
+
 import datetime
 
 from django.contrib.admin.models import ADDITION, DELETION, LogEntry
@@ -498,9 +499,9 @@ class RegisterAttendanceView(PermissionRequiredMixin, DetailView, MessageMixin):
         else:
             try:
                 self.register_user_attendance(registration=registration)
-                context[
-                    "attendance_message"
-                ] = f"Velkommen {registration.user.first_name}"
+                context["attendance_message"] = (
+                    f"Velkommen {registration.user.first_name}"
+                )
                 context["status_type"] = "success"
             except UserAlreadyRegistered as e:
                 reg_datetime = e.eventregistration.attendance_registration

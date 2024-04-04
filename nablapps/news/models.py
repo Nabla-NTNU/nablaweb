@@ -9,6 +9,7 @@ In a previous version of nablaweb those two models was a single model called New
 Models that was to appear on the front page had to inherit from the News model.
 This inheritance coupled different parts of nablaweb too much and made it hard to change.
 """
+
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models

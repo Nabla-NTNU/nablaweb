@@ -428,9 +428,11 @@ def _voting_public_serializer(voting, user, include_alternatives=True):
         "has_voted": voting.user_already_voted(user),
         "is_preference": voting.is_preference_vote,
         "num_winners": voting.num_winners,
-        "description": markdown(voting.description)
-        if voting.event.display_description_users
-        else None,
+        "description": (
+            markdown(voting.description)
+            if voting.event.display_description_users
+            else None
+        ),
     }
     if include_alternatives:
         response["alternatives"] = [

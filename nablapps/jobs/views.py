@@ -1,6 +1,7 @@
 """
 Views for jobs app
 """
+
 from datetime import datetime
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator

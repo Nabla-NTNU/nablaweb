@@ -181,7 +181,7 @@ class BaseApplicationListView(ListView):
         return committees
 
 
-class ApplicationListView(BaseApplicationListView):
+class ApplicationListView(LoginRequiredMixin, BaseApplicationListView):
     template_name = "apply_committee/application_list.html"
 
 

@@ -1,6 +1,7 @@
 """
 Templatetags for dealing with python lists in django template
 """
+
 from django import template
 
 register = template.Library()

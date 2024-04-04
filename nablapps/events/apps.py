@@ -1,6 +1,7 @@
 """
 App configs for event app
 """
+
 from django.apps import AppConfig
 
 

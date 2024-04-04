@@ -61,9 +61,9 @@ class QuizView(LoginRequiredMixin, DetailView):
         # its corresponding start-time
         # The time is converted to a string because a datetime object isn't
         # JSON-serializable, and can't be stored in the session
-        self.request.session[QUIZREPLIES_SESSIONKEY][
-            self.quiz_reply_id
-        ] = datetime.strftime(datetime.now(), DATE_FORMAT)
+        self.request.session[QUIZREPLIES_SESSIONKEY][self.quiz_reply_id] = (
+            datetime.strftime(datetime.now(), DATE_FORMAT)
+        )
 
         # Mark the session as modified, because we are modifying a nested object
         self.request.session.modified = True

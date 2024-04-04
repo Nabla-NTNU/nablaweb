@@ -3,6 +3,7 @@ Models for jobs app
 
 Defines mainly the Advert and Company models.
 """
+
 from datetime import datetime
 
 from django.db import models

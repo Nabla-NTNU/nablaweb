@@ -1,6 +1,7 @@
 """
 Tests for registration to an event
 """
+
 # pylint: disable=C0111,C0301
 import random
 from datetime import datetime

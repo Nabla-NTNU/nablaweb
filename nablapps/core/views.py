@@ -1,6 +1,7 @@
 """
 Core views in nablaweb
 """
+
 from datetime import datetime, timedelta
 from itertools import chain
 

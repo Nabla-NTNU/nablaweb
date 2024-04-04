@@ -1,6 +1,7 @@
 """
 Templatetags used in jobs app
 """
+
 from django import template
 
 register = template.Library()

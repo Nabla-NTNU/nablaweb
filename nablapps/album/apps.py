@@ -1,6 +1,7 @@
 """
 AppConfigs for album app
 """
+
 from django.apps import AppConfig
 
 

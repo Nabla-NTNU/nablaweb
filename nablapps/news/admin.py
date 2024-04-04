@@ -1,6 +1,7 @@
 """
 Admin for front-page-news and news-articles
 """
+
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.utils.html import format_html

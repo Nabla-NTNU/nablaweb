@@ -47,9 +47,9 @@ class PurchaseForm(forms.Form):
         ]
         self.fields["product"].choices = product_list
         self.fields["product"].initial = product_list[0]
-        self.fields[
-            "product"
-        ].widget.option_template_name = "officeBeer/radio_option.html"
+        self.fields["product"].widget.option_template_name = (
+            "officeBeer/radio_option.html"
+        )
 
     # todo valid product
     def clean_user_card_key(self):

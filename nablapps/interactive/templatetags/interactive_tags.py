@@ -1,6 +1,7 @@
 """
 Tags for interactive
 """
+
 from django import template
 
 from ..models.place import time_of_last_action

@@ -1,6 +1,7 @@
 """
 Urls for events
 """
+
 from django.urls import path, re_path
 
 from .feeds import RecentEvents

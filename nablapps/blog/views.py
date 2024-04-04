@@ -1,6 +1,7 @@
 """
 Views for blog app
 """
+
 from django.http import HttpResponseNotFound
 from django.urls import reverse
 from django.views.generic import DetailView, ListView

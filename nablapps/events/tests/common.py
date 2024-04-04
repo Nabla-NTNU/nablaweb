@@ -2,6 +2,7 @@
 This module contains things that are in common
 for the different event tests.
 """
+
 from datetime import datetime
 
 from django.contrib.auth import get_user_model
