@@ -23,6 +23,7 @@ class NewsDetailViewTest(TestCase):
         self.body = "Haha, jeg lurte deg. Det er ikke så spennende alikevel."
         self.news.created_by = self.user
         self.news.save()
+        self.client.force_login(self.user)
 
         # Prøver å laste inn siden til nyheten og tar vare på resultatet
         self.response = self.client.get(self.news.get_absolute_url())
