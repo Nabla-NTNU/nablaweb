@@ -1,6 +1,7 @@
 """
 Models for album app
 """
+
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_image_file_extension

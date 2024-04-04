@@ -3,6 +3,7 @@ Search index for NewsArticle
 
 used by haystack
 """
+
 from haystack import indexes
 
 from .models import NewsArticle

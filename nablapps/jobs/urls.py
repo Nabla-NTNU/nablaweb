@@ -1,6 +1,7 @@
 """
 Urls for jobs app
 """
+
 from django.urls import path, re_path
 
 from .feeds import RecentJobs

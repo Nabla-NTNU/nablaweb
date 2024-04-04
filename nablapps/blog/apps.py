@@ -1,6 +1,7 @@
 """
 Define configurations for the app blog
 """
+
 from django.apps import AppConfig
 
 

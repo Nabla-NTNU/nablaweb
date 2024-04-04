@@ -1,6 +1,7 @@
 """
 Views for the news app
 """
+
 from django.views.generic import DetailView, ListView
 
 from nablapps.core.view_mixins import AdminLinksMixin

@@ -1,6 +1,7 @@
 """
 Defines and registers django signal receivers
 """
+
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver

@@ -1,6 +1,7 @@
 """
 Admin interface definitions for blog app
 """
+
 from django.contrib import admin
 
 from nablapps.core.admin import ChangedByMixin

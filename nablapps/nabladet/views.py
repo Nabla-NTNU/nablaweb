@@ -1,6 +1,7 @@
 """
 Views for nablad apps
 """
+
 from datetime import datetime
 
 from django.conf import settings

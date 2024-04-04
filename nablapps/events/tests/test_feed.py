@@ -1,6 +1,7 @@
 """
 Test the event rss feed
 """
+
 # pylint: disable=C0111,C0301
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse

@@ -1,6 +1,7 @@
 """
 Module for creation of a calendar of events.
 """
+
 from calendar import HTMLCalendar
 from collections import defaultdict
 from datetime import date, timedelta

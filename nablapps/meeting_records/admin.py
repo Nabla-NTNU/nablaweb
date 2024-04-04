@@ -1,6 +1,7 @@
 """
 Admin interface for meeting record app
 """
+
 from django.contrib import admin
 
 from nablapps.core.admin import ChangedByMixin

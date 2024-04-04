@@ -1,6 +1,7 @@
 """
 App configs for poll app
 """
+
 from django.apps import AppConfig
 
 

@@ -1,6 +1,7 @@
 """
 The Event model
 """
+
 import logging
 from datetime import datetime
 

@@ -1,6 +1,7 @@
 """
 Urls for news articles
 """
+
 from django.urls import path
 
 from .views import NewsDetailView, NewsListView

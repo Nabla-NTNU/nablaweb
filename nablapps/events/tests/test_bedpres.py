@@ -2,7 +2,6 @@
 Tests related to bedpres
 """
 
-
 from django.core.exceptions import ValidationError
 
 from nablapps.jobs.models import Company

@@ -60,9 +60,9 @@ class ComMembershipAdmin(admin.ModelAdmin):
 
         output_stream.seek(0)
         response = HttpResponse(output_stream, content_type="text")
-        response[
-            "Content-Disposition"
-        ] = "attachment; filename=active_committee_members.txt"
+        response["Content-Disposition"] = (
+            "attachment; filename=active_committee_members.txt"
+        )
         return response
 
     @transaction.atomic

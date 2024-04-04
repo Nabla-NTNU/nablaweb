@@ -1,6 +1,7 @@
 """
 Tests for nablad app
 """
+
 import os
 from shutil import copyfile, rmtree
 
