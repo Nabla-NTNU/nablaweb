@@ -1,6 +1,7 @@
 """
 Feed for events
 """
+
 from django.contrib.syndication.views import Feed
 
 from .models import Event

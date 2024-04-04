@@ -1,6 +1,7 @@
 """
 Forms for jobs app
 """
+
 from django import forms
 from django.forms import ModelForm
 

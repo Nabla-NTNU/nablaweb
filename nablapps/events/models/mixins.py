@@ -5,6 +5,7 @@ They are split up in order make them easier to read,
 and because there was (once upon a time) an idea to split up the information
 about an event and the registration info into different models.
 """
+
 from datetime import datetime
 
 from django.db import models

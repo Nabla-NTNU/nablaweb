@@ -1,6 +1,7 @@
 """
 Abstract models to be included in other apps
 """
+
 # Ignore pylint problems with Meta-classes
 # pylint: disable=missing-docstring,too-few-public-methods
 from django.conf import settings

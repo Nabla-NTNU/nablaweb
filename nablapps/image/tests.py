@@ -1,6 +1,7 @@
 """
 Tests for image app
 """
+
 # pylint: disable=C0111
 from django.test import TestCase
 

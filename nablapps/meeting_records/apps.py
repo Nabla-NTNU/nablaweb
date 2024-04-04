@@ -1,6 +1,7 @@
 """
 App configs for meeting records
 """
+
 from django.apps import AppConfig
 
 

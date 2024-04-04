@@ -3,6 +3,7 @@ Haystack search indexes for blog app
 
 Will be imported by haystack if haystack is used.
 """
+
 from haystack import indexes  # pylint: disable=E0401
 
 from .models import BlogPost

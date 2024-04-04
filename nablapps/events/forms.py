@@ -1,6 +1,7 @@
 """
 Forms for events
 """
+
 import operator
 
 from django.forms import (

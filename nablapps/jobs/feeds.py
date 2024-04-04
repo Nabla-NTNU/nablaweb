@@ -1,6 +1,7 @@
 """
 Rss feed for jobs
 """
+
 from django.contrib.syndication.views import Feed
 
 from nablapps.jobs.models import Advert

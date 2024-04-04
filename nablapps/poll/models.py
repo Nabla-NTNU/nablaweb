@@ -14,6 +14,7 @@ Some design info for the models
   which means it is the one to be shown on the front page.
 
 """
+
 from random import shuffle
 
 from django.conf import settings

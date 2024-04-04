@@ -1,6 +1,7 @@
 """
 Context processors for poll app
 """
+
 from .models import Poll
 
 

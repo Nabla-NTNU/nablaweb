@@ -1,6 +1,7 @@
 """
 Views for image app
 """
+
 from django.shortcuts import render
 
 

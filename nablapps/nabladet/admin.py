@@ -1,6 +1,7 @@
 """
 Admin interface for nabladet app
 """
+
 from django.contrib import admin
 
 from image_cropping import ImageCroppingMixin

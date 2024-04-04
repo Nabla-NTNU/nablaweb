@@ -1,6 +1,7 @@
 """
 Generic view mixins
 """
+
 import logging
 
 from django.contrib.flatpages.models import FlatPage

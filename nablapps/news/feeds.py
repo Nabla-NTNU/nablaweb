@@ -1,6 +1,7 @@
 """
 RSS feed for front page news
 """
+
 from django.contrib.syndication.views import Feed
 
 from .models import FrontPageNews

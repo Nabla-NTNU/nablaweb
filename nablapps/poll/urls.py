@@ -1,6 +1,7 @@
 """
 Urls for poll app
 """
+
 from django.urls import path
 
 from .views import (

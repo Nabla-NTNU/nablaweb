@@ -1,6 +1,7 @@
 """
 Admin for ContentImage
 """
+
 from django.contrib import admin
 
 from .models import ContentImage

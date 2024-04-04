@@ -1,6 +1,7 @@
 """
 Models for nabladet app
 """
+
 import os
 
 from django.conf import settings

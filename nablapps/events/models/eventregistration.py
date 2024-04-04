@@ -1,6 +1,7 @@
 """
 Model representing a registration to an event.
 """
+
 from datetime import datetime
 
 from django.conf import settings
