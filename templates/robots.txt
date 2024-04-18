@@ -1,2 +1,4 @@
 User-agent: *
 Disallow: /media/nabladet/
+Disallow: /album/
+crawl-delay: 3
