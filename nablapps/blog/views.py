@@ -6,12 +6,14 @@ from django.http import HttpResponseNotFound
 from django.urls import reverse
 from django.views.generic import DetailView, ListView
 
+from braces.views import LoginRequiredMixin
+
 from nablapps.core.view_mixins import AdminLinksMixin
 
 from .models import Blog, BlogPost
 
 
-class BlogPostView(AdminLinksMixin, DetailView):
+class BlogPostView(LoginRequiredMixin, AdminLinksMixin, DetailView):
     """
     Show a single blog post
     """
@@ -40,7 +42,7 @@ class BlogPostView(AdminLinksMixin, DetailView):
         ]
 
 
-class BlogView(AdminLinksMixin, ListView):
+class BlogView(LoginRequiredMixin, AdminLinksMixin, ListView):
     """
     View for a blog also lists the posts in the blog
     """
@@ -81,7 +83,7 @@ class BlogView(AdminLinksMixin, ListView):
         ]
 
 
-class BlogListView(ListView):
+class BlogListView(LoginRequiredMixin, ListView):
     """
     List all blogs on the site.
     """

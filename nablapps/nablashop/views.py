@@ -19,7 +19,7 @@ from nablapps.officeBeer.views import Transaction
 from .models import Category, Order, OrderProduct, Product
 
 
-class IndexView(ListView):
+class IndexView(LoginRequiredMixin, ListView):
     queryset = Product.objects.order_by("-pub_date")
     template_name = "nablashop/index.html"
 
@@ -29,7 +29,7 @@ class IndexView(ListView):
         return context
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = "nablashop/product_detail.html"
 
@@ -39,7 +39,7 @@ class ProductDetailView(DetailView):
         return context
 
 
-class CategoryDetailView(DetailView):
+class CategoryDetailView(LoginRequiredMixin, DetailView):
     model = Category
     template_name = "nablashop/category_detail.html"
 
@@ -133,7 +133,7 @@ def remove_single_product_from_cart(request, slug):
         return redirect("nablashop:product_detail", slug=slug)
 
 
-class CheckoutView(TemplateView):
+class CheckoutView(LoginRequiredMixin, TemplateView):
     template_name = "nablashop/purchase.html"
 
     def post(self, request, *args, **kwargs):

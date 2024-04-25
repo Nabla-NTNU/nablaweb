@@ -3,6 +3,7 @@ from datetime import datetime
 from django.http import Http404
 from django.views.generic import DetailView, ListView, TemplateView
 
+from braces.views import LoginRequiredMixin
 from hitcount.views import HitCountDetailView
 
 from nablapps.core.view_mixins import AdminLinksMixin, FlatPageMixin
@@ -10,7 +11,7 @@ from nablapps.core.view_mixins import AdminLinksMixin, FlatPageMixin
 from .models import Podcast, Season, get_season_count
 
 
-class SeasonView(FlatPageMixin, TemplateView):
+class SeasonView(LoginRequiredMixin, FlatPageMixin, TemplateView):
     template_name = "podcast/season.html"
     flatpages = [("info", "/skraattcast/")]
 
@@ -47,7 +48,7 @@ class SeasonView(FlatPageMixin, TemplateView):
         return data
 
 
-class RssView(ListView):
+class RssView(LoginRequiredMixin, ListView):
     template_name = "podcast/podcast.rss"
     content_type = "application/xml"
     model = Podcast
@@ -56,7 +57,9 @@ class RssView(ListView):
     )
 
 
-class PodcastDetailView(AdminLinksMixin, HitCountDetailView, DetailView):
+class PodcastDetailView(
+    LoginRequiredMixin, AdminLinksMixin, HitCountDetailView, DetailView
+):
     template_name = "podcast/podcast_detail.html"
     model = Podcast
     context_object_name = "podcast"

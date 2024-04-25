@@ -1,9 +1,11 @@
 from django.views.generic import ListView
 
+from braces.views import FormMessagesMixin, LoginRequiredMixin
+
 from nablapps.interactive.models.games import Game
 
 
-class GamesList(ListView):
+class GamesList(LoginRequiredMixin, ListView):
     """List of games"""
 
     model = Game

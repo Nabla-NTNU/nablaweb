@@ -4,12 +4,14 @@ Views for the news app
 
 from django.views.generic import DetailView, ListView
 
+from braces.views import FormMessagesMixin, LoginRequiredMixin
+
 from nablapps.core.view_mixins import AdminLinksMixin
 
 from .models import NewsArticle
 
 
-class NewsListView(ListView):
+class NewsListView(LoginRequiredMixin, ListView):
     """List of news-articles"""
 
     model = NewsArticle
@@ -19,7 +21,7 @@ class NewsListView(ListView):
     queryset = NewsArticle.objects.order_by("-pk")
 
 
-class NewsDetailView(AdminLinksMixin, DetailView):
+class NewsDetailView(LoginRequiredMixin, AdminLinksMixin, DetailView):
     """Show a single news-article"""
 
     model = NewsArticle

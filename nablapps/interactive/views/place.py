@@ -6,6 +6,8 @@ from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic.detail import DetailView
 
+from braces.views import FormMessagesMixin, LoginRequiredMixin
+
 from ..models.place import (
     PlaceAction,
     PlaceGrid,
@@ -30,7 +32,7 @@ class PlaceView(DetailView):
             return obj
 
 
-class NewestPlaceView(PlaceView):
+class NewestPlaceView(LoginRequiredMixin, PlaceView):
     """DetailView displaying the latest grid"""
 
     def get_object(self):

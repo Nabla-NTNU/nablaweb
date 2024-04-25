@@ -8,10 +8,12 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import DetailView, ListView, TemplateView
 
+from braces.views import FormMessagesMixin, LoginRequiredMixin
+
 from .models import Album
 
 
-class AlbumList(ListView):
+class AlbumList(LoginRequiredMixin, ListView):
     """
     List of publically visible albums
     """
