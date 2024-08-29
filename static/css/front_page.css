@@ -25,7 +25,7 @@
     align-items: stretch;
     grid-template-areas:
         "main-article      main-article      social"
-        "upcoming-events-1 upcoming-events-2 office"
+        "upcoming-events-1 upcoming-events-2 leaderboard"
         "latest-podcast    latest-nablad     poll"
         "more-news-1       more-news-2       more-news-3"
         "more-news-4       more-news-5       more-news-6"
@@ -60,6 +60,7 @@
         "upcoming-events-2"
         "office"
         "social"
+        "leaderboard"
         "poll"
         "latest-nablad"
         "latest-podcast"
