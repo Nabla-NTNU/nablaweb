@@ -48,7 +48,7 @@ class SeasonView(LoginRequiredMixin, FlatPageMixin, TemplateView):
         return data
 
 
-class RssView(LoginRequiredMixin, ListView):
+class RssView(ListView):
     template_name = "podcast/podcast.rss"
     content_type = "application/xml"
     model = Podcast
