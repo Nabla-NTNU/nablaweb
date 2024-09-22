@@ -30,6 +30,8 @@ class Event(
     Dukker opp som nyheter på forsiden.
     """
 
+    headline = models.CharField(blank=True, max_length=50, verbose_name="tittel")
+
     # Penalty_rules is a dict where key is an integer and value is
     # a tuple with the name of the rule as first element and
     # a dictionary with the rules as second element.
