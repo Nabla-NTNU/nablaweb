@@ -8,6 +8,7 @@ from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, models
 from django.urls import reverse
+from django.utils.text import slugify
 
 from nablapps.core.models import TimeStamped, WithPicture
 from nablapps.jobs.models import Company
@@ -126,6 +127,8 @@ class Event(
         )
 
     def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.headline)
         super().save(*args, **kwargs)
         self.move_waiting_to_attending()
 
