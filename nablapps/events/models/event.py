@@ -32,6 +32,7 @@ class Event(
 
     slug = models.CharField(blank=True, null=True, max_length=100)
 
+
     # Penalty_rules is a dict where key is an integer and value is
     # a tuple with the name of the rule as first element and
     # a dictionary with the rules as second element.
@@ -127,6 +128,8 @@ class Event(
         )
 
     def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.headline)
         super().save(*args, **kwargs)
         self.move_waiting_to_attending()
 
