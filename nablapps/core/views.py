@@ -41,7 +41,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
 
         messages.warning(
             self.request,
-            "På grunn av en serverkræsj og en rask migrering så kan nettsiden være noe ustabil for øyeblikket. Nablamailene er også nede så det er ikke mulig å sende mail til noen av @nabla.no mailadressene. WebKom jobber med å få dette fikset. Dersom noe ikke funker ta kontakt gjennom https://nabla.no/contact/feedback istedet for direkte på mail.",
+            "På grunn av en serverkræsj og en rask migrering så kan nettsiden være noe ustabil for øyeblikket. WebKom jobber med å få dette fikset. Dersom noe ikke funker som det skal gjerne ta kontakt på webkom@nabla.no",
         )
 
         # Inject complicated context.
