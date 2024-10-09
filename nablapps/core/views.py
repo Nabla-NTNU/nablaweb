@@ -39,11 +39,6 @@ class FrontPageView(FlatPageMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        messages.warning(
-            self.request,
-            "På grunn av en serverkræsj og en rask migrering så kan nettsiden være noe ustabil for øyeblikket. WebKom jobber med å få dette fikset. Dersom noe ikke funker som det skal gjerne ta kontakt på webkom@nabla.no",
-        )
-
         # Inject complicated context.
         # This context processing should perhaps be moved to the corresponding apps.
         self._add_news(context)
