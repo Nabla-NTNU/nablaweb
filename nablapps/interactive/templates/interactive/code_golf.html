@@ -68,7 +68,7 @@ function builtinRead(x) {
 </form>
 
 <pre v-if="errors" class="alert alert-warning" id="error">[[ errors ]]</pre>
-<div v-if="status=='correct'" class="alert alert-success">Riktig output!</div>
+<div v-if="status=='correct'" class="alert alert-success">Riktig output! Din skår: [[ outputLength ]] tegn!</div>
 <div v-if="longerThanBest" class="alert alert-warning">Koden din er lengre enn den beste du har sendt inn. Du kan sende den inn, men skåren din vil ikke endres.</div>
 <pre v-if="output" class="alert alert-primary">
     <h4 class="alert-heading">Output:</h4>
@@ -84,6 +84,7 @@ function builtinRead(x) {
              status: null,  // One of "correct", "incorrect", "spinning"
              user_code: null,
              output: null,
+             outputLength: null,
              longerThanBest: false
          }
      },
@@ -117,6 +118,7 @@ function builtinRead(x) {
                          this.status = "correct"
                          this.errors = null
                          this.longerThanBest = outputLength > shortestSolution
+                         this.outputLength = outputLength
                      } else {
                          this.status = "incorrect"
                          this.errors = "Output does not match correct output."

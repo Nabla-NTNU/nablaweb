@@ -88,6 +88,7 @@ class CodeGolf(CreateView):
         else:
             best_result_length = best_result.length
         context["best_attempt"] = best_result_length
+        context["logged_in"] = True if self.request.user.is_authenticated else False
         return context
 
     def form_valid(self, form):
