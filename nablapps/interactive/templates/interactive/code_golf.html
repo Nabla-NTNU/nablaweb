@@ -61,7 +61,9 @@ function builtinRead(x) {
     {% csrf_token %}
     {{ form.as_p  }}
     <button class="btn btn-nabla-blue-dark mr-1" type="button" @click="runit">Kjør</button>
+    {% if logged_in %}
     <input class="btn btn-secondary" type="submit" value="Send" :disabled="status!='correct'" />
+    {% endif %}
 <br />
 </form>
 

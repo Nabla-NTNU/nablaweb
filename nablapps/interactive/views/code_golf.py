@@ -56,7 +56,7 @@ class ResultForm(ModelForm):
             raise ValidationError("Output does not match correct output")
 
 
-class CodeGolf(LoginRequiredMixin, CreateView):
+class CodeGolf(CreateView):
     """View for writing and submitting solutions"""
 
     model = Result
@@ -142,7 +142,7 @@ def code_golf_score(request, task_id):
     return render(request, "interactive/code_golf_score.html", context)
 
 
-class CodeTaskListView(LoginRequiredMixin, ListView):
+class CodeTaskListView(ListView):
     model = CodeTask
 
     def get_context_data(self, **kwargs):
