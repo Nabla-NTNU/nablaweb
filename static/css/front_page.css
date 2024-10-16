@@ -39,6 +39,7 @@
         grid-template-areas:
         "welcome"
         "main-article"
+        "leaderboard"
         "upcoming-events-1"
         "upcoming-events-2"
         "office"
@@ -101,6 +102,10 @@
     align-self: stretch;
     margin: 0;
     grid-area: main-article;
+}
+
+.leaderboard {
+    grid-area: leaderboard;
 }
 
 .more-news-1 {
