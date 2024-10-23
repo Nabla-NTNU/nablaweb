@@ -68,7 +68,16 @@
         <div class="leaderboard d-flex flex-column">
             <h5 class="nabla-frontpage-header">
                 Bedpres leaderboard
-            </h5>
+            </h5> <!-- Ren kok fra code_golf.html -->
+            <table style="width:100%">
+                <tr><th>Bruker</th><th>Antall Bedpres</th></tr>
+                {% for t in bedpres_leaderboard %}
+                <tr>
+                    <td>{{t.user.get_full_name}}</td>
+                    <td>{{t.length}}</td> <!-- TODO: hva skal stå her istedenfor length???, Funker dette egentlig? -->
+                </tr>
+                {% endfor %}
+            </table>
         </div>
 
         <div class="latest-nablad d-flex flex-column">

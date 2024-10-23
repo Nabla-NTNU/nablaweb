@@ -15,7 +15,7 @@ from nablapps.album.models import Album
 from nablapps.blog.models import BlogPost
 
 from ..accounts.models import FysmatClass
-from ..events.models import Event
+from ..events.models import Event, EventRegistration
 from ..nabladet.models import Nablad
 from ..nablaforum.models import Channel, Message, Thread
 from ..news.models import FrontPageNews
@@ -67,6 +67,11 @@ class FrontPageView(FlatPageMixin, TemplateView):
         context["logged_in"] = True if self.request.user.is_authenticated else False
         # Uncomment when fadderperiode to display new student popup.
         # context["newuser_popup"] = False if self.request.user.is_authenticated else True
+
+        # TODO: fiks SQL query
+        context["bedpres_leaderboard"] = EventRegistration.objects.raw(
+            """SELECT COUNT(attendance_registration), username from EventRegistration JOIN users WHERE EventRegistration.userId = users.id JOIN event where EventRegistration.eventId = event.id WHERE EventRegistration.date > "2024 - 08 - 10" AND EventRegistration.date < "2025 - 06 - 20" AND event.is_bedpres GROUP BY userId LIMIT 10"""
+        )
         return context
 
     def _add_news(self, context):

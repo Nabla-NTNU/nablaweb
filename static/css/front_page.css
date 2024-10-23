@@ -157,6 +157,10 @@
     grid-area: poll;
 }
 
+.leaderboard {
+    grid-area: leaderboard;
+}
+
 .latest-podcast {
     grid-area: latest-podcast;
 }
