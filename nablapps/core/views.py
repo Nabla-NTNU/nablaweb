@@ -70,7 +70,19 @@ class FrontPageView(FlatPageMixin, TemplateView):
 
         # TODO: fiks SQL query
         context["bedpres_leaderboard"] = EventRegistration.objects.raw(
-            """SELECT COUNT(attendance_registration), username from EventRegistration JOIN users WHERE EventRegistration.userId = users.id JOIN event where EventRegistration.eventId = event.id WHERE EventRegistration.date > "2024 - 08 - 10" AND EventRegistration.date < "2025 - 06 - 20" AND event.is_bedpres GROUP BY userId LIMIT 10"""
+            """SELECT 1 as id,
+                  COUNT(r.attendance_registration) AS num_bedpres,
+                  u.username,
+                  u.first_name, u.last_name
+                FROM content_eventregistration AS r
+                INNER JOIN accounts_nablauser AS u ON r.user_id = u.id
+                INNER JOIN content_event AS e ON r.event_id = e.id
+                WHERE r.date > '2024-08-10'
+                  AND r.date < '2025-06-20'
+                  AND e.is_bedpres = 1
+                GROUP BY r.user_id
+                ORDER BY num_bedpres DESC
+                LIMIT 10"""
         )
         return context
 

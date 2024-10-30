@@ -73,8 +73,8 @@
                 <tr><th>Bruker</th><th>Antall Bedpres</th></tr>
                 {% for t in bedpres_leaderboard %}
                 <tr>
-                    <td>{{t.user.get_full_name}}</td>
-                    <td>{{t.length}}</td> <!-- TODO: hva skal stå her istedenfor length???, Funker dette egentlig? -->
+                    <td>{{t.first_name}} {{t.last_name}}</td>
+                    <td>{{t.num_bedpres}}</td> <!-- TODO: hva skal stå her istedenfor length???, Funker dette egentlig? -->
                 </tr>
                 {% endfor %}
             </table>
