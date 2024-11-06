@@ -26,11 +26,16 @@
     grid-template-areas:
         "main-article      main-article      social"
         "upcoming-events-1 upcoming-events-2 leaderboard"
-        "latest-podcast    latest-nablad     poll"
-        "more-news-1       more-news-2       more-news-3"
-        "more-news-4       more-news-5       more-news-6"
+        "latest-podcast    latest-nablad     office"
+        "poll       more-news-1       more-news-2"
+        "more-news-3       more-news-4       more-news-5"
         "more-news-btn     more-news-btn     more-news-btn"
         "sponsors          sponsors          suggestions";
+}
+
+/* This is to not have more-news-6 show up when leaderboard is used.*/
+.maingrid-container-authenticated > .more-news-6 {
+    display: none;
 }
 
 @media (max-width: 1000px) {
@@ -39,7 +44,7 @@
         grid-template-areas:
         "welcome"
         "main-article"
-        "leaderboard"
+        "social"
         "upcoming-events-1"
         "upcoming-events-2"
         "office"
@@ -108,6 +113,10 @@
     grid-area: leaderboard;
 }
 
+.social {
+    grid-area: social;
+}
+
 .more-news-1 {
     grid-area: more-news-1;
 }
@@ -160,10 +169,6 @@
 
 .poll {
     grid-area: poll;
-}
-
-.leaderboard {
-    grid-area: leaderboard;
 }
 
 .latest-podcast {
