@@ -3,9 +3,10 @@
   border-collapse: collapse;
   width: 100%;
     height: 100%;
+    grid-area: leaderboard;
 }
 
-th, td {
+.th_leaderboard, .td_leaderboard {
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #ddd;
@@ -19,11 +20,11 @@ th, td {
             </h5>
     <div class="card flex-grow-1 border border-nabla-blue">
             <table class="leaderboard">
-               <tr><th>Bruker</th><th>Antall Bedpres</th></tr>
+               <tr><th class="th_leaderboard">Bruker</th><th class="th_leaderboard">Antall Bedpres</th></tr>
                 {% for t in bedpres_leaderboard %}
                 <tr>
-                    <td>{{t.first_name}} {{t.last_name}}</td>
-                    <td style="text-align:center">{{t.num_bedpres}}</td>
+                    <td class="td_leaderboard">{{t.first_name}} {{t.last_name}}</td>
+                    <td class="td_leaderboard" style="text-align:center">{{t.num_bedpres}}</td>
                 </tr>
                 {% endfor %}
             </table>
