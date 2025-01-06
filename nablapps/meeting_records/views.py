@@ -35,4 +35,4 @@ class MeetingRecordListView(YearArchiveView):
     date_field = "pub_date"
     make_object_list = True
     allow_future = False
-    allow_empty = False
+    allow_empty = True
