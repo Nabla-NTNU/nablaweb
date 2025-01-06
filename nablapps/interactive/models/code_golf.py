@@ -2,6 +2,7 @@
 import json
 
 from django import template
+from django.contrib.auth.models import AnonymousUser
 from django.db import models
 from django.db.models.functions import Concat
 from django.utils import timezone
@@ -68,10 +69,12 @@ class ResultManager(models.Manager):
 
     def best_specific_user(self, task, user):
         """Gets the best result for a specific user. Returns result object"""
-
-        best_result = (
-            Result.objects.filter(user=user, task=task).order_by("length").first()
-        )
+        if user != AnonymousUser():
+            best_result = (
+                Result.objects.filter(user=user, task=task).order_by("length").first()
+            )
+        else:
+            best_result = None
 
         return best_result
 

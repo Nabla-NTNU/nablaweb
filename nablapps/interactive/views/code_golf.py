@@ -56,7 +56,7 @@ class ResultForm(ModelForm):
             raise ValidationError("Output does not match correct output")
 
 
-class CodeGolf(LoginRequiredMixin, CreateView):
+class CodeGolf(CreateView):
     """View for writing and submitting solutions"""
 
     model = Result
@@ -88,6 +88,7 @@ class CodeGolf(LoginRequiredMixin, CreateView):
         else:
             best_result_length = best_result.length
         context["best_attempt"] = best_result_length
+        context["logged_in"] = True if self.request.user.is_authenticated else False
         return context
 
     def form_valid(self, form):
@@ -142,7 +143,7 @@ def code_golf_score(request, task_id):
     return render(request, "interactive/code_golf_score.html", context)
 
 
-class CodeTaskListView(LoginRequiredMixin, ListView):
+class CodeTaskListView(ListView):
     model = CodeTask
 
     def get_context_data(self, **kwargs):
