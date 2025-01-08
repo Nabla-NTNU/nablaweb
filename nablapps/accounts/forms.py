@@ -61,7 +61,9 @@ class UserForm(forms.ModelForm):
 class RegistrationForm(forms.Form):
     """Form used to activate a new user or send a registration request."""
 
-    username = forms.CharField(label="NTNU-brukernavn", required=True)
+    username = forms.CharField(
+        label="NTNU Brukernavn", help_text="Uten @stud.ntnu.no", required=True
+    )
 
     first_name = forms.CharField(label="Fornavn", required=True)
 
