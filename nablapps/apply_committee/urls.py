@@ -11,5 +11,5 @@ urlpatterns = [
         name="list-applicants",
     ),
     path("confirmation/", views.ConfirmView.as_view(), name="confirm"),
-    path("list/admin/export.csv/", views.generate_csv, name="csv"),
+    path("list/export.csv/", views.generate_csv, name="csv"),
 ]
