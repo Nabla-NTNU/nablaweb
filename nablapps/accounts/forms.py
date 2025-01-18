@@ -70,11 +70,12 @@ class RegistrationForm(forms.Form):
                 "placeholder": "NTNU Brukernavn",
             }
         ),
+        label_suffix="",
     )
 
-    first_name = forms.CharField(label="Fornavn:", required=True)
+    first_name = forms.CharField(label="Fornavn", required=True)
 
-    last_name = forms.CharField(label="Etternavn:", required=True)
+    last_name = forms.CharField(label="Etternavn", required=True)
 
 
 # Forms for admin
