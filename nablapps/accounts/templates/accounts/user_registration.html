@@ -15,7 +15,18 @@
 
 <form method="post" action="" >
     {% csrf_token %}
-    {% bootstrap_form form %}
+    
+    <div class="form-group">
+        {{ form.username.label_tag }}
+        <div class="input-group">
+            {{ form.username }}
+            <div class="input-group-append">
+                <span class="input-group-text">@stud.ntnu.no</span>
+            </div>
+        </div>
+    </div>
+
+    {% bootstrap_form form exclude="username" %}
     <button class="btn btn-lg btn-nabla-blue-dark" type="submit">Send</button>
 </form>
 

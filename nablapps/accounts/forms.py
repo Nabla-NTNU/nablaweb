@@ -62,7 +62,15 @@ class RegistrationForm(forms.Form):
     """Form used to activate a new user or send a registration request."""
 
     username = forms.CharField(
-        label="NTNU Brukernavn", help_text="Uten @stud.ntnu.no", required=True
+        label="NTNU Brukernavn",
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "NTNU Brukernavn",
+            }
+        ),
+        label_suffix="",
     )
 
     first_name = forms.CharField(label="Fornavn", required=True)
