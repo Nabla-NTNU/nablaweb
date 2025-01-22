@@ -25,6 +25,15 @@ from ..poll.models import Poll
 from .view_mixins import FlatPageMixin
 
 
+def get_year_for_leaderboard():
+    cur_date = datetime.now()
+    year = cur_date.year
+    if cur_date < datetime(year, 7, 15):
+        return year - 1
+    else:
+        return year
+
+
 class FrontPageView(FlatPageMixin, TemplateView):
     """
     The view for showing the front page of nablaweb
@@ -37,11 +46,9 @@ class FrontPageView(FlatPageMixin, TemplateView):
     ]
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        # Inject complicated context.
-        # This context processing should perhaps be moved to the corresponding apps.
-        self._add_news(context)
+        context = super().get_context_data(
+            **kwargs
+        )  # Inject complicated context. # This context processing should perhaps be moved to the corresponding apps. self._add_news(context)
         self._add_events_and_bedpres(context)
         self._add_poll(context)
         self._add_nablad(context)
@@ -70,15 +77,15 @@ class FrontPageView(FlatPageMixin, TemplateView):
 
         # TODO: fiks SQL query
         context["bedpres_leaderboard"] = EventRegistration.objects.raw(
-            """SELECT 1 as id,
+            f"""SELECT 1 as id,
                   COUNT(r.attendance_registration) AS num_bedpres,
                   u.username,
                   u.first_name, u.last_name
                 FROM content_eventregistration AS r
                 INNER JOIN accounts_nablauser AS u ON r.user_id = u.id
                 INNER JOIN content_event AS e ON r.event_id = e.id
-                WHERE r.date > '2024-08-10'
-                  AND r.date < '2025-06-20'
+                WHERE r.date > '{get_year_for_leaderboard()}-07-15'
+                  AND r.date < '{int(get_year_for_leaderboard()) + 1}-07-15'
                   AND e.is_bedpres = 1
                 GROUP BY r.user_id
                 ORDER BY num_bedpres DESC
