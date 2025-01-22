@@ -26,6 +26,10 @@ from .view_mixins import FlatPageMixin
 
 
 def get_year_for_leaderboard():
+    """
+    Gets the year for making the bedpres leaderboard.
+    Return current year if date after 15.07, else the previous year.
+    """
     cur_date = datetime.now()
     year = cur_date.year
     if cur_date < datetime(year, 7, 15):
@@ -75,7 +79,6 @@ class FrontPageView(FlatPageMixin, TemplateView):
         # Uncomment when fadderperiode to display new student popup.
         # context["newuser_popup"] = False if self.request.user.is_authenticated else True
 
-        # TODO: fiks SQL query
         context["bedpres_leaderboard"] = EventRegistration.objects.raw(
             f"""SELECT 1 as id,
                   COUNT(r.attendance_registration) AS num_bedpres,
