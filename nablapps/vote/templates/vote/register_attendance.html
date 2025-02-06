@@ -17,7 +17,7 @@
         </div>
         <form @submit.prevent="toggleUser(this.userIdentifier)">
             <div  class="form-group">
-            <input v-bind:class="{'is-invalid': error}" autofocus class="form-control form-control-lg" type="text" name="user-identifier" placeholder="Enter card number" v-model="userIdentifier">
+            <input v-bind:class="{'is-invalid': error}" autofocus class="form-control form-control-lg" type="text" name="user-identifier" placeholder="Enter NTNU username" v-model="userIdentifier">
             <div v-if="this.error" class="invalid-feedback">
                 [[ lastAction.error ]]
             </div>
