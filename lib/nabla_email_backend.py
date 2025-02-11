@@ -2,6 +2,7 @@
 import base64
 from email.message import EmailMessage
 
+# Django's email backend parent class
 from django.core.mail.backends.base import BaseEmailBackend
 
 # Google API authentication
@@ -20,7 +21,7 @@ ROOT_DOMAIN: str = "nabla.no"
 
 
 class Nabla_email_backend(BaseEmailBackend):
-    SCOPES: list[str] = [
+    _SCOPES: list[str] = [
         "https://www.googleapis.com/auth/gmail.send",
     ]  # https://developers.google.com/admin-sdk/directory/v1/guides/authorizing < Relevant scopes
 
@@ -29,7 +30,7 @@ class Nabla_email_backend(BaseEmailBackend):
     # Generate credentials and object to send API calls
     def __init__(self, **kwargs):
         _creds = service_account.Credentials.from_service_account_file(
-            SERVICE_ACCOUNT_FILE_PATH, scopes=self.SCOPES
+            SERVICE_ACCOUNT_FILE_PATH, scopes=self._SCOPES
         ).with_subject(SUPER_ADMIN)
         self._service = build("gmail", "v1", credentials=_creds)
 
@@ -37,24 +38,24 @@ class Nabla_email_backend(BaseEmailBackend):
         mail = EmailMessage()
         mail.set_content(email_message.body)
 
-        # Gmail overrides "From" field to be superuser. Therefore
-        #   CC them, and set the Reply-To to the actual FROM email
+        # Override to send mail to outselves for debugging
         # mail["To"] = email_message.to
-        mail["To"] = (
-            "webkom@nabla.no"  # Override to send mail to outselves for debugging
-        )
+        mail["To"] = "webkom@nabla.no"
         mail["From"] = SUPER_ADMIN
         mail["Subject"] = email_message.subject
-        mail["CC"] = email_message.cc + [email_message.from_email]
         mail["BCC"] = email_message.bcc
-        mail["Reply-To"] = email_message.reply_to + [email_message.from_email]
+        if email_message.from_email == SUPER_ADMIN:
+            mail["CC"] = email_message.cc
+            mail["Reply-To"] = email_message.reply_to
+        else:
+            mail["CC"] = email_message.cc + [email_message.from_email]
+            mail["Reply-To"] = email_message.reply_to + [email_message.from_email]
 
         # Encode email to binary
         encoded_email = base64.urlsafe_b64encode(mail.as_bytes()).decode()
         encoded_package = {"raw": encoded_email}
 
         try:
-            # Send email using the object
             email_attempt = (
                 self._service.users()
                 .messages()
