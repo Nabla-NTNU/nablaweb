@@ -16,7 +16,12 @@ class FeedbackForm(forms.Form):
     def process(self):
         cd = self.cleaned_data
         subject = cd["subject"]
-        message = cd["message"] + "\n-" + cd["your_name"]
+        message = (
+            cd["message"]
+            + "\n-"
+            + cd["your_name"]
+            + ("\n\tEmail: " + cd["email"] if cd["email"] else "")
+        )
         email = cd["email"]
         return subject, message, email
 
@@ -131,7 +136,11 @@ class ContactForm(forms.Form):
         cd = self.cleaned_data
         subject = cd["subject"]
         if cd["your_name"]:
-            message = cd["message"] + "\n-" + cd["your_name"]
+            message = (
+                cd["message"] + "\n-" + cd["your_name"] + ("\n\tEmail: " + cd["email"])
+                if cd["email"]
+                else ""
+            )
         else:
             message = cd["message"] + "\n-" + "Anonym"
         email = cd["email"]
