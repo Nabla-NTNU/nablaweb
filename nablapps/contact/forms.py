@@ -131,11 +131,7 @@ class ContactForm(forms.Form):
         cd = self.cleaned_data
         subject = cd["subject"]
         if cd["your_name"]:
-            message = (
-                cd["message"] + "\n-" + cd["your_name"] + ("\n\tEmail: " + cd["email"])
-                if cd["email"]
-                else ""
-            )
+            message = cd["message"] + "\n-" + cd["your_name"]
         else:
             message = cd["message"] + "\n-" + "Anonym"
         email = cd["email"]
