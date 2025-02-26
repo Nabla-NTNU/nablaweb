@@ -56,4 +56,4 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o755
 
 # Sett email backend til Gmail API
-# EMAIL_BACKEND = "lib.nabla_email_backend.Nabla_email_backend"
+EMAIL_BACKEND = "lib.nabla_email_backend.Nabla_email_backend"

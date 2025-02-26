@@ -22,8 +22,8 @@ DATABASES = {
 CACHES = {"default": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"}}
 
 # All epost blir sendt til terminalen, istedet for ut til brukerne.
-# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # Send til terminal
-EMAIL_BACKEND = "lib.nabla_email_backend.Nabla_email_backend"  # Send til Gmail
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # Send til terminal
+# EMAIL_BACKEND = "lib.nabla_email_backend.Nabla_email_backend"  # Send til Gmail
 
 # easy_thumbnail debugging
 # Gjør at man får en feilmelding dersom thumbnail-taggen ikke klarer å lage ny

@@ -16,12 +16,7 @@ class FeedbackForm(forms.Form):
     def process(self):
         cd = self.cleaned_data
         subject = cd["subject"]
-        message = (
-            cd["message"]
-            + "\n-"
-            + cd["your_name"]
-            + ("\n\tEmail: " + cd["email"] if cd["email"] else "")
-        )
+        message = cd["message"] + "\n-" + cd["your_name"]
         email = cd["email"]
         return subject, message, email
 
