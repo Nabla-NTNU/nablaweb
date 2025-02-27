@@ -57,11 +57,12 @@ jobs:
       # Also install ghostscript, which imagemagick uses to read/write PDFs
       if: runner.os == 'Linux'
       run: |
+        sudo apt install imagemagick-6.q16
         configure_path=$(convert -list configure | sed -n -e 's/CONFIGURE_PATH[[:space:]]*//p' || true)
         temp_file="$(sudo mktemp)"
 
         # sed -i is a gnu extension. Beware
-        sudo sed -i -e 's/<policy domain="coder" rights=".*" pattern="PDF" \/>/<policy domain="coder" rights="read | write" pattern="PDF" \/>/w '"$temp_file" "$configure_path/policy.xml"
+        sudo sed -i -e 's/<\/policymap>/<policy domain="coder" rights="read | write" pattern="PDF" \/>\n<\/policymap>/w '"$temp_file" "$configure_path/policy.xml"
         if [ ! -s "$temp_file" ]; then
           echo 'Failed to edit policy file to allow reading/writing PDFs!'
           echo 'Below are the contents of `policy.xml`'
