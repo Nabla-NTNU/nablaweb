@@ -28,6 +28,9 @@ django-bootstrap4 = "*"
 django-ckeditor = "5.*"
 djangorestframework = "*"
 
+# Email & Group management
+google-api-python-client = "2.*"
+
 [dev-packages]
 pre-commit = "*"
 faker = "*"               # Fake data generator, used in tests.
