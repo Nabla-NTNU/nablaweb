@@ -181,10 +181,6 @@ class BaseApplicationListView(ListView):
         return committees
 
 
-class ApplicationListView(LoginRequiredMixin, BaseApplicationListView):
-    template_name = "apply_committee/application_list.html"
-
-
 class AdminApplicationListView(UserPassesTestMixin, BaseApplicationListView):
     template_name = "apply_committee/admin_application_list.html"
 
