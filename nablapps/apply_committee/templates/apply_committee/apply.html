@@ -57,7 +57,6 @@
 {% if application_round %}
 Nåværende søknad: <u>{{ application_round.name }}</u> <br />
 Skriv kun i fritekst-feltet dersom komiteen har sagt at du skal gjøre dette.<br />
-Du kan se en oversikt over hvem som har søkt hva <a href="{% url 'list-applicants' %}">her</a>.
 <hr />
 <form id="application_form" method="post">
     {% csrf_token %}
@@ -71,10 +70,6 @@ Du kan se en oversikt over hvem som har søkt hva <a href="{% url 'list-applican
 
         {{ form.application_text.errors }}
         {{ form.application_text }}
-
-        {{ form.anonymous.errors }}
-        {{ form.anonymous.label_tag }}
-        {{ form.anonymous }}
         </div>
     </div>
     {% endfor %}
