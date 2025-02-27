@@ -62,12 +62,7 @@ jobs:
         temp_file="$(sudo mktemp)"
 
         # sed -i is a gnu extension. Beware
-        sudo sed -i -e 's/<policy domain="coder" rights=".*" pattern="PDF" \/>/<policy domain="coder" rights="read | write" pattern="PDF" \/>/w '"$temp_file" "$configure_path/policy.xml"
-        echo
-        echo $temp_file
-        echo
-        sudo cat $temp_file
-        echo
+        sudo sed -i -e 's/<\/policymap>/<policy domain="coder" rights="read | write" pattern="PDF" \/>\n<\/policymap>/w '"$temp_file" "$configure_path/policy.xml"
         if [ ! -s "$temp_file" ]; then
           echo 'Failed to edit policy file to allow reading/writing PDFs!'
           echo 'Below are the contents of `policy.xml`'
