@@ -66,7 +66,7 @@ jobs:
         echo
         echo $temp_file
         echo
-        cat $temp_file
+        sudo cat $temp_file
         echo
         if [ ! -s "$temp_file" ]; then
           echo 'Failed to edit policy file to allow reading/writing PDFs!'
