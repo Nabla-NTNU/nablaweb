@@ -57,6 +57,7 @@ jobs:
       # Also install ghostscript, which imagemagick uses to read/write PDFs
       if: runner.os == 'Linux'
       run: |
+        sudo apt install imegemagick
         configure_path=$(magick convert -list configure | sed -n -e 's/CONFIGURE_PATH[[:space:]]*//p' || true)
         temp_file="$(sudo mktemp)"
 
