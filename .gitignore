@@ -29,3 +29,6 @@ sqlite.db
 
 # Local pyenv version file
 .python-version
+
+# Private keys / data
+lib/privateKey.json

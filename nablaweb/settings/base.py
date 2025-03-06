@@ -289,3 +289,12 @@ NODE_MODULES_ROOT = os.path.join(PROJECT_ROOT, "node_modules")
 kibi = 1024
 mibi = kibi**2
 FILEBROWSER_MAX_UPLOAD_SIZE = 100 * mibi  # 100 MiB
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
