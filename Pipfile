@@ -28,6 +28,10 @@ django-bootstrap4 = "*"
 django-ckeditor = "5.*"
 djangorestframework = "*"
 
+# version 12.11.0 failes for some reason.
+# adding this to see if it works.
+sorl-thumbnail="==12.10.0"
+
 # Email & Group management
 google-api-python-client = "2.*"
 
@@ -45,7 +49,7 @@ bandit = "*"
 pillow = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.10"
 
 [scripts]
 production = "gunicorn --config /etc/websites/nablaweb/gunicorn.conf nablaweb.wsgi:application"
