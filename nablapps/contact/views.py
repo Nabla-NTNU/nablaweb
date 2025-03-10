@@ -1,6 +1,7 @@
 import datetime
 import random
 
+from django.contrib.auth.decorators import login_required
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -51,6 +52,7 @@ def contact(request):
                 return render(request, "contact/contact.html", context)
 
 
+@login_required
 def feedback(request, template="feedback.html", send_to="webkom@nabla.no"):
     spam_check = False
     if request.method != "POST":
@@ -85,6 +87,7 @@ def feedback(request, template="feedback.html", send_to="webkom@nabla.no"):
                 return render(request, "contact/" + template, context)
 
 
+@login_required
 def roombooking(request, template="rombooking.html", send_to="koordinator@nabla.no"):
     spam_check = False
     if request.method != "POST":
