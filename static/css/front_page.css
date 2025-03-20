@@ -25,12 +25,17 @@
     align-items: stretch;
     grid-template-areas:
         "main-article      main-article      social"
-        "upcoming-events-1 upcoming-events-2 office"
-        "latest-podcast    latest-nablad     poll"
-        "more-news-1       more-news-2       more-news-3"
-        "more-news-4       more-news-5       more-news-6"
+        "upcoming-events-1 upcoming-events-2 leaderboard"
+        "latest-podcast    latest-nablad     office"
+        "poll       more-news-1       more-news-2"
+        "more-news-3       more-news-4       more-news-5"
         "more-news-btn     more-news-btn     more-news-btn"
         "sponsors          sponsors          suggestions";
+}
+
+/* This is to not have more-news-6 show up when leaderboard is used.*/
+.maingrid-container-authenticated > .more-news-6 {
+    display: none;
 }
 
 @media (max-width: 1000px) {
@@ -39,6 +44,7 @@
         grid-template-areas:
         "welcome"
         "main-article"
+        "social"
         "upcoming-events-1"
         "upcoming-events-2"
         "office"
@@ -60,6 +66,7 @@
         "upcoming-events-2"
         "office"
         "social"
+        "leaderboard"
         "poll"
         "latest-nablad"
         "latest-podcast"
@@ -100,6 +107,14 @@
     align-self: stretch;
     margin: 0;
     grid-area: main-article;
+}
+
+.leaderboard {
+    grid-area: leaderboard;
+}
+
+.social {
+    grid-area: social;
 }
 
 .more-news-1 {

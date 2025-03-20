@@ -15,7 +15,7 @@ from nablapps.album.models import Album
 from nablapps.blog.models import BlogPost
 
 from ..accounts.models import FysmatClass
-from ..events.models import Event
+from ..events.models import Event, EventRegistration
 from ..nabladet.models import Nablad
 from ..nablaforum.models import Channel, Message, Thread
 from ..news.models import FrontPageNews
@@ -23,6 +23,19 @@ from ..officeCalendar.models import OfficeEvent
 from ..podcast.models import Podcast
 from ..poll.models import Poll
 from .view_mixins import FlatPageMixin
+
+
+def get_year_for_leaderboard():
+    """
+    Gets the year for making the bedpres leaderboard.
+    Return current year if date after 15.07, else the previous year.
+    """
+    cur_date = datetime.now()
+    year = cur_date.year
+    if cur_date < datetime(year, 7, 15):
+        return year - 1
+    else:
+        return year
 
 
 class FrontPageView(FlatPageMixin, TemplateView):
@@ -37,11 +50,9 @@ class FrontPageView(FlatPageMixin, TemplateView):
     ]
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        # Inject complicated context.
-        # This context processing should perhaps be moved to the corresponding apps.
-        self._add_news(context)
+        context = super().get_context_data(
+            **kwargs
+        )  # Inject complicated context. # This context processing should perhaps be moved to the corresponding apps. self._add_news(context)
         self._add_events_and_bedpres(context)
         self._add_poll(context)
         self._add_nablad(context)
@@ -67,6 +78,22 @@ class FrontPageView(FlatPageMixin, TemplateView):
         context["logged_in"] = True if self.request.user.is_authenticated else False
         # Uncomment when fadderperiode to display new student popup.
         # context["newuser_popup"] = False if self.request.user.is_authenticated else True
+
+        context["bedpres_leaderboard"] = EventRegistration.objects.raw(
+            f"""SELECT 1 as id,
+                  COUNT(r.attendance_registration) AS num_bedpres,
+                  u.username,
+                  u.first_name, u.last_name
+                FROM content_eventregistration AS r
+                INNER JOIN accounts_nablauser AS u ON r.user_id = u.id
+                INNER JOIN content_event AS e ON r.event_id = e.id
+                WHERE r.date > '{get_year_for_leaderboard()}-07-15'
+                  AND r.date < '{int(get_year_for_leaderboard()) + 1}-07-15'
+                  AND e.is_bedpres = 1
+                GROUP BY r.user_id
+                ORDER BY num_bedpres DESC
+                LIMIT 10"""
+        )
         return context
 
     def _add_news(self, context):
