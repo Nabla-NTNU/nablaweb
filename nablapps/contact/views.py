@@ -122,6 +122,40 @@ def roombooking(request, template="rombooking.html", send_to="koordinator@nabla.
                 return render(request, "contact/" + template, context)
 
 
+def prokom_utlan(request, template="prokom_utlan.html", send_to="koordinator@nabla.no"):
+    spam_check = False
+    if request.method != "POST":
+        test_val = random.randint(0, 20)
+        context = make_roombooking_context(request, spam_check, test_val)
+        return render(request, "contact/" + template, context)
+    else:
+        room_form = RoomForm(request.POST)
+        if room_form.is_valid():
+            # spam check
+            if room_form.get_right_answer() == room_form.get_answer():
+                # Sends mail
+                subject, message, email = room_form.process()
+                if resolve(request.path_info).url_name == "gullkorn":
+                    # remove "your_name" from message
+                    message = "\n".join(message.split("\n")[:-1])
+                    message = f"<<{message}>> -{subject}"
+                    subject = "Sitat " + datetime.date.today().strftime("%d.%m.%y")
+
+                try:
+                    send_mail(subject, message, email, [send_to], fail_silently=False)
+                except BadHeaderError:
+                    return HttpResponse("Ivalid header found")
+                if resolve(request.path_info).url_name == "gullkorn":
+                    return HttpResponseRedirect("/contact/success_gullkorn/")
+                    # sjekker om man leverer et skjema
+                return HttpResponseRedirect("/contact/success/")
+            else:
+                spam_check = True
+                test_val = random.randint(0, 20)
+                context = make_feedback_context(request, spam_check, test_val)
+                return render(request, "contact/" + template, context)
+
+
 def success(request):
     return render(request, "contact/success.html")
 
