@@ -9,7 +9,8 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
     --nabla-yellow: #FFD500;
     --nabla-yellow-dark: #FDC500;
     --nabla-yellow-light: #ffff72;
-    --nabla-blue: #003F88; /* navbar + overskrifter */
+    --nabla-blue: #003f88; /*overskrifter */
+    --nabla-header-footer: #003f88;    
     --nabla-blue-dark: #00296B;
     --nabla-blue-light: #00509D;
     --nabla-background: rgba(0, 80, 157, 0.05);
@@ -24,7 +25,8 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
     --nabla-yellow: #fa9a2c;
     --nabla-yellow-dark: #fa9a2c;
     --nabla-yellow-light: #fa9a2c;
-    --nabla-blue: #2277e7; /* navbar + overskrifter */
+    --nabla-blue: #2277e7; /*overskrifter */
+    --nabla-header-footer: #00296B; 
     --nabla-blue-dark: #00296B;
     --nabla-blue-light: #fa9a2c;
     --nabla-background: rgba(0, 80, 157, 0.05);
@@ -101,7 +103,7 @@ body {
 }
 
 nav.nabla-navbar {
-    background: var(--nabla-blue);
+    background: var(--nabla-header-footer);
     box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
 
 }
@@ -319,7 +321,7 @@ code.jax {
 
 .nabla-footer {
     /* TODO: Add cross-browser support */
-    background-color: var(--nabla-blue);
+    background-color: var(--nabla-header-footer);
     color: var(--white);
     padding-top: 30px;
     width: 100%;
