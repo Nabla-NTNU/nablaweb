@@ -94,6 +94,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
                 ORDER BY num_bedpres DESC
                 LIMIT 10"""
         )
+        context["newuser_popup"] = False if self.request.user.is_authenticated else True
         return context
 
     def _add_news(self, context):
