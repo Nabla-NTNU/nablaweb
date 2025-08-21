@@ -15,8 +15,7 @@ class Committee(models.Model):
             [
                 application.applicant.email
                 for application in Application.objects.filter(
-                    committee=self,
-                    application_round=ApplicationRound.get_current()
+                    committee=self, application_round=ApplicationRound.get_current()
                 ).prefetch_related("applicant")
             ]
         )
