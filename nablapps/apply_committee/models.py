@@ -15,7 +15,7 @@ class Committee(models.Model):
             [
                 application.applicant.email
                 for application in Application.objects.filter(
-                    committee=self
+                    committee=self, application_round=ApplicationRound.get_current()
                 ).prefetch_related("applicant")
             ]
         )
@@ -39,6 +39,7 @@ class ApplicationRound(models.Model):
         state = "active" if self.is_active else "inactive"
         return f"ApplicationRound {self.name}, {state}"
 
+    @staticmethod
     def get_current():
         """Returns the current ApplicationRound, ie. is_active is True
         Returns empty if no active ApplicationRound"""
