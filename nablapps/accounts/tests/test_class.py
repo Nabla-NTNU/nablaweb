@@ -17,7 +17,7 @@ class ClassesTest(TestCase):
 
         for j, cls in enumerate(self.classes):
             users = [
-                NablaUser.objects.create(username=f"user{j*10+i}") for i in range(4)
+                NablaUser.objects.create(username=f"user{j * 10 + i}") for i in range(4)
             ]
 
             for u in users:
