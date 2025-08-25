@@ -63,7 +63,7 @@ class EventRegistration(models.Model):
         ordering = ("id",)
 
     def __str__(self):
-        return f'{self.event}, {self.user} is {"Attending" if self.attending else "Waiting"}'
+        return f"{self.event}, {self.user} is {'Attending' if self.attending else 'Waiting'}"
 
     def clean(self):
         valid_penalties = self.event.get_penalty_rule_dict().values()

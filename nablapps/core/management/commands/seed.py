@@ -703,12 +703,12 @@ class AlbumSeeder:
     def create(cls) -> None:
         for i in range(cls.amount_albums):
             parent_album = Album.objects.create(
-                title=f"Parent Album: {i+1}", visibility="p" if i % 2 else "u"
+                title=f"Parent Album: {i + 1}", visibility="p" if i % 2 else "u"
             )
 
             sub_albums = [
                 Album.objects.create(
-                    title=f"Child Album: {j+1}",
+                    title=f"Child Album: {j + 1}",
                     visibility="p" if j % 2 else "u",
                     parent=parent_album,
                 )
