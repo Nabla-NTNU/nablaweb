@@ -20,13 +20,17 @@
             </h5>
     <div class="card flex-grow-1 border border-nabla-blue">
             <table class="leaderboard">
-               <tr><th class="th_leaderboard">Komponent</th><th class="th_leaderboard">Antall Bedpres</th></tr>
-                {% for t in bedpres_leaderboard %}
-                <tr>
-                    <td class="td_leaderboard">{{t.first_name}} {{t.last_name}}</td>
-                    <td class="td_leaderboard" style="text-align:center">{{t.num_bedpres}}</td>
-                </tr>
-                {% endfor %}
+                {% if bedpres_leaderboard %}
+                <tr><th class="th_leaderboard">Komponent</th><th class="th_leaderboard">Antall Bedpres</th></tr>
+                    {% for t in bedpres_leaderboard %}
+                    <tr>
+                        <td class="td_leaderboard">{{t.first_name}} {{t.last_name}}</td>
+                        <td class="td_leaderboard" style="text-align:center">{{t.num_bedpres}}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                <li class="list-group-item"> Ingen har vært på Bedpres enda</li>
+                {% endif %}
             </table>
         </div>
     {% endif %}
