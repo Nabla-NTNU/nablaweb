@@ -78,7 +78,6 @@ class FrontPageView(FlatPageMixin, TemplateView):
         context["logged_in"] = True if self.request.user.is_authenticated else False
         # Uncomment when fadderperiode to display new student popup.
         # context["newuser_popup"] = False if self.request.user.is_authenticated else True
-
         context["bedpres_leaderboard"] = EventRegistration.objects.raw(
             f"""SELECT 1 as id,
                   COUNT(r.attendance_registration) AS num_bedpres,
@@ -94,7 +93,6 @@ class FrontPageView(FlatPageMixin, TemplateView):
                 ORDER BY num_bedpres DESC
                 LIMIT 10"""
         )
-        context["newuser_popup"] = False if self.request.user.is_authenticated else True
         return context
 
     def _add_news(self, context):
