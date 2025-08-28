@@ -91,6 +91,65 @@ class RoomForm(forms.Form):
         return right_answer
 
 
+class UtstyrForm(forms.Form):
+    your_name = forms.CharField(label="Ditt navn:", max_length=100, required=False)
+    committee_name = forms.CharField(label="Komite:", max_length=100, required=False)
+    date = forms.CharField(label="Dato:", required=True)
+    start_time = forms.CharField(
+        label="Start tidspunkt:", max_length=100, required=True
+    )
+    duration = forms.CharField(label="Varighet:", max_length=100, required=True)
+    num_people = forms.IntegerField(
+        label="Estimert antall:", max_value=400, required=False
+    )
+    purpose = forms.CharField(
+        label="Kort beskrivelse av formål:", widget=forms.Textarea, required=True
+    )
+    email = forms.EmailField(label="Din e-post:", max_length=100, required=True)
+    spam_check = forms.FloatField(max_value=20, required=True)
+    right_answer = forms.FloatField(
+        max_value=20, required=True, widget=forms.HiddenInput()
+    )
+
+    def process(self):
+        cd = self.cleaned_data
+        committee_name = cd["committee_name"]
+        email = cd["email"]
+        purpose = (
+            "Navn: "
+            + cd["your_name"]
+            + "\n"
+            + "Komite: "
+            + cd["committee_name"]
+            + "\n"
+            + "Dato: "
+            + cd["date"]
+            + "\n"
+            + "Start tidspunkt: "
+            + cd["start_time"]
+            + "\n"
+            + "Varighet: "
+            + cd["duration"]
+            + "\n"
+            + "Estimert antall: "
+            + str(cd["num_people"])
+            + "\n"
+            + "Formål: "
+            + cd["purpose"]
+        )
+        return committee_name, purpose, email
+
+    def get_answer(self):
+        cd = self.cleaned_data
+        answer = cd["spam_check"]
+        return answer
+
+    def get_right_answer(self):
+        cd = self.cleaned_data
+        right_answer = cd["right_answer"]
+        return right_answer
+
+
 # Cant remember why I made this abomination... but to afraid to remove it, in case I may need it in the future... :Yawar:
 # class ForCompanyForm(forms.Form):
 #     company = forms.CharField(label="Bedrift:", max_length=100, required=True)

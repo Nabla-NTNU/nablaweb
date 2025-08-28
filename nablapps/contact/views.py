@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import resolve
 
-from .forms import ContactForm, FeedbackForm, RoomForm
+from .forms import ContactForm, FeedbackForm, RoomForm, UtstyrForm
 
 
 def contact(request):
@@ -121,6 +121,39 @@ def roombooking(request, template="rombooking.html", send_to="koordinator@nabla.
                 context = make_feedback_context(request, spam_check, test_val)
                 return render(request, "contact/" + template, context)
 
+@login_required
+def utstyrbooking(request, template="utstyrbooking.html", send_to="sportskom@nabla.no"):
+    spam_check = False
+    if request.method != "POST":
+        test_val = random.randint(0, 20)
+        context = make_utstyrbooking_context(request, spam_check, test_val)
+        return render(request, "contact/" + template, context)
+    else:
+        utstyr_form = UtstyrForm(request.POST)
+        if utstyr_form.is_valid():
+            # spam check
+            if utstyr_form.get_right_answer() == utstyr_form.get_answer():
+                # Sends mail
+                subject, message, email = utstyr_form.process()
+                if resolve(request.path_info).url_name == "gullkorn":
+                    # remove "your_name" from message
+                    message = "\n".join(message.split("\n")[:-1])
+                    message = f"<<{message}>> -{subject}"
+                    subject = "Sitat " + datetime.date.today().strftime("%d.%m.%y")
+
+                try:
+                    send_mail(subject, message, email, [send_to], fail_silently=False)
+                except BadHeaderError:
+                    return HttpResponse("Ivalid header found")
+                if resolve(request.path_info).url_name == "gullkorn":
+                    return HttpResponseRedirect("/contact/success_gullkorn/")
+                    # sjekker om man leverer et skjema
+                return HttpResponseRedirect("/contact/success/")
+            else:
+                spam_check = True
+                test_val = random.randint(0, 20)
+                context = make_feedback_context(request, spam_check, test_val)
+                return render(request, "contact/" + template, context)
 
 def success(request):
     return render(request, "contact/success.html")
@@ -273,6 +306,32 @@ def make_roombooking_context(request, spam_check, test_val):
     }
     return context
 
+def make_utstyrbooking_context(request, spam_check, test_val):
+    if request.user.is_authenticated:
+        # skjema uten navn og e-post
+        utstyr_form = UtstyrForm(
+            initial={
+                "your_name": request.user.get_full_name(),
+                "email": request.user.email,
+                "right_answer": test_val,
+            }
+        )
+
+    else:
+        # tomt skjema
+        utstyr_form = UtstyrForm(initial={"right_answer": test_val})
+    utstyr_form.fields["spam_check"].label = (
+        f"Hva er kvadratroten av {test_val} ganget med kvadratroten av {test_val}? "
+    )
+    utstyr_form.fields["spam_check"].help_text = (
+        "Skriv inn svaret over for å verifisere at du er et menneske"
+    )
+    context = {
+        "utstyr_form": utstyr_form,
+        "spam_check": spam_check,
+        "test_val": test_val,
+    }
+    return context
 
 def for_bedrifter(request, template="for_bedrifter.html", send_to="bedkom@nabla.no"):
     return render(request, "contact/" + template)
