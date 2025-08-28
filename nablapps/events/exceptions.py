@@ -51,7 +51,7 @@ class UserAttendanceException(EventException):
         eventregistration=None,
         user=None,
         identification_string=None,
-        method=None
+        method=None,
     ):
         super().__init__(*args)
         self.eventregistration = eventregistration
