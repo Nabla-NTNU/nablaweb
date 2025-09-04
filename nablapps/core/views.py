@@ -52,7 +52,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(
             **kwargs
-        )  # Inject complicated context. # This context processing should perhaps be moved to the corresponding apps. self._add_news(context)
+        )  # Inject complicated context. # This context processing should perhaps be moved to the corresponding apps.
         self._add_news(context)
         self._add_events_and_bedpres(context)
         self._add_poll(context)
