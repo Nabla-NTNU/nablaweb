@@ -37,7 +37,7 @@ class RoomForm(forms.Form):
     committee_name = forms.CharField(label="Komite:", max_length=100, required=False)
     date = forms.CharField(label="Dato:", required=True)
     start_time = forms.CharField(
-        label="Start tidspunkt:", max_length=100, required=True
+        label="Starttidspunkt:", max_length=100, required=True
     )
     duration = forms.CharField(label="Varighet:", max_length=100, required=True)
     num_people = forms.IntegerField(
@@ -66,7 +66,7 @@ class RoomForm(forms.Form):
             + "Dato: "
             + cd["date"]
             + "\n"
-            + "Start tidspunkt: "
+            + "Starttidspunkt: "
             + cd["start_time"]
             + "\n"
             + "Varighet: "
@@ -92,19 +92,15 @@ class RoomForm(forms.Form):
 
 
 class UtstyrForm(forms.Form):
+    utstyr_tilgjengelig = [("Fotball", "Fotball")]
+
     your_name = forms.CharField(label="Ditt navn:", max_length=100, required=False)
-    committee_name = forms.CharField(label="Komite:", max_length=100, required=False)
+    equipment = forms.ChoiceField(label="Utstyr", choices=utstyr_tilgjengelig, required=True)
     date = forms.CharField(label="Dato:", required=True)
     start_time = forms.CharField(
-        label="Start tidspunkt:", max_length=100, required=True
+        label="Starttidspunkt:", max_length=100, required=True
     )
     duration = forms.CharField(label="Varighet:", max_length=100, required=True)
-    num_people = forms.IntegerField(
-        label="Estimert antall:", max_value=400, required=False
-    )
-    purpose = forms.CharField(
-        label="Kort beskrivelse av formål:", widget=forms.Textarea, required=True
-    )
     email = forms.EmailField(label="Din e-post:", max_length=100, required=True)
     spam_check = forms.FloatField(max_value=20, required=True)
     right_answer = forms.FloatField(
@@ -113,31 +109,25 @@ class UtstyrForm(forms.Form):
 
     def process(self):
         cd = self.cleaned_data
-        committee_name = cd["committee_name"]
         email = cd["email"]
+        subject = "Utstyrbooking av " + cd["equipment"]
         purpose = (
             "Navn: "
             + cd["your_name"]
             + "\n"
-            + "Komite: "
-            + cd["committee_name"]
+            + "\n"
+            + "Ønsker å låne: " + cd["equipment"]
             + "\n"
             + "Dato: "
             + cd["date"]
             + "\n"
-            + "Start tidspunkt: "
+            + "Starttidspunkt: "
             + cd["start_time"]
             + "\n"
             + "Varighet: "
             + cd["duration"]
-            + "\n"
-            + "Estimert antall: "
-            + str(cd["num_people"])
-            + "\n"
-            + "Formål: "
-            + cd["purpose"]
         )
-        return committee_name, purpose, email
+        return subject, purpose, email
 
     def get_answer(self):
         cd = self.cleaned_data
