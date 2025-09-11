@@ -6,7 +6,7 @@ After=network.target
 User=nablaweb
 Group=webapps
 WorkingDirectory=/srv/nablaweb
-ExecStart=/var/websites/nablaweb/.local/bin/pipenv run production
+ExecStart=/var/websites/nablaweb/.pyenv/shims/pipenv run production
 StandardError=journal
 
 [Install]
