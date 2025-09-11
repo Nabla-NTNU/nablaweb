@@ -92,15 +92,17 @@ class RoomForm(forms.Form):
 
 
 class UtstyrForm(forms.Form):
-    utstyr_tilgjengelig = [("Fotball", "Fotball")]
+    utstyr_tilgjengelig = [("Laavo", "Lavvo 8-10 personer"), ("Kubb", "Kubb"), ("Liggeunderlag","Liggeunderlag (3)"),
+                            ("Tarp","Tarp"), ("Hengekøye", "Hengekøye (3)"),("Stormkjøkken", "Stormkjøkken"),
+                            ("sitteunderlag", "Sitteunderlag (10)"), ("liten tursag", "Liten tursag")]
 
     your_name = forms.CharField(label="Ditt navn:", max_length=100, required=False)
     equipment = forms.ChoiceField(label="Utstyr", choices=utstyr_tilgjengelig, required=True)
-    date = forms.CharField(label="Dato:", required=True)
-    start_time = forms.CharField(
-        label="Starttidspunkt:", max_length=100, required=True
+    start_date = forms.CharField(label="Startdato:", required=True)
+    end_date = forms.CharField(label="Sluttdato:", max_length=100, required=True)
+    comment = forms.CharField(
+        label="Kommentar:", widget=forms.Textarea, required=False
     )
-    duration = forms.CharField(label="Varighet:", max_length=100, required=True)
     email = forms.EmailField(label="Din e-post:", max_length=100, required=True)
     spam_check = forms.FloatField(max_value=20, required=True)
     right_answer = forms.FloatField(
@@ -118,14 +120,13 @@ class UtstyrForm(forms.Form):
             + "\n"
             + "Ønsker å låne: " + cd["equipment"]
             + "\n"
-            + "Dato: "
-            + cd["date"]
+            + "Startdato: "
+            + cd["start_date"]
             + "\n"
-            + "Starttidspunkt: "
-            + cd["start_time"]
+            + "Sluttdato: "
+            + cd["end_date"]
             + "\n"
-            + "Varighet: "
-            + cd["duration"]
+            + cd["comment"]
         )
         return subject, purpose, email
 
