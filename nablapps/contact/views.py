@@ -121,6 +121,7 @@ def roombooking(request, template="rombooking.html", send_to="koordinator@nabla.
                 context = make_feedback_context(request, spam_check, test_val)
                 return render(request, "contact/" + template, context)
 
+
 @login_required
 def utstyrbooking(request, template="utstyrbooking.html", send_to="sportskom@nabla.no"):
     spam_check = False
@@ -154,6 +155,7 @@ def utstyrbooking(request, template="utstyrbooking.html", send_to="sportskom@nab
                 test_val = random.randint(0, 20)
                 context = make_feedback_context(request, spam_check, test_val)
                 return render(request, "contact/" + template, context)
+
 
 def success(request):
     return render(request, "contact/success.html")
@@ -306,6 +308,7 @@ def make_roombooking_context(request, spam_check, test_val):
     }
     return context
 
+
 def make_utstyrbooking_context(request, spam_check, test_val):
     if request.user.is_authenticated:
         # skjema uten navn og e-post
@@ -332,6 +335,7 @@ def make_utstyrbooking_context(request, spam_check, test_val):
         "test_val": test_val,
     }
     return context
+
 
 def for_bedrifter(request, template="for_bedrifter.html", send_to="bedkom@nabla.no"):
     return render(request, "contact/" + template)
