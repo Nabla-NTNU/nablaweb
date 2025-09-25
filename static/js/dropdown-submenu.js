@@ -1,43 +1,26 @@
-function startToggleUtlaanListener() {
-    // Toggle submenu only when clicking "Utlån"
-    document.querySelectorAll('.dropdown-submenu > .dropdown-toggle').forEach(function(toggle) {
-        toggle.addEventListener('click', function(e) {
-            e.preventDefault();   // don’t follow "#"
-            e.stopPropagation();  // don’t close the parent dropdown
 
-            let submenu = this.nextElementSibling;
+// $ runs the function through jQuery for it to be compatible with Bootstrap
+$(document).ready(function() {
 
-            // Toggle current submenu
-            submenu.classList.toggle('show');
-        });
+    $(".dropdown-submenu > .dropdown-toggle").on("click", function(e) {
+        e.preventDefault();   
+        e.stopPropagation();  
+
+        const $submenu = $(this).next(".dropdown-menu");
+        const isOpen = $submenu.hasClass("show");
+
+        // Toggle submenu
+        $submenu.toggleClass("show");
+
+        // Update aria-expanded for accessibility
+        $(this).attr("aria-expanded", !isOpen);
     });
 
-    // Automatically close all submenus when main dropdown closes
-    document.querySelectorAll('.dropdown').forEach(function(dropdown) {
-        dropdown.addEventListener('hide.bs.dropdown', function () {
-            dropdown.querySelectorAll('.dropdown-menu.show').forEach(function(submenu) {
-                submenu.classList.remove('show');
-            });
-        });
+    // Close all submenus when the main dropdown closes
+    $(".dropdown").on("hide.bs.dropdown", function() {
+        $(this).find(".dropdown-submenu > .dropdown-menu.show").removeClass("show");
+
+        // Reset aria-expanded for all submenu toggles
+        $(this).find(".dropdown-submenu > .dropdown-toggle").attr("aria-expanded", "false");
     });
-}
-
-
-
-/*
-function startCloseUtlaanListener() {
-    document.querySelectorAll('dropdown-menu').forEach(function(toggle) {
-        toggle.addEventListener('click', function() {
-            console.log('Hei mikkel')
-
-            let submenu = document.querySelectorAll('.dropdown-submenu');
-
-            // Toggle current submenu
-            submenu.classList.remove('show');
-        });
-    })
-}
-
-document.addEventListener("DOMContentLoaded", startToggleUtlaanListener);
-document.addEventListener("DOMContentLoaded", startCloseUtlaanListener);
- */
+});
