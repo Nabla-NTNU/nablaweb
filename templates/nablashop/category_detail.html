@@ -3,7 +3,7 @@
 
 {% block content %}
     <h1>{{ category.name }}</h1>
-    <h2>{{ category.description }}</h2>
+    <h2>{{ category.description | safe }}</h2>
     <div class="row">
         {% for product in products %}
             <div class="col-xs-6 col-md-4">
