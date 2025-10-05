@@ -36,9 +36,7 @@ class RoomForm(forms.Form):
     your_name = forms.CharField(label="Ditt navn:", max_length=100, required=False)
     committee_name = forms.CharField(label="Komite:", max_length=100, required=False)
     date = forms.CharField(label="Dato:", required=True)
-    start_time = forms.CharField(
-        label="Start tidspunkt:", max_length=100, required=True
-    )
+    start_time = forms.CharField(label="Starttidspunkt:", max_length=100, required=True)
     duration = forms.CharField(label="Varighet:", max_length=100, required=True)
     num_people = forms.IntegerField(
         label="Estimert antall:", max_value=400, required=False
@@ -66,7 +64,7 @@ class RoomForm(forms.Form):
             + "Dato: "
             + cd["date"]
             + "\n"
-            + "Start tidspunkt: "
+            + "Starttidspunkt: "
             + cd["start_time"]
             + "\n"
             + "Varighet: "
@@ -79,6 +77,64 @@ class RoomForm(forms.Form):
             + cd["purpose"]
         )
         return committee_name, purpose, email
+
+    def get_answer(self):
+        cd = self.cleaned_data
+        answer = cd["spam_check"]
+        return answer
+
+    def get_right_answer(self):
+        cd = self.cleaned_data
+        right_answer = cd["right_answer"]
+        return right_answer
+
+
+class UtstyrForm(forms.Form):
+    utstyr_tilgjengelig = [
+        ("Laavo", "Lavvo 8-10 personer"),
+        ("Kubb", "Kubb"),
+        ("Liggeunderlag", "Liggeunderlag (3)"),
+        ("Tarp", "Tarp"),
+        ("Hengekøye", "Hengekøye (3)"),
+        ("Stormkjøkken", "Stormkjøkken"),
+        ("sitteunderlag", "Sitteunderlag (10)"),
+        ("liten tursag", "Liten tursag"),
+    ]
+
+    your_name = forms.CharField(label="Ditt navn:", max_length=100, required=False)
+    equipment = forms.ChoiceField(
+        label="Utstyr", choices=utstyr_tilgjengelig, required=True
+    )
+    start_date = forms.CharField(label="Startdato:", required=True)
+    end_date = forms.CharField(label="Sluttdato:", max_length=100, required=True)
+    comment = forms.CharField(label="Kommentar:", widget=forms.Textarea, required=False)
+    email = forms.EmailField(label="Din e-post:", max_length=100, required=True)
+    spam_check = forms.FloatField(max_value=20, required=True)
+    right_answer = forms.FloatField(
+        max_value=20, required=True, widget=forms.HiddenInput()
+    )
+
+    def process(self):
+        cd = self.cleaned_data
+        email = cd["email"]
+        subject = "Utstyrbooking av " + cd["equipment"]
+        purpose = (
+            "Navn: "
+            + cd["your_name"]
+            + "\n"
+            + "\n"
+            + "Ønsker å låne: "
+            + cd["equipment"]
+            + "\n"
+            + "Startdato: "
+            + cd["start_date"]
+            + "\n"
+            + "Sluttdato: "
+            + cd["end_date"]
+            + "\n"
+            + cd["comment"]
+        )
+        return subject, purpose, email
 
     def get_answer(self):
         cd = self.cleaned_data

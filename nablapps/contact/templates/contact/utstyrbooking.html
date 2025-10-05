@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% block title %}Utstyrbooking{% endblock %}
+
+{% block content %}
+
+<h1>Utstyrbooking</h1>
+
+<p>Book utstyr ved å sende inn :) </p>
+    
+<p> Info om hvor og når utstyret kan hentes kommer på mail ved booking.</p>
+
+<p> PS: Hvis det er mulig å booke flere av utstyret du er ute etter, skriv antallet du ønsker i kommentarboksen. 
+    Det er mulig at utstyret du ønsker å booke er allerede booket, da får du beskjed. </p>
+
+
+
+{% if spam_check == True %}
+    {% bootstrap_alert "Forsøk å regne kontrollspørsmål på nytt" alert_type="danger" %}
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    {% bootstrap_form utstyr_form exclude="spam_check" %}
+    {% bootstrap_field utstyr_form.spam_check placeholder="Svar" %}
+    {% bootstrap_button "Send" button_type="submit" %}
+</form>
+{% endblock %}

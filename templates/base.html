@@ -310,7 +310,16 @@
                             <a class="dropdown-item" href="{% url "ex_frontpage" %}">Utveksling</a>
                             <a class="dropdown-item" href="https://drive.google.com/drive/u/0/folders/0AIfT2N9gx5wOUk9PVA">Nablabanken</a>
                             <a class="dropdown-item" href="/contact/rombooking/">Rombooking</a>
+                            <div class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-toggle" href="#">Utlån</a>
+                                <div class="dropdown-menu">
+                                    {# Lenker under Utlån #}
+                                    <a class="dropdown-item" href="/contact/utstyrbooking/">Sportskom</a>
+                                    <a class="dropdown-item" href="/utleie/">Prokom</a>
+                                </div>
+                            </div>
                         </div>
+                        <script src="{% static 'js/dropdown-submenu.js' %}"></script> <!-- Script to make Utlån submenu clickable-->
                     </li>
                     <li class="nav-item mr-1 ">
                         <a class="nav-link text-light" href="/contact/for_bedrifter/">For bedrifter</a>
