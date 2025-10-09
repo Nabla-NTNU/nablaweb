@@ -54,31 +54,13 @@
 {% block sidebar %}
 <h1>Nabla - kontakt</h1>
 <p>
-Har du en superkul idé til noe nytt vi kan gjøre i Nabla? Savner du noe, eller har du en tilbakemelding til oss som drifter linjeforeningen?
-Styret ønsker gjerne hjelp fra dere alle til å gjøre Nabla til en best mulig linjeforening. Vi ønsker derfor alle mulige tilbakemeldinger dersom du har noe på hjertet, enten det er ris eller ros. Det kan være alt fra et ønskearrangement for Arrkom til eventuelle problem eller forbedringer i Nabla.  Du velger selv om du ønsker å være anonym eller gi oss ditt navn. Alle tilbakemeldinger og forslag vil gjennomgås på styremøter og behandles av Styret.  Dersom saken angår noen i Styret, kan du gjerne benytte deg av PostKom som et mellomledd for klager til Styret.
+Har du en superkul idé til noe nytt vi kan gjøre i Nabla? Savner du noe, eller har du en tilbakemelding til oss som drifter linjeforeningen? Da tar Styret gjerne imot tilbakemelding på mail til <a href="mailto:nabla [Ætt] nabla.no">nabla [Ætt] nabla.no</a>.
+Styret ønsker gjerne hjelp fra dere alle til å gjøre Nabla til en best mulig linjeforening. Vi ønsker derfor alle mulige tilbakemeldinger dersom du har noe på hjertet, enten det er ris eller ros. Det kan være alt fra et ønskearrangement for Arrkom til eventuelle problem eller forbedringer i Nabla.  
+ Dersom saken angår noen i Styret, kan du gjerne sende mail til PostKom gjennom <a href="mailto:postkom [Ætt] nabla.no">postkom [Ætt] nabla.no</a>  som et mellomledd for klager til Styret.
+Alle tilbakemeldinger og forslag vil gjennomgås på styremøter og behandles av Styret.  
 </p>
 <p>
-Du kan også bruke skjemaet til å sende en melding til de tillitsvalgte ved instituttene. ITV-ene tar imot blant annet  forslag til faglige eller studierelaterte endringer. De vil bringe forslagene dine videre til ledelsen. Husk at du også kan kontakte ITV-ene ved utfordringer med emner og undervisere.
-<br>
-Velg  ITV ved IFY for fysikk eller ITV ved IMF for matte
-</p>
+Det er også mulig å sende en mail til de tillitsvalgte ved instituttene. Deres kontaktinformasjon finner du på <a href="https://nabla.no/om/tillitsvalgte/">tillitsvalgtsida</a>. ITV-ene tar imot blant annet forslag til faglige eller studierelaterte endringer. De vil bringe forslagene dine videre til ledelsen. Husk at du også kan kontakte ITV-ene ved utfordringer med emner og undervisere.
 
-<p>
-<b>For å være anonym lar du feltene "Ditt navn" og "Din e-post" stå tomme.</b>
-</p>
-
-Webkom jobber for tiden med å minske mengden spam!
-<!--
-{% if spam_check == True %}
-    {% bootstrap_alert "Forsøk å regne kontrollspørsmål på nytt" alert_type="danger" %}
-{% endif %}
-<br>
-<form method="POST">
-    {% csrf_token %}
-    {% bootstrap_form contact_form exclude="spam_check" %}
-    {% bootstrap_field contact_form.spam_check placeholder="Svar" %}
-    {% bootstrap_button "Send" button_type="submit" %}
-</form>
--->
 
 {% endblock %}
