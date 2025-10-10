@@ -24,7 +24,7 @@ def send_activation_email(user, password):
 
 
 def extract_usernames(string, fysmat_class=None):
-    from .models import NablaUser, RegistrationRequest
+    from .models import NablaGroup, NablaUser, RegistrationRequest
 
     # One username per line. Structure of the usernames is
     # 'letters+optional numbers'
@@ -40,11 +40,12 @@ def extract_usernames(string, fysmat_class=None):
                 r.delete()
 
         new_user, was_created = NablaUser.objects.get_or_create(username=u)
-        if not was_created:
-            continue
+        komponenter_group, _ = NablaGroup.objects.get_or_create(name="komponenter")
 
         if fysmat_class is not None:
             fysmat_class.user_set.add(new_user)
+            komponenter_group.user_set.add(new_user)
 
-        new_user.is_active = False
-        new_user.save()
+        if was_created:
+            new_user.is_active = False
+            new_user.save()
