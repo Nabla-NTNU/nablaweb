@@ -1,3 +1,6 @@
+# Secrets are stored here
+.env
+
 # Bytecode
 *.pyc
 
