@@ -21,7 +21,13 @@ class CodeTask(models.Model):
         return self.title
 
     def get_best_result(self):
-        return self.result_set.order_by("length").first()
+        # Make sure we return the first best solution.
+        best_solution = self.result_set.aggregate(models.Min("length"))["length__min"]
+        return (
+            self.result_set.filter(length=best_solution)
+            .order_by("submitted_at")
+            .first()
+        )
 
     @property
     def correct_output_json(self):
