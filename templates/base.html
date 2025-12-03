@@ -325,6 +325,11 @@
                         <a class="nav-link text-light" href="/contact/for_bedrifter/">For bedrifter</a>
                     </li>
 
+                    {# Kan aktiveres igjen ved neste joulekalender #}
+                    <li class="nav-item mr-1 ">
+                        <a class="nav-link text-light" href="{% url "advent_calendar" "2025" %}">Joulekalender 2025</a>
+                    </li>
+
                     {# Kan aktiveres igjen ved neste undergruppe-valg #}
                     {# if user.is_authenticated #}
                     <!-- <li class="nav-item mr-1 ">
