@@ -1,6 +1,8 @@
 # Raw email encoding
 import base64
+import json
 from email.message import EmailMessage
+from os import environ as env
 
 # Django's email backend parent class
 from django.core.mail.backends.base import BaseEmailBackend
@@ -10,8 +12,7 @@ from google.oauth2 import service_account  # Authentication
 from googleapiclient.discovery import build  # API wrapper
 from googleapiclient.errors import HttpError  # Interpreting returned errors
 
-# Private key filepath
-SERVICE_ACCOUNT_FILE_PATH: str = "lib/privateKey.json"
+SERVICE_ACCOUNT_SECRET = json.loads(env.get("SERVICE_ACCOUNT_SECRET"))
 
 # Email of admin to be impersonated. Used as true from email.
 IMPERSONATED_ADMIN: str = "noreply@nabla.no"
@@ -27,8 +28,8 @@ class Nabla_email_backend(BaseEmailBackend):
 
     # Generate credentials and object to send API calls
     def __init__(self, **kwargs):
-        _creds = service_account.Credentials.from_service_account_file(
-            SERVICE_ACCOUNT_FILE_PATH, scopes=self._SCOPES
+        _creds = service_account.Credentials.from_service_account_info(
+            SERVICE_ACCOUNT_SECRET, scopes=self._SCOPES
         ).with_subject(IMPERSONATED_ADMIN)
         self._service = build("gmail", "v1", credentials=_creds)
 
