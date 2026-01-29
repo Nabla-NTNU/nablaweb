@@ -225,7 +225,7 @@ def generate_csv(http_request):
     table = list()
     applicants = list()
     applicant_texts = list()
-    top_row = list(["Nr", "Navn"])
+    top_row = list(["Nr", "Navn", "Studentmail"])
 
     for application in current_application_round.get_applicants():
         if application.applicant not in applicants:
@@ -236,6 +236,7 @@ def generate_csv(http_request):
         applicant_text = list()
         row.append(len(table) + 1)  # Row index
         row.append(f"{applicant.first_name} {applicant.last_name}")
+        row.append(f"{applicant.email}")
 
         applications = Application.objects.filter(
             application_round=ApplicationRound.get_current(),
@@ -250,7 +251,8 @@ def generate_csv(http_request):
                 )
 
         while len(top_row) < len(row):
-            top_row.append(f"{len(top_row) - 1}. valg")
+            # 2 comes from moving past the "Navn" and the "Studentmail" column
+            top_row.append(f"{len(top_row) - 2}. valg")
 
         applicant_texts.append(applicant_text)
         table.append(
