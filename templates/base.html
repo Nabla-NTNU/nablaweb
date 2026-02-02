@@ -331,11 +331,11 @@
                     </li> -->
 
                     {# Kan aktiveres igjen ved neste undergruppe-valg #}
-                    {# if user.is_authenticated #}
-                    <!-- <li class="nav-item mr-1 ">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item mr-1 ">
                         <a class="nav-link text-light" href="/application/">Søk undergruppe</a>
-                    </li> -->
-                    {# endif #}
+                    </li>
+                    {% endif %}
 
                 </ul>
 
