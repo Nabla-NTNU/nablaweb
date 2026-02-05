@@ -47,6 +47,7 @@ class UserForm(forms.ModelForm):
             "Dette er et 7-10-sifret eS-nummer som står på baksiden av kortet. "
             "På eldre kort er dette sifrene etter EM. "
             "Det kan f.eks. brukes for å identifisere deg på bedriftspresentasjoner og SKE. "
+            "<br>"
             "<img style='padding-top:10px;' alt=' ' src='/static/img/ntnu_card_number.png' height = 180> </img>"
         )
     )
