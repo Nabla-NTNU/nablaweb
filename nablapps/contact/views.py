@@ -184,6 +184,7 @@ def make_contact_context(request):
         ("the Stokes", "thestokes"),
         ("utfluks", "utfluks"),
         ("WebKom", "webkom"),
+        ("KeyNematics", "keynematics"),
     )
 
     context = {
