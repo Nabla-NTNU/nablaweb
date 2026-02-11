@@ -173,6 +173,8 @@ def make_contact_context(request):
         ("Arrkom", "arrkom"),
         ("BN - Bedriftkontakten Nabla", "bedkom"),
         ("Eurekakom", "eureka"),
+        ("Fadderkom", "fadderkom"),
+        ("KeyNematics", "keynematics"),
         ("Kjellersamarbeidet (Nabla, HC, Janus)", "kjellern.hk18"),
         ("Kontorkom", "kontorkom"),
         ("Koreolis", "koreolis"),
@@ -184,7 +186,6 @@ def make_contact_context(request):
         ("the Stokes", "thestokes"),
         ("utfluks", "utfluks"),
         ("WebKom", "webkom"),
-        ("KeyNematics", "keynematics"),
     )
 
     context = {
