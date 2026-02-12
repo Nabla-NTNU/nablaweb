@@ -49,5 +49,29 @@
     </div>
 </div>
 
+<br>
+
+<div class="headline">
+    <details >
+        <summary> <b> Inaktive undergrupper </b> </summary>
+
+        <p> &emsp;Høres en av disse undergruppene ut som noe du vil starte opp igjen? Ta kontakt med styret davel! </p>
+    <div class="grid-container">
+        {% for c in inactive_groups %}
+            <div class="grid-element">
+                <a class="com-link" href="{{ c.get_absolute_url }}">
+                    <img class="img-fluid com-img"
+                    {% if c.picture %}
+                        src="{% thumbnail c.picture 250x250 crop="smart" %}"
+                    {% else %}
+                        src="{% static "img/nabla-black.svg" 250x250 crop="smart" %}"
+                    {% endif %}>
+                {{ c.com.name }}</a>
+            </div>
+        {% endfor %}
+    </div>
+    </details>
+</div>
+
 
 {% endblock %}
