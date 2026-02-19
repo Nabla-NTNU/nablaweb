@@ -11,6 +11,12 @@ urlpatterns = [
         {"template": "gullkorn.html", "send_to": "redaktor@nabla.no"},
         name="gullkorn",
     ),
+    path(
+        "meme/",
+        views.feedback,
+        {"template": "meme.html", "send_to": "redaktor@nabla.no"},
+        name="meme",
+    ),
     path("success/", views.success, name="success"),
     path("success_gullkorn/", views.success_gullkorn, name="success_gullkorn"),
     path("rombooking/", views.roombooking, name="rombooking"),
