@@ -12,7 +12,9 @@
     {% endaddtoblock %}
 
 <div>
-    <h3 class="headline col-lg-8">Komiteer</h3>
+    <div class="row justify-content-center">
+        <h3 class="headline col-lg-8">Komiteer</h3>
+    </div>
     <div class="grid-container">
         {% for c in committees %}
             <div class="grid-element">
@@ -32,7 +34,9 @@
 <br>
 
 <div>
-    <h3 class="headline col-lg-8">Interessegrupper</h3>
+    <div class="row justify-content-center">
+        <h3 class="headline col-lg-8">Interessegrupper</h3>
+    </div>
     <div class="grid-container">
         {% for c in interest_groups %}
             <div class="grid-element">
@@ -51,24 +55,27 @@
 
 <br>
 
-<div class="headline">
-    <details >
-        <summary> <b> Inaktive undergrupper </b> </summary>
+<div>
+    <details>
+        <summary class="headline"> <b> Inaktive undergrupper </b> </summary>
 
-        <p> &emsp;Høres en av disse undergruppene ut som noe du vil starte opp igjen? Ta kontakt med styret davel! </p>
-    <div class="grid-container">
-        {% for c in inactive_groups %}
-            <div class="grid-element">
-                <a class="com-link" href="{{ c.get_absolute_url }}">
-                    <img class="img-fluid com-img"
-                    {% if c.picture %}
-                        src="{% thumbnail c.picture 250x250 crop="smart" %}"
-                    {% else %}
-                        src="{% static "img/nabla-black.svg" 250x250 crop="smart" %}"
-                    {% endif %}>
-                {{ c.com.name }}</a>
-            </div>
-        {% endfor %}
+        <p style="text-align: center;"> Høres en av disse undergruppene ut som noe du vil starte opp igjen? Ta kontakt med styret davel! </p>
+
+        <br>
+
+        <div class="grid-container">
+            {% for c in inactive_groups %}
+                <div class="grid-element">
+                    <a class="com-link" href="{{ c.get_absolute_url }}">
+                        <img class="img-fluid com-img"
+                        {% if c.picture %}
+                            src="{% thumbnail c.picture 250x250 crop="smart" %}"
+                        {% else %}
+                            src="{% static "img/nabla-black.svg" 250x250 crop="smart" %}"
+                        {% endif %}>
+                    {{ c.com.name }}</a>
+                </div>
+            {% endfor %}
     </div>
     </details>
 </div>
