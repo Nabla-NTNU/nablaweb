@@ -37,14 +37,16 @@ class CommitteeOverview(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        committees = ComPage.objects.filter(is_interest_group=False).order_by(
-            "com__name"
-        )
-        interest_groups = ComPage.objects.filter(is_interest_group=True).order_by(
-            "com__name"
-        )
+        committees = ComPage.objects.filter(
+            is_interest_group=False, is_active=True
+        ).order_by("com__name")
+        interest_groups = ComPage.objects.filter(
+            is_interest_group=True, is_active=True
+        ).order_by("com__name")
+        inactive_groups = ComPage.objects.filter(is_active=False).order_by("com__name")
 
         context["committees"] = committees
         context["interest_groups"] = interest_groups
+        context["inactive_groups"] = inactive_groups
 
         return context

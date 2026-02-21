@@ -33,6 +33,12 @@ class ComPage(models.Model):
         default=True,
     )
 
+    is_active = models.BooleanField(
+        verbose_name="Aktiv",
+        help_text="Er komitéen aktiv?",
+        default=True,
+    )
+
     description = RichTextField(
         config_name="basic",
         verbose_name="Beskrivelse",
