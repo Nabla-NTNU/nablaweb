@@ -56,13 +56,13 @@
 <h3 class="col-lg-8">Komiteer</h3>
 <ul class="nav flex-column">
 {% for c in compages %}
-    {% if not c.is_interest_group %}
+    {% if not c.is_interest_group and c.is_active %}
     <li class="nav-item"><a class="nav-link" href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
     {% endif %}
 {% endfor %}
 <h3 class="col-lg-8">Interessegrupper</h3>
 {% for c in compages %}
-    {% if c.is_interest_group %}
+    {% if c.is_interest_group and c.is_active %}
     <li class="nav-item"><a class="nav-link" href="{{ c.get_absolute_url }}">{{ c.com.name }}</a></li>
     {% endif %}
 {% endfor %}

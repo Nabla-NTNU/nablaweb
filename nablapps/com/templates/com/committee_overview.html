@@ -75,6 +75,10 @@
                         {% endif %}>
                     {{ c.com.name }}</a>
                 </div>
+
+            {% empty %}
+                <br>
+                <p> Nabla er visstnok veldig aktiv for tida! </p>
             {% endfor %}
     </div>
     </details>
