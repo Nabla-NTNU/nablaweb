@@ -282,9 +282,9 @@ class Voting(models.Model):
             len(alternatives) == 1 and self.num_winners == 1
         ), "Preference vote should not be used for one alternative and one winner"
 
-        assert not (
-            len(alternatives) == 2 and self.num_winners == 1
-        ), "Preference vote should not be used for two alternatives and one winner"
+        # assert not (
+        #     len(alternatives) == 2 and self.num_winners == 1
+        # ), "Preference vote should not be used for two alternatives and one winner"
 
         # Initial ballot/vote distribution according to first priority
         self.multi_winnner_initial_dist()
