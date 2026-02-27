@@ -210,7 +210,7 @@ def calendar(request, year=None, month=None):
 class EventMainPage(ListView):
     model = Event
     template_name = "events/event_main_page.html"
-    NUMBER_OF_EVENTS = 10  # Number of events to list
+    NUMBER_OF_EVENTS = 42  # Number of events to list
 
     def get_queryset(self):
         events = super().get_queryset().order_by("event_start")
