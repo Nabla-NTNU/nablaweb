@@ -35,3 +35,7 @@ sqlite.db
 
 # Private keys / data
 lib/privateKey.json
+
+# macOS (sorry)
+.DS_Store
+**/.DS_Store
