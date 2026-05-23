@@ -35,6 +35,12 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         try:
             view_user = NablaUser.objects.get(username=self.kwargs["username"])
+
+            # Folk lagrer med og uten protokoll - må normaliseres for å funke
+            if view_user.web_page:
+                view_user.web_page = view_user.web_page.removeprefix("http://")
+                view_user.web_page = view_user.web_page.removeprefix("https://")
+
         except NablaUser.DoesNotExist:
             raise Http404("Bruker finnes ikke")
         return view_user

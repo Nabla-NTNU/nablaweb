@@ -40,9 +40,9 @@
             <tr>
                 <td>Hjemmeside </td>
                 {% if member.web_page %}
-                <td><a href="{{ member.web_page }}" target="_blank" >{{ member.web_page }}</a></td>
+                <td><a href="https://{{ member.web_page }}" target="_blank" >{{ member.web_page }}</a></td>
                 {% else %}
-                <td><a href="http://folk.ntnu.no/{{ member.username }}">http://folk.ntnu.no/{{ member.username }}</a></td>
+                <td><a href="https://folk.ntnu.no/{{ member.username }}">folk.ntnu.no/{{ member.username }}</a></td>
                 {% endif %}
             </tr>
 
