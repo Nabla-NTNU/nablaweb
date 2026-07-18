@@ -137,7 +137,7 @@ class RegistrationRequestAdmin(admin.ModelAdmin):
     """
 
     actions = ["approve", "decline"]
-    list_display = ["username", "first_name", "last_name", "created"]
+    list_display = ["username", "first_name", "last_name", "fysmat_class", "created"]
     ordering = ["-created"]
 
     def approve(self, request, queryset):

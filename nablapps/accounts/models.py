@@ -184,6 +184,13 @@ class RegistrationRequest(models.Model):
 
     last_name = models.CharField(max_length=80, verbose_name="Etternavn", null=True)
 
+    def get_newest_class():
+        return FysmatClass.objects.order_by("-starting_year")[0].id
+
+    fysmat_class = models.ForeignKey(
+        FysmatClass, on_delete=models.CASCADE, default=get_newest_class
+    )
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.created = datetime.today()
