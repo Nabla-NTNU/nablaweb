@@ -1,8 +1,9 @@
-Velkommen til som bruker på Nabla.no
+Hei!
+
+Velkommen til oss! Påloggingsinfo til nabla.no finner du under. Håper du trives!
 
 Brukernavn: {{username}}
 Passord: {{password}}
 
-
-Hilsen
-webkom
+Hilsen,
+Nablas Webkomité
