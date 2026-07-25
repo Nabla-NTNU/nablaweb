@@ -163,7 +163,7 @@ class FysmatClass(NablaGroup):
         verbose_name = "Kull"
         verbose_name_plural = "Kull"
 
-    starting_year = models.CharField("År startet", max_length=4, unique=True)
+    starting_year = models.CharField("År startet", max_length=4, unique=True, null=True)
 
     def get_class_number(self):
         now = date.today()
@@ -185,7 +185,10 @@ class RegistrationRequest(models.Model):
     last_name = models.CharField(max_length=80, verbose_name="Etternavn", null=True)
 
     def get_newest_class():
-        return FysmatClass.objects.order_by("-starting_year")[0].id
+        class_list = FysmatClass.objects.order_by("-starting_year")
+        if len(class_list) > 0:
+            return class_list[0].id
+        return
 
     fysmat_class = models.ForeignKey(
         FysmatClass, on_delete=models.CASCADE, default=get_newest_class

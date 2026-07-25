@@ -16,7 +16,7 @@ from braces.views import (
 )
 
 from .forms import InjectUsersForm, RegistrationForm, UserForm
-from .models import NablaGroup, NablaUser, RegistrationRequest
+from .models import FysmatClass, NablaGroup, NablaUser, RegistrationRequest
 from .utils import (
     activate_user_and_create_password,
     extract_usernames,
@@ -77,6 +77,8 @@ class RegistrationView(MessageMixin, FormView):
         username = form.cleaned_data["username"]
         first_name = form.cleaned_data.get("first_name")
         last_name = form.cleaned_data.get("last_name")
+        class_name = form.cleaned_data.get("fysmat_class")
+        fysmat_class = FysmatClass.objects.get(name=class_name)
 
         # Activate a user or create a registration request.
         try:
@@ -86,13 +88,18 @@ class RegistrationView(MessageMixin, FormView):
             else:
                 user.first_name = first_name
                 user.last_name = last_name
+
+                fysmat_class.user_set.add(user)
                 user.save()
                 password = activate_user_and_create_password(user)
                 send_activation_email(user, password)
                 self.messages.info(f"Registreringsepost sendt til {user.email}")
         except NablaUser.DoesNotExist:
             RegistrationRequest.objects.create(
-                username=username, first_name=first_name, last_name=last_name
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                fysmat_class=fysmat_class.id,
             )
             self.messages.info(
                 "Denne brukeren er ikke registrert. "

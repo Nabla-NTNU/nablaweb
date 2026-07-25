@@ -10,10 +10,12 @@ class BaseRegistrationTest(TestCase):
         self.username = "someusername"
         self.first_name = "Ola"
         self.last_name = "Nordmann"
+        self.fysmat_class = "class_international"
         self.data = {
             "username": self.username,
             "first_name": self.first_name,
             "last_name": self.last_name,
+            "fysmat_class": self.fysmat_class,
         }
 
 
@@ -26,7 +28,13 @@ class RegistrationViewTest(BaseRegistrationTest):
         self.assertEqual(reg.last_name, self.last_name)
 
     def create_inactive_user(self):
-        user = NablaUser.objects.create(**self.data)
+        user = NablaUser.objects.create(
+            {
+                "username": self.username,
+                "first_name": self.first_name,
+                "last_name": self.last_name,
+            }
+        )
         user.is_active = False
         user.save()
 

@@ -10,7 +10,7 @@ class TestUniversityGetRetningList(TestCase):
     def setUp(self):
         self.student = NablaUser.objects.create(username="thexchanger")
         self.univ = University.objects.create(
-            univ_navn="YOLO", land="Der ingen skulle tru at nokon kunne bu."
+            univ_navn="YOLO", land="Der ingen  skulle tru at nokon kunne bu."
         )
 
     def test_no_exchanges(self):
