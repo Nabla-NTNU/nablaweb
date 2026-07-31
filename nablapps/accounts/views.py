@@ -99,7 +99,7 @@ class RegistrationView(MessageMixin, FormView):
                 username=username,
                 first_name=first_name,
                 last_name=last_name,
-                fysmat_class=fysmat_class.id,
+                fysmat_class=fysmat_class,
             )
             self.messages.info(
                 "Denne brukeren er ikke registrert. "

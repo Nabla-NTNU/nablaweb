@@ -184,6 +184,8 @@ class RegistrationRequest(models.Model):
 
     last_name = models.CharField(max_length=80, verbose_name="Etternavn", null=True)
 
+    paid = models.BooleanField(verbose_name="Betalt medlemskontingent", default=False)
+
     def get_newest_class():
         class_list = FysmatClass.objects.order_by("-starting_year")
         if len(class_list) > 0:
@@ -208,9 +210,31 @@ class RegistrationRequest(models.Model):
         password = activate_user_and_create_password(user)
         send_activation_email(user, password)
 
+        self.fysmat_class.user_set.add(user)
+
     class Meta:
         verbose_name = "Registreringsforespørsel"
         verbose_name_plural = "Registreringsforespørsler"
 
     def __str__(self):
         return self.username
+
+    def register_payment(self, *args, **kwargs):
+        self.paid = True
+        self.save(*args, **kwargs)
+
+
+# Exists solely for the Admin page
+class PaymentStatus(RegistrationRequest):
+    class Meta:
+        proxy = True
+        verbose_name = "Kontingentregistrering"
+        verbose_name_plural = "Kontingentregistreringer"
+
+    def register_payment(self, *args, **kwargs):
+        self.paid = True
+        self.save(*args, **kwargs)
+
+    def deregister_payment(self, *args, **kwargs):
+        self.paid = True
+        self.save(*args, **kwargs)

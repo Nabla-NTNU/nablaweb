@@ -15,7 +15,13 @@ from django.urls import reverse
 from django.utils.encoding import smart_text
 
 from .forms import NablaUserChangeForm, NablaUserCreationForm
-from .models import FysmatClass, NablaGroup, NablaUser, RegistrationRequest
+from .models import (
+    FysmatClass,
+    NablaGroup,
+    NablaUser,
+    PaymentStatus,
+    RegistrationRequest,
+)
 
 User = get_user_model()
 admin.site.register(FysmatClass)
@@ -137,8 +143,15 @@ class RegistrationRequestAdmin(admin.ModelAdmin):
     """
 
     actions = ["approve", "decline"]
-    list_display = ["username", "first_name", "last_name", "fysmat_class", "created"]
-    ordering = ["-created"]
+    list_display = [
+        "username",
+        "first_name",
+        "last_name",
+        "fysmat_class",
+        "paid",
+        "created",
+    ]
+    ordering = ["-paid", "-created"]
 
     def approve(self, request, queryset):
         """Approve selected requests"""
@@ -150,6 +163,38 @@ class RegistrationRequestAdmin(admin.ModelAdmin):
         """Decline selected requests"""
         for req in queryset:
             req.delete()
+
+
+@admin.register(PaymentStatus)
+class PaymentRegistrationAdmin(admin.ModelAdmin):
+    """
+    Admin interface so the økonomiansvarlig can register payment on registration requests
+    """
+
+    actions = ["registrer_betaling"]
+    list_display = [
+        "username",
+        "first_name",
+        "last_name",
+        "fysmat_class",
+        "paid",
+        "created",
+    ]
+
+    readonly_fields = [
+        "username",
+        "first_name",
+        "last_name",
+        "fysmat_class",
+        "created",
+    ]
+
+    ordering = ["paid", "-created"]
+
+    def registrer_betaling(self, request, queryset):
+        """Mark the selected requests as paid"""
+        for req in queryset:
+            req.register_payment()
 
 
 # Define a new FlatPageAdmin
