@@ -77,16 +77,20 @@ class RegistrationForm(forms.Form):
 
     last_name = forms.CharField(label="Etternavn", required=True)
 
-    fysmat_class = forms.ChoiceField(
-        required=True,
-        label="Kull",
-        choices=[("", "Velg ditt fysmat-kull")]
-        + [
-            (m.name, f"Kull {m.starting_year}")
-            for m in FysmatClass.objects.order_by("-starting_year")
-        ][:5]
-        + [("class_international", "International")],
-    )
+    fysmat_class = forms.ChoiceField(required=True, label="Kull", choices=())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["fysmat_class"] = forms.ChoiceField(
+            required=True,
+            label="kull",
+            choices=[("", "Velg ditt fysmat-kull")]
+            + [
+                (m.name, f"Kull {m.starting_year}")
+                for m in FysmatClass.objects.order_by("-starting_year")
+            ][:5]
+            + [("class_international", "International")],
+        )
 
 
 # Forms for admin
