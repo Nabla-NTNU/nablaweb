@@ -2,7 +2,7 @@ from django.core import mail
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from nablapps.accounts.models import NablaUser, RegistrationRequest
+from nablapps.accounts.models import FysmatClass, NablaUser, RegistrationRequest
 
 
 class BaseRegistrationTest(TestCase):
@@ -18,6 +18,8 @@ class BaseRegistrationTest(TestCase):
             "fysmat_class": self.fysmat_class,
         }
 
+        FysmatClass.objects.create(starting_year=None, name="class_international")
+
 
 class RegistrationViewTest(BaseRegistrationTest):
     def test_create_registration_request(self):
@@ -29,7 +31,7 @@ class RegistrationViewTest(BaseRegistrationTest):
 
     def create_inactive_user(self):
         user = NablaUser.objects.create(
-            {
+            **{
                 "username": self.username,
                 "first_name": self.first_name,
                 "last_name": self.last_name,
