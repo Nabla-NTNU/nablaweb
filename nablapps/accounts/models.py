@@ -230,6 +230,7 @@ class PaymentStatus(RegistrationRequest):
         proxy = True
         verbose_name = "Kontingentregistrering"
         verbose_name_plural = "Kontingentregistreringer"
+        default_permissions = ("change", "view")
 
     def register_payment(self, *args, **kwargs):
         self.paid = True
