@@ -83,13 +83,15 @@ class RegistrationForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields["fysmat_class"] = forms.ChoiceField(
             required=True,
-            label="kull",
-            choices=[("", "Velg ditt fysmat-kull")]
-            + [
-                (m.name, f"Kull {m.starting_year}")
-                for m in FysmatClass.objects.order_by("-starting_year")
-            ][:5]
-            + [("class_international", "International")],
+            label="Kull",
+            choices=[
+                ("", "Kull [året du startet]"),
+                *[
+                    (m.name, f"Kull {m.starting_year}")
+                    for m in FysmatClass.objects.order_by("-starting_year")
+                ][:5],
+                ("class_international", "International"),
+            ],
         )
 
 
