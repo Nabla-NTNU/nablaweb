@@ -18,7 +18,9 @@ class BaseRegistrationTest(TestCase):
             "fysmat_class": self.fysmat_class,
         }
 
-        FysmatClass.objects.create(starting_year=None, name="class_international")
+        FysmatClass.objects.get_or_create(
+            starting_year=None, name="class_international"
+        )
 
 
 class RegistrationViewTest(BaseRegistrationTest):
@@ -31,11 +33,9 @@ class RegistrationViewTest(BaseRegistrationTest):
 
     def create_inactive_user(self):
         user = NablaUser.objects.create(
-            **{
-                "username": self.username,
-                "first_name": self.first_name,
-                "last_name": self.last_name,
-            }
+            self.username,
+            self.first_name,
+            self.last_name,
         )
         user.is_active = False
         user.save()
