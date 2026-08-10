@@ -35,7 +35,9 @@ def extract_usernames(string, fysmat_class=None):
         requests = RegistrationRequest.objects.filter(username=u)
 
         if requests:
-            requests.last().approve_request()
+            last_request = requests.last()
+            last_request.fysmat_class = fysmat_class
+            last_request.approve_request()
             for r in requests:
                 r.delete()
 
