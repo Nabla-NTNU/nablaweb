@@ -233,8 +233,6 @@ class RegistrationRequest(models.Model):
         user.activate()
 
         self.fysmat_class.user_set.add(user)
-        components_group, _ = NablaGroup.objects.get_or_create(name="komponenter")
-        components_group.user_set.add(user)
 
         identical_resuests = RegistrationRequest.objects.filter(username=self.username)
         for request in identical_resuests:
