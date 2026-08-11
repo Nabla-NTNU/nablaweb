@@ -209,8 +209,6 @@ class RegistrationRequest(models.Model):
 
     last_name = models.CharField(max_length=80, verbose_name="Etternavn", null=True)
 
-    paid = models.BooleanField(verbose_name="Betalt medlemskontingent", default=False)
-
     def get_newest_class():
         class_list = FysmatClass.objects.order_by("-starting_year")
         if len(class_list) > 0:
@@ -248,17 +246,3 @@ class RegistrationRequest(models.Model):
 
     def __str__(self):
         return self.username
-
-
-# Exists solely for the Admin page
-class PaymentStatus(RegistrationRequest):
-    class Meta:
-        proxy = True
-        verbose_name = "Kontingentregistrering"
-        verbose_name_plural = "Kontingentregistreringer"
-        # Don't show creation/deletion permissions
-        default_permissions = ("change", "view")
-
-    def register_payment(self, *args, **kwargs):
-        self.paid = True
-        self.save(*args, **kwargs)

@@ -13,19 +13,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name="PaymentStatus",
-            fields=[],
-            options={
-                "verbose_name": "Kontingentregistrering",
-                "verbose_name_plural": "Kontingentregistreringer",
-                "proxy": True,
-                "default_permissions": ("change", "view"),
-                "indexes": [],
-                "constraints": [],
-            },
-            bases=("accounts.registrationrequest",),
-        ),
         migrations.AddField(
             model_name="registrationrequest",
             name="fysmat_class",
@@ -33,13 +20,6 @@ class Migration(migrations.Migration):
                 default=nablapps.accounts.models.RegistrationRequest.get_newest_class,
                 on_delete=django.db.models.deletion.CASCADE,
                 to="accounts.fysmatclass",
-            ),
-        ),
-        migrations.AddField(
-            model_name="registrationrequest",
-            name="paid",
-            field=models.BooleanField(
-                default=False, verbose_name="Betalt medlemskontingent"
             ),
         ),
         migrations.AlterField(
