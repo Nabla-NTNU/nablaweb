@@ -144,6 +144,7 @@ class RegistrationRequestAdmin(admin.ModelAdmin):
         "fysmat_class",
         "created",
     ]
+    ordering = ["-created"]
 
     def approve(self, request, queryset):
         """Approve selected requests"""
