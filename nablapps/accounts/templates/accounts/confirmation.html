@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block title %}{{ form.title }}{% endblock %}
+
+{% block content %}
+
+<h1>Forespørselsystem (ubetalt)</h1>
+Under finner du liste og kontrollpanel over status på nye brukere i <div style="font-family: monospace; display: inline">nablaweb</div>.
+
+<h2>Ubetalt kontigent:</h2>
+{% if requests %}
+  <table style="width: 100%">
+      <tr>
+        <th>Brukernavn</th>
+        <th>Navn</th>
+        <th>Kull</th>
+        <th>Dato</th>
+      </tr>
+      {% for request in requests%}
+      <tr>
+        <td><a href="/admin/accounts/registrationrequest/{{request.id}}">{{request.username}}</a></td>
+        <td>{{request.first_name}} {{request.last_name}}</td>
+        <td>{{request.fysmat_class}}</td>
+        <td>{{request.created}}</td>
+      </tr>
+      {% endfor %}
+  </table>
+{% else%}
+  Wooo, alle har betalt!
+{% endif %}
+
+<h2>Betalt, men ikke pålogget</h2>
+{% if unpaid_users %}
+<table style="width: 100%">
+    <tr>
+      <th>Brukernavn</th>
+      <th>Dato lagt inn</th>
+    </tr>
+    {% for user in unpaid_users%}
+    <tr>
+      <td><a href="/admin/accounts/nablauser/{{user.id}}">{{user.username}}</a></td>
+      <td>{{user.date_joined}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else%}
+  Wooo, alle har logget på!
+{% endif %}
+
+<h2>Legg til betalte brukere:</h2>
+
+<form method="post" action="" >
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button class="btn btn-lg btn-nabla-blue-dark" type="submit">Bekreft betaling</button>
+</form>
+
+{% endblock %}

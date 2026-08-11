@@ -1,4 +1,8 @@
+import re
+
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden
 from django.views.generic import (
     DetailView,
@@ -15,13 +19,8 @@ from braces.views import (
     PermissionRequiredMixin,
 )
 
-from .forms import InjectUsersForm, RegistrationForm, UserForm
+from .forms import ConfirmUsersForm, RegistrationForm, UserForm
 from .models import FysmatClass, NablaGroup, NablaUser, RegistrationRequest
-from .utils import (
-    activate_user_and_create_password,
-    extract_usernames,
-    send_activation_email,
-)
 
 User = get_user_model()
 
@@ -88,12 +87,10 @@ class RegistrationView(MessageMixin, FormView):
             else:
                 user.first_name = first_name
                 user.last_name = last_name
-
                 fysmat_class.user_set.add(user)
-                user.save()
-                password = activate_user_and_create_password(user)
-                send_activation_email(user, password)
+                user.activate()
                 self.messages.info(f"Registreringsepost sendt til {user.email}")
+
         except NablaUser.DoesNotExist:
             RegistrationRequest.objects.create(
                 username=username,
@@ -101,7 +98,7 @@ class RegistrationView(MessageMixin, FormView):
                 last_name=last_name,
                 fysmat_class=fysmat_class,
             )
-            self.messages.info(
+            self.messages.warning(
                 "Denne brukeren er ikke registrert. "
                 "En forespørsel har blitt opprettet og "
                 "du vil få en epost hvis den blir godkjent."
@@ -109,12 +106,22 @@ class RegistrationView(MessageMixin, FormView):
         return super().form_valid(form)
 
 
-class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
-    form_class = InjectUsersForm
+class ConfirmUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
+    form_class = ConfirmUsersForm
     form_valid_message = "Brukerne er lagt i databasen."
     form_invalid_message = "Ikke riktig utfyllt."
-    template_name = "form.html"
-    success_url = "/"
+    template_name = "accounts/confirmation.html"
+
+    def get_success_url(self):
+        return self.request.path
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["requests"] = RegistrationRequest.objects.all().order_by("-created")
+        context["unpaid_users"] = NablaUser.objects.filter(
+            Q(password__startswith="!")
+        ).order_by("-date_joined")
+        return context
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.has_module_perms("django.contrib.auth"):
@@ -124,15 +131,39 @@ class InjectUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
     def form_valid(self, form):
         from .models import FysmatClass
 
-        data = form.cleaned_data["data"]
-        fysmat_class = form.cleaned_data["fysmat_class"]
+        usernames_string = form.cleaned_data["data"]
+        usernames = re.findall(
+            r"^([a-zæøå]+[1-9]*)\s*$",
+            usernames_string,
+            flags=re.IGNORECASE | re.MULTILINE,
+        )
+        for username in usernames:
+            users = NablaUser.objects.filter(username=username)
+            if users.exists():
+                self.messages.info(f"Bruker {username} eksisterer allerede!")
+                continue
 
-        if fysmat_class != "":
-            fysmat_class = FysmatClass.objects.get(name=fysmat_class)
-        else:
-            fysmat_class = None
+            requests = RegistrationRequest.objects.filter(username=username)
+            if requests.exists():
+                requests[0].approve_request()
+                self.messages.success(f"Aktivert bruker {username}")
+            else:
+                user = NablaUser.objects.create_user(username=username)
+                send_mail(
+                    subject="Velkommen til nabla!",
+                    message="""Hei!
 
-        extract_usernames(data, fysmat_class)
+Vi har registrert et betalt kontigent fra deg, og har derfor laget deg en bruker på nabla.no. Så snart du fyller ut skjema på https://nabla.no/brukere/registrer/ kan du logge inn!
+
+Velkommen til oss,
+-Oss i Nablas WebKomité
+""",
+                    from_email="noreply@nabla.no",
+                    recipient_list=[user.email],
+                )
+                user.is_active = False
+                user.save()
+                self.messages.info(f"Laget skall-bruker for {username}")
         return super().form_valid(form)
 
 

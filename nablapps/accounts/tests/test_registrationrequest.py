@@ -33,9 +33,9 @@ class RegistrationViewTest(BaseRegistrationTest):
 
     def create_inactive_user(self):
         user = NablaUser.objects.create(
-            self.username,
-            self.first_name,
-            self.last_name,
+            username=self.username,
+            first_name=self.first_name,
+            last_name=self.last_name,
         )
         user.is_active = False
         user.save()

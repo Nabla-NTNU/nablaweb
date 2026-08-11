@@ -2,13 +2,13 @@ from datetime import date, datetime
 from hashlib import sha1
 
 from django.contrib.auth.models import AbstractUser, Group, UserManager
+from django.core.mail import send_mail
 from django.db import models
+from django.template import loader
 from django.urls import reverse
 from django.utils import timezone
 
 from image_cropping.fields import ImageCropField, ImageRatioField
-
-from .utils import activate_user_and_create_password, send_activation_email
 
 
 class NablaUserManager(UserManager):
@@ -108,6 +108,31 @@ class NablaUser(AbstractUser):
 
         return super().save(force_insert, force_update, using, update_fields)
 
+    def activate(self):
+        self.email = f"{self.username}@stud.ntnu.no"
+        user_manager = UserManager()
+        password = user_manager.make_random_password()
+        self.set_password(password)
+        self.is_active = True
+        self.save()
+
+        template = loader.get_template("accounts/registration_email.txt")
+        email_text = template.render({"username": self.username, "password": password})
+        self.email_user("Bruker på nabla.no", email_text)
+
+        components_group, _ = NablaGroup.objects.get_or_create(name="komponenter")
+        components_group.user_set.add(self)
+
+        fysmat_class = FysmatClass.objects.filter(user=self)
+        if fysmat_class.exists():
+            send_mail(
+                subject="Mail-lsite",
+                message=f"Bruker {self.email} har blitt med i kull {fysmat_class[0]}",
+                from_email="noreply@nabla.no",
+                recipient_list=["webkom@nabla.no"],
+                # fail_silently=False,
+            )
+
     @property
     def nablagroups(self):
         groups = self.groups.all()
@@ -186,7 +211,7 @@ class RegistrationRequest(models.Model):
 
     paid = models.BooleanField(verbose_name="Betalt medlemskontingent", default=False)
 
-    def get_newest_class(self):
+    def get_newest_class():
         class_list = FysmatClass.objects.order_by("-starting_year")
         if len(class_list) > 0:
             return class_list[0].id
@@ -202,15 +227,20 @@ class RegistrationRequest(models.Model):
         return super().save(*args, **kwargs)
 
     def approve_request(self):
-        user, created_user = NablaUser.objects.get_or_create(username=self.username)
+        user, _ = NablaUser.objects.get_or_create(username=self.username)
 
         user.first_name = self.first_name
         user.last_name = self.last_name
 
-        password = activate_user_and_create_password(user)
-        send_activation_email(user, password)
+        user.activate()
 
         self.fysmat_class.user_set.add(user)
+        components_group, _ = NablaGroup.objects.get_or_create(name="komponenter")
+        components_group.user_set.add(user)
+
+        identical_resuests = RegistrationRequest.objects.filter(username=self.username)
+        for request in identical_resuests:
+            request.delete()
 
     class Meta:
         verbose_name = "Registreringsforespørsel"

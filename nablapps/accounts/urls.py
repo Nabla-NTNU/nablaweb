@@ -11,7 +11,7 @@ from django.views.generic import RedirectView
 
 from .views import (
     BirthdayView,
-    InjectUsersFormView,
+    ConfirmUsersFormView,
     MailListView,
     RegistrationView,
     UpdateProfile,
@@ -53,7 +53,7 @@ urlpatterns = [
     path("view/", UserList.as_view(), name="user_list"),
     path("view/<str:username>/", UserDetailView.as_view(), name="member_profile"),
     path("registrer/", RegistrationView.as_view(), name="user_registration"),
-    path("oppdater/", InjectUsersFormView.as_view(), name="users_inject"),
+    path("bekreft/", ConfirmUsersFormView.as_view(), name="confirm"),
     re_path(
         r"^bursdag/(?P<day>[0-9]+)?", BirthdayView.as_view(), name="users_birthday"
     ),

@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.forms.widgets import SelectDateWidget
 
-from .models import FysmatClass, NablaUser
+from .models import FysmatClass, NablaUser, RegistrationRequest
 
 
 class UserForm(forms.ModelForm):
@@ -113,20 +113,9 @@ class NablaUserCreationForm(UserCreationForm):
         return self.cleaned_data["username"]
 
 
-class InjectUsersForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["fysmat_class"] = forms.ChoiceField(
-            required=False,
-            choices=[("", "Ingen klasse")]
-            + [(m.name, m.name) for m in FysmatClass.objects.all()],
-            label="Klasse",
-        )
-
+class ConfirmUsersForm(forms.Form):
     title = "Putt brukernavn i databasen."
-    data = forms.CharField(widget=forms.Textarea, label="Data")
-    fysmat_class = forms.ChoiceField(
-        required=False,
-        label="Klasse",
-        choices=(),
+    data = forms.CharField(
+        widget=forms.Textarea(attrs={"placeholder": "leuler\nwirhamil\nalein\netc..."}),
+        label="Brukernavn",
     )
