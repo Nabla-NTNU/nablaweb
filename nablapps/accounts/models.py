@@ -129,7 +129,7 @@ class NablaUser(AbstractUser):
                 subject="Mail-lsite",
                 message=f"Bruker {self.email} har blitt med i kull {fysmat_class[0]}",
                 from_email="noreply@nabla.no",
-                recipient_list=["webkom@nabla.no"],
+                recipient_list=["mail@nabla.no"],
                 # fail_silently=False,
             )
 
