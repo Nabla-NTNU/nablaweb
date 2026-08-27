@@ -106,11 +106,12 @@ class RegistrationView(MessageMixin, FormView):
         return super().form_valid(form)
 
 
-class ConfirmUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
+class ConfirmUsersFormView(PermissionRequiredMixin, FormMessagesMixin, FormView):
     form_class = ConfirmUsersForm
     form_valid_message = "Brukerne er lagt i databasen."
     form_invalid_message = "Ikke riktig utfyllt."
     template_name = "accounts/confirmation.html"
+    permission_required = "accounts.change_registrationrequest"
 
     def get_success_url(self):
         return self.request.path
@@ -122,11 +123,6 @@ class ConfirmUsersFormView(LoginRequiredMixin, FormMessagesMixin, FormView):
             Q(password__startswith="!")
         ).order_by("-date_joined")
         return context
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.has_module_perms("django.contrib.auth"):
-            return super().dispatch(request, *args, **kwargs)
-        return HttpResponseForbidden()
 
     def form_valid(self, form):
         from .models import FysmatClass
