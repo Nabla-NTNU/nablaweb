@@ -214,7 +214,7 @@ class ConfirmView(LoginRequiredMixin, TemplateView):
 
 @staff_member_required
 def generate_csv(http_request):
-    response = HttpResponse(content_type="text/csv", charset="latin-1")
+    response = HttpResponse(content_type="text/csv", charset="utf-8")
     response["Content-Disposition"] = 'attachment; filename="export.csv"'
 
     writer = csv.writer(response, dialect="excel")
