@@ -213,6 +213,9 @@ def send_maillist_email(sender, instance, action, reverse, pk_set, **kwargs):
 
     verb = "lagt til i" if action == "post_add" else "fjernet fra"
 
+    classes = FysmatClass.objects.filter(name__in=classNames)
+    classNames = [kull.name for kull in classes]
+
     for className in classNames:
         message = (
             f"Følgende eposter har blitt {verb} {className}. Vennligst oppdater mailinglisten.\n\n"
