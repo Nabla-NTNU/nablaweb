@@ -49,6 +49,11 @@ class RegistrationViewTest(BaseRegistrationTest):
         self.assertTrue(user.is_active, msg="The user should be active.")
         self.assertEqual(
             mail.outbox[0].to[0],
+            "mail@nabla.no",
+            msg="New user should be added to mail-list",
+        )
+        self.assertEqual(
+            mail.outbox[1].to[0],
             user.email,
             msg="There should have been sent an email to the new user.",
         )
