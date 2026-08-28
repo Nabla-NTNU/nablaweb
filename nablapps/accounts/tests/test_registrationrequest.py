@@ -2,7 +2,7 @@ from django.core import mail
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from nablapps.accounts.models import NablaUser, RegistrationRequest
+from nablapps.accounts.models import FysmatClass, NablaUser, RegistrationRequest
 
 
 class BaseRegistrationTest(TestCase):
@@ -10,11 +10,17 @@ class BaseRegistrationTest(TestCase):
         self.username = "someusername"
         self.first_name = "Ola"
         self.last_name = "Nordmann"
+        self.fysmat_class = "class_international"
         self.data = {
             "username": self.username,
             "first_name": self.first_name,
             "last_name": self.last_name,
+            "fysmat_class": self.fysmat_class,
         }
+
+        FysmatClass.objects.get_or_create(
+            starting_year=None, name="class_international"
+        )
 
 
 class RegistrationViewTest(BaseRegistrationTest):
@@ -26,7 +32,11 @@ class RegistrationViewTest(BaseRegistrationTest):
         self.assertEqual(reg.last_name, self.last_name)
 
     def create_inactive_user(self):
-        user = NablaUser.objects.create(**self.data)
+        user = NablaUser.objects.create(
+            username=self.username,
+            first_name=self.first_name,
+            last_name=self.last_name,
+        )
         user.is_active = False
         user.save()
 
@@ -39,6 +49,11 @@ class RegistrationViewTest(BaseRegistrationTest):
         self.assertTrue(user.is_active, msg="The user should be active.")
         self.assertEqual(
             mail.outbox[0].to[0],
+            "mail@nabla.no",
+            msg="New user should be added to mail-list",
+        )
+        self.assertEqual(
+            mail.outbox[1].to[0],
             user.email,
             msg="There should have been sent an email to the new user.",
         )

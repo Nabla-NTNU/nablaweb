@@ -141,6 +141,8 @@ class FysmatClassSeeder:
         for i in range(cls.amount):
             FysmatClass.objects.create(starting_year=year - i, name=f"kull{year - i}")
 
+        FysmatClass.objects.create(starting_year=None, name="class_international")
+
     @classmethod
     def delete(cls) -> None:
         FysmatClass.objects.all().delete()

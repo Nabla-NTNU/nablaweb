@@ -2,13 +2,15 @@ from datetime import date, datetime
 from hashlib import sha1
 
 from django.contrib.auth.models import AbstractUser, Group, UserManager
+from django.core.mail import send_mail
 from django.db import models
+from django.db.models.signals import m2m_changed
+from django.dispatch import receiver
+from django.template import loader
 from django.urls import reverse
 from django.utils import timezone
 
 from image_cropping.fields import ImageCropField, ImageRatioField
-
-from .utils import activate_user_and_create_password, send_activation_email
 
 
 class NablaUserManager(UserManager):
@@ -108,6 +110,21 @@ class NablaUser(AbstractUser):
 
         return super().save(force_insert, force_update, using, update_fields)
 
+    def activate(self):
+        self.email = f"{self.username}@stud.ntnu.no"
+        user_manager = UserManager()
+        password = user_manager.make_random_password()
+        self.set_password(password)
+        self.is_active = True
+        self.save()
+
+        template = loader.get_template("accounts/registration_email.txt")
+        email_text = template.render({"username": self.username, "password": password})
+        self.email_user("Bruker på nabla.no", email_text)
+
+        components_group, _ = NablaGroup.objects.get_or_create(name="komponenter")
+        components_group.user_set.add(self)
+
     @property
     def nablagroups(self):
         groups = self.groups.all()
@@ -163,7 +180,7 @@ class FysmatClass(NablaGroup):
         verbose_name = "Kull"
         verbose_name_plural = "Kull"
 
-    starting_year = models.CharField("År startet", max_length=4, unique=True)
+    starting_year = models.CharField("År startet", max_length=4, unique=True, null=True)
 
     def get_class_number(self):
         now = date.today()
@@ -175,6 +192,45 @@ class FysmatClass(NablaGroup):
         super().save(*args, **kwargs)
 
 
+@receiver(m2m_changed, sender=FysmatClass.user_set.through)
+def send_maillist_email(sender, instance, action, reverse, pk_set, **kwargs):
+    if action not in ("post_add", "post_remove"):
+        return
+
+    # Whether we're changing through the group or the user
+    if reverse:
+        classNames = [instance.name]
+        users = NablaUser.objects.filter(pk__in=pk_set)
+
+    else:
+        classNames = FysmatClass.objects.filter(pk__in=pk_set).values_list(
+            "name", flat=True
+        )
+        users = [instance]
+
+    verb = "lagt til i" if action == "post_add" else "fjernet fra"
+
+    classes = FysmatClass.objects.filter(name__in=classNames)
+    classNames = [kull.name for kull in classes]
+
+    for className in classNames:
+        message = (
+            f"Følgende eposter har blitt {verb} {className}. Vennligst oppdater mailinglisten.\n\n"
+            + "\n".join(
+                [f"{user.email} ({user.username}@stud.ntnu.no)" for user in users]
+            )
+            + "\n\n"
+            + "mvh\nWebKom"
+        )
+
+        send_mail(
+            subject="Mail-liste",
+            message=message,
+            from_email="noreply@nabla.no",
+            recipient_list=["mail@nabla.no"],
+        )
+
+
 class RegistrationRequest(models.Model):
     username = models.CharField(max_length=80, verbose_name="Brkuernavn")
 
@@ -184,19 +240,34 @@ class RegistrationRequest(models.Model):
 
     last_name = models.CharField(max_length=80, verbose_name="Etternavn", null=True)
 
+    def get_newest_class():
+        class_list = FysmatClass.objects.order_by("-starting_year")
+        if len(class_list) > 0:
+            return class_list[0].id
+        return
+
+    fysmat_class = models.ForeignKey(
+        FysmatClass, on_delete=models.CASCADE, default=get_newest_class
+    )
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.created = datetime.today()
         return super().save(*args, **kwargs)
 
     def approve_request(self):
-        user, created_user = NablaUser.objects.get_or_create(username=self.username)
+        user, _ = NablaUser.objects.get_or_create(username=self.username)
 
         user.first_name = self.first_name
         user.last_name = self.last_name
 
-        password = activate_user_and_create_password(user)
-        send_activation_email(user, password)
+        user.activate()
+
+        self.fysmat_class.user_set.add(user)
+
+        identical_resuests = RegistrationRequest.objects.filter(username=self.username)
+        for request in identical_resuests:
+            request.delete()
 
     class Meta:
         verbose_name = "Registreringsforespørsel"

@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.forms.widgets import SelectDateWidget
 
-from .models import FysmatClass, NablaUser
+from .models import FysmatClass, NablaUser, RegistrationRequest
 
 
 class UserForm(forms.ModelForm):
@@ -77,6 +77,23 @@ class RegistrationForm(forms.Form):
 
     last_name = forms.CharField(label="Etternavn", required=True)
 
+    fysmat_class = forms.ChoiceField(required=True, label="Kull", choices=())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["fysmat_class"] = forms.ChoiceField(
+            required=True,
+            label="Kull",
+            choices=[
+                ("", "Kull [året du startet]"),
+                *[
+                    (m.name, f"Kull {m.starting_year}")
+                    for m in FysmatClass.objects.order_by("-starting_year")
+                ][:5],
+                ("class_international", "International"),
+            ],
+        )
+
 
 # Forms for admin
 class NablaUserChangeForm(UserChangeForm):
@@ -96,20 +113,9 @@ class NablaUserCreationForm(UserCreationForm):
         return self.cleaned_data["username"]
 
 
-class InjectUsersForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["fysmat_class"] = forms.ChoiceField(
-            required=False,
-            choices=[("", "Ingen klasse")]
-            + [(m.name, m.name) for m in FysmatClass.objects.all()],
-            label="Klasse",
-        )
-
+class ConfirmUsersForm(forms.Form):
     title = "Putt brukernavn i databasen."
-    data = forms.CharField(widget=forms.Textarea, label="Data")
-    fysmat_class = forms.ChoiceField(
-        required=False,
-        label="Klasse",
-        choices=(),
+    data = forms.CharField(
+        widget=forms.Textarea(attrs={"placeholder": "leuler\nwirhamil\nalein\netc..."}),
+        label="Brukernavn",
     )

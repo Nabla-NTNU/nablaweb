@@ -78,7 +78,7 @@ class FrontPageView(FlatPageMixin, TemplateView):
         )
         context["logged_in"] = True if self.request.user.is_authenticated else False
         # Uncomment when fadderperiode to display new student popup.
-        context["newuser_popup"] = False if self.request.user.is_authenticated else True
+        # context["newuser_popup"] = False if self.request.user.is_authenticated else True
         context["bedpres_leaderboard"] = EventRegistration.objects.raw(
             f"""SELECT 1 as id,
                   COUNT(r.attendance_registration) AS num_bedpres,
