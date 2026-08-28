@@ -195,12 +195,9 @@ class FysmatClass(NablaGroup):
 @receiver(m2m_changed, sender=FysmatClass.user_set.through)
 def send_maillist_email(sender, instance, action, reverse, pk_set, **kwargs):
     if action not in ("post_add", "post_remove"):
-        print("Passing")
         return
 
-    users = NablaUser.objects.filter(pk__in=pk_set)
-
-    # Changing through Groups or User
+    # Whether we're changing through the group or the user
     if reverse:
         classNames = [instance.name]
         users = NablaUser.objects.filter(pk__in=pk_set)
