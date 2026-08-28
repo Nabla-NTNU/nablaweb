@@ -4,6 +4,8 @@ from hashlib import sha1
 from django.contrib.auth.models import AbstractUser, Group, UserManager
 from django.core.mail import send_mail
 from django.db import models
+from django.db.models.signals import m2m_changed
+from django.dispatch import receiver
 from django.template import loader
 from django.urls import reverse
 from django.utils import timezone
@@ -123,16 +125,6 @@ class NablaUser(AbstractUser):
         components_group, _ = NablaGroup.objects.get_or_create(name="komponenter")
         components_group.user_set.add(self)
 
-        fysmat_class = FysmatClass.objects.filter(user=self)
-        if fysmat_class.exists():
-            send_mail(
-                subject="Mail-lsite",
-                message=f"Bruker {self.email} har blitt med i kull {fysmat_class[0]}",
-                from_email="noreply@nabla.no",
-                recipient_list=["mail@nabla.no"],
-                # fail_silently=False,
-            )
-
     @property
     def nablagroups(self):
         groups = self.groups.all()
@@ -198,6 +190,45 @@ class FysmatClass(NablaGroup):
     def save(self, *args, **kwargs):
         self.group_type = "kull"
         super().save(*args, **kwargs)
+
+
+@receiver(m2m_changed, sender=FysmatClass.user_set.through)
+def send_maillist_email(sender, instance, action, reverse, pk_set, **kwargs):
+    if action not in ("post_add", "post_remove"):
+        print("Passing")
+        return
+
+    users = NablaUser.objects.filter(pk__in=pk_set)
+
+    # Changing through Groups or User
+    if reverse:
+        classNames = [instance.name]
+        users = NablaUser.objects.filter(pk__in=pk_set)
+
+    else:
+        classNames = FysmatClass.objects.filter(pk__in=pk_set).values_list(
+            "name", flat=True
+        )
+        users = [instance]
+
+    verb = "lagt til i" if action == "post_add" else "fjernet fra"
+
+    for className in classNames:
+        message = (
+            f"Følgende eposter har blitt {verb} {className}. Vennligst oppdater mailinglisten.\n\n"
+            + "\n".join(
+                [f"{user.email} ({user.username}@stud.ntnu.no)" for user in users]
+            )
+            + "\n\n"
+            + "mvh\nWebKom"
+        )
+
+        send_mail(
+            subject="Mail-liste",
+            message=message,
+            from_email="noreply@nabla.no",
+            recipient_list=["mail@nabla.no"],
+        )
 
 
 class RegistrationRequest(models.Model):
