@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from itertools import chain
 
 from django.contrib import messages
+from django.db.models import Q
 from django.utils import timezone
 from django.views.generic import TemplateView
 
@@ -118,14 +119,19 @@ class FrontPageView(FlatPageMixin, TemplateView):
         )
 
     def _add_events_and_bedpres(self, context):
-        now = datetime.now() - timedelta(hours=6)
+        now = datetime.now()
+        remove_time = now - timedelta(hours=4)
         context["upcoming_events"] = (
-            Event.objects.filter(event_start__gte=now)
+            Event.objects.filter(
+                Q(event_end__gte=now)
+                | Q(event_end=None) & Q(event_start__gte=remove_time)
+            )
             .exclude(is_bedpres=True)
             .order_by("event_start")[:5]
         )
         context["upcoming_bedpreses"] = Event.objects.filter(
-            event_start__gte=now, is_bedpres=True
+            Q(event_end__gte=now) | Q(event_end=None) & Q(event_start__gte=remove_time),
+            is_bedpres=True,
         ).order_by("event_start")[:5]
 
     def _add_poll(self, context):
