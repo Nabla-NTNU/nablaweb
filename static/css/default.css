@@ -9,10 +9,10 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
     --nabla-yellow: #FFD500;
     --nabla-yellow-dark: #FDC500;
     --nabla-yellow-light: #ffff72;
-    --nabla-blue: #333333; /*overskrifter */
-    --nabla-header-footer: #000000;    
-    --nabla-blue-dark: #111111;
-    --nabla-blue-light: #555555;
+    --nabla-blue: #003f88; /*overskrifter */
+    --nabla-header-footer: #003f88;    
+    --nabla-blue-dark: #00296B;
+    --nabla-blue-light: #00509D;
     --nabla-background: rgba(0, 80, 157, 0.05);
     --event: #5cb85c;
     --bedpres: #f5b507;
@@ -25,9 +25,9 @@ If the html,body height-rule is indeed not necessary, is should be removed (I be
     --nabla-yellow: #fa9a2c;
     --nabla-yellow-dark: #fa9a2c;
     --nabla-yellow-light: #fa9a2c;
-    --nabla-blue: #999999; /*overskrifter */
-    --nabla-header-footer: #444444; 
-    --nabla-blue-dark: #222222;
+    --nabla-blue: #2277e7; /*overskrifter */
+    --nabla-header-footer: #00296B; 
+    --nabla-blue-dark: #00296B;
     --nabla-blue-light: #fa9a2c;
     --nabla-background: rgba(0, 80, 157, 0.05);
     --event: #5cb85c;
